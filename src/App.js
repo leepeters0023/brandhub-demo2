@@ -1,58 +1,70 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useState } from "react";
+import { Router } from "@reach/router";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+import LogIn from "./components/Login";
+import TopNav from "./components/TopNav";
+import SideDrawer from "./components/SideDrawer";
+import Landing from "./pages/Landing";
+import Order from "./pages/Order";
+import Account from "./pages/Account";
+import Budget from "./pages/Budget";
+import Reports from "./pages/Reports";
+import Calendar from "./pages/Calendar";
+import Compliance from "./pages/Compliance";
+import Coupons from "./pages/Coupons";
+import Help from "./pages/Help";
+import OrderPre from "./pages/OrderPre";
+
+import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import Drawer from "@material-ui/core/Drawer";
+import { makeStyles } from "@material-ui/core";
+import themeFile from "./utility/theme.js";
+
+import "./App.css";
+import OrderHistory from "./pages/OrderHistory";
+
+const theme = createMuiTheme(themeFile);
+
+const App = () => {
+  const [auth, setAuth] = useState(true);
+  const [drawerOpen, handleDrawer] = useState(false);
+  const [notificationOpen, handleNotification] = useState(false);
+
+  if (!auth) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <LogIn setAuth={setAuth} />;
+      </MuiThemeProvider>
+    );
+  } else {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <TopNav
+          drawerOpen={drawerOpen}
+          notificationOpen={notificationOpen}
+          handleDrawer={handleDrawer}
+          handleNotification={handleNotification}
+        />
+        <Drawer anchor="left" open={drawerOpen} onClose={() => {handleDrawer(false)}}>
+          <SideDrawer handleDrawer={handleDrawer} />
+        </Drawer>
+        <Router>
+          <Landing path="/" />
+          <OrderHistory path="/order-history" />
+          <Order path="/order" />
+          <OrderPre path="/order/pre-order" />
+          <Coupons path="/coupons" />
+          <Account path="/account" />
+          <Budget path="/budget" />
+          <Reports path="/reports" />
+          <Calendar path="/calendar" />
+          <Compliance path="/compliance" />
+          <Help path="/help" />
+        </Router>
+      </MuiThemeProvider>
+    )
+  }
 }
 
 export default App;
