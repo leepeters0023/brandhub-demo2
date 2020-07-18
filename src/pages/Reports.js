@@ -56,14 +56,27 @@ const Reports = () => {
           </Typography>
         </div>
         <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
           centered
         >
-          <Tab className={classes.headerText} label="Regional Reports" value={1} />
-          <Tab className={classes.headerText} label="Standard Reports" value={2} />
-          <Tab className={classes.headerText} label="Favorite Reports" value={3} />
+          <Tab
+            className={classes.headerText}
+            label="Regional Reports"
+            value={1}
+          />
+          <Tab
+            className={classes.headerText}
+            label="Standard Reports"
+            value={2}
+          />
+          <Tab
+            className={classes.headerText}
+            label="Favorite Reports"
+            value={3}
+          />
         </Tabs>
       </Paper>
     </div>

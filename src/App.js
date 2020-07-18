@@ -18,7 +18,6 @@ import OrderPre from "./pages/OrderPre";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Drawer from "@material-ui/core/Drawer";
-import { makeStyles } from "@material-ui/core";
 import themeFile from "./utility/theme.js";
 
 import "./App.css";

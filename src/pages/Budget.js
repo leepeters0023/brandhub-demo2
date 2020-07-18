@@ -60,12 +60,17 @@ const Budget = () => {
           </Typography>
         </div>
         <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
           centered
         >
-          <Tab className={classes.headerText} label="Regional Budgets" value={1} />
+          <Tab
+            className={classes.headerText}
+            label="Regional Budgets"
+            value={1}
+          />
           <Tab className={classes.headerText} label="User Budgets" value={2} />
           <Tab className={classes.headerText} label="Brand Budgets" value={3} />
         </Tabs>
