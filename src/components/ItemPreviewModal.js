@@ -211,6 +211,7 @@ const ItemPreviewModal = (props) => {
       </Grid>
       <br/>
       <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"

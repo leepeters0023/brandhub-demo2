@@ -32,6 +32,7 @@ const Account = () => {
           </Typography>
         </div>
         <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChange}
           indicatorColor="primary"

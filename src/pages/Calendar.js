@@ -56,12 +56,17 @@ const Calendar = () => {
           </Typography>
         </div>
         <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
           centered
         >
-          <Tab className={classes.headerText} label="Priority Calendar" value={1} />
+          <Tab
+            className={classes.headerText}
+            label="Priority Calendar"
+            value={1}
+          />
           <Tab className={classes.headerText} label="On Premise" value={2} />
           <Tab className={classes.headerText} label="Off Premise" value={3} />
         </Tabs>

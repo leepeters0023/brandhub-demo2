@@ -60,6 +60,7 @@ const Order = () => {
           </Typography>
         </div>
         <Tabs
+          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
