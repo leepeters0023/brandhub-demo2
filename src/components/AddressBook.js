@@ -1,5 +1,7 @@
 import React from "react";
 
+import AddressModal from "../components/AddressModal";
+
 import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,12 +10,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import EditIcon from "@material-ui/icons/Edit";
-import AddBoxIcon from "@material-ui/icons/AddBox";
+const onSubmit = (company, code, city, state, id) => {
+  console.log(company, code, city, state, id);
+};
 
 // simulate mock addresses
 const createData = (company, code, city, state, button) => {
@@ -26,44 +27,44 @@ const billingAddresses = [
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
 ];
 
@@ -73,88 +74,88 @@ const shippingAddresses = [
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
   createData(
     "Company Name",
     `(${Math.floor(Math.random() * 1000 + 1000)})`,
     "City Name",
     "VT",
-    <Tooltip title="Edit">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <AddressModal
+      type="edit"
+      onSubmit={onSubmit}
+      id={Math.floor(Math.random() * 1000 + 1000)}
+    />
   ),
 ];
 
@@ -163,7 +164,7 @@ const useStyles = makeStyles((theme) => ({
   addressTitleBar: {
     display: "flex",
     justifyContent: "space-between",
-  }
+  },
 }));
 
 const AddressBook = () => {
@@ -181,14 +182,14 @@ const AddressBook = () => {
         <TableContainer className={classes.tableContainer}>
           <br />
           <div className={classes.addressTitleBar}>
-          <Typography className={classes.titleText} variant="h5">
-            Billing Address
-          </Typography>
-          <Tooltip title="Add New Address">
-            <IconButton>
-              <AddBoxIcon />
-            </IconButton>
-          </Tooltip>
+            <Typography className={classes.titleText} variant="h5">
+              Billing Address
+            </Typography>
+            <AddressModal
+              type="add"
+              onSubmit={onSubmit}
+              id={Math.floor(Math.random() * 1000 + 1000)}
+            />
           </div>
           <br />
           <Table className={classes.table} aria-label="simple table">
@@ -225,20 +226,20 @@ const AddressBook = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <br/>
-        <hr/>
-        <br/>
+        <br />
+        <hr />
+        <br />
         <TableContainer className={classes.tableContainer}>
           <br />
           <div className={classes.addressTitleBar}>
-          <Typography className={classes.titleText} variant="h5">
-            Shipping Address
-          </Typography>
-          <Tooltip title="Add New Address">
-            <IconButton>
-              <AddBoxIcon />
-            </IconButton>
-          </Tooltip>
+            <Typography className={classes.titleText} variant="h5">
+              Shipping Address
+            </Typography>
+            <AddressModal
+              type="add"
+              onSubmit={onSubmit}
+              id={Math.floor(Math.random() * 1000 + 1000)}
+            />
           </div>
           <br />
           <Table className={classes.table} aria-label="simple table">

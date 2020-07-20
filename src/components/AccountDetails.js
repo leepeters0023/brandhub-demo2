@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+
+import EditAccountModal from "./EditAccountModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -7,7 +9,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 
-import EditIcon from "@material-ui/icons/Edit";
 import EditAttributesIcon from "@material-ui/icons/EditAttributes";
 import EmailIcon from "@material-ui/icons/Email";
 import PhoneIcon from "@material-ui/icons/Phone";
@@ -29,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
 
 const AccountDetails = () => {
   const classes = useStyles();
+
+  const [info, setInfo] = useState({
+    first: "Firstname",
+    last: "Lastname",
+    email: "email@email.com",
+    phone: "999-999-9999",
+  });
+
+  const onSubmit = (first, last, email, phone) => {
+    setInfo({ first, last, email, phone });
+  };
+
   return (
     <div>
       <Container className={classes.tabContainer}>
@@ -42,20 +55,22 @@ const AccountDetails = () => {
           <div className={classes.accountDetais}>
             <div className={classes.accountInfo}>
               <Typography className={classes.titleText}>
-                Firstname Lastname
+                {`${info.first} ${info.last}`}
               </Typography>
-              <Tooltip title="Edit Info">
-                <IconButton>
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
+              <EditAccountModal
+                onSubmit={onSubmit}
+                currentFirst={info.first}
+                currentLast={info.last}
+                currentEmail={info.email}
+                currentPhone={info.phone}
+              />
             </div>
             <div className={classes.accountInfo}>
               <Tooltip title="Email">
                 <EmailIcon />
               </Tooltip>
               <Typography variant="body1" color="textSecondary">
-                : email@email.com
+                {`: ${info.email}`}
               </Typography>
             </div>
             <div className={classes.accountInfo}>
@@ -63,7 +78,7 @@ const AccountDetails = () => {
                 <PhoneIcon />
               </Tooltip>
               <Typography variant="body1" color="textSecondary">
-                : 999.999.9999 ext: 1234
+                {`: ${info.phone}`}
               </Typography>
             </div>
             <div className={classes.accountInfo}>

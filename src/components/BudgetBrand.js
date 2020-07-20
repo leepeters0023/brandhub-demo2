@@ -105,7 +105,7 @@ const BudgetBrand = () => {
             </TableHead>
             <TableBody>
               {budget.map((row) => (
-                <TableRow key={row.budget}>
+                <TableRow key={row.spend}>
                   <TableCell component="th" scope="row">
                     {row.date}
                   </TableCell>

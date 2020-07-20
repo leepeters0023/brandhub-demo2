@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 5px",
   },
   configButtons: {
-    marginLeft: "80%",
+    marginLeft: "70%",
   },
 }));
 
@@ -162,12 +162,12 @@ const OrderPre = () => {
           <div className={classes.configButtons}>
             <Tooltip title="View List">
               <IconButton onClick={() => {setView("list")}}>
-                <ViewStreamIcon />
+                <ViewStreamIcon fontSize="large" color={currentView === "list" ? "primary" : "inherit"} />
               </IconButton>
             </Tooltip>
             <Tooltip title="View Grid">
               <IconButton onClick={() => {setView("grid")}}>
-                <ViewModuleIcon />
+                <ViewModuleIcon fontSize="large" color={currentView === "grid" ? "primary" : "inherit"} />
               </IconButton>
             </Tooltip>
           </div>

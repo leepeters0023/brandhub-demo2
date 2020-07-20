@@ -1,7 +1,6 @@
 import React from "react";
 
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    margin: "10px",
+    
   },
   itemControl: {
     width: "100%",
@@ -56,7 +55,7 @@ const OrderPreGridView = (props) => {
       <br />
       <br />
       <br />
-      <Grid container spacing={7} className={classes.itemGridContainer}>
+      <Grid container spacing={10} className={classes.itemGridContainer}>
         {currentItems.map((item) => (
           <Grid
             className={classes.singleItem}
@@ -66,7 +65,6 @@ const OrderPreGridView = (props) => {
             sm={6}
             xs={12}
             key={item.itemNumber}
-            component={Paper}
           >
             <img
               id={item.itemNumber}

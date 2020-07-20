@@ -26,21 +26,30 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     right: "0",
   },
+  previewGrid: {
+    display: "flex",
+    justifyContent: "space-around",
+  },
   dialogGrid: {
     position: "relative",
     display: "flex",
     alignItems: "center",
-    [theme.breakpoints.down("md")] : {
+    [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
-    }
+    },
   },
   imgPreview: {
     display: "flex",
-    height: "500px",
+    height: "auto",
   },
-  largeImage: {
+  largeImageWrapper: {
     display: "flex",
     alignItems: "center",
+    width: "75%",
+  },
+  largeImage: {
+    width: "100%",
+    height: "auto",
   },
   carousel: {
     display: "flex",
@@ -76,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   cartButton: {
     width: theme.spacing(38),
     marginTop: "10px",
-  }
+  },
 }));
 
 const ItemPreviewModal = (props) => {
@@ -86,22 +95,21 @@ const ItemPreviewModal = (props) => {
     handleClose,
   } = props;
 
-  const [currentImage, updateImage] = useState(imgUrl);
-  const [budget, updateBudget] = useState("");
-  const [value, updateValue] = useState(1);
+  const [currentImage, setImage] = useState(imgUrl);
+  const [budget, setBudget] = useState("");
+  const [value, setValue] = useState(1);
 
   const handleChangeTab = (_evt, newValue) => {
-    updateValue(newValue);
+    setValue(newValue);
   };
 
   const handleChangeBudget = (evt) => {
-    updateBudget(evt.target.value);
+    setBudget(evt.target.value);
   };
-
 
   return (
     <div>
-      <Grid container spacing={1} className={classes.dialogGrid}>
+      <Grid container spacing={5} className={classes.dialogGrid}>
         <IconButton
           className={classes.closeButton}
           onClick={() => {
@@ -110,10 +118,14 @@ const ItemPreviewModal = (props) => {
         >
           <CancelIcon fontSize="large" color="secondary" />
         </IconButton>
-        <Grid className={classes.previewGrid} item lg={6} md={12} xs={12}>
+        <Grid item className={classes.previewGrid} md={7} xs={12}>
           <div className={classes.imgPreview}>
-            <div className={classes.largeImage}>
-              <img src={currentImage} alt={`${brand} ${itemType}`} />
+            <div className={classes.largeImageWrapper}>
+              <img
+                className={classes.largeImage}
+                src={currentImage}
+                alt={`${brand} ${itemType}`}
+              />
             </div>
             <div className={classes.carousel}>
               <img
@@ -121,23 +133,32 @@ const ItemPreviewModal = (props) => {
                 className={classes.previewImg}
                 src={currentImage}
                 alt={`${brand} ${itemType}`}
+                onClick={() => {
+                  setImage(currentImage);
+                }}
               />
               <img
                 id={currentImage}
                 className={classes.previewImg}
                 src={currentImage}
                 alt={`${brand} ${itemType}`}
+                onClick={() => {
+                  setImage(currentImage);
+                }}
               />
               <img
                 id={currentImage}
                 className={classes.previewImg}
                 src={currentImage}
                 alt={`${brand} ${itemType}`}
+                onClick={() => {
+                  setImage(currentImage);
+                }}
               />
             </div>
           </div>
         </Grid>
-        <Grid className={classes.previewGrid} item lg={6} md={12} xs={12}>
+        <Grid item className={classes.detailGrid} md={5} xs={12}>
           <Typography color="textSecondary" variant="body2">
             {brand}
           </Typography>
@@ -180,7 +201,7 @@ const ItemPreviewModal = (props) => {
           <br />
           <Box bgcolor="primary.main" className={classes.dividerBox} />
           <TextField
-            style={{width: "150px"}}
+            style={{ width: "150px" }}
             id={`${itemNumber}`}
             placeholder="Qty"
             variant="outlined"
@@ -203,30 +224,34 @@ const ItemPreviewModal = (props) => {
               <option value={3}>Retion 3 Budget</option>
             </Select>
           </FormControl>
-          <br/>
-          <Button variant="contained" color="secondary" className={classes.cartButton}>
+          <br />
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.cartButton}
+          >
             ADD TO CART
           </Button>
         </Grid>
       </Grid>
-      <br/>
+      <br />
       <Tabs
-          variant="fullWidth"
-          value={value}
-          onChange={handleChangeTab}
-          indicatorColor="primary"
-          centered
-        >
-          <Tab className={classes.headerText} label="One Sheet" value={1} />
-          <Tab className={classes.headerText} label="Item Feedback" value={2} />
-          <Tab className={classes.headerText} label="Assembly" value={3} />
-        </Tabs>
-      <hr/>
-      <br/>
+        variant="fullWidth"
+        value={value}
+        onChange={handleChangeTab}
+        indicatorColor="primary"
+        centered
+      >
+        <Tab className={classes.headerText} label="One Sheet" value={1} />
+        <Tab className={classes.headerText} label="Item Feedback" value={2} />
+        <Tab className={classes.headerText} label="Assembly" value={3} />
+      </Tabs>
+      <hr />
+      <br />
       {value === 1 && <ItemOneSheet />}
       {value === 2 && <ItemFeedback />}
       {value === 3 && <ItemAssembly />}
-      <br/>
+      <br />
     </div>
   );
 };
