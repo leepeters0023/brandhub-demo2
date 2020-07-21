@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 const ItemOneSheet = () => {
   const classes = useStyles();
   return (
-    <div>
+    <>
       <Container className={classes.modalTabContainer}>
         <Typography className={classes.headerText}>
           Item Description:
@@ -22,7 +22,7 @@ const ItemOneSheet = () => {
           exercitation cillum incididunt est ex non fugiat.
         </Typography>
       </Container>
-    </div>
+    </>
   );
 };
 

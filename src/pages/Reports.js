@@ -33,7 +33,7 @@ const Reports = () => {
   };
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
@@ -79,7 +79,7 @@ const Reports = () => {
           />
         </Tabs>
       </Paper>
-    </div>
+    </>
   );
 };
 

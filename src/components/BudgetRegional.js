@@ -64,9 +64,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BudgetRegional = () => {
+
   const classes = useStyles();
   return (
-    <div>
+    <>
       <Container className={classes.tabContainer}>
         <TableContainer className={classes.tableContainer}>
           <br />
@@ -137,7 +138,7 @@ const BudgetRegional = () => {
           </Table>
         </TableContainer>
       </Container>
-    </div>
+    </>
   );
 };
 

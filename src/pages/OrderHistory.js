@@ -95,7 +95,7 @@ const rows = [
 const OrderHistory = () => {
   const classes = useStyles();
   return (
-    <div>
+    <>
       <TableContainer className={classes.tableContainer} component={Paper}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -139,7 +139,7 @@ const OrderHistory = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 };
 

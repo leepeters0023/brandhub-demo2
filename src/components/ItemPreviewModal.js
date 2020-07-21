@@ -108,7 +108,7 @@ const ItemPreviewModal = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Grid container spacing={5} className={classes.dialogGrid}>
         <IconButton
           className={classes.closeButton}
@@ -252,7 +252,7 @@ const ItemPreviewModal = (props) => {
       {value === 2 && <ItemFeedback />}
       {value === 3 && <ItemAssembly />}
       <br />
-    </div>
+    </>
   );
 };
 

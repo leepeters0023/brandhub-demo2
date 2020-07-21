@@ -14,7 +14,7 @@ const Compliance = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -23,7 +23,7 @@ const Compliance = () => {
           </Typography>
         </div>
       </Paper>
-    </div>
+    </>
   );
 };
 

@@ -33,7 +33,7 @@ const Calendar = () => {
   };
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Region</InputLabel>
@@ -71,7 +71,7 @@ const Calendar = () => {
           <Tab className={classes.headerText} label="Off Premise" value={3} />
         </Tabs>
       </Paper>
-    </div>
+    </>
   );
 };
 

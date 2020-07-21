@@ -15,7 +15,7 @@ const Help = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -57,7 +57,7 @@ const Help = () => {
         <br/>
         <br/>
       </Paper>
-    </div>
+    </>
   );
 };
 

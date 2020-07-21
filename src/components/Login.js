@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+
+import { useInput } from "../hooks/UtilityHooks";
+
 import BrandHubLogo from "../assets/brandhub.svg";
 
 import Button from "@material-ui/core/Button";
@@ -40,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -48,25 +51,55 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const userTypes = ["super", "orderer", "compliance", "marketing", "creative"];
+
 const Login = ({ setAuth }) => {
   const classes = useStyles();
+  const {
+    value: userName,
+    bind: bindUserName,
+    reset: resetUserName,
+  } = useInput("");
+  const {
+    value: password,
+    bind: bindPassword,
+    reset: resetPassword,
+  } = useInput("");
+
+  const [error, setError] = useState({ user: undefined });
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    setAuth(true);
+    let error = { user: undefined };
+    setError(error);
+    if (!userTypes.includes(userName)) {
+      error = { user: "User does not exist" };
+      setError(error);
+      resetUserName();
+    }
+    if (password !== "admin") {
+      error = { ...error, password: "Invalid Password" };
+      setError(error);
+      resetPassword();
+    }
+    if (!error.user && !error.password) {
+      setAuth(userName);
+    }
   };
   return (
-    <div>
+    <>
       <img src={BrandHubLogo} className={classes.logo} alt="Logo" />
-      <Container className={classes.loginContainer} component="main" maxWidth="xs">
+      <Container
+        className={classes.loginContainer}
+        component="main"
+        maxWidth="xs"
+      >
         <CssBaseline />
         <div className={classes.paper}>
           <Typography className={classes.welcome} component="h1" variant="h2">
             Welcome
           </Typography>
-          <Typography variant="h5">
-            Sign in to access your account
-          </Typography>
+          <Typography variant="h5">Sign in to access your account</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
@@ -78,6 +111,9 @@ const Login = ({ setAuth }) => {
               name="email"
               autoComplete="email"
               autoFocus
+              helperText={error.user}
+              error={error.user ? true : false}
+              {...bindUserName}
             />
             <TextField
               variant="outlined"
@@ -89,6 +125,9 @@ const Login = ({ setAuth }) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              helperText={error.password}
+              error={error.password ? true : false}
+              {...bindPassword}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -118,7 +157,7 @@ const Login = ({ setAuth }) => {
           </form>
         </div>
       </Container>
-    </div>
+    </>
   );
 };
 

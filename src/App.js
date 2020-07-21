@@ -13,7 +13,6 @@ import Calendar from "./pages/Calendar";
 import Compliance from "./pages/Compliance";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
-import OrderPre from "./pages/OrderPre";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -25,8 +24,10 @@ import OrderHistory from "./pages/OrderHistory";
 
 const theme = createMuiTheme(themeFile);
 
+//const userLookup = {};
+
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState('orderer');
   const [drawerOpen, handleDrawer] = useState(false);
   const [notificationOpen, handleNotification] = useState(false);
 
@@ -45,25 +46,32 @@ const App = () => {
           handleDrawer={handleDrawer}
           handleNotification={handleNotification}
         />
-        <Drawer anchor="left" open={drawerOpen} onClose={() => {handleDrawer(false)}}>
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={() => {
+            handleDrawer(false);
+          }}
+        >
           <SideDrawer handleDrawer={handleDrawer} />
         </Drawer>
-        <Router>
-          <Landing path="/" />
-          <OrderHistory path="/order-history" />
-          <Order path="/order" />
-          <OrderPre path="/order/pre-order" />
-          <Coupons path="/coupons" />
-          <Account path="/account" />
-          <Budget path="/budget" />
-          <Reports path="/reports" />
-          <Calendar path="/calendar" />
-          <Compliance path="/compliance" />
-          <Help path="/help" />
-        </Router>
+        <div id="main-container">
+          <Router primary={false}>
+            <Landing path="/" />
+            <OrderHistory path="/order-history" />
+            <Order path="/order" />
+            <Coupons path="/coupons" />
+            <Account path="/account" />
+            <Budget path="/budget" />
+            <Reports path="/reports" />
+            <Calendar path="/calendar" />
+            <Compliance path="/compliance" />
+            <Help path="/help" />
+          </Router>
+        </div>
       </MuiThemeProvider>
-    )
+    );
   }
-}
+};
 
 export default App;

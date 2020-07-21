@@ -23,7 +23,7 @@ const Account = () => {
   };
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -44,7 +44,7 @@ const Account = () => {
       </Paper>
       {value === 1 && <AccountDetails />}
       {value === 2 && <AddressBook />}
-    </div>
+    </>
   );
 };
 

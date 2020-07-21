@@ -50,10 +50,10 @@ export default {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginTop: "50px",
+      marginTop: "30px",
     },
     paperContainer: {
-      margin: "100px auto 0 auto",
+      margin: "30px auto 0 auto",
       padding: "20px 25px",
       width: "90vw",
     },

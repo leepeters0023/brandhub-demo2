@@ -98,7 +98,7 @@ const Notifications = () => {
     );
 
   return (
-    <div>
+    <>
       <Tooltip title="Notifications">
         <IconButton
           aria-owns={anchorEl ? "simple-menu" : undefined}
@@ -116,7 +116,7 @@ const Notifications = () => {
       >
         {notificationsMarkup}
       </Menu>
-    </div>
+    </>
   );
 };
 

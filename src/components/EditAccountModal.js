@@ -29,7 +29,7 @@ const EditAccountModal = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Tooltip title="Edit Info">
         <IconButton
           onClick={() => {
@@ -89,7 +89,7 @@ const EditAccountModal = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

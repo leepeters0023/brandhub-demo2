@@ -43,7 +43,7 @@ const AccountDetails = () => {
   };
 
   return (
-    <div>
+    <>
       <Container className={classes.tabContainer}>
         <Typography className={classes.titleText}>
           Profile Information
@@ -94,7 +94,7 @@ const AccountDetails = () => {
           </div>
         </div>
       </Container>
-    </div>
+    </>
   );
 };
 

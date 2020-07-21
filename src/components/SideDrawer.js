@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const SideDrawer = ({ handleDrawer }) => {
   const classes = useStyles();
   return (
-    <div>
+    <>
       <div className={classes.user}>
         <Avatar className={classes.avatar} />
         <Typography>User</Typography>
@@ -167,7 +167,7 @@ const SideDrawer = ({ handleDrawer }) => {
           <ListItemText primary="Help" />
         </ListItem>
       </List>
-    </div>
+    </>
   );
 };
 

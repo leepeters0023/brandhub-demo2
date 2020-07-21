@@ -170,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
 const AddressBook = () => {
   const classes = useStyles();
   return (
-    <div>
+    <>
       <Container className={classes.tabContainer}>
         <Typography className={classes.titleText} variant="h5">
           Address Book
@@ -277,7 +277,7 @@ const AddressBook = () => {
           </Table>
         </TableContainer>
       </Container>
-    </div>
+    </>
   );
 };
 

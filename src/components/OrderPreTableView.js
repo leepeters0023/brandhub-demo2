@@ -1,6 +1,5 @@
 import React from "react";
 
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -32,15 +31,8 @@ const OrderPreTableView = (props) => {
   const { currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
-    <div>
+    <>
       <TableContainer className={classes.tableContainer}>
-        <br />
-        <div className={classes.titleBar}>
-          <Typography className={classes.titleText} variant="h5">
-            Monthly Pre Order
-          </Typography>
-        </div>
-        <br />
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -104,7 +96,7 @@ const OrderPreTableView = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </>
   );
 };
 

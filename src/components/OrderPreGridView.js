@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
     paddingBottom: "20px",
   },
   previewImg: {
@@ -46,24 +45,13 @@ const OrderPreGridView = (props) => {
   const classes = useStyles();
   return (
     <Container>
-      <br />
-      <div className={classes.titleBar}>
-        <Typography className={classes.titleText} variant="h5">
-          Monthly Pre Order
-        </Typography>
-      </div>
-      <br />
-      <br />
-      <br />
       <Grid container spacing={10} className={classes.itemGridContainer}>
         {currentItems.map((item) => (
           <Grid
             className={classes.singleItem}
             item
-            lg={3}
-            md={4}
-            sm={6}
-            xs={12}
+            lg={4}
+            md={6}
             key={item.itemNumber}
           >
             <img

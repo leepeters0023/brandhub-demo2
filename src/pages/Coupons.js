@@ -14,7 +14,7 @@ const Coupons = () => {
   const classes = useStyles();
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -23,7 +23,7 @@ const Coupons = () => {
           </Typography>
         </div>
       </Paper>
-    </div>
+    </>
   );
 };
 

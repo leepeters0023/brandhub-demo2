@@ -37,7 +37,7 @@ const Budget = () => {
   };
 
   return (
-    <div>
+    <>
       <Paper className={classes.paperContainer}>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="demo-simple-select-outlined-label">Region</InputLabel>
@@ -78,7 +78,7 @@ const Budget = () => {
       {value === 1 && <BudgetRegional />}
       {value === 2 && <BudgetUser />}
       {value === 3 && <BudgetBrand />}
-    </div>
+    </>
   );
 };
 

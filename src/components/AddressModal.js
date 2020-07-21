@@ -34,7 +34,7 @@ const AddressModal = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Tooltip title={type[0].toUpperCase() + type.slice(1)}>
         <IconButton
           onClick={() => {
@@ -98,7 +98,7 @@ const AddressModal = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 

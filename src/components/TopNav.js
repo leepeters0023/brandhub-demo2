@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const TopNav = ({ drawerOpen, handleDrawer }) => {
   const classes = useStyles();
   return (
-    <div>
+    <>
       <AppBar className={classes.appBar}>
         <div className={classes.navBreak}>
           <Tooltip title="Navigate">
@@ -75,7 +75,6 @@ const TopNav = ({ drawerOpen, handleDrawer }) => {
               id="search"
               label="Search"
               name="search"
-              autoFocus
             />
           </div>
         </div>
@@ -86,7 +85,7 @@ const TopNav = ({ drawerOpen, handleDrawer }) => {
           <Avatar className={classes.avatar}>JD</Avatar>
         </div>
       </AppBar>
-    </div>
+    </>
   );
 };
 
