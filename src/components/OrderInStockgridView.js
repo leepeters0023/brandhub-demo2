@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
 }));
-const OrderPreGridView = (props) => {
+const OrderInStockGridView = (props) => {
   const { currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
@@ -91,4 +91,4 @@ const OrderPreGridView = (props) => {
   );
 };
 
-export default OrderPreGridView;
+export default OrderInStockGridView;

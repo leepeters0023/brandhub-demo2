@@ -4,10 +4,15 @@ import GalloLogo from "../assets/gallologo.png";
 
 //mockdata
 import items from "../assets/mockdata/Items";
+import programs from "../assets/mockdata/Programs";
 
 import ItemFilter from "../components/ItemFilter";
-import OrderPre from "../components/OrderPre";
+import OrderInStock from "../components/OrderInStock";
+import OrderPreOrder from "../components/OrderPreOrder";
+import ItemPreviewModal from "../components/ItemPreviewModal";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -29,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   orderGrid: {
     display: "flex",
-    justifyContent: "space-around"
-  }
+    justifyContent: "space-around",
+  },
 }));
 
 let brands = items.map((item) => item.brand);
@@ -41,6 +46,10 @@ const Order = () => {
   const [value, updateValue] = useState(1);
   const [region, updateRegion] = useState("Region 1");
   const [currentView, setView] = useState("list");
+  const [previewModal, handlePreviewModal] = useState(false);
+  const [programModal, handleProgramModal] = useState(false);
+  const [currentItem, handleCurrentItem] = useState({});
+  const [currentProgram, handleCurrentProgram] = useState({});
 
   const handleChangeTab = (_evt, newValue) => {
     updateValue(newValue);
@@ -50,8 +59,41 @@ const Order = () => {
     updateRegion(evt.target.value);
   };
 
+  const handlePreview = (evt) => {
+    let item = items.find(
+      (item) => item.itemNumber === parseInt(evt.target.id)
+    );
+    handleCurrentItem(item);
+    handlePreviewModal(true);
+  };
+
+  const handleProgram = (evt) => {
+    let prog = programs.find((prog) => prog.id === evt.target.id);
+    handleCurrentProgram(prog);
+    console.log(currentProgram);
+    console.log(programModal);
+  };
+
+  const handleModalClose = () => {
+    handlePreviewModal(false);
+    handleProgramModal(false);
+  };
+
   return (
     <>
+      <Dialog
+        open={previewModal}
+        onClose={handleModalClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent>
+          <ItemPreviewModal
+            currentItem={currentItem}
+            handleClose={handleModalClose}
+          />
+        </DialogContent>
+      </Dialog>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -62,12 +104,10 @@ const Order = () => {
           </div>
           <div>
             <FormControl variant="outlined">
-              <InputLabel id="demo-simple-select-outlined-label">
-                Region
-              </InputLabel>
+              <InputLabel id="region-select">Region</InputLabel>
               <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
+                labelId="region-select"
+                id="regions"
                 value={region}
                 onChange={handleChangeSelect}
                 label="Region"
@@ -77,32 +117,34 @@ const Order = () => {
                 <MenuItem value={"Region 3"}>Region 3</MenuItem>
               </Select>
             </FormControl>
-            <div className={classes.configButtons}>
-              <Tooltip title="View List">
-                <IconButton
-                  onClick={() => {
-                    setView("list");
-                  }}
-                >
-                  <ViewStreamIcon
-                    fontSize="large"
-                    color={currentView === "list" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="View Grid">
-                <IconButton
-                  onClick={() => {
-                    setView("grid");
-                  }}
-                >
-                  <ViewModuleIcon
-                    fontSize="large"
-                    color={currentView === "grid" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip>
-            </div>
+            {value !== 1 && (
+              <div className={classes.configButtons}>
+                <Tooltip title="View List">
+                  <IconButton
+                    onClick={() => {
+                      setView("list");
+                    }}
+                  >
+                    <ViewStreamIcon
+                      fontSize="large"
+                      color={currentView === "list" ? "primary" : "inherit"}
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="View Grid">
+                  <IconButton
+                    onClick={() => {
+                      setView("grid");
+                    }}
+                  >
+                    <ViewModuleIcon
+                      fontSize="large"
+                      color={currentView === "grid" ? "primary" : "inherit"}
+                    />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            )}
           </div>
         </div>
         <Tabs
@@ -124,9 +166,30 @@ const Order = () => {
             <ItemFilter brands={brands} itemTypes={itemTypes} />
           </Grid>
           <Divider orientation="vertical" flexItem />
-          <Grid item md={9}>
-            <OrderPre currentView={currentView} />
-          </Grid>
+          {value === 1 && (
+            <Grid item md={9}>
+              <OrderPreOrder
+                currentPrograms={programs}
+                handleProgram={handleProgram}
+              />
+            </Grid>
+          )}
+          {value === 2 && (
+            <Grid item md={9}>
+              <OrderInStock
+                currentView={currentView}
+                handlePreview={handlePreview}
+              />
+            </Grid>
+          )}
+          {value === 3 && (
+            <Grid item md={9}>
+              <OrderInStock
+                currentView={currentView}
+                handlePreview={handlePreview}
+              />
+            </Grid>
+          )}
         </Grid>
       </Paper>
     </>

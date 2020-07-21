@@ -27,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderPreTableView = (props) => {
+const OrderInStockTableView = (props) => {
   const { currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
     <>
       <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table} aria-label="in-stock-table">
           <TableHead>
             <TableRow>
               <TableCell className={classes.headerText}></TableCell>
@@ -100,4 +100,4 @@ const OrderPreTableView = (props) => {
   );
 };
 
-export default OrderPreTableView;
+export default OrderInStockTableView;
