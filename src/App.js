@@ -25,13 +25,13 @@ import OrderHistory from "./pages/OrderHistory";
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState("compliance");
   const [drawerOpen, handleDrawer] = useState(false);
   const [notificationOpen, handleNotification] = useState(false);
 
   const handleLogout = () => {
     setAuth(null);
-  }
+  };
 
   if (!auth) {
     return (
@@ -56,11 +56,15 @@ const App = () => {
             handleDrawer(false);
           }}
         >
-          <SideDrawer handleDrawer={handleDrawer} handleLogout={handleLogout} userType={auth}/>
+          <SideDrawer
+            handleDrawer={handleDrawer}
+            handleLogout={handleLogout}
+            userType={auth}
+          />
         </Drawer>
         <div id="main-container">
+          {auth === "compliance" && <Redirect noThrow to="/compliance" />}
           <Router primary={false}>
-            {auth === "compliance" && <Redirect from="/" to="/compliance" />}
             <Landing path="/" />
             <OrderHistory path="/order-history" />
             <Order path="/order" />

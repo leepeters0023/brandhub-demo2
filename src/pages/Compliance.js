@@ -5,7 +5,10 @@ import { useInput } from "../hooks/UtilityHooks";
 
 import ApprovalPrior from "../components/ApprovalPrior";
 import ApprovalPending from "../components/ApprovalPending";
+import ComplianceModal from "../components/ComplianceModal";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
@@ -38,6 +41,7 @@ const Compliance = () => {
   const [value, updateValue] = useState(1);
   const [region, updateRegion] = useState(1);
   const [modal, setModal] = useState(false);
+  const [currentId, setCurrentId] = useState("");
 
   const {
     value: sequenceNum,
@@ -70,13 +74,22 @@ const Compliance = () => {
   };
 
   const handleModal = (id) => {
+    setCurrentId(id);
     setModal(true);
-    console.log(modal)
-    console.log(id)
   }
 
   return (
     <>
+      <Dialog
+        open={modal}
+        onClose={()=>setModal(!modal)}
+        fullWidth
+        maxWidth="xl"
+      >
+        <DialogContent>
+          <ComplianceModal id={currentId} handleClose={setModal}/>
+        </DialogContent>
+      </Dialog>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -123,7 +136,7 @@ const Compliance = () => {
         </Tabs>
         <br />
         <br />
-        <Grid container spacing={5} className={classes.orderGrid}>
+        <Grid container spacing={5} justify="space-around">
           <Grid item md={2}>
             <br />
             <Typography className={classes.headerText} >

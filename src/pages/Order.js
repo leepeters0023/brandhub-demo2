@@ -174,7 +174,7 @@ const Order = () => {
         </Tabs>
         <br />
         <br />
-        <Grid container spacing={5} className={classes.orderGrid}>
+        <Grid container spacing={5} className={classes.orderGrid} justify="space-around">
           <Grid item md={2}>
             <br />
             <ItemFilter brands={brands} itemTypes={itemTypes} />

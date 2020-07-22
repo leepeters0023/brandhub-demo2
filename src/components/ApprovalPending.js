@@ -178,8 +178,8 @@ const ApprovalPending = ({ handleModal }) => {
             {rows.map((row) => (
               <TableRow
                 key={row.approvalId}
-                id={row.approvalId}
-                onClick={() => handleModal(row.approvalId)}
+                id={`${row.approvalId}-${row.sequenceNum}`}
+                onClick={() => handleModal(`${row.approvalId}-${row.sequenceNum}`)}
                 hover={true}
                 className={classes.tableRow}
               >
