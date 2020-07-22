@@ -18,6 +18,21 @@ export default {
       display: "flex",
       alignItems: "center",
     },
+    previewImg: {
+      width: "75px",
+      height: "75px",
+      borderRadius: "50%",
+      objectFit: "cover",
+    },
+    previewImageFloat: {
+      width: "75px",
+      height: "75px",
+      borderRadius: "50%",
+      objectFit: "cover",
+      "&:hover": {
+        cursor: "pointer",
+      },
+    },
     titleText: {
       fontWeight: "600",
       fontSize: "1.5rem",
@@ -51,6 +66,9 @@ export default {
       flexDirection: "column",
       alignItems: "center",
       marginTop: "30px",
+    },
+    cartContainer: {
+      maxHeight: "65vh",
     },
     paperContainer: {
       margin: "30px auto 0 auto",
@@ -90,6 +108,6 @@ export default {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-    }
+    },
   },
 };

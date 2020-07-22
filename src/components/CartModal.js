@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import OrderPreOrderCart from "./OrderPreOrderCart";
+import OrderCart from "./OrderCart";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -81,6 +82,8 @@ const CartModal = () => {
           <br />
           <br />
           {value === 1 && <OrderPreOrderCart />}
+          {value === 2 && <OrderCart />}
+          {value === 3 && <OrderCart />}
         </DialogContent>
       </Dialog>
     </div>

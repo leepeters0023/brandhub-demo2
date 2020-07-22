@@ -16,15 +16,6 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  previewImg: {
-    width: "75px",
-    height: "75px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    "&:hover": {
-      cursor: "pointer",
-    },
-  },
 }));
 
 const OrderInStockTableView = (props) => {
@@ -53,7 +44,7 @@ const OrderInStockTableView = (props) => {
                 Qty / Item
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Total Cost
+                Cost
               </TableCell>
               <TableCell className={classes.headerText}></TableCell>
             </TableRow>
@@ -69,7 +60,7 @@ const OrderInStockTableView = (props) => {
                 <TableCell align="left">
                   <img
                     id={row.itemNumber}
-                    className={classes.previewImg}
+                    className={classes.previewImageFloat}
                     src={row.imgUrl}
                     alt={row.itemType}
                     onClick={handlePreview}

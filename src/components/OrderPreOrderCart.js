@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -27,19 +28,9 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 //mock data
 import items from "../assets/mockdata/Items";
 import distributors from "../assets/mockdata/distributors";
-import { TableContainer } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  previewImg: {
-    width: "75px",
-    height: "75px",
-    borderRadius: "50%",
-    objectFit: "cover",
-  },
-  cartContainer: {
-    maxHeight: "65vh",
-  },
   headerCell: {
     padding: "0",
     height: "200px",
@@ -102,107 +93,111 @@ const OrderPreOrderCart = (props) => {
       </FormControl>
       <TableContainer className={classes.cartContainer}>
         <Table>
-          <TableRow>
-            <TableCell align="right">
-              <div className={classes.tableControl}>
-                <Typography>Order Details</Typography>
-                <IconButton
-                  aria-label="expand row"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              </div>
-            </TableCell>
-          </TableRow>
-          <TableCell style={{ padding: 0 }} colSpan={items.length + 1}>
-            <Collapse in={open} timeout="auto">
-              <Box>
-                <Table
-                  size="small"
-                  className={classes.table}
-                  aria-label="item-info"
-                >
-                  <TableBody>
-                    <TableRow className={classes.infoRow}>
-                      <TableCell className={classes.borderRight}>
-                        <div className={classes.colTitle}>
-                          <Typography className={classes.headerText}>
-                            Items Per Pack
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
-                          <div className={classes.infoCell}>
-                            {item.qty !== "Single Unit"
-                              ? item.qty.split(" ")[0]
-                              : 1}
-                          </div>
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow className={classes.infoRow}>
-                      <TableCell className={classes.borderRight}>
-                        <div className={classes.colTitle}>
-                          <Typography className={classes.headerText}>
-                            Total Qty of Items
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
-                          0
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow className={classes.infoRow}>
-                      <TableCell className={classes.borderRight}>
-                        <div className={classes.colTitle}>
-                          <Typography className={classes.headerText}>
-                            Item Est Cost
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
-                          $TBD
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow className={classes.infoRow}>
-                      <TableCell className={classes.borderRight}>
-                        <div className={classes.colTitle}>
-                          <Typography className={classes.headerText}>
-                            Total Est Cost
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
-                          $TBD
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow className={classes.infoRow}>
-                      <TableCell className={classes.borderRight}>
-                        <div className={classes.colTitle}>
-                          <Typography className={classes.headerText}>
-                            Inv. Balance
-                          </Typography>
-                        </div>
-                      </TableCell>
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
-                          NA
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
+          <TableBody>
+            <TableRow>
+              <TableCell align="right">
+                <div className={classes.tableControl}>
+                  <Typography>Order Details</Typography>
+                  <IconButton
+                    aria-label="expand row"
+                    onClick={() => setOpen(!open)}
+                  >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </IconButton>
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{ padding: 0 }} colSpan={items.length + 1}>
+                <Collapse in={open} timeout="auto">
+                  <Box>
+                    <Table
+                      size="small"
+                      className={classes.table}
+                      aria-label="item-info"
+                    >
+                      <TableBody>
+                        <TableRow className={classes.infoRow}>
+                          <TableCell className={classes.borderRight}>
+                            <div className={classes.colTitle}>
+                              <Typography className={classes.headerText}>
+                                Items Per Pack
+                              </Typography>
+                            </div>
+                          </TableCell>
+                          {items.map((item) => (
+                            <TableCell align="center" key={item.itemNumber}>
+                              <div className={classes.infoCell}>
+                                {item.qty !== "Single Unit"
+                                  ? item.qty.split(" ")[0]
+                                  : 1}
+                              </div>
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                        <TableRow className={classes.infoRow}>
+                          <TableCell className={classes.borderRight}>
+                            <div className={classes.colTitle}>
+                              <Typography className={classes.headerText}>
+                                Total Qty of Items
+                              </Typography>
+                            </div>
+                          </TableCell>
+                          {items.map((item) => (
+                            <TableCell align="center" key={item.itemNumber}>
+                              0
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                        <TableRow className={classes.infoRow}>
+                          <TableCell className={classes.borderRight}>
+                            <div className={classes.colTitle}>
+                              <Typography className={classes.headerText}>
+                                Item Est Cost
+                              </Typography>
+                            </div>
+                          </TableCell>
+                          {items.map((item) => (
+                            <TableCell align="center" key={item.itemNumber}>
+                              $TBD
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                        <TableRow className={classes.infoRow}>
+                          <TableCell className={classes.borderRight}>
+                            <div className={classes.colTitle}>
+                              <Typography className={classes.headerText}>
+                                Total Est Cost
+                              </Typography>
+                            </div>
+                          </TableCell>
+                          {items.map((item) => (
+                            <TableCell align="center" key={item.itemNumber}>
+                              $TBD
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                        <TableRow className={classes.infoRow}>
+                          <TableCell className={classes.borderRight}>
+                            <div className={classes.colTitle}>
+                              <Typography className={classes.headerText}>
+                                Inv. Balance
+                              </Typography>
+                            </div>
+                          </TableCell>
+                          {items.map((item) => (
+                            <TableCell align="center" key={item.itemNumber}>
+                              NA
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Box>
+                </Collapse>
+              </TableCell>
+            </TableRow>
+          </TableBody>
         </Table>
 
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
@@ -275,20 +270,20 @@ const OrderPreOrderCart = (props) => {
         have any questions, please contact your Compliance representative.
       </Typography>
       <br />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={terms}
-            onChange={() => setTermsChecked(!terms)}
-            name="Terms"
-            color="primary"
-          />
-        }
-        label=" I have read and accept the Terms and Conditions"
-      />
-      <br />
       <Grid container spacing={5}>
         <Grid item md={7} xs={12}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={terms}
+                onChange={() => setTermsChecked(!terms)}
+                name="Terms"
+                color="primary"
+              />
+            }
+            label=" I have read and accept the Terms and Conditions"
+          />
+          <br />
           <br />
           <Typography className={classes.headerText}>Order Notes</Typography>
           <br />
@@ -310,8 +305,10 @@ const OrderPreOrderCart = (props) => {
           <Typography className={classes.titleText}>Total:</Typography>
         </Grid>
       </Grid>
+      <br/>
+      <br/>
       <div className={classes.orderControl}>
-      <Button
+        <Button
           className={classes.largeButton}
           color="secondary"
           variant="contained"
