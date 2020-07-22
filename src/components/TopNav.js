@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopNav = ({ drawerOpen, handleDrawer }) => {
+const TopNav = ({ drawerOpen, handleDrawer, userType }) => {
   const classes = useStyles();
   return (
     <>
@@ -68,10 +68,10 @@ const TopNav = ({ drawerOpen, handleDrawer }) => {
               <SearchIcon fontSize="large" />
             </IconButton>
             <TextField
+              size="small"
               color="primary"
               variant="outlined"
               margin="normal"
-              required
               id="search"
               label="Search"
               name="search"
@@ -80,7 +80,7 @@ const TopNav = ({ drawerOpen, handleDrawer }) => {
         </div>
         <div className={classes.navBreak}>
           <Divider orientation="vertical" flexItem />
-          <CartModal />
+          {userType !== "compliance" && <CartModal />}
           <Notifications />
           <Avatar className={classes.avatar}>JD</Avatar>
         </div>

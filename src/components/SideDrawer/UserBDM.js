@@ -16,8 +16,8 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
 import DateRangeIcon from "@material-ui/icons/DateRange";
-import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import HelpIcon from "@material-ui/icons/Help";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles((theme) => ({
   user: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SideDrawer = ({ handleDrawer }) => {
+const UserBDM = ({ handleDrawer, handleLogout }) => {
   const classes = useStyles();
   return (
     <>
@@ -143,19 +143,6 @@ const SideDrawer = ({ handleDrawer }) => {
         <ListItem
           button
           component={Link}
-          to="/compliance"
-          onClick={() => {
-            handleDrawer(false);
-          }}
-        >
-          <ListItemIcon>
-            <AssignmentTurnedInIcon />
-          </ListItemIcon>
-          <ListItemText primary="Compliance" />
-        </ListItem>
-        <ListItem
-          button
-          component={Link}
           to="/help"
           onClick={() => {
             handleDrawer(false);
@@ -166,9 +153,23 @@ const SideDrawer = ({ handleDrawer }) => {
           </ListItemIcon>
           <ListItemText primary="Help" />
         </ListItem>
+        <ListItem
+          button
+          component={Link}
+          to="/"
+          onClick={() => {
+            handleLogout()
+            handleDrawer(false);
+          }}
+        >
+          <ListItemIcon>
+            <ExitToAppIcon />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
       </List>
     </>
   );
 };
 
-export default SideDrawer;
+export default UserBDM;

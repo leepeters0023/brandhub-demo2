@@ -110,7 +110,7 @@ const OrderHistory = () => {
           Past Orders
         </Typography>
         <br />
-        <Table className={classes.table} aria-label="simple table">
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell className={classes.headerText}>Order Number</TableCell>

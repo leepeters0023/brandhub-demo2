@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     backgroundImage: `url(${BackgroundImg})`,
     backgroundSize: "cover",
     backgroundPosition: "center",
-    height: "100vh",
+    height: "Calc(100vh - 64px)",
     overflowX: "hidden",
   },
   paper: {
@@ -61,7 +61,7 @@ const Landing = () => {
         </Grid>
       </Grid>
       <Grid className={classes.landingGrid} container spacing={7}>
-        <Grid item sm={1} xs={1} />
+        <Grid item sm={1} xs={1}/>
         <Grid item sm={5} xs={10}>
           <Paper className={classes.paper}>
             <Typography variant="h4" className={classes.subTitle}>

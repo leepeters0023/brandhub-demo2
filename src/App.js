@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Router } from "@reach/router";
+import { Router, Redirect } from "@reach/router";
 
 import LogIn from "./components/Login";
 import TopNav from "./components/TopNav";
-import SideDrawer from "./components/SideDrawer";
+import SideDrawer from "./components/SideDrawer/SideDrawer";
 import Landing from "./pages/Landing";
 import Order from "./pages/Order";
 import Account from "./pages/Account";
@@ -24,12 +24,14 @@ import OrderHistory from "./pages/OrderHistory";
 
 const theme = createMuiTheme(themeFile);
 
-//const userLookup = {};
-
 const App = () => {
-  const [auth, setAuth] = useState('orderer');
+  const [auth, setAuth] = useState(false);
   const [drawerOpen, handleDrawer] = useState(false);
   const [notificationOpen, handleNotification] = useState(false);
+
+  const handleLogout = () => {
+    setAuth(null);
+  }
 
   if (!auth) {
     return (
@@ -41,6 +43,7 @@ const App = () => {
     return (
       <MuiThemeProvider theme={theme}>
         <TopNav
+          userType={auth}
           drawerOpen={drawerOpen}
           notificationOpen={notificationOpen}
           handleDrawer={handleDrawer}
@@ -53,10 +56,11 @@ const App = () => {
             handleDrawer(false);
           }}
         >
-          <SideDrawer handleDrawer={handleDrawer} />
+          <SideDrawer handleDrawer={handleDrawer} handleLogout={handleLogout} userType={auth}/>
         </Drawer>
         <div id="main-container">
           <Router primary={false}>
+            {auth === "compliance" && <Redirect from="/" to="/compliance" />}
             <Landing path="/" />
             <OrderHistory path="/order-history" />
             <Order path="/order" />
@@ -65,7 +69,7 @@ const App = () => {
             <Budget path="/budget" />
             <Reports path="/reports" />
             <Calendar path="/calendar" />
-            <Compliance path="/compliance" />
+            {auth === "compliance" && <Compliance path="/compliance" />}
             <Help path="/help" />
           </Router>
         </div>
