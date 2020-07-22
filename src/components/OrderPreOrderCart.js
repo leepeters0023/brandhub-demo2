@@ -15,7 +15,6 @@ import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -68,7 +67,7 @@ const OrderPreOrderCart = (props) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(true);
-  const [program, updateProgram] = useState("Apothic Launch");
+  const [program, updateProgram] = useState(1);
   const [terms, setTermsChecked] = useState(false);
 
   const handleChangeSelect = (evt) => {
@@ -80,15 +79,16 @@ const OrderPreOrderCart = (props) => {
       <FormControl variant="outlined">
         <InputLabel id="program-select-label">Program</InputLabel>
         <Select
+          native
           labelId="program-select-label"
           id="program-select"
           value={program}
           onChange={handleChangeSelect}
           label="Program"
         >
-          <MenuItem value={"Apothic Launch"}>Apothic Launch</MenuItem>
-          <MenuItem value={"Barefoot Summer"}>Barefoot Summer</MenuItem>
-          <MenuItem value={"Gallo Fall Promo"}>Gallo Fall Promo</MenuItem>
+          <option value={1}>Apothic Launch</option>
+          <option value={2}>Barefoot Summer</option>
+          <option value={3}>Gallo Fall Promo</option>
         </Select>
       </FormControl>
       <TableContainer className={classes.cartContainer}>
@@ -305,8 +305,8 @@ const OrderPreOrderCart = (props) => {
           <Typography className={classes.titleText}>Total:</Typography>
         </Grid>
       </Grid>
-      <br/>
-      <br/>
+      <br />
+      <br />
       <div className={classes.orderControl}>
         <Button
           className={classes.largeButton}

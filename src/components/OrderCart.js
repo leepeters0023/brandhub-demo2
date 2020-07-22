@@ -137,7 +137,6 @@ const OrderCart = () => {
                     <InputLabel htmlFor="budget">Budget</InputLabel>
                     <Select
                       native
-                      size="small"
                       value={
                         budgets.find(
                           (budget) => budget.id === `${row.itemNumber}`

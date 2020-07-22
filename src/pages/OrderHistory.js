@@ -15,7 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   tableContainer: {
-    margin: "100px auto 0 auto",
+    margin: "30px auto 0 auto",
     padding: "20px 25px",
     width: "90vw",
   },

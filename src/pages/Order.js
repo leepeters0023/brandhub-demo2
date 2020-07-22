@@ -10,6 +10,7 @@ import ItemFilter from "../components/ItemFilter";
 import OrderInStock from "../components/OrderInStock";
 import OrderPreOrder from "../components/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreviewModal";
+import ProgramModal from "../components/ProgramModal";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -22,7 +23,6 @@ import Tab from "@material-ui/core/Tab";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,7 +44,7 @@ let itemTypes = items.map((item) => item.itemType);
 const Order = () => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
-  const [region, updateRegion] = useState("Region 1");
+  const [region, updateRegion] = useState(1);
   const [currentView, setView] = useState("list");
   const [previewModal, handlePreviewModal] = useState(false);
   const [programModal, handleProgramModal] = useState(false);
@@ -70,8 +70,7 @@ const Order = () => {
   const handleProgram = (evt) => {
     let prog = programs.find((prog) => prog.id === evt.target.id);
     handleCurrentProgram(prog);
-    console.log(currentProgram);
-    console.log(programModal);
+    handleProgramModal(true);
   };
 
   const handleModalClose = () => {
@@ -94,6 +93,20 @@ const Order = () => {
           />
         </DialogContent>
       </Dialog>
+      <Dialog
+        open={programModal}
+        onClose={handleModalClose}
+        fullWidth
+        maxWidth="xl"
+      >
+        <DialogContent>
+          <ProgramModal
+            program={currentProgram}
+            items={items}
+            handleClose={handleModalClose}
+          />
+        </DialogContent>
+      </Dialog>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -106,15 +119,16 @@ const Order = () => {
             <FormControl variant="outlined">
               <InputLabel id="region-select">Region</InputLabel>
               <Select
+                native
                 labelId="region-select"
                 id="regions"
                 value={region}
                 onChange={handleChangeSelect}
                 label="Region"
               >
-                <MenuItem value={"Region 1"}>Region 1</MenuItem>
-                <MenuItem value={"Region 2"}>Region 2</MenuItem>
-                <MenuItem value={"Region 3"}>Region 3</MenuItem>
+                <option value={1}>Region 1</option>
+                <option value={2}>Region 2</option>
+                <option value={3}>Retion 3</option>
               </Select>
             </FormControl>
             {value !== 1 && (
