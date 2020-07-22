@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userTypes = ["super", "orderer", "compliance", "marketing", "creative"];
+const userTypes = ["super", "bdm", "compliance", "marketing", "creative"];
 
 const Login = ({ setAuth }) => {
   const classes = useStyles();
