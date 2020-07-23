@@ -18,8 +18,8 @@ body {
 }
 
 #main-container {
-  margin: 64px auto 0 auto;
-  width: 100%;
+  flex-grow: 1;
+  margin: 64px auto 0 75px;
   height: Calc(100vh - 64px);
   overflow-y: scroll;
   overflow-x: hidden;

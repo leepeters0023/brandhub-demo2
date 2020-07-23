@@ -33,6 +33,24 @@ export default {
         cursor: "pointer",
       },
     },
+    navList: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "space-between",
+      height: "Calc(100% - 64px)",
+      marginTop: "64px",
+    },
+    navItem: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      textAlign: "center"
+    },
+    navText: {
+      fontSize: ".75rem",
+      color: ""
+    },
     titleText: {
       fontWeight: "600",
       fontSize: "1.5rem",

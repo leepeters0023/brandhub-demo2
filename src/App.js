@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Router, Redirect } from "@reach/router";
 
 import LogIn from "./components/Login";
-import TopNav from "./components/TopNav";
-import SideDrawer from "./components/SideDrawer/SideDrawer";
+import TopLeftNav from "./components/TopLeftNav";
 import Landing from "./pages/Landing";
 import Order from "./pages/Order";
 import Account from "./pages/Account";
@@ -16,7 +15,6 @@ import Help from "./pages/Help";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
-import Drawer from "@material-ui/core/Drawer";
 import themeFile from "./utility/theme.js";
 
 import "./App.css";
@@ -25,8 +23,7 @@ import OrderHistory from "./pages/OrderHistory";
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
-  const [auth, setAuth] = useState("compliance");
-  const [drawerOpen, handleDrawer] = useState(false);
+  const [auth, setAuth] = useState(false);
   const [notificationOpen, handleNotification] = useState(false);
 
   const handleLogout = () => {
@@ -42,26 +39,12 @@ const App = () => {
   } else {
     return (
       <MuiThemeProvider theme={theme}>
-        <TopNav
+        <TopLeftNav
           userType={auth}
-          drawerOpen={drawerOpen}
           notificationOpen={notificationOpen}
-          handleDrawer={handleDrawer}
+          handleLogout={handleLogout}
           handleNotification={handleNotification}
         />
-        <Drawer
-          anchor="left"
-          open={drawerOpen}
-          onClose={() => {
-            handleDrawer(false);
-          }}
-        >
-          <SideDrawer
-            handleDrawer={handleDrawer}
-            handleLogout={handleLogout}
-            userType={auth}
-          />
-        </Drawer>
         <div id="main-container">
           {auth === "compliance" && <Redirect noThrow to="/compliance" />}
           <Router primary={false}>
