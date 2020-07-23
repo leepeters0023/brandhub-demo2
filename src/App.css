@@ -8,6 +8,9 @@ body {
   background-color: rgb(245, 245, 245);
 }
 
+h4 {
+  margin: 0;
+}
 
 .App {
   text-align: center;

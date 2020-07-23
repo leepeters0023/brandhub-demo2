@@ -1,12 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { makeStyles } from "@material-ui/core/styles";
+import MaterialTable from "material-table";
+
+import { tableIcons } from "../utility/tableIcons";
 
 const createData = (
   approvalId,
@@ -132,69 +128,38 @@ const rows = [
   ),
 ];
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-  tableRow: {
-    "&:hover": {
-      backgroundColor: "lightgray !important",
-      cursor: "pointer",
-    },
-  },
-}));
-
 const ApprovalPending = ({ handleModal }) => {
-  const classes = useStyles();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="prior-approvals">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.headerText} align="left">
-                Approval ID
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Entry Date
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Sequence #
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Brand
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Last Update
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Last Modified By
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Comments
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.approvalId}
-                id={`${row.approvalId}-${row.sequenceNum}`}
-                onClick={() => handleModal(`${row.approvalId}-${row.sequenceNum}`)}
-                hover={true}
-                className={classes.tableRow}
-              >
-                <TableCell align="left">{row.approvalId}</TableCell>
-                <TableCell align="left">{row.date}</TableCell>
-                <TableCell align="left">{row.sequenceNum}</TableCell>
-                <TableCell align="left">{row.brand}</TableCell>
-                <TableCell align="left">{row.lastUpdate}</TableCell>
-                <TableCell align="left">{row.lastMod}</TableCell>
-                <TableCell align="left">{row.comments}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <MaterialTable
+        title="Prior Approvals"
+        columns={[
+          { title: "Approval Id", field: "approvalId" },
+          { title: "Entry Date", field: "date", filtering: false },
+          { title: "Sequence #", field: "sequenceNum" },
+          { title: "Brand", field: "brand" },
+          { title: "Last Update", field: "lastUpdate", filtering: false },
+          { title: "Last Modified By", field: "lastMod", filtering: false },
+          { title: "Comments", field: "comments", filtering: false },
+        ]}
+        data={rows}
+        options={{
+          filtering: true,
+          rowStyle: (rowData) => ({
+            backgroundColor:
+              selectedRow === rowData.tableData.id ? "#EEE" : "#FFF",
+          }),
+          exportButton: true,
+          exportAllData: true,
+        }}
+        onRowClick={(evt, selectedRow) => {
+          setSelectedRow(selectedRow.tableData.id);
+          handleModal(`${selectedRow.approvalId}-${selectedRow.sequenceNum}`);
+        }}
+        icons={tableIcons}
+      />
     </>
   );
 };

@@ -74,10 +74,10 @@ const Budget = () => {
           <Tab className={classes.headerText} label="User Budgets" value={2} />
           <Tab className={classes.headerText} label="Brand Budgets" value={3} />
         </Tabs>
-      </Paper>
       {value === 1 && <BudgetRegional />}
       {value === 2 && <BudgetUser />}
       {value === 3 && <BudgetBrand />}
+      </Paper>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import TextField from "@material-ui/core/TextField";
+import AutoComplete from "@material-ui/lab/Autocomplete";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,6 +25,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 //mock data
 import items from "../assets/mockdata/Items";
+import distributors from "../assets/mockdata/distributors";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -49,6 +51,7 @@ const OrderCart = () => {
   const [currentItems, setItems] = useState(itemList);
   const [terms, setTermsChecked] = useState(false);
   const [rush, setRushChecked] = useState(false);
+  const [shippingLocation, setShippingLocation] = useState(null);
 
   const handleChangeBudget = (evt) => {
     let newBudgets = budgets.map((budget) => {
@@ -165,22 +168,23 @@ const OrderCart = () => {
       </TableContainer>
       <br />
       <br />
-      <Typography className={classes.headerText}>
-        TERMS AND CONDITIONS
-      </Typography>
-      <br />
-      <Typography className={classes.bodyText}>
-        Use of this site is subject to all Gallo use policies. By using this
-        site, you warrant that you are a Gallo or Gallo Sales employee and that
-        you have reviewed, read, and understand the Compliance rules below
-        associated with this site and with your intended order. You further
-        warrant that you will not, under any circumstances, order items for use
-        in stated where prohibited or use items in a prohibited manner. If you
-        have any questions, please contact your Compliance representative.
-      </Typography>
-      <br />
       <Grid container spacing={5}>
         <Grid item md={7} xs={12}>
+          <Typography className={classes.headerText}>
+            TERMS AND CONDITIONS
+          </Typography>
+          <br />
+          <Typography className={classes.bodyText}>
+            Use of this site is subject to all Gallo use policies. By using this
+            site, you warrant that you are a Gallo or Gallo Sales employee and
+            that you have reviewed, read, and understand the Compliance rules
+            below associated with this site and with your intended order. You
+            further warrant that you will not, under any circumstances, order
+            items for use in stated where prohibited or use items in a
+            prohibited manner. If you have any questions, please contact your
+            Compliance representative.
+          </Typography>
+          <br />
           <FormControlLabel
             control={
               <Checkbox
@@ -205,6 +209,16 @@ const OrderCart = () => {
           />
         </Grid>
         <Grid item md={5} xs={12}>
+          <AutoComplete
+            value={shippingLocation}
+            onChange={(event, value) => setShippingLocation(value)}
+            id="shippingLocation"
+            options={distributors}
+            getOptionLabel={(distributor) => distributor.name}
+            renderInput={(params)=> <TextField {...params} label="Shipping Location" variant="outlined" size="small" />}
+            />
+          <br/>
+          <br/>
           <Typography className={classes.headerText}>Rush Order</Typography>
           <FormControlLabel
             control={

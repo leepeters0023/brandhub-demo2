@@ -21,17 +21,11 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  closeButton: {
-    position: "absolute",
-    top: "0",
-    right: "0",
-  },
   previewGrid: {
     display: "flex",
     justifyContent: "space-around",
   },
   dialogGrid: {
-    position: "relative",
     display: "flex",
     alignItems: "center",
     [theme.breakpoints.down("sm")]: {

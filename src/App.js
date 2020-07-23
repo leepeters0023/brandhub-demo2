@@ -12,18 +12,18 @@ import Calendar from "./pages/Calendar";
 import Compliance from "./pages/Compliance";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
+import Tracking from "./pages/Tracking";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import themeFile from "./utility/theme.js";
 
 import "./App.css";
-import OrderHistory from "./pages/OrderHistory";
 
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState("bdm");
   const [notificationOpen, handleNotification] = useState(false);
 
   const handleLogout = () => {
@@ -49,7 +49,7 @@ const App = () => {
           {auth === "compliance" && <Redirect noThrow to="/compliance" />}
           <Router primary={false}>
             <Landing path="/" />
-            <OrderHistory path="/order-history" />
+            <Tracking path="/tracking" />
             <Order path="/order" />
             <Coupons path="/coupons" />
             <Account path="/account" />

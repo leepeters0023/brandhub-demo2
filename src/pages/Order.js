@@ -80,33 +80,37 @@ const Order = () => {
 
   return (
     <>
-      <Dialog
-        open={previewModal}
-        onClose={handleModalClose}
-        fullWidth
-        maxWidth="lg"
-      >
-        <DialogContent>
-          <ItemPreviewModal
-            currentItem={currentItem}
-            handleClose={handleModalClose}
-          />
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        open={programModal}
-        onClose={handleModalClose}
-        fullWidth
-        maxWidth="xl"
-      >
-        <DialogContent>
-          <ProgramModal
-            program={currentProgram}
-            items={items}
-            handleClose={handleModalClose}
-          />
-        </DialogContent>
-      </Dialog>
+      <div className={classes.relativeContainer}>
+        <Dialog
+          open={previewModal}
+          onClose={handleModalClose}
+          fullWidth
+          maxWidth="lg"
+        >
+          <DialogContent>
+            <ItemPreviewModal
+              currentItem={currentItem}
+              handleClose={handleModalClose}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
+      <div className={classes.relativeContainer}>
+        <Dialog
+          open={programModal}
+          onClose={handleModalClose}
+          fullWidth
+          maxWidth="xl"
+        >
+          <DialogContent>
+            <ProgramModal
+              program={currentProgram}
+              items={items}
+              handleClose={handleModalClose}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -174,7 +178,12 @@ const Order = () => {
         </Tabs>
         <br />
         <br />
-        <Grid container spacing={5} className={classes.orderGrid} justify="space-around">
+        <Grid
+          container
+          spacing={5}
+          className={classes.orderGrid}
+          justify="space-around"
+        >
           <Grid item md={2}>
             <br />
             <ItemFilter brands={brands} itemTypes={itemTypes} />

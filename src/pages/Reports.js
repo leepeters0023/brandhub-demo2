@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import OrderHistory from "../components/OrderHistory";
 import GalloLogo from "../assets/gallologo.png";
 
 import Paper from "@material-ui/core/Paper";
@@ -64,20 +65,16 @@ const Reports = () => {
         >
           <Tab
             className={classes.headerText}
-            label="Regional Reports"
+            label="Order History"
             value={1}
           />
           <Tab
             className={classes.headerText}
-            label="Standard Reports"
+            label="Custom Reports"
             value={2}
           />
-          <Tab
-            className={classes.headerText}
-            label="Favorite Reports"
-            value={3}
-          />
         </Tabs>
+        {value === 1 && <OrderHistory />}
       </Paper>
     </>
   );

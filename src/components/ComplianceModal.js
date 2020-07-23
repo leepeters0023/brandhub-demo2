@@ -24,14 +24,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center"
   },
-  relativeContainer: {
-    position: "relative",
-  },
-  closeButton: {
-    position: "absolute",
-    top: "0",
-    right: "0",
-  }
 }));
 
 const ComplianceModal = (props) => {
@@ -41,7 +33,7 @@ const ComplianceModal = (props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.relativeContainer}>
+    <>
       <IconButton
           className={classes.closeButton}
           onClick={() => {
@@ -203,7 +195,7 @@ const ComplianceModal = (props) => {
           </Grid>
         </Grid>
       </Grid>
-    </div>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
 
-import HistoryIcon from "@material-ui/icons/History";
+import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
@@ -39,11 +39,11 @@ const UserBDM = ({ handleLogout }) => {
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Coupons" />
           </ListItem>
-          <ListItem className={classes.navItem} button component={Link} to="/order-history">
+          <ListItem className={classes.navItem} button component={Link} to="/tracking">
             <ListItemIcon className={classes.navItem}>
-              <HistoryIcon fontSize="large" color="primary" />
+              <TrackChangesIcon fontSize="large" color="primary" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="History" />
+            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Tracking" />
           </ListItem>
           <ListItem className={classes.navItem} button component={Link} to="/budget">
             <ListItemIcon className={classes.navItem}>

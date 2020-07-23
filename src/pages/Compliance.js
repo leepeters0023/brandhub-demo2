@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
-import { useInput } from "../hooks/UtilityHooks";
 
 import ApprovalPrior from "../components/ApprovalPrior";
 import ApprovalPending from "../components/ApprovalPending";
@@ -16,23 +15,11 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import Divider from "@material-ui/core/Divider";
-import { makeStyles } from "@material-ui/core/styles";
 
-import ClearIcon from "@material-ui/icons/Clear";
-import SearchIcon from "@material-ui/icons/Search";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  queryControl: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-around",
-  },
 }));
 
 const Compliance = () => {
@@ -43,18 +30,6 @@ const Compliance = () => {
   const [modal, setModal] = useState(false);
   const [currentId, setCurrentId] = useState("");
 
-  const {
-    value: sequenceNum,
-    bind: bindSequenceNum,
-    reset: resetSequenceNum,
-  } = useInput("");
-  const { value: brand, bind: bindBrand, reset: resetBrand } = useInput("");
-  const {
-    value: approvalId,
-    bind: bindApprovalId,
-    reset: resetApprovalId,
-  } = useInput("");
-
   const handleChangeTab = (_evt, newValue) => {
     updateValue(newValue);
   };
@@ -63,33 +38,25 @@ const Compliance = () => {
     updateRegion(evt.target.value);
   };
 
-  const handleSearch = () => {
-    console.log(sequenceNum, brand, approvalId);
-  };
-
-  const handleClear = () => {
-    resetSequenceNum();
-    resetBrand();
-    resetApprovalId();
-  };
-
   const handleModal = (id) => {
     setCurrentId(id);
     setModal(true);
-  }
+  };
 
   return (
     <>
-      <Dialog
-        open={modal}
-        onClose={()=>setModal(!modal)}
-        fullWidth
-        maxWidth="xl"
-      >
-        <DialogContent>
-          <ComplianceModal id={currentId} handleClose={setModal}/>
-        </DialogContent>
-      </Dialog>
+      <div className={classes.relativeContainer}>
+        <Dialog
+          open={modal}
+          onClose={() => setModal(!modal)}
+          fullWidth
+          maxWidth="xl"
+        >
+          <DialogContent>
+            <ComplianceModal id={currentId} handleClose={setModal} />
+          </DialogContent>
+        </Dialog>
+      </div>
       <Paper className={classes.paperContainer}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -136,7 +103,7 @@ const Compliance = () => {
         </Tabs>
         <br />
         <br />
-        <Grid container spacing={5} justify="space-around">
+        {/* <Grid container spacing={5} justify="space-around">
           <Grid item md={2}>
             <br />
             <Typography className={classes.headerText} >
@@ -191,11 +158,11 @@ const Compliance = () => {
               </div>
           </Grid>
           <Divider orientation="vertical" flexItem />
-          <Grid item md={9}>
-            {value === 1 && <ApprovalPrior handleModal={handleModal}/>}
-            {value === 2 && <ApprovalPending handleModal={handleModal}/>}
-          </Grid>
-        </Grid>
+          <Grid item md={9}> */}
+        {value === 1 && <ApprovalPrior handleModal={handleModal} />}
+        {value === 2 && <ApprovalPending handleModal={handleModal} />}
+        {/* </Grid>
+        </Grid> */}
       </Paper>
     </>
   );

@@ -101,7 +101,7 @@ const Notifications = () => {
     <>
       <Tooltip title="Notifications">
         <IconButton
-          aria-owns={anchorEl ? "simple-menu" : undefined}
+          aria-owns={anchorEl ? "notifications" : undefined}
           aria-haspopup="true"
           onClick={handleOpen}
         >

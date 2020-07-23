@@ -1,13 +1,9 @@
 import React from "react";
 
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Container from "@material-ui/core/Container";
+import MaterialTable from "material-table";
+
+import { tableIcons } from "../utility/tableIcons";
+
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
@@ -45,80 +41,59 @@ let budget = [
   createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
   createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
   createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
   createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
   createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
   createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
   createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-]
+  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
+  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
+  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
+  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
+  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
+];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  configButtons: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "flex-end",
+  },
 }));
 
 const BudgetUser = () => {
   const classes = useStyles();
   return (
     <>
-      <Container className={classes.tabContainer}>
-        <TableContainer className={classes.tableContainer}>
-          <br />
-          <div className={classes.titleBar}>
-            <Typography className={classes.titleText} variant="h5">
-              User Budgets
-            </Typography>
-            <div className={classes.configButtons}>
-              <Tooltip title="Refresh">
-                <IconButton>
-                  <CachedIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Download">
-                <IconButton>
-                  <GetAppIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </div>
-          <br />
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.headerText}>Date</TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  User
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                Buisiness Unit
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Region
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Spend
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {budget.map((row) => (
-                <TableRow key={row.spend}>
-                  <TableCell component="th" scope="row">
-                    {row.date}
-                  </TableCell>
-                  <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">{row.unit}</TableCell>
-                  <TableCell align="left">{row.region}</TableCell>
-                  <TableCell align="left">{row.spend}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
+      <div className={classes.configButtons}>
+        <Tooltip title="Refresh">
+          <IconButton>
+            <CachedIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Download">
+          <IconButton>
+            <GetAppIcon />
+          </IconButton>
+        </Tooltip>
+      </div>
+      <MaterialTable
+        title="User Budgets"
+        columns={[
+          { title: "Date", field: "date", filtering: false },
+          { title: "User", field: "user" },
+          { title: "Business Unit", field: "unit" },
+          { title: "Region", field: "region" },
+          { title: "Spend", field: "spend", filtering: false },
+        ]}
+        data={budget}
+        options={{
+          filtering: true,
+          exportButton: true,
+          exportAllData: true,
+        }}
+        icons={tableIcons}
+      />
     </>
   );
 };

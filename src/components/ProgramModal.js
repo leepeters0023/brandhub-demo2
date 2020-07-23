@@ -1,5 +1,7 @@
 import React from "react";
 
+import ItemOptions from "./ItemOptions";
+
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -27,13 +29,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     borderRadius: "50%",
   },
-  closeButton: {
-    position: "absolute",
-    top: "0",
-    right: "0",
-  },
   dialogGrid: {
-    position: "relative",
     display: "flex",
     alignItems: "center",
     [theme.breakpoints.down("sm")]: {
@@ -44,6 +40,16 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     width: "100%",
     justifyContent: "flex-end",
+  },
+  headerCell: {
+    padding: "0",
+    height: "200px",
+    width: "150px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    textAlign: "center",
   },
 }));
 
@@ -95,9 +101,12 @@ const ProgramModal = (props) => {
               {items.map((item) => (
                 <TableCell key={item.itemNumber}>
                   <div className={classes.headerCell}>
-                    <Typography className={classes.headerText} variant="h5">
-                      {item.brand}
-                    </Typography>
+                    <div style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <Typography className={classes.headerText}>
+                        {item.brand}
+                      </Typography>
+                      <ItemOptions />
+                    </div>
                     <img
                       id={item.itemNumber}
                       className={classes.previewImg}

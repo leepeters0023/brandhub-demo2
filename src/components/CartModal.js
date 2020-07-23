@@ -17,14 +17,6 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  relativeContainer: {
-    position: "relative",
-  },
-  closeButton: {
-    position: "absolute",
-    top: "0",
-    right: "0",
-  }
 }));
 
 const CartModal = () => {

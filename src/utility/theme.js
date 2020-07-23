@@ -93,39 +93,19 @@ export default {
       padding: "20px 25px",
       width: "90vw",
     },
-    chipApproved: {
-      margin: "0",
-      backgroundColor: "#3f51b5",
-      width: "125px",
-      color: "white",
-      fontWeight: "600",
-    },
-    chipActive: {
-      margin: "0",
-      backgroundColor: "#4caf50",
-      width: "125px",
-      color: "white",
-      fontWeight: "600",
-    },
-    chipPending: {
-      margin: "0",
-      backgroundColor: "#ff9800",
-      width: "125px",
-      color: "white",
-      fontWeight: "600",
-    },
-    chipCanceled: {
-      margin: "0",
-      backgroundColor: "#f44336",
-      width: "125px",
-      color: "white",
-      fontWeight: "600",
-    },
     modalTabContainer: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
     },
+    relativeContainer: {
+      position: "relative",
+    },
+    closeButton: {
+      position: "absolute",
+      top: "0",
+      right: "5px",
+    }
   },
 };

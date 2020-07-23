@@ -1,16 +1,11 @@
 import React from "react";
 
-import Typography from "@material-ui/core/Typography";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Container from "@material-ui/core/Container";
+import MaterialTable from "material-table";
+
+import { tableIcons } from "../utility/tableIcons";
+
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CachedIcon from "@material-ui/icons/Cached";
@@ -57,87 +52,114 @@ let budget = [
   createData(dateString, "Lorem 2020", "Select", "Canceled"),
   createData(dateString, "Lorem 2020", "Select", "Canceled"),
   createData(dateString, "Lorem 2020", "Select", "Canceled"),
-]
+];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  configButtons: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "flex-end",
+  },
 }));
 
 const BudgetRegional = () => {
-
   const classes = useStyles();
   return (
     <>
-      <Container className={classes.tabContainer}>
-        <TableContainer className={classes.tableContainer}>
-          <br />
-          <div className={classes.titleBar}>
-            <Typography className={classes.titleText} variant="h5">
-              Monthly Pre-Order
-            </Typography>
-            <div className={classes.configButtons}>
-              <Tooltip title="Refresh">
-                <IconButton>
-                  <CachedIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Download">
-                <IconButton>
-                  <GetAppIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </div>
-          <br />
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.headerText}>Date</TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Buisiness Unit
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Region
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Budget
-                </TableCell>
-                <TableCell className={classes.headerText} align="left">
-                  Spend
-                </TableCell><TableCell className={classes.headerText} align="left">
-                  Balance
-                </TableCell>
-                <TableCell
-                  className={classes.headerText}
-                  align="center"
-                >
-                  Status
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {budget.map((row) => (
-                <TableRow key={row.budget}>
-                  <TableCell component="th" scope="row">
-                    {row.date}
-                  </TableCell>
-                  <TableCell align="left">{row.unit}</TableCell>
-                  <TableCell align="left">{row.region}</TableCell>
-                  <TableCell align="left">{row.budget}</TableCell>
-                  <TableCell align="left">{row.spend}</TableCell>
-                  <TableCell align="left">{row.balance}</TableCell>
-                  <TableCell align="center">
-                    {row.status === "Approved" && <Chip className={classes.chipApproved} label={row.status} />}
-                    {row.status === "Active" && <Chip className={classes.chipActive} label={row.status} />}
-                    {row.status === "Pending" && <Chip className={classes.chipPending} label={row.status} />}
-                    {row.status === "Canceled" && <Chip className={classes.chipCanceled} label={row.status} />}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Container>
+      <div className={classes.configButtons}>
+        <Tooltip title="Refresh">
+          <IconButton>
+            <CachedIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Download">
+          <IconButton>
+            <GetAppIcon />
+          </IconButton>
+        </Tooltip>
+      </div>
+      <MaterialTable
+        title="Regional Budget"
+        columns={[
+          { title: "Date", field: "date", filtering: false },
+          { title: "Business Unit", field: "unit" },
+          { title: "Region", field: "region" },
+          { title: "Budget", field: "budget", filtering: false },
+          { title: "Spend", field: "spend", filtering: false },
+          { title: "Balance", field: "balance", filtering: false },
+          {
+            title: "Status",
+            field: "status",
+            render: (rowData) => {
+              if (rowData.status === "Approved") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#4caf50",
+                      color: "#FFF",
+                      textAlign: "center",
+                      padding: "1px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
+                  </div>
+                );
+              } else if (rowData.status === "Active") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#3f51b5",
+                      color: "#FFF",
+                      textAlign: "center",
+                      padding: "1px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
+                  </div>
+                );
+              } else if (rowData.status === "Pending") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#ff9800",
+                      color: "#FFF",
+                      textAlign: "center",
+                      padding: "1px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
+                  </div>
+                );
+              } else if (rowData.status === "Canceled") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#f44336",
+                      color: "#FFF",
+                      textAlign: "center",
+                      padding: "1px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
+                  </div>
+                );
+              }
+            },
+          },
+        ]}
+        data={budget}
+        options={{
+          filtering: true,
+          exportButton: true,
+          exportAllData: true,
+        }}
+        icons={tableIcons}
+      />
     </>
   );
 };
