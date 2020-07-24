@@ -23,7 +23,7 @@ import "./App.css";
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState("bdm");
   const [notificationOpen, handleNotification] = useState(false);
 
   const handleLogout = () => {
