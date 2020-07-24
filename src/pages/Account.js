@@ -41,9 +41,10 @@ const Account = () => {
           <Tab className={classes.headerText} label="Account Details" value={1} />
           <Tab className={classes.headerText} label="Address Book" value={2} />
         </Tabs>
-      </Paper>
+        <br/>
       {value === 1 && <AccountDetails />}
       {value === 2 && <AddressBook />}
+      </Paper>
     </>
   );
 };
