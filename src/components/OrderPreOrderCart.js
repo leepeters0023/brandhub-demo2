@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   headerCell: {
     padding: "0",
-    height: "200px",
+    height: "184px",
     width: "150px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     textAlign: "center",
   },
   borderRight: {
@@ -76,26 +76,45 @@ const OrderPreOrderCart = (props) => {
 
   return (
     <>
-      <FormControl variant="outlined">
-        <InputLabel id="program-select-label">Program</InputLabel>
-        <Select
-          native
-          labelId="program-select-label"
-          id="program-select"
-          value={program}
-          onChange={handleChangeSelect}
-          label="Program"
-        >
-          <option value={1}>Apothic Launch</option>
-          <option value={2}>Barefoot Summer</option>
-          <option value={3}>Gallo Fall Promo</option>
-        </Select>
-      </FormControl>
       <TableContainer className={classes.cartContainer}>
-        <Table>
-          <TableBody>
+        <Table stickyHeader={true} size="small" aria-label="pre-order-table">
+          <TableHead>
             <TableRow>
-              <TableCell align="right">
+              <TableCell>
+                <FormControl variant="outlined">
+                  <InputLabel id="program-select-label">Program</InputLabel>
+                  <Select
+                    native
+                    labelId="program-select-label"
+                    id="program-select"
+                    value={program}
+                    onChange={handleChangeSelect}
+                    label="Program"
+                  >
+                    <option value={1}>Apothic Launch</option>
+                    <option value={2}>Barefoot Summer</option>
+                    <option value={3}>Gallo Fall Promo</option>
+                  </Select>
+                </FormControl>
+              </TableCell>
+              {items.map((item) => (
+                <TableCell key={item.itemNumber}>
+                  <div className={classes.headerCell}>
+                    <Typography className={classes.headerText} variant="h5">
+                      {item.brand}
+                    </Typography>
+                    <img
+                      id={item.itemNumber}
+                      className={classes.previewImg}
+                      src={item.imgUrl}
+                      alt={item.itemType}
+                    />
+                  </div>
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow>
+              <TableCell align="right" style={{ top: 197 }}>
                 <div className={classes.tableControl}>
                   <Typography>Order Details</Typography>
                   <IconButton
@@ -106,6 +125,17 @@ const OrderPreOrderCart = (props) => {
                   </IconButton>
                 </div>
               </TableCell>
+              {items.map((item) => {
+                return (
+                  <TableCell style={{ top: 197 }} key={item.itemNumber}>
+                    <div className={classes.infoCell}>
+                      <Typography variant="body2" color="textSecondary">
+                        {`${item.itemType} | ${item.itemNumber}`}
+                      </Typography>
+                    </div>
+                  </TableCell>
+                );
+              })}
             </TableRow>
             <TableRow>
               <TableCell style={{ padding: 0 }} colSpan={items.length + 1}>
@@ -196,38 +226,6 @@ const OrderPreOrderCart = (props) => {
                   </Box>
                 </Collapse>
               </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-
-        <Table stickyHeader={true} size="small" aria-label="pre-order-table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.borderRight}>
-                <div className={classes.colTitle}>
-                  <Typography className={classes.headerText}>
-                    Brand / Item
-                  </Typography>
-                </div>
-              </TableCell>
-              {items.map((item) => (
-                <TableCell key={item.itemNumber}>
-                  <div className={classes.headerCell}>
-                    <Typography className={classes.headerText} variant="h5">
-                      {item.brand}
-                    </Typography>
-                    <img
-                      id={item.itemNumber}
-                      className={classes.previewImg}
-                      src={item.imgUrl}
-                      alt={item.itemType}
-                    />
-                    <Typography variant="body2" color="textSecondary">
-                      {`${item.itemType} | ${item.itemNumber}`}
-                    </Typography>
-                  </div>
-                </TableCell>
-              ))}
             </TableRow>
           </TableHead>
           <TableBody>

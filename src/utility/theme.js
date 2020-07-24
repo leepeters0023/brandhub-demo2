@@ -99,6 +99,13 @@ export default {
       alignItems: "center",
       justifyContent: "center",
     },
+    centerWrapper: {
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
     relativeContainer: {
       position: "relative",
     },

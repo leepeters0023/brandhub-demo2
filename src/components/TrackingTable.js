@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import MaterialTable from "material-table";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { tableIcons } from "../utility/tableIcons";
@@ -512,18 +513,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const TrackingTable = () => {
+const TrackingTable = ({ handlePreview }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(null);
-
-  const handleModal = (id) => {
-    console.log(id)
-  }
 
   return (
     <>
       <MaterialTable
-        title=""
+        title={<Typography className={classes.titleText}>Tracking</Typography>}
         columns={[
           { title: <h4 className={classes.colHeader}>Ord. #</h4>, field: "orderNum" },
           { title: <h4 className={classes.colHeader}>Seq. #</h4>, field: "sequenceNum" },
@@ -546,17 +543,24 @@ const TrackingTable = () => {
           }),
           headerStyle: {
             backgroundColor: "#0d47a1",
+            position: "sticky",
+            top: 0,
             color: "#FFF",
             "&:hover": {
               color: "#ffac33"
-            }
+            },
           },
+          filterCellStyle: {
+            position: "sticky",
+          },
+          maxBodyHeight: "650px",
+          pageSizeOptions: [5, 10, 20, 50, 100],
           exportButton: true,
           exportAllData: true
         }}
         onRowClick={((evt, selectedRow) => {
           setSelectedRow(selectedRow.tableData.id)
-          handleModal(`${selectedRow.orderNum}-${selectedRow.sequenceNum}`)
+          handlePreview(`${selectedRow.orderNum}-${selectedRow.sequenceNum}`)
         })}
         icons={tableIcons}
       />

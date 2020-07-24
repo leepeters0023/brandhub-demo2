@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Router, Redirect } from "@reach/router";
 
 import LogIn from "./components/Login";
-import TopLeftNav from "./components/TopLeftNav";
+import TopLeftNav from "./components/Navigation/TopLeftNav";
 import Landing from "./pages/Landing";
 import Order from "./pages/Order";
 import Account from "./pages/Account";

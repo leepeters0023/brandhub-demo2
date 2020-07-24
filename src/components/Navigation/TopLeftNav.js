@@ -1,9 +1,9 @@
 import React from "react";
-import BrandHubLogo from "../assets/brandhub.svg";
+import BrandHubLogo from "../../assets/brandhub.svg";
 
-import CartModal from "./CartModal";
-import Notifications from "./Notifications";
-import SideDrawer from "./Navigation/SideDrawer";
+import CartModal from "../CartModal";
+import Notifications from "../Notifications";
+import SideDrawer from "./SideDrawer";
 
 import AppBar from "@material-ui/core/AppBar";
 import Avatar from "@material-ui/core/Avatar";
