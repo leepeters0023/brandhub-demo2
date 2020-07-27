@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import ItemOptions from "./ItemOptions";
+import SelectorMenus from "./SelectorMenus";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -28,6 +29,11 @@ import distributors from "../assets/mockdata/distributors";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  formControl: {
+    position: "absolute",
+    top: "15px",
+    right: "60px",
+  },
   programImage: {
     width: "90%",
     height: "auto",
@@ -69,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     width: "150px",
   },
+  tableClosed: {
+    zIndex: "-5",
+  }
 }));
 
 const ProgramModal = (props) => {
@@ -77,9 +86,11 @@ const ProgramModal = (props) => {
     program: { name, imgUrl, desc, goals, timeframe },
     items,
     handleClose,
+    userType,
   } = props;
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [tableStyle, setTableStyle] = useState("tableClosed");
 
   return (
     <>
@@ -92,6 +103,11 @@ const ProgramModal = (props) => {
         >
           <CancelIcon fontSize="large" color="secondary" />
         </IconButton>
+        {userType !== "field1" && (
+          <div className={classes.formControl}>
+            <SelectorMenus type="bdms" />
+          </div>
+        )}
         <Grid item md={3} style={{ textAlign: "center" }}>
           <img src={imgUrl} className={classes.programImage} alt={name} />
           <Typography className={classes.bodyText}>{timeframe}</Typography>
@@ -150,7 +166,10 @@ const ProgramModal = (props) => {
                   <Tooltip title="Details">
                     <IconButton
                       aria-label="expand row"
-                      onClick={() => setOpen(!open)}
+                      onClick={() => {
+                        setOpen(!open)
+                        !open ? setTableStyle(null) : setTableStyle("tableClosed")
+                      }}
                     >
                       {open ? (
                         <KeyboardArrowUpIcon />
@@ -174,7 +193,7 @@ const ProgramModal = (props) => {
               })}
             </TableRow>
             <TableRow>
-              <TableCell style={{ padding: 0 }} colSpan={items.length + 1}>
+              <TableCell style={{ padding: 0 }} colSpan={items.length + 1} className={classes[tableStyle]}>
                 <Collapse in={open} timeout="auto">
                   <Box>
                     <Table
@@ -183,7 +202,7 @@ const ProgramModal = (props) => {
                       aria-label="item-info"
                     >
                       <TableBody>
-                        <TableRow className={classes.infoRow} >
+                        <TableRow className={classes.infoRow}>
                           <TableCell className={classes.borderRight}>
                             <div className={classes.colTitle}>
                               <Typography className={classes.headerText}>

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import SelectorMenus from "./SelectorMenus";
+
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
@@ -11,10 +13,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
@@ -61,18 +60,18 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     width: "100%",
   },
+  tableClosed: {
+    zIndex: "-5",
+  }
 }));
 
-const OrderPreOrderCart = (props) => {
+const OrderPreOrderCart = ({ userType }) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(true);
-  const [program, updateProgram] = useState(1);
+  const [open, setOpen] = useState(false);
   const [terms, setTermsChecked] = useState(false);
+  const [tableStyle, setTableStyle] = useState("tableClosed");
 
-  const handleChangeSelect = (evt) => {
-    updateProgram(evt.target.value);
-  };
 
   return (
     <>
@@ -81,21 +80,7 @@ const OrderPreOrderCart = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <FormControl variant="outlined">
-                  <InputLabel id="program-select-label">Program</InputLabel>
-                  <Select
-                    native
-                    labelId="program-select-label"
-                    id="program-select"
-                    value={program}
-                    onChange={handleChangeSelect}
-                    label="Program"
-                  >
-                    <option value={1}>Apothic Launch</option>
-                    <option value={2}>Barefoot Summer</option>
-                    <option value={3}>Gallo Fall Promo</option>
-                  </Select>
-                </FormControl>
+                <SelectorMenus type="programs" />
               </TableCell>
               {items.map((item) => (
                 <TableCell key={item.itemNumber}>
@@ -119,7 +104,10 @@ const OrderPreOrderCart = (props) => {
                   <Typography>Order Details</Typography>
                   <IconButton
                     aria-label="expand row"
-                    onClick={() => setOpen(!open)}
+                    onClick={() => {
+                      setOpen(!open)
+                      !open ? setTableStyle(null) : setTableStyle("tableClosed")
+                    }}
                   >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                   </IconButton>
@@ -138,7 +126,7 @@ const OrderPreOrderCart = (props) => {
               })}
             </TableRow>
             <TableRow>
-              <TableCell style={{ padding: 0 }} colSpan={items.length + 1}>
+              <TableCell style={{ padding: 0 }} colSpan={items.length + 1} className={classes[tableStyle]}>
                 <Collapse in={open} timeout="auto">
                   <Box>
                     <Table
@@ -313,13 +301,15 @@ const OrderPreOrderCart = (props) => {
         >
           SAVE ORDER
         </Button>
-        <Button
-          className={classes.largeButton}
-          color="primary"
-          variant="contained"
-        >
-          PURCHASE ORDER
-        </Button>
+        {userType !== "field1" && (
+          <Button
+            className={classes.largeButton}
+            color="primary"
+            variant="contained"
+          >
+            PURCHASE ORDER
+          </Button>
+        )}
       </div>
       <br />
       <br />

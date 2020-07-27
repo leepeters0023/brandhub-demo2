@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import Badge from "@material-ui/core/Badge";
+import ListItemText from "@material-ui/core/ListItemText";
 
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
@@ -82,11 +84,11 @@ const Notifications = () => {
     (notifications && notifications.length) > 0 ? (
       notifications.map((not, index) => {
         return (
+          
           <MenuItem key={index} onClick={handleClose}>
-            <Typography color="inherit" variant="body1">
-              {not.content}
-            </Typography>
+            <ListItemText primary={not.content} />
           </MenuItem>
+          
         );
       })
     ) : (
@@ -109,6 +111,15 @@ const Notifications = () => {
         </IconButton>
       </Tooltip>
       <Menu
+       getContentAnchorEl={null}
+       anchorOrigin={{
+         vertical: "bottom",
+         horizontal: "right",
+       }}
+       transformOrigin={{
+         vertical: "top",
+         horizontal: "right",
+       }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}

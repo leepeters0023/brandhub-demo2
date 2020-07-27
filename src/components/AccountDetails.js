@@ -93,6 +93,8 @@ const AccountDetails = () => {
             </div>
           </div>
         </div>
+        <br/>
+        <br/>
       </Container>
     </>
   );

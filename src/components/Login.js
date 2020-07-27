@@ -16,6 +16,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 const useStyles = makeStyles((theme) => ({
+  welcomContainer: {
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    overflow: "hidden",
+    backgroundColor: "#FFF",
+  },
   welcome: {
     fontFamily: "georgia",
     fontWeight: "800",
@@ -51,9 +61,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userTypes = ["super", "bdm", "compliance", "marketing", "creative"];
+const userTypes = [
+  "super",
+  "field1",
+  "field2",
+  "compliance",
+  "marketing",
+  "creative",
+];
 
-const Login = ({ setAuth }) => {
+const Login = ({ setAuth, setLoginPath }) => {
   const classes = useStyles();
   const {
     value: userName,
@@ -83,11 +100,19 @@ const Login = ({ setAuth }) => {
       resetPassword();
     }
     if (!error.user && !error.password) {
-      setAuth(userName);
+      if (userName === "compliance") {
+        setLoginPath("/compliance");
+        localStorage.setItem("user", userName)
+        setAuth(userName);
+      } else {
+        setLoginPath("/")
+        localStorage.setItem("user", userName)
+        setAuth(userName);
+      }
     }
   };
   return (
-    <>
+    <div className={classes.welcomContainer}>
       <img src={BrandHubLogo} className={classes.logo} alt="Logo" />
       <Container
         className={classes.loginContainer}
@@ -157,7 +182,7 @@ const Login = ({ setAuth }) => {
           </form>
         </div>
       </Container>
-    </>
+    </div>
   );
 };
 

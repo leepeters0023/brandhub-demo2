@@ -44,7 +44,7 @@ let initialBudgets = itemList.map((item) => {
   return { id: `${item.itemNumber}`, budget: "" };
 });
 
-const OrderCart = () => {
+const OrderCart = ({ userType }) => {
   const classes = useStyles();
 
   const [budgets, setBudget] = useState(initialBudgets);
@@ -215,10 +215,17 @@ const OrderCart = () => {
             id="shippingLocation"
             options={distributors}
             getOptionLabel={(distributor) => distributor.name}
-            renderInput={(params)=> <TextField {...params} label="Shipping Location" variant="outlined" size="small" />}
-            />
-          <br/>
-          <br/>
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Shipping Location"
+                variant="outlined"
+                size="small"
+              />
+            )}
+          />
+          <br />
+          <br />
           <Typography className={classes.headerText}>Rush Order</Typography>
           <FormControlLabel
             control={
@@ -240,6 +247,7 @@ const OrderCart = () => {
           <Typography className={classes.titleText}>Total:</Typography>
         </Grid>
       </Grid>
+      <br />
       <div className={classes.orderControl}>
         <Button
           className={classes.largeButton}
@@ -248,13 +256,15 @@ const OrderCart = () => {
         >
           SAVE ORDER
         </Button>
-        <Button
-          className={classes.largeButton}
-          color="primary"
-          variant="contained"
-        >
-          PURCHASE ORDER
-        </Button>
+        {userType !== "field1" && (
+          <Button
+            className={classes.largeButton}
+            color="primary"
+            variant="contained"
+          >
+            PURCHASE ORDER
+          </Button>
+        )}
       </div>
       <br />
       <br />

@@ -9,7 +9,8 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
   topImage: {
     position: "relative",
     backgroundImage: `url(${BackgroundImg})`,
@@ -44,7 +45,7 @@ const useStyles = makeStyles({
     width: "100%",
     justifyContent: "space-between",
   },
-});
+}));
 
 const Landing = () => {
   const classes = useStyles();

@@ -8,6 +8,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core";
 
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -26,6 +27,7 @@ const ItemFilter = (props) => {
   const [brandsOpen, setBrandsOpen] = useState(false);
   const [itemTypesOpen, setItemTypesOpen] = useState(false);
   const [unitsOpen, setUnitsOpen] = useState(false);
+  const [favItemChecked, setFavItemChecked] = useState(false);
 
   const [brandsChecked, setBrandsChecked] = useState([]);
   const [itemTypesChecked, setItemTypesChecked] = useState([]);
@@ -151,7 +153,20 @@ const ItemFilter = (props) => {
     <>
       <Typography className={classes.headerText}>Filter Items</Typography>
       <List>
-        <br/>
+        <br />
+        <ListItem>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={favItemChecked}
+                onChange={() => setFavItemChecked(!favItemChecked)}
+                name="viewFavorites"
+                color="primary"
+              />
+            }
+            label=" View Favorites"
+          />
+        </ListItem>
         <ListItem
           button
           onClick={() => {

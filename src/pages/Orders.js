@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "date-fns";
 
-import TrackingTable from "../components/TrackingTable";
+import OrdersCurrentTable from "../components/OrdersCurrentTable";
+import OrdersPastTable from "../components/OrdersPastTable";
 import TrackingModal from "../components/TrackingModal";
 
 import GalloLogo from "../assets/gallologo.png";
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Tracking = () => {
+const Orders = () => {
   const classes = useStyles();
 
   const [selectedFromDate, setSelectedFromDate] = useState(
@@ -173,10 +174,11 @@ const Tracking = () => {
         </Grid>
         <br />
         <br />
-        <TrackingTable handlePreview={handlePreview} />
+        {window.location.hash==="#current" && <OrdersCurrentTable handlePreview={handlePreview} />}
+        {window.location.hash==="#past" && <OrdersPastTable handlePreview={handlePreview} />}
       </Paper>
     </>
   );
 };
 
-export default Tracking;
+export default Orders;

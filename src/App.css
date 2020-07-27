@@ -1,3 +1,7 @@
+html {
+  background-color: rgb(225, 225, 225);
+}
+
 h4 {
   margin: 0;
 }
@@ -14,7 +18,7 @@ h4 {
   flex-grow: 1;
   margin: 64px auto 0 75px;
   height: Calc(100vh - 64px);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background-color: rgb(225, 225, 225);

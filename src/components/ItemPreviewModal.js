@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import ItemOneSheet from "./ItemOneSheet";
 import ItemFeedback from "./ItemFeedback";
 import ItemAssembly from "./ItemAssembly";
+import SelectorMenus from "./SelectorMenus";
 
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -11,9 +12,6 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -72,10 +70,6 @@ const useStyles = makeStyles((theme) => ({
     height: "5px",
     margin: "10px 0",
   },
-  formControl: {
-    width: "150px",
-    margin: "0px 5px",
-  },
   cartButton: {
     width: theme.spacing(38),
     marginTop: "10px",
@@ -87,18 +81,14 @@ const ItemPreviewModal = (props) => {
   const {
     currentItem: { itemNumber, brand, itemType, price, imgUrl, qty },
     handleClose,
+    userType,
   } = props;
 
   const [currentImage, setImage] = useState(imgUrl);
-  const [budget, setBudget] = useState("");
   const [value, setValue] = useState(1);
 
   const handleChangeTab = (_evt, newValue) => {
     setValue(newValue);
-  };
-
-  const handleChangeBudget = (evt) => {
-    setBudget(evt.target.value);
   };
 
   return (
@@ -194,30 +184,20 @@ const ItemPreviewModal = (props) => {
           </Typography>
           <br />
           <Box bgcolor="primary.main" className={classes.dividerBox} />
+          {userType !== "field1" && (
+            <div>
+              <SelectorMenus type="bdms" />
+              <br />
+              <br />
+            </div>
+          )}
           <TextField
-            style={{ width: "150px" }}
+            style={{ width: "150px", marginLeft: "5px" }}
             id={`${itemNumber}`}
             placeholder="Qty"
             variant="outlined"
           />
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel htmlFor="budget">Budget</InputLabel>
-            <Select
-              native
-              value={budget}
-              onChange={handleChangeBudget}
-              label="Budget"
-              inputProps={{
-                name: "Budget",
-                id: "budget",
-              }}
-            >
-              <option value={""} aria-label="Budget" />
-              <option value={1}>Region 1 Budget</option>
-              <option value={2}>Region 2 Budget</option>
-              <option value={3}>Retion 3 Budget</option>
-            </Select>
-          </FormControl>
+          <SelectorMenus type="budgets" />
           <br />
           <Button
             variant="contained"

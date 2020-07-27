@@ -1,14 +1,17 @@
 import React from "react";
 
-import UserBDM from "./UserBDM";
+import UserField from "./UserField";
 import UserCompliance from "./UserCompliance";
+import UserSuper from "./UserSuper";
 
 
-const SideDrawer = ({ handleLogout, userType }) => {
+const SideDrawer = ({ userType }) => {
   return (
     <>
-      {userType === "bdm" && <UserBDM handleLogout={handleLogout} />}
-      {userType === "compliance" && <UserCompliance handleLogout={handleLogout} />}
+      {userType === "super" && <UserSuper />}
+      {userType === "field1" && <UserField />}
+      {userType === "field2" && <UserField />}
+      {userType === "compliance" && <UserCompliance />}
     </>
   );
 };

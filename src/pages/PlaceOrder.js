@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
+import SelectorMenus from "../components/SelectorMenus";
+
 //mockdata
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
@@ -14,15 +16,13 @@ import ProgramModal from "../components/ProgramModal";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,10 +41,9 @@ const useStyles = makeStyles((theme) => ({
 let brands = items.map((item) => item.brand);
 let itemTypes = items.map((item) => item.itemType);
 
-const Order = () => {
+const PlaceOrder = ({ userType }) => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
-  const [region, updateRegion] = useState(1);
   const [currentView, setView] = useState("list");
   const [previewModal, handlePreviewModal] = useState(false);
   const [programModal, handleProgramModal] = useState(false);
@@ -53,10 +52,6 @@ const Order = () => {
 
   const handleChangeTab = (_evt, newValue) => {
     updateValue(newValue);
-  };
-
-  const handleChangeSelect = (evt) => {
-    updateRegion(evt.target.value);
   };
 
   const handlePreview = (evt) => {
@@ -91,6 +86,7 @@ const Order = () => {
             <ItemPreviewModal
               currentItem={currentItem}
               handleClose={handleModalClose}
+              userType={userType}
             />
           </DialogContent>
         </Dialog>
@@ -102,11 +98,17 @@ const Order = () => {
           fullWidth
           maxWidth="xl"
         >
+          <DialogTitle>
+            <Typography className={classes.titleText}>
+              {currentProgram.name}
+            </Typography>
+          </DialogTitle>
           <DialogContent>
             <ProgramModal
               program={currentProgram}
               items={items}
               handleClose={handleModalClose}
+              userType={userType}
             />
           </DialogContent>
         </Dialog>
@@ -120,21 +122,8 @@ const Order = () => {
             </Typography>
           </div>
           <div>
-            <FormControl variant="outlined">
-              <InputLabel id="region-select">Region</InputLabel>
-              <Select
-                native
-                labelId="region-select"
-                id="regions"
-                value={region}
-                onChange={handleChangeSelect}
-                label="Region"
-              >
-                <option value={1}>Region 1</option>
-                <option value={2}>Region 2</option>
-                <option value={3}>Retion 3</option>
-              </Select>
-            </FormControl>
+            {userType !== "field1" && <SelectorMenus type="bdms" />}
+            <SelectorMenus type="regions" />
             {value !== 1 && (
               <div className={classes.configButtons}>
                 <Tooltip title="View List">
@@ -219,4 +208,4 @@ const Order = () => {
   );
 };
 
-export default Order;
+export default PlaceOrder;

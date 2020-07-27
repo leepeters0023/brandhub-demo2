@@ -8,31 +8,31 @@ import { tableIcons } from "../utility/tableIcons";
 
 // simulate mock addresses
 const createData = (company, code, city, state) => {
-  return { company, code, city, state };
+  return { company: company, code: code, city: city, state: state };
 };
 
 const billingAddresses = [
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
@@ -41,49 +41,49 @@ const billingAddresses = [
 const shippingAddresses = [
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    `(${Math.floor(Math.random() * 1000 + 1000)})`,
+    (Math.floor(Math.random() * 1000 + 1000)).toString(),
     "City Name",
     "VT"
   ),
@@ -91,12 +91,6 @@ const shippingAddresses = [
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  colHeader: {
-    color: "#FFF",
-    "&:hover": {
-      color: "#ffac33",
-    },
-  },
 }));
 
 const AddressBook = () => {
@@ -107,16 +101,16 @@ const AddressBook = () => {
 
   const columns = [
     {
-      title: <h3 className={classes.colHeader}>Company</h3>,
+      title: "Company",
       field: "company",
     },
     {
-      title: <h3 className={classes.colHeader}>Code</h3>,
+      title: "Code",
       field: "code",
     },
-    { title: <h3 className={classes.colHeader}>City</h3>, field: "city" },
+    { title: "City", field: "city",},
     {
-      title: <h3 className={classes.colHeader}>State</h3>,
+      title: "State",
       field: "state",
     },
   ];
@@ -135,12 +129,11 @@ const AddressBook = () => {
           filtering: true,
           headerStyle: {
             backgroundColor: "#0d47a1",
+            fontWeight: "600",
+            fontSize: "1.1rem",
             position: "sticky",
             top: 0,
             color: "#FFF",
-            "&:hover": {
-              color: "#ffac33",
-            },
           },
           filterCellStyle: {
             position: "sticky",
@@ -149,7 +142,9 @@ const AddressBook = () => {
           pageSizeOptions: [5, 10, 20, 50, 100],
           exportButton: true,
           exportAllData: true,
+          selection: true,
         }}
+        onSelectionChange={(rows) => console.log(rows)}
         editable={{
           onRowAdd: (newData) =>
             new Promise((resolve, reject) => {
@@ -197,12 +192,11 @@ const AddressBook = () => {
           filtering: true,
           headerStyle: {
             backgroundColor: "#0d47a1",
+            fontWeight: "600",
+            fontSize: "1.1rem",
             position: "sticky",
             top: 0,
             color: "#FFF",
-            "&:hover": {
-              color: "#ffac33",
-            },
           },
           filterCellStyle: {
             position: "sticky",

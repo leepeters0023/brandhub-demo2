@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 
 import MaterialTable from "material-table";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 
 import { tableIcons } from "../utility/tableIcons";
 
@@ -503,37 +501,27 @@ const rows = [
   )
 ]
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-  colHeader: {
-    color: "#FFF",
-    "&:hover": {
-      color: "#ffac33"
-    }
-  }
-}))
 
-const TrackingTable = ({ handlePreview }) => {
-  const classes = useStyles();
+const OrdersPastTable = ({ handlePreview }) => {
   const [selectedRow, setSelectedRow] = useState(null);
 
   return (
     <>
       <MaterialTable
-        title={<Typography className={classes.titleText}>Tracking</Typography>}
+        title="Completed Orders"
         columns={[
-          { title: <h4 className={classes.colHeader}>Ord. #</h4>, field: "orderNum" },
-          { title: <h4 className={classes.colHeader}>Seq. #</h4>, field: "sequenceNum" },
-          { title: <h4 className={classes.colHeader}>Brand</h4>, field: "brand" },
-          { title: <h4 className={classes.colHeader}>Distributor</h4>, field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
-          { title: <h4 className={classes.colHeader}>State</h4>, field: "state" },
-          { title: <h4 className={classes.colHeader}>Order Date</h4>, field: "orderDate", filtering: false },
-          { title: <h4 className={classes.colHeader}>Item Type</h4>, field: "itemType" },
-          { title: <h4 className={classes.colHeader}>Qty</h4>, field: "qty", filtering: false },
-          { title: <h4 className={classes.colHeader}>Order Name</h4>, field: "orderName" },
-          { title: <h4 className={classes.colHeader}>Ship Date</h4>, field: "shipDate", filtering: false },
-          { title: <h4 className={classes.colHeader}>Carrier</h4>, field: "carrier" },
-          { title: <h4 className={classes.colHeader}>Track. #</h4>, field: "trackingNum"}
+          { title: "Ord. #", field: "orderNum" },
+          { title: "Seq. #", field: "sequenceNum" },
+          { title: "Brand", field: "brand" },
+          { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
+          { title: "State", field: "state" },
+          { title: "Order Date", field: "orderDate", filtering: false },
+          { title: "Item Type", field: "itemType" },
+          { title: "Qty", field: "qty", filtering: false },
+          { title: "Order Name", field: "orderName" },
+          { title: "Ship Date", field: "shipDate", filtering: false },
+          { title: "Carrier", field: "carrier" },
+          { title: "Track. #", field: "trackingNum"}
         ]}
         data={rows}
         options={{
@@ -543,12 +531,10 @@ const TrackingTable = ({ handlePreview }) => {
           }),
           headerStyle: {
             backgroundColor: "#0d47a1",
+            fontWeight: "600",
             position: "sticky",
             top: 0,
             color: "#FFF",
-            "&:hover": {
-              color: "#ffac33"
-            },
           },
           filterCellStyle: {
             position: "sticky",
@@ -568,4 +554,4 @@ const TrackingTable = ({ handlePreview }) => {
   )
 }
 
-export default TrackingTable
+export default OrdersPastTable;
