@@ -70,7 +70,7 @@ const userTypes = [
   "creative",
 ];
 
-const Login = ({ setAuth, setLoginPath }) => {
+const Login = ({ setAuth }) => {
   const classes = useStyles();
   const {
     value: userName,
@@ -100,15 +100,8 @@ const Login = ({ setAuth, setLoginPath }) => {
       resetPassword();
     }
     if (!error.user && !error.password) {
-      if (userName === "compliance") {
-        setLoginPath("/compliance");
-        localStorage.setItem("user", userName)
-        setAuth(userName);
-      } else {
-        setLoginPath("/")
-        localStorage.setItem("user", userName)
-        setAuth(userName);
-      }
+      localStorage.setItem("user", userName);
+      setAuth(userName);
     }
   };
   return (

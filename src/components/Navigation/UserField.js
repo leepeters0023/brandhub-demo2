@@ -9,8 +9,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
 
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import HelpIcon from "@material-ui/icons/Help";
 
@@ -25,8 +25,16 @@ const UserField = () => {
     <>
       <List className={classes.navList}>
         <div>
+          <ListItem className={classes.navItem} button component={Link} to="/">
+            <ListItemIcon className={classes.navItem}>
+              <DashboardIcon fontSize="large" color="primary" />
+            </ListItemIcon>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navText }}
+              primary="Dashboard"
+            />
+          </ListItem>
           <OrdersMenu />
-
           <ListItem
             className={classes.navItem}
             button
@@ -34,7 +42,7 @@ const UserField = () => {
             to="/budget#regional"
           >
             <ListItemIcon className={classes.navItem}>
-              <MonetizationOnIcon fontSize="large" color="primary" />
+              <MonetizationOnIcon fontSize="large" color="secondary" />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -45,24 +53,10 @@ const UserField = () => {
             className={classes.navItem}
             button
             component={Link}
-            to="/reports"
-          >
-            <ListItemIcon className={classes.navItem}>
-              <InsertChartIcon fontSize="large" color="primary" />
-            </ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.navText }}
-              primary="Reports"
-            />
-          </ListItem>
-          <ListItem
-            className={classes.navItem}
-            button
-            component={Link}
             to="/calendar"
           >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="primary" />
+              <DateRangeIcon fontSize="large" color="secondary" />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}

@@ -3,15 +3,18 @@ import { Router, Redirect } from "@reach/router";
 
 import LogIn from "./components/Login";
 import TopLeftNav from "./components/Navigation/TopLeftNav";
-import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
 import PlaceOrder from "./pages/PlaceOrder";
 import Budget from "./pages/Budget";
 import Reports from "./pages/Reports";
 import Calendar from "./pages/Calendar";
-import Compliance from "./pages/Compliance";
+import Approvals from "./pages/Approvals";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
 import Orders from "./pages/Orders";
+import RulesByState from "./pages/RulesByState";
+import ContactsByState from "./pages/ContactsByState";
+import POSClassifications from "./pages/POSClassifications";
 import FourOhFour from "./pages/FourOhFour";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
@@ -23,7 +26,6 @@ import "./App.css";
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
-  const [loginPath, setLoginPath] = useState(null);
   const [notificationOpen, handleNotification] = useState(false);
   const [currentUser, setCurrentUser] = useState(window.localStorage.getItem("user"));
 
@@ -49,13 +51,13 @@ const App = () => {
       <div id="main-container">
         {!currentUser && <Redirect noThrow to="/login" />}
         {currentUser && window.location.pathname === "/login" && (
-          <Redirect noThrow to={loginPath} />
+          <Redirect noThrow to="/" />
         )}
         <Router primary={false}>
           {handleAuth(
-           <Landing path="/" />,
+           <Dashboard path="/" />,
             "/",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "compliance", "super"],
             currentUser
           )}
           {handleAuth(
@@ -79,7 +81,7 @@ const App = () => {
           {handleAuth(
             <Reports path="/reports" />,
             "/reports",
-            ["field1", "field2", "super", "compliance"],
+            ["super"],
             currentUser
           )}
           {handleAuth(
@@ -89,8 +91,26 @@ const App = () => {
             currentUser
           )}
           {handleAuth(
-            <Compliance path="/compliance" />,
-            "/compliance",
+            <Approvals path="/approval" />,
+            "/approval",
+            ["compliance", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <RulesByState path="/rules" />,
+            "/rules",
+            ["compliance", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <ContactsByState path="/compliance-contacts" />,
+            "/compliance-contacts",
+            ["compliance", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <POSClassifications path="/classifications" />,
+            "/classifications",
             ["compliance", "super"],
             currentUser
           )}
@@ -100,7 +120,6 @@ const App = () => {
           {!currentUser && (
             <LogIn
               setAuth={handleLogIn}
-              setLoginPath={setLoginPath}
               path="/login"
             />
           )}

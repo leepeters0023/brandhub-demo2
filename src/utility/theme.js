@@ -13,6 +13,40 @@ export default {
       contrastText: "#fff",
     },
   },
+  dashboard: {
+    paper: {
+      height: "100%",
+      padding: "40px",
+    },
+    welcomeText: {
+      fontWeight: "600",
+      color: "#4C4C4C",
+    },
+    subTitle: {
+      fontWeight: "600",
+      color: "#4C4C4C",
+    },
+    content: {
+      fontSize: "1.25rem",
+      color: "#4C4C4C",
+    },
+    buttons: {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+    },
+    gridList: {
+      flexWrap: "nowrap",
+      transform: "translateZ(0)",
+    },
+    title: {
+      color: "#ffac33",
+    },
+    titleBar: {
+      background:
+        "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+    },
+  },
   global: {
     titleImage: {
       display: "flex",
@@ -48,8 +82,9 @@ export default {
       textAlign: "center"
     },
     navText: {
-      fontSize: ".75rem",
-      color: ""
+      fontSize: ".7rem",
+      fontWeight: "600",
+      color: "#4C4C4C",
     },
     titleText: {
       fontWeight: "600",
@@ -76,8 +111,9 @@ export default {
       justifyContent: "space-between",
     },
     largeButton: {
-      fontWeight: "500",
-      fontSize: "1.3rem",
+      fontWeight: "600",
+      fontSize: "1rem",
+      textAlign: "center",
     },
     tabContainer: {
       display: "flex",
@@ -91,6 +127,10 @@ export default {
     paperContainer: {
       margin: "30px auto 0 auto",
       padding: "20px 25px",
+      width: "90vw",
+    },
+    gridContainer: {
+      margin: "10px auto 0 auto",
       width: "90vw",
     },
     modalTabContainer: {

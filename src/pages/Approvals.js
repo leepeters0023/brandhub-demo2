@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Compliance = () => {
+const Approvals = () => {
   const classes = useStyles();
 
   const [value, updateValue] = useState(1);
@@ -68,7 +68,7 @@ const Compliance = () => {
           <div className={classes.titleImage}>
             <img className={classes.logo} src={GalloLogo} alt="Gallo" />
             <Typography className={classes.titleText} variant="h5">
-              Compliance
+              Approvals
             </Typography>
           </div>
           <div>
@@ -102,4 +102,4 @@ const Compliance = () => {
   );
 };
 
-export default Compliance;
+export default Approvals;

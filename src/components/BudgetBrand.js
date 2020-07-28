@@ -85,7 +85,6 @@ const BudgetBrand = () => {
           headerStyle: {
             backgroundColor: "#0d47a1",
             fontWeight: "600",
-            fontSize: "1.1rem",
             position: "sticky",
             top: 0,
             color: "#FFF",
