@@ -9,7 +9,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CachedIcon from "@material-ui/icons/Cached";
-import GetAppIcon from "@material-ui/icons/GetApp";
 
 // simulate data for mock
 const createData = (date, brand, unit, region) => {
@@ -71,11 +70,6 @@ const BudgetBrand = () => {
             <CachedIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Download">
-          <IconButton>
-            <GetAppIcon />
-          </IconButton>
-        </Tooltip>
       </div>
       <MaterialTable
         title="Brand Budgets"
@@ -88,6 +82,19 @@ const BudgetBrand = () => {
         ]}
         data={budget}
         options={{
+          headerStyle: {
+            backgroundColor: "#0d47a1",
+            fontWeight: "600",
+            fontSize: "1.1rem",
+            position: "sticky",
+            top: 0,
+            color: "#FFF",
+          },
+          filterCellStyle: {
+            position: "sticky",
+          },
+          maxBodyHeight: "650px",
+          pageSizeOptions: [5, 10, 20, 50, 100],
           filtering: true,
           exportButton: true,
           exportAllData: true,

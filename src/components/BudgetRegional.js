@@ -4,12 +4,13 @@ import MaterialTable from "material-table";
 
 import { tableIcons } from "../utility/tableIcons";
 
+import { renderChip } from "../utility/utilityFunctions";
+
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CachedIcon from "@material-ui/icons/Cached";
-import GetAppIcon from "@material-ui/icons/GetApp";
 
 // simulate data for mock
 const createData = (date, unit, region, status) => {
@@ -73,11 +74,6 @@ const BudgetRegional = () => {
             <CachedIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Download">
-          <IconButton>
-            <GetAppIcon />
-          </IconButton>
-        </Tooltip>
       </div>
       <MaterialTable
         title="Regional Budget"
@@ -91,69 +87,24 @@ const BudgetRegional = () => {
           {
             title: "Status",
             field: "status",
-            render: (rowData) => {
-              if (rowData.status === "Approved") {
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "#4caf50",
-                      color: "#FFF",
-                      textAlign: "center",
-                      padding: "1px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
-                  </div>
-                );
-              } else if (rowData.status === "Active") {
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "#3f51b5",
-                      color: "#FFF",
-                      textAlign: "center",
-                      padding: "1px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
-                  </div>
-                );
-              } else if (rowData.status === "Pending") {
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "#ff9800",
-                      color: "#FFF",
-                      textAlign: "center",
-                      padding: "1px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
-                  </div>
-                );
-              } else if (rowData.status === "Canceled") {
-                return (
-                  <div
-                    style={{
-                      backgroundColor: "#f44336",
-                      color: "#FFF",
-                      textAlign: "center",
-                      padding: "1px",
-                      borderRadius: "5px",
-                    }}
-                  >
-                    <p style={{ fontWeight: "bold" }}>{rowData.status}</p>
-                  </div>
-                );
-              }
-            },
+            render: renderChip,
           },
         ]}
         data={budget}
         options={{
+          headerStyle: {
+            backgroundColor: "#0d47a1",
+            fontWeight: "600",
+            fontSize: "1.1rem",
+            position: "sticky",
+            top: 0,
+            color: "#FFF",
+          },
+          filterCellStyle: {
+            position: "sticky",
+          },
+          maxBodyHeight: "650px",
+          pageSizeOptions: [5, 10, 20, 50, 100],
           filtering: true,
           exportButton: true,
           exportAllData: true,

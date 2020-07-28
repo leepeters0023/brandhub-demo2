@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@reach/router";
 
-import OrdersMenu from "../OrdersMenu";
+import OrdersMenu from "./OrdersMenu";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,7 +31,7 @@ const UserField = () => {
             className={classes.navItem}
             button
             component={Link}
-            to="/budget"
+            to="/budget#regional"
           >
             <ListItemIcon className={classes.navItem}>
               <MonetizationOnIcon fontSize="large" color="primary" />

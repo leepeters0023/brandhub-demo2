@@ -147,6 +147,18 @@ const ApprovalPrior = ({ handleModal }) => {
         data={rows}
         options={{
           filtering: true,
+          headerStyle: {
+            backgroundColor: "#0d47a1",
+            fontWeight: "600",
+            position: "sticky",
+            top: 0,
+            color: "#FFF",
+          },
+          filterCellStyle: {
+            position: "sticky",
+          },
+          maxBodyHeight: "650px",
+          pageSizeOptions: [5, 10, 20, 50, 100],
           rowStyle: (rowData) => ({
             backgroundColor:
               selectedRow === rowData.tableData.id ? "#EEE" : "#FFF",

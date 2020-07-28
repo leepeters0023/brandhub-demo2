@@ -3,7 +3,7 @@ import BrandHubLogo from "../../assets/brandhub.svg";
 
 import CartModal from "../CartModal";
 import Notifications from "../Notifications";
-import UserNavMenu from "../UserNavMenu";
+import UserNavMenu from "./UserNavMenu";
 import SideDrawer from "./SideDrawer";
 import AddressBook from "../AddressBook";
 import AccountDetails from "../AccountDetails";

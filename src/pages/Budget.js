@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import BudgetRegional from "../components/BudgetRegional";
 import BudgetUser from "../components/BudgetUser";
@@ -23,11 +23,28 @@ const useStyles = makeStyles((theme) => ({
 const Budget = () => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
-
+  const currentUser = window.localStorage.getItem("user");
 
   const handleChangeTab = (_evt, newValue) => {
+    if (newValue === 1) {
+      window.location.hash = "#regional"
+    } else if (newValue === 2) {
+      window.location.hash = "#user"
+    } else if (newValue === 3) {
+      window.location.hash = "#brand"
+    }
     updateValue(newValue);
   };
+
+  useEffect(()=>{
+    if(window.location.hash === "#regional") {
+      updateValue(1)
+    } else if (window.location.hash === "#user") {
+      updateValue(2)
+    } else if (window.location.hash === "#brand") {
+      updateValue(3)
+    }
+  },[])
 
   return (
     <>
@@ -53,7 +70,13 @@ const Budget = () => {
             label="Regional Budgets"
             value={1}
           />
-          <Tab className={classes.headerText} label="User Budgets" value={2} />
+          {(currentUser === "super" || currentUser === "field2") && (
+            <Tab
+              className={classes.headerText}
+              label="User Budgets"
+              value={2}
+            />
+          )}
           <Tab className={classes.headerText} label="Brand Budgets" value={3} />
         </Tabs>
         {value === 1 && <BudgetRegional />}

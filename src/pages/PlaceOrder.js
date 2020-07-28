@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -51,8 +51,25 @@ const PlaceOrder = ({ userType }) => {
   const [currentProgram, handleCurrentProgram] = useState({});
 
   const handleChangeTab = (_evt, newValue) => {
+    if (newValue === 1) {
+      window.location.hash = "#pre"
+    } else if (newValue === 2) {
+      window.location.hash = "#instock"
+    } else if (newValue === 3) {
+      window.location.hash = "#ondemand"
+    }
     updateValue(newValue);
   };
+
+  useEffect(()=>{
+    if(window.location.hash === "#pre"){
+      updateValue(1);
+    } else if (window.location.hash === "#instock") {
+      updateValue(2)
+    } else if (window.location.hash === "#ondemand") {
+      updateValue(3)
+    }
+  },[])
 
   const handlePreview = (evt) => {
     let item = items.find(

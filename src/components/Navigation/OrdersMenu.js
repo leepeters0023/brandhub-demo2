@@ -58,7 +58,7 @@ const OrdersMenu = () => {
       >
         <MenuItem
           component={Link}
-          to="/order"
+          to="/order#pre"
           onClick={() => {
             handleClose();
           }}

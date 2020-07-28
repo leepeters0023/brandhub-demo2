@@ -33,7 +33,6 @@ const App = () => {
 
   const handleLogout = () => {
     setCurrentUser(null)
-    window.location.pathname="/login"
     localStorage.removeItem("user")
   };
 

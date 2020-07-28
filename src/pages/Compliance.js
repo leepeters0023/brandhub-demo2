@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -28,6 +28,11 @@ const Compliance = () => {
   const [currentId, setCurrentId] = useState("");
 
   const handleChangeTab = (_evt, newValue) => {
+    if (newValue === 1) {
+      window.location.hash = "#prior";
+    } else if (newValue === 2) {
+      window.location.hash = "#pending";
+    }
     updateValue(newValue);
   };
 
@@ -35,6 +40,14 @@ const Compliance = () => {
     setCurrentId(id);
     setModal(true);
   };
+
+  useEffect(() => {
+    if (window.location.hash === "#prior") {
+      updateValue(1);
+    } else if (window.location.hash === "#pending") {
+      updateValue(2);
+    }
+  }, []);
 
   return (
     <>

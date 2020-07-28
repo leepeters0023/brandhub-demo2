@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
 import MaterialTable from "material-table";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
 
 import { tableIcons } from "../utility/tableIcons";
 
@@ -14,25 +12,25 @@ const createData = (company, code, city, state) => {
 const billingAddresses = [
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
@@ -41,60 +39,55 @@ const billingAddresses = [
 const shippingAddresses = [
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
   createData(
     "Company Name",
-    (Math.floor(Math.random() * 1000 + 1000)).toString(),
+    Math.floor(Math.random() * 1000 + 1000).toString(),
     "City Name",
     "VT"
   ),
 ];
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-}));
-
 const AddressBook = () => {
-  const classes = useStyles();
 
   const [billing, setBilling] = useState(billingAddresses);
   const [shipping, setShipping] = useState(shippingAddresses);
@@ -108,7 +101,7 @@ const AddressBook = () => {
       title: "Code",
       field: "code",
     },
-    { title: "City", field: "city",},
+    { title: "City", field: "city" },
     {
       title: "State",
       field: "state",
@@ -118,11 +111,7 @@ const AddressBook = () => {
   return (
     <>
       <MaterialTable
-        title={
-          <Typography className={classes.titleText}>
-            Billing Addresses
-          </Typography>
-        }
+        title="Billing Addresses"
         columns={columns}
         data={billing}
         options={{
@@ -142,9 +131,7 @@ const AddressBook = () => {
           pageSizeOptions: [5, 10, 20, 50, 100],
           exportButton: true,
           exportAllData: true,
-          selection: true,
         }}
-        onSelectionChange={(rows) => console.log(rows)}
         editable={{
           onRowAdd: (newData) =>
             new Promise((resolve, reject) => {
@@ -179,13 +166,9 @@ const AddressBook = () => {
         }}
         icons={tableIcons}
       />
-      <br/>
+      <br />
       <MaterialTable
-        title={
-          <Typography className={classes.titleText}>
-            Shipping Addresses
-          </Typography>
-        }
+        title="Shipping Addresses"
         columns={columns}
         data={shipping}
         options={{
