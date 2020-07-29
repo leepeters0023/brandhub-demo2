@@ -152,6 +152,13 @@ export default {
       position: "absolute",
       top: "0",
       right: "5px",
+    },
+    pageBreak: {
+      border: "none",
+      height: "2px",
+      margin: "0",
+      flexShrink: "0",
+      backgroundColor: "#0d47a1"
     }
   },
 };

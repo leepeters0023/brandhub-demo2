@@ -7,6 +7,7 @@ import TrackingModal from "../components/TrackingModal";
 
 import GalloLogo from "../assets/gallologo.png";
 
+import Divider from "@material-ui/core/Divider";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
@@ -173,9 +174,14 @@ const Orders = () => {
           </Grid>
         </Grid>
         <br />
+        <Divider classes={{ root: classes.pageBreak }} />
         <br />
-        {window.location.hash==="#current" && <OrdersCurrentTable handlePreview={handlePreview} />}
-        {window.location.hash==="#past" && <OrdersPastTable handlePreview={handlePreview} />}
+        {window.location.hash === "#current" && (
+          <OrdersCurrentTable handlePreview={handlePreview} />
+        )}
+        {window.location.hash === "#past" && (
+          <OrdersPastTable handlePreview={handlePreview} />
+        )}
       </Container>
     </>
   );

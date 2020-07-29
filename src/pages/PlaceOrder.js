@@ -184,6 +184,7 @@ const PlaceOrder = ({ userType }) => {
           <Tab className={classes.headerText} label="On-Demand" value={3} />
         </Tabs>
         <br />
+        <Divider classes={{root: classes.pageBreak}}/>
         <br />
         <Grid
           container

@@ -7,6 +7,7 @@ import SelectorMenus from "../components/SelectorMenus";
 
 import GalloLogo from "../assets/gallologo.png";
 
+import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
@@ -79,6 +80,8 @@ const Budget = () => {
           )}
           <Tab className={classes.headerText} label="Brand Budgets" value={3} />
         </Tabs>
+        <br/>
+        <Divider classes={{root: classes.pageBreak}}/>
         {value === 1 && <BudgetRegional />}
         {value === 2 && <BudgetUser />}
         {value === 3 && <BudgetBrand />}

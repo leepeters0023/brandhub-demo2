@@ -69,7 +69,7 @@ const Reports = () => {
           </Typography>
         </div>
         <br />
-        <Divider />
+        <Divider classes={{root: classes.pageBreak}}/>
         <br />
         <Typography className={classes.headerText}>Order History:</Typography>
         <br />

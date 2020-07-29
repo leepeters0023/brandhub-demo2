@@ -7,6 +7,7 @@ import ApprovalPending from "../components/ApprovalPending";
 import ComplianceModal from "../components/ComplianceModal";
 import SelectorMenus from "../components/SelectorMenus";
 
+import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -84,16 +85,17 @@ const Approvals = () => {
         >
           <Tab
             className={classes.headerText}
-            label="Prior Approval"
-            value={1}
-          />
-          <Tab
-            className={classes.headerText}
             label="Pending Approval"
             value={2}
           />
+          <Tab
+            className={classes.headerText}
+            label="Prior Approval"
+            value={1}
+          />
         </Tabs>
         <br />
+        <Divider classes={{root: classes.pageBreak}}/>
         <br />
         {value === 1 && <ApprovalPrior handleModal={handleModal} />}
         {value === 2 && <ApprovalPending handleModal={handleModal} />}
