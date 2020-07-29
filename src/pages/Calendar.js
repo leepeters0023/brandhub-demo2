@@ -4,7 +4,7 @@ import SelectorMenus from "../components/SelectorMenus";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -28,7 +28,7 @@ const Calendar = () => {
 
   return (
     <>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <div className={classes.formControl}>
           <SelectorMenus type="regions" />
         </div>
@@ -53,7 +53,7 @@ const Calendar = () => {
           <Tab className={classes.headerText} label="On Premise" value={2} />
           <Tab className={classes.headerText} label="Off Premise" value={3} />
         </Tabs>
-      </Paper>
+      </Container>
     </>
   );
 };

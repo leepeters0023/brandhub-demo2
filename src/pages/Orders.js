@@ -11,7 +11,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -92,7 +92,7 @@ const Orders = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <Grid container>
           <Grid item md={2}>
             <img className={classes.trackingLogo} src={GalloLogo} alt="Gallo" />
@@ -176,7 +176,7 @@ const Orders = () => {
         <br />
         {window.location.hash==="#current" && <OrdersCurrentTable handlePreview={handlePreview} />}
         {window.location.hash==="#past" && <OrdersPastTable handlePreview={handlePreview} />}
-      </Paper>
+      </Container>
     </>
   );
 };

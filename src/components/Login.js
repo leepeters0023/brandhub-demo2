@@ -4,6 +4,7 @@ import { useInput } from "../hooks/UtilityHooks";
 
 import BrandHubLogo from "../assets/brandhub.svg";
 
+import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -24,10 +25,9 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     overflow: "hidden",
-    backgroundColor: "#FFF",
+    backgroundColor: theme.palette.secondary.light,
   },
   welcome: {
-    fontFamily: "georgia",
     fontWeight: "800",
   },
   loginContainer: {
@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     top: "20px",
     left: "20px",
+    filter: "brightness(0%)"
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -114,6 +115,7 @@ const Login = ({ setAuth }) => {
       >
         <CssBaseline />
         <div className={classes.paper}>
+          <Paper style={{padding: "20px", textAlign: "center"}}>
           <Typography className={classes.welcome} component="h1" variant="h2">
             Welcome
           </Typography>
@@ -173,6 +175,7 @@ const Login = ({ setAuth }) => {
               </Grid>
             </Grid>
           </form>
+          </Paper>
         </div>
       </Container>
     </div>

@@ -7,9 +7,9 @@ import ApprovalPending from "../components/ApprovalPending";
 import ComplianceModal from "../components/ComplianceModal";
 import SelectorMenus from "../components/SelectorMenus";
 
+import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -63,7 +63,7 @@ const Approvals = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
             <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -97,7 +97,7 @@ const Approvals = () => {
         <br />
         {value === 1 && <ApprovalPrior handleModal={handleModal} />}
         {value === 2 && <ApprovalPending handleModal={handleModal} />}
-      </Paper>
+      </Container>
     </>
   );
 };

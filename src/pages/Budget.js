@@ -7,7 +7,7 @@ import SelectorMenus from "../components/SelectorMenus";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -48,7 +48,7 @@ const Budget = () => {
 
   return (
     <>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <div className={classes.formControl}>
           <SelectorMenus type="regions" />
         </div>
@@ -82,7 +82,7 @@ const Budget = () => {
         {value === 1 && <BudgetRegional />}
         {value === 2 && <BudgetUser />}
         {value === 3 && <BudgetBrand />}
-      </Paper>
+      </Container>
     </>
   );
 };

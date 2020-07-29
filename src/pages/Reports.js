@@ -9,7 +9,7 @@ import ReportModal from "../components/ReportModal";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -61,7 +61,7 @@ const Reports = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
           <Typography className={classes.titleText} variant="h5">
@@ -74,7 +74,7 @@ const Reports = () => {
         <Typography className={classes.headerText}>Order History:</Typography>
         <br />
         <ReportHistoryForm handleReportSubmit={handleReportSubmit}/>
-      </Paper>
+      </Container>
     </>
   );
 };

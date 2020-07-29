@@ -17,18 +17,19 @@ export default {
     paper: {
       height: "100%",
       padding: "40px",
+      backgroundColor: "#3d6bb3",
     },
     welcomeText: {
       fontWeight: "600",
-      color: "#4C4C4C",
+      color: "#FFF",
     },
     subTitle: {
       fontWeight: "600",
-      color: "#4C4C4C",
+      color: "#FFF",
     },
     content: {
       fontSize: "1.25rem",
-      color: "#4C4C4C",
+      color: "#FFF",
     },
     buttons: {
       display: "flex",
@@ -42,7 +43,7 @@ export default {
     title: {
       color: "#ffac33",
     },
-    titleBar: {
+    gridTitleBar: {
       background:
         "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
     },
@@ -66,6 +67,13 @@ export default {
       "&:hover": {
         cursor: "pointer",
       },
+    },
+    mainWrapper: {
+      backgroundColor: "#FFF",
+      maxWidth: "2000px",
+      minHeight: "Calc(100vh - 64px)",
+      margin: "0px",
+      paddingTop: "24px",
     },
     navList: {
       display: "flex",
@@ -123,15 +131,6 @@ export default {
     },
     cartContainer: {
       maxHeight: "65vh",
-    },
-    paperContainer: {
-      margin: "30px auto 0 auto",
-      padding: "20px 25px",
-      width: "90vw",
-    },
-    gridContainer: {
-      margin: "10px auto 0 auto",
-      width: "90vw",
     },
     modalTabContainer: {
       display: "flex",

@@ -14,10 +14,10 @@ import OrderPreOrder from "../components/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreviewModal";
 import ProgramModal from "../components/ProgramModal";
 
+import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
@@ -131,7 +131,7 @@ const PlaceOrder = ({ userType }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <Paper className={classes.paperContainer}>
+      <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
             <img className={classes.logo} src={GalloLogo} alt="Gallo" />
@@ -223,7 +223,7 @@ const PlaceOrder = ({ userType }) => {
             </Grid>
           )}
         </Grid>
-      </Paper>
+      </Container>
     </>
   );
 };

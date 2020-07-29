@@ -23,7 +23,6 @@ const DashboardCompliance = () => {
   return (
     <>
       <Grid
-        className={classes.gridContainer}
         container
         spacing={2}
         alignItems="stretch"
@@ -69,7 +68,7 @@ const DashboardCompliance = () => {
                       <GridListTileBar
                         title={program.name}
                         classes={{
-                          root: classes.titleBar,
+                          root: classes.gridTitleBar,
                           title: classes.title,
                         }}
                       />
