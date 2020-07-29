@@ -42,7 +42,7 @@ const OrdersMenu = () => {
         aria-haspopup="true"
       >
         <ListItemIcon className={classes.navItem}>
-          <StoreIcon fontSize="large" color="secondary" />
+          <StoreIcon fontSize="large" color="primary" />
         </ListItemIcon>
         <ListItemText
               primaryTypographyProps={{ className: classes.navText }}

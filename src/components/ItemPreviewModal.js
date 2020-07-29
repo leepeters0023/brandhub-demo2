@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
 const ItemPreviewModal = (props) => {
   const classes = useStyles();
   const {
+    type,
     currentItem: { itemNumber, brand, itemType, price, imgUrl, qty },
     handleClose,
     userType,
@@ -176,9 +177,11 @@ const ItemPreviewModal = (props) => {
             - Item bullet point
           </Typography>
           <br />
-          <Typography variant="body1" color="textSecondary">
-            Amount Available
-          </Typography>
+          {type === "inStock" && (
+            <Typography variant="body1" color="textSecondary">
+              {`Amount Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
+            </Typography>
+          )}
           <Typography variant="body1" color="textSecondary">
             {qty}
           </Typography>

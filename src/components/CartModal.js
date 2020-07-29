@@ -48,7 +48,7 @@ const CartModal = ({ userType }) => {
             setModal(true);
           }}
         >
-          <ShoppingCartIcon fontSize="large" />
+          <ShoppingCartIcon color="primary" fontSize="large" />
         </IconButton>
       </Tooltip>
       <Dialog open={modal} onClose={handleClose} fullWidth maxWidth="xl">

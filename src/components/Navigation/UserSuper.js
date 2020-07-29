@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
-import DateRangeIcon from "@material-ui/icons/DateRange";
+//import DateRangeIcon from "@material-ui/icons/DateRange";
 import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +26,7 @@ const UserSuper = () => {
     <>
       <List className={classes.navList}>
         <div>
-        <ListItem className={classes.navItem} button component={Link} to="/">
+          <ListItem className={classes.navItem} button component={Link} to="/">
             <ListItemIcon className={classes.navItem}>
               <DashboardIcon fontSize="large" color="primary" />
             </ListItemIcon>
@@ -36,32 +36,64 @@ const UserSuper = () => {
             />
           </ListItem>
           <OrdersMenu />
-          <ListItem className={classes.navItem} button component={Link} to="/budget#regional">
+          <ListItem
+            className={classes.navItem}
+            button
+            component={Link}
+            to="/budget#regional"
+          >
             <ListItemIcon className={classes.navItem}>
-              <MonetizationOnIcon fontSize="large" color="secondary" />
+              <MonetizationOnIcon fontSize="large" color="primary" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Budget" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navText }}
+              primary="Budget"
+            />
           </ListItem>
-          <ListItem className={classes.navItem} button component={Link} to="/reports">
+          <ListItem
+            className={classes.navItem}
+            button
+            component={Link}
+            to="/reports"
+          >
             <ListItemIcon className={classes.navItem}>
-              <InsertChartIcon fontSize="large" color="secondary" />
+              <InsertChartIcon fontSize="large" color="primary" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Reports" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navText }}
+              primary="Reports"
+            />
           </ListItem>
           <ComplianceMenu />
-          <ListItem className={classes.navItem} button component={Link} to="/calendar">
+          {/* <ListItem
+            className={classes.navItem}
+            button
+            component={Link}
+            to="/calendar"
+          >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="secondary" />
+              <DateRangeIcon fontSize="large" color="primary" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Calendar" />
-          </ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navText }}
+              primary="Calendar"
+            />
+          </ListItem> */}
         </div>
         <div>
-          <ListItem className={classes.navItem} button component={Link} to="/help">
+          <ListItem
+            className={classes.navItem}
+            button
+            component={Link}
+            to="/help"
+          >
             <ListItemIcon className={classes.navItem}>
               <HelpIcon fontSize="large" color="primary" />
             </ListItemIcon>
-            <ListItemText primaryTypographyProps={{className: classes.navText}} primary="Help" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navText }}
+              primary="Help"
+            />
           </ListItem>
         </div>
       </List>

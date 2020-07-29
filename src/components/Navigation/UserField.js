@@ -11,7 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import DateRangeIcon from "@material-ui/icons/DateRange";
+//import DateRangeIcon from "@material-ui/icons/DateRange";
 import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,27 +42,27 @@ const UserField = () => {
             to="/budget#regional"
           >
             <ListItemIcon className={classes.navItem}>
-              <MonetizationOnIcon fontSize="large" color="secondary" />
+              <MonetizationOnIcon fontSize="large" color="primary" />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
               primary="Budget"
             />
           </ListItem>
-          <ListItem
+          {/* <ListItem
             className={classes.navItem}
             button
             component={Link}
             to="/calendar"
           >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="secondary" />
+              <DateRangeIcon fontSize="large" color="primary" />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
               primary="Calendar"
             />
-          </ListItem>
+          </ListItem> */}
         </div>
         <div>
           <ListItem

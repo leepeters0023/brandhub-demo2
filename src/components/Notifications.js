@@ -72,12 +72,12 @@ const Notifications = () => {
             }
             color="secondary"
           >
-            <NotificationsIcon fontSize="large" />
+            <NotificationsIcon color="primary" fontSize="large" />
           </Badge>
         ))
-      : (notificationsIcon = <NotificationsIcon fontSize="large" />);
+      : (notificationsIcon = <NotificationsIcon color="primary" fontSize="large" />);
   } else {
-    notificationsIcon = <NotificationsIcon fontSize="large" />;
+    notificationsIcon = <NotificationsIcon color="primary" fontSize="large" />;
   }
 
   let notificationsMarkup =

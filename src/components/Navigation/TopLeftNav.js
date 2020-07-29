@@ -9,7 +9,6 @@ import AddressBook from "../AddressBook";
 import AccountDetails from "../AccountDetails";
 
 import AppBar from "@material-ui/core/AppBar";
-import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -21,7 +20,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import SearchIcon from "@material-ui/icons/Search";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +32,11 @@ const useStyles = makeStyles((theme) => ({
   },
   toolBar: {
     width: "100%",
-    backgroundColor: "white",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    backgroundColor: theme.palette.secondary.light
   },
   drawer: {
     width: 75,
@@ -50,17 +48,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     overflow: "hidden",
+    backgroundColor: theme.palette.secondary.dark
   },
   navBreak: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     margin: "0",
-  },
-  search: {
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
   },
 }));
 
@@ -108,23 +102,7 @@ const TopLeftNav = ({ handleLogout, userType }) => {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
           <div className={classes.navBreak}>
-            <img src={BrandHubLogo} alt="Logo" />
-          </div>
-          <div className={classes.search}>
-            <div className={classes.navBreak}>
-              <IconButton>
-                <SearchIcon fontSize="large" />
-              </IconButton>
-              <TextField
-                size="small"
-                color="primary"
-                variant="outlined"
-                margin="normal"
-                id="search"
-                label="Search"
-                name="search"
-              />
-            </div>
+            <img src={BrandHubLogo} alt="Logo" style={{filter: "brightness(0%)"}} />
           </div>
           <div className={classes.navBreak}>
             <Divider orientation="vertical" flexItem />

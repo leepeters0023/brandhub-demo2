@@ -1,14 +1,14 @@
 import React from "react";
 
-import OrderInStockTableView from "./OrderInStockTableView";
-import OrderPreGridView from "./OrderInStockgridView";
+import OrderInStockTableView from "./OrderItemTableView";
+import OrderPreGridView from "./OrderItemGridView";
 
 //mockdata
 import items from "../assets/mockdata/Items";
 
-const OrderInStock = (props) => {
+const OrderItemViewControl = (props) => {
 
-  const { currentView, handlePreview } = props;
+  const { type, currentView, handlePreview } = props;
 
   //const [currentItems, setCurrentItems] = useState(items);
 
@@ -16,12 +16,14 @@ const OrderInStock = (props) => {
     <>
       {currentView === "list" && (
         <OrderInStockTableView
+          type={type}
           currentItems={items}
           handlePreview={handlePreview}
         />
       )}
       {currentView === "grid" && (
         <OrderPreGridView
+          type={type}
           currentItems={items}
           handlePreview={handlePreview}
         />
@@ -30,4 +32,4 @@ const OrderInStock = (props) => {
   );
 };
 
-export default OrderInStock;
+export default OrderItemViewControl;

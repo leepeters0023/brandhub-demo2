@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const OrderInStockTableView = (props) => {
-  const { currentItems, handlePreview } = props;
+const OrderItemTableView = (props) => {
+  const { type, currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
     <>
@@ -43,6 +43,11 @@ const OrderInStockTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Qty / Item
               </TableCell>
+              {type === "inStock" && (
+                <TableCell className={classes.headerText} align="left">
+                  Stock
+                </TableCell>
+              )}
               <TableCell className={classes.headerText} align="left">
                 Cost
               </TableCell>
@@ -70,6 +75,11 @@ const OrderInStockTableView = (props) => {
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
+                {type === "inStock" && (
+                  <TableCell>
+                    {Math.floor(Math.random() * 10 + 1) * 5}
+                  </TableCell>
+                )}
                 <TableCell>{row.price}</TableCell>
                 <TableCell>
                   <Button
@@ -91,4 +101,4 @@ const OrderInStockTableView = (props) => {
   );
 };
 
-export default OrderInStockTableView;
+export default OrderItemTableView;

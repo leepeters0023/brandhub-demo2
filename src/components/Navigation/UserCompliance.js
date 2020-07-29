@@ -10,7 +10,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import DateRangeIcon from "@material-ui/icons/DateRange";
+//import DateRangeIcon from "@material-ui/icons/DateRange";
 import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,20 +33,20 @@ const UserCompliance = () => {
             />
           </ListItem>
           <ComplianceMenu />
-          <ListItem
+          {/* <ListItem
             className={classes.navItem}
             button
             component={Link}
             to="/calendar"
           >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="secondary" />
+              <DateRangeIcon fontSize="large" color="primary" />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
               primary="Calendar"
             />
-          </ListItem>
+          </ListItem> */}
         </div>
         <div>
           <ListItem

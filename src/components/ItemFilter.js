@@ -9,13 +9,22 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core";
 
+import SearchIcon from "@material-ui/icons/Search";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  navBreak: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    margin: "0",
+  },
 }));
 
 const ItemFilter = (props) => {
@@ -152,6 +161,24 @@ const ItemFilter = (props) => {
   return (
     <>
       <Typography className={classes.headerText}>Filter Items</Typography>
+      <TextField
+        fullWidth
+        size="small"
+        color="primary"
+        variant="outlined"
+        margin="normal"
+        id="search"
+        label="Search"
+        name="search"
+      />
+      <br />
+      <Button
+        variant="contained"
+        color="primary"
+        style={{width: "100%"}}
+      >
+        <SearchIcon color="secondary" />
+      </Button>
       <List>
         <br />
         <ListItem>
@@ -164,7 +191,7 @@ const ItemFilter = (props) => {
                 color="primary"
               />
             }
-            label=" View Favorites"
+            label=" Favorites"
           />
         </ListItem>
         <ListItem

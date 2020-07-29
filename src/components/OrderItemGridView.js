@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    
   },
   itemControl: {
     width: "100%",
@@ -40,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
 }));
-const OrderInStockGridView = (props) => {
-  const { currentItems, handlePreview } = props;
+const OrderItemGridView = (props) => {
+  const { type, currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
     <Container>
@@ -68,7 +67,11 @@ const OrderInStockGridView = (props) => {
             <Typography variant="body1" color="textSecondary">
               {`#${item.itemNumber} | ${item.qty}`}
             </Typography>
-            <br />
+            {type === "inStock" && (
+              <Typography variant="body1" color="textSecondary">
+                {`Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
+              </Typography>
+            )}
             <br />
             <div className={classes.itemControl}>
               <IconButton>
@@ -91,4 +94,4 @@ const OrderInStockGridView = (props) => {
   );
 };
 
-export default OrderInStockGridView;
+export default OrderItemGridView;

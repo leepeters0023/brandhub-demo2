@@ -9,7 +9,7 @@ import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
 import ItemFilter from "../components/ItemFilter";
-import OrderInStock from "../components/OrderInStock";
+import OrderItemViewControl from "../components/OrderItemViewControl";
 import OrderPreOrder from "../components/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreviewModal";
 import ProgramModal from "../components/ProgramModal";
@@ -101,6 +101,7 @@ const PlaceOrder = ({ userType }) => {
         >
           <DialogContent>
             <ItemPreviewModal
+              type={value === 2 ? "inStock" : "onDemand"}
               currentItem={currentItem}
               handleClose={handleModalClose}
               userType={userType}
@@ -205,7 +206,8 @@ const PlaceOrder = ({ userType }) => {
           )}
           {value === 2 && (
             <Grid item md={9}>
-              <OrderInStock
+              <OrderItemViewControl
+                type={"inStock"}
                 currentView={currentView}
                 handlePreview={handlePreview}
               />
@@ -213,7 +215,8 @@ const PlaceOrder = ({ userType }) => {
           )}
           {value === 3 && (
             <Grid item md={9}>
-              <OrderInStock
+              <OrderItemViewControl
+                type={"onDemand"}
                 currentView={currentView}
                 handlePreview={handlePreview}
               />

@@ -84,7 +84,7 @@ export default {
     navText: {
       fontSize: ".7rem",
       fontWeight: "600",
-      color: "#4C4C4C",
+      color: "#ffac33",
     },
     titleText: {
       fontWeight: "600",
