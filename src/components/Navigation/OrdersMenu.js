@@ -64,7 +64,7 @@ const OrdersMenu = () => {
           }}
         >
           <ListItemIcon>
-            <ShopIcon fontSize="large" color="primary" />
+            <ShopIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Place an Order" />
         </MenuItem>
@@ -77,7 +77,7 @@ const OrdersMenu = () => {
           }}
         >
           <ListItemIcon>
-            <CardGiftcardIcon fontSize="large" color="primary" />
+            <CardGiftcardIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Coupons" />
         </MenuItem>
@@ -90,7 +90,7 @@ const OrdersMenu = () => {
           }}
         >
           <ListItemIcon>
-            <TrackChangesIcon fontSize="large" color="primary" />
+            <TrackChangesIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Current Orders" />
         </MenuItem>
@@ -103,7 +103,7 @@ const OrdersMenu = () => {
           }}
         >
           <ListItemIcon>
-            <HistoryIcon fontSize="large" color="primary" />
+            <HistoryIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Past Orders" />
         </MenuItem>

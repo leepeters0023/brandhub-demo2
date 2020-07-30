@@ -79,11 +79,11 @@ const OrderItemGridView = (props) => {
               </IconButton>
               <Button
                 variant="contained"
-                color="primary"
+                color="secondary"
                 id={`${item.itemNumber}`}
               >
                 <Tooltip title="Add to Cart">
-                  <AddShoppingCartIcon color="secondary" />
+                  <AddShoppingCartIcon color="primary" />
                 </Tooltip>
               </Button>
             </div>

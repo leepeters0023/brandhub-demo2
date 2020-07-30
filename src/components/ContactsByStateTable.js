@@ -29,9 +29,8 @@ const ContactsByStateTable = ({ data }) => {
         options={{
           filtering: true,
           headerStyle: {
-            backgroundColor: "#0d47a1",
+            backgroundColor: "#404040",
             fontWeight: "600",
-            fontSize: "1.1rem",
             position: "sticky",
             top: 0,
             color: "#FFF",

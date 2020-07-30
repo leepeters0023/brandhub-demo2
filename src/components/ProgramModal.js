@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     width: "150px",
   },
   infoRow: {
-    backgroundColor: "#ffcc80",
+    backgroundColor: "#404040",
   },
   infoCell: {
     textAlign: "center",
@@ -89,8 +89,8 @@ const ProgramModal = (props) => {
     userType,
   } = props;
 
-  const [open, setOpen] = useState(false);
-  const [tableStyle, setTableStyle] = useState("tableClosed");
+  const [open, setOpen] = useState(true);
+  const [tableStyle, setTableStyle] = useState("tableOpen");
 
   return (
     <>
@@ -296,6 +296,7 @@ const ProgramModal = (props) => {
                 {items.map((item) => (
                   <TableCell key={`${dist.name}-${item.itemNumber}`}>
                     <TextField
+                      color="secondary"
                       variant="outlined"
                       size="small"
                       id={`${dist.name}-${item.itemNumber}`}

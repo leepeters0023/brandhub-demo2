@@ -84,11 +84,11 @@ const OrderItemTableView = (props) => {
                 <TableCell>
                   <Button
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     id={`${row.itemNumber}`}
                   >
                     <Tooltip title="Add to Cart">
-                      <AddShoppingCartIcon color="secondary" />
+                      <AddShoppingCartIcon color="primary" />
                     </Tooltip>
                   </Button>
                 </TableCell>

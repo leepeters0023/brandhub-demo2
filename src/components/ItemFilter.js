@@ -77,7 +77,7 @@ const ItemFilter = (props) => {
             >
               <ListItemIcon>
                 <Checkbox
-                  color="primary"
+                  color="secondary"
                   edge="start"
                   checked={brandsChecked.indexOf(item) !== -1}
                   disableRipple
@@ -110,7 +110,7 @@ const ItemFilter = (props) => {
             >
               <ListItemIcon>
                 <Checkbox
-                  color="primary"
+                  color="secondary"
                   edge="start"
                   checked={itemTypesChecked.indexOf(item) !== -1}
                   disableRipple
@@ -143,7 +143,7 @@ const ItemFilter = (props) => {
             >
               <ListItemIcon>
                 <Checkbox
-                  color="primary"
+                  color="secondary"
                   edge="start"
                   checked={unitsChecked.indexOf(item) !== -1}
                   disableRipple
@@ -164,7 +164,7 @@ const ItemFilter = (props) => {
       <TextField
         fullWidth
         size="small"
-        color="primary"
+        color="secondary"
         variant="outlined"
         margin="normal"
         id="search"
@@ -174,10 +174,10 @@ const ItemFilter = (props) => {
       <br />
       <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         style={{width: "100%"}}
       >
-        <SearchIcon color="secondary" />
+        <SearchIcon color="primary" />
       </Button>
       <List>
         <br />
@@ -188,7 +188,7 @@ const ItemFilter = (props) => {
                 checked={favItemChecked}
                 onChange={() => setFavItemChecked(!favItemChecked)}
                 name="viewFavorites"
-                color="primary"
+                color="secondary"
               />
             }
             label=" Favorites"

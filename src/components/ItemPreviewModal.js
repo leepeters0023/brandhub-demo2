@@ -195,6 +195,7 @@ const ItemPreviewModal = (props) => {
             </div>
           )}
           <TextField
+            color="secondary"
             style={{ width: "150px", marginLeft: "5px" }}
             id={`${itemNumber}`}
             placeholder="Qty"

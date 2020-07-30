@@ -87,6 +87,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
           <Grid item lg={3} md={4} sm={6} xs={12}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                color="secondary"
                 className={classes.queryField}
                 disableToolbar
                 variant="inline"
@@ -105,6 +106,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
           <Grid item lg={3} md={4} sm={6} xs={12}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                color="secondary"
                 className={classes.queryField}
                 disableToolbar
                 variant="inline"
@@ -122,6 +124,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
           </Grid>
           <Grid item lg={3} md={4} sm={6} xs={12}>
             <TextField
+              color="secondary"
               fullWidth
               name="sequenceNumber"
               type="text"
@@ -140,6 +143,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(state) => state.state}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="State"
                   variant="outlined"
@@ -157,6 +161,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(item) => item.brand}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Brand"
                   variant="outlined"
@@ -174,6 +179,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(dist) => dist.name}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Vendor"
                   variant="outlined"
@@ -191,6 +197,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(program) => program.name}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Programs"
                   variant="outlined"
@@ -208,6 +215,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(item) => item.itemType}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Item Type"
                   variant="outlined"
@@ -225,6 +233,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(user) => user}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Field User"
                   variant="outlined"
@@ -242,6 +251,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
               getOptionLabel={(region) => region}
               renderInput={(params) => (
                 <TextField
+                  color="secondary"
                   {...params}
                   label="Region / Key Acct."
                   variant="outlined"
@@ -257,7 +267,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
             <Button
               className={classes.formButton}
               id="orderSummary"
-              color="primary"
+              color="secondary"
               variant="contained"
               onClick={() => {
                 handleOrderHistorySubmit();
@@ -271,7 +281,7 @@ const ReportHistoryForm = ({ handleReportSubmit }) => {
             <Button
               className={classes.formButton}
               id="orderDetails"
-              color="primary"
+              color="secondary"
               variant="contained"
               onClick={() => {
                 handleOrderHistorySubmit();

@@ -180,6 +180,7 @@ const ComplianceModal = (props) => {
               <Typography className={classes.headerText}>Comments:</Typography>
               <br />
               <TextField
+                color="secondary"
                 multiline
                 fullWidth
                 variant="outlined"

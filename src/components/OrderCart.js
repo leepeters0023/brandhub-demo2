@@ -126,6 +126,7 @@ const OrderCart = ({ userType }) => {
                 <TableCell>{row.price}</TableCell>
                 <TableCell>
                   <TextField
+                    color="secondary"
                     className={classes.itemQty}
                     variant="outlined"
                     size="small"
@@ -201,6 +202,7 @@ const OrderCart = ({ userType }) => {
           <Typography className={classes.headerText}>Order Notes</Typography>
           <br />
           <TextField
+            color="secondary"
             multiline
             fullWidth
             variant="outlined"
@@ -217,6 +219,7 @@ const OrderCart = ({ userType }) => {
             getOptionLabel={(distributor) => distributor.name}
             renderInput={(params) => (
               <TextField
+                color="secondary"
                 {...params}
                 label="Shipping Location"
                 variant="outlined"

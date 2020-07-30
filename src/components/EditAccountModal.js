@@ -44,6 +44,7 @@ const EditAccountModal = (props) => {
         <DialogContent>
           <form>
             <TextField
+              color="secondary"
               name="firstName"
               type="text"
               label="FirstName"
@@ -51,6 +52,7 @@ const EditAccountModal = (props) => {
               fullWidth
             />
             <TextField
+              color="secondary"
               name="lastName"
               type="text"
               label="LastName"
@@ -58,6 +60,7 @@ const EditAccountModal = (props) => {
               fullWidth
             />
             <TextField
+              color="secondary"
               name="email"
               type="email"
               label="Email"
@@ -65,6 +68,7 @@ const EditAccountModal = (props) => {
               fullWidth
             />
             <TextField
+              color="secondary"
               name="phone"
               type="text"
               label="Phone"

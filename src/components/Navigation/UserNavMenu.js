@@ -18,7 +18,7 @@ import ContactMailIcon from '@material-ui/icons/ContactMail';
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   avatar: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.dark,
   },
 }));
 
@@ -64,7 +64,7 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
           handleModalOpen("Address Book")
           }}>
           <ListItemIcon>
-            <ContactMailIcon fontSize="small" />
+            <ContactMailIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Address Book" />
         </MenuItem>
@@ -74,7 +74,7 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
           handleModalOpen("Settings")
           }}>
           <ListItemIcon>
-            <SettingsIcon fontSize="small" />
+            <SettingsIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </MenuItem>
@@ -88,7 +88,7 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
           }}
         >
           <ListItemIcon>
-            <ExitToAppIcon fontSize="small" />
+            <ExitToAppIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Logout" />
         </MenuItem>

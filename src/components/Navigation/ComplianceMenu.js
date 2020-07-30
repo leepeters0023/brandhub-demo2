@@ -64,7 +64,7 @@ const ComplianceMenu = () => {
           }}
         >
           <ListItemIcon>
-            <PlaylistAddCheckIcon fontSize="large" color="primary" />
+            <PlaylistAddCheckIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Approvals" />
         </MenuItem>
@@ -77,7 +77,7 @@ const ComplianceMenu = () => {
           }}
         >
           <ListItemIcon>
-            <GavelIcon fontSize="large" color="primary" />
+            <GavelIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="State Rules" />
         </MenuItem>
@@ -90,7 +90,7 @@ const ComplianceMenu = () => {
           }}
         >
           <ListItemIcon>
-            <ContactMailIcon fontSize="large" color="primary" />
+            <ContactMailIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="Contacts" />
         </MenuItem>
@@ -103,7 +103,7 @@ const ComplianceMenu = () => {
           }}
         >
           <ListItemIcon>
-            <CategoryIcon fontSize="large" color="primary" />
+            <CategoryIcon fontSize="large" color="secondary" />
           </ListItemIcon>
           <ListItemText primary="POS Classifications" />
         </MenuItem>

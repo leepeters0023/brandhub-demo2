@@ -4,7 +4,6 @@ import { useInput } from "../hooks/UtilityHooks";
 
 import BrandHubLogo from "../assets/brandhub.svg";
 
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     overflow: "hidden",
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: "#e5e5e5",
   },
   welcome: {
     fontWeight: "800",
@@ -115,13 +114,14 @@ const Login = ({ setAuth }) => {
       >
         <CssBaseline />
         <div className={classes.paper}>
-          <Paper style={{padding: "30px", textAlign: "center"}}>
+          
           <Typography className={classes.welcome} component="h1" variant="h2">
             Welcome
           </Typography>
           <Typography variant="h5">Sign in to access your account</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
+              color="secondary"
               variant="outlined"
               margin="normal"
               required
@@ -136,6 +136,7 @@ const Login = ({ setAuth }) => {
               {...bindUserName}
             />
             <TextField
+              color="secondary"
               variant="outlined"
               margin="normal"
               required
@@ -157,25 +158,25 @@ const Login = ({ setAuth }) => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               className={classes.submit}
             >
               Sign In
             </Button>
-            <Grid container>
+            <Grid container justify="center" alignItems="center">
               <Grid item xs={5}>
                 <Link href="#" color="secondary" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item xs>
+              <Grid item xs={7}>
                 <Link href="#" color="secondary" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </form>
-          </Paper>
+          
         </div>
       </Container>
     </div>

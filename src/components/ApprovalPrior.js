@@ -148,7 +148,7 @@ const ApprovalPrior = ({ handleModal }) => {
         options={{
           filtering: true,
           headerStyle: {
-            backgroundColor: "#0d47a1",
+            backgroundColor: "#404040",
             fontWeight: "600",
             position: "sticky",
             top: 0,

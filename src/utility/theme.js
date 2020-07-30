@@ -1,35 +1,35 @@
 export default {
   palette: {
     primary: {
-      light: "#ffac33",
-      main: "#ff9800",
-      dark: "#b26a00",
-      contrastText: "#fff",
+      light: "#bebebe",
+      main: "#cbcbcb",
+      dark: "#d8d8d8",
+      contrastText: "#000000",
     },
     secondary: {
-      light: "#3d6bb3",
-      main: "#0d47a1",
-      dark: "#093170",
-      contrastText: "#fff",
+      light: "#737373",
+      main: "#595959",
+      dark: "#404040",
+      contrastText: "#e5e5e5",
     },
   },
   dashboard: {
     paper: {
       height: "100%",
       padding: "40px",
-      backgroundColor: "#3d6bb3",
+      backgroundColor: "#404040",
     },
     welcomeText: {
       fontWeight: "600",
-      color: "#FFF",
+      color: "#e5e5e5",
     },
     subTitle: {
       fontWeight: "600",
-      color: "#FFF",
+      color: "#e5e5e5",
     },
     content: {
       fontSize: "1.25rem",
-      color: "#FFF",
+      color: "#e5e5e5",
     },
     buttons: {
       display: "flex",
@@ -69,7 +69,7 @@ export default {
       },
     },
     mainWrapper: {
-      backgroundColor: "#FFF",
+      backgroundColor: "#e5e5e5",
       maxWidth: "2000px",
       minHeight: "Calc(100vh - 64px)",
       margin: "0px",
@@ -92,7 +92,7 @@ export default {
     navText: {
       fontSize: ".7rem",
       fontWeight: "600",
-      color: "#ffac33",
+      color: "#e5e5e5",
     },
     titleText: {
       fontWeight: "600",
@@ -122,6 +122,7 @@ export default {
       fontWeight: "600",
       fontSize: "1rem",
       textAlign: "center",
+      color: "#404040"
     },
     tabContainer: {
       display: "flex",
@@ -158,7 +159,7 @@ export default {
       height: "2px",
       margin: "0",
       flexShrink: "0",
-      backgroundColor: "#0d47a1"
+      backgroundColor: "#404040"
     }
   },
 };

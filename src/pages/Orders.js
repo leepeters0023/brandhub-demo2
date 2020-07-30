@@ -102,9 +102,9 @@ const Orders = () => {
             <form>
               <div className={classes.queryRow}>
                 <TextField
+                  color="secondary"
                   className={classes.queryField}
                   size="small"
-                  color="primary"
                   variant="outlined"
                   margin="normal"
                   id="approvalId"
@@ -112,9 +112,9 @@ const Orders = () => {
                   name="approvalId"
                 />
                 <TextField
+                  color="secondary"
                   className={classes.queryField}
                   size="small"
-                  color="primary"
                   variant="outlined"
                   margin="normal"
                   id="theme"
@@ -123,6 +123,7 @@ const Orders = () => {
                 />
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
+                    color="secondary"
                     className={classes.queryField}
                     disableToolbar
                     variant="inline"
@@ -139,6 +140,7 @@ const Orders = () => {
                 </MuiPickersUtilsProvider>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
+                    color="secondary"
                     className={classes.queryField}
                     disableToolbar
                     variant="inline"
@@ -158,14 +160,14 @@ const Orders = () => {
                 <Button
                   className={classes.queryButton}
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                 >
                   SEARCH
                 </Button>
                 <Button
                   className={classes.queryButton}
                   variant="contained"
-                  color="secondary"
+                  color="primary"
                 >
                   CLEAR
                 </Button>

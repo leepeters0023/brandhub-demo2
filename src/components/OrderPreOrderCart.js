@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "0",
     height: "184px",
     width: "150px",
+    maxWidth: "150px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -43,12 +44,13 @@ const useStyles = makeStyles((theme) => ({
   },
   borderRight: {
     borderRight: "1px solid lightgrey",
+    width: "196px"
   },
   colTitle: {
     width: "150px",
   },
   infoRow: {
-    backgroundColor: "#ffcc80",
+    backgroundColor: "#cbcbcb",
   },
   infoCell: {
     width: "150px",
@@ -64,15 +66,15 @@ const useStyles = makeStyles((theme) => ({
   },
   tableClosed: {
     zIndex: "-5",
-  }
+  },
 }));
 
 const OrderPreOrderCart = ({ userType }) => {
   const classes = useStyles();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [terms, setTermsChecked] = useState(false);
-  const [tableStyle, setTableStyle] = useState("tableClosed");
+  const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
 
 
@@ -232,6 +234,7 @@ const OrderPreOrderCart = ({ userType }) => {
                 {items.map((item) => (
                   <TableCell key={`${dist.name}-${item.itemNumber}`}>
                     <TextField
+                      color="secondary"
                       variant="outlined"
                       size="small"
                       id={`${dist.name}-${item.itemNumber}`}
@@ -277,6 +280,7 @@ const OrderPreOrderCart = ({ userType }) => {
           <Typography className={classes.headerText}>Order Notes</Typography>
           <br />
           <TextField
+            color="secondary"
             multiline
             fullWidth
             variant="outlined"
@@ -293,6 +297,7 @@ const OrderPreOrderCart = ({ userType }) => {
             getOptionLabel={(budget) => budget}
             renderInput={(params) => (
               <TextField
+                color="secondary"
                 {...params}
                 label="Budget"
                 variant="outlined"
