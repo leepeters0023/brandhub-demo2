@@ -160,6 +160,15 @@ export default {
       margin: "0",
       flexShrink: "0",
       backgroundColor: "#404040"
+    },
+    configButtons: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-end"
+    },
+    innerConfigDiv: {
+      display: "flex",
+      justifyContent: "flex-end"
     }
   },
 };

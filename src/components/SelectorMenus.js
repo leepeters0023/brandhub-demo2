@@ -7,7 +7,7 @@ import Select from "@material-ui/core/Select";
 const SelectorMenus = ({ type }) => {
   //data would be pulled from store
   const regions = ["Region 1", "Region 2", "Region 3"];
-  const fieldUsers = ["Field User 1", "Field User 2", "Field User 3"];
+  const fieldUsers = ["Field User 1", "Field User 2", "Field User 3", "Total Cart"];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
   const programs = ["Program 1", "Program 2", "Program 3"];
 
@@ -50,18 +50,18 @@ const SelectorMenus = ({ type }) => {
         </FormControl>
       </>
     );
-  } else if (type === "bdms") {
+  } else if (type === "cart") {
     return (
       <>
         <FormControl variant="outlined" style={{ margin: "0 5px" }}>
-          <InputLabel id="bdm-select">BDM</InputLabel>
+          <InputLabel id="cart-select">Cart</InputLabel>
           <Select
             native
-            labelId="bdm-select"
-            id="bdms"
+            labelId="cart-select"
+            id="cart"
             value={bdm}
             onChange={handleChangeSelect}
-            label="BDM"
+            label="Cart"
           >
             {fieldUsers.map((user, index) => (
               <option value={index} key={index}>

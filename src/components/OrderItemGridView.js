@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -38,12 +39,25 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
   },
+  singleItemWrapper: {
+    position: "relative",
+    width: "auto",
+    height: "auto",
+    padding: "0 5px",
+  },
+  favorite: {
+    position: "absolute",
+    top: "0px",
+    right: "0px",
+    padding: "0px",
+  },
 }));
 const OrderItemGridView = (props) => {
   const { type, currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
     <Container>
+      <br />
       <Grid container spacing={10} className={classes.itemGridContainer}>
         {currentItems.map((item) => (
           <Grid
@@ -53,13 +67,20 @@ const OrderItemGridView = (props) => {
             md={6}
             key={item.itemNumber}
           >
-            <img
-              id={item.itemNumber}
-              className={classes.previewImg}
-              src={item.imgUrl}
-              alt={item.itemType}
-              onClick={handlePreview}
-            />
+            <div className={classes.singleItemWrapper}>
+              <Tooltip placement="top-start" title="Favorite">
+                <IconButton className={classes.favorite}>
+                  <StarBorderIcon />
+                </IconButton>
+              </Tooltip>
+              <img
+                id={item.itemNumber}
+                className={classes.previewImg}
+                src={item.imgUrl}
+                alt={item.itemType}
+                onClick={handlePreview}
+              />
+            </div>
             <br />
             <Typography className={classes.headerText}>
               {`${item.brand} ${item.itemType}`}
@@ -74,18 +95,24 @@ const OrderItemGridView = (props) => {
             )}
             <br />
             <div className={classes.itemControl}>
-              <IconButton>
-                <StarBorderIcon />
-              </IconButton>
-              <Button
-                variant="contained"
-                color="secondary"
-                id={`${item.itemNumber}`}
-              >
-                <Tooltip title="Add to Cart">
+              <Tooltip title="Add to PDF">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  id={`${item.itemNumber}`}
+                >
+                  <PictureAsPdfIcon color="primary" />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Add to Cart">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  id={`${item.itemNumber}`}
+                >
                   <AddShoppingCartIcon color="primary" />
-                </Tooltip>
-              </Button>
+                </Button>
+              </Tooltip>
             </div>
           </Grid>
         ))}

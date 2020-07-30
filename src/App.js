@@ -12,6 +12,7 @@ import Approvals from "./pages/Approvals";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
 import Orders from "./pages/Orders";
+import Program from "./pages/Program";
 import RulesByState from "./pages/RulesByState";
 import ContactsByState from "./pages/ContactsByState";
 import POSClassifications from "./pages/POSClassifications";
@@ -69,6 +70,12 @@ const App = () => {
           {handleAuth(
             <PlaceOrder path="/order" userType={currentUser} />,
             "/order",
+            ["field1", "field2", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <Program path="/program/:programId" userType={currentUser} />,
+            "/program",
             ["field1", "field2", "super"],
             currentUser
           )}

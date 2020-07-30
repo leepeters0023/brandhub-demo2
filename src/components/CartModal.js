@@ -48,7 +48,7 @@ const CartModal = ({ userType }) => {
             setModal(true);
           }}
         >
-          <ShoppingCartIcon color="#404040" fontSize="large" />
+          <ShoppingCartIcon fontSize="large" />
         </IconButton>
       </Tooltip>
       <Dialog open={modal} onClose={handleClose} fullWidth maxWidth="xl">
@@ -62,7 +62,7 @@ const CartModal = ({ userType }) => {
         </IconButton>
         {userType !== "field1" && (
           <div className={classes.formControl}>
-            <SelectorMenus type="bdms" />
+            <SelectorMenus type="cart" />
           </div>
         )}
         <DialogTitle>

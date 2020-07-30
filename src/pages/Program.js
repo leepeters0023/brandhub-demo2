@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import SelectorMenus from "../components/SelectorMenus";
-
 //mockdata
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
+import ProgramDetails from "../components/ProgramDetails";
+import SelectorMenus from "../components/SelectorMenus";
 import ItemFilter from "../components/ItemFilter";
 import OrderItemViewControl from "../components/OrderItemViewControl";
-import OrderPreOrder from "../components/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreviewModal";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -48,33 +48,32 @@ const useStyles = makeStyles((theme) => ({
 let brands = items.map((item) => item.brand);
 let itemTypes = items.map((item) => item.itemType);
 
-const PlaceOrder = ({ userType }) => {
+const Program = ({ userType, programId }) => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
   const [currentView, setView] = useState("list");
   const [previewModal, handlePreviewModal] = useState(false);
   const [currentItem, handleCurrentItem] = useState({});
+  const [currentProgram, setCurrentProgram] = useState(null);
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
-      window.location.hash = "#pre";
+      window.location.hash = "#details";
     } else if (newValue === 2) {
-      window.location.hash = "#instock";
-    } else if (newValue === 3) {
-      window.location.hash = "#ondemand";
+      window.location.hash = "#items";
     }
     updateValue(newValue);
   };
 
   useEffect(() => {
-    if (window.location.hash === "#pre") {
+    let program = programs.find((prog) => prog.id === programId);
+    setCurrentProgram(program);
+    if (window.location.hash === "#details") {
       updateValue(1);
-    } else if (window.location.hash === "#instock") {
+    } else if (window.location.hash === "#items") {
       updateValue(2);
-    } else if (window.location.hash === "#ondemand") {
-      updateValue(3);
     }
-  }, []);
+  }, [programId]);
 
   const handlePreview = (evt) => {
     let item = items.find(
@@ -88,6 +87,10 @@ const PlaceOrder = ({ userType }) => {
     handlePreviewModal(false);
   };
 
+  if (!currentProgram) {
+    return <CircularProgress />;
+  }
+
   return (
     <>
       <div className={classes.relativeContainer}>
@@ -99,7 +102,7 @@ const PlaceOrder = ({ userType }) => {
         >
           <DialogContent>
             <ItemPreviewModal
-              type={value === 2 ? "inStock" : "onDemand"}
+              type="preOrder"
               currentItem={currentItem}
               handleClose={handleModalClose}
               userType={userType}
@@ -112,7 +115,7 @@ const PlaceOrder = ({ userType }) => {
           <div className={classes.titleImage}>
             <img className={classes.logo} src={GalloLogo} alt="Gallo" />
             <Typography className={classes.titleText} variant="h5">
-              Place an Order
+              {currentProgram.name}
             </Typography>
           </div>
           <div className={classes.configButtons}>
@@ -162,51 +165,34 @@ const PlaceOrder = ({ userType }) => {
           indicatorColor="primary"
           centered
         >
-          <Tab className={classes.headerText} label="Pre-Order" value={1} />
-          <Tab className={classes.headerText} label="In-Stock" value={2} />
-          <Tab className={classes.headerText} label="On-Demand" value={3} />
+          <Tab className={classes.headerText} label="Details" value={1} />
+          <Tab className={classes.headerText} label="Items" value={2} />
         </Tabs>
         <br />
         <Divider classes={{ root: classes.pageBreak }} />
         <br />
-        <Grid container className={classes.orderGrid} justify="space-around">
-          {value !== 1 && (
-            <>
-              <Grid item md={2} xs={12}>
-                <br />
-                <div className={classes.filterDiv}>
-                  <ItemFilter brands={brands} itemTypes={itemTypes} />
-                </div>
-              </Grid>
-            </>
-          )}
-          {value === 1 && (
-            <Grid item md={12}>
-              <OrderPreOrder currentPrograms={programs} />
+
+        {value === 1 && <ProgramDetails program={currentProgram} />}
+        {value === 2 && (
+          <Grid container className={classes.orderGrid} justify="space-around">
+            <Grid item md={2} xs={12}>
+              <br />
+              <div className={classes.filterDiv}>
+                <ItemFilter brands={brands} itemTypes={itemTypes} />
+              </div>
             </Grid>
-          )}
-          {value === 2 && (
             <Grid item md={10} xs={12}>
               <OrderItemViewControl
-                type={"inStock"}
+                type={"preOrder"}
                 currentView={currentView}
                 handlePreview={handlePreview}
               />
             </Grid>
-          )}
-          {value === 3 && (
-            <Grid item md={10} xs={12}>
-              <OrderItemViewControl
-                type={"onDemand"}
-                currentView={currentView}
-                handlePreview={handlePreview}
-              />
-            </Grid>
-          )}
-        </Grid>
+          </Grid>
+        )}
       </Container>
     </>
   );
 };
 
-export default PlaceOrder;
+export default Program;

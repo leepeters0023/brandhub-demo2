@@ -9,13 +9,19 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  tableButtonWrapper: {
+    display: "flex",
+    flexWrap: "none"
+  }
 }));
 
 const OrderItemTableView = (props) => {
@@ -51,6 +57,11 @@ const OrderItemTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Cost
               </TableCell>
+              {type !== "preOrder" && (
+                <TableCell className={classes.headerText} align="left">
+                  Qty
+                </TableCell>
+              )}
               <TableCell className={classes.headerText}></TableCell>
             </TableRow>
           </TableHead>
@@ -58,9 +69,11 @@ const OrderItemTableView = (props) => {
             {currentItems.map((row) => (
               <TableRow key={row.itemNumber} hover>
                 <TableCell component="th" scope="row">
-                  <IconButton>
-                    <StarBorderIcon />
-                  </IconButton>
+                  <Tooltip title="Favorite">
+                    <IconButton>
+                      <StarBorderIcon />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell align="left">
                   <img
@@ -81,16 +94,41 @@ const OrderItemTableView = (props) => {
                   </TableCell>
                 )}
                 <TableCell>{row.price}</TableCell>
+                {type !== "preOrder" && (
+                  <TableCell>
+                    <TextField
+                      color="secondary"
+                      size="small"
+                      style={{ width: "55px" }}
+                      id={`${row.itemNumber}`}
+                      placeholder="Qty"
+                      variant="outlined"
+                    />
+                  </TableCell>
+                )}
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id={`${row.itemNumber}`}
-                  >
-                    <Tooltip title="Add to Cart">
-                      <AddShoppingCartIcon color="primary" />
+                  <div className={classes.tableButtonWrapper}>
+                    <Tooltip placement="top" title="Add to PDF">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        id={`${row.itemNumber}`}
+                        style={{ margin: "5px 2.5px" }}
+                      >
+                        <PictureAsPdfIcon color="primary" />
+                      </Button>
                     </Tooltip>
-                  </Button>
+                    <Tooltip title="Add to Cart">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        id={`${row.itemNumber}`}
+                        style={{ margin: "5px 2.5px" }}
+                      >
+                        <AddShoppingCartIcon color="primary" />
+                      </Button>
+                    </Tooltip>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

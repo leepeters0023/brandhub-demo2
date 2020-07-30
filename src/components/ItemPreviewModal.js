@@ -52,10 +52,10 @@ const useStyles = makeStyles((theme) => ({
     height: "25%",
     width: "175px",
     objectFit: "cover",
-    border: "5px solid #ffac33",
+    border: `5px solid ${theme.palette.secondary.dark}`,
     "&:hover": {
       cursor: "pointer",
-      border: "5px solid #3d6bb3",
+      border: `5px solid ${theme.palette.primary.main}`,
     },
   },
   itemTitle: {
@@ -187,21 +187,26 @@ const ItemPreviewModal = (props) => {
           </Typography>
           <br />
           <Box bgcolor="primary.main" className={classes.dividerBox} />
+          <br />
           {userType !== "field1" && (
             <div>
-              <SelectorMenus type="bdms" />
+              <SelectorMenus type="cart" />
               <br />
               <br />
             </div>
           )}
-          <TextField
-            color="secondary"
-            style={{ width: "150px", marginLeft: "5px" }}
-            id={`${itemNumber}`}
-            placeholder="Qty"
-            variant="outlined"
-          />
-          <SelectorMenus type="budgets" />
+          {type !== "preOrder" && (
+            <>
+              <TextField
+                color="secondary"
+                style={{ width: "150px", marginLeft: "5px" }}
+                id={`${itemNumber}`}
+                placeholder="Qty"
+                variant="outlined"
+              />
+              <SelectorMenus type="budgets" />
+            </>
+          )}
           <br />
           <Button
             variant="contained"

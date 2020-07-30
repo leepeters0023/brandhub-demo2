@@ -32,15 +32,21 @@ const ItemFilter = (props) => {
 
   const { brands, itemTypes } = props;
   const units = ["Unit 1", "Unit 2", "Unit 3"];
+  const channels = ["Channel 1", "Channel 2", "Channel 3"];
+  const others = ["Growth Engines", "Key Brands", "High Potential"];
 
   const [brandsOpen, setBrandsOpen] = useState(false);
   const [itemTypesOpen, setItemTypesOpen] = useState(false);
   const [unitsOpen, setUnitsOpen] = useState(false);
+  const [channelsOpen, setChannelsOpen] = useState(false);
+  const [othersOpen, setOthersOpen] = useState(false);
   const [favItemChecked, setFavItemChecked] = useState(false);
 
   const [brandsChecked, setBrandsChecked] = useState([]);
   const [itemTypesChecked, setItemTypesChecked] = useState([]);
   const [unitsChecked, setUnitsChecked] = useState([]);
+  const [channelsChecked, setChannelsChecked] = useState([]);
+  const [othersChecked, setOthersChecked] = useState([]);
 
   const handleCheckToggle = (value, array, func) => {
     const currentIndex = array.indexOf(value);
@@ -158,6 +164,72 @@ const ItemFilter = (props) => {
     );
   };
 
+  const channelsList = (listItems) => {
+    return (
+      <List component="div" disablePadding>
+        {listItems.map((item) => {
+          const labelId = `checkbox-list-label-${item}`;
+
+          return (
+            <ListItem
+              key={item}
+              role={undefined}
+              dense
+              button
+              onClick={() => {
+                handleCheckToggle(item, channelsChecked, setChannelsChecked);
+              }}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  color="secondary"
+                  edge="start"
+                  checked={channelsChecked.indexOf(item) !== -1}
+                  disableRipple
+                  inputProps={{ "aria-labelledby": labelId }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`${item}`} />
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
+  const othersList = (listItems) => {
+    return (
+      <List component="div" disablePadding>
+        {listItems.map((item) => {
+          const labelId = `checkbox-list-label-${item}`;
+
+          return (
+            <ListItem
+              key={item}
+              role={undefined}
+              dense
+              button
+              onClick={() => {
+                handleCheckToggle(item, othersChecked, setOthersChecked);
+              }}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  color="secondary"
+                  edge="start"
+                  checked={othersChecked.indexOf(item) !== -1}
+                  disableRipple
+                  inputProps={{ "aria-labelledby": labelId }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`${item}`} />
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   return (
     <>
       <Typography className={classes.headerText}>Filter Items</Typography>
@@ -226,11 +298,37 @@ const ItemFilter = (props) => {
             handleListToggle(unitsOpen, setUnitsOpen);
           }}
         >
-          <ListItemText primary="Units" />
+          <ListItemText primary="Business Units" />
           {unitsOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
           {unitsList(units)}
+        </Collapse>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            handleListToggle(channelsOpen, setChannelsOpen);
+          }}
+        >
+          <ListItemText primary="Channels" />
+          {channelsOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
+          {channelsList(channels)}
+        </Collapse>
+        <Divider />
+        <ListItem
+          button
+          onClick={() => {
+            handleListToggle(othersOpen, setOthersOpen);
+          }}
+        >
+          <ListItemText primary="Other" />
+          {othersOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={othersOpen} timeout="auto" unmountOnExit>
+          {othersList(others)}
         </Collapse>
       </List>
     </>
