@@ -18,6 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
+import AutoComplete from "@material-ui/lab/Autocomplete";
 import { makeStyles } from "@material-ui/core/styles";
 
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -26,6 +27,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 //mock data
 import items from "../assets/mockdata/Items";
 import distributors from "../assets/mockdata/distributors";
+const budgets = ["Regional Budget", "User Budget", "Key Account Budget"]
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -71,6 +73,7 @@ const OrderPreOrderCart = ({ userType }) => {
   const [open, setOpen] = useState(false);
   const [terms, setTermsChecked] = useState(false);
   const [tableStyle, setTableStyle] = useState("tableClosed");
+  const [budget, setBudget] = useState(null);
 
 
   return (
@@ -282,6 +285,22 @@ const OrderPreOrderCart = ({ userType }) => {
           />
         </Grid>
         <Grid item md={5} xs={12}>
+        <AutoComplete
+            value={budget}
+            onChange={(event, value) => setBudget(value)}
+            id="budget"
+            options={budgets}
+            getOptionLabel={(budget) => budget}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Budget"
+                variant="outlined"
+                size="small"
+              />
+            )}
+          />
+          <br />
           <Typography className={classes.titleText}>Subtotal:</Typography>
           <Typography className={classes.titleText}>Shipping:</Typography>
           <Typography className={classes.titleText}>Handling:</Typography>
