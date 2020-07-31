@@ -16,7 +16,6 @@ import ItemPreviewModal from "../components/ItemPreviewModal";
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
@@ -31,18 +30,6 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  orderGrid: {
-    display: "flex",
-    justifyContent: "space-around",
-  },
-  filterDiv: {
-    borderRight: "1px solid #4c4c4c",
-    paddingRight: "15px",
-    height: "100%",
-    [theme.breakpoints.down("sm")]: {
-      borderRight: "0px solid rgb(0,0,0,0)",
-    },
-  },
 }));
 
 let brands = items.map((item) => item.brand);
@@ -169,41 +156,22 @@ const PlaceOrder = ({ userType }) => {
         <br />
         <Divider classes={{ root: classes.pageBreak }} />
         <br />
-        <Grid container className={classes.orderGrid} justify="space-around">
-          {value !== 1 && (
-            <>
-              <Grid item md={2} xs={12}>
-                <br />
-                <div className={classes.filterDiv}>
-                  <ItemFilter brands={brands} itemTypes={itemTypes} />
-                </div>
-              </Grid>
-            </>
-          )}
-          {value === 1 && (
-            <Grid item md={12}>
-              <OrderPreOrder currentPrograms={programs} />
-            </Grid>
-          )}
-          {value === 2 && (
-            <Grid item md={10} xs={12}>
-              <OrderItemViewControl
-                type={"inStock"}
-                currentView={currentView}
-                handlePreview={handlePreview}
-              />
-            </Grid>
-          )}
-          {value === 3 && (
-            <Grid item md={10} xs={12}>
-              <OrderItemViewControl
-                type={"onDemand"}
-                currentView={currentView}
-                handlePreview={handlePreview}
-              />
-            </Grid>
-          )}
-        </Grid>
+        {value !== 1 && <ItemFilter brands={brands} itemTypes={itemTypes} />}
+        {value === 1 && <OrderPreOrder currentPrograms={programs} />}
+        {value === 2 && (
+          <OrderItemViewControl
+            type={"inStock"}
+            currentView={currentView}
+            handlePreview={handlePreview}
+          />
+        )}
+        {value === 3 && (
+          <OrderItemViewControl
+            type={"onDemand"}
+            currentView={currentView}
+            handlePreview={handlePreview}
+          />
+        )}
       </Container>
     </>
   );

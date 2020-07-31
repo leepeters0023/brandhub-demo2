@@ -16,7 +16,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
@@ -174,21 +173,19 @@ const Program = ({ userType, programId }) => {
 
         {value === 1 && <ProgramDetails program={currentProgram} />}
         {value === 2 && (
-          <Grid container className={classes.orderGrid} justify="space-around">
-            <Grid item md={2} xs={12}>
-              <br />
-              <div className={classes.filterDiv}>
+            <>
+             
+              
                 <ItemFilter brands={brands} itemTypes={itemTypes} />
-              </div>
-            </Grid>
-            <Grid item md={10} xs={12}>
+              
+            
+            
               <OrderItemViewControl
                 type={"preOrder"}
                 currentView={currentView}
                 handlePreview={handlePreview}
               />
-            </Grid>
-          </Grid>
+            </>
         )}
       </Container>
     </>

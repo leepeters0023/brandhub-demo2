@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import FilterChipList from "./FilterChipList";
+
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
+import Menu from "@material-ui/core/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -16,15 +20,20 @@ import { makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  navBreak: {
+  filterControl: {
     display: "flex",
-    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    margin: "0",
+    width: "350px",
+    marginRight: "15px"
   },
+  filterList: {
+    display: "flex"
+  }
 }));
 
 const ItemFilter = (props) => {
@@ -35,6 +44,7 @@ const ItemFilter = (props) => {
   const channels = ["Channel 1", "Channel 2", "Channel 3"];
   const others = ["Growth Engines", "Key Brands", "High Potential"];
 
+  const [anchorEl, setAnchorEl] = useState(null);
   const [brandsOpen, setBrandsOpen] = useState(false);
   const [itemTypesOpen, setItemTypesOpen] = useState(false);
   const [unitsOpen, setUnitsOpen] = useState(false);
@@ -47,6 +57,7 @@ const ItemFilter = (props) => {
   const [unitsChecked, setUnitsChecked] = useState([]);
   const [channelsChecked, setChannelsChecked] = useState([]);
   const [othersChecked, setOthersChecked] = useState([]);
+  const [allFilters, setAllFilters] = useState([]);
 
   const handleCheckToggle = (value, array, func) => {
     const currentIndex = array.indexOf(value);
@@ -61,9 +72,57 @@ const ItemFilter = (props) => {
     func(newChecked);
   };
 
+  const handleChipClick = (type, value) => {
+    if (type === "brand") {
+      handleCheckToggle(value, brandsChecked, setBrandsChecked);
+    } else if (type === "itemType") {
+      handleCheckToggle(value, itemTypesChecked, setItemTypesChecked);
+    } else if (type === "unit") {
+      handleCheckToggle(value, unitsChecked, setUnitsChecked);
+    } else if (type === "channel") {
+      handleCheckToggle(value, channelsChecked, setChannelsChecked);
+    } else if (type === "other") {
+      handleCheckToggle(value, othersChecked, setOthersChecked);
+    }
+  };
+
   const handleListToggle = (open, func) => {
     func(!open);
   };
+
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    const currentFilters = [];
+    brandsChecked.forEach((brand) =>
+      currentFilters.push({ type: "brand", value: brand })
+    );
+    itemTypesChecked.forEach((itemType) =>
+      currentFilters.push({ type: "itemType", value: itemType })
+    );
+    unitsChecked.forEach((unit) =>
+      currentFilters.push({ type: "unit", value: unit })
+    );
+    channelsChecked.forEach((channel) =>
+      currentFilters.push({ type: "channel", value: channel })
+    );
+    othersChecked.forEach((other) =>
+      currentFilters.push({ type: "other", value: other })
+    );
+    setAllFilters(currentFilters);
+  }, [
+    brandsChecked,
+    itemTypesChecked,
+    unitsChecked,
+    channelsChecked,
+    othersChecked,
+  ]);
 
   const brandsList = (listItems) => {
     return (
@@ -231,107 +290,134 @@ const ItemFilter = (props) => {
   };
 
   return (
-    <>
-      <Typography className={classes.headerText}>Filter Items</Typography>
-      <TextField
-        fullWidth
-        size="small"
-        color="secondary"
-        variant="outlined"
-        margin="normal"
-        id="search"
-        label="Search"
-        name="search"
-      />
-      <br />
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{width: "100%"}}
-      >
-        <SearchIcon color="primary" />
-      </Button>
-      <List>
-        <br />
-        <ListItem>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={favItemChecked}
-                onChange={() => setFavItemChecked(!favItemChecked)}
-                name="viewFavorites"
-                color="secondary"
+    <div className={classes.filterList}>
+      <div className={classes.filterControl}>
+        <Tooltip title="Filter Items">
+          <IconButton
+            aria-owns={anchorEl ? "filters" : undefined}
+            aria-haspopup="true"
+            onClick={handleOpen}
+          >
+            <FilterListIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          name="filters"
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <List
+            style={{
+              width: "300px",
+              maxHeight: "400px",
+              overflowY: "auto",
+            }}
+          >
+            <ListItem>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={favItemChecked}
+                    onChange={() => setFavItemChecked(!favItemChecked)}
+                    name="viewFavorites"
+                    color="secondary"
+                  />
+                }
+                label=" Favorites"
               />
-            }
-            label=" Favorites"
-          />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(brandsOpen, setBrandsOpen);
-          }}
-        >
-          <ListItemText primary="Brands" />
-          {brandsOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={brandsOpen} timeout="auto" unmountOnExit>
-          {brandsList(brands)}
-        </Collapse>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(itemTypesOpen, setItemTypesOpen);
-          }}
-        >
-          <ListItemText primary="Item Types" />
-          {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={itemTypesOpen} timeout="auto" unmountOnExit>
-          {itemTypesList(itemTypes)}
-        </Collapse>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(unitsOpen, setUnitsOpen);
-          }}
-        >
-          <ListItemText primary="Business Units" />
-          {unitsOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
-          {unitsList(units)}
-        </Collapse>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(channelsOpen, setChannelsOpen);
-          }}
-        >
-          <ListItemText primary="Channels" />
-          {channelsOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
-          {channelsList(channels)}
-        </Collapse>
-        <Divider />
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(othersOpen, setOthersOpen);
-          }}
-        >
-          <ListItemText primary="Other" />
-          {othersOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse in={othersOpen} timeout="auto" unmountOnExit>
-          {othersList(others)}
-        </Collapse>
-      </List>
-    </>
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                handleListToggle(brandsOpen, setBrandsOpen);
+              }}
+            >
+              <ListItemText primary="Brands" />
+              {brandsOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={brandsOpen} timeout="auto" unmountOnExit>
+              {brandsList(brands)}
+            </Collapse>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                handleListToggle(itemTypesOpen, setItemTypesOpen);
+              }}
+            >
+              <ListItemText primary="Item Types" />
+              {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={itemTypesOpen} timeout="auto" unmountOnExit>
+              {itemTypesList(itemTypes)}
+            </Collapse>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                handleListToggle(unitsOpen, setUnitsOpen);
+              }}
+            >
+              <ListItemText primary="Business Units" />
+              {unitsOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
+              {unitsList(units)}
+            </Collapse>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                handleListToggle(channelsOpen, setChannelsOpen);
+              }}
+            >
+              <ListItemText primary="Channels" />
+              {channelsOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
+              {channelsList(channels)}
+            </Collapse>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
+                handleListToggle(othersOpen, setOthersOpen);
+              }}
+            >
+              <ListItemText primary="Other" />
+              {othersOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={othersOpen} timeout="auto" unmountOnExit>
+              {othersList(others)}
+            </Collapse>
+          </List>
+        </Menu>
+        <TextField
+          style={{ margin: 0 }}
+          size="small"
+          color="secondary"
+          variant="outlined"
+          margin="normal"
+          id="search"
+          label="Search"
+          name="search"
+        />
+        <Button variant="contained" color="secondary" style={{ width: "50px" }}>
+          <SearchIcon color="primary" />
+        </Button>
+      </div>
+      <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />
+    </div>
   );
 };
 

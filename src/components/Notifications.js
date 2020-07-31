@@ -113,12 +113,12 @@ const Notifications = () => {
       <Menu
        getContentAnchorEl={null}
        anchorOrigin={{
-         vertical: "bottom",
-         horizontal: "right",
+         vertical: "top",
+         horizontal: "left",
        }}
        transformOrigin={{
          vertical: "top",
-         horizontal: "right",
+         horizontal: "left",
        }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
