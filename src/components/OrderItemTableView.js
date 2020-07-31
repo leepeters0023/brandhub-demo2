@@ -115,7 +115,7 @@ const OrderItemTableView = (props) => {
                         id={`${row.itemNumber}`}
                         style={{ margin: "5px 2.5px" }}
                       >
-                        <PictureAsPdfIcon color="primary" />
+                        <PictureAsPdfIcon className={classes.navIcon} />
                       </Button>
                     </Tooltip>
                     <Tooltip title="Add to Cart">
@@ -125,7 +125,7 @@ const OrderItemTableView = (props) => {
                         id={`${row.itemNumber}`}
                         style={{ margin: "5px 2.5px" }}
                       >
-                        <AddShoppingCartIcon color="primary" />
+                        <AddShoppingCartIcon className={classes.navIcon} />
                       </Button>
                     </Tooltip>
                   </div>

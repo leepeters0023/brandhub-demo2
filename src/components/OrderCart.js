@@ -262,10 +262,19 @@ const OrderCart = ({ userType }) => {
         {userType !== "field1" && (
           <Button
             className={classes.largeButton}
-            color="primary"
+            color="secondary"
             variant="contained"
           >
             PURCHASE ORDER
+          </Button>
+        )}
+        {userType === "field1" && (
+          <Button
+            className={classes.largeButton}
+            color="secondary"
+            variant="contained"
+          >
+            SUBMIT ORDER
           </Button>
         )}
       </div>

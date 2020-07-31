@@ -28,7 +28,7 @@ const UserSuper = () => {
         <div>
           <ListItem className={classes.navItem} button component={Link} to="/">
             <ListItemIcon className={classes.navItem}>
-              <DashboardIcon fontSize="large" color="primary" />
+              <DashboardIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -43,7 +43,7 @@ const UserSuper = () => {
             to="/budget#regional"
           >
             <ListItemIcon className={classes.navItem}>
-              <MonetizationOnIcon fontSize="large" color="primary" />
+              <MonetizationOnIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -57,7 +57,7 @@ const UserSuper = () => {
             to="/reports"
           >
             <ListItemIcon className={classes.navItem}>
-              <InsertChartIcon fontSize="large" color="primary" />
+              <InsertChartIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -72,7 +72,7 @@ const UserSuper = () => {
             to="/calendar"
           >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="primary" />
+              <DateRangeIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -88,7 +88,7 @@ const UserSuper = () => {
             to="/help"
           >
             <ListItemIcon className={classes.navItem}>
-              <HelpIcon fontSize="large" color="primary" />
+              <HelpIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}

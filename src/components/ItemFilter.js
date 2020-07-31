@@ -413,7 +413,7 @@ const ItemFilter = (props) => {
           name="search"
         />
         <Button variant="contained" color="secondary" style={{ width: "50px" }}>
-          <SearchIcon color="primary" />
+          <SearchIcon className={classes.navIcon} />
         </Button>
       </div>
       <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />

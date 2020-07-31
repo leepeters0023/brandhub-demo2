@@ -27,7 +27,7 @@ const UserField = () => {
         <div>
           <ListItem className={classes.navItem} button component={Link} to="/">
             <ListItemIcon className={classes.navItem}>
-              <DashboardIcon fontSize="large" color="primary" />
+              <DashboardIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -42,7 +42,7 @@ const UserField = () => {
             to="/budget#regional"
           >
             <ListItemIcon className={classes.navItem}>
-              <MonetizationOnIcon fontSize="large" color="primary" />
+              <MonetizationOnIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -56,7 +56,7 @@ const UserField = () => {
             to="/calendar"
           >
             <ListItemIcon className={classes.navItem}>
-              <DateRangeIcon fontSize="large" color="primary" />
+              <DateRangeIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}
@@ -72,7 +72,7 @@ const UserField = () => {
             to="/help"
           >
             <ListItemIcon className={classes.navItem}>
-              <HelpIcon fontSize="large" color="primary" />
+              <HelpIcon fontSize="large" className={classes.navIcon} />
             </ListItemIcon>
             <ListItemText
               primaryTypographyProps={{ className: classes.navText }}

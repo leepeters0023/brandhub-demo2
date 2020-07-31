@@ -94,7 +94,7 @@ const DashboardFieldOne = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/order#pre"
@@ -104,7 +104,7 @@ const DashboardFieldOne = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/order#instock"
@@ -114,7 +114,7 @@ const DashboardFieldOne = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/order#ondemand"
@@ -128,7 +128,7 @@ const DashboardFieldOne = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/coupons"
@@ -142,7 +142,7 @@ const DashboardFieldOne = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/orders#current"

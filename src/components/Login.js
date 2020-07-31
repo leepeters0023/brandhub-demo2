@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     left: 0,
     overflow: "hidden",
-    backgroundColor: "#e5e5e5",
+    backgroundColor: "#FFFFFF",
   },
   welcome: {
     fontWeight: "800",

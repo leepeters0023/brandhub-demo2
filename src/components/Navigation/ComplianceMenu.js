@@ -42,7 +42,7 @@ const ComplianceMenu = () => {
         aria-haspopup="true"
       >
         <ListItemIcon className={classes.navItem}>
-          <AssignmentTurnedInIcon fontSize="large" color="primary" />
+          <AssignmentTurnedInIcon fontSize="large" className={classes.navIcon} />
         </ListItemIcon>
         <ListItemText
               primaryTypographyProps={{ className: classes.navText }}

@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: theme.palette.secondary.light
+    backgroundColor: theme.palette.primary.light
   },
   drawer: {
     width: 75,
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     overflow: "hidden",
-    backgroundColor: theme.palette.secondary.dark
+    backgroundColor: theme.palette.secondary.main
   },
   navBreak: {
     display: "flex",

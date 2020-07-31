@@ -94,7 +94,7 @@ const DashboardCompliance = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/approval#pending"
@@ -104,7 +104,7 @@ const DashboardCompliance = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/approval#prior"
@@ -118,7 +118,7 @@ const DashboardCompliance = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/rules"
@@ -128,7 +128,7 @@ const DashboardCompliance = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/classifications"
@@ -142,7 +142,7 @@ const DashboardCompliance = () => {
               <br />
               <Button
                 className={classes.largeButton}
-                color="primary"
+                color="secondary"
                 variant="contained"
                 component={Link}
                 to="/compliance-contacts"

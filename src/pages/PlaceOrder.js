@@ -113,32 +113,34 @@ const PlaceOrder = ({ userType }) => {
                   <PictureAsPdfIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="View List">
-                <IconButton
-                  disabled={value === 1}
-                  onClick={() => {
-                    setView("list");
-                  }}
-                >
-                  <ViewStreamIcon
-                    fontSize="large"
-                    color={currentView === "list" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="View Grid">
-                <IconButton
-                  disabled={value === 1}
-                  onClick={() => {
-                    setView("grid");
-                  }}
-                >
-                  <ViewModuleIcon
-                    fontSize="large"
-                    color={currentView === "grid" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip>
+              {value !== 1 && (
+                <>
+                  <Tooltip title="View List">
+                    <IconButton
+                      onClick={() => {
+                        setView("list");
+                      }}
+                    >
+                      <ViewStreamIcon
+                        fontSize="large"
+                        color={currentView === "list" ? "primary" : "inherit"}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="View Grid">
+                    <IconButton
+                      onClick={() => {
+                        setView("grid");
+                      }}
+                    >
+                      <ViewModuleIcon
+                        fontSize="large"
+                        color={currentView === "grid" ? "primary" : "inherit"}
+                      />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
             </div>
           </div>
         </div>

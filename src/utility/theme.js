@@ -7,29 +7,26 @@ export default {
       contrastText: "#000000",
     },
     secondary: {
-      light: "#737373",
-      main: "#595959",
-      dark: "#404040",
-      contrastText: "#e5e5e5",
+      light: "#999999",
+      main: "#737373",
+      dark: "#595959",
+      contrastText: "#000000",
     },
   },
   dashboard: {
     paper: {
       height: "100%",
       padding: "40px",
-      backgroundColor: "#404040",
+      backgroundColor: "#bebebe",
     },
     welcomeText: {
       fontWeight: "600",
-      color: "#e5e5e5",
     },
     subTitle: {
       fontWeight: "600",
-      color: "#e5e5e5",
     },
     content: {
       fontSize: "1.25rem",
-      color: "#e5e5e5",
     },
     buttons: {
       display: "flex",
@@ -41,7 +38,7 @@ export default {
       transform: "translateZ(0)",
     },
     title: {
-      color: "#ffac33",
+      color: "#cbcbcb",
     },
     gridTitleBar: {
       background:
@@ -69,7 +66,7 @@ export default {
       },
     },
     mainWrapper: {
-      backgroundColor: "#e5e5e5",
+      backgroundColor: "#FFFFFF",
       maxWidth: "2000px",
       minHeight: "Calc(100vh - 64px)",
       margin: "0px",
@@ -89,10 +86,13 @@ export default {
       alignItems: "center",
       textAlign: "center"
     },
+    navIcon: {
+      color: "#FFFFFF"
+    },
     navText: {
       fontSize: ".7rem",
       fontWeight: "600",
-      color: "#e5e5e5",
+      color: "#FFFFFF",
     },
     titleText: {
       fontWeight: "600",
@@ -122,7 +122,7 @@ export default {
       fontWeight: "600",
       fontSize: "1rem",
       textAlign: "center",
-      color: "#404040"
+      color: "#FFFFFF"
     },
     tabContainer: {
       display: "flex",
@@ -159,7 +159,7 @@ export default {
       height: "2px",
       margin: "0",
       flexShrink: "0",
-      backgroundColor: "#404040"
+      backgroundColor: "#737373"
     },
     configButtons: {
       display: "flex",

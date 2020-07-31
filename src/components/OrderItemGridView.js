@@ -101,7 +101,7 @@ const OrderItemGridView = (props) => {
                   color="secondary"
                   id={`${item.itemNumber}`}
                 >
-                  <PictureAsPdfIcon color="primary" />
+                  <PictureAsPdfIcon className={classes.navIcon} />
                 </Button>
               </Tooltip>
               <Tooltip title="Add to Cart">
@@ -110,7 +110,7 @@ const OrderItemGridView = (props) => {
                   color="secondary"
                   id={`${item.itemNumber}`}
                 >
-                  <AddShoppingCartIcon color="primary" />
+                  <AddShoppingCartIcon className={classes.navIcon} />
                 </Button>
               </Tooltip>
             </div>
