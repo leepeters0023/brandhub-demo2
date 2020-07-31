@@ -27,7 +27,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 //mock data
 import items from "../assets/mockdata/Items";
 import distributors from "../assets/mockdata/distributors";
-const budgets = ["Regional Budget", "User Budget", "Key Account Budget"]
+const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   borderRight: {
     borderRight: "1px solid lightgrey",
-    width: "196px"
+    width: "196px",
   },
   colTitle: {
     width: "150px",
@@ -76,7 +76,6 @@ const OrderPreOrderCart = ({ userType }) => {
   const [terms, setTermsChecked] = useState(false);
   const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
-
 
   return (
     <>
@@ -110,8 +109,10 @@ const OrderPreOrderCart = ({ userType }) => {
                   <IconButton
                     aria-label="expand row"
                     onClick={() => {
-                      setOpen(!open)
-                      !open ? setTableStyle(null) : setTableStyle("tableClosed")
+                      setOpen(!open);
+                      !open
+                        ? setTableStyle(null)
+                        : setTableStyle("tableClosed");
                     }}
                   >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -131,7 +132,11 @@ const OrderPreOrderCart = ({ userType }) => {
               })}
             </TableRow>
             <TableRow>
-              <TableCell style={{ padding: 0 }} colSpan={items.length + 1} className={classes[tableStyle]}>
+              <TableCell
+                style={{ padding: 0 }}
+                colSpan={items.length + 1}
+                className={classes[tableStyle]}
+              >
                 <Collapse in={open} timeout="auto">
                   <Box>
                     <Table
@@ -248,22 +253,23 @@ const OrderPreOrderCart = ({ userType }) => {
       </TableContainer>
       <br />
       <br />
-      <Typography className={classes.headerText}>
-        TERMS AND CONDITIONS
-      </Typography>
-      <br />
-      <Typography className={classes.bodyText}>
-        Use of this site is subject to all Gallo use policies. By using this
-        site, you warrant that you are a Gallo or Gallo Sales employee and that
-        you have reviewed, read, and understand the Compliance rules below
-        associated with this site and with your intended order. You further
-        warrant that you will not, under any circumstances, order items for use
-        in stated where prohibited or use items in a prohibited manner. If you
-        have any questions, please contact your Compliance representative.
-      </Typography>
-      <br />
       <Grid container spacing={5}>
         <Grid item md={7} xs={12}>
+          <Typography className={classes.headerText}>
+            TERMS AND CONDITIONS
+          </Typography>
+          <br />
+          <Typography className={classes.bodyText}>
+            Use of this site is subject to all Gallo use policies. By using this
+            site, you warrant that you are a Gallo or Gallo Sales employee and
+            that you have reviewed, read, and understand the Compliance rules
+            below associated with this site and with your intended order. You
+            further warrant that you will not, under any circumstances, order
+            items for use in stated where prohibited or use items in a
+            prohibited manner. If you have any questions, please contact your
+            Compliance representative.
+          </Typography>
+          <br />
           <FormControlLabel
             control={
               <Checkbox
@@ -289,7 +295,7 @@ const OrderPreOrderCart = ({ userType }) => {
           />
         </Grid>
         <Grid item md={5} xs={12}>
-        <AutoComplete
+          <AutoComplete
             value={budget}
             onChange={(event, value) => setBudget(value)}
             id="budget"

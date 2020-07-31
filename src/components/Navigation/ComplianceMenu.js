@@ -58,7 +58,7 @@ const ComplianceMenu = () => {
       >
         <MenuItem
           component={Link}
-          to="/approval#prior"
+          to="/approval#pending"
           onClick={() => {
             handleClose();
           }}

@@ -75,6 +75,7 @@ const Reports = () => {
         <br />
         <ReportHistoryForm handleReportSubmit={handleReportSubmit}/>
       </Container>
+      <br />
     </>
   );
 };

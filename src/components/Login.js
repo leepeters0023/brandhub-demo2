@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
+    color: "#FFFFFF",
+    fontSize: "1.25rem",
+    fontWeight: "600",
     margin: theme.spacing(3, 0, 2),
   },
 }));

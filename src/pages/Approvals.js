@@ -30,9 +30,9 @@ const Approvals = () => {
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
-      window.location.hash = "#prior";
-    } else if (newValue === 2) {
       window.location.hash = "#pending";
+    } else if (newValue === 2) {
+      window.location.hash = "#prior";
     }
     updateValue(newValue);
   };
@@ -43,9 +43,9 @@ const Approvals = () => {
   };
 
   useEffect(() => {
-    if (window.location.hash === "#prior") {
+    if (window.location.hash === "#pending") {
       updateValue(1);
-    } else if (window.location.hash === "#pending") {
+    } else if (window.location.hash === "#prior") {
       updateValue(2);
     }
   }, []);
@@ -100,6 +100,7 @@ const Approvals = () => {
         {value === 1 && <ApprovalPending handleModal={handleModal} />}
         {value === 2 && <ApprovalPrior handleModal={handleModal} />}
       </Container>
+      <br />
     </>
   );
 };

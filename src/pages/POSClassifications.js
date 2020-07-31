@@ -25,6 +25,7 @@ const POSClassifications = () => {
           </Typography>
         </div>
       </Container>
+      <br />
     </>
   );
 };

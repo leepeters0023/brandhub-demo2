@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ItemOneSheet from "./ItemOneSheet";
 import ItemFeedback from "./ItemFeedback";
 import ItemAssembly from "./ItemAssembly";
-import SelectorMenus from "./SelectorMenus";
+import SelectorMenus from "../SelectorMenus";
 
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";

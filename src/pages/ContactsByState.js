@@ -34,6 +34,7 @@ const ContactsByState = () => {
         <br />
         <ContactsByStateTable data={contacts} />
       </Container>
+      <br />
     </>
   );
 };

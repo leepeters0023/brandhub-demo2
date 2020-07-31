@@ -15,6 +15,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      height: "auto",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+    }
   },
 }));
 
@@ -48,6 +53,7 @@ const Dashboard = () => {
           {currentUser === "compliance" && <DashboardCompliance />}
         </div>
       </Container>
+      <br />
     </>
   );
 };

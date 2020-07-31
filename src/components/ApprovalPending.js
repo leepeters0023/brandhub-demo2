@@ -134,7 +134,7 @@ const ApprovalPending = ({ handleModal }) => {
   return (
     <>
       <MaterialTable
-        title="Prior Approvals"
+        title="Pending Approvals"
         columns={[
           { title: "Approval Id", field: "approvalId" },
           { title: "Entry Date", field: "date", filtering: false },

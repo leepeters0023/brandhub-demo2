@@ -10,7 +10,7 @@ import ProgramDetails from "../components/ProgramDetails";
 import SelectorMenus from "../components/SelectorMenus";
 import ItemFilter from "../components/ItemFilter";
 import OrderItemViewControl from "../components/OrderItemViewControl";
-import ItemPreviewModal from "../components/ItemPreviewModal";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -190,6 +190,7 @@ const Program = ({ userType, programId }) => {
             </>
         )}
       </Container>
+      <br />
     </>
   );
 };

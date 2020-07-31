@@ -86,6 +86,7 @@ const Budget = () => {
         {value === 2 && <BudgetUser />}
         {value === 3 && <BudgetBrand />}
       </Container>
+      <br />
     </>
   );
 };

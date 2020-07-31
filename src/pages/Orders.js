@@ -201,6 +201,7 @@ const Orders = ({ reportType }) => {
           <OrdersPastTable handlePreview={handlePreview} tableType={tableType}/>
         )}
       </Container>
+      <br />
     </>
   );
 };

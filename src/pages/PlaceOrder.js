@@ -11,7 +11,7 @@ import programs from "../assets/mockdata/Programs";
 import ItemFilter from "../components/ItemFilter";
 import OrderItemViewControl from "../components/OrderItemViewControl";
 import OrderPreOrder from "../components/OrderPreOrder";
-import ItemPreviewModal from "../components/ItemPreviewModal";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -175,6 +175,7 @@ const PlaceOrder = ({ userType }) => {
           />
         )}
       </Container>
+      <br />
     </>
   );
 };

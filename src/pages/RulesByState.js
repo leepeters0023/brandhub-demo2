@@ -31,6 +31,7 @@ const RulesByState = () => {
         <br />
         <RulesByStateTable data={rules} />
       </Container>
+      <br />
     </>
   );
 };

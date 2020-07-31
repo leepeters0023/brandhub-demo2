@@ -28,12 +28,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "350px",
-    marginRight: "15px"
+    minWidth: "350px",
+    marginRight: "15px",
   },
   filterList: {
-    display: "flex"
-  }
+    display: "flex",
+    overflowX: "auto",
+  },
 }));
 
 const ItemFilter = (props) => {

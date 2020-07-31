@@ -23,6 +23,7 @@ const Coupons = () => {
           </Typography>
         </div>
       </Container>
+      <br />
     </>
   );
 };
