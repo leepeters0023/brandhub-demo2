@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   buttonGrid: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 }));
 
@@ -33,15 +33,15 @@ const ComplianceModal = (props) => {
   const classes = useStyles();
 
   return (
-    <>
+    <div style={{ overflow: "hidden"}}>
       <IconButton
-          className={classes.closeButton}
-          onClick={() => {
-            handleClose(false);
-          }}
-        >
-          <CancelIcon fontSize="large" color="secondary" />
-        </IconButton>
+        className={classes.closeButton}
+        onClick={() => {
+          handleClose(false);
+        }}
+      >
+        <CancelIcon fontSize="large" color="secondary" />
+      </IconButton>
       <Typography className={classes.headerText}>
         {`Approval Id: ${idString}  POS Spirits`}
       </Typography>
@@ -173,8 +173,8 @@ const ComplianceModal = (props) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <Grid container spacing={5} justify="space-around">
             <Grid item md={8}>
               <Typography className={classes.headerText}>Comments:</Typography>
@@ -189,14 +189,20 @@ const ComplianceModal = (props) => {
               />
             </Grid>
             <Grid item md={4} className={classes.buttonGrid}>
-              <Button className={classes.largeButton} color="primary" variant="contained">
+              <Button
+                className={classes.largeButton}
+                color="primary"
+                variant="contained"
+              >
                 SAVE
               </Button>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </>
+      <br />
+      <br />
+    </div>
   );
 };
 

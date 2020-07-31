@@ -86,19 +86,19 @@ const Approvals = () => {
           <Tab
             className={classes.headerText}
             label="Pending Approval"
-            value={2}
+            value={1}
           />
           <Tab
             className={classes.headerText}
             label="Prior Approval"
-            value={1}
+            value={2}
           />
         </Tabs>
         <br />
         <Divider classes={{root: classes.pageBreak}}/>
         <br />
-        {value === 1 && <ApprovalPrior handleModal={handleModal} />}
-        {value === 2 && <ApprovalPending handleModal={handleModal} />}
+        {value === 1 && <ApprovalPending handleModal={handleModal} />}
+        {value === 2 && <ApprovalPrior handleModal={handleModal} />}
       </Container>
     </>
   );

@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "date-fns";
 
 import OrdersCurrentTable from "../components/OrdersCurrentTable";
 import OrdersPastTable from "../components/OrdersPastTable";
-import TrackingModal from "../components/TrackingModal";
+import OrderHistoryItemModal from "../components/OrderHistoryItemModal";
+import OrderHistoryOrderModal from "../components/OrderHistoryOrderModal";
 
 import GalloLogo from "../assets/gallologo.png";
 
 import Divider from "@material-ui/core/Divider";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
@@ -28,14 +30,9 @@ const useStyles = makeStyles((theme) => ({
     height: "40px",
     margin: "5px",
   },
-  queryForm: {
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-  },
   queryRow: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   queryButtonRow: {
@@ -44,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   queryField: {
     width: "23%",
+    marginLeft: "10px",
   },
   trackingLogo: {
     width: "100px",
@@ -54,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Orders = () => {
+const Orders = ({ reportType }) => {
   const classes = useStyles();
 
   const [selectedFromDate, setSelectedFromDate] = useState(
@@ -63,7 +61,11 @@ const Orders = () => {
   const [selectedToDate, setSelectedToDate] = useState(
     new Date().toLocaleDateString()
   );
-  const [itemModal, handleItemModal] = useState(false);
+  const [modal, handleModal] = useState(false);
+  const [value, updateValue] = useState(1);
+  const [tableType, setTableType] = useState(null)
+  const [modalType, setModalType] = useState("order")
+  const [currentOrder, setCurrentOrder] = useState(null)
 
   const handleFromDateChange = (date) => {
     setSelectedFromDate(date);
@@ -71,25 +73,48 @@ const Orders = () => {
   const handleToDateChange = (date) => {
     setSelectedToDate(date);
   };
-  const handlePreview = (id) => {
-    console.log(id);
-    handleItemModal(true);
+  const handlePreview = (id, type) => {
+    setCurrentOrder(id);
+    setModalType(type);
+    handleModal(true);
   };
   const handleModalClose = () => {
-    handleItemModal(false);
+    handleModal(false);
   };
+
+  const handleChangeTab = (_evt, newValue) => {
+    if (newValue === 1) {
+      window.location.hash = "#byorder";
+      setTableType("byOrder")
+    } else if (newValue === 2) {
+      window.location.hash = "#byitems";
+      setTableType("byItems")
+    }
+    updateValue(newValue);
+  };
+
+  useEffect(() => {
+    if (window.location.hash === "#byorder") {
+      updateValue(1);
+      setTableType("byOrder")
+    } else if (window.location.hash === "#byitems") {
+      updateValue(2);
+      setTableType("byItems")
+    }
+  }, [reportType]);
 
   return (
     <>
       <div className={classes.relativeContainer}>
         <Dialog
-          open={itemModal}
+          open={modal}
           onClose={handleModalClose}
           fullWidth
           maxWidth="lg"
         >
           <DialogContent>
-            <TrackingModal handleClose={handleModalClose} />
+            {modalType === "item" && <OrderHistoryItemModal handleClose={handleModalClose} />}
+            {modalType === "order" && <OrderHistoryOrderModal handleClose={handleModalClose} orderNumber={currentOrder} />}
           </DialogContent>
         </Dialog>
       </div>
@@ -101,26 +126,6 @@ const Orders = () => {
           <Grid item md={10}>
             <form>
               <div className={classes.queryRow}>
-                <TextField
-                  color="secondary"
-                  className={classes.queryField}
-                  size="small"
-                  variant="outlined"
-                  margin="normal"
-                  id="approvalId"
-                  label="Approval Id"
-                  name="approvalId"
-                />
-                <TextField
-                  color="secondary"
-                  className={classes.queryField}
-                  size="small"
-                  variant="outlined"
-                  margin="normal"
-                  id="theme"
-                  label="Program Theme"
-                  name="theme"
-                />
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     color="secondary"
@@ -169,20 +174,31 @@ const Orders = () => {
                   variant="contained"
                   color="primary"
                 >
-                  CLEAR
+                  RESET
                 </Button>
               </div>
             </form>
           </Grid>
         </Grid>
         <br />
+        <Tabs
+          variant="fullWidth"
+          value={value}
+          onChange={handleChangeTab}
+          indicatorColor="primary"
+          centered
+        >
+          <Tab className={classes.headerText} label="View by Order" value={1} />
+          <Tab className={classes.headerText} label="View by Item" value={2} />
+        </Tabs>
+        <br />
         <Divider classes={{ root: classes.pageBreak }} />
         <br />
-        {window.location.hash === "#current" && (
-          <OrdersCurrentTable handlePreview={handlePreview} />
+        {reportType === "current" && (
+          <OrdersCurrentTable handlePreview={handlePreview} tableType={tableType}/>
         )}
-        {window.location.hash === "#past" && (
-          <OrdersPastTable handlePreview={handlePreview} />
+        {reportType === "past" && (
+          <OrdersPastTable handlePreview={handlePreview} tableType={tableType}/>
         )}
       </Container>
     </>

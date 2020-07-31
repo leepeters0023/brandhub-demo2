@@ -62,7 +62,7 @@ const App = () => {
             currentUser
           )}
           {handleAuth(
-            <Orders path="/orders" />,
+            <Orders path="/orders/:reportType" />,
             "/orders",
             ["field1", "field2", "super"],
             currentUser

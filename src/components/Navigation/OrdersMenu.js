@@ -84,7 +84,7 @@ const OrdersMenu = () => {
         <Divider />
         <MenuItem
           component={Link}
-          to="/orders#current"
+          to="/orders/current#byorder"
           onClick={() => {
             handleClose();
           }}
@@ -97,7 +97,7 @@ const OrdersMenu = () => {
         <Divider />
         <MenuItem
           component={Link}
-          to="/orders#past"
+          to="/orders/past#byorder"
           onClick={() => {
             handleClose();
           }}

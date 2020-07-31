@@ -1,557 +1,137 @@
 import React, { useState } from 'react'
 
 import MaterialTable from "material-table";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { tableIcons } from "../utility/tableIcons";
 
 //mock data
+import { orderHistory } from "../assets/mockdata/orderHistory";
 
-import items from "../assets/mockdata/Items";
-import distributors from "../assets/mockdata/distributors";
+const byOrderRows = orderHistory.map((data) => ({
+  orderNum: data.orderNum,
+  distributor: data.distributor,
+  program: data.program,
+  state: data.state,
+  orderDate: data.orderDate,
+  shipDate: data.shipDate,
+  trackingNum: data.trackingNum,
+  orderTotal: data.orderTotal,
+  orderStatus: data.orderStatus,
+}))
 
-const createData = (
-  orderNum,
-  sequenceNum,
-  brand,
-  distributor,
-  state,
-  orderDate,
-  itemType,
-  qty,
-  orderName,
-  shipDate,
-  carrier,
-  trackingNum,
-) => {
-  return {
-    orderNum,
-  sequenceNum,
-  brand,
-  distributor,
-  state,
-  orderDate,
-  itemType,
-  qty,
-  orderName,
-  shipDate,
-  carrier,
-  trackingNum,
-  }
-}
+const byItemRows = orderHistory.map((data) => ({
+  sequenceNum: data.sequenceNum,
+  orderNum: data.orderNum,
+  brand: data.brand,
+  itemType: data.itemType,
+  program: data.program,
+  qty: data.qty,
+  distributor: data.distributor,
+  orderDate: data.orderDate,
+  shipDate: data.shipDate,
+  trackingNum: data.trackingNum,
+  itemStatus: data.itemStatus,
+}))
 
-let date = new Date();
-let dateString = date.toLocaleDateString();
-
-const getOrderNum = () => {
-  return `${Math.floor(Math.random() * 9999 + 10000)}`;
-};
-
-const getSeqNum = () => {
-  return `1100${Math.floor(Math.random() * 9999 + 10000)}`;
-};
-
-const rows = [
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  ),
-  createData(
-    getOrderNum(),
-    getSeqNum(),
-    items[Math.floor(Math.random()*7+1)].brand,
-    distributors[Math.floor(Math.random()*7+1)].name,
-    "VT",
-    dateString,
-    items[Math.floor(Math.random()*7+1)].itemType,
-    Math.floor(Math.random()*200+5),
-    "Name Here",
-    dateString,
-    "UPS",
-    getSeqNum()
-  )
-]
-
-
-const OrdersPastTable = ({ handlePreview }) => {
+const OrdersPastTable = ({ handlePreview, tableType }) => {
   const [selectedRow, setSelectedRow] = useState(null);
-
-  return (
-    <>
-      <MaterialTable
-        title="Completed Orders"
-        columns={[
-          { title: "Ord. #", field: "orderNum" },
-          { title: "Seq. #", field: "sequenceNum" },
-          { title: "Brand", field: "brand" },
-          { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
-          { title: "State", field: "state" },
-          { title: "Order Date", field: "orderDate", filtering: false },
-          { title: "Item Type", field: "itemType" },
-          { title: "Qty", field: "qty", filtering: false },
-          { title: "Order Name", field: "orderName" },
-          { title: "Ship Date", field: "shipDate", filtering: false },
-          { title: "Carrier", field: "carrier" },
-          { title: "Track. #", field: "trackingNum"}
-        ]}
-        data={rows}
-        options={{
-          filtering: true,
-          rowStyle: rowData => ({
-            backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
-          }),
-          headerStyle: {
-            backgroundColor: "#404040",
-            fontWeight: "600",
-            position: "sticky",
-            top: 0,
-            color: "#FFF",
-          },
-          filterCellStyle: {
-            position: "sticky",
-          },
-          maxBodyHeight: "650px",
-          pageSizeOptions: [5, 10, 20, 50, 100],
-          exportButton: true,
-          exportAllData: true
-        }}
-        onRowClick={((evt, selectedRow) => {
-          setSelectedRow(selectedRow.tableData.id)
-          handlePreview(`${selectedRow.orderNum}-${selectedRow.sequenceNum}`)
-        })}
-        icons={tableIcons}
-      />
-    </>
-  )
+  if(!tableType) {
+    return <CircularProgress />
+  }
+  if (tableType === "byItems") {
+    return (
+      <>
+        <MaterialTable
+          title="Order History by Items"
+          columns={[
+            { title: "Sequence #", field: "sequenceNum"},
+            { title: "Ord. #", field: "orderNum" },
+            { title: "Brand", field: "brand" },
+            { title: "Item Type", field: "itemType" },
+            { title: "Program", field: "program" },
+            { title: "Quantity", field: "qty", filtering: false },
+            { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
+            { title: "Order Date", field: "orderDate", filtering: false },
+            { title: "Ship Date", field: "shipDate", filtering: false },
+            { title: "Track. #", field: "trackingNum"},
+            { title: "Compliance", field: "itemStatus"}
+          ]}
+          data={byItemRows}
+          options={{
+            filtering: true,
+            rowStyle: rowData => ({
+              backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+            }),
+            headerStyle: {
+              backgroundColor: "#404040",
+              fontWeight: "600",
+              position: "sticky",
+              top: 0,
+              color: "#FFF",
+            },
+            filterCellStyle: {
+              position: "sticky",
+            },
+            maxBodyHeight: "650px",
+            pageSizeOptions: [5, 10, 20, 50, 100],
+            exportButton: true,
+            exportAllData: true
+          }}
+          onRowClick={((evt, selectedRow) => {
+            setSelectedRow(selectedRow.tableData.id)
+            handlePreview(`${selectedRow.sequenceNum}`, "item")
+          })}
+          icons={tableIcons}
+        />
+      </>
+    )
+  } else if (tableType === "byOrder") {
+    return (
+      <>
+        <MaterialTable
+          title="Order History by Order"
+          columns={[
+            { title: "Ord. #", field: "orderNum" },
+            { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
+            { title: "Program", field: "program" },
+            { title: "State", field: "state" },
+            { title: "Order Date", field: "orderDate", filtering: false },
+            { title: "Ship Date", field: "shipDate", filtering: false },
+            { title: "Track. #", field: "trackingNum"},
+            { title: "Total", field: "orderTotal", filtering: false },
+            { title: "Order Status", field: "orderStatus"}
+          ]}
+          data={byOrderRows}
+          options={{
+            filtering: true,
+            rowStyle: rowData => ({
+              backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
+            }),
+            headerStyle: {
+              backgroundColor: "#404040",
+              fontWeight: "600",
+              position: "sticky",
+              top: 0,
+              color: "#FFF",
+            },
+            filterCellStyle: {
+              position: "sticky",
+            },
+            maxBodyHeight: "650px",
+            pageSizeOptions: [5, 10, 20, 50, 100],
+            exportButton: true,
+            exportAllData: true
+          }}
+          onRowClick={((evt, selectedRow) => {
+            setSelectedRow(selectedRow.tableData.id)
+            handlePreview(`${selectedRow.orderNum}`, "order")
+          })}
+          icons={tableIcons}
+        />
+      </>
+    )
+  }
 }
 
 export default OrdersPastTable;

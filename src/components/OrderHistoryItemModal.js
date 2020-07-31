@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TrackingModal = ({ handleClose }) => {
+const OrderHistoryItemModal = ({ handleClose }) => {
   const classes = useStyles();
   return (
     <>
@@ -186,4 +186,4 @@ const TrackingModal = ({ handleClose }) => {
   );
 };
 
-export default TrackingModal;
+export default OrderHistoryItemModal;
