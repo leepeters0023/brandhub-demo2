@@ -31,7 +31,7 @@ const ItemFilter = (props) => {
   const classes = useStyles();
 
   const { brands, itemTypes } = props;
-  const units = ["Unit 1", "Unit 2", "Unit 3"];
+  const units = ["Compass", "Popular", "Renaissance", "Spirits"];
   const channels = ["Channel 1", "Channel 2", "Channel 3"];
   const others = ["Growth Engines", "Key Brands", "High Potential"];
 
