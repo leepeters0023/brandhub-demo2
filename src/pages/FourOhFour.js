@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { navigate } from "@reach/router";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -13,6 +14,14 @@ const useStyles = makeStyles((theme) => ({
 
 const FourOhFour = () => {
   const classes = useStyles();
+
+  useEffect(() => {
+    if (window.location.pathname !== "/login") {
+      setTimeout(() => {
+        navigate("/");
+      }, 5000);
+    }
+  }, []);
 
   return (
     <>
@@ -44,6 +53,11 @@ const FourOhFour = () => {
               Go Back Home
             </Button>
             <br />
+            <br />
+            <br />
+            <Typography className={classes.bodyText}>
+              You will be redirected back home in five seconds....
+            </Typography>
           </Grid>
         </Grid>
       </Container>
