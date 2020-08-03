@@ -12,15 +12,15 @@ const SelectorMenus = ({ type }) => {
   const programs = ["Program 1", "Program 2", "Program 3"];
 
   const [region, updateRegion] = useState(0);
-  const [bdm, updateBdm] = useState(0);
+  const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState(0);
 
   const handleChangeSelect = (evt) => {
     if (evt.target.id === "regions") {
       updateRegion(evt.target.value);
-    } else if (evt.target.id === "bdms") {
-      updateBdm(evt.target.value);
+    } else if (evt.target.id === "cart") {
+      updateCart(evt.target.value);
     } else if (evt.target.id === "budgets") {
       updateBudget(evt.target.value);
     } else if (evt.target.id === "programs") {
@@ -59,7 +59,7 @@ const SelectorMenus = ({ type }) => {
             native
             labelId="cart-select"
             id="cart"
-            value={bdm}
+            value={cart}
             onChange={handleChangeSelect}
             label="Cart"
           >

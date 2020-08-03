@@ -16,6 +16,7 @@ import Program from "./pages/Program";
 import RulesByState from "./pages/RulesByState";
 import ContactsByState from "./pages/ContactsByState";
 import POSClassifications from "./pages/POSClassifications";
+import Settings from "./pages/Settings";
 import FourOhFour from "./pages/FourOhFour";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
@@ -119,6 +120,12 @@ const App = () => {
             <POSClassifications path="/classifications" />,
             "/classifications",
             ["compliance", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <Settings path="/settings" userType={currentUser} />,
+            "/settings",
+            ["field1", "field2", "compliance", "super"],
             currentUser
           )}
           <Calendar path="/calendar" />

@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
-import ContactMailIcon from '@material-ui/icons/ContactMail';
+import ContactMailIcon from "@material-ui/icons/ContactMail";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -59,20 +59,25 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => {
-          handleClose()
-          handleModalOpen("Address Book")
-          }}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleModalOpen("Address Book");
+          }}
+        >
           <ListItemIcon>
             <ContactMailIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Address Book" />
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => {
-          handleClose()
-          handleModalOpen("Settings")
-          }}>
+        <MenuItem
+          component={Link}
+          to="/settings#general"
+          onClick={() => {
+            handleClose();
+          }}
+        >
           <ListItemIcon>
             <SettingsIcon color="secondary" fontSize="small" />
           </ListItemIcon>

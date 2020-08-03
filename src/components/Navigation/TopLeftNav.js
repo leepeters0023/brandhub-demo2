@@ -6,7 +6,6 @@ import Notifications from "../Notifications";
 import UserNavMenu from "./UserNavMenu";
 import SideDrawer from "./SideDrawer";
 import AddressBook from "../AddressBook";
-import AccountDetails from "../AccountDetails";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
@@ -93,7 +92,6 @@ const TopLeftNav = ({ handleLogout, userType }) => {
           </DialogTitle>
           <DialogContent>
             {userModalType === "Address Book" && <AddressBook />}
-            {userModalType === "Settings" && <AccountDetails />}
           </DialogContent>
         </Dialog>
       </div>
