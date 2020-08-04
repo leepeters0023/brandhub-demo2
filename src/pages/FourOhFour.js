@@ -14,12 +14,17 @@ const useStyles = makeStyles((theme) => ({
 
 const FourOhFour = () => {
   const classes = useStyles();
+  let redirectTime;
 
   useEffect(() => {
     if (window.location.pathname !== "/login") {
-      setTimeout(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      redirectTime = setTimeout(() => {
         navigate("/");
       }, 5000);
+    }
+    return () => {
+      clearTimeout(redirectTime)
     }
   }, []);
 
