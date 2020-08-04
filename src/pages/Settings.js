@@ -115,7 +115,7 @@ const Settings = ({ userType }) => {
                     <ListItemText primary="Users" />
                   </ListItem>
                   <Divider />
-                  <ListItem
+                  {/* <ListItem
                     button
                     selected={selectedIndex === 4}
                     onClick={() => {
@@ -124,7 +124,7 @@ const Settings = ({ userType }) => {
                   >
                     <ListItemText primary="Programs" />
                   </ListItem>
-                  <Divider />
+                  <Divider /> */}
                 </>
               )}
             </List>

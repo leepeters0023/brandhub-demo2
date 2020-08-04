@@ -101,7 +101,7 @@ const EditProgramModal = ({ handleClose, currentProgram }) => {
   }
 
   useEffect(()=>{
-    let onMountProgram = programs.find((prog) => prog.id = currentProgram)
+    let onMountProgram = programs.find((prog) => prog.id === currentProgram)
     setProgram(onMountProgram);
   },[currentProgram])
 
