@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import OrderPreOrderCart from "./OrderPreOrderCart";
+import OrderPreOrderCart from "../Purchasing/OrderPreOrderCart";
 import OrderCart from "./OrderCart";
-import SelectorMenus from "./SelectorMenus";
+import SelectorMenus from "../Utility/SelectorMenus";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";

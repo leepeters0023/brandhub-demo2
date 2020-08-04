@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 const ContactsByStateTable = ({ data }) => {
   const [currentContacts, setCurrentContacts] = useState(data);

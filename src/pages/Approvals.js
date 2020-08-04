@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import ApprovalPrior from "../components/ApprovalPrior";
-import ApprovalPending from "../components/ApprovalPending";
-import ComplianceModal from "../components/ComplianceModal";
-import SelectorMenus from "../components/SelectorMenus";
+import ApprovalPrior from "../components/Compliance/ApprovalPrior";
+import ApprovalPending from "../components/Compliance/ApprovalPending";
+import ComplianceModal from "../components/Compliance/ComplianceModal";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";

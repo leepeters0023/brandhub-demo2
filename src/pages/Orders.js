@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "date-fns";
 
-import OrdersCurrentTable from "../components/OrdersCurrentTable";
-import OrdersPastTable from "../components/OrdersPastTable";
-import OrderHistoryItemModal from "../components/OrderHistoryItemModal";
-import OrderHistoryOrderModal from "../components/OrderHistoryOrderModal";
+import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
+import OrdersPastTable from "../components/OrderHistory/OrdersPastTable";
+import OrderHistoryItemModal from "../components/OrderHistory/OrderHistoryItemModal";
+import OrderHistoryOrderModal from "../components/OrderHistory/OrderHistoryOrderModal";
 
 import GalloLogo from "../assets/gallologo.png";
 

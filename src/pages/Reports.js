@@ -3,8 +3,8 @@ import "date-fns";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import ReportHistoryForm from "../components/ReportHistoryForm";
-import ReportModal from "../components/ReportModal";
+import ReportHistoryForm from "../components/Reports/ReportHistoryForm";
+import ReportModal from "../components/Reports/ReportModal";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";

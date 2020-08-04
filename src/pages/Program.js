@@ -6,10 +6,10 @@ import GalloLogo from "../assets/gallologo.png";
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
-import ProgramDetails from "../components/ProgramDetails";
-import SelectorMenus from "../components/SelectorMenus";
-import ItemFilter from "../components/ItemFilter";
-import OrderItemViewControl from "../components/OrderItemViewControl";
+import ProgramDetails from "../components/Purchasing/ProgramDetails";
+import SelectorMenus from "../components/Utility/SelectorMenus";
+import ItemFilter from "../components/Utility/ItemFilter";
+import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import CircularProgress from "@material-ui/core/CircularProgress";

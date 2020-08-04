@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useInput } from "../../hooks/UtilityHooks";
 
-import ProgramsTable from "./ProgramsTable";
-import EditProgramModal from "./EditProgramModal";
-
 import MaterialTable from "material-table";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import AutoComplete from "@material-ui/lab/Autocomplete";
+import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -21,11 +17,13 @@ import {
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
+import CancelIcon from "@material-ui/icons/Cancel";
 import AddIcon from "@material-ui/icons/Add";
 import { tableIcons } from "../../utility/tableIcons";
 
 //import { programs } from "../../assets/mockdata/Programs";
 import items from "../../assets/mockdata/Items";
+import programs from "../../assets/mockdata/Programs";
 
 const itemNumbers = items.map((item) => item.itemNumber.toString());
 
@@ -40,11 +38,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Programs = () => {
+const EditProgramModal = ({ handleClose, currentProgram }) => {
   const classes = useStyles();
 
-  const [modal, handleModal] = useState(false);
-  const [currentProgram, setCurrentProgram] = useState(null);
+  const [program, setProgram] = useState(null);
   const [currentItemNumber, setCurrentItemNumber] = useState(null);
   const [currentItems, setCurrentItems] = useState([]);
   const [selectedFromDate, setSelectedFromDate] = useState(
@@ -103,30 +100,26 @@ const Programs = () => {
     resetProgramStrategies();
   }
 
-  const handleModalClose = () => {
-    handleModal(false);
-  };
+  useEffect(()=>{
+    let onMountProgram = programs.find((prog) => prog.id = currentProgram)
+    setProgram(onMountProgram);
+  },[currentProgram])
 
-  const handleProgramClick = (program) => {
-    setCurrentProgram(program)
-    handleModal(true);
+  if (!program) {
+    return <CircularProgress />
   }
 
   return (
     <>
-    <div className={classes.relativeContainer}>
-        <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="lg">
-          <DialogTitle>
-            <Typography className={classes.headerText}>
-              {`Program Id: ${currentProgram}`}
-            </Typography>
-          </DialogTitle>
-          <DialogContent>
-            <EditProgramModal handleClose={handleModalClose} currentProgram={currentProgram} />
-          </DialogContent>
-        </Dialog>
-      </div>
-      <Typography className={classes.titleText}>Add New Program</Typography>
+      <IconButton
+        className={classes.closeButton}
+        onClick={() => {
+          handleClose(false);
+        }}
+      >
+        <CancelIcon fontSize="large" color="secondary" />
+      </IconButton>
+      <Typography className={classes.titleText}>{program.name}</Typography>
       <form>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
@@ -291,12 +284,8 @@ const Programs = () => {
       </Button>
       </form>
       <br />
-      <br />
-      <Typography className={classes.titleText}>Current Programs</Typography>
-      <br />
-      <ProgramsTable handleProgramClick={handleProgramClick} />
     </>
-  );
-};
+  )
+}
 
-export default Programs;
+export default EditProgramModal;

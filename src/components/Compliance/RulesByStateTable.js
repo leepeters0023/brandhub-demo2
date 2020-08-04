@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 const RulesByStateTable = ({ data }) => {
   const [currentData, setCurrentData] = useState(data);

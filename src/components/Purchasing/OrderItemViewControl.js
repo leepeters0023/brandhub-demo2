@@ -4,7 +4,7 @@ import OrderInStockTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
 
 //mockdata
-import items from "../assets/mockdata/Items";
+import items from "../../assets/mockdata/Items";
 
 const OrderItemViewControl = (props) => {
 

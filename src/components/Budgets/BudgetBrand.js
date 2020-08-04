@@ -2,7 +2,7 @@ import React from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -11,11 +11,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import CachedIcon from "@material-ui/icons/Cached";
 
 // simulate data for mock
-const createData = (date, user, unit, region) => {
+const createData = (date, brand, unit, region) => {
   let money = randomMoney();
   return {
     date,
-    user,
+    brand,
     unit,
     region,
     spend: money[1],
@@ -33,22 +33,22 @@ let date = new Date();
 let dateString = date.toLocaleDateString();
 
 let budget = [
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Jeremy Kent", "Lorem 2020", "Select"),
-  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-  createData(dateString, "Josh Downs", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
-  createData(dateString, "Michelle Brandon", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Apothic", "Lorem 2020", "Select"),
+  createData(dateString, "Barefoot", "Lorem 2020", "Select"),
+  createData(dateString, "Barefoot", "Lorem 2020", "Select"),
+  createData(dateString, "Barefoot", "Lorem 2020", "Select"),
+  createData(dateString, "Barefoot", "Lorem 2020", "Select"),
+  createData(dateString, "Barefoot", "Lorem 2020", "Select"),
+  createData(dateString, "La Marca", "Lorem 2020", "Select"),
+  createData(dateString, "La Marca", "Lorem 2020", "Select"),
+  createData(dateString, "La Marca", "Lorem 2020", "Select"),
+  createData(dateString, "La Marca", "Lorem 2020", "Select"),
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BudgetUser = () => {
+const BudgetBrand = () => {
   const classes = useStyles();
   return (
     <>
@@ -72,10 +72,10 @@ const BudgetUser = () => {
         </Tooltip>
       </div>
       <MaterialTable
-        title="User Budgets"
+        title="Brand Budgets"
         columns={[
           { title: "Date", field: "date", filtering: false },
-          { title: "User", field: "user" },
+          { title: "Brand", field: "brand" },
           { title: "Business Unit", field: "unit" },
           { title: "Region", field: "region" },
           { title: "Spend", field: "spend", filtering: false },
@@ -104,4 +104,4 @@ const BudgetUser = () => {
   );
 };
 
-export default BudgetUser;
+export default BudgetBrand;

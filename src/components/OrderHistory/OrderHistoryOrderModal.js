@@ -5,10 +5,10 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 //mock data
-import { orderHistory } from "../assets/mockdata/orderHistory";
+import { orderHistory } from "../../assets/mockdata/orderHistory";
 
 const byItemRows = orderHistory.map((data) => ({
   sequenceNum: data.sequenceNum,

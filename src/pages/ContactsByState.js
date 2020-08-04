@@ -2,7 +2,7 @@ import React from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import ContactsByStateTable from "../components/ContactsByStateTable";
+import ContactsByStateTable from "../components/Compliance/ContactsByStateTable";
 
 import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";

@@ -2,9 +2,9 @@ import React from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
-import { renderChip } from "../utility/utilityFunctions";
+import { renderChip } from "../../utility/utilityFunctions";
 
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";

@@ -24,8 +24,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 //mock data
-import items from "../assets/mockdata/Items";
-import distributors from "../assets/mockdata/distributors";
+import items from "../../assets/mockdata/Items";
+import distributors from "../../assets/mockdata/distributors";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,

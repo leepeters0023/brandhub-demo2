@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import BrandHubLogo from "../../assets/brandhub.svg";
 
-import CartModal from "../CartModal";
-import Notifications from "../Notifications";
+import CartModal from "../Purchasing/CartModal";
+import Notifications from "../User/Notifications";
 import UserNavMenu from "./UserNavMenu";
 import SideDrawer from "./SideDrawer";
-import AddressBook from "../AddressBook";
+import AddressBook from "../User/AddressBook";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";

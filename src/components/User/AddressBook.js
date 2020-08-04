@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 // simulate mock addresses
 const createData = (name, company, city, state, email, busPhone, cellPhone) => {

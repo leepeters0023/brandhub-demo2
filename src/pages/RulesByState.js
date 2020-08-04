@@ -2,7 +2,7 @@ import React from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import RulesByStateTable from "../components/RulesByStateTable";
+import RulesByStateTable from "../components/Compliance/RulesByStateTable";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";

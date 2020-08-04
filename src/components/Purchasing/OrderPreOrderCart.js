@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import SelectorMenus from "./SelectorMenus";
+import SelectorMenus from "../Utility/SelectorMenus";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -25,8 +25,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 //mock data
-import items from "../assets/mockdata/Items";
-import distributors from "../assets/mockdata/distributors";
+import items from "../../assets/mockdata/Items";
+import distributors from "../../assets/mockdata/distributors";
 const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
 
 const useStyles = makeStyles((theme) => ({

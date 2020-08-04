@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-import BudgetRegional from "../components/BudgetRegional";
-import BudgetUser from "../components/BudgetUser";
-import BudgetBrand from "../components/BudgetBrand";
-import SelectorMenus from "../components/SelectorMenus";
+import BudgetRegional from "../components/Budgets/BudgetRegional";
+import BudgetUser from "../components/Budgets/BudgetUser";
+import BudgetBrand from "../components/Budgets/BudgetBrand";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import GalloLogo from "../assets/gallologo.png";
 

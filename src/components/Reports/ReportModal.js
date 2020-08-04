@@ -2,10 +2,10 @@ import React from "react";
 
 import MaterialTable from "material-table";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
-import items from "../assets/mockdata/Items";
-import distributors from "../assets/mockdata/distributors";
+import items from "../../assets/mockdata/Items";
+import distributors from "../../assets/mockdata/distributors";
 
 const createData = (
   orderNum,

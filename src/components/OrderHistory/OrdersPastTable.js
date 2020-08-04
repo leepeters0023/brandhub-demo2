@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import MaterialTable from "material-table";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { tableIcons } from "../utility/tableIcons";
+import { tableIcons } from "../../utility/tableIcons";
 
 //mock data
-import { orderHistory } from "../assets/mockdata/orderHistory";
+import { orderHistory } from "../../assets/mockdata/orderHistory";
 
 const byOrderRows = orderHistory.map((data) => ({
   orderNum: data.orderNum,
@@ -35,7 +35,6 @@ const byItemRows = orderHistory.map((data) => ({
 }))
 
 const OrdersPastTable = ({ handlePreview, tableType }) => {
-  const [selectedRow, setSelectedRow] = useState(null);
   if(!tableType) {
     return <CircularProgress />
   }
@@ -60,9 +59,6 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
           data={byItemRows}
           options={{
             filtering: true,
-            rowStyle: rowData => ({
-              backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
-            }),
             headerStyle: {
               backgroundColor: "#404040",
               fontWeight: "600",
@@ -79,7 +75,6 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
             exportAllData: true
           }}
           onRowClick={((evt, selectedRow) => {
-            setSelectedRow(selectedRow.tableData.id)
             handlePreview(`${selectedRow.sequenceNum}`, "item")
           })}
           icons={tableIcons}
@@ -105,9 +100,6 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
           data={byOrderRows}
           options={{
             filtering: true,
-            rowStyle: rowData => ({
-              backgroundColor: (selectedRow === rowData.tableData.id) ? '#EEE' : '#FFF'
-            }),
             headerStyle: {
               backgroundColor: "#404040",
               fontWeight: "600",
@@ -124,7 +116,6 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
             exportAllData: true
           }}
           onRowClick={((evt, selectedRow) => {
-            setSelectedRow(selectedRow.tableData.id)
             handlePreview(`${selectedRow.orderNum}`, "order")
           })}
           icons={tableIcons}

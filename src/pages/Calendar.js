@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import SelectorMenus from "../components/SelectorMenus";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import GalloLogo from "../assets/gallologo.png";
 

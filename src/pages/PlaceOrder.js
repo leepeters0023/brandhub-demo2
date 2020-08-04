@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 
 import GalloLogo from "../assets/gallologo.png";
 
-import SelectorMenus from "../components/SelectorMenus";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 //mockdata
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
-import ItemFilter from "../components/ItemFilter";
-import OrderItemViewControl from "../components/OrderItemViewControl";
-import OrderPreOrder from "../components/OrderPreOrder";
+import ItemFilter from "../components/Utility/ItemFilter";
+import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
+import OrderPreOrder from "../components/Purchasing/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import Container from "@material-ui/core/Container";
