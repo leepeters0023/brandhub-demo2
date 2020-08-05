@@ -17,6 +17,7 @@ import RulesByState from "./pages/RulesByState";
 import ContactsByState from "./pages/ContactsByState";
 import POSClassifications from "./pages/POSClassifications";
 import Settings from "./pages/Settings";
+import Cart from "./pages/Cart";
 import FourOhFour from "./pages/FourOhFour";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
@@ -77,6 +78,12 @@ const App = () => {
           {handleAuth(
             <Program path="/program/:programId" userType={currentUser} />,
             "/program",
+            ["field1", "field2", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <Cart path="/cart" userType={currentUser} />,
+            "/cart",
             ["field1", "field2", "super"],
             currentUser
           )}

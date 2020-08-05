@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -19,8 +19,10 @@ import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
 import AutoComplete from "@material-ui/lab/Autocomplete";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
@@ -69,13 +71,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderPreOrderCart = ({ userType }) => {
+const createDataGrid = () => {
+  let grid = {};
+  let distributorValues = {};
+  distributors.forEach((dist) => distributorValues[dist.name] = 0)
+  items.forEach((item) => {
+    grid[`${item.itemNumber}`] = {...distributorValues}
+  })
+  return grid
+}
+
+const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const classes = useStyles();
 
+  const [currentItems, setItems] = useState(items);
   const [open, setOpen] = useState(true);
   const [terms, setTermsChecked] = useState(false);
   const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
+  const [currentGrid, setCurrentGrid] = useState(createDataGrid());
+
+  const handleRemove = (i) => {
+    currentItems.splice(i, 1);
+    let newItems = [...currentItems];
+    setItems(newItems);
+    let tempGrid={...currentGrid}
+    delete tempGrid[`{${currentItems[i].itemNumber}`]
+    setCurrentGrid(tempGrid);
+  };
+
+  const handleInput = useCallback((itemNumber, distributor, value) => {
+    let tempGrid = {...currentGrid}
+    tempGrid[itemNumber][distributor] = value
+    setCurrentGrid(tempGrid);
+  }, [currentGrid])
 
   return (
     <>
@@ -86,18 +115,31 @@ const OrderPreOrderCart = ({ userType }) => {
               <TableCell>
                 <SelectorMenus type="programs" />
               </TableCell>
-              {items.map((item) => (
+              {currentItems.map((item, index) => (
                 <TableCell key={item.itemNumber}>
                   <div className={classes.headerCell}>
+                    <Tooltip title="Remove from Cart">
+                      <IconButton onClick={()=>{handleRemove(index)}}>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <img
+                      id={item.itemNumber}
+                      className={classes.previewImageFloat}
+                      src={item.imgUrl}
+                      alt={item.itemType}
+                      onClick={() =>
+                        handleModalOpen(
+                          item.imgUrl,
+                          item.brand,
+                          item.itemType,
+                          item.itemNumber
+                        )
+                      }
+                    />
                     <Typography className={classes.headerText} variant="h5">
                       {item.brand}
                     </Typography>
-                    <img
-                      id={item.itemNumber}
-                      className={classes.previewImg}
-                      src={item.imgUrl}
-                      alt={item.itemType}
-                    />
                   </div>
                 </TableCell>
               ))}
@@ -119,9 +161,12 @@ const OrderPreOrderCart = ({ userType }) => {
                   </IconButton>
                 </div>
               </TableCell>
-              {items.map((item) => {
+              {currentItems.map((item) => {
                 return (
-                  <TableCell style={{ top: 197 }} key={item.itemNumber}>
+                  <TableCell
+                    style={{ top: 197, textAlign: "center" }}
+                    key={item.itemNumber}
+                  >
                     <div className={classes.infoCell}>
                       <Typography variant="body2" color="textSecondary">
                         {`${item.itemType} | ${item.itemNumber}`}
@@ -133,8 +178,8 @@ const OrderPreOrderCart = ({ userType }) => {
             </TableRow>
             <TableRow>
               <TableCell
-                style={{ padding: 0 }}
-                colSpan={items.length + 1}
+                style={{ padding: 0, top: 258 }}
+                colSpan={currentItems.length + 1}
                 className={classes[tableStyle]}
               >
                 <Collapse in={open} timeout="auto">
@@ -153,7 +198,7 @@ const OrderPreOrderCart = ({ userType }) => {
                               </Typography>
                             </div>
                           </TableCell>
-                          {items.map((item) => (
+                          {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
                               <div className={classes.infoCell}>
                                 {item.qty !== "Single Unit"
@@ -171,7 +216,7 @@ const OrderPreOrderCart = ({ userType }) => {
                               </Typography>
                             </div>
                           </TableCell>
-                          {items.map((item) => (
+                          {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
                               0
                             </TableCell>
@@ -185,7 +230,7 @@ const OrderPreOrderCart = ({ userType }) => {
                               </Typography>
                             </div>
                           </TableCell>
-                          {items.map((item) => (
+                          {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
                               $TBD
                             </TableCell>
@@ -199,7 +244,7 @@ const OrderPreOrderCart = ({ userType }) => {
                               </Typography>
                             </div>
                           </TableCell>
-                          {items.map((item) => (
+                          {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
                               $TBD
                             </TableCell>
@@ -213,7 +258,7 @@ const OrderPreOrderCart = ({ userType }) => {
                               </Typography>
                             </div>
                           </TableCell>
-                          {items.map((item) => (
+                          {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
                               NA
                             </TableCell>
@@ -236,13 +281,15 @@ const OrderPreOrderCart = ({ userType }) => {
                     </Typography>
                   </div>
                 </TableCell>
-                {items.map((item) => (
+                {currentItems.map((item) => (
                   <TableCell key={`${dist.name}-${item.itemNumber}`}>
                     <TextField
                       color="secondary"
                       variant="outlined"
                       size="small"
                       id={`${dist.name}-${item.itemNumber}`}
+                      value={currentGrid[`${item.itemNumber}`][dist.name]}
+                      onChange={(evt)=>{handleInput(`${item.itemNumber}`, dist.name, evt.target.value)}}
                     />
                   </TableCell>
                 ))}

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import BrandHubLogo from "../../assets/brandhub.svg";
+import { Link } from "@reach/router";
 
-import CartModal from "../Purchasing/CartModal";
 import Notifications from "../User/Notifications";
 import UserNavMenu from "./UserNavMenu";
 import SideDrawer from "./SideDrawer";
 import AddressBook from "../User/AddressBook";
 
+import Tooltip from "@material-ui/core/Tooltip";
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
@@ -19,6 +20,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: theme.palette.primary.light
+    backgroundColor: theme.palette.primary.light,
   },
   drawer: {
     width: 75,
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     overflow: "hidden",
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   navBreak: {
     display: "flex",
@@ -95,34 +97,46 @@ const TopLeftNav = ({ handleLogout, userType }) => {
           </DialogContent>
         </Dialog>
       </div>
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar className={classes.toolBar}>
-          <div className={classes.navBreak}>
-            <img src={BrandHubLogo} alt="Logo" style={{filter: "brightness(0%)"}} />
-          </div>
-          <div className={classes.navBreak}>
-            <Divider orientation="vertical" flexItem />
-            {userType !== "compliance" && <CartModal userType={userType} />}
-            <Notifications />
-            <UserNavMenu
-              handleLogout={handleLogout}
-              handleModalOpen={handleModalOpen}
-            />
-          </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <SideDrawer handleLogout={handleLogout} userType={userType} />
-      </Drawer>
-    </div>
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar className={classes.toolBar}>
+            <div className={classes.navBreak}>
+              <img
+                src={BrandHubLogo}
+                alt="Logo"
+                style={{ filter: "brightness(0%)" }}
+              />
+            </div>
+            <div className={classes.navBreak}>
+              <Divider orientation="vertical" flexItem />
+              {userType !== "compliance" && (
+                <>
+                  <Tooltip title="View Cart">
+                    <IconButton component={Link} to="/cart#preorder">
+                      <ShoppingCartIcon fontSize="large" />
+                    </IconButton>
+                  </Tooltip>{" "}
+                </>
+              )}
+              <Notifications />
+              <UserNavMenu
+                handleLogout={handleLogout}
+                handleModalOpen={handleModalOpen}
+              />
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <SideDrawer handleLogout={handleLogout} userType={userType} />
+        </Drawer>
+      </div>
     </>
   );
 };

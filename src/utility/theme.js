@@ -131,7 +131,7 @@ export default {
       marginTop: "30px",
     },
     cartContainer: {
-      maxHeight: "65vh",
+      maxHeight: "750px",
     },
     modalTabContainer: {
       display: "flex",

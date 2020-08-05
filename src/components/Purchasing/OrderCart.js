@@ -44,7 +44,7 @@ let initialBudgets = itemList.map((item) => {
   return { id: `${item.itemNumber}`, budget: "" };
 });
 
-const OrderCart = ({ userType }) => {
+const OrderCart = ({ userType, handleModalOpen }) => {
   const classes = useStyles();
 
   const [budgets, setBudget] = useState(initialBudgets);
@@ -115,9 +115,17 @@ const OrderCart = ({ userType }) => {
                 <TableCell align="left">
                   <img
                     id={row.itemNumber}
-                    className={classes.previewImg}
+                    className={classes.previewImageFloat}
                     src={row.imgUrl}
                     alt={row.itemType}
+                    onClick={() =>
+                      handleModalOpen(
+                        row.imgUrl,
+                        row.brand,
+                        row.itemType,
+                        row.itemNumber
+                      )
+                    }
                   />
                 </TableCell>
                 <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
