@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const OrderItemGridView = (props) => {
-  const { type, currentItems, handlePreview } = props;
+  const { type, currentItems, allPdf, allCart, handlePreview } = props;
   const classes = useStyles();
   return (
     <Container>
@@ -96,22 +96,28 @@ const OrderItemGridView = (props) => {
             <br />
             <div className={classes.itemControl}>
               <Tooltip title="Add to PDF">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  id={`${item.itemNumber}`}
-                >
-                  <PictureAsPdfIcon className={classes.navIcon} />
-                </Button>
+                <span>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    id={`${item.itemNumber}`}
+                    disabled={allPdf && type === "preOrder"}
+                  >
+                    <PictureAsPdfIcon className={classes.navIcon} />
+                  </Button>
+                </span>
               </Tooltip>
               <Tooltip title="Add to Cart">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  id={`${item.itemNumber}`}
-                >
-                  <AddShoppingCartIcon className={classes.navIcon} />
-                </Button>
+                <span>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    id={`${item.itemNumber}`}
+                    disabled={allCart && type === "preOrder"}
+                  >
+                    <AddShoppingCartIcon className={classes.navIcon} />
+                  </Button>
+                </span>
               </Tooltip>
             </div>
           </Grid>

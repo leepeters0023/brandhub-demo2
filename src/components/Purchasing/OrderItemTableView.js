@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   tableButtonWrapper: {
     display: "flex",
-    flexWrap: "none"
-  }
+    flexWrap: "none",
+  },
 }));
 
 const OrderItemTableView = (props) => {
-  const { type, currentItems, handlePreview } = props;
+  const { type, currentItems, allPdf, allCart, handlePreview } = props;
   const classes = useStyles();
   return (
     <>
@@ -109,24 +109,30 @@ const OrderItemTableView = (props) => {
                 <TableCell>
                   <div className={classes.tableButtonWrapper}>
                     <Tooltip placement="top" title="Add to PDF">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        id={`${row.itemNumber}`}
-                        style={{ margin: "5px 2.5px" }}
-                      >
-                        <PictureAsPdfIcon className={classes.navIcon} />
-                      </Button>
+                      <span>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          id={`${row.itemNumber}`}
+                          style={{ margin: "5px 2.5px" }}
+                          disabled={allPdf && type === "preOrder"}
+                        >
+                          <PictureAsPdfIcon className={classes.navIcon} />
+                        </Button>
+                      </span>
                     </Tooltip>
                     <Tooltip title="Add to Cart">
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        id={`${row.itemNumber}`}
-                        style={{ margin: "5px 2.5px" }}
-                      >
-                        <AddShoppingCartIcon className={classes.navIcon} />
-                      </Button>
+                      <span>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          id={`${row.itemNumber}`}
+                          style={{ margin: "5px 2.5px" }}
+                          disabled={allCart && type === "preOrder"}
+                        >
+                          <AddShoppingCartIcon className={classes.navIcon} />
+                        </Button>
+                      </span>
                     </Tooltip>
                   </div>
                 </TableCell>

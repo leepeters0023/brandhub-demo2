@@ -12,7 +12,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core";
@@ -34,28 +33,23 @@ const useStyles = makeStyles((theme) => ({
   filterList: {
     display: "flex",
     overflowX: "auto",
-    width: "Calc(100% - 133px)"
+    width: "Calc(100% - 380px)"
   },
 }));
 
-const ItemFilter = (props) => {
+const ProgramFilter = (props) => {
   const classes = useStyles();
 
-  const { brands, itemTypes, units, channels, others } = props;
+  const { brands, focusMonths, units, setProgramFilters } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [brandsOpen, setBrandsOpen] = useState(false);
-  const [itemTypesOpen, setItemTypesOpen] = useState(false);
+  const [focusMonthsOpen, setFocusMonthsOpen] = useState(false);
   const [unitsOpen, setUnitsOpen] = useState(false);
-  const [channelsOpen, setChannelsOpen] = useState(false);
-  const [othersOpen, setOthersOpen] = useState(false);
-  const [favItemChecked, setFavItemChecked] = useState(false);
 
   const [brandsChecked, setBrandsChecked] = useState([]);
-  const [itemTypesChecked, setItemTypesChecked] = useState([]);
+  const [focusMonthsChecked, setFocusMonthsChecked] = useState([]);
   const [unitsChecked, setUnitsChecked] = useState([]);
-  const [channelsChecked, setChannelsChecked] = useState([]);
-  const [othersChecked, setOthersChecked] = useState([]);
   const [allFilters, setAllFilters] = useState([]);
 
   const handleCheckToggle = (value, array, func) => {
@@ -74,14 +68,10 @@ const ItemFilter = (props) => {
   const handleChipClick = (type, value) => {
     if (type === "brand") {
       handleCheckToggle(value, brandsChecked, setBrandsChecked);
-    } else if (type === "itemType") {
-      handleCheckToggle(value, itemTypesChecked, setItemTypesChecked);
+    } else if (type === "focusMonth") {
+      handleCheckToggle(value, focusMonthsChecked, setFocusMonthsChecked);
     } else if (type === "unit") {
       handleCheckToggle(value, unitsChecked, setUnitsChecked);
-    } else if (type === "channel") {
-      handleCheckToggle(value, channelsChecked, setChannelsChecked);
-    } else if (type === "other") {
-      handleCheckToggle(value, othersChecked, setOthersChecked);
     }
   };
 
@@ -102,25 +92,19 @@ const ItemFilter = (props) => {
     brandsChecked.forEach((brand) =>
       currentFilters.push({ type: "brand", value: brand })
     );
-    itemTypesChecked.forEach((itemType) =>
-      currentFilters.push({ type: "itemType", value: itemType })
+    focusMonthsChecked.forEach((focusMonth) =>
+      currentFilters.push({ type: "focusMonth", value: focusMonth })
     );
     unitsChecked.forEach((unit) =>
       currentFilters.push({ type: "unit", value: unit })
     );
-    channelsChecked.forEach((channel) =>
-      currentFilters.push({ type: "channel", value: channel })
-    );
-    othersChecked.forEach((other) =>
-      currentFilters.push({ type: "other", value: other })
-    );
     setAllFilters(currentFilters);
+    setProgramFilters(currentFilters);
   }, [
     brandsChecked,
-    itemTypesChecked,
+    focusMonthsChecked,
     unitsChecked,
-    channelsChecked,
-    othersChecked,
+    setProgramFilters
   ]);
 
   const brandsList = (listItems) => {
@@ -156,7 +140,7 @@ const ItemFilter = (props) => {
     );
   };
 
-  const itemTypesList = (listItems) => {
+  const focusMonthsList = (listItems) => {
     return (
       <List component="div" disablePadding>
         {listItems.map((item) => {
@@ -169,14 +153,14 @@ const ItemFilter = (props) => {
               dense
               button
               onClick={() => {
-                handleCheckToggle(item, itemTypesChecked, setItemTypesChecked);
+                handleCheckToggle(item, focusMonthsChecked, setFocusMonthsChecked);
               }}
             >
               <ListItemIcon>
                 <Checkbox
                   color="secondary"
                   edge="start"
-                  checked={itemTypesChecked.indexOf(item) !== -1}
+                  checked={focusMonthsChecked.indexOf(item) !== -1}
                   disableRipple
                   inputProps={{ "aria-labelledby": labelId }}
                 />
@@ -210,72 +194,6 @@ const ItemFilter = (props) => {
                   color="secondary"
                   edge="start"
                   checked={unitsChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  const channelsList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, channelsChecked, setChannelsChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={channelsChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  const othersList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, othersChecked, setOthersChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={othersChecked.indexOf(item) !== -1}
                   disableRipple
                   inputProps={{ "aria-labelledby": labelId }}
                 />
@@ -322,19 +240,6 @@ const ItemFilter = (props) => {
               overflowY: "auto",
             }}
           >
-            <ListItem>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={favItemChecked}
-                    onChange={() => setFavItemChecked(!favItemChecked)}
-                    name="viewFavorites"
-                    color="secondary"
-                  />
-                }
-                label=" Favorites"
-              />
-            </ListItem>
             <ListItem
               button
               onClick={() => {
@@ -351,14 +256,14 @@ const ItemFilter = (props) => {
             <ListItem
               button
               onClick={() => {
-                handleListToggle(itemTypesOpen, setItemTypesOpen);
+                handleListToggle(focusMonthsOpen, setFocusMonthsOpen);
               }}
             >
-              <ListItemText primary="Item Type" />
-              {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
+              <ListItemText primary="Focus Month" />
+              {focusMonthsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={itemTypesOpen} timeout="auto" unmountOnExit>
-              {itemTypesList(itemTypes)}
+            <Collapse in={focusMonthsOpen} timeout="auto" unmountOnExit>
+              {focusMonthsList(focusMonths)}
             </Collapse>
             <Divider />
             <ListItem
@@ -374,31 +279,6 @@ const ItemFilter = (props) => {
               {unitsList(units)}
             </Collapse>
             <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(channelsOpen, setChannelsOpen);
-              }}
-            >
-              <ListItemText primary="Channel" />
-              {channelsOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
-              {channelsList(channels)}
-            </Collapse>
-            <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(othersOpen, setOthersOpen);
-              }}
-            >
-              <ListItemText primary="Other" />
-              {othersOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={othersOpen} timeout="auto" unmountOnExit>
-              {othersList(others)}
-            </Collapse>
           </List>
         </Menu>
         <TextField
@@ -420,4 +300,4 @@ const ItemFilter = (props) => {
   );
 };
 
-export default ItemFilter;
+export default ProgramFilter;

@@ -7,8 +7,7 @@ import OrderPreGridView from "./OrderItemGridView";
 import items from "../../assets/mockdata/Items";
 
 const OrderItemViewControl = (props) => {
-
-  const { type, currentView, handlePreview } = props;
+  const { type, currentView, allPdf, allCart, handlePreview } = props;
 
   //const [currentItems, setCurrentItems] = useState(items);
 
@@ -18,6 +17,8 @@ const OrderItemViewControl = (props) => {
         <OrderInStockTableView
           type={type}
           currentItems={items}
+          allPdf={allPdf}
+          allCart={allCart}
           handlePreview={handlePreview}
         />
       )}
@@ -25,6 +26,8 @@ const OrderItemViewControl = (props) => {
         <OrderPreGridView
           type={type}
           currentItems={items}
+          allPdf={allPdf}
+          allCart={allCart}
           handlePreview={handlePreview}
         />
       )}

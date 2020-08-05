@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export const renderChip = (rowData) => {
   if (rowData.status === "Approved") {
@@ -58,4 +58,20 @@ export const renderChip = (rowData) => {
       </div>
     );
   }
-}
+};
+
+export const filter = (array, filters) => {
+  let filteredArray = [];
+  if (filters.length !== 0) {
+    filters.forEach((filter) => {
+      array
+        .filter((item) => item[filter.type] === filter.value)
+        .forEach((item) => {
+          if (filteredArray.filter((i) => i.id === item.id).length === 0) {
+            filteredArray.push(item);
+          }
+        });
+    });
+    return filteredArray;
+  } else return array;
+};

@@ -9,9 +9,13 @@ import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
 import ItemFilter from "../components/Utility/ItemFilter";
+import ProgramFilter from "../components/Utility/ProgramFilter";
+import ProgramSort from "../components/Utility/ProgramSort";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import OrderPreOrder from "../components/Purchasing/OrderPreOrder";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
+
+import { useProgramSort } from "../hooks/UtilityHooks";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -32,8 +36,25 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-let brands = items.map((item) => item.brand);
-let itemTypes = items.map((item) => item.itemType);
+const brands = items.map((item) => item.brand);
+const itemTypes = items.map((item) => item.itemType);
+const focusMonths = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const units = ["Compass", "Popular", "Renaissance", "Spirits"];
+const channels = ["Channel 1", "Channel 2", "Channel 3"];
+const others = ["Growth Engines", "Key Brands", "High Potential"];
 
 const PlaceOrder = ({ userType }) => {
   const classes = useStyles();
@@ -41,6 +62,10 @@ const PlaceOrder = ({ userType }) => {
   const [currentView, setView] = useState("list");
   const [previewModal, handlePreviewModal] = useState(false);
   const [currentItem, handleCurrentItem] = useState({});
+  const [sortOption, setSortOption] = useState("brand");
+  const [programFilters, setProgramFilters] = useState([]);
+  //const [itemFilters, setItemFilters] = useState([]);
+  const currentPrograms = useProgramSort(programs, sortOption, programFilters);
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
@@ -53,16 +78,6 @@ const PlaceOrder = ({ userType }) => {
     updateValue(newValue);
   };
 
-  useEffect(() => {
-    if (window.location.hash === "#pre") {
-      updateValue(1);
-    } else if (window.location.hash === "#instock") {
-      updateValue(2);
-    } else if (window.location.hash === "#ondemand") {
-      updateValue(3);
-    }
-  }, []);
-
   const handlePreview = (evt) => {
     let item = items.find(
       (item) => item.itemNumber === parseInt(evt.target.id)
@@ -74,6 +89,16 @@ const PlaceOrder = ({ userType }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    if (window.location.hash === "#pre") {
+      updateValue(1);
+    } else if (window.location.hash === "#instock") {
+      updateValue(2);
+    } else if (window.location.hash === "#ondemand") {
+      updateValue(3);
+    }
+  }, []);
 
   return (
     <>
@@ -158,21 +183,44 @@ const PlaceOrder = ({ userType }) => {
         <br />
         <Divider classes={{ root: classes.pageBreak }} />
         <br />
-        {value !== 1 && <ItemFilter brands={brands} itemTypes={itemTypes} />}
-        {value === 1 && <OrderPreOrder currentPrograms={programs} />}
-        {value === 2 && (
-          <OrderItemViewControl
-            type={"inStock"}
-            currentView={currentView}
-            handlePreview={handlePreview}
-          />
+        {value === 1 && (
+          <>
+            <div style={{ display: "flex" }}>
+              <ProgramFilter
+                brands={brands}
+                focusMonths={focusMonths}
+                units={units}
+                setProgramFilters={setProgramFilters}
+              />
+              <ProgramSort setSortOption={setSortOption} />
+            </div>
+            <OrderPreOrder currentPrograms={currentPrograms} />
+          </>
         )}
-        {value === 3 && (
-          <OrderItemViewControl
-            type={"onDemand"}
-            currentView={currentView}
-            handlePreview={handlePreview}
-          />
+        {value !== 1 && (
+          <>
+            <ItemFilter
+              brands={brands}
+              itemTypes={itemTypes}
+              units={units}
+              channels={channels}
+              others={others}
+            />
+            {value === 2 && (
+              <OrderItemViewControl
+                type={"inStock"}
+                currentView={currentView}
+                handlePreview={handlePreview}
+              />
+            )}
+            {value === 3 && (
+              <OrderItemViewControl
+                type={"onDemand"}
+                currentView={currentView}
+                handlePreview={handlePreview}
+              />
+            )}
+          </>
         )}
       </Container>
       <br />

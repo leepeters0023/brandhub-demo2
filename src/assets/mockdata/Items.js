@@ -25,7 +25,7 @@ export default [
   },
   {
     itemNumber: 110009066,
-    brand: "New Amsterdam Vodka",
+    brand: "New Amsterdam",
     itemType: "Glorifier",
     price: "$TBD",
     qty: "5 / Pack",
@@ -33,7 +33,7 @@ export default [
   },
   {
     itemNumber: 110007932,
-    brand: "Whitehaven",
+    brand: "White Haven",
     itemType: "Mini Mass",
     price: "$TBD",
     qty: "Single Unit",

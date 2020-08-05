@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-import GalloLogo from "../assets/gallologo.png";
+import { Link } from "@reach/router";
 
 //mockdata
 import items from "../assets/mockdata/Items";
@@ -22,11 +21,20 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+
+const units = ["Compass", "Popular", "Renaissance", "Spirits"];
+const channels = ["Channel 1", "Channel 2", "Channel 3"];
+const others = ["Growth Engines", "Key Brands", "High Potential"];
+const brands = items.map((item) => item.brand);
+const itemTypes = items.map((item) => item.itemType);
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -44,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-let brands = items.map((item) => item.brand);
-let itemTypes = items.map((item) => item.itemType);
-
 const Program = ({ userType, programId }) => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
@@ -54,6 +59,8 @@ const Program = ({ userType, programId }) => {
   const [previewModal, handlePreviewModal] = useState(false);
   const [currentItem, handleCurrentItem] = useState({});
   const [currentProgram, setCurrentProgram] = useState(null);
+  const [allPdf, setAllPdf] = useState(false);
+  const [allCart, setAllCart] = useState(false);
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
@@ -112,7 +119,11 @@ const Program = ({ userType, programId }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
-            <img className={classes.logo} src={GalloLogo} alt="Gallo" />
+            <Tooltip title="Back to All Programs" placement="bottom-start">
+              <IconButton component={Link} to="/order#pre">
+                <ArrowBackIcon fontSize="large" color="secondary" />
+              </IconButton>
+            </Tooltip>
             <Typography className={classes.titleText} variant="h5">
               {currentProgram.name}
             </Typography>
@@ -175,19 +186,49 @@ const Program = ({ userType, programId }) => {
 
         {value === 1 && <ProgramDetails program={currentProgram} />}
         {value === 2 && (
-            <>
-             
-              
-                <ItemFilter brands={brands} itemTypes={itemTypes} />
-              
-            
-            
-              <OrderItemViewControl
-                type={"preOrder"}
-                currentView={currentView}
-                handlePreview={handlePreview}
+          <>
+            <div style={{ display: "flex" }}>
+              <ItemFilter
+                brands={brands}
+                units={units}
+                channels={channels}
+                itemTypes={itemTypes}
+                others={others}
               />
-            </>
+              <div style={{ width: "133px", display: "flex", alignItems: "center"}}>
+                <Tooltip placement="top" title="Add All to PDF">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    id="addAllPdf"
+                    style={{ marginRight: "2.5px" }}
+                    onClick={()=>setAllPdf(true)}
+                  >
+                    <PictureAsPdfIcon className={classes.navIcon} />
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Add All to Cart">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    id="addAllCart"
+                    style={{ marginLeft: "2.5px" }}
+                    onClick={()=>setAllCart(true)}
+                  >
+                    <AddShoppingCartIcon className={classes.navIcon} />
+                  </Button>
+                </Tooltip>
+              </div>
+            </div>
+
+            <OrderItemViewControl
+              type={"preOrder"}
+              currentView={currentView}
+              allPdf={allPdf}
+              allCart={allCart}
+              handlePreview={handlePreview}
+            />
+          </>
         )}
       </Container>
       <br />
