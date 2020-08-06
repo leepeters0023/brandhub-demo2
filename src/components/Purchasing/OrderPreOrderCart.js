@@ -1,30 +1,22 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 
-import SelectorMenus from "../Utility/SelectorMenus";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeGridItem,
+} from "../../redux/slices/programCartSlice";
+
+import PreOrderCartTable from "./PreOrderCartTable";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
 import AutoComplete from "@material-ui/lab/Autocomplete";
-import Tooltip from "@material-ui/core/Tooltip";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
-
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 //mock data
 import items from "../../assets/mockdata/Items";
@@ -71,233 +63,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const createDataGrid = () => {
-  let grid = {};
-  let distributorValues = {};
-  distributors.forEach((dist) => distributorValues[dist.name] = 0)
-  items.forEach((item) => {
-    grid[`${item.itemNumber}`] = {...distributorValues}
-  })
-  return grid
-}
-
 const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
-
+  
   const [currentItems, setItems] = useState(items);
   const [open, setOpen] = useState(true);
   const [terms, setTermsChecked] = useState(false);
   const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
-  const [currentGrid, setCurrentGrid] = useState(createDataGrid());
+
+  const cart = useSelector((state) => state.programCart)
 
   const handleRemove = (i) => {
+    let itemNum = currentItems[i].itemNumber;
+    console.log(itemNum)
     currentItems.splice(i, 1);
     let newItems = [...currentItems];
+    dispatch(removeGridItem({ itemNum }));
     setItems(newItems);
-    let tempGrid={...currentGrid}
-    delete tempGrid[`{${currentItems[i].itemNumber}`]
-    setCurrentGrid(tempGrid);
   };
 
-  const handleInput = useCallback((itemNumber, distributor, value) => {
-    let tempGrid = {...currentGrid}
-    tempGrid[itemNumber][distributor] = value
-    setCurrentGrid(tempGrid);
-  }, [currentGrid])
+  if (Object.keys(cart).length === 0) {
+    return <CircularProgress />
+  }
 
   return (
     <>
-      <TableContainer className={classes.cartContainer}>
-        <Table stickyHeader={true} size="small" aria-label="pre-order-table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <SelectorMenus type="programs" />
-              </TableCell>
-              {currentItems.map((item, index) => (
-                <TableCell key={item.itemNumber}>
-                  <div className={classes.headerCell}>
-                    <Tooltip title="Remove from Cart">
-                      <IconButton onClick={()=>{handleRemove(index)}}>
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <img
-                      id={item.itemNumber}
-                      className={classes.previewImageFloat}
-                      src={item.imgUrl}
-                      alt={item.itemType}
-                      onClick={() =>
-                        handleModalOpen(
-                          item.imgUrl,
-                          item.brand,
-                          item.itemType,
-                          item.itemNumber
-                        )
-                      }
-                    />
-                    <Typography className={classes.headerText} variant="h5">
-                      {item.brand}
-                    </Typography>
-                  </div>
-                </TableCell>
-              ))}
-            </TableRow>
-            <TableRow>
-              <TableCell align="right" style={{ top: 197 }}>
-                <div className={classes.tableControl}>
-                  <Typography>Order Details</Typography>
-                  <IconButton
-                    aria-label="expand row"
-                    onClick={() => {
-                      setOpen(!open);
-                      !open
-                        ? setTableStyle(null)
-                        : setTableStyle("tableClosed");
-                    }}
-                  >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                  </IconButton>
-                </div>
-              </TableCell>
-              {currentItems.map((item) => {
-                return (
-                  <TableCell
-                    style={{ top: 197, textAlign: "center" }}
-                    key={item.itemNumber}
-                  >
-                    <div className={classes.infoCell}>
-                      <Typography variant="body2" color="textSecondary">
-                        {`${item.itemType} | ${item.itemNumber}`}
-                      </Typography>
-                    </div>
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-            <TableRow>
-              <TableCell
-                style={{ padding: 0, top: 258 }}
-                colSpan={currentItems.length + 1}
-                className={classes[tableStyle]}
-              >
-                <Collapse in={open} timeout="auto">
-                  <Box>
-                    <Table
-                      size="small"
-                      className={classes.table}
-                      aria-label="item-info"
-                    >
-                      <TableBody>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Items Per Pack
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              <div className={classes.infoCell}>
-                                {item.qty !== "Single Unit"
-                                  ? item.qty.split(" ")[0]
-                                  : 1}
-                              </div>
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Total Qty of Items
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              0
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Item Est Cost
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              $TBD
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Total Est Cost
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              $TBD
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Inv. Balance
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              NA
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </Collapse>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {distributors.map((dist) => (
-              <TableRow key={dist.id}>
-                <TableCell className={classes.borderRight}>
-                  <div className={classes.colTitle}>
-                    <Typography className={classes.headerText}>
-                      {dist.name}
-                    </Typography>
-                  </div>
-                </TableCell>
-                {currentItems.map((item) => (
-                  <TableCell key={`${dist.name}-${item.itemNumber}`}>
-                    <TextField
-                      color="secondary"
-                      variant="outlined"
-                      size="small"
-                      id={`${dist.name}-${item.itemNumber}`}
-                      value={currentGrid[`${item.itemNumber}`][dist.name]}
-                      onChange={(evt)=>{handleInput(`${item.itemNumber}`, dist.name, evt.target.value)}}
-                    />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <PreOrderCartTable
+        currentItems={currentItems}
+        distributors={distributors}
+        open={open}
+        setOpen={setOpen}
+        tableStyle={tableStyle}
+        setTableStyle={setTableStyle}
+        handleModalOpen={handleModalOpen}
+        handleRemove={handleRemove}
+      />
       <br />
       <br />
       <Grid container spacing={5}>
@@ -403,4 +205,4 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   );
 };
 
-export default OrderPreOrderCart;
+export default React.memo(OrderPreOrderCart);

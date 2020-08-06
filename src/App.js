@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Router, Redirect } from "@reach/router";
+
+import { useDispatch } from "react-redux";
+import {
+  setGridItems,
+} from "./redux/slices/programCartSlice";
 
 import LogIn from "./components/Login";
 import TopLeftNav from "./components/Navigation/TopLeftNav";
@@ -26,9 +31,14 @@ import themeFile from "./utility/theme.js";
 
 import "./App.css";
 
+//mock data
+import items from "./assets/mockdata/Items";
+import distributors from "./assets/mockdata/distributors";
+
 const theme = createMuiTheme(themeFile);
 
 const App = () => {
+  const dispatch = useDispatch();
   const [notificationOpen, handleNotification] = useState(false);
   const [currentUser, setCurrentUser] = useState(window.localStorage.getItem("user"));
 
@@ -40,6 +50,12 @@ const App = () => {
     setCurrentUser(null)
     localStorage.removeItem("user")
   };
+
+  useEffect(()=>{
+    if (currentUser) {
+      dispatch(setGridItems({ items, distributors }));
+    }
+  },[dispatch, currentUser])
 
   return (
     <MuiThemeProvider theme={theme}>

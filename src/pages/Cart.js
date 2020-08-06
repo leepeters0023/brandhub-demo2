@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import OrderPreOrderCart from "../components/Purchasing/OrderPreOrderCart";
 import OrderCart from "../components/Purchasing/OrderCart";
@@ -45,7 +45,7 @@ const Cart = ({ userType }) => {
     handleModal(false);
   };
 
-  const handleModalOpen = (img, brand, itemType, itemNumber) => {
+  const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
     setCurrentItem({
       imgUrl: img,
       brand: brand,
@@ -53,7 +53,7 @@ const Cart = ({ userType }) => {
       itemNumber: itemNumber,
     });
     handleModal(true);
-  };
+  },[]);
 
   return (
     <>
