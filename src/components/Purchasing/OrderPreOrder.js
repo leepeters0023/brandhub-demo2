@@ -113,24 +113,28 @@ const OrderPreOrder = ({ currentPrograms }) => {
               </Typography>
               <div className={classes.itemControl}>
                 <Tooltip title="Add All Items to PDF">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id={`${prog.id}`}
-                    disabled={allPdf}
-                  >
-                    <PictureAsPdfIcon className={classes.navIcon} />
-                  </Button>
+                  <span>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      id={`${prog.id}`}
+                      disabled={allPdf}
+                    >
+                      <PictureAsPdfIcon className={classes.navIcon} />
+                    </Button>
+                  </span>
                 </Tooltip>
                 <Tooltip title="Add All Items to Cart">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id={`${prog.id}`}
-                    disabled={allCart}
-                  >
-                    <AddShoppingCartIcon className={classes.navIcon} />
-                  </Button>
+                  <span>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      id={`${prog.id}`}
+                      disabled={allCart}
+                    >
+                      <AddShoppingCartIcon className={classes.navIcon} />
+                    </Button>
+                  </span>
                 </Tooltip>
               </div>
             </Paper>
