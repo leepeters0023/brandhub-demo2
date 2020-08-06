@@ -6,7 +6,6 @@ import { setGridItem, setItemTotal } from "../../redux/slices/programCartSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
-import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -18,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
+import InputBase from "@material-ui/core/InputBase";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(({ distributor, itemNumber }) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const value = useSelector(
     (state) =>
@@ -72,12 +73,10 @@ const MemoInputCell = React.memo(({ distributor, itemNumber }) => {
   );
 
   return (
-    <TableCell>
-      <TextField
+    <TableCell className={classes.borderRight} style={{ zIndex: "-100" }}>
+      <InputBase
+        style={{ textAlign: "center", zIndex: "0" }}
         fullWidth
-        label={distributor.split(" ")[0]}
-        color="secondary"
-        variant="outlined"
         size="small"
         id={`${distributor}-${itemNumber}`}
         value={value}
@@ -139,7 +138,7 @@ const PreOrderCartTable = (props) => {
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell style={{ zIndex: "100" }}>
                 <SelectorMenus type="programs" />
               </TableCell>
               {currentItems.map((item) => (
@@ -176,7 +175,7 @@ const PreOrderCartTable = (props) => {
               ))}
             </TableRow>
             <TableRow>
-              <TableCell align="right" style={{ top: 197 }}>
+              <TableCell align="right" style={{ top: 197, zIndex: "100" }}>
                 <div className={classes.tableControl}>
                   <Typography>Order Details</Typography>
                   <IconButton
@@ -220,10 +219,21 @@ const PreOrderCartTable = (props) => {
                       className={classes.table}
                       aria-label="item-info"
                     >
-                      <TableBody>
+                      <TableBody style={{ position: "relative", zIndex: "10" }}>
                         <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
+                          <TableCell
+                            className={classes.borderRight}
+                            style={{
+                              position: "sticky",
+                              left: 0,
+                              backgroundColor: "white",
+                              zIndex: "100",
+                            }}
+                          >
+                            <div
+                              className={classes.colTitle}
+                              style={{ zIndex: "100" }}
+                            >
                               <Typography className={classes.headerText}>
                                 Items Per Pack
                               </Typography>
@@ -240,8 +250,19 @@ const PreOrderCartTable = (props) => {
                           ))}
                         </TableRow>
                         <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
+                          <TableCell
+                            className={classes.borderRight}
+                            style={{
+                              position: "sticky",
+                              left: 0,
+                              backgroundColor: "white",
+                              zIndex: "100",
+                            }}
+                          >
+                            <div
+                              className={classes.colTitle}
+                              style={{ zIndex: "100" }}
+                            >
                               <Typography className={classes.headerText}>
                                 Total Qty of Items
                               </Typography>
@@ -255,8 +276,19 @@ const PreOrderCartTable = (props) => {
                           ))}
                         </TableRow>
                         <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
+                          <TableCell
+                            className={classes.borderRight}
+                            style={{
+                              position: "sticky",
+                              left: 0,
+                              backgroundColor: "white",
+                              zIndex: "100",
+                            }}
+                          >
+                            <div
+                              className={classes.colTitle}
+                              style={{ zIndex: "100" }}
+                            >
                               <Typography className={classes.headerText}>
                                 Item Est Cost
                               </Typography>
@@ -269,8 +301,19 @@ const PreOrderCartTable = (props) => {
                           ))}
                         </TableRow>
                         <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
+                          <TableCell
+                            className={classes.borderRight}
+                            style={{
+                              position: "sticky",
+                              left: 0,
+                              backgroundColor: "white",
+                              zIndex: "100",
+                            }}
+                          >
+                            <div
+                              className={classes.colTitle}
+                              style={{ zIndex: "100" }}
+                            >
                               <Typography className={classes.headerText}>
                                 Total Est Cost
                               </Typography>
@@ -290,10 +333,18 @@ const PreOrderCartTable = (props) => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody style={{ position: "relative" }}>
             {distributors.map((dist) => (
               <TableRow key={dist.id}>
-                <TableCell className={classes.borderRight}>
+                <TableCell
+                  className={classes.borderRight}
+                  style={{
+                    position: "sticky",
+                    left: 0,
+                    backgroundColor: "#cbcbcb",
+                    zIndex: "1",
+                  }}
+                >
                   <div className={classes.colTitle}>
                     <Typography className={classes.headerText}>
                       {dist.name}
