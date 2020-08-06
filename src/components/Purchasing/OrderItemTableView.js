@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
@@ -143,6 +144,14 @@ const OrderItemTableView = (props) => {
       </TableContainer>
     </>
   );
+};
+
+OrderItemTableView.propTypes = {
+  type: PropTypes.string.isRequired,
+  currentItems: PropTypes.array.isRequired,
+  allPdf: PropTypes.bool.isRequired,
+  allCart: PropTypes.bool.isRequired,
+  handlePreview: PropTypes.func.isRequired,
 };
 
 export default OrderItemTableView;

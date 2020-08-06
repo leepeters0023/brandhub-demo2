@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import OrderInStockTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
@@ -33,6 +34,14 @@ const OrderItemViewControl = (props) => {
       )}
     </>
   );
+};
+
+OrderItemViewControl.propTypes = {
+  type: PropTypes.string.isRequired,
+  currentView: PropTypes.string.isRequired,
+  allPdf: PropTypes.bool.isRequired,
+  allCart: PropTypes.bool.isRequired,
+  handlePreview: PropTypes.func.isRequired,
 };
 
 export default OrderItemViewControl;

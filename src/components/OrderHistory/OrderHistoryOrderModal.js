@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 import IconButton from "@material-ui/core/IconButton";
@@ -20,7 +21,7 @@ const byItemRows = orderHistory.map((data) => ({
   shipDate: data.shipDate,
   trackingNum: data.trackingNum,
   itemStatus: data.itemStatus,
-}))
+}));
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -30,7 +31,7 @@ const OrderHistoryOrderModal = ({ handleClose, orderNumber }) => {
   const classes = useStyles();
 
   return (
-    <div style={{overflow: "hidden"}}>
+    <div style={{ overflow: "hidden" }}>
       <IconButton
         className={classes.closeButton}
         onClick={() => {
@@ -42,40 +43,45 @@ const OrderHistoryOrderModal = ({ handleClose, orderNumber }) => {
       <br />
       <br />
       <MaterialTable
-          title={`Order #${orderNumber}`}
-          columns={[
-            { title: "Sequence #", field: "sequenceNum"},
-            { title: "Brand", field: "brand" },
-            { title: "Item Type", field: "itemType" },
-            { title: "Program", field: "program" },
-            { title: "Quantity", field: "qty", filtering: false },
-            { title: "Order Date", field: "orderDate", filtering: false },
-            { title: "Ship Date", field: "shipDate", filtering: false },
-            { title: "Track. #", field: "trackingNum"},
-            { title: "Compliance", field: "itemStatus"}
-          ]}
-          data={byItemRows}
-          options={{
-            filtering: true,
-            headerStyle: {
-              backgroundColor: "#404040",
-              fontWeight: "600",
-              position: "sticky",
-              top: 0,
-              color: "#FFF",
-            },
-            filterCellStyle: {
-              position: "sticky",
-            },
-            maxBodyHeight: "650px",
-            pageSizeOptions: [5, 10, 20, 50, 100],
-            exportButton: true,
-            exportAllData: true
-          }}
-          icons={tableIcons}
-        />
+        title={`Order #${orderNumber}`}
+        columns={[
+          { title: "Sequence #", field: "sequenceNum" },
+          { title: "Brand", field: "brand" },
+          { title: "Item Type", field: "itemType" },
+          { title: "Program", field: "program" },
+          { title: "Quantity", field: "qty", filtering: false },
+          { title: "Order Date", field: "orderDate", filtering: false },
+          { title: "Ship Date", field: "shipDate", filtering: false },
+          { title: "Track. #", field: "trackingNum" },
+          { title: "Compliance", field: "itemStatus" },
+        ]}
+        data={byItemRows}
+        options={{
+          filtering: true,
+          headerStyle: {
+            backgroundColor: "#404040",
+            fontWeight: "600",
+            position: "sticky",
+            top: 0,
+            color: "#FFF",
+          },
+          filterCellStyle: {
+            position: "sticky",
+          },
+          maxBodyHeight: "650px",
+          pageSizeOptions: [5, 10, 20, 50, 100],
+          exportButton: true,
+          exportAllData: true,
+        }}
+        icons={tableIcons}
+      />
     </div>
   );
+};
+
+OrderHistoryOrderModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+  orderNumber: PropTypes.string,
 };
 
 export default OrderHistoryOrderModal;

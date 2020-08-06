@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import "date-fns";
 
 import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
@@ -63,9 +64,9 @@ const Orders = ({ reportType }) => {
   );
   const [modal, handleModal] = useState(false);
   const [value, updateValue] = useState(1);
-  const [tableType, setTableType] = useState(null)
-  const [modalType, setModalType] = useState("order")
-  const [currentOrder, setCurrentOrder] = useState(null)
+  const [tableType, setTableType] = useState(null);
+  const [modalType, setModalType] = useState("order");
+  const [currentOrder, setCurrentOrder] = useState(null);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDate(date);
@@ -85,10 +86,10 @@ const Orders = ({ reportType }) => {
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
       window.location.hash = "#byorder";
-      setTableType("byOrder")
+      setTableType("byOrder");
     } else if (newValue === 2) {
       window.location.hash = "#byitems";
-      setTableType("byItems")
+      setTableType("byItems");
     }
     updateValue(newValue);
   };
@@ -96,25 +97,27 @@ const Orders = ({ reportType }) => {
   useEffect(() => {
     if (window.location.hash === "#byorder") {
       updateValue(1);
-      setTableType("byOrder")
+      setTableType("byOrder");
     } else if (window.location.hash === "#byitems") {
       updateValue(2);
-      setTableType("byItems")
+      setTableType("byItems");
     }
   }, [reportType]);
 
   return (
     <>
       <div className={classes.relativeContainer}>
-        <Dialog
-          open={modal}
-          onClose={handleModalClose}
-          fullWidth
-          maxWidth="lg"
-        >
+        <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="lg">
           <DialogContent>
-            {modalType === "item" && <OrderHistoryItemModal handleClose={handleModalClose} />}
-            {modalType === "order" && <OrderHistoryOrderModal handleClose={handleModalClose} orderNumber={currentOrder} />}
+            {modalType === "item" && (
+              <OrderHistoryItemModal handleClose={handleModalClose} />
+            )}
+            {modalType === "order" && (
+              <OrderHistoryOrderModal
+                handleClose={handleModalClose}
+                orderNumber={currentOrder}
+              />
+            )}
           </DialogContent>
         </Dialog>
       </div>
@@ -195,15 +198,25 @@ const Orders = ({ reportType }) => {
         <Divider classes={{ root: classes.pageBreak }} />
         <br />
         {reportType === "current" && (
-          <OrdersCurrentTable handlePreview={handlePreview} tableType={tableType}/>
+          <OrdersCurrentTable
+            handlePreview={handlePreview}
+            tableType={tableType}
+          />
         )}
         {reportType === "past" && (
-          <OrdersPastTable handlePreview={handlePreview} tableType={tableType}/>
+          <OrdersPastTable
+            handlePreview={handlePreview}
+            tableType={tableType}
+          />
         )}
       </Container>
       <br />
     </>
   );
+};
+
+Orders.propTypes = {
+  reportType: PropTypes.string,
 };
 
 export default Orders;

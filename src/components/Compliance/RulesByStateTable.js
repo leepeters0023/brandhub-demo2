@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 
@@ -80,6 +81,10 @@ const RulesByStateTable = ({ data }) => {
       />
     </>
   );
+};
+
+RulesByStateTable.propTypes = {
+  data: PropTypes.array.isRequired,
 };
 
 export default RulesByStateTable;

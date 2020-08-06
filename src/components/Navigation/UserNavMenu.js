@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import Menu from "@material-ui/core/Menu";
@@ -100,6 +101,11 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
       </Menu>
     </>
   );
+};
+
+UserNavMenu.propTypes = {
+  handleLogout: PropTypes.func.isRequired,
+  handleModalOpen: PropTypes.func.isRequired,
 };
 
 export default UserNavMenu;

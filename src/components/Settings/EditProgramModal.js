@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import { useInput } from "../../hooks/UtilityHooks";
 
@@ -84,7 +85,9 @@ const EditProgramModal = ({ handleClose, currentProgram }) => {
     if (
       currentItemList.filter((item) => item.itemNumber === item).length === 0
     ) {
-      let newItem = items.find((item) => item.itemNumber === parseInt(currentItemNumber));
+      let newItem = items.find(
+        (item) => item.itemNumber === parseInt(currentItemNumber)
+      );
       currentItemList.push(newItem);
       setCurrentItems(currentItemList);
     }
@@ -93,20 +96,25 @@ const EditProgramModal = ({ handleClose, currentProgram }) => {
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
     //temporary event handler
-    console.log(programName, programDescription, programGoals, programStrategies)
+    console.log(
+      programName,
+      programDescription,
+      programGoals,
+      programStrategies
+    );
     resetProgramName();
     resetProgramDesicription();
     resetProgramGoals();
     resetProgramStrategies();
-  }
+  };
 
-  useEffect(()=>{
-    let onMountProgram = programs.find((prog) => prog.id === currentProgram)
+  useEffect(() => {
+    let onMountProgram = programs.find((prog) => prog.id === currentProgram);
     setProgram(onMountProgram);
-  },[currentProgram])
+  }, [currentProgram]);
 
   if (!program) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
 
   return (
@@ -274,18 +282,23 @@ const EditProgramModal = ({ handleClose, currentProgram }) => {
         />
         <br />
         <Button
-        className={classes.largeButton}
-        variant="contained"
-        color="secondary"
-        id="profile"
-        onClick={handleFormSubmit}
-      >
-        SUBMIT
-      </Button>
+          className={classes.largeButton}
+          variant="contained"
+          color="secondary"
+          id="profile"
+          onClick={handleFormSubmit}
+        >
+          SUBMIT
+        </Button>
       </form>
       <br />
     </>
-  )
-}
+  );
+};
+
+EditProgramModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+  currentProgram: PropTypes.string.isRequired,
+};
 
 export default EditProgramModal;

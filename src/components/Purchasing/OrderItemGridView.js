@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -125,6 +126,14 @@ const OrderItemGridView = (props) => {
       </Grid>
     </Container>
   );
+};
+
+OrderItemGridView.propTypes = {
+  type: PropTypes.string.isRequired,
+  currentItems: PropTypes.array.isRequired,
+  allPdf: PropTypes.bool.isRequired,
+  allCart: PropTypes.bool.isRequired,
+  handlePreview: PropTypes.func.isRequired,
 };
 
 export default OrderItemGridView;

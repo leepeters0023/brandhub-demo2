@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 //mockdata
@@ -195,14 +196,20 @@ const Program = ({ userType, programId }) => {
                 itemTypes={itemTypes}
                 others={others}
               />
-              <div style={{ width: "133px", display: "flex", alignItems: "center"}}>
+              <div
+                style={{
+                  width: "133px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 <Tooltip placement="top" title="Add All to PDF">
                   <Button
                     variant="contained"
                     color="secondary"
                     id="addAllPdf"
                     style={{ marginRight: "2.5px" }}
-                    onClick={()=>setAllPdf(true)}
+                    onClick={() => setAllPdf(true)}
                   >
                     <PictureAsPdfIcon className={classes.navIcon} />
                   </Button>
@@ -213,7 +220,7 @@ const Program = ({ userType, programId }) => {
                     color="secondary"
                     id="addAllCart"
                     style={{ marginLeft: "2.5px" }}
-                    onClick={()=>setAllCart(true)}
+                    onClick={() => setAllCart(true)}
                   >
                     <AddShoppingCartIcon className={classes.navIcon} />
                   </Button>
@@ -234,6 +241,11 @@ const Program = ({ userType, programId }) => {
       <br />
     </>
   );
+};
+
+Program.propTypes = {
+  userType: PropTypes.string,
+  programId: PropTypes.string,
 };
 
 export default Program;

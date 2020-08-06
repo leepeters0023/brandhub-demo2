@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 
@@ -17,7 +18,7 @@ const ContactsByStateTable = ({ data }) => {
     { title: "Name", field: "name" },
     { title: "Address", field: "address" },
     { title: "Email", field: "email" },
-    { title: "Phone", field: "phone"}
+    { title: "Phone", field: "phone" },
   ];
 
   return (
@@ -79,6 +80,10 @@ const ContactsByStateTable = ({ data }) => {
       />
     </>
   );
+};
+
+ContactsByStateTable.propTypes = {
+  data: PropTypes.array.isRequired,
 };
 
 export default ContactsByStateTable;

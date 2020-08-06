@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ProgrogramsTable = ({ handleProgramClick }) => {
+const ProgramsTable = ({ handleProgramClick }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -39,7 +40,7 @@ const ProgrogramsTable = ({ handleProgramClick }) => {
                 className={classes.previewImg}
               />
             ),
-            filtering: false
+            filtering: false,
           },
           { title: "Id #", field: "id" },
           { title: "Program", field: "name" },
@@ -79,4 +80,8 @@ const ProgrogramsTable = ({ handleProgramClick }) => {
   );
 };
 
-export default ProgrogramsTable;
+ProgramsTable.propTypes = {
+  handleProgramClick: PropTypes.func.isRequired,
+};
+
+export default ProgramsTable;

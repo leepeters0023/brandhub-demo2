@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import PropTypes from "prop-types";
 
 import OrderPreOrderCart from "../components/Purchasing/OrderPreOrderCart";
 import OrderCart from "../components/Purchasing/OrderCart";
@@ -22,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   cartPreviewImage: {
     width: "60%",
-    height: "auto"
-  }
+    height: "auto",
+  },
 }));
 
 const Cart = ({ userType }) => {
@@ -53,7 +54,7 @@ const Cart = ({ userType }) => {
       itemNumber: itemNumber,
     });
     handleModal(true);
-  },[]);
+  }, []);
 
   return (
     <>
@@ -133,6 +134,10 @@ const Cart = ({ userType }) => {
       <br />
     </>
   );
+};
+
+Cart.propTypes = {
+  userType: PropTypes.string,
 };
 
 export default Cart;

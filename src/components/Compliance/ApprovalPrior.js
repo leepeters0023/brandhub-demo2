@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 
@@ -174,6 +175,10 @@ const ApprovalPrior = ({ handleModal }) => {
       />
     </>
   );
+};
+
+ApprovalPrior.propTypes = {
+  handleModal: PropTypes.func.isRequired,
 };
 
 export default ApprovalPrior;

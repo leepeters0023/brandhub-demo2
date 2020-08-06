@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setGridItem, setItemTotal } from "../../redux/slices/programCartSlice";
@@ -28,8 +29,7 @@ const useStyles = makeStyles((theme) => ({
   headerCell: {
     padding: "0",
     height: "184px",
-    width: "150px",
-    maxWidth: "150px",
+    minWidth: "150px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#cbcbcb",
   },
   infoCell: {
-    width: "150px",
+    width: "100%",
+    minWidth: "150px",
   },
   tableControl: {
     display: "flex",
@@ -63,55 +64,61 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInputCell = React.memo(
-  ({ distributor, itemNumber }) => {
-    const dispatch = useDispatch();
-    const value = useSelector((state) => state.programCart.items[`${itemNumber}`].distributors[distributor]);
+const MemoInputCell = React.memo(({ distributor, itemNumber }) => {
+  const dispatch = useDispatch();
+  const value = useSelector(
+    (state) =>
+      state.programCart.items[`${itemNumber}`].distributors[distributor]
+  );
 
-    return (
-      <TableCell>
-        <TextField
-          label={distributor.split(" ")[0]}
-          color="secondary"
-          variant="outlined"
-          size="small"
-          id={`${distributor}-${itemNumber}`}
-          value={
-            value
-          }
-          onChange={(evt) => {
-            dispatch(
-              setGridItem({
-                itemNumber: `${itemNumber}`,
-                distributor: distributor,
-                value: evt.target.value,
-              })
-            );
-            dispatch(setItemTotal({itemNumber: `${itemNumber}`}))
-          }}
-        />
-      </TableCell>
-    );
-  }
-);
+  return (
+    <TableCell>
+      <TextField
+        fullWidth
+        label={distributor.split(" ")[0]}
+        color="secondary"
+        variant="outlined"
+        size="small"
+        id={`${distributor}-${itemNumber}`}
+        value={value}
+        onChange={(evt) => {
+          dispatch(
+            setGridItem({
+              itemNumber: `${itemNumber}`,
+              distributor: distributor,
+              value: evt.target.value,
+            })
+          );
+          dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+        }}
+      />
+    </TableCell>
+  );
+});
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
-  const value = useSelector((state) => state.programCart.items[`${itemNumber}`].itemDetails.totalItems)
+  const classes = useStyles();
+  const value = useSelector(
+    (state) => state.programCart.items[`${itemNumber}`].itemDetails.totalItems
+  );
   return (
-    <TableCell style={{textAlign: "center"}}>
-      {value}
+    <TableCell style={{ textAlign: "center" }}>
+      <div className={classes.infoCell}>{value}</div>
     </TableCell>
-  )
-})
+  );
+});
 
 const TotalEstCostCell = React.memo(({ itemNumber }) => {
-  const value = useSelector((state) => state.programCart.items[`${itemNumber}`].itemDetails.estTotal)
+  const classes = useStyles();
+  const value = useSelector(
+    (state) => state.programCart.items[`${itemNumber}`].itemDetails.estTotal
+  );
   return (
-    <TableCell style={{textAlign: "center"}}>
-      {`$${value.toFixed(2)}`}
+    <TableCell style={{ textAlign: "center" }}>
+      <div className={classes.infoCell}>{`$${value.toFixed(2)}`}</div>
     </TableCell>
-  )
-})
+  );
+});
 
 const PreOrderCartTable = (props) => {
   const {
@@ -241,7 +248,10 @@ const PreOrderCartTable = (props) => {
                             </div>
                           </TableCell>
                           {currentItems.map((item) => (
-                            <TotalItemCell itemNumber={item.itemNumber} key={item.itemNumber} />
+                            <TotalItemCell
+                              itemNumber={item.itemNumber}
+                              key={item.itemNumber}
+                            />
                           ))}
                         </TableRow>
                         <TableRow className={classes.infoRow}>
@@ -267,7 +277,10 @@ const PreOrderCartTable = (props) => {
                             </div>
                           </TableCell>
                           {currentItems.map((item) => (
-                            <TotalEstCostCell itemNumber={item.itemNumber} key={item.itemNumber} />
+                            <TotalEstCostCell
+                              itemNumber={item.itemNumber}
+                              key={item.itemNumber}
+                            />
                           ))}
                         </TableRow>
                       </TableBody>
@@ -303,4 +316,15 @@ const PreOrderCartTable = (props) => {
   );
 };
 
-export default React.memo(PreOrderCartTable)
+PreOrderCartTable.propTypes = {
+  currentItems: PropTypes.array.isRequired,
+  distributors: PropTypes.array.isRequired,
+  open: PropTypes.bool.isRequired,
+  setOpen: PropTypes.func.isRequired,
+  tableStyle: PropTypes.string,
+  setTableStyle: PropTypes.func.isRequired,
+  handleModalOpen: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+};
+
+export default React.memo(PreOrderCartTable);

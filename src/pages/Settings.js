@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -143,5 +144,9 @@ const Settings = ({ userType }) => {
     </>
   );
 };
+
+Settings.propTypes = {
+  userType: PropTypes.string
+}
 
 export default Settings;

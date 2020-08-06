@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import FilterChipList from "./FilterChipList";
 
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   filterList: {
     display: "flex",
     overflowX: "auto",
-    width: "Calc(100% - 380px)"
+    width: "Calc(100% - 380px)",
   },
 }));
 
@@ -100,12 +101,7 @@ const ProgramFilter = (props) => {
     );
     setAllFilters(currentFilters);
     setProgramFilters(currentFilters);
-  }, [
-    brandsChecked,
-    focusMonthsChecked,
-    unitsChecked,
-    setProgramFilters
-  ]);
+  }, [brandsChecked, focusMonthsChecked, unitsChecked, setProgramFilters]);
 
   const brandsList = (listItems) => {
     return (
@@ -153,7 +149,11 @@ const ProgramFilter = (props) => {
               dense
               button
               onClick={() => {
-                handleCheckToggle(item, focusMonthsChecked, setFocusMonthsChecked);
+                handleCheckToggle(
+                  item,
+                  focusMonthsChecked,
+                  setFocusMonthsChecked
+                );
               }}
             >
               <ListItemIcon>
@@ -298,6 +298,13 @@ const ProgramFilter = (props) => {
       <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />
     </div>
   );
+};
+
+ProgramFilter.propTypes = {
+  brands: PropTypes.array.isRequired,
+  focusMonths: PropTypes.array.isRequired,
+  units: PropTypes.array.isRequired,
+  setProgramFilters: PropTypes.func.isRequired,
 };
 
 export default ProgramFilter;

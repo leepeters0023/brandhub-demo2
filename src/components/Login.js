@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     top: "20px",
     left: "20px",
-    filter: "brightness(0%)"
+    filter: "brightness(0%)",
   },
   paper: {
     marginTop: theme.spacing(8),
@@ -117,7 +118,6 @@ const Login = ({ setAuth }) => {
       >
         <CssBaseline />
         <div className={classes.paper}>
-          
           <Typography className={classes.welcome} component="h1" variant="h2">
             Welcome
           </Typography>
@@ -179,11 +179,14 @@ const Login = ({ setAuth }) => {
               </Grid>
             </Grid>
           </form>
-          
         </div>
       </Container>
     </div>
   );
+};
+
+Login.propTypes = {
+  setAuth: PropTypes.func.isRequired,
 };
 
 export default Login;

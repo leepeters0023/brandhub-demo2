@@ -1,30 +1,35 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Redirect } from "@reach/router";
 
 class ErrorBoundary extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      hasError: false
-    }
+      hasError: false,
+    };
   }
 
   static getDerivedStateFromError(_error) {
-    return {hasError: true}
+    return { hasError: true };
   }
 
   componentDidCatch(error, info) {
-    console.error("ErrorBoundary caught an error", error, info)
+    console.error("ErrorBoundary caught an error", error, info);
     //add logging service like Sentry
   }
 
   render() {
     if (this.state.hasError) {
-      return <Redirect noThrow to="/whoops" />
+      return <Redirect noThrow to="/whoops" />;
     }
 
     return this.props.children;
   }
 }
 
-export default ErrorBoundary
+ErrorBoundary.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+export default ErrorBoundary;

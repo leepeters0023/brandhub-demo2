@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -33,7 +34,7 @@ const ComplianceModal = (props) => {
   const classes = useStyles();
 
   return (
-    <div style={{ overflow: "hidden"}}>
+    <div style={{ overflow: "hidden" }}>
       <IconButton
         className={classes.closeButton}
         onClick={() => {
@@ -204,6 +205,11 @@ const ComplianceModal = (props) => {
       <br />
     </div>
   );
+};
+
+ComplianceModal.propTypes = {
+  id: PropTypes.string.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default ComplianceModal;

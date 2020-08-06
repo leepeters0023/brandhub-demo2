@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import { useInput } from "../../hooks/UtilityHooks";
 
@@ -90,7 +91,7 @@ const EditUserModal = ({ handleClose }) => {
     console.log(firstName, lastName, email, phone);
   };
   return (
-    <div style={{ overflow: "hidden"}}>
+    <div style={{ overflow: "hidden" }}>
       <IconButton
         className={classes.closeButton}
         onClick={() => {
@@ -99,8 +100,8 @@ const EditUserModal = ({ handleClose }) => {
       >
         <CancelIcon fontSize="large" color="secondary" />
       </IconButton>
-    <form>
-      <TextField
+      <form>
+        <TextField
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -213,89 +214,92 @@ const EditUserModal = ({ handleClose }) => {
             />
           </FormGroup>
         </FormControl>
-        </form>
-        <br />
-        <br />
-        <Typography
-          className={classes.headerText}
-          style={{ marginBottom: "15px" }}
-        >
-          Region / Key Acct. Assignment
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item md={6} xs={12}>
-            <div style={{ display: "flex", flexWrap: "none", width: "100%" }}>
-              <AutoComplete
-                fullWidth
-                className={classes.settingsMargin}
-                value={region}
-                onChange={(event, value) => setRegion(value)}
-                id="region"
-                options={regions}
-                getOptionLabel={(region) => region}
-                renderInput={(params) => (
-                  <TextField
-                    color="secondary"
-                    {...params}
-                    label="Region / Key Acct."
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-              />
-              <Button
-                style={{
-                  height: "40px",
-                  marginLeft: "5px"
-                }}
-                variant="contained"
-                color="primary"
-                id="addRegion"
-                disabled={region === null}
-                onClick={handleRegion}
-              >
-                <AddIcon color="secondary" />
-              </Button>
-            </div>
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <MaterialTable
-              title=""
-              columns={[{ title: "Region/Key Account", field: "region" }]}
-              data={regionsList}
-              editable={{
-                onRowDelete: (oldData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataDelete = [...regionsList];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setRegionsList([...dataDelete]);
-                      resolve();
-                    }, 500);
-                  }),
-              }}
-              icons={tableIcons}
-              options={{
-                paging: false,
-                search: false,
-                toolbar: false,
-              }}
+      </form>
+      <br />
+      <br />
+      <Typography
+        className={classes.headerText}
+        style={{ marginBottom: "15px" }}
+      >
+        Region / Key Acct. Assignment
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item md={6} xs={12}>
+          <div style={{ display: "flex", flexWrap: "none", width: "100%" }}>
+            <AutoComplete
+              fullWidth
+              className={classes.settingsMargin}
+              value={region}
+              onChange={(event, value) => setRegion(value)}
+              id="region"
+              options={regions}
+              getOptionLabel={(region) => region}
+              renderInput={(params) => (
+                <TextField
+                  color="secondary"
+                  {...params}
+                  label="Region / Key Acct."
+                  variant="outlined"
+                  size="small"
+                />
+              )}
             />
-          </Grid>
+            <Button
+              style={{
+                height: "40px",
+                marginLeft: "5px",
+              }}
+              variant="contained"
+              color="primary"
+              id="addRegion"
+              disabled={region === null}
+              onClick={handleRegion}
+            >
+              <AddIcon color="secondary" />
+            </Button>
+          </div>
         </Grid>
-        <Button
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          id="profile"
-          onClick={handleFormSubmit}
-        >
-          SUBMIT
-        </Button>
-      
+        <Grid item md={6} xs={12}>
+          <MaterialTable
+            title=""
+            columns={[{ title: "Region/Key Account", field: "region" }]}
+            data={regionsList}
+            editable={{
+              onRowDelete: (oldData) =>
+                new Promise((resolve, reject) => {
+                  setTimeout(() => {
+                    const dataDelete = [...regionsList];
+                    const index = oldData.tableData.id;
+                    dataDelete.splice(index, 1);
+                    setRegionsList([...dataDelete]);
+                    resolve();
+                  }, 500);
+                }),
+            }}
+            icons={tableIcons}
+            options={{
+              paging: false,
+              search: false,
+              toolbar: false,
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Button
+        className={classes.largeButton}
+        variant="contained"
+        color="secondary"
+        id="profile"
+        onClick={handleFormSubmit}
+      >
+        SUBMIT
+      </Button>
     </div>
-  )
-}
+  );
+};
+
+EditUserModal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+};
 
 export default EditUserModal;

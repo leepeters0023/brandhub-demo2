@@ -1,4 +1,5 @@
-import React from 'react'
+import React from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -18,7 +19,7 @@ const byOrderRows = orderHistory.map((data) => ({
   trackingNum: data.trackingNum,
   orderTotal: data.orderTotal,
   orderStatus: data.orderStatus,
-}))
+}));
 
 const byItemRows = orderHistory.map((data) => ({
   sequenceNum: data.sequenceNum,
@@ -32,11 +33,11 @@ const byItemRows = orderHistory.map((data) => ({
   shipDate: data.shipDate,
   trackingNum: data.trackingNum,
   itemStatus: data.itemStatus,
-}))
+}));
 
 const OrdersPastTable = ({ handlePreview, tableType }) => {
-  if(!tableType) {
-    return <CircularProgress />
+  if (!tableType) {
+    return <CircularProgress />;
   }
   if (tableType === "byItems") {
     return (
@@ -44,17 +45,25 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
         <MaterialTable
           title="Order History by Items"
           columns={[
-            { title: "Sequence #", field: "sequenceNum"},
+            { title: "Sequence #", field: "sequenceNum" },
             { title: "Ord. #", field: "orderNum" },
             { title: "Brand", field: "brand" },
             { title: "Item Type", field: "itemType" },
             { title: "Program", field: "program" },
             { title: "Quantity", field: "qty", filtering: false },
-            { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
+            {
+              title: "Distributor",
+              field: "distributor",
+              render: (rowData) => (
+                <div style={{ width: "200px" }}>
+                  <p>{rowData.distributor}</p>
+                </div>
+              ),
+            },
             { title: "Order Date", field: "orderDate", filtering: false },
             { title: "Ship Date", field: "shipDate", filtering: false },
-            { title: "Track. #", field: "trackingNum"},
-            { title: "Compliance", field: "itemStatus"}
+            { title: "Track. #", field: "trackingNum" },
+            { title: "Compliance", field: "itemStatus" },
           ]}
           data={byItemRows}
           options={{
@@ -72,15 +81,15 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
             maxBodyHeight: "650px",
             pageSizeOptions: [5, 10, 20, 50, 100],
             exportButton: true,
-            exportAllData: true
+            exportAllData: true,
           }}
-          onRowClick={((evt, selectedRow) => {
-            handlePreview(`${selectedRow.sequenceNum}`, "item")
-          })}
+          onRowClick={(evt, selectedRow) => {
+            handlePreview(`${selectedRow.sequenceNum}`, "item");
+          }}
           icons={tableIcons}
         />
       </>
-    )
+    );
   } else if (tableType === "byOrder") {
     return (
       <>
@@ -88,14 +97,22 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
           title="Order History by Order"
           columns={[
             { title: "Ord. #", field: "orderNum" },
-            { title: "Distributor", field: "distributor", render: rowData => <div style={{width: "200px"}}><p>{rowData.distributor}</p></div> },
+            {
+              title: "Distributor",
+              field: "distributor",
+              render: (rowData) => (
+                <div style={{ width: "200px" }}>
+                  <p>{rowData.distributor}</p>
+                </div>
+              ),
+            },
             { title: "Program", field: "program" },
             { title: "State", field: "state" },
             { title: "Order Date", field: "orderDate", filtering: false },
             { title: "Ship Date", field: "shipDate", filtering: false },
-            { title: "Track. #", field: "trackingNum"},
+            { title: "Track. #", field: "trackingNum" },
             { title: "Total", field: "orderTotal", filtering: false },
-            { title: "Order Status", field: "orderStatus"}
+            { title: "Order Status", field: "orderStatus" },
           ]}
           data={byOrderRows}
           options={{
@@ -113,16 +130,21 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
             maxBodyHeight: "650px",
             pageSizeOptions: [5, 10, 20, 50, 100],
             exportButton: true,
-            exportAllData: true
+            exportAllData: true,
           }}
-          onRowClick={((evt, selectedRow) => {
-            handlePreview(`${selectedRow.orderNum}`, "order")
-          })}
+          onRowClick={(evt, selectedRow) => {
+            handlePreview(`${selectedRow.orderNum}`, "order");
+          }}
           icons={tableIcons}
         />
       </>
-    )
+    );
   }
-}
+};
+
+OrdersPastTable.propTypes = {
+  handlePreview: PropTypes.func.isRequired,
+  tableType: PropTypes.string.isRequired,
+};
 
 export default OrdersPastTable;

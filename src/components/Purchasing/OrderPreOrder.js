@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -48,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
 }));
-const OrderPreOrder = (props) => {
-  const { currentPrograms } = props;
+const OrderPreOrder = ({ currentPrograms }) => {
   const classes = useStyles();
 
   const [allCart, setAllCart] = useState(false);
@@ -139,6 +139,10 @@ const OrderPreOrder = (props) => {
       </Grid>
     </Container>
   );
+};
+
+OrderPreOrder.propTypes = {
+  currentPrograms: PropTypes.array.isRequired,
 };
 
 export default OrderPreOrder;

@@ -1,9 +1,8 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  removeGridItem,
-} from "../../redux/slices/programCartSlice";
+import { removeGridItem } from "../../redux/slices/programCartSlice";
 
 import PreOrderCartTable from "./PreOrderCartTable";
 
@@ -71,19 +70,19 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
 
-  const cart = useSelector((state) => state.programCart)
+  const cart = useSelector((state) => state.programCart);
 
   const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
   };
 
   if (Object.keys(cart.items).length === 0) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
 
   const itemArray = [];
   for (let item in cart.items) {
-    itemArray.push(cart.items[item].itemDetails)
+    itemArray.push(cart.items[item].itemDetails);
   }
 
   return (
@@ -201,6 +200,11 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       <br />
     </>
   );
+};
+
+OrderPreOrderCart.propTypes = {
+  userType: PropTypes.string.isRequired,
+  handleModalOpen: PropTypes.func.isRequired,
 };
 
 export default React.memo(OrderPreOrderCart);

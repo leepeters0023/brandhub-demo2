@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import MaterialTable from "material-table";
 
@@ -142,6 +143,10 @@ const UserTable = ({ handleUserClick }) => {
       />
     </>
   );
+};
+
+UserTable.propTypes = {
+  handleUserClick: PropTypes.func.isRequired,
 };
 
 export default UserTable;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
 import { Link } from "@reach/router";
 
@@ -139,6 +140,11 @@ const TopLeftNav = ({ handleLogout, userType }) => {
       </div>
     </>
   );
+};
+
+TopLeftNav.propTypes = {
+  handleLogout: PropTypes.func.isRequired,
+  userType: PropTypes.string.isRequired,
 };
 
 export default TopLeftNav;

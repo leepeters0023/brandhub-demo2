@@ -1,9 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import UserField from "./UserField";
 import UserCompliance from "./UserCompliance";
 import UserSuper from "./UserSuper";
-
 
 const SideDrawer = ({ userType }) => {
   return (
@@ -14,6 +14,10 @@ const SideDrawer = ({ userType }) => {
       {userType === "compliance" && <UserCompliance />}
     </>
   );
+};
+
+SideDrawer.propTypes = {
+  userType: PropTypes.string.isRequired,
 };
 
 export default SideDrawer;

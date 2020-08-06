@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import TextField from "@material-ui/core/TextField";
 import AutoComplete from "@material-ui/lab/Autocomplete";
@@ -290,6 +291,11 @@ const OrderCart = ({ userType, handleModalOpen }) => {
       <br />
     </>
   );
+};
+
+OrderCart.propTypes = {
+  userType: PropTypes.string.isRequired,
+  handleModalOpen: PropTypes.func.isRequired,
 };
 
 export default OrderCart;

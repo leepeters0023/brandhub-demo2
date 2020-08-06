@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 import ItemOneSheet from "./ItemOneSheet";
 import ItemFeedback from "./ItemFeedback";
@@ -237,6 +238,13 @@ const ItemPreviewModal = (props) => {
       <br />
     </>
   );
+};
+
+ItemPreviewModal.propTypes = {
+  type: PropTypes.string.isRequired,
+  currentItem: PropTypes.object.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  userType: PropTypes.string.isRequired,
 };
 
 export default ItemPreviewModal;

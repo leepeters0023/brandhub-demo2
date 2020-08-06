@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import FilterChipList from "./FilterChipList";
 
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   filterList: {
     display: "flex",
     overflowX: "auto",
-    width: "Calc(100% - 133px)"
+    width: "Calc(100% - 133px)",
   },
 }));
 
@@ -418,6 +419,14 @@ const ItemFilter = (props) => {
       <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />
     </div>
   );
+};
+
+ItemFilter.propTypes = {
+  brands: PropTypes.array.isRequired,
+  itemTypes: PropTypes.array.isRequired,
+  units: PropTypes.array.isRequired,
+  channels: PropTypes.array.isRequired,
+  others: PropTypes.array.isRequired,
 };
 
 export default ItemFilter;
