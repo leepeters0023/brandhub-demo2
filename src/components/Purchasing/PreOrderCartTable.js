@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setGridItem } from "../../redux/slices/programCartSlice";
+import { setGridItem, setItemTotal } from "../../redux/slices/programCartSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -63,14 +63,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoTableCell = React.memo(
+const MemoInputCell = React.memo(
   ({ distributor, itemNumber }) => {
     const dispatch = useDispatch();
-    const value = useSelector((state) => state.programCart[`${itemNumber}`][distributor]);
+    const value = useSelector((state) => state.programCart.items[`${itemNumber}`].distributors[distributor]);
 
     return (
       <TableCell>
         <TextField
+          label={distributor.split(" ")[0]}
           color="secondary"
           variant="outlined"
           size="small"
@@ -86,12 +87,31 @@ const MemoTableCell = React.memo(
                 value: evt.target.value,
               })
             );
+            dispatch(setItemTotal({itemNumber: `${itemNumber}`}))
           }}
         />
       </TableCell>
     );
   }
 );
+
+const TotalItemCell = React.memo(({ itemNumber }) => {
+  const value = useSelector((state) => state.programCart.items[`${itemNumber}`].itemDetails.totalItems)
+  return (
+    <TableCell style={{textAlign: "center"}}>
+      {value}
+    </TableCell>
+  )
+})
+
+const TotalEstCostCell = React.memo(({ itemNumber }) => {
+  const value = useSelector((state) => state.programCart.items[`${itemNumber}`].itemDetails.estTotal)
+  return (
+    <TableCell style={{textAlign: "center"}}>
+      {`$${value.toFixed(2)}`}
+    </TableCell>
+  )
+})
 
 const PreOrderCartTable = (props) => {
   const {
@@ -115,13 +135,13 @@ const PreOrderCartTable = (props) => {
               <TableCell>
                 <SelectorMenus type="programs" />
               </TableCell>
-              {currentItems.map((item, index) => (
+              {currentItems.map((item) => (
                 <TableCell key={item.itemNumber}>
                   <div className={classes.headerCell}>
                     <Tooltip title="Remove from Cart">
                       <IconButton
                         onClick={() => {
-                          handleRemove(index);
+                          handleRemove(item.itemNumber);
                         }}
                       >
                         <DeleteForeverIcon />
@@ -206,7 +226,7 @@ const PreOrderCartTable = (props) => {
                             <TableCell align="center" key={item.itemNumber}>
                               <div className={classes.infoCell}>
                                 {item.qty !== "Single Unit"
-                                  ? item.qty.split(" ")[0]
+                                  ? parseInt(item.qty.split(" ")[0])
                                   : 1}
                               </div>
                             </TableCell>
@@ -221,9 +241,7 @@ const PreOrderCartTable = (props) => {
                             </div>
                           </TableCell>
                           {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              0
-                            </TableCell>
+                            <TotalItemCell itemNumber={item.itemNumber} key={item.itemNumber} />
                           ))}
                         </TableRow>
                         <TableRow className={classes.infoRow}>
@@ -236,7 +254,7 @@ const PreOrderCartTable = (props) => {
                           </TableCell>
                           {currentItems.map((item) => (
                             <TableCell align="center" key={item.itemNumber}>
-                              $TBD
+                              {`$${item.price.toFixed(2)}`}
                             </TableCell>
                           ))}
                         </TableRow>
@@ -249,23 +267,7 @@ const PreOrderCartTable = (props) => {
                             </div>
                           </TableCell>
                           {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              $TBD
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                        <TableRow className={classes.infoRow}>
-                          <TableCell className={classes.borderRight}>
-                            <div className={classes.colTitle}>
-                              <Typography className={classes.headerText}>
-                                Inv. Balance
-                              </Typography>
-                            </div>
-                          </TableCell>
-                          {currentItems.map((item) => (
-                            <TableCell align="center" key={item.itemNumber}>
-                              NA
-                            </TableCell>
+                            <TotalEstCostCell itemNumber={item.itemNumber} key={item.itemNumber} />
                           ))}
                         </TableRow>
                       </TableBody>
@@ -286,7 +288,7 @@ const PreOrderCartTable = (props) => {
                   </div>
                 </TableCell>
                 {currentItems.map((item) => (
-                  <MemoTableCell
+                  <MemoInputCell
                     key={item.itemNumber}
                     distributor={dist.name}
                     itemNumber={item.itemNumber}
@@ -301,4 +303,4 @@ const PreOrderCartTable = (props) => {
   );
 };
 
-export default PreOrderCartTable
+export default React.memo(PreOrderCartTable)

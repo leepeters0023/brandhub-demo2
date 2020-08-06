@@ -19,7 +19,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 //mock data
-import items from "../../assets/mockdata/Items";
 import distributors from "../../assets/mockdata/distributors";
 const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
 
@@ -66,8 +65,7 @@ const useStyles = makeStyles((theme) => ({
 const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  
-  const [currentItems, setItems] = useState(items);
+
   const [open, setOpen] = useState(true);
   const [terms, setTermsChecked] = useState(false);
   const [tableStyle, setTableStyle] = useState("tableOpen");
@@ -75,23 +73,23 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
 
   const cart = useSelector((state) => state.programCart)
 
-  const handleRemove = (i) => {
-    let itemNum = currentItems[i].itemNumber;
-    console.log(itemNum)
-    currentItems.splice(i, 1);
-    let newItems = [...currentItems];
+  const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
-    setItems(newItems);
   };
 
-  if (Object.keys(cart).length === 0) {
+  if (Object.keys(cart.items).length === 0) {
     return <CircularProgress />
+  }
+
+  const itemArray = [];
+  for (let item in cart.items) {
+    itemArray.push(cart.items[item].itemDetails)
   }
 
   return (
     <>
       <PreOrderCartTable
-        currentItems={currentItems}
+        currentItems={itemArray}
         distributors={distributors}
         open={open}
         setOpen={setOpen}
