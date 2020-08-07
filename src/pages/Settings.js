@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import GalloLogo from "../assets/gallologo.png";
-
 import General from "../components/Settings/General";
 import Users from "../components/Settings/Users";
 import Billing from "../components/Settings/Billing";
@@ -11,7 +9,6 @@ import Programs from "../components/Settings/Programs";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -61,15 +58,6 @@ const Settings = ({ userType }) => {
   return (
     <>
       <Container className={classes.mainWrapper}>
-        <div className={classes.titleImage}>
-          <img className={classes.logo} src={GalloLogo} alt="Gallo" />
-          <Typography className={classes.titleText} variant="h5">
-            Settings
-          </Typography>
-        </div>
-        <br />
-        <Divider className={classes.pageBreak} />
-        <br />
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">
           <Grid item md={1} xs={false} />
           <Grid item md={2} xs={2} className={classes.borderRight}>

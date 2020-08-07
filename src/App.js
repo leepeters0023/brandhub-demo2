@@ -7,7 +7,7 @@ import {
 } from "./redux/slices/programCartSlice";
 
 import LogIn from "./components/Login";
-import TopLeftNav from "./components/Navigation/TopLeftNav";
+import ScrollNav from "./components/Navigation/ScrollNav";
 import Dashboard from "./pages/Dashboard";
 import PlaceOrder from "./pages/PlaceOrder";
 import Budget from "./pages/Budget";
@@ -39,7 +39,6 @@ const theme = createMuiTheme(themeFile);
 
 const App = () => {
   const dispatch = useDispatch();
-  const [notificationOpen, handleNotification] = useState(false);
   const [currentUser, setCurrentUser] = useState(window.localStorage.getItem("user"));
 
   const handleLogIn = (user) => {
@@ -60,11 +59,9 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       {currentUser && (
-        <TopLeftNav
+        <ScrollNav
           userType={currentUser}
-          notificationOpen={notificationOpen}
           handleLogout={handleLogout}
-          handleNotification={handleNotification}
         />
       )}
       <div id="main-container">

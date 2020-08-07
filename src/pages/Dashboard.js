@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   centerGrid: {
     width: "100%",
-    height: "Calc(100vh - 150px)",
+    height: "80vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",

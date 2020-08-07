@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
+const UserNavMenu = ({ handleLogout, handleUserModal }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -49,12 +49,12 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
       <Menu
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -63,7 +63,7 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            handleModalOpen("Address Book");
+            handleUserModal(true);
           }}
         >
           <ListItemIcon>
@@ -105,7 +105,7 @@ const UserNavMenu = ({ handleLogout, handleModalOpen }) => {
 
 UserNavMenu.propTypes = {
   handleLogout: PropTypes.func.isRequired,
-  handleModalOpen: PropTypes.func.isRequired,
+  handleUserModal: PropTypes.func.isRequired,
 };
 
 export default UserNavMenu;

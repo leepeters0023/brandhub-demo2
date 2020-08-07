@@ -10,7 +10,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Container from "@material-ui/core/Container";
-import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -69,7 +68,6 @@ const Reports = () => {
           </Typography>
         </div>
         <br />
-        <Divider classes={{root: classes.pageBreak}}/>
         <br />
         <Typography className={classes.headerText}>Order History:</Typography>
         <br />

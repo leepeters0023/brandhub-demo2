@@ -16,7 +16,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -182,7 +181,6 @@ const Program = ({ userType, programId }) => {
           <Tab className={classes.headerText} label="Items" value={2} />
         </Tabs>
         <br />
-        <Divider classes={{ root: classes.pageBreak }} />
         <br />
 
         {value === 1 && <ProgramDetails program={currentProgram} />}

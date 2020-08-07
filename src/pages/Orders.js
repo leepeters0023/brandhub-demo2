@@ -9,7 +9,6 @@ import OrderHistoryOrderModal from "../components/OrderHistory/OrderHistoryOrder
 
 import GalloLogo from "../assets/gallologo.png";
 
-import Divider from "@material-ui/core/Divider";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Dialog from "@material-ui/core/Dialog";
@@ -195,7 +194,6 @@ const Orders = ({ reportType }) => {
           <Tab className={classes.headerText} label="View by Item" value={2} />
         </Tabs>
         <br />
-        <Divider classes={{ root: classes.pageBreak }} />
         <br />
         {reportType === "current" && (
           <OrdersCurrentTable

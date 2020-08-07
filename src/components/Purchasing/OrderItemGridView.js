@@ -131,8 +131,8 @@ const OrderItemGridView = (props) => {
 OrderItemGridView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
-  allPdf: PropTypes.bool.isRequired,
-  allCart: PropTypes.bool.isRequired,
+  allPdf: PropTypes.bool,
+  allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
 };
 

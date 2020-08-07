@@ -4,7 +4,6 @@ import GalloLogo from "../assets/gallologo.png";
 
 import ContactsByStateTable from "../components/Compliance/ContactsByStateTable";
 
-import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -30,7 +29,6 @@ const ContactsByState = () => {
           </Typography>
         </div>
         <br />
-        <Divider classes={{root: classes.pageBreak}}/>
         <br />
         <ContactsByStateTable data={contacts} />
       </Container>

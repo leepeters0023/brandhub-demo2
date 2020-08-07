@@ -68,7 +68,6 @@ export default {
     mainWrapper: {
       backgroundColor: "#FFFFFF",
       maxWidth: "2000px",
-      minHeight: "Calc(100vh - 64px)",
       margin: "0px",
       paddingTop: "24px",
     },

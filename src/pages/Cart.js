@@ -9,7 +9,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import Divider from "@material-ui/core/Divider";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
@@ -116,7 +115,6 @@ const Cart = ({ userType }) => {
           <Tab className={classes.headerText} label="On-Demand" value={3} />
         </Tabs>
         <br />
-        <Divider className={classes.pageBreak} />
         <br />
         {value === 1 && (
           <OrderPreOrderCart

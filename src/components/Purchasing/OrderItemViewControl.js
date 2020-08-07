@@ -39,8 +39,8 @@ const OrderItemViewControl = (props) => {
 OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
-  allPdf: PropTypes.bool.isRequired,
-  allCart: PropTypes.bool.isRequired,
+  allPdf: PropTypes.bool,
+  allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
 };
 
