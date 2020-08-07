@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
-const SelectorMenus = ({ type }) => {
+const SelectorMenus = ({ type, programs, handler }) => {
   //data would be pulled from store
   const regions = ["Region 1", "Region 2", "Region 3"];
   const fieldUsers = [
@@ -15,12 +16,11 @@ const SelectorMenus = ({ type }) => {
     "Total Cart",
   ];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
-  const programs = ["Program 1", "Program 2", "Program 3"];
 
   const [region, updateRegion] = useState(0);
   const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
-  const [program, updateProgram] = useState(0);
+  const [program, updateProgram] = useState("1");
 
   const handleChangeSelect = (evt) => {
     if (evt.target.id === "regions") {
@@ -29,8 +29,10 @@ const SelectorMenus = ({ type }) => {
       updateCart(evt.target.value);
     } else if (evt.target.id === "budgets") {
       updateBudget(evt.target.value);
-    } else if (evt.target.id === "programs") {
+    } else if (evt.target.name === "programs") {
+      console.log(evt.target.value)
       updateProgram(evt.target.value);
+      handler(evt.target.value)
     }
   };
 
@@ -106,17 +108,17 @@ const SelectorMenus = ({ type }) => {
         <FormControl variant="outlined" style={{ margin: "0 5px" }}>
           <InputLabel id="program-select">Program</InputLabel>
           <Select
-            native
+            name="programs"
             labelId="program-select"
             id="programs"
             value={program}
             onChange={handleChangeSelect}
-            label="program"
+            
           >
             {programs.map((program, index) => (
-              <option value={index} key={index}>
-                {program}
-              </option>
+              <MenuItem value={program.id} key={index}>
+                {`${program.name}-${program.focusMonth}`}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

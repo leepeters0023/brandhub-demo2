@@ -72,23 +72,23 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
 
   const cart = useSelector((state) => state.programCart);
 
-  const handleRemove = (itemNum) => {
-    dispatch(removeGridItem({ itemNum }));
+  const handleRemove = (program, itemNum) => {
+    dispatch(removeGridItem({ program, itemNum }));
   };
 
-  if (Object.keys(cart.items).length === 0) {
-    return <CircularProgress />;
+  if (Object.keys(cart.programs).length === 0) {
+    return <CircularProgress />
   }
 
-  const itemArray = [];
-  for (let item in cart.items) {
-    itemArray.push(cart.items[item].itemDetails);
+  const programArray = [];
+  for (let program in cart.programs) {
+    programArray.push(cart.programs[program].details);
   }
 
   return (
     <>
       <PreOrderCartTable
-        currentItems={itemArray}
+        currentPrograms={programArray}
         distributors={distributors}
         open={open}
         setOpen={setOpen}

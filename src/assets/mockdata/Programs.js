@@ -1,7 +1,7 @@
 export default [
   {
     id: "1",
-    name: "New Amsterdam Sample Program",
+    name: "New Amsterdam",
     brand: "New Amsterdam",
     unit: "Spirits",
     desc:
@@ -16,7 +16,7 @@ export default [
   },
   {
     id: "2",
-    name: "Fleur De Mer Sample Program",
+    name: "Fleur De Mer",
     brand: "Fleur de Mer",
     unit: "Renaissance",
     desc:
@@ -31,7 +31,7 @@ export default [
   },
   {
     id: "3",
-    name: "La Marca Sample Program",
+    name: "La Marca",
     brand: "La Marca",
     unit: "Compass",
     desc:
@@ -46,7 +46,7 @@ export default [
   },
   {
     id: "4",
-    name: "White Haven Sample Program",
+    name: "White Haven",
     brand: "White Haven",
     unit: "Popular",
     desc:
@@ -61,7 +61,7 @@ export default [
   },
   {
     id: "5",
-    name: "Orin Swift Sample Program",
+    name: "Orin Swift",
     brand: "Orin Swift",
     unit: "Renaissance",
     desc:
@@ -76,7 +76,7 @@ export default [
   },
   {
     id: "6",
-    name: "High Noon Sample Program",
+    name: "High Noon",
     brand: "High Noon",
     unit: "Spirits",
     desc:
@@ -91,7 +91,7 @@ export default [
   },
   {
     id: "7",
-    name: "Dark Horse Sample Program",
+    name: "Dark Horse",
     brand: "Dark Horse",
     unit: "Popular",
     desc:
@@ -106,7 +106,7 @@ export default [
   },
   {
     id: "8",
-    name: "BareFoot Sample Program",
+    name: "BareFoot",
     brand: "Barefoot",
     unit: "Popular",
     desc:
@@ -121,7 +121,7 @@ export default [
   },
   {
     id: "9",
-    name: "Apothic Sample Program",
+    name: "Apothic",
     brand: "Apothic",
     unit: "Compass",
     desc:
@@ -136,7 +136,7 @@ export default [
   },
   {
     id: "10",
-    name: "New Amsterdam Sample Program",
+    name: "New Amsterdam",
     brand: "New Amsterdam",
     unit: "Spirits",
     desc:
@@ -151,7 +151,7 @@ export default [
   },
   {
     id: "11",
-    name: "Fleur De Mer Sample Program",
+    name: "Fleur De Mer",
     brand: "Fleur de Mer",
     unit: "Renaissance",
     desc:
@@ -166,7 +166,7 @@ export default [
   },
   {
     id: "12",
-    name: "La Marca Sample Program",
+    name: "La Marca",
     brand: "La Marca",
     unit: "Compass",
     desc:
@@ -181,7 +181,7 @@ export default [
   },
   {
     id: "13",
-    name: "White Haven Sample Program",
+    name: "White Haven",
     brand: "White Haven",
     unit: "Popular",
     desc:
@@ -196,7 +196,7 @@ export default [
   },
   {
     id: "14",
-    name: "Orin Swift Sample Program",
+    name: "Orin Swift",
     brand: "Orin Swift",
     unit: "Renaissance",
     desc:
@@ -211,7 +211,7 @@ export default [
   },
   {
     id: "15",
-    name: "High Noon Sample Program",
+    name: "High Noon",
     brand: "High Noon",
     unit: "Spirits",
     desc:
@@ -226,7 +226,7 @@ export default [
   },
   {
     id: "16",
-    name: "Dark Horse Sample Program",
+    name: "Dark Horse",
     brand: "Dark Horse",
     unit: "Popular",
     desc:
@@ -241,7 +241,7 @@ export default [
   },
   {
     id: "17",
-    name: "BareFoot Sample Program",
+    name: "BareFoot",
     brand: "Barefoot",
     unit: "Popular",
     desc:
@@ -256,7 +256,7 @@ export default [
   },
   {
     id: "18",
-    name: "Apothic Sample Program",
+    name: "Apothic",
     brand: "Apothic",
     unit: "Compass",
     desc:
@@ -271,7 +271,7 @@ export default [
   },
   {
     id: "19",
-    name: "New Amsterdam Sample Program",
+    name: "New Amsterdam",
     brand: "New Amsterdam",
     unit: "Spirits",
     desc:
@@ -286,7 +286,7 @@ export default [
   },
   {
     id: "20",
-    name: "Fleur De Mer Sample Program",
+    name: "Fleur De Mer",
     brand: "Fleur de Mer",
     unit: "Renaissance",
     desc:
@@ -301,7 +301,7 @@ export default [
   },
   {
     id: "21",
-    name: "La Marca Sample Program",
+    name: "La Marca",
     brand: "La Marca",
     unit: "Compass",
     desc:
@@ -316,7 +316,7 @@ export default [
   },
   {
     id: "22",
-    name: "White Haven Sample Program",
+    name: "White Haven",
     brand: "White Haven",
     unit: "Popular",
     desc:
@@ -331,7 +331,7 @@ export default [
   },
   {
     id: "23",
-    name: "Orin Swift Sample Program",
+    name: "Orin Swift",
     brand: "Orin Swift",
     unit: "Renaissance",
     desc:
@@ -346,7 +346,7 @@ export default [
   },
   {
     id: "24",
-    name: "High Noon Sample Program",
+    name: "High Noon",
     brand: "High Noon",
     unit: "Spirits",
     desc:
@@ -361,7 +361,7 @@ export default [
   },
   {
     id: "25",
-    name: "Dark Horse Sample Program",
+    name: "Dark Horse",
     brand: "Dark Horse",
     unit: "Popular",
     desc:
@@ -376,7 +376,7 @@ export default [
   },
   {
     id: "26",
-    name: "BareFoot Sample Program",
+    name: "BareFoot",
     brand: "Barefoot",
     unit: "Popular",
     desc:
@@ -391,7 +391,7 @@ export default [
   },
   {
     id: "27",
-    name: "Apothic Sample Program",
+    name: "Apothic",
     brand: "Apothic",
     unit: "Compass",
     desc:
@@ -406,7 +406,7 @@ export default [
   },
   {
     id: "28",
-    name: "New Amsterdam Sample Program",
+    name: "New Amsterdam",
     brand: "New Amsterdam",
     unit: "Spirits",
     desc:
@@ -421,7 +421,7 @@ export default [
   },
   {
     id: "29",
-    name: "Fleur De Mer Sample Program",
+    name: "Fleur De Mer",
     brand: "Fleur de Mer",
     unit: "Renaissance",
     desc:
@@ -436,7 +436,7 @@ export default [
   },
   {
     id: "30",
-    name: "La Marca Sample Program",
+    name: "La Marca",
     brand: "La Marca",
     unit: "Compass",
     desc:
@@ -451,7 +451,7 @@ export default [
   },
   {
     id: "31",
-    name: "White Haven Sample Program",
+    name: "White Haven",
     brand: "White Haven",
     unit: "Popular",
     desc:
@@ -466,7 +466,7 @@ export default [
   },
   {
     id: "32",
-    name: "Orin Swift Sample Program",
+    name: "Orin Swift",
     brand: "Orin Swift",
     unit: "Renaissance",
     desc:
@@ -481,7 +481,7 @@ export default [
   },
   {
     id: "33",
-    name: "High Noon Sample Program",
+    name: "High Noon",
     brand: "High Noon",
     unit: "Spirits",
     desc:
@@ -496,7 +496,7 @@ export default [
   },
   {
     id: "34",
-    name: "Dark Horse Sample Program",
+    name: "Dark Horse",
     brand: "Dark Horse",
     unit: "Popular",
     desc:
@@ -511,7 +511,7 @@ export default [
   },
   {
     id: "35",
-    name: "BareFoot Sample Program",
+    name: "BareFoot",
     brand: "Barefoot",
     unit: "Popular",
     desc:

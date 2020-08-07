@@ -3,7 +3,7 @@ import { Router, Redirect } from "@reach/router";
 
 import { useDispatch } from "react-redux";
 import {
-  setGridItems,
+  setInitialCart,
 } from "./redux/slices/programCartSlice";
 
 import LogIn from "./components/Login";
@@ -32,7 +32,7 @@ import themeFile from "./utility/theme.js";
 import "./App.css";
 
 //mock data
-import items from "./assets/mockdata/Items";
+import programs from "./assets/mockdata/Programs";
 import distributors from "./assets/mockdata/distributors";
 
 const theme = createMuiTheme(themeFile);
@@ -52,7 +52,7 @@ const App = () => {
 
   useEffect(()=>{
     if (currentUser) {
-      dispatch(setGridItems({ items, distributors }));
+      dispatch(setInitialCart({ programs, distributors }));
     }
   },[dispatch, currentUser])
 
