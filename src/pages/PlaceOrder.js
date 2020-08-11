@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import { useSelector } from "react-redux";
+
 import GalloLogo from "../assets/gallologo.png";
 
 import SelectorMenus from "../components/Utility/SelectorMenus";
 
 //mockdata
 import items from "../assets/mockdata/Items";
-import programs from "../assets/mockdata/Programs";
 
 import ItemFilter from "../components/Utility/ItemFilter";
 import ProgramFilter from "../components/Utility/ProgramFilter";
@@ -26,6 +27,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -65,6 +67,7 @@ const PlaceOrder = ({ userType }) => {
   const [sortOption, setSortOption] = useState("brand");
   const [programFilters, setProgramFilters] = useState([]);
   //const [itemFilters, setItemFilters] = useState([]);
+  let programs = useSelector((state) => state.programs.programs)
   const currentPrograms = useProgramSort(programs, sortOption, programFilters);
 
   const handleChangeTab = (_evt, newValue) => {
@@ -99,6 +102,11 @@ const PlaceOrder = ({ userType }) => {
       updateValue(3);
     }
   }, []);
+
+  if (currentPrograms.length === 0) {
+    return <CircularProgress />
+  }
+  
 
   return (
     <>
@@ -193,7 +201,10 @@ const PlaceOrder = ({ userType }) => {
               />
               <ProgramSort setSortOption={setSortOption} />
             </div>
+            {currentPrograms.length === 0 ? (
+            <CircularProgress /> ) : (
             <OrderPreOrder currentPrograms={currentPrograms} />
+            )}
           </>
         )}
         {value !== 1 && (

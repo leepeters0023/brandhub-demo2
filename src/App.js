@@ -3,8 +3,9 @@ import { Router, Redirect } from "@reach/router";
 
 import { useDispatch } from "react-redux";
 import {
-  setInitialCart,
-} from "./redux/slices/programCartSlice";
+  setInitialTableData,
+} from "./redux/slices/programTableSlice";
+import { getProgramsSuccess } from "./redux/slices/programsSlice";
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -52,7 +53,8 @@ const App = () => {
 
   useEffect(()=>{
     if (currentUser) {
-      dispatch(setInitialCart({ programs, distributors }));
+      dispatch(setInitialTableData({ programs, distributors }));
+      dispatch(getProgramsSuccess({ programs }));
     }
   },[dispatch, currentUser])
 

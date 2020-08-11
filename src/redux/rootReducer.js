@@ -1,9 +1,13 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
-import programCartReducer from "./slices/programCartSlice";
+import programTableReducer from "./slices/programTableSlice";
+import programsReducer from "./slices/programsSlice";
+import ordersReducer from "./slices/ordersSlice";
 
 const rootReducer = combineReducers({
-  programCart: programCartReducer
+  orders: ordersReducer,
+  programTable: programTableReducer,
+  programs: programsReducer,
 })
 
 export default rootReducer

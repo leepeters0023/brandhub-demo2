@@ -4,7 +4,7 @@ export default [
         city: "Evansville",
         state: "WY",
         type: "P",
-        id: 31203,
+        id: "31203",
         POSOnly: false,
     },
     {
@@ -12,7 +12,7 @@ export default [
         city: "Elizabeth City",
         state: "NC",
         type: "S",
-        id: 1662,
+        id: "1662",
         POSOnly: false,
     },
     {
@@ -20,7 +20,7 @@ export default [
         city: "Boise",
         state: "ID",
         type: "P",
-        id: 501009,
+        id: "501009",
         POSOnly: false,
     },
     {
@@ -28,7 +28,7 @@ export default [
         city: "Alpena",
         state: "MI",
         type: "S",
-        id: 1912,
+        id: "1912",
         POSOnly: false,
     },
     {
@@ -36,7 +36,7 @@ export default [
         city: "Philadelphia",
         state: "PA",
         type: "S",
-        id: 1112,
+        id: "1112",
         POSOnly: false,
     },
     {
@@ -44,7 +44,7 @@ export default [
         city: "Escanaba",
         state: "MI",
         type: "S",
-        id: 57746,
+        id: "57746",
         POSOnly: false,
     },
     {
@@ -52,7 +52,7 @@ export default [
         city: "Abingdon",
         state: "VA",
         type: "S",
-        id: 436404,
+        id: "436404",
         POSOnly: false,
     },
     {
@@ -60,7 +60,7 @@ export default [
         city: "Newton",
         state: "NC",
         type: "S",
-        id: 1085,
+        id: "1085",
         POSOnly: false,
     },
     {
@@ -68,7 +68,7 @@ export default [
         city: "Miles City",
         state: "MT",
         type: "S",
-        id: 1971,
+        id: "1971",
         POSOnly: false,
     },
     {
@@ -76,7 +76,7 @@ export default [
         city: "Rockford",
         state: "IL",
         type: "P",
-        id: 434604,
+        id: "434604",
         POSOnly: false,
     },
     {
@@ -84,7 +84,7 @@ export default [
         city: "Bozeman",
         state: "MT",
         type: "S",
-        id: 1876,
+        id: "1876",
         POSOnly: false,
     },
     {
@@ -92,7 +92,7 @@ export default [
         city: "Boise",
         state: "ID",
         type: "S",
-        id: 33995,
+        id: "33995",
         POSOnly: false,
     },
     {
@@ -100,7 +100,7 @@ export default [
         city: "Amarillo",
         state: "TX",
         type: "P",
-        id: 489866,
+        id: "489866",
         POSOnly: true,
     },
     {
@@ -108,7 +108,7 @@ export default [
         city: "Jackson",
         state: "MS",
         type: "S",
-        id: 146084,
+        id: "146084",
         POSOnly: false,
     },
     {
@@ -116,7 +116,7 @@ export default [
         city: "Starkville",
         state: "MS",
         type: "S",
-        id: 436305,
+        id: "436305",
         POSOnly: false,
     },
     {
@@ -124,7 +124,7 @@ export default [
         city: "Warrenton",
         state: "OR",
         type: "S",
-        id: 123819,
+        id: "123819",
         POSOnly: false,
     },
     {
@@ -132,7 +132,7 @@ export default [
         city: "Cetreville",
         state: "VA",
         type: undefined,
-        id: 10041410,
+        id: "10041410",
         POSOnly: false,
     },
     {
@@ -140,7 +140,7 @@ export default [
         city: "Cheyenne",
         state: "WY",
         type: "P",
-        id: 31202,
+        id: "31202",
         POSOnly: false,
     },
     {
@@ -148,7 +148,7 @@ export default [
         city: "Stratford",
         state: "CT",
         type: "S",
-        id: 426855,
+        id: "426855",
         POSOnly: false,
     },
     {
@@ -156,7 +156,7 @@ export default [
         city: "Tampa",
         state: "FL",
         type: "S",
-        id: 491960,
+        id: "491960",
         POSOnly: false,
     },
     {
@@ -164,7 +164,7 @@ export default [
         city: "Aberdeen",
         state: "WA",
         type: "S",
-        id: 1150,
+        id: "1150",
         POSOnly: false,
     },
     {
@@ -172,7 +172,7 @@ export default [
         city: "Moraine",
         state: "OH",
         type: "P",
-        id: 503129,
+        id: "503129",
         POSOnly: true,
     },
 

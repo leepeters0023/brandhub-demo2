@@ -105,7 +105,7 @@ const SelectorMenus = ({ type, programs, handler }) => {
   } else if (type === "programs") {
     return (
       <>
-        <FormControl variant="outlined" style={{ margin: "0 5px" }}>
+        <FormControl  style={{ margin: "0 5px" }}>
           <InputLabel id="program-select">Program</InputLabel>
           <Select
             name="programs"

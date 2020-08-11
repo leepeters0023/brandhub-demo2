@@ -36,37 +36,43 @@ export const useProgramSort = (programList, sortOption, filters) => {
     December: 11,
   };
   useEffect(() => {
-    let tempList = filter(programList, filters)
-    tempList.sort((a, b) => {
-      return a.brand.toLowerCase()[0] < b.brand.toLowerCase()[0]
-      ? -1
-      : a.brand.toLowerCase()[0] > b.brand.toLowerCase()[0]
-      ? 1
-      : 0;
-    });
-    
-    if (sortOption === "brand") {
-      setSortedList(tempList)
-    } else if (sortOption === "unit") {
-      let unitList = [...tempList]
-      unitList.sort((a,b) => {
-        return a.unit.toLowerCase()[0] < b.unit.toLowerCase()[0]
+    if (programList.length === 0) {
+      setSortedList([])
+    } else {
+
+      let tempList = filter(programList, filters)
+      tempList = tempList.slice();
+      tempList.sort((a, b) => {
+        return a.brand.toLowerCase()[0] < b.brand.toLowerCase()[0]
         ? -1
-        : a.unit.toLowerCase()[0] > b.unit.toLowerCase()[0]
+        : a.brand.toLowerCase()[0] > b.brand.toLowerCase()[0]
         ? 1
         : 0;
       });
-      setSortedList(unitList)
-    } else if (sortOption === "month") {
-      let monthList = [...tempList]
-      monthList.sort((a,b) => {
-        return monthValue[a.focusMonth] < monthValue[b.focusMonth]
-        ? -1
-        : monthValue[a.focusMonth] > monthValue[b.focusMonth]
-        ? 1
-        : 0;
-      })
-      setSortedList(monthList)
+      
+      if (sortOption === "brand") {
+        setSortedList(tempList)
+      } else if (sortOption === "unit") {
+        let unitList = [...tempList]
+        unitList.sort((a,b) => {
+          return a.unit.toLowerCase()[0] < b.unit.toLowerCase()[0]
+          ? -1
+          : a.unit.toLowerCase()[0] > b.unit.toLowerCase()[0]
+          ? 1
+          : 0;
+        });
+        setSortedList(unitList)
+      } else if (sortOption === "month") {
+        let monthList = [...tempList]
+        monthList.sort((a,b) => {
+          return monthValue[a.focusMonth] < monthValue[b.focusMonth]
+          ? -1
+          : monthValue[a.focusMonth] > monthValue[b.focusMonth]
+          ? 1
+          : 0;
+        })
+        setSortedList(monthList)
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortOption, programList, filters])

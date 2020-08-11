@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
-import { removeGridItem } from "../../redux/slices/programCartSlice";
+import { removeGridItem } from "../../redux/slices/programTableSlice";
 
 import PreOrderCartTable from "./PreOrderCartTable";
 
@@ -70,19 +70,19 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [tableStyle, setTableStyle] = useState("tableOpen");
   const [budget, setBudget] = useState(null);
 
-  const cart = useSelector((state) => state.programCart);
+  const tableData = useSelector((state) => state.programTable);
 
   const handleRemove = (program, itemNum) => {
     dispatch(removeGridItem({ program, itemNum }));
   };
 
-  if (Object.keys(cart.programs).length === 0) {
+  if (Object.keys(tableData.programs).length === 0) {
     return <CircularProgress />
   }
 
   const programArray = [];
-  for (let program in cart.programs) {
-    programArray.push(cart.programs[program].details);
+  for (let program in tableData.programs) {
+    programArray.push(tableData.programs[program].details);
   }
 
   return (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setGridItem, setItemTotal } from "../../redux/slices/programCartSlice";
+import { setGridItem, setItemTotal } from "../../redux/slices/programTableSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   borderRight: {
     borderRight: "1px solid lightgrey",
     width: "196px",
+    maxWidth: "196px"
   },
   colTitle: {
     width: "150px",
@@ -69,8 +70,11 @@ const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
   const dispatch = useDispatch();
   const value = useSelector(
     (state) =>
-      state.programCart[`${program}`].items[`${itemNumber}`].distributors[distributor]
+      state.programTable.programs[`${program}`].items[`${itemNumber}`].distributors[
+        distributor
+      ]
   );
+  console.log(value)
 
   return (
     <TableCell className={classes.borderRight} style={{ zIndex: "-100" }}>
@@ -89,7 +93,9 @@ const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
               value: evt.target.value,
             })
           );
-          dispatch(setItemTotal({ program: program, itemNumber: `${itemNumber}` }));
+          dispatch(
+            setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+          );
         }}
       />
     </TableCell>
@@ -99,7 +105,9 @@ const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
 const TotalItemCell = React.memo(({ program, itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
-    (state) => state.programCart[`${program}`].items[`${itemNumber}`].itemDetails.totalItems
+    (state) =>
+      state.programTable.programs[`${program}`].items[`${itemNumber}`].itemDetails
+        .totalItems
   );
   return (
     <TableCell style={{ textAlign: "center" }}>
@@ -111,7 +119,9 @@ const TotalItemCell = React.memo(({ program, itemNumber }) => {
 const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
-    (state) => state.programCart[`${program}`].items[`${itemNumber}`].itemDetails.estTotal
+    (state) =>
+      state.programTable.programs[`${program}`].items[`${itemNumber}`].itemDetails
+        .estTotal
   );
   return (
     <TableCell style={{ textAlign: "center" }}>
@@ -134,9 +144,14 @@ const PreOrderCartTable = (props) => {
 
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
 
-  const currentItems = useSelector(
-    (state) => state.programCart.programs[`${currentProgram}`].items
+  const currentItemsObj = useSelector(
+    (state) => state.programTable.programs[`${currentProgram}`].items
   );
+
+  const currentItems =
+    Object.keys(currentItemsObj).length > 0
+      ? Object.keys(currentItemsObj).map((key) => ({ ...currentItemsObj[key].itemDetails }))
+      : [];
 
   const handleProgram = (id) => {
     setCurrentProgram(id);
@@ -147,11 +162,15 @@ const PreOrderCartTable = (props) => {
     <>
       <TableContainer className={classes.cartContainer}>
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
-          {Object.keys(currentItems).length === 0 ? (
+          {Object.keys(currentItemsObj).length === 0 ? (
             <TableHead>
               <TableRow>
                 <TableCell style={{ zIndex: "100", width: "300px" }}>
-                  <SelectorMenus type="programs" programs={currentPrograms} handler={handleProgram} />
+                  <SelectorMenus
+                    type="programs"
+                    programs={currentPrograms}
+                    handler={handleProgram}
+                  />
                 </TableCell>
                 <TableCell>
                   You currently have no items in this cart...
@@ -163,7 +182,11 @@ const PreOrderCartTable = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell style={{ zIndex: "100" }}>
-                    <SelectorMenus type="programs" programs={currentPrograms} handler={handleProgram} />
+                    <SelectorMenus
+                      type="programs"
+                      programs={currentPrograms}
+                      handler={handleProgram}
+                    />
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell key={item.itemNumber}>
@@ -171,7 +194,7 @@ const PreOrderCartTable = (props) => {
                         <Tooltip title="Remove from Cart">
                           <IconButton
                             onClick={() => {
-                              handleRemove(item.itemNumber);
+                              handleRemove(currentProgram, item.itemNumber);
                             }}
                           >
                             <DeleteForeverIcon />
@@ -252,7 +275,7 @@ const PreOrderCartTable = (props) => {
                           >
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                className={classes.borderRight}
+                                
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -281,7 +304,7 @@ const PreOrderCartTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                className={classes.borderRight}
+                               
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -308,7 +331,7 @@ const PreOrderCartTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                className={classes.borderRight}
+                                
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -333,7 +356,7 @@ const PreOrderCartTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                className={classes.borderRight}
+                                
                                 style={{
                                   position: "sticky",
                                   left: 0,

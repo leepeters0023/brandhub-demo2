@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+import { useDispatch } from "react-redux";
+import { addItems } from "../../redux/slices/programTableSlice";
+
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
@@ -49,11 +52,21 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
   },
 }));
+
 const OrderPreOrder = ({ currentPrograms }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [allCart, setAllCart] = useState(false);
   const [allPdf, setAllPdf] = useState(false);
+
+  const handleAddAllProgram = (prog) => {
+    console.log(console.log(currentPrograms))
+    console.log(prog)
+    const currentProgram = currentPrograms.find((program) => program.id === prog)
+    console.log(currentProgram)
+    dispatch(addItems({program: currentProgram.id, items: currentProgram.items}));
+  };
 
   return (
     <Container style={{ textAlign: "center", maxWidth: "2000px" }}>
@@ -131,6 +144,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
                       color="secondary"
                       id={`${prog.id}`}
                       disabled={allCart}
+                      onClick={() => handleAddAllProgram(prog.id)}
                     >
                       <AddShoppingCartIcon className={classes.navIcon} />
                     </Button>
