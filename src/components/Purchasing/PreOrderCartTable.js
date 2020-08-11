@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setGridItem, setItemTotal } from "../../redux/slices/programTableSlice";
+import {
+  setGridItem,
+  setItemTotal,
+} from "../../redux/slices/programTableSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -18,6 +21,7 @@ import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
+//import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -37,12 +41,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   borderRight: {
-    borderRight: "1px solid lightgrey",
-    width: "196px",
-    maxWidth: "196px"
-  },
-  colTitle: {
-    width: "150px",
+    borderRight: "1px solid #cbcbcb",
   },
   infoRow: {
     backgroundColor: "#cbcbcb",
@@ -63,6 +62,11 @@ const useStyles = makeStyles((theme) => ({
   tableClosed: {
     zIndex: "-5",
   },
+  root: {
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
+  },
 }));
 
 const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
@@ -70,14 +74,16 @@ const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
   const dispatch = useDispatch();
   const value = useSelector(
     (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`].distributors[
-        distributor
-      ]
+      state.programTable.programs[`${program}`].items[`${itemNumber}`]
+        .distributors[distributor]
   );
-  console.log(value)
 
   return (
-    <TableCell className={classes.borderRight} style={{ zIndex: "-100" }}>
+    <TableCell
+      classes={{ root: classes.root }}
+      className={classes.borderRight}
+      style={{ zIndex: "-100" }}
+    >
       <InputBase
         style={{ textAlign: "center", zIndex: "0" }}
         fullWidth
@@ -106,11 +112,11 @@ const TotalItemCell = React.memo(({ program, itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
     (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`].itemDetails
-        .totalItems
+      state.programTable.programs[`${program}`].items[`${itemNumber}`]
+        .itemDetails.totalItems
   );
   return (
-    <TableCell style={{ textAlign: "center" }}>
+    <TableCell classes={{ root: classes.root }} style={{ textAlign: "center" }}>
       <div className={classes.infoCell}>{value}</div>
     </TableCell>
   );
@@ -120,11 +126,11 @@ const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
     (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`].itemDetails
-        .estTotal
+      state.programTable.programs[`${program}`].items[`${itemNumber}`]
+        .itemDetails.estTotal
   );
   return (
-    <TableCell style={{ textAlign: "center" }}>
+    <TableCell classes={{ root: classes.root }} style={{ textAlign: "center" }}>
       <div className={classes.infoCell}>{`$${value.toFixed(2)}`}</div>
     </TableCell>
   );
@@ -140,8 +146,9 @@ const PreOrderCartTable = (props) => {
     setTableStyle,
     handleModalOpen,
     handleRemove,
+    setProgram,
   } = props;
-
+  
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
 
   const currentItemsObj = useSelector(
@@ -150,12 +157,15 @@ const PreOrderCartTable = (props) => {
 
   const currentItems =
     Object.keys(currentItemsObj).length > 0
-      ? Object.keys(currentItemsObj).map((key) => ({ ...currentItemsObj[key].itemDetails }))
+      ? Object.keys(currentItemsObj).map((key) => ({
+          ...currentItemsObj[key].itemDetails,
+        }))
       : [];
 
-  const handleProgram = (id) => {
+  const handleProgram = useCallback((id) => {
     setCurrentProgram(id);
-  };
+    setProgram(id);
+  }, [setProgram]);
 
   const classes = useStyles();
   return (
@@ -165,14 +175,18 @@ const PreOrderCartTable = (props) => {
           {Object.keys(currentItemsObj).length === 0 ? (
             <TableHead>
               <TableRow>
-                <TableCell style={{ zIndex: "100", width: "300px" }}>
+                <TableCell
+                  classes={{ root: classes.root }}
+                  style={{ zIndex: "100", width: "300px" }}
+                >
                   <SelectorMenus
                     type="programs"
                     programs={currentPrograms}
                     handler={handleProgram}
+                    currentProgram={currentProgram}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell classes={{ root: classes.root }}>
                   You currently have no items in this cart...
                 </TableCell>
               </TableRow>
@@ -181,15 +195,22 @@ const PreOrderCartTable = (props) => {
             <>
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ zIndex: "100" }}>
+                  <TableCell
+                    classes={{ root: classes.root }}
+                    style={{ zIndex: "100" }}
+                  >
                     <SelectorMenus
                       type="programs"
                       programs={currentPrograms}
                       handler={handleProgram}
+                      currentProgram={currentProgram}
                     />
                   </TableCell>
                   {currentItems.map((item) => (
-                    <TableCell key={item.itemNumber}>
+                    <TableCell
+                      classes={{ root: classes.root }}
+                      key={item.itemNumber}
+                    >
                       <div className={classes.headerCell}>
                         <Tooltip title="Remove from Cart">
                           <IconButton
@@ -222,7 +243,12 @@ const PreOrderCartTable = (props) => {
                   ))}
                 </TableRow>
                 <TableRow>
-                  <TableCell align="right" style={{ top: 197, zIndex: "100" }}>
+                  <TableCell
+                    classes={{ root: classes.root }}
+                    className={classes.borderRight}
+                    align="right"
+                    style={{ top: 197, zIndex: "100" }}
+                  >
                     <div className={classes.tableControl}>
                       <Typography>Order Details</Typography>
                       <IconButton
@@ -245,6 +271,7 @@ const PreOrderCartTable = (props) => {
                   {currentItems.map((item) => {
                     return (
                       <TableCell
+                        classes={{ root: classes.root }}
                         style={{ top: 197, textAlign: "center" }}
                         key={item.itemNumber}
                       >
@@ -259,6 +286,7 @@ const PreOrderCartTable = (props) => {
                 </TableRow>
                 <TableRow>
                   <TableCell
+                    classes={{ root: classes.root }}
                     style={{ padding: 0, top: 258 }}
                     colSpan={currentItems.length + 1}
                     className={classes[tableStyle]}
@@ -275,25 +303,27 @@ const PreOrderCartTable = (props) => {
                           >
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                
+                                classes={{ root: classes.root }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
                                   backgroundColor: "white",
                                   zIndex: "100",
                                 }}
+                                className={classes.borderRight}
                               >
-                                <div
-                                  className={classes.colTitle}
-                                  style={{ zIndex: "100" }}
-                                >
+                                <div style={{ zIndex: "100" }}>
                                   <Typography className={classes.headerText}>
                                     Items Per Pack
                                   </Typography>
                                 </div>
                               </TableCell>
                               {currentItems.map((item) => (
-                                <TableCell align="center" key={item.itemNumber}>
+                                <TableCell
+                                  classes={{ root: classes.root }}
+                                  align="center"
+                                  key={item.itemNumber}
+                                >
                                   <div className={classes.infoCell}>
                                     {item.qty !== "Single Unit"
                                       ? parseInt(item.qty.split(" ")[0])
@@ -304,18 +334,16 @@ const PreOrderCartTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                               
+                                classes={{ root: classes.root }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
                                   backgroundColor: "white",
                                   zIndex: "100",
                                 }}
+                                className={classes.borderRight}
                               >
-                                <div
-                                  className={classes.colTitle}
-                                  style={{ zIndex: "100" }}
-                                >
+                                <div style={{ zIndex: "100" }}>
                                   <Typography className={classes.headerText}>
                                     Total Qty of Items
                                   </Typography>
@@ -331,43 +359,43 @@ const PreOrderCartTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                
+                                classes={{ root: classes.root }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
                                   backgroundColor: "white",
                                   zIndex: "100",
                                 }}
+                                className={classes.borderRight}
                               >
-                                <div
-                                  className={classes.colTitle}
-                                  style={{ zIndex: "100" }}
-                                >
+                                <div style={{ zIndex: "100" }}>
                                   <Typography className={classes.headerText}>
                                     Item Est Cost
                                   </Typography>
                                 </div>
                               </TableCell>
                               {currentItems.map((item) => (
-                                <TableCell align="center" key={item.itemNumber}>
+                                <TableCell
+                                  classes={{ root: classes.root }}
+                                  align="center"
+                                  key={item.itemNumber}
+                                >
                                   {`$${item.price.toFixed(2)}`}
                                 </TableCell>
                               ))}
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                
+                                classes={{ root: classes.root }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
                                   backgroundColor: "white",
                                   zIndex: "100",
                                 }}
+                                className={classes.borderRight}
                               >
-                                <div
-                                  className={classes.colTitle}
-                                  style={{ zIndex: "100" }}
-                                >
+                                <div style={{ zIndex: "100" }}>
                                   <Typography className={classes.headerText}>
                                     Total Est Cost
                                   </Typography>
@@ -392,6 +420,7 @@ const PreOrderCartTable = (props) => {
                 {distributors.map((dist) => (
                   <TableRow key={dist.id}>
                     <TableCell
+                      classes={{ root: classes.root }}
                       className={classes.borderRight}
                       style={{
                         position: "sticky",
@@ -400,7 +429,7 @@ const PreOrderCartTable = (props) => {
                         zIndex: "1",
                       }}
                     >
-                      <div className={classes.colTitle}>
+                      <div>
                         <Typography className={classes.headerText}>
                           {dist.name}
                         </Typography>
@@ -436,4 +465,11 @@ PreOrderCartTable.propTypes = {
   handleRemove: PropTypes.func.isRequired,
 };
 
-export default React.memo(PreOrderCartTable);
+export default React.memo(PreOrderCartTable, (prev, next) => {
+  return (
+    prev.currentPrograms.length === next.currentPrograms.length &&
+    prev.distributors.length === next.distributors.length &&
+    prev.open === next.open &&
+    prev.tableStyle === next.tableStyle
+  );
+});

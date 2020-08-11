@@ -11,9 +11,9 @@ orders: {
 }
 
 orderObj: {
-	distributor: string,
+	distributorId: string,
   type: string,
-  program: null || [...string(programIds)],
+  program: null || [...{id: total}],
 	status: string,
 	items: [...{ itemObj }],
 	shipping: { shippingObj },
@@ -49,6 +49,7 @@ const getOrderNum = () => {
 let initialState = {
   isLoading: false,
   orders: [],
+  activePrograms: [],
   programTotal: 0,
   error: null,
 };
@@ -80,9 +81,15 @@ const ordersSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    setActivePrograms(state, action) {
+      const { programs } = action.payload;
+      let programList = programs.map(prog => ({[`${prog.id}`]: 0}))
+      state.activePrograms = [...programList]
+    },
     addNewOrder(state, action) {
       const {
-        distributor,
+        distributorId,
+        distributorName,
         type,
         program,
         items,
@@ -94,7 +101,8 @@ const ordersSlice = createSlice({
       } = action.payload;
       const newOrder = {
         id: getOrderNum(),
-        distributor: distributor,
+        distributorId: distributorId,
+        distributorName: distributorName,
         type: type,
         program: program,
         items: items,
@@ -104,7 +112,7 @@ const ordersSlice = createSlice({
         status: status,
         shipping: shipping,
       };
-      let newOrders = state.orders.splice();
+      let newOrders = [...state.orders];
       newOrders.push(newOrder);
       state.orders = newOrders;
     },
@@ -146,7 +154,8 @@ const ordersSlice = createSlice({
 
         return {
           id: ord.id,
-          distributor: ord.distributor,
+          distributorId: ord.distributorId,
+          distributorName: ord.distributorName,
           type: ord.type,
           program: ord.program,
           items: [...orders[index].items],
@@ -172,6 +181,7 @@ const ordersSlice = createSlice({
 
 export const {
   setIsLoading,
+  setActivePrograms,
   addNewOrder,
   updateOrder,
   updateOrders,

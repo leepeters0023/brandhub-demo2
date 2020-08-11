@@ -60,6 +60,12 @@ const OrderPreOrder = ({ currentPrograms }) => {
   const [allCart, setAllCart] = useState(false);
   const [allPdf, setAllPdf] = useState(false);
 
+  const handleAddAllPrograms = () => {
+    currentPrograms.forEach(prog => {
+      dispatch(addItems({program: prog.id, items: prog.items}));
+    })
+  }
+
   const handleAddAllProgram = (prog) => {
     console.log(console.log(currentPrograms))
     console.log(prog)
@@ -85,7 +91,10 @@ const OrderPreOrder = ({ currentPrograms }) => {
           variant="contained"
           color="secondary"
           className={classes.largeButton}
-          onClick={() => setAllCart(true)}
+          onClick={() => {
+            setAllCart(true)
+            handleAddAllPrograms()
+          }}
         >
           ADD ALL ITEMS TO CART
         </Button>

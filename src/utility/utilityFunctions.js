@@ -75,3 +75,23 @@ export const filter = (array, filters) => {
     return filteredArray;
   } else return array;
 };
+
+export const mapProgramsToOrders = (programs, distributors) => {
+  const newOrders = [];
+  distributors.forEach((dist) => {
+    programs.forEach(prog => {
+      let order = {
+        distributorId: dist.id,
+        distributorName: dist.name,
+        type: "program",
+        program: {id: prog.id, name: prog.name},
+        items: [],
+        budget: undefined,
+        totalItems: 0,
+        totalEstCost: 0,
+      };
+      newOrders.push(order)
+    })
+  });
+  return newOrders;
+};

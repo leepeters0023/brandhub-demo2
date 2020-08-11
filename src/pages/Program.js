@@ -232,6 +232,7 @@ const Program = ({ userType, programId }) => {
               allPdf={allPdf}
               allCart={allCart}
               handlePreview={handlePreview}
+              currentProgram={currentProgram}
             />
           </>
         )}

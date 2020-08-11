@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import FormControl from "@material-ui/core/FormControl";
@@ -6,7 +6,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
-const SelectorMenus = ({ type, programs, handler }) => {
+const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   //data would be pulled from store
   const regions = ["Region 1", "Region 2", "Region 3"];
   const fieldUsers = [
@@ -20,7 +20,7 @@ const SelectorMenus = ({ type, programs, handler }) => {
   const [region, updateRegion] = useState(0);
   const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
-  const [program, updateProgram] = useState("1");
+  const [program, updateProgram] = useState("");
 
   const handleChangeSelect = (evt) => {
     if (evt.target.id === "regions") {
@@ -30,11 +30,16 @@ const SelectorMenus = ({ type, programs, handler }) => {
     } else if (evt.target.id === "budgets") {
       updateBudget(evt.target.value);
     } else if (evt.target.name === "programs") {
-      console.log(evt.target.value)
       updateProgram(evt.target.value);
-      handler(evt.target.value)
+      handler(evt.target.value);
     }
   };
+
+  useEffect(() => {
+    if (currentProgram) {
+      updateProgram(currentProgram);
+    }
+  }, [currentProgram]);
 
   if (type === "regions") {
     return (
@@ -105,7 +110,7 @@ const SelectorMenus = ({ type, programs, handler }) => {
   } else if (type === "programs") {
     return (
       <>
-        <FormControl  style={{ margin: "0 5px" }}>
+        <FormControl style={{ margin: "0 5px" }}>
           <InputLabel id="program-select">Program</InputLabel>
           <Select
             name="programs"
@@ -113,7 +118,6 @@ const SelectorMenus = ({ type, programs, handler }) => {
             id="programs"
             value={program}
             onChange={handleChangeSelect}
-            
           >
             {programs.map((program, index) => (
               <MenuItem value={program.id} key={index}>
@@ -131,4 +135,14 @@ SelectorMenus.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default SelectorMenus;
+export default React.memo(SelectorMenus, (prev, next) => {
+  if (prev.programs && prev.currentProgram) {
+    return (
+      prev.programs.length === next.programs.length &&
+      prev.type === next.type &&
+      prev.currentProgram === next.currentProgram
+    );
+  } else {
+    return prev.type === next.type;
+  }
+});

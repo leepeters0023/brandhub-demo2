@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +8,6 @@ import PreOrderCartTable from "./PreOrderCartTable";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
@@ -61,14 +60,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const TotalsDiv = React.memo(({ program }) => {
+  const classes = useStyles();
+  const programTotal = useSelector(
+    (state) => state.programTable.programs[`${program}`].programDetails.total
+  );
+  const grandTotal = useSelector((state) => state.programTable.details.total);
+
+  return (
+    <>
+      <Typography
+        className={classes.titleText}
+      >{`Program Total: $${programTotal.toFixed(2)}`}</Typography>
+      <Typography
+        className={classes.titleText}
+      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography>
+    </>
+  );
+});
+
 const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const [open, setOpen] = useState(true);
-  const [terms, setTermsChecked] = useState(false);
-  const [tableStyle, setTableStyle] = useState("tableOpen");
-  const [budget, setBudget] = useState(null);
+  const [open, setOpen] = useCallback(useState(true));
+  const [terms, setTermsChecked] = useCallback(useState(false));
+  const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
+  const [budget, setBudget] = useCallback(useState(null));
+  const [program, setProgram] = useCallback(useState(undefined));
 
   const tableData = useSelector((state) => state.programTable);
 
@@ -76,13 +95,28 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
     dispatch(removeGridItem({ program, itemNum }));
   };
 
-  if (Object.keys(tableData.programs).length === 0) {
-    return <CircularProgress />
-  }
-
   const programArray = [];
   for (let program in tableData.programs) {
     programArray.push(tableData.programs[program].details);
+  }
+  programArray.sort((a, b) => {
+    return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
+      ? -1
+      : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+      ? 1
+      : 0;
+  });
+
+  console.log(program)
+
+  useEffect(() => {
+    if (programArray.length > 0 && !program) {
+      setProgram(programArray[0].id);
+    }
+  });
+
+  if (programArray.length === 0) {
+    return <CircularProgress />;
   }
 
   return (
@@ -96,6 +130,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
         setTableStyle={setTableStyle}
         handleModalOpen={handleModalOpen}
         handleRemove={handleRemove}
+        setProgram={setProgram}
       />
       <br />
       <br />
@@ -127,8 +162,8 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
             }
             label=" I have read and accept the Terms and Conditions"
           />
-          <br />
-          <br />
+        </Grid>
+        <Grid item md={5} xs={12}>
           <Typography className={classes.headerText}>Order Notes</Typography>
           <br />
           <TextField
@@ -139,8 +174,8 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
             size="small"
             rows="5"
           />
-        </Grid>
-        <Grid item md={5} xs={12}>
+          <br />
+          <br />
           <AutoComplete
             value={budget}
             onChange={(event, value) => setBudget(value)}
@@ -158,13 +193,19 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
             )}
           />
           <br />
-          <Typography className={classes.titleText}>Subtotal:</Typography>
-          <Typography className={classes.titleText}>Shipping:</Typography>
-          <Typography className={classes.titleText}>Handling:</Typography>
-          <br />
-          <Divider />
-          <br />
-          <Typography className={classes.titleText}>Total:</Typography>
+
+          {program ? (
+            <TotalsDiv program={program} />
+          ) : (
+            <>
+              <Typography
+                className={classes.titleText}
+              >{`Program Total:`}</Typography>
+              <Typography
+                className={classes.titleText}
+              >{`Pre-Order Total:`}</Typography>
+            </>
+          )}
         </Grid>
       </Grid>
       <br />

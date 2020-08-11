@@ -53,9 +53,12 @@ const useStyles = makeStyles((theme) => ({
     padding: "0px",
   },
 }));
+
 const OrderItemGridView = (props) => {
-  const { type, currentItems, allPdf, allCart, handlePreview } = props;
+
+  const { type, currentItems, allPdf, allCart, handlePreview, handleAddItem } = props;
   const classes = useStyles();
+
   return (
     <Container>
       <br />
@@ -115,6 +118,7 @@ const OrderItemGridView = (props) => {
                     color="secondary"
                     id={`${item.itemNumber}`}
                     disabled={allCart && type === "preOrder"}
+                    onClick={()=>handleAddItem(item)}
                   >
                     <AddShoppingCartIcon className={classes.navIcon} />
                   </Button>
@@ -134,6 +138,7 @@ OrderItemGridView.propTypes = {
   allPdf: PropTypes.bool,
   allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
+  handleAddItem: PropTypes.func.isRequired,
 };
 
 export default OrderItemGridView;
