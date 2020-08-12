@@ -107,8 +107,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       : 0;
   });
 
-  console.log(program)
-
   useEffect(() => {
     if (programArray.length > 0 && !program) {
       setProgram(programArray[0].id);

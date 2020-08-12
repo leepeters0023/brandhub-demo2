@@ -51,9 +51,9 @@ const programTableSlice = createSlice({
   reducers: {
     setTableData(state, action) {
       const { tableData } = action.payload;
-      const currentPrograms = {...tableData.programs};
+      const currentPrograms = { ...tableData.programs };
       const currentDist = [...tableData.distributors];
-      const currentDetails = {...tableData.details};
+      const currentDetails = { ...tableData.details };
       state.programs = currentPrograms;
       state.distributors = currentDist;
       state.details = currentDetails;
@@ -80,9 +80,8 @@ const programTableSlice = createSlice({
     },
     addItem(state, action) {
       const { program, item } = action.payload;
-      console.log(program);
       let distributorValues = {};
-      let currentDistributors = [...state.distributors]
+      let currentDistributors = [...state.distributors];
       currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
       let newItem = {
         itemDetails: {
@@ -103,8 +102,7 @@ const programTableSlice = createSlice({
     addItems(state, action) {
       const { program, items } = action.payload;
       let distributorValues = {};
-      let currentDistributors = [...state.distributors]
-      console.log(currentDistributors)
+      let currentDistributors = [...state.distributors];
       currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
       items.forEach((item) => {
         state.programs[`${program}`].items[`${item.itemNumber}`] = {
@@ -131,30 +129,41 @@ const programTableSlice = createSlice({
     },
     setItemTotal(state, action) {
       const { program, itemNumber } = action.payload;
-      let initialTotal = state.programs[`${program}`].programDetails.total
+      let initialTotal = state.programs[`${program}`].programDetails.total;
       let total = 0;
       for (let dist in state.programs[`${program}`].items[`${itemNumber}`]
         .distributors) {
         total +=
           parseInt(
-            state.programs[`${program}`].items[`${itemNumber}`].distributors[dist]
+            state.programs[`${program}`].items[`${itemNumber}`].distributors[
+              dist
+            ]
           ) || 0;
       }
-      let totalCost = total * state.programs[`${program}`].items[`${itemNumber}`].itemDetails.price;
-      state.programs[`${program}`].items[`${itemNumber}`].itemDetails.totalItems = total;
+      let totalCost =
+        total *
+        state.programs[`${program}`].items[`${itemNumber}`].itemDetails.price;
+      state.programs[`${program}`].items[
+        `${itemNumber}`
+      ].itemDetails.totalItems = total;
       state.programs[`${program}`].items[
         `${itemNumber}`
       ].itemDetails.estTotal = totalCost;
       let totalProgramCost = 0;
       for (let item in state.programs[`${program}`].items) {
-        totalProgramCost += state.programs[`${program}`].items[item].itemDetails.estTotal
+        totalProgramCost +=
+          state.programs[`${program}`].items[item].itemDetails.estTotal;
       }
       state.programs[`${program}`].programDetails.total = totalProgramCost;
-      state.details.total += (totalProgramCost - initialTotal)
+      state.details.total += totalProgramCost - initialTotal;
     },
     removeGridItem(state, action) {
       const { program, itemNum } = action.payload;
-      console.log(program)
+      console.log(program);
+      state.programs[`${program}`].programDetails.total -=
+        state.programs[`${program}`].items[`${itemNum}`].itemDetails.estTotal;
+      state.details.total -=
+        state.programs[`${program}`].items[`${itemNum}`].itemDetails.estTotal;
       delete state.programs[`${program}`].items[`${itemNum}`];
     },
   },
