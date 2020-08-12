@@ -61,6 +61,7 @@ const AddItemConfirmation = (props) => {
       }
       
       setProcessing(false);
+      return () => setNoItems(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmOpen]);

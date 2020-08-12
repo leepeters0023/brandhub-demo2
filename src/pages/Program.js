@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
@@ -6,6 +6,7 @@ import { Link } from "@reach/router";
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
+import AddItemConfirmation from "../components/Purchasing/AddItemConfirmation";
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import SelectorMenus from "../components/Utility/SelectorMenus";
 import ItemFilter from "../components/Utility/ItemFilter";
@@ -54,13 +55,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Program = ({ userType, programId }) => {
   const classes = useStyles();
-  const [value, updateValue] = useState(1);
-  const [currentView, setView] = useState("list");
-  const [previewModal, handlePreviewModal] = useState(false);
-  const [currentItem, handleCurrentItem] = useState({});
-  const [currentProgram, setCurrentProgram] = useState(null);
-  const [allPdf, setAllPdf] = useState(false);
-  const [allCart, setAllCart] = useState(false);
+  const [value, updateValue] = useCallback(useState(1));
+  const [currentView, setView] = useCallback(useState("list"));
+  const [previewModal, handlePreviewModal] = useCallback(useState(false));
+  const [currentItem, handleCurrentItem] = useCallback(useState({}));
+  const [currentProgram, setCurrentProgram] = useCallback(useState(null));
+  const [currentOrder, setCurrentOrder] = useCallback(useState({}))
+  const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
@@ -79,6 +80,7 @@ const Program = ({ userType, programId }) => {
     } else if (window.location.hash === "#items") {
       updateValue(2);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [programId]);
 
   const handlePreview = (evt) => {
@@ -93,12 +95,34 @@ const Program = ({ userType, programId }) => {
     handlePreviewModal(false);
   };
 
+  const handleAddProgramItem = (item) => {
+    setCurrentOrder({program: currentProgram.id, items: [item]})
+    setConfirmOpen(true);
+  }
+
+  const handleAddAllProgramItems = () => {
+    setCurrentOrder({program: currentProgram.id, items: currentProgram.items})
+    setConfirmOpen(true);
+  }
+
+  const handleConfirmClose = () => {
+    setConfirmOpen(false);
+  }
+
   if (!currentProgram) {
     return <CircularProgress />;
   }
 
   return (
     <>
+      {currentOrder.program && (
+        <AddItemConfirmation
+          itemArray={currentOrder.items}
+          program={currentOrder.program}
+          confirmOpen={confirmOpen}
+          handleConfirmClose={handleConfirmClose}
+        />
+      )}
       <div className={classes.relativeContainer}>
         <Dialog
           open={previewModal}
@@ -125,7 +149,7 @@ const Program = ({ userType, programId }) => {
               </IconButton>
             </Tooltip>
             <Typography className={classes.titleText} variant="h5">
-              {currentProgram.name}
+              {`${currentProgram.name} - ${currentProgram.focusMonth}`}
             </Typography>
           </div>
           <div className={classes.configButtons}>
@@ -207,7 +231,6 @@ const Program = ({ userType, programId }) => {
                     color="secondary"
                     id="addAllPdf"
                     style={{ marginRight: "2.5px" }}
-                    onClick={() => setAllPdf(true)}
                   >
                     <PictureAsPdfIcon className={classes.navIcon} />
                   </Button>
@@ -218,7 +241,7 @@ const Program = ({ userType, programId }) => {
                     color="secondary"
                     id="addAllCart"
                     style={{ marginLeft: "2.5px" }}
-                    onClick={() => setAllCart(true)}
+                    onClick={handleAddAllProgramItems}
                   >
                     <AddShoppingCartIcon className={classes.navIcon} />
                   </Button>
@@ -229,10 +252,10 @@ const Program = ({ userType, programId }) => {
             <OrderItemViewControl
               type={"preOrder"}
               currentView={currentView}
-              allPdf={allPdf}
-              allCart={allCart}
               handlePreview={handlePreview}
               currentProgram={currentProgram}
+              handleAddProgramItem={handleAddProgramItem}
+              handleAddAllProgramItems={handleAddAllProgramItems}
             />
           </>
         )}

@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
-import { addItem } from "../../redux/slices/programTableSlice";
-
 import OrderInStockTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
 
@@ -11,35 +8,27 @@ import OrderPreGridView from "./OrderItemGridView";
 import items from "../../assets/mockdata/Items";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, allPdf, allCart, handlePreview, currentProgram } = props;
-
-  const dispatch = useDispatch();
-
-  const handleAddItem = (item) => {
-    dispatch(addItem({program: currentProgram.id, item}))
-  }
-  //const [currentItems, setCurrentItems] = useState(items);
+  const { type, currentView, handlePreview, handleAddProgramItem, handleAddAllProgramItems } = props;
 
   return (
     <>
+
       {currentView === "list" && (
         <OrderInStockTableView
           type={type}
           currentItems={items}
-          allPdf={allPdf}
-          allCart={allCart}
           handlePreview={handlePreview}
-          handleAddItem={handleAddItem}
+          handleAddProgramItem={handleAddProgramItem}
+          handleAddAllProgramItems={handleAddAllProgramItems}
         />
       )}
       {currentView === "grid" && (
         <OrderPreGridView
           type={type}
           currentItems={items}
-          allPdf={allPdf}
-          allCart={allCart}
           handlePreview={handlePreview}
-          handleAddItem={handleAddItem}
+          handleAddProgramItem={handleAddProgramItem}
+          handleAddAllProgramItems={handleAddAllProgramItems}
         />
       )}
     </>
@@ -49,10 +38,9 @@ const OrderItemViewControl = (props) => {
 OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
-  allPdf: PropTypes.bool,
-  allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
-  currentProgram: PropTypes.object
+  handleAddProgramItem: PropTypes.func.isRequired,
+  handleAddAllProgramItems: PropTypes.func.isRequired,
 };
 
 export default OrderItemViewControl;

@@ -4,18 +4,18 @@ import { createSlice } from "@reduxjs/toolkit";
 state: {
   programs: {
     programId: {
-      items: {
+      items: { 
         itemNumber: {
           itemDetails: {
-            itemNumber: "",
-            brand: "",
-            itemType: "",
-            price: "",
-            qty: "",
-            imgUrl: "",
-            complianceStatus: "",
-            totalItems: "",
-            estTotal: "",
+            itemNumber: string,
+            brand: string,
+            itemType: string,
+            price: float,
+            qty: string,
+            imgUrl: string,
+            complianceStatus: string,
+            totalItems: int,
+            estTotal: float,
           }
           distributors: {
             distributor: value
@@ -23,15 +23,15 @@ state: {
         }
       },
       programDetails: {
-        total: 0,
-        budget: ""
+        total: float,
+        budget: string
       }
     }
   },
-  distributors: [...distributor list],
+  distributors: [...distributor list, strings],
   details: {
-    total: *total cart cost all programs,
-    budgets: { *amount allocated to each budget }
+    total: *total cart cost all programs, float,
+    budgets: { *amount allocated to each budget, key(budget): value(float) }
   }
 }
 */
@@ -105,20 +105,22 @@ const programTableSlice = createSlice({
       let currentDistributors = [...state.distributors];
       currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
       items.forEach((item) => {
-        state.programs[`${program}`].items[`${item.itemNumber}`] = {
-          itemDetails: {
-            itemNumber: item.itemNumber,
-            brand: item.brand,
-            itemType: item.itemType,
-            price: item.price,
-            qty: item.qty,
-            imgUrl: item.imgUrl,
-            complianceStatus: "pending",
-            totalItems: 0,
-            estTotal: 0,
-          },
-          distributors: { ...distributorValues },
-        };
+        if (!state.programs[`${program}`].items[`${item.itemNumber}`]) {
+          state.programs[`${program}`].items[`${item.itemNumber}`] = {
+            itemDetails: {
+              itemNumber: item.itemNumber,
+              brand: item.brand,
+              itemType: item.itemType,
+              price: item.price,
+              qty: item.qty,
+              imgUrl: item.imgUrl,
+              complianceStatus: "pending",
+              totalItems: 0,
+              estTotal: 0,
+            },
+            distributors: { ...distributorValues },
+          };
+        }
       });
     },
     setGridItem(state, action) {

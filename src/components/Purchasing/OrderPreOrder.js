@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import AddItemConfirmation from "./AddItemConfirmation";
@@ -59,8 +60,6 @@ const OrderPreOrder = ({ currentPrograms }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [allCart, setAllCart] = useState(false);
-  const [allPdf, setAllPdf] = useState(false);
   const [currentOrder, setCurrentOrder] = useCallback(useState({}));
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
 
@@ -107,7 +106,6 @@ const OrderPreOrder = ({ currentPrograms }) => {
             color="secondary"
             className={classes.largeButton}
             onClick={() => {
-              setAllCart(true);
               handleAddAllPrograms();
             }}
           >
@@ -118,7 +116,6 @@ const OrderPreOrder = ({ currentPrograms }) => {
             variant="contained"
             color="secondary"
             className={classes.largeButton}
-            onClick={() => setAllPdf(true)}
           >
             ADD ALL ITEMS TO PDF
           </Button>
@@ -129,7 +126,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
           {currentPrograms.map((prog) => (
             <Grid item lg={2} md={3} key={prog.id}>
               <Paper className={classes.singleItem}>
-                <a href={`/program/${prog.id}#details`}>
+                <Link to={`/program/${prog.id}#details`}>
                   <Tooltip title="Program Details" placement="top">
                     <img
                       id={prog.id}
@@ -138,7 +135,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
                       alt={prog.name}
                     />
                   </Tooltip>
-                </a>
+                </Link>
                 <Typography className={classes.headerText}>
                   {prog.name}
                 </Typography>
@@ -155,7 +152,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
                         variant="contained"
                         color="secondary"
                         id={`${prog.id}`}
-                        disabled={allPdf}
+                        
                       >
                         <PictureAsPdfIcon className={classes.navIcon} />
                       </Button>
@@ -167,7 +164,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
                         variant="contained"
                         color="secondary"
                         id={`${prog.id}`}
-                        disabled={allCart}
+                        
                         onClick={() => handleAddAllProgram(prog.id)}
                       >
                         <AddShoppingCartIcon className={classes.navIcon} />

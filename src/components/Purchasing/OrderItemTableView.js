@@ -26,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemTableView = (props) => {
-  const { type, currentItems, allPdf, allCart, handlePreview, handleAddItem } = props;
+  const {
+    type,
+    currentItems,
+    handlePreview,
+    handleAddProgramItem,
+  } = props;
   const classes = useStyles();
   return (
     <>
@@ -116,7 +121,6 @@ const OrderItemTableView = (props) => {
                           color="secondary"
                           id={`${row.itemNumber}`}
                           style={{ margin: "5px 2.5px" }}
-                          disabled={allPdf && type === "preOrder"}
                         >
                           <PictureAsPdfIcon className={classes.navIcon} />
                         </Button>
@@ -129,8 +133,7 @@ const OrderItemTableView = (props) => {
                           color="secondary"
                           id={`${row.itemNumber}`}
                           style={{ margin: "5px 2.5px" }}
-                          disabled={allCart && type === "preOrder"}
-                          onClick={()=>handleAddItem(row)}
+                          onClick={() => handleAddProgramItem(row)}
                         >
                           <AddShoppingCartIcon className={classes.navIcon} />
                         </Button>
@@ -150,10 +153,8 @@ const OrderItemTableView = (props) => {
 OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
-  allPdf: PropTypes.bool,
-  allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
-  handleAddItem: PropTypes.func.isRequired,
+  handleAddProgramItem: PropTypes.func.isRequired,
 };
 
 export default OrderItemTableView;

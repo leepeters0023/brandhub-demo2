@@ -1,5 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/*
+* DataFormat
+programs: {
+  isLoading: bool,
+  programs: [...{ programObj }],
+  error: null || string
+}
+
+programObj: {
+  id: string,
+  name: string,
+  brand: string,
+  bu: string,
+  desc: string,
+  goals: string,
+  strategies: string,
+  focusMonth: string,
+  imgUrl: string,
+  items: [...{ itemObj }]
+}
+
+itemObj: {
+  itemNumber: string,
+  brand: string,
+  itemType: string,
+  price: float,
+  qty: string,
+  imgUrl: string
+}
+
+*/
+
 let initialState = {
   isLoading: false,
   programs: [],

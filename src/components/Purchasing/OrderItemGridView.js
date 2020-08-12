@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderItemGridView = (props) => {
 
-  const { type, currentItems, allPdf, allCart, handlePreview, handleAddItem } = props;
+  const { type, currentItems, handlePreview, handleAddProgramItem } = props;
   const classes = useStyles();
 
   return (
@@ -105,7 +105,6 @@ const OrderItemGridView = (props) => {
                     variant="contained"
                     color="secondary"
                     id={`${item.itemNumber}`}
-                    disabled={allPdf && type === "preOrder"}
                   >
                     <PictureAsPdfIcon className={classes.navIcon} />
                   </Button>
@@ -117,8 +116,7 @@ const OrderItemGridView = (props) => {
                     variant="contained"
                     color="secondary"
                     id={`${item.itemNumber}`}
-                    disabled={allCart && type === "preOrder"}
-                    onClick={()=>handleAddItem(item)}
+                    onClick={()=>handleAddProgramItem(item)}
                   >
                     <AddShoppingCartIcon className={classes.navIcon} />
                   </Button>
@@ -135,10 +133,9 @@ const OrderItemGridView = (props) => {
 OrderItemGridView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
-  allPdf: PropTypes.bool,
-  allCart: PropTypes.bool,
   handlePreview: PropTypes.func.isRequired,
-  handleAddItem: PropTypes.func.isRequired,
+  handleAddProgramItem: PropTypes.func.isRequired,
+  handleAddAllProgramItems: PropTypes.func.isRequired,
 };
 
 export default OrderItemGridView;
