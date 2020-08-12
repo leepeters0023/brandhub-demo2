@@ -74,7 +74,7 @@ const programTableSlice = createSlice({
               focusMonth: prog.focusMonth,
             },
             items: {},
-            orders: {},
+            orders: [],
             programDetails: { total: 0, budget: "" },
           })
       );
@@ -84,7 +84,7 @@ const programTableSlice = createSlice({
     },
     setOrders(state, action) {
       const { program, orders } = action.payload
-      state.programs[`${program}`].orders = {...orders}
+      state.programs[`${program}`].orders = [...orders]
     },
     addItem(state, action) {
       const { program, item } = action.payload;
@@ -182,6 +182,7 @@ const programTableSlice = createSlice({
 export const {
   setTableData,
   setInitialTableData,
+  setOrders,
   addItem,
   addItems,
   setGridItem,

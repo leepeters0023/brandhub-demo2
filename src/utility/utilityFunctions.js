@@ -76,24 +76,31 @@ export const filter = (array, filters) => {
   } else return array;
 };
 
+export const getOrderNum = () => {
+  //this would fetch current order number and increment it, produces random number currently
+  return Math.floor(Math.random() * 10000 + 12300000000).toString();
+};
+
 export const mapNewOrdersToProgram = (program, distributors, items) => {
   const newOrders = [];
   distributors.forEach((dist) => {
-      let order = {
-        distributorId: dist.id,
-        distributorName: dist.name,
-        type: "program",
-        program: {id: program.id, name: program.name},
-        items: [],
-        budget: undefined,
-        totalItems: 0,
-        totalEstCost: 0,
-      };
-      newOrders.push(order)
+    let order = {
+      id: getOrderNum(),
+      distributorId: dist.id,
+      distributorName: dist.name,
+      type: "program",
+      program: { id: program.id, name: program.name },
+      items: [],
+      budget: undefined,
+      totalItems: 0,
+      totalEstCost: 0,
+      status: "draft",
+    };
+    newOrders.push(order);
   });
   for (let item in items) {
     for (let dist in items[item].distributors) {
-      let currentOrder = newOrders.find(o => o.distributorName === dist)
+      let currentOrder = newOrders.find((o) => o.distributorName === dist);
       let currentItem = {
         itemNumber: item,
         brand: items[item].itemDetails.brand,
@@ -103,15 +110,56 @@ export const mapNewOrdersToProgram = (program, distributors, items) => {
         imgUrl: items[item].itemDetails.imgUrl,
         complianceStatus: items[item].itemDetails.complianceStatus,
         totalItems: parseInt(items[item].distributors[dist]),
-        estTotal: (parseInt(items[item].distributors[dist]) * items[item].itemDetails.price).toFixed(2)
-      }
-      let editOrder = {...currentOrder}
-      editOrder.items.push(currentItem)
-      editOrder.totalItems += currentItem.totalItems
-      editOrder.totalEstCost += parseFloat(currentItem.estTotal)
-      newOrders.splice(newOrders.indexOf(currentOrder), 1, editOrder)
+        estTotal: (
+          parseInt(items[item].distributors[dist]) *
+          items[item].itemDetails.price
+        ).toFixed(2),
+      };
+      let editOrder = { ...currentOrder };
+      editOrder.items.push(currentItem);
+      editOrder.totalItems += currentItem.totalItems;
+      editOrder.totalEstCost += parseFloat(currentItem.estTotal);
+      newOrders.splice(newOrders.indexOf(currentOrder), 1, editOrder);
     }
   }
-  newOrders.forEach(order => order.totalEstCost = parseFloat(order.totalEstCost.toFixed(2)))
+  newOrders.forEach(
+    (order) => (order.totalEstCost = parseFloat(order.totalEstCost.toFixed(2)))
+  );
   return newOrders;
+};
+
+export const updateProgramOrders = (orders, items) => {
+  let updatedOrders = [];
+  orders = orders.slice();
+  orders.forEach((o) => {
+    updatedOrders.push({ ...o });
+  });
+  let currentItems = Object.keys(items);
+  updatedOrders.forEach((ord) => {
+    let orderItems = ord.items.filter((o) =>
+      currentItems.includes(o.itemNumber)
+    );
+    let updatedOrderItems = [];
+    orderItems.forEach((i) => updatedOrderItems.push({ ...i }));
+    for (let item in items) {
+      let updateItem = updatedOrderItems.find((i) => i.itemNumber === item);
+      let index = updatedOrderItems.indexOf(updateItem);
+      updatedOrderItems[index].totalItems = parseInt(
+        items[item].distributors[ord.distributorName]
+      );
+      updatedOrderItems[index].estTotal =
+        parseInt(items[item].distributors[ord.distributorName]) *
+        items[item].itemDetails.price;
+    }
+    ord.items = [...updatedOrderItems];
+  });
+  updatedOrders.forEach((ord) => {
+    ord.totalItems = ord.items
+      .map((item) => item.totalItems)
+      .reduce((a, b) => a + b);
+    ord.totalEstCost = ord.items
+      .map((item) => item.estTotal)
+      .reduce((a, b) => a + b);
+  });
+  return updatedOrders;
 };

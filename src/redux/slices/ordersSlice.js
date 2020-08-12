@@ -41,11 +41,6 @@ shippingObj: {
 }	
 */
 
-const getOrderNum = () => {
-  //this would fetch current order number and increment it, produces random number currently
-  return Math.floor(Math.random() * 10000 + 12300000000).toString();
-};
-
 let initialState = {
   isLoading: false,
   orders: [],
@@ -88,6 +83,7 @@ const ordersSlice = createSlice({
     },
     addNewOrder(state, action) {
       const {
+        id,
         distributorId,
         distributorName,
         type,
@@ -100,7 +96,7 @@ const ordersSlice = createSlice({
         shipping = shippingState,
       } = action.payload;
       const newOrder = {
-        id: getOrderNum(),
+        id: id,
         distributorId: distributorId,
         distributorName: distributorName,
         type: type,
@@ -117,24 +113,17 @@ const ordersSlice = createSlice({
       state.orders = newOrders;
     },
     updateOrder(state, action) {
-      const { orderId, items, budget, status, shipping } = action.payload;
+      const { orderId, items, budget, totalItems, totalEstCost, status } = action.payload;
+      console.log(orderId)
       let currentOrder = state.orders.find((ord) => ord.id === orderId);
       let index = state.orders.indexOf(currentOrder);
-      let ordersArray = state.orders.splice();
-      let totalItems = 0;
-      let totalEstCost = 0;
-
-      items.forEach((i) => {
-        totalItems += i.totalItems;
-        totalEstCost += i.estTotal;
-      });
+      let ordersArray = [...state.orders]
 
       currentOrder.items = [...items];
       currentOrder.budget = budget;
       currentOrder.totalItems = totalItems;
       currentOrder.totalEstCost = totalEstCost;
       currentOrder.status = status;
-      currentOrder.shipping = { ...shipping };
 
       ordersArray.splice(index, 1, currentOrder);
 

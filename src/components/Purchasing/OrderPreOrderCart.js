@@ -2,10 +2,10 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
-import { removeGridItem } from "../../redux/slices/programTableSlice";
-import { addNewOrder } from "../../redux/slices/ordersSlice";
+import { removeGridItem, setOrders } from "../../redux/slices/programTableSlice";
+import { addNewOrder, updateOrder } from "../../redux/slices/ordersSlice";
 
-import { mapNewOrdersToProgram } from "../../utility/utilityFunctions";
+import { mapNewOrdersToProgram, updateProgramOrders } from "../../utility/utilityFunctions";
 
 import PreOrderCartTable from "./PreOrderCartTable";
 
@@ -105,22 +105,39 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   };
   
   const handleSaveOrder = (prog) => {
-    console.log(tableData.programs[`${prog}`])
     //assumes no orders exist yet:
-    let orders = mapNewOrdersToProgram(tableData.programs[`${prog}`].details, distributors, tableData.programs[`${prog}`].items)
-    orders.forEach((ord) => {
-      dispatch(addNewOrder({
-        distributorId: ord.distributorId,
-        distributorName: ord.distributorName,
-        type: ord.type,
-        program: ord.program,
-        items: ord.items,
-        budget: ord.budget,
-        totalItems: ord.totalItems,
-        totalEstCost: ord.totalEstCost
-      }))
-    })
-
+    if (tableData.programs[`${prog}`].orders.length === 0) {
+      let orders = mapNewOrdersToProgram(tableData.programs[`${prog}`].details, distributors, tableData.programs[`${prog}`].items)
+      orders.forEach((ord) => {
+        dispatch(addNewOrder({
+          id: ord.id,
+          distributorId: ord.distributorId,
+          distributorName: ord.distributorName,
+          type: ord.type,
+          program: ord.program,
+          items: ord.items,
+          budget: ord.budget,
+          totalItems: ord.totalItems,
+          totalEstCost: ord.totalEstCost,
+          status: ord.status
+        }))
+      })
+      dispatch(setOrders({program: prog, orders: orders}))
+    } else {
+      let updatedOrders = updateProgramOrders(tableData.programs[`${prog}`].orders, tableData.programs[`${prog}`].items)
+      console.log(updatedOrders)
+      updatedOrders.forEach((ord) => {
+        dispatch(updateOrder({
+          orderId: ord.id,
+          items: ord.items,
+          budget: ord.budget,
+          totalItems: ord.totalItems,
+          totalEstCost: ord.totalEstCost,
+          status: ord.status
+        }))
+      })
+      dispatch(setOrders({program: prog, orders: updatedOrders}))
+    }
     setBackdrop(false)
   }
 
