@@ -76,22 +76,42 @@ export const filter = (array, filters) => {
   } else return array;
 };
 
-export const mapProgramsToOrders = (programs, distributors) => {
+export const mapNewOrdersToProgram = (program, distributors, items) => {
   const newOrders = [];
   distributors.forEach((dist) => {
-    programs.forEach(prog => {
       let order = {
         distributorId: dist.id,
         distributorName: dist.name,
         type: "program",
-        program: {id: prog.id, name: prog.name},
+        program: {id: program.id, name: program.name},
         items: [],
         budget: undefined,
         totalItems: 0,
         totalEstCost: 0,
       };
       newOrders.push(order)
-    })
   });
+  for (let item in items) {
+    for (let dist in items[item].distributors) {
+      let currentOrder = newOrders.find(o => o.distributorName === dist)
+      let currentItem = {
+        itemNumber: item,
+        brand: items[item].itemDetails.brand,
+        itemType: items[item].itemDetails.itemType,
+        price: items[item].itemDetails.price,
+        qty: items[item].itemDetails.qty,
+        imgUrl: items[item].itemDetails.imgUrl,
+        complianceStatus: items[item].itemDetails.complianceStatus,
+        totalItems: parseInt(items[item].distributors[dist]),
+        estTotal: (parseInt(items[item].distributors[dist]) * items[item].itemDetails.price).toFixed(2)
+      }
+      let editOrder = {...currentOrder}
+      editOrder.items.push(currentItem)
+      editOrder.totalItems += currentItem.totalItems
+      editOrder.totalEstCost += parseFloat(currentItem.estTotal)
+      newOrders.splice(newOrders.indexOf(currentOrder), 1, editOrder)
+    }
+  }
+  newOrders.forEach(order => order.totalEstCost = parseFloat(order.totalEstCost.toFixed(2)))
   return newOrders;
 };

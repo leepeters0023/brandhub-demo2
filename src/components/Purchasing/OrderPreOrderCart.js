@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 import { removeGridItem } from "../../redux/slices/programTableSlice";
+import { addNewOrder } from "../../redux/slices/ordersSlice";
+
+import { mapNewOrdersToProgram } from "../../utility/utilityFunctions";
 
 import PreOrderCartTable from "./PreOrderCartTable";
 
@@ -14,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import AutoComplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 
 //mock data
@@ -58,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
   tableClosed: {
     zIndex: "-5",
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 const TotalsDiv = React.memo(({ program }) => {
@@ -88,12 +96,33 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useCallback(useState(undefined));
+  const [backdrop, setBackdrop] = useCallback(useState(false));
 
   const tableData = useSelector((state) => state.programTable);
 
   const handleRemove = (program, itemNum) => {
     dispatch(removeGridItem({ program, itemNum }));
   };
+  
+  const handleSaveOrder = (prog) => {
+    console.log(tableData.programs[`${prog}`])
+    //assumes no orders exist yet:
+    let orders = mapNewOrdersToProgram(tableData.programs[`${prog}`].details, distributors, tableData.programs[`${prog}`].items)
+    orders.forEach((ord) => {
+      dispatch(addNewOrder({
+        distributorId: ord.distributorId,
+        distributorName: ord.distributorName,
+        type: ord.type,
+        program: ord.program,
+        items: ord.items,
+        budget: ord.budget,
+        totalItems: ord.totalItems,
+        totalEstCost: ord.totalEstCost
+      }))
+    })
+
+    setBackdrop(false)
+  }
 
   const programArray = [];
   for (let program in tableData.programs) {
@@ -119,6 +148,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
 
   return (
     <>
+      <Backdrop className={classes.backdrop} open={backdrop}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <PreOrderCartTable
         currentPrograms={programArray}
         distributors={distributors}
@@ -213,6 +245,10 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
           className={classes.largeButton}
           color="secondary"
           variant="contained"
+          onClick={()=>{
+            setBackdrop(true)
+            handleSaveOrder(program)
+          }}
         >
           SAVE ORDER
         </Button>

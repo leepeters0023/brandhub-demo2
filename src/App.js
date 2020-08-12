@@ -5,10 +5,8 @@ import { useDispatch } from "react-redux";
 import {
   setInitialTableData,
 } from "./redux/slices/programTableSlice";
-import { addNewOrder, setActivePrograms } from "./redux/slices/ordersSlice";
+import { setActivePrograms } from "./redux/slices/ordersSlice";
 import { getProgramsSuccess } from "./redux/slices/programsSlice";
-
-import { mapProgramsToOrders } from "./utility/utilityFunctions";
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -56,19 +54,6 @@ const App = () => {
 
   useEffect(()=>{
     if (currentUser) {
-      const newProgramOrders = mapProgramsToOrders(programs, distributors);
-      newProgramOrders.forEach(ord => {
-        dispatch(addNewOrder({
-          distributorId: ord.distributorId,
-          distributorName: ord.distributorName,
-          type: ord.type,
-          program: ord.program,
-          items: ord.items,
-          budget: ord.budget,
-          totalItems: ord.totalItems,
-          totalEstCost: ord.totalEstCost,
-        }))
-      })
       dispatch(setActivePrograms({ programs }));
       dispatch(setInitialTableData({ programs, distributors }));
       dispatch(getProgramsSuccess({ programs }));

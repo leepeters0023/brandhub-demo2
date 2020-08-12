@@ -18,7 +18,10 @@ state: {
             estTotal: float,
           }
           distributors: {
-            distributor: value
+            distributor: {
+              orderNum: string || undefined(when being created)
+              value: int,
+            }
           }
         }
       },
@@ -71,12 +74,17 @@ const programTableSlice = createSlice({
               focusMonth: prog.focusMonth,
             },
             items: {},
+            orders: {},
             programDetails: { total: 0, budget: "" },
           })
       );
       distributors.forEach((dist) => initialDistributors.push(dist.name));
       state.programs = { ...initialPrograms };
       state.distributors = initialDistributors;
+    },
+    setOrders(state, action) {
+      const { program, orders } = action.payload
+      state.programs[`${program}`].orders = {...orders}
     },
     addItem(state, action) {
       const { program, item } = action.payload;
