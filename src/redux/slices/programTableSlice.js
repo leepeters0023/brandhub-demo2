@@ -169,7 +169,6 @@ const programTableSlice = createSlice({
     },
     removeGridItem(state, action) {
       const { program, itemNum } = action.payload;
-      console.log(program);
       state.programs[`${program}`].programDetails.total -=
         state.programs[`${program}`].items[`${itemNum}`].itemDetails.estTotal;
       state.details.total -=

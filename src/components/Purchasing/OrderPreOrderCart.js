@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import {
   removeGridItem,
   setOrders,
@@ -108,65 +108,78 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [program, setProgram] = useCallback(useState(undefined));
   const [backdrop, setBackdrop] = useCallback(useState(false));
 
-  const tableData = useSelector((state) => state.programTable);
+  const tableData = useSelector(
+    (state) => state.programTable.programs,
+    shallowEqual
+  );
 
   const handleRemove = (program, itemNum) => {
     dispatch(removeGridItem({ program, itemNum }));
   };
 
-  const handleSaveOrder = useCallback((prog) => {
-    if (tableData.programs[`${prog}`].orders.length === 0) {
-      let orders = mapNewOrdersToProgram(
-        tableData.programs[`${prog}`].details,
-        distributors,
-        tableData.programs[`${prog}`].items
-      );
-      orders.forEach((ord) => {
-        dispatch(
-          addNewOrder({
-            id: ord.id,
-            distributorId: ord.distributorId,
-            distributorName: ord.distributorName,
-            type: ord.type,
-            program: ord.program,
-            items: ord.items,
-            budget: ord.budget,
-            totalItems: ord.totalItems,
-            totalEstCost: ord.totalEstCost,
-            status: ord.status,
-          })
-        );
-      });
-      dispatch(setOrders({ program: prog, orders: orders }));
-    } else {
-      let updatedOrders = updateProgramOrders(
-        tableData.programs[`${prog}`].orders,
-        tableData.programs[`${prog}`].items
-      );
-      if (updatedOrders.length === 0) {
-        dispatch(removeProgramOrders({ program: prog }));
-      } else {
-        updatedOrders.forEach((ord) => {
-          dispatch(
-            updateOrder({
-              orderId: ord.id,
-              items: ord.items,
-              budget: ord.budget,
-              totalItems: ord.totalItems,
-              totalEstCost: ord.totalEstCost,
-              status: ord.status,
-            })
+  const handleSaveOrder = () => {
+    for (let program in tableData) {
+      if (
+        !(
+          Object.keys(tableData[`${program}`].items).length === 0 &&
+          tableData[`${program}`].orders.length === 0
+        )
+      ) {
+        if (tableData[program].orders.length === 0) {
+          let orders = mapNewOrdersToProgram(
+            tableData[program].details,
+            distributors,
+            tableData[program].items
           );
-        });
-        dispatch(setOrders({ program: prog, orders: updatedOrders }));
+          orders.forEach((ord) => {
+            dispatch(
+              addNewOrder({
+                id: ord.id,
+                distributorId: ord.distributorId,
+                distributorName: ord.distributorName,
+                type: ord.type,
+                program: ord.program,
+                items: ord.items,
+                budget: ord.budget,
+                totalItems: ord.totalItems,
+                totalEstCost: ord.totalEstCost,
+                status: ord.status,
+              })
+            );
+          });
+          dispatch(setOrders({ program: program, orders: orders }));
+        } else {
+          let updatedOrders = updateProgramOrders(
+            tableData[program].orders,
+            tableData[program].items
+          );
+          if (updatedOrders.length === 0) {
+            dispatch(removeProgramOrders({ program: program }));
+            dispatch(setOrders({ program: program, orders: [] }));
+          } else {
+            updatedOrders.forEach((ord) => {
+              dispatch(
+                updateOrder({
+                  orderId: ord.id,
+                  items: ord.items,
+                  budget: ord.budget,
+                  totalItems: ord.totalItems,
+                  totalEstCost: ord.totalEstCost,
+                  status: ord.status,
+                })
+              );
+            });
+            dispatch(setOrders({ program: program, orders: updatedOrders }));
+          }
+        }
       }
     }
-    setBackdrop(false);
-  }, [tableData.programs, dispatch, setBackdrop]);
+    setTimeout(()=>{setBackdrop(false)},1000)
+  };
 
   const programArray = [];
-  for (let program in tableData.programs) {
-    programArray.push(tableData.programs[program].details);
+  for (let program in tableData) {
+    programArray.push(tableData[program].details);
   }
   programArray.sort((a, b) => {
     return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
@@ -181,22 +194,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       setProgram(programArray[0].id);
     }
   });
-
-  useEffect(() => {
-    if (program) {
-      return () => {
-        if (
-          !(
-            Object.keys(tableData.programs[`${program}`].items).length === 0 &&
-            tableData.programs[`${program}`].orders.length === 0
-          )
-        ) {
-          handleSaveOrder(program);
-        }
-      };
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [program, handleSaveOrder]);
 
   if (programArray.length === 0 || !program) {
     return <CircularProgress />;
@@ -301,10 +298,10 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
           className={classes.largeButton}
           color="secondary"
           variant="contained"
-          disabled={
-            Object.keys(tableData.programs[`${program}`].items).length === 0 &&
-            tableData.programs[`${program}`].orders.length === 0
-          }
+          // disabled={
+          //   Object.keys(tableData[`${program}`].items).length === 0 &&
+          //   tableData[`${program}`].orders.length === 0
+          // }
           onClick={() => {
             setBackdrop(true);
             handleSaveOrder(program);

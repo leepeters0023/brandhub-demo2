@@ -7,6 +7,9 @@ import AddItemConfirmation from "./AddItemConfirmation";
 import { useDispatch } from "react-redux";
 import { addItems } from "../../redux/slices/programTableSlice";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
@@ -17,6 +20,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -62,9 +66,11 @@ const OrderPreOrder = ({ currentPrograms }) => {
 
   const [currentOrder, setCurrentOrder] = useCallback(useState({}));
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
+  const [confirmAllOpen, setConfirmAllOpen] = useCallback(useState(false));
 
   const handleConfirmClose = () => {
     setConfirmOpen(false);
+    setConfirmAllOpen(false);
   };
 
   const handleAddAllPrograms = () => {
@@ -81,6 +87,38 @@ const OrderPreOrder = ({ currentPrograms }) => {
 
   return (
     <>
+      <div className={classes.relativeContainer}>
+        <Dialog
+          open={confirmAllOpen}
+          onClose={handleConfirmClose}
+          fullWidth
+          maxWidth="sm"
+          style={{
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <DialogContent>
+            <IconButton
+              className={classes.closeButton}
+              onClick={handleConfirmClose}
+            >
+              <CancelIcon fontSize="large" color="secondary" />
+            </IconButton>
+            <br />
+            <br />
+            <Typography className={classes.headerText}>
+              Items successfully added to your order
+            </Typography>
+            <br />
+            <br />
+          </DialogContent>
+        </Dialog>
+      </div>
       {currentOrder.program && (
         <AddItemConfirmation
           itemArray={currentOrder.items}
@@ -107,6 +145,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
             className={classes.largeButton}
             onClick={() => {
               handleAddAllPrograms();
+              setConfirmAllOpen(true);
             }}
           >
             ADD ALL ITEMS TO CART
@@ -152,7 +191,6 @@ const OrderPreOrder = ({ currentPrograms }) => {
                         variant="contained"
                         color="secondary"
                         id={`${prog.id}`}
-                        
                       >
                         <PictureAsPdfIcon className={classes.navIcon} />
                       </Button>
@@ -164,7 +202,6 @@ const OrderPreOrder = ({ currentPrograms }) => {
                         variant="contained"
                         color="secondary"
                         id={`${prog.id}`}
-                        
                         onClick={() => handleAddAllProgram(prog.id)}
                       >
                         <AddShoppingCartIcon className={classes.navIcon} />

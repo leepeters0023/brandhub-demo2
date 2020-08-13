@@ -201,7 +201,7 @@ const PreOrderCartTable = (props) => {
               <TableRow>
                 <TableCell
                   classes={{ root: classes.root }}
-                  style={{ zIndex: "100", width: "300px" }}
+                  style={{ zIndex: "100", width: "300px"}}
                 >
                   <SelectorMenus
                     type="programs"
