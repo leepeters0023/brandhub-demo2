@@ -10,6 +10,7 @@ import {
   addNewOrder,
   updateOrder,
   removeProgramOrders,
+  fetchProgramOrders,
 } from "../../redux/slices/ordersSlice";
 
 import {
@@ -107,6 +108,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useCallback(useState(undefined));
   const [backdrop, setBackdrop] = useCallback(useState(false));
+  const [hasFetched, setHasFetched] = useCallback(useState({}));
+
+  const isLoading = useSelector((state) => state.orders.isLoading);
 
   const tableData = useSelector(
     (state) => state.programTable.programs,
@@ -174,7 +178,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
         }
       }
     }
-    setTimeout(()=>{setBackdrop(false)},1000)
+    setTimeout(() => {
+      setBackdrop(false);
+    }, 1000);
   };
 
   const programArray = [];
@@ -195,8 +201,19 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
     }
   });
 
+  useEffect(() => {
+    if (!hasFetched[program] && program) {
+      dispatch(fetchProgramOrders(userType, program));
+      setHasFetched({ ...hasFetched, [`${program}`]: true });
+    }
+  }, [program, userType, dispatch, hasFetched, setHasFetched]);
+
   if (programArray.length === 0 || !program) {
-    return <CircularProgress />;
+    return (
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
   }
 
   return (
@@ -214,6 +231,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
         handleModalOpen={handleModalOpen}
         handleRemove={handleRemove}
         setProgram={setProgram}
+        isLoading={isLoading}
       />
       <br />
       <br />

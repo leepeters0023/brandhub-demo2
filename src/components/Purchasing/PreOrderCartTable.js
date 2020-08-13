@@ -21,7 +21,8 @@ import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
-//import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -66,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     width: "200px !important",
     maxWidth: "200px !important",
     minWidth: "200px !important",
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
   },
 }));
 
@@ -168,7 +173,9 @@ const PreOrderCartTable = (props) => {
     handleModalOpen,
     handleRemove,
     setProgram,
+    isLoading
   } = props;
+  const classes = useStyles();
 
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
 
@@ -190,8 +197,14 @@ const PreOrderCartTable = (props) => {
     },
     [setProgram]
   );
+  if (isLoading) {
+    return (
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
 
-  const classes = useStyles();
   return (
     <>
       <TableContainer className={classes.cartContainer}>
@@ -487,6 +500,7 @@ PreOrderCartTable.propTypes = {
   setTableStyle: PropTypes.func.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default React.memo(PreOrderCartTable, (prev, next) => {
@@ -494,6 +508,7 @@ export default React.memo(PreOrderCartTable, (prev, next) => {
     prev.currentPrograms.length === next.currentPrograms.length &&
     prev.distributors.length === next.distributors.length &&
     prev.open === next.open &&
-    prev.tableStyle === next.tableStyle
+    prev.tableStyle === next.tableStyle &&
+    prev.isLoading === next.isLoading
   );
 });
