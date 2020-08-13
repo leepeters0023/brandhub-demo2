@@ -316,10 +316,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
           className={classes.largeButton}
           color="secondary"
           variant="contained"
-          // disabled={
-          //   Object.keys(tableData[`${program}`].items).length === 0 &&
-          //   tableData[`${program}`].orders.length === 0
-          // }
           onClick={() => {
             setBackdrop(true);
             handleSaveOrder(program);

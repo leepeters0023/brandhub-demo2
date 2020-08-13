@@ -86,6 +86,11 @@ const programTableSlice = createSlice({
       const { program, orders } = action.payload
       state.programs[`${program}`].orders = [...orders]
     },
+    setFetchedOrders(state, action) {
+      const { program, orders } = action.payload
+      state.programs[`${program}`].orders = [...orders]
+      //need to map orders to table 
+    },
     addItem(state, action) {
       const { program, item } = action.payload;
       let distributorValues = {};
