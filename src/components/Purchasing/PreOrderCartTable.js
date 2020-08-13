@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
   const classes = useStyles();
+  const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   const dispatch = useDispatch();
   const value = useSelector(
     (state) =>
@@ -90,18 +91,38 @@ const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
         size="small"
         id={`${distributor}-${itemNumber}`}
         value={value}
+        onBlur={(evt) => {
+          if (evt.target.value === "") {
+            dispatch(
+              setGridItem({
+                program: program,
+                itemNumber: `${itemNumber}`,
+                distributor: distributor,
+                value: 0,
+              })
+            );
+            dispatch(
+              setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+            );
+          }
+        }}
         onChange={(evt) => {
-          dispatch(
-            setGridItem({
-              program: program,
-              itemNumber: `${itemNumber}`,
-              distributor: distributor,
-              value: evt.target.value,
-            })
-          );
-          dispatch(
-            setItemTotal({ program: program, itemNumber: `${itemNumber}` })
-          );
+          if (
+            numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
+            evt.target.value === ""
+          ) {
+            dispatch(
+              setGridItem({
+                program: program,
+                itemNumber: `${itemNumber}`,
+                distributor: distributor,
+                value: evt.target.value,
+              })
+            );
+            dispatch(
+              setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+            );
+          }
         }}
       />
     </TableCell>
@@ -148,7 +169,7 @@ const PreOrderCartTable = (props) => {
     handleRemove,
     setProgram,
   } = props;
-  
+
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
 
   const currentItemsObj = useSelector(
@@ -162,10 +183,13 @@ const PreOrderCartTable = (props) => {
         }))
       : [];
 
-  const handleProgram = useCallback((id) => {
-    setCurrentProgram(id);
-    setProgram(id);
-  }, [setProgram]);
+  const handleProgram = useCallback(
+    (id) => {
+      setCurrentProgram(id);
+      setProgram(id);
+    },
+    [setProgram]
+  );
 
   const classes = useStyles();
   return (

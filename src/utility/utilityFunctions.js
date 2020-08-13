@@ -129,6 +129,9 @@ export const mapNewOrdersToProgram = (program, distributors, items) => {
 };
 
 export const updateProgramOrders = (orders, items) => {
+  if (Object.keys(items).length === 0) {
+    return [];
+  }
   let updatedOrders = [];
   orders = orders.slice();
   orders.forEach((o) => {

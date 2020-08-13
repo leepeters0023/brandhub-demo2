@@ -114,7 +114,6 @@ const ordersSlice = createSlice({
     },
     updateOrder(state, action) {
       const { orderId, items, budget, totalItems, totalEstCost, status } = action.payload;
-      console.log(orderId)
       let currentOrder = state.orders.find((ord) => ord.id === orderId);
       let index = state.orders.indexOf(currentOrder);
       let ordersArray = [...state.orders]
@@ -158,6 +157,14 @@ const ordersSlice = createSlice({
 
       state.orders = ordersArray;
     },
+    removeProgramOrders(state,action) {
+      const { program } = action.payload;
+      const currentOrders = state.orders.map(order => ({...order}))
+      const programsArray = currentOrders.filter((order) => order.type==="program")
+      const otherOrdersArray = currentOrders.filter((order) => order.type !== "program")
+      const filteredProgramOrders = programsArray.filter((order) => order.program.id !== program)
+      state.orders = otherOrdersArray.concat(filteredProgramOrders)
+    },
     removeOrder(state, action) {
       const { orderId } = action.payload;
       const ordersArray = state.orders.filter((order) => order.id !== orderId);
@@ -174,6 +181,7 @@ export const {
   addNewOrder,
   updateOrder,
   updateOrders,
+  removeProgramOrders,
   removeOrder,
   setFailure,
 } = ordersSlice.actions
