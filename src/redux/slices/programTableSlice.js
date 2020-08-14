@@ -83,13 +83,47 @@ const programTableSlice = createSlice({
       state.distributors = initialDistributors;
     },
     setOrders(state, action) {
-      const { program, orders } = action.payload
-      state.programs[`${program}`].orders = [...orders]
+      const { program, orders } = action.payload;
+      state.programs[`${program}`].orders = [...orders];
     },
     setFetchedOrders(state, action) {
-      const { program, orders } = action.payload
-      state.programs[`${program}`].orders = [...orders]
-      //need to map orders to table 
+      const { program, orders } = action.payload;
+      state.programs[`${program}`].orders = [...orders];
+      //need to map orders to table
+      let distributorValues = {};
+      let currentDistributors = [...state.distributors];
+      currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
+      orders[0].items.forEach((item) => {
+        state.programs[`${program}`].items[`${item.itemNumber}`] = {
+          itemDetails: {
+            itemNumber: item.itemNumber,
+            brand: item.brand,
+            itemType: item.itemType,
+            price: item.price,
+            qty: item.qty,
+            imgUrl: item.imgUrl,
+            complianceStatus: "pending",
+            totalItems: 0,
+            estTotal: 0,
+          },
+          distributors: {...distributorValues},
+        };
+      });
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          state.programs[`${program}`].items[`${item.itemNumber}`].distributors[
+            `${order.distributorName}`
+          ] = item.totalItems;
+          state.programs[`${program}`].items[
+            `${item.itemNumber}`
+          ].itemDetails.totalItems += item.totalItems;
+          state.programs[`${program}`].items[
+            `${item.itemNumber}`
+          ].itemDetails.estTotal += parseFloat(item.estTotal);
+          state.programs[`${program}`].programDetails.total += parseFloat(item.estTotal)
+          state.details.total += parseFloat(item.estTotal)
+        });
+      });
     },
     addItem(state, action) {
       const { program, item } = action.payload;
@@ -187,6 +221,7 @@ export const {
   setTableData,
   setInitialTableData,
   setOrders,
+  setFetchedOrders,
   addItem,
   addItems,
   setGridItem,

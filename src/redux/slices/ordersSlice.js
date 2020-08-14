@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { setOrders } from "./programTableSlice";
+import { setFetchedOrders } from "./programTableSlice";
 
 import { fetchOrdersByProgram } from "../../api/programApi";
 
@@ -200,7 +200,7 @@ export const fetchProgramOrders = (user, program) => async dispatch => {
     const currentOrders = await fetchOrdersByProgram(user, program)
     console.log(currentOrders)
     if (currentOrders.length !== 0) {
-      dispatch(setOrders({ program, orders: currentOrders}))
+      dispatch(setFetchedOrders({ program, orders: currentOrders}))
     }
     dispatch(getOrdersSuccess({orders: currentOrders}))
   } catch (err) {
