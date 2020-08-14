@@ -10,7 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemGridView = (props) => {
-
   const { type, currentItems, handlePreview, handleAddProgramItem } = props;
   const classes = useStyles();
 
@@ -110,15 +109,15 @@ const OrderItemGridView = (props) => {
                   </Button>
                 </span>
               </Tooltip>
-              <Tooltip title="Add to Cart">
+              <Tooltip title="Add to Order">
                 <span>
                   <Button
                     variant="contained"
                     color="secondary"
                     id={`${item.itemNumber}`}
-                    onClick={()=>handleAddProgramItem(item)}
+                    onClick={() => handleAddProgramItem(item)}
                   >
-                    <AddShoppingCartIcon className={classes.navIcon} />
+                    <AddBoxIcon className={classes.navIcon} />
                   </Button>
                 </span>
               </Tooltip>
@@ -134,8 +133,8 @@ OrderItemGridView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func.isRequired,
-  handleAddAllProgramItems: PropTypes.func.isRequired,
+  handleAddProgramItem: PropTypes.func,
+  handleAddAllProgramItems: PropTypes.func,
 };
 
 export default OrderItemGridView;

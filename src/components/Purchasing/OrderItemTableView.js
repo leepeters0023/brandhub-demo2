@@ -14,7 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 import StarBorderIcon from "@material-ui/icons/StarBorder";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,12 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemTableView = (props) => {
-  const {
-    type,
-    currentItems,
-    handlePreview,
-    handleAddProgramItem,
-  } = props;
+  const { type, currentItems, handlePreview, handleAddProgramItem } = props;
   const classes = useStyles();
   return (
     <>
@@ -126,7 +121,7 @@ const OrderItemTableView = (props) => {
                         </Button>
                       </span>
                     </Tooltip>
-                    <Tooltip title="Add to Cart">
+                    <Tooltip title="Add to Order">
                       <span>
                         <Button
                           variant="contained"
@@ -135,7 +130,7 @@ const OrderItemTableView = (props) => {
                           style={{ margin: "5px 2.5px" }}
                           onClick={() => handleAddProgramItem(row)}
                         >
-                          <AddShoppingCartIcon className={classes.navIcon} />
+                          <AddBoxIcon className={classes.navIcon} />
                         </Button>
                       </span>
                     </Tooltip>
@@ -154,7 +149,7 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func.isRequired,
+  handleAddProgramItem: PropTypes.func,
 };
 
 export default OrderItemTableView;

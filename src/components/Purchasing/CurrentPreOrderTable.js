@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -23,6 +24,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -173,7 +175,7 @@ const PreOrderCartTable = (props) => {
     handleModalOpen,
     handleRemove,
     setProgram,
-    isLoading
+    isLoading,
   } = props;
   const classes = useStyles();
 
@@ -214,7 +216,7 @@ const PreOrderCartTable = (props) => {
               <TableRow>
                 <TableCell
                   classes={{ root: classes.root }}
-                  style={{ zIndex: "100", width: "300px"}}
+                  style={{ zIndex: "100", width: "300px" }}
                 >
                   <SelectorMenus
                     type="programs"
@@ -224,7 +226,30 @@ const PreOrderCartTable = (props) => {
                   />
                 </TableCell>
                 <TableCell classes={{ root: classes.root }}>
-                  You currently have no items in this cart...
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Typography
+                      className={classes.bodyText}
+                      style={{ marginRight: "10px" }}
+                    >
+                      You have not added any items from this program...
+                    </Typography>
+                    <Button
+                      className={classes.largeButton}
+                      component={Link}
+                      to={`/program/${currentProgram}`}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      View Program
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             </TableHead>

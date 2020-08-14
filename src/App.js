@@ -18,13 +18,13 @@ import Calendar from "./pages/Calendar";
 import Approvals from "./pages/Approvals";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
-import Orders from "./pages/Orders";
+import CurrentOrders from "./pages/CurrentOrders";
+import PastOrders from "./pages/PastOrders";
 import Program from "./pages/Program";
 import RulesByState from "./pages/RulesByState";
 import ContactsByState from "./pages/ContactsByState";
 import POSClassifications from "./pages/POSClassifications";
 import Settings from "./pages/Settings";
-import Cart from "./pages/Cart";
 import FourOhFour from "./pages/FourOhFour";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
@@ -81,8 +81,14 @@ const App = () => {
             currentUser
           )}
           {handleAuth(
-            <Orders path="/orders/:reportType" />,
+            <PastOrders path="/orders/past" />,
             "/orders",
+            ["field1", "field2", "super"],
+            currentUser
+          )}
+          {handleAuth(
+            <CurrentOrders path="/orders/current" userType={currentUser}/>,
+            "/orders/current",
             ["field1", "field2", "super"],
             currentUser
           )}
@@ -95,12 +101,6 @@ const App = () => {
           {handleAuth(
             <Program path="/program/:programId" userType={currentUser} />,
             "/program",
-            ["field1", "field2", "super"],
-            currentUser
-          )}
-          {handleAuth(
-            <Cart path="/cart" userType={currentUser} />,
-            "/cart",
             ["field1", "field2", "super"],
             currentUser
           )}

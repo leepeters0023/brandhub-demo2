@@ -39,8 +39,8 @@ OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func.isRequired,
-  handleAddAllProgramItems: PropTypes.func.isRequired,
+  handleAddProgramItem: PropTypes.func,
+  handleAddAllProgramItems: PropTypes.func,
 };
 
 export default OrderItemViewControl;

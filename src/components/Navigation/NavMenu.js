@@ -60,9 +60,9 @@ const NavMenu = ({ userType }) => {
 
   return (
     <>
-      <Tooltip title="Notifications">
+      <Tooltip title="Navigation">
         <IconButton
-          aria-owns={anchorEl ? "notifications" : undefined}
+          aria-owns={anchorEl ? "navigation" : undefined}
           aria-haspopup="true"
           onClick={handleOpen}
         >
@@ -106,6 +106,18 @@ const NavMenu = ({ userType }) => {
                       button
                       onClick={handleClose}
                       component={Link}
+                      to="/orders/current"
+                      className={classes.nested}
+                    >
+                      <ListItemIcon>
+                        <TrackChangesIcon fontSize="large" color="secondary" />
+                      </ListItemIcon>
+                      <ListItemText primary="Current Orders" />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={handleClose}
+                      component={Link}
                       to="/order#pre"
                       className={classes.nested}
                     >
@@ -130,18 +142,6 @@ const NavMenu = ({ userType }) => {
                       button
                       onClick={handleClose}
                       component={Link}
-                      to="/orders/current#byorder"
-                      className={classes.nested}
-                    >
-                      <ListItemIcon>
-                        <TrackChangesIcon fontSize="large" color="secondary" />
-                      </ListItemIcon>
-                      <ListItemText primary="Current Orders" />
-                    </ListItem>
-                    <ListItem
-                      button
-                      onClick={handleClose}
-                      component={Link}
                       to="/orders/past#byorder"
                       className={classes.nested}
                     >
@@ -152,21 +152,6 @@ const NavMenu = ({ userType }) => {
                     </ListItem>
                   </List>
                 </Collapse>
-              </>
-            )}
-            {userType !== "compliance" && (
-              <>
-                <ListItem
-                  button
-                  onClick={handleClose}
-                  component={Link}
-                  to="/reports"
-                >
-                  <ListItemIcon>
-                    <InsertChartIcon fontSize="large" color="secondary" />
-                  </ListItemIcon>
-                  <ListItemText primary="Reports" />
-                </ListItem>
               </>
             )}
             {userType === "super" && (
@@ -233,6 +218,17 @@ const NavMenu = ({ userType }) => {
                     </ListItem>
                   </List>
                 </Collapse>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/reports"
+                >
+                  <ListItemIcon>
+                    <InsertChartIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Reports" />
+                </ListItem>
               </>
             )}
             {userType === "compliance" && (

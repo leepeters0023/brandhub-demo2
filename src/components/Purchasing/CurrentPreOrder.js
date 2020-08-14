@@ -5,6 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import {
   removeGridItem,
   setOrders,
+  setHasFetched,
 } from "../../redux/slices/programTableSlice";
 import {
   addNewOrder,
@@ -18,7 +19,7 @@ import {
   updateProgramOrders,
 } from "../../utility/utilityFunctions";
 
-import PreOrderCartTable from "./PreOrderCartTable";
+import PreOrderCartTable from "./CurrentPreOrderTable";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -108,7 +109,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useCallback(useState(undefined));
   const [backdrop, setBackdrop] = useCallback(useState(false));
-  const [hasFetched, setHasFetched] = useCallback(useState({}));
 
   const isLoading = useSelector((state) => state.orders.isLoading);
 
@@ -116,6 +116,8 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
     (state) => state.programTable.programs,
     shallowEqual
   );
+
+  const hasFetched = useSelector((state) => state.programTable.hasFetched)
 
   const handleRemove = (program, itemNum) => {
     dispatch(removeGridItem({ program, itemNum }));
@@ -204,9 +206,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   useEffect(() => {
     if (!hasFetched[program] && program) {
       dispatch(fetchProgramOrders(userType, program));
-      setHasFetched({ ...hasFetched, [`${program}`]: true });
+      dispatch(setHasFetched({ program: [`${program}`] }));
     }
-  }, [program, userType, dispatch, hasFetched, setHasFetched]);
+  }, [program, userType, dispatch, hasFetched]);
 
   if (programArray.length === 0 || !program) {
     return (

@@ -1,20 +1,20 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import OrderPreOrderCart from "../components/Purchasing/CurrentPreOrder";
-import OrderCart from "../components/Purchasing/OrderCart";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import CurrentPreOrder from "../components/Purchasing/CurrentPreOrder";
+import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import IconButton from "@material-ui/core/IconButton";
-import Container from "@material-ui/core/Container";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Cart = ({ userType }) => {
+const CurrentOrders = ({ userType }) => {
   const classes = useStyles();
 
   const [value, updateValue] = useState(1);
@@ -38,6 +38,13 @@ const Cart = ({ userType }) => {
   const [currentItem, setCurrentItem] = useState({});
 
   const handleChangeTab = (_evt, newValue) => {
+    if (newValue === 1) {
+      window.location.hash = "#preorder";
+    } else if (newValue === 2) {
+      window.location.hash = "#drafts";
+    } else if (newValue === 3) {
+      window.location.hash = "#status"
+    }
     updateValue(newValue);
   };
 
@@ -55,9 +62,20 @@ const Cart = ({ userType }) => {
     handleModal(true);
   }, []);
 
+  useEffect(() => {
+    if (window.location.hash === "#preorder") {
+      updateValue(1);
+    } else if (window.location.hash === "#drafts") {
+      updateValue(2);
+    } else if (window.location.hash === "#status") {
+      updateValue(3)
+    }
+  }, []);
+
+
   return (
     <>
-      <div className={classes.relativeContainer}>
+    <div className={classes.relativeContainer}>
         <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="sm">
           <DialogContent>
             <IconButton
@@ -86,56 +104,39 @@ const Cart = ({ userType }) => {
         </Dialog>
       </div>
       <Container className={classes.mainWrapper}>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography className={classes.titleText} variant="h5">
-            Your Cart
-          </Typography>
-          {userType !== "field1" && (
-            <div className={classes.formControl}>
-              <SelectorMenus type="cart" />
-            </div>
-          )}
-        </div>
-        <br />
-        <Tabs
+      <Typography className={classes.titleText} variant="h5">
+        Current Orders
+      </Typography>
+      <br />
+      <Tabs
           variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
           centered
         >
-          <Tab className={classes.headerText} label="Pre-Order" value={1} />
-          <Tab className={classes.headerText} label="In-Stock" value={2} />
-          <Tab className={classes.headerText} label="On-Demand" value={3} />
+          <Tab className={classes.headerText} label="Pre Order" value={1} />
+          <Tab className={classes.headerText} label="Drafts" value={2} />
+          <Tab className={classes.headerText} label="Order Status" value={3} />
         </Tabs>
         <br />
-        <br />
         {value === 1 && (
-          <OrderPreOrderCart
+          <CurrentPreOrder
             userType={userType}
             handleModalOpen={handleModalOpen}
           />
         )}
-        {value === 2 && (
-          <OrderCart userType={userType} handleModalOpen={handleModalOpen} />
-        )}
+
         {value === 3 && (
-          <OrderCart userType={userType} handleModalOpen={handleModalOpen} />
+          <OrdersCurrentTable />
         )}
       </Container>
-      <br />
     </>
-  );
-};
+  )
+}
 
-Cart.propTypes = {
-  userType: PropTypes.string,
-};
+CurrentOrders.propTypes = {
+  userType: PropTypes.string.isRequired
+}
 
-export default Cart;
+export default CurrentOrders

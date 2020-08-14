@@ -46,6 +46,7 @@ let initialState = {
     total: 0,
     budgets: {},
   },
+  hasFetched: {},
 };
 
 const programTableSlice = createSlice({
@@ -64,23 +65,25 @@ const programTableSlice = createSlice({
     setInitialTableData(state, action) {
       const { programs, distributors } = action.payload;
       let initialPrograms = {};
+      let initialFetched = {};
       let initialDistributors = [];
-      programs.forEach(
-        (prog) =>
-          (initialPrograms[`${prog.id}`] = {
-            details: {
-              id: prog.id,
-              name: prog.name,
-              focusMonth: prog.focusMonth,
-            },
-            items: {},
-            orders: [],
-            programDetails: { total: 0, budget: "" },
-          })
-      );
+      programs.forEach((prog) => {
+        initialPrograms[`${prog.id}`] = {
+          details: {
+            id: prog.id,
+            name: prog.name,
+            focusMonth: prog.focusMonth,
+          },
+          items: {},
+          orders: [],
+          programDetails: { total: 0, budget: "" },
+        };
+        initialFetched[`${prog.id}`] = false;
+      });
       distributors.forEach((dist) => initialDistributors.push(dist.name));
       state.programs = { ...initialPrograms };
       state.distributors = initialDistributors;
+      state.hasFetched = { ...initialFetched };
     },
     setOrders(state, action) {
       const { program, orders } = action.payload;
@@ -106,7 +109,7 @@ const programTableSlice = createSlice({
             totalItems: 0,
             estTotal: 0,
           },
-          distributors: {...distributorValues},
+          distributors: { ...distributorValues },
         };
       });
       orders.forEach((order) => {
@@ -120,10 +123,16 @@ const programTableSlice = createSlice({
           state.programs[`${program}`].items[
             `${item.itemNumber}`
           ].itemDetails.estTotal += parseFloat(item.estTotal);
-          state.programs[`${program}`].programDetails.total += parseFloat(item.estTotal)
-          state.details.total += parseFloat(item.estTotal)
+          state.programs[`${program}`].programDetails.total += parseFloat(
+            item.estTotal
+          );
+          state.details.total += parseFloat(item.estTotal);
         });
       });
+    },
+    setHasFetched(state, action) {
+      const {program} = action.payload;
+      state.hasFetched[`${program}`] = true;
     },
     addItem(state, action) {
       const { program, item } = action.payload;
@@ -222,6 +231,7 @@ export const {
   setInitialTableData,
   setOrders,
   setFetchedOrders,
+  setHasFetched,
   addItem,
   addItems,
   setGridItem,

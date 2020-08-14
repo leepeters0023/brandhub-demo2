@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import "date-fns";
 
-import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
 import OrdersPastTable from "../components/OrderHistory/OrdersPastTable";
 import OrderHistoryItemModal from "../components/OrderHistory/OrderHistoryItemModal";
 import OrderHistoryOrderModal from "../components/OrderHistory/OrderHistoryOrderModal";
@@ -52,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Orders = ({ reportType }) => {
+const PastOrders = () => {
   const classes = useStyles();
 
   const [selectedFromDate, setSelectedFromDate] = useState(
@@ -101,7 +100,7 @@ const Orders = ({ reportType }) => {
       updateValue(2);
       setTableType("byItems");
     }
-  }, [reportType]);
+  }, []);
 
   return (
     <>
@@ -195,26 +194,11 @@ const Orders = ({ reportType }) => {
         </Tabs>
         <br />
         <br />
-        {reportType === "current" && (
-          <OrdersCurrentTable
-            handlePreview={handlePreview}
-            tableType={tableType}
-          />
-        )}
-        {reportType === "past" && (
-          <OrdersPastTable
-            handlePreview={handlePreview}
-            tableType={tableType}
-          />
-        )}
+        <OrdersPastTable handlePreview={handlePreview} tableType={tableType} />
       </Container>
       <br />
     </>
   );
 };
 
-Orders.propTypes = {
-  reportType: PropTypes.string,
-};
-
-export default Orders;
+export default PastOrders;

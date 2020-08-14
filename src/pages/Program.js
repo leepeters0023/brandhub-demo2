@@ -8,7 +8,6 @@ import programs from "../assets/mockdata/Programs";
 
 import AddItemConfirmation from "../components/Purchasing/AddItemConfirmation";
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
-import SelectorMenus from "../components/Utility/SelectorMenus";
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
@@ -25,7 +24,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
@@ -154,15 +153,6 @@ const Program = ({ userType, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              {userType !== "field1" && <SelectorMenus type="cart" />}
-              <SelectorMenus type="regions" />
-            </div>
-            <div className={classes.innerConfigDiv}>
-              <Tooltip title="View Current PDF">
-                <IconButton>
-                  <PictureAsPdfIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
               {value !== 1 && (
                 <>
                   <Tooltip title="View List">
@@ -235,7 +225,7 @@ const Program = ({ userType, programId }) => {
                     <PictureAsPdfIcon className={classes.navIcon} />
                   </Button>
                 </Tooltip>
-                <Tooltip title="Add All to Cart">
+                <Tooltip title="Add All to Order">
                   <Button
                     variant="contained"
                     color="secondary"
@@ -243,7 +233,7 @@ const Program = ({ userType, programId }) => {
                     style={{ marginLeft: "2.5px" }}
                     onClick={handleAddAllProgramItems}
                   >
-                    <AddShoppingCartIcon className={classes.navIcon} />
+                    <AddBoxIcon className={classes.navIcon} />
                   </Button>
                 </Tooltip>
               </div>

@@ -3,10 +3,6 @@ import PropTypes from "prop-types";
 
 import { useSelector } from "react-redux";
 
-import GalloLogo from "../assets/gallologo.png";
-
-import SelectorMenus from "../components/Utility/SelectorMenus";
-
 //mockdata
 import items from "../assets/mockdata/Items";
 
@@ -32,7 +28,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -67,7 +62,7 @@ const PlaceOrder = ({ userType }) => {
   const [sortOption, setSortOption] = useState("brand");
   const [programFilters, setProgramFilters] = useState([]);
   //const [itemFilters, setItemFilters] = useState([]);
-  let programs = useSelector((state) => state.programs.programs)
+  let programs = useSelector((state) => state.programs.programs);
   const currentPrograms = useProgramSort(programs, sortOption, programFilters);
 
   const handleChangeTab = (_evt, newValue) => {
@@ -104,9 +99,8 @@ const PlaceOrder = ({ userType }) => {
   }, []);
 
   if (currentPrograms.length === 0) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
-  
 
   return (
     <>
@@ -129,23 +123,12 @@ const PlaceOrder = ({ userType }) => {
       </div>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <div className={classes.titleImage}>
-            <img className={classes.logo} src={GalloLogo} alt="Gallo" />
-            <Typography className={classes.titleText} variant="h5">
-              Place an Order
-            </Typography>
-          </div>
+          <Typography className={classes.titleText} variant="h5">
+            Place an Order
+          </Typography>
+
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              {userType !== "field1" && <SelectorMenus type="cart" />}
-              <SelectorMenus type="regions" />
-            </div>
-            <div className={classes.innerConfigDiv}>
-              <Tooltip title="View Current PDF">
-                <IconButton>
-                  <PictureAsPdfIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
               {value !== 1 && (
                 <>
                   <Tooltip title="View List">
@@ -177,6 +160,7 @@ const PlaceOrder = ({ userType }) => {
             </div>
           </div>
         </div>
+        <br />
         <Tabs
           variant="fullWidth"
           value={value}
@@ -202,8 +186,9 @@ const PlaceOrder = ({ userType }) => {
               <ProgramSort setSortOption={setSortOption} />
             </div>
             {currentPrograms.length === 0 ? (
-            <CircularProgress /> ) : (
-            <OrderPreOrder currentPrograms={currentPrograms} />
+              <CircularProgress />
+            ) : (
+              <OrderPreOrder currentPrograms={currentPrograms} />
             )}
           </>
         )}

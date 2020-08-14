@@ -18,7 +18,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import CancelIcon from "@material-ui/icons/Cancel";
 
@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   programImg: {
-    width: "175px",
-    height: "175px",
+    width: "125px",
+    height: "125px",
     borderRadius: "50%",
     objectFit: "cover",
     filter: "sepia(100%)",
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     textAlign: "center",
-    height: "360px",
+    height: "325px",
     marginBottom: "40px",
     padding: "10px",
   },
@@ -148,7 +148,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
               setConfirmAllOpen(true);
             }}
           >
-            ADD ALL ITEMS TO CART
+            ADD ALL ITEMS TO ORDER
           </Button>
           <Button
             style={{ margin: "0 5px" }}
@@ -178,34 +178,30 @@ const OrderPreOrder = ({ currentPrograms }) => {
                 <Typography className={classes.headerText}>
                   {prog.name}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {`Focus Month: ${prog.focusMonth}`}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {`Business Unit: ${prog.unit}`}
-                </Typography>
+                <div>
+                  <Typography variant="body2" color="textSecondary">
+                    {`Focus Month: ${prog.focusMonth}`}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {`Business Unit: ${prog.unit}`}
+                  </Typography>
+                </div>
                 <div className={classes.itemControl}>
                   <Tooltip title="Add All Items to PDF">
                     <span>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        id={`${prog.id}`}
-                      >
-                        <PictureAsPdfIcon className={classes.navIcon} />
-                      </Button>
+                      <IconButton id={`${prog.id}`}>
+                        <PictureAsPdfIcon />
+                      </IconButton>
                     </span>
                   </Tooltip>
-                  <Tooltip title="Add All Items to Cart">
+                  <Tooltip title="Add All Items to Order">
                     <span>
-                      <Button
-                        variant="contained"
-                        color="secondary"
+                      <IconButton
                         id={`${prog.id}`}
                         onClick={() => handleAddAllProgram(prog.id)}
                       >
-                        <AddShoppingCartIcon className={classes.navIcon} />
-                      </Button>
+                        <AddBoxIcon />
+                      </IconButton>
                     </span>
                   </Tooltip>
                 </div>

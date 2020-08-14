@@ -144,7 +144,7 @@ const OrdersPastTable = ({ handlePreview, tableType }) => {
 
 OrdersPastTable.propTypes = {
   handlePreview: PropTypes.func.isRequired,
-  tableType: PropTypes.string.isRequired,
+  tableType: PropTypes.string,
 };
 
 export default OrdersPastTable;

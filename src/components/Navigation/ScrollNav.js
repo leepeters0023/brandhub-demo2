@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
-import { Link } from "@reach/router";
+//import { Link } from "@reach/router";
 
 import Notifications from "../User/Notifications";
 import UserNavMenu from "./UserNavMenu";
@@ -21,8 +21,9 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+//import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import CancelIcon from "@material-ui/icons/Cancel";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -82,18 +83,28 @@ const ScrollNav = (props) => {
       <CssBaseline />
       <HideOnScroll {...props}>
         <AppBar elevation={0} className={classes.scrollNav}>
-          <div style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-
-          <div className={classes.navBreak}>
-            <NavMenu userType={userType} />
-            <img
-              src={BrandHubLogo}
-              alt="Logo"
-              style={{ filter: "brightness(0%)" }}
-            />
-          </div>
-          <div className={classes.navBreak}>
-            {userType !== "compliance" && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <div className={classes.navBreak}>
+              <NavMenu userType={userType} />
+              <img
+                src={BrandHubLogo}
+                alt="Logo"
+                style={{ filter: "brightness(0%)" }}
+              />
+            </div>
+            <div className={classes.navBreak}>
+              <Tooltip title="View Current PDF">
+                <IconButton>
+                  <PictureAsPdfIcon fontSize="large" />
+                </IconButton>
+              </Tooltip>
+              {/* {userType !== "compliance" && (
               <>
                 <Tooltip title="View Cart">
                   <IconButton component={Link} to="/cart#preorder">
@@ -101,13 +112,13 @@ const ScrollNav = (props) => {
                   </IconButton>
                 </Tooltip>{" "}
               </>
-            )}
-            <Notifications />
-            <UserNavMenu
-              handleLogout={handleLogout}
-              handleUserModal={handleUserModal}
-            />
-          </div>
+            )} */}
+              <Notifications />
+              <UserNavMenu
+                handleLogout={handleLogout}
+                handleUserModal={handleUserModal}
+              />
+            </div>
           </div>
         </AppBar>
       </HideOnScroll>
@@ -118,7 +129,7 @@ const ScrollNav = (props) => {
 
 ScrollNav.propTypes = {
   userType: PropTypes.string.isRequired,
-  handleLogout: PropTypes.func.isRequired
-}
+  handleLogout: PropTypes.func.isRequired,
+};
 
 export default ScrollNav;
