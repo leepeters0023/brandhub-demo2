@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setGridItem,
   setItemTotal,
+  setProgramComplete,
 } from "../../redux/slices/programTableSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
@@ -25,6 +26,7 @@ import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
@@ -178,11 +180,16 @@ const PreOrderCartTable = (props) => {
     isLoading,
   } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
-
   const currentItemsObj = useSelector(
     (state) => state.programTable.programs[`${currentProgram}`].items
+  );
+
+  const isComplete = useSelector(
+    (state) =>
+      state.programTable.programs[`${currentProgram}`].programDetails.isComplete
   );
 
   const currentItems =
@@ -207,6 +214,12 @@ const PreOrderCartTable = (props) => {
     );
   }
 
+  const handleComplete = () => {
+    dispatch(
+      setProgramComplete({ program: currentProgram, status: !isComplete })
+    );
+  };
+
   return (
     <>
       <TableContainer className={classes.cartContainer}>
@@ -218,12 +231,21 @@ const PreOrderCartTable = (props) => {
                   classes={{ root: classes.root }}
                   style={{ zIndex: "100", width: "300px" }}
                 >
-                  <SelectorMenus
-                    type="programs"
-                    programs={currentPrograms}
-                    handler={handleProgram}
-                    currentProgram={currentProgram}
-                  />
+                  <div style={{ display: "flex", alignItems: "flex-end" }}>
+                    <SelectorMenus
+                      type="programs"
+                      programs={currentPrograms}
+                      handler={handleProgram}
+                      currentProgram={currentProgram}
+                    />
+                    <Tooltip title="Complete">
+                      <Checkbox
+                        checked={isComplete}
+                        onChange={handleComplete}
+                        inputProps={{ "aria-label": "complete checkbox" }}
+                      />
+                    </Tooltip>
+                  </div>
                 </TableCell>
                 <TableCell classes={{ root: classes.root }}>
                   <div
@@ -261,12 +283,21 @@ const PreOrderCartTable = (props) => {
                     classes={{ root: classes.root }}
                     style={{ zIndex: "100" }}
                   >
-                    <SelectorMenus
-                      type="programs"
-                      programs={currentPrograms}
-                      handler={handleProgram}
-                      currentProgram={currentProgram}
-                    />
+                    <div style={{ display: "flex", alignItems: "flex-end" }}>
+                      <SelectorMenus
+                        type="programs"
+                        programs={currentPrograms}
+                        handler={handleProgram}
+                        currentProgram={currentProgram}
+                      />
+                      <Tooltip title="Complete">
+                        <Checkbox
+                          checked={isComplete}
+                          onChange={handleComplete}
+                          inputProps={{ "aria-label": "complete checkbox" }}
+                        />
+                      </Tooltip>
+                    </div>
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell

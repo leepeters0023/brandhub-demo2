@@ -27,6 +27,7 @@ state: {
       },
       programDetails: {
         total: float,
+        isComplete: bool,
         budget: string
       }
     }
@@ -76,7 +77,7 @@ const programTableSlice = createSlice({
           },
           items: {},
           orders: [],
-          programDetails: { total: 0, budget: "" },
+          programDetails: { total: 0, isComplete: false, budget: "" },
         };
         initialFetched[`${prog.id}`] = false;
       });
@@ -215,6 +216,10 @@ const programTableSlice = createSlice({
       state.programs[`${program}`].programDetails.total = totalProgramCost;
       state.details.total += totalProgramCost - initialTotal;
     },
+    setProgramComplete(state, action) {
+      const { program, status } = action.payload;
+      state.programs[`${program}`].programDetails.isComplete = status
+    },
     removeGridItem(state, action) {
       const { program, itemNum } = action.payload;
       state.programs[`${program}`].programDetails.total -=
@@ -236,6 +241,7 @@ export const {
   addItems,
   setGridItem,
   setItemTotal,
+  setProgramComplete,
   removeGridItem,
 } = programTableSlice.actions;
 

@@ -187,7 +187,12 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
 
   const programArray = [];
   for (let program in tableData) {
-    programArray.push(tableData[program].details);
+    programArray.push({
+      id: tableData[program].details.id,
+      name: tableData[program].details.name,
+      focusMonth: tableData[program].details.focusMonth,
+      isComplete: tableData[program].programDetails.isComplete
+    });
   }
   programArray.sort((a, b) => {
     return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
+
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   //data would be pulled from store
@@ -21,6 +25,7 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState("");
+  const currentPrograms = useSelector((state) => state.programTable.programs)
 
   const handleChangeSelect = (evt) => {
     if (evt.target.id === "regions") {
@@ -121,7 +126,20 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
           >
             {programs.map((program, index) => (
               <MenuItem value={program.id} key={index}>
-                {`${program.name}-${program.focusMonth}`}
+                {currentPrograms[program.id].programDetails.isComplete ? (
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}
+                  >
+                    <Typography variant="body2">
+                      {`${program.name}-${program.focusMonth}`}
+                    </Typography>
+                    <CheckCircleIcon color="secondary" style={{marginLeft: "5px"}} />
+                  </div>
+                ) : (
+                  <Typography variant="body2">
+                    {`${program.name}-${program.focusMonth}`}
+                  </Typography>
+                )}
               </MenuItem>
             ))}
           </Select>
