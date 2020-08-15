@@ -8,7 +8,6 @@ import UserNavMenu from "./UserNavMenu";
 import NavMenu from "./NavMenu";
 import AddressBook from "../User/AddressBook";
 
-import Tooltip from "@material-ui/core/Tooltip";
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -23,7 +22,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 //import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import CancelIcon from "@material-ui/icons/Cancel";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -99,11 +97,6 @@ const ScrollNav = (props) => {
               />
             </div>
             <div className={classes.navBreak}>
-              <Tooltip title="View Current PDF">
-                <IconButton>
-                  <PictureAsPdfIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
               {/* {userType !== "compliance" && (
               <>
                 <Tooltip title="View Cart">
