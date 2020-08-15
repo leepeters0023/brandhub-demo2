@@ -49,12 +49,12 @@ const UserNavMenu = ({ handleLogout, handleUserModal }) => {
       <Menu
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

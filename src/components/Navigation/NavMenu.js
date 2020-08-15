@@ -72,12 +72,12 @@ const NavMenu = ({ userType }) => {
       <Menu
         getContentAnchorEl={null}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
+          vertical: "top",
+          horizontal: "left",
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -91,7 +91,7 @@ const NavMenu = ({ userType }) => {
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
-            {userType !== "compliance" && (
+            {userType === "super" && (
               <>
                 <ListItem button onClick={handleOrders}>
                   <ListItemIcon>
@@ -102,18 +102,6 @@ const NavMenu = ({ userType }) => {
                 </ListItem>
                 <Collapse in={ordersOpen} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
-                    <ListItem
-                      button
-                      onClick={handleClose}
-                      component={Link}
-                      to="/orders/current"
-                      className={classes.nested}
-                    >
-                      <ListItemIcon>
-                        <TrackChangesIcon fontSize="large" color="secondary" />
-                      </ListItemIcon>
-                      <ListItemText primary="Current Orders" />
-                    </ListItem>
                     <ListItem
                       button
                       onClick={handleClose}
@@ -130,13 +118,13 @@ const NavMenu = ({ userType }) => {
                       button
                       onClick={handleClose}
                       component={Link}
-                      to="/coupons"
+                      to="/orders/open"
                       className={classes.nested}
                     >
                       <ListItemIcon>
-                        <CardGiftcardIcon fontSize="large" color="secondary" />
+                        <TrackChangesIcon fontSize="large" color="secondary" />
                       </ListItemIcon>
-                      <ListItemText primary="Coupons" />
+                      <ListItemText primary="Open Orders" />
                     </ListItem>
                     <ListItem
                       button
@@ -148,20 +136,27 @@ const NavMenu = ({ userType }) => {
                       <ListItemIcon>
                         <HistoryIcon fontSize="large" color="secondary" />
                       </ListItemIcon>
-                      <ListItemText primary="Past Orders" />
+                      <ListItemText primary="Order History" />
                     </ListItem>
                   </List>
                 </Collapse>
-              </>
-            )}
-            {userType === "super" && (
-              <>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/coupons"
+                >
+                  <ListItemIcon>
+                    <CardGiftcardIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Coupons" />
+                </ListItem>
                 <ListItem button onClick={handleCompliance}>
                   <ListItemIcon>
                     <AssignmentTurnedInIcon fontSize="large" />
                   </ListItemIcon>
                   <ListItemText primary="Compliance" />
-                  {ordersOpen ? <ExpandLess /> : <ExpandMore />}
+                  {complianceOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
                 <Collapse in={complianceOpen} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
@@ -228,6 +223,54 @@ const NavMenu = ({ userType }) => {
                     <InsertChartIcon fontSize="large" color="secondary" />
                   </ListItemIcon>
                   <ListItemText primary="Reports" />
+                </ListItem>
+              </>
+            )}
+            {(userType === "field1" || userType === "field2") && (
+              <>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/order#pre"
+                >
+                  <ListItemIcon>
+                    <ShopIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Place an Order" />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/orders/open"
+                >
+                  <ListItemIcon>
+                    <TrackChangesIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Open Orders" />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/orders/past#byorder"
+                >
+                  <ListItemIcon>
+                    <HistoryIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Order History" />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/coupons"
+                >
+                  <ListItemIcon>
+                    <CardGiftcardIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Coupons" />
                 </ListItem>
               </>
             )}

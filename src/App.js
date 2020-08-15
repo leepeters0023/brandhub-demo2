@@ -87,7 +87,7 @@ const App = () => {
             currentUser
           )}
           {handleAuth(
-            <CurrentOrders path="/orders/current" userType={currentUser}/>,
+            <CurrentOrders path="/orders/open" userType={currentUser}/>,
             "/orders/current",
             ["field1", "field2", "super"],
             currentUser

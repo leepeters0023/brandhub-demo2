@@ -176,7 +176,7 @@ const PlaceOrder = ({ userType }) => {
         <br />
         {value === 1 && (
           <>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <ProgramFilter
                 brands={brands}
                 focusMonths={focusMonths}

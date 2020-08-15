@@ -12,6 +12,10 @@ export default {
       dark: "#595959",
       contrastText: "#000000",
     },
+    text: {
+      primary: "#4C4C4C",
+      secondary: "#737373",
+    }
   },
   dashboard: {
     paper: {

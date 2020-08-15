@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   filterList: {
     display: "flex",
     overflowX: "auto",
-    width: "Calc(100% - 380px)",
+    width: "Calc(100% - 390px)",
   },
 }));
 
@@ -291,7 +291,7 @@ const ProgramFilter = (props) => {
           label="Search"
           name="search"
         />
-        <Button variant="contained" color="secondary" style={{ width: "50px" }}>
+        <Button variant="contained" color="secondary" style={{ width: "50px", height: "40px" }}>
           <SearchIcon className={classes.navIcon} />
         </Button>
       </div>

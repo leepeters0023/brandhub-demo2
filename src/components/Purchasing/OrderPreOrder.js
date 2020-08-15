@@ -16,11 +16,17 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import CancelIcon from "@material-ui/icons/Cancel";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -52,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     height: "325px",
     marginBottom: "40px",
     padding: "10px",
+    backgroundColor: "whitesmoke",
   },
   itemControl: {
     width: "100%",
@@ -67,6 +74,15 @@ const OrderPreOrder = ({ currentPrograms }) => {
   const [currentOrder, setCurrentOrder] = useCallback(useState({}));
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
   const [confirmAllOpen, setConfirmAllOpen] = useCallback(useState(false));
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleConfirmClose = () => {
     setConfirmOpen(false);
@@ -128,36 +144,63 @@ const OrderPreOrder = ({ currentPrograms }) => {
         />
       )}
       <Container style={{ textAlign: "center", maxWidth: "2000px" }}>
-        <Typography className={classes.titleText}>Current Programs</Typography>
-        <br />
         <div
-          className={classes.allItemButtons}
           style={{
             display: "flex",
             width: "100%",
-            justifyContent: "space-around",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Button
-            style={{ margin: "0 5px" }}
-            variant="contained"
-            color="secondary"
-            className={classes.largeButton}
-            onClick={() => {
-              handleAddAllPrograms();
+          <Typography className={classes.titleText}>
+            Current Programs
+          </Typography>
+          <Tooltip title="Program Options">
+            <IconButton
+            aria-owns={anchorEl ? "program-options" : undefined}
+            aria-haspopup="true"
+            onClick={handleOpen}>
+              <MenuIcon />
+            </IconButton>
+          </Tooltip>
+          <Menu
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleAddAllPrograms();
               setConfirmAllOpen(true);
-            }}
-          >
-            ADD ALL ITEMS TO ORDER
-          </Button>
-          <Button
-            style={{ margin: "0 5px" }}
-            variant="contained"
-            color="secondary"
-            className={classes.largeButton}
-          >
-            ADD ALL ITEMS TO PDF
-          </Button>
+          }}
+        >
+          <ListItemIcon>
+            <AddBoxIcon color="secondary" fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{variant: "body2" }} primary="Add All Items to Order" />
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          onClick={() => {
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <PictureAsPdfIcon color="secondary" fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{variant: "body2" }} primary="Add All Items to PDF" />
+        </MenuItem>
+      </Menu>
         </div>
         <br />
         <br />

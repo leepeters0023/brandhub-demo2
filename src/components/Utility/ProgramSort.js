@@ -1,41 +1,77 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+  selectedButton: {
+    fontWeight: "600",
+    fontSize: "1rem",
+    textAlign: "center",
+    color: "#737373",
+  },
+}));
 
 const ProgramSort = ({ setSortOption }) => {
+  const classes = useStyles();
+
   const [value, setValue] = useState("brand");
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
-    setSortOption(event.target.value);
-  };
-
   return (
-    <FormControl component="fieldset">
-      <RadioGroup
-        row
-        aria-label="sortOption"
-        name="sort"
-        value={value}
-        onChange={handleChange}
+    <>
+      <ButtonGroup
+        style={{ height: "40px" }}
+        color="secondary"
+        aria-label="program-sort"
       >
-        <FormControlLabel value="brand" control={<Radio />} label="Brand" />
-        <FormControlLabel
-          value="month"
-          control={<Radio />}
-          label="Focus Month"
-        />
-        <FormControlLabel
-          value="unit"
-          control={<Radio />}
-          label="Business Unit"
-        />
-      </RadioGroup>
-    </FormControl>
+        <Tooltip title="Sort by Brand">
+          <Button
+            className={
+              value === "brand" ? classes.largeButton : classes.selectedButton
+            }
+            variant={value === "brand" ? "contained" : "outlined"}
+            onClick={() => {
+              setValue("brand");
+              setSortOption("brand");
+            }}
+          >
+            BRAND
+          </Button>
+        </Tooltip>
+        <Tooltip title="Sort by Focus Month">
+          <Button
+            className={
+              value === "month" ? classes.largeButton : classes.selectedButton
+            }
+            variant={value === "month" ? "contained" : "outlined"}
+            onClick={() => {
+              setValue("month");
+              setSortOption("month");
+            }}
+          >
+            FOCUS MONTH
+          </Button>
+        </Tooltip>
+        <Tooltip title="Sort by Business Unit">
+          <Button
+            className={
+              value === "unit" ? classes.largeButton : classes.selectedButton
+            }
+            variant={value === "unit" ? "contained" : "outlined"}
+            onClick={() => {
+              setValue("unit");
+              setSortOption("unit");
+            }}
+          >
+            BUSINESS UNIT
+          </Button>
+        </Tooltip>
+      </ButtonGroup>
+    </>
   );
 };
 
