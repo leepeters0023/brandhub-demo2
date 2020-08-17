@@ -130,7 +130,7 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
                   <div
                     style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}
                   >
-                    <Typography variant="body2">
+                    <Typography variant="body2" style={{overflow: "hidden"}}>
                       {`${program.name}-${program.focusMonth}`}
                     </Typography>
                     <CheckCircleIcon color="secondary" style={{marginLeft: "5px"}} />

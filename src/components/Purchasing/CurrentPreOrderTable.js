@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -27,17 +27,19 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import CancelIcon from "@material-ui/icons/Cancel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   headerCell: {
+    position: "relative",
     padding: "0",
-    height: "184px",
+    height: "125px",
     minWidth: "150px",
     display: "flex",
     flexDirection: "column",
@@ -47,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   borderRight: {
     borderRight: "1px solid #cbcbcb",
+  },
+  borderRightLight: {
+    borderRight: `1px solid rgba(224, 224, 224, 1)`,
   },
   infoRow: {
     backgroundColor: "#cbcbcb",
@@ -78,65 +83,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInputCell = React.memo(({ program, distributor, itemNumber }) => {
-  const classes = useStyles();
-  const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-  const dispatch = useDispatch();
-  const value = useSelector(
-    (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`]
-        .distributors[distributor]
-  );
+const MemoInputCell = React.memo(
+  React.forwardRef(({ program, distributor, itemNumber, index }, ref) => {
+    const classes = useStyles();
+    const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    const dispatch = useDispatch();
+    const value = useSelector(
+      (state) =>
+        state.programTable.programs[`${program}`].items[`${itemNumber}`]
+          .distributors[distributor]
+    );
 
-  return (
-    <TableCell
-      classes={{ root: classes.root }}
-      className={classes.borderRight}
-      style={{ zIndex: "-100" }}
-    >
-      <InputBase
-        style={{ textAlign: "center", zIndex: "0" }}
-        fullWidth
-        size="small"
-        id={`${distributor}-${itemNumber}`}
-        value={value}
-        onBlur={(evt) => {
-          if (evt.target.value === "") {
-            dispatch(
-              setGridItem({
-                program: program,
-                itemNumber: `${itemNumber}`,
-                distributor: distributor,
-                value: 0,
-              })
-            );
-            dispatch(
-              setItemTotal({ program: program, itemNumber: `${itemNumber}` })
-            );
-          }
-        }}
-        onChange={(evt) => {
-          if (
-            numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
-            evt.target.value === ""
-          ) {
-            dispatch(
-              setGridItem({
-                program: program,
-                itemNumber: `${itemNumber}`,
-                distributor: distributor,
-                value: evt.target.value,
-              })
-            );
-            dispatch(
-              setItemTotal({ program: program, itemNumber: `${itemNumber}` })
-            );
-          }
-        }}
-      />
-    </TableCell>
-  );
-});
+    const handleScrollLeft = () => {
+      ref.current.scrollLeft = 0;
+    };
+
+    return (
+      <TableCell
+        classes={{ root: classes.root }}
+        className={classes.borderRight}
+        style={{ zIndex: "-100" }}
+        onFocus={() => (index === 0 ? handleScrollLeft() : null)}
+      >
+        <InputBase
+          style={{ textAlign: "center", zIndex: "0" }}
+          fullWidth
+          size="small"
+          id={`${distributor}-${itemNumber}`}
+          value={value}
+          onBlur={(evt) => {
+            if (evt.target.value === "") {
+              dispatch(
+                setGridItem({
+                  program: program,
+                  itemNumber: `${itemNumber}`,
+                  distributor: distributor,
+                  value: 0,
+                })
+              );
+              dispatch(
+                setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+              );
+            }
+          }}
+          onChange={(evt) => {
+            if (
+              numArray.includes(
+                evt.target.value[evt.target.value.length - 1]
+              ) ||
+              evt.target.value === ""
+            ) {
+              dispatch(
+                setGridItem({
+                  program: program,
+                  itemNumber: `${itemNumber}`,
+                  distributor: distributor,
+                  value: evt.target.value,
+                })
+              );
+              dispatch(
+                setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+              );
+            }
+          }}
+        />
+      </TableCell>
+    );
+  })
+);
 
 const TotalItemCell = React.memo(({ program, itemNumber }) => {
   const classes = useStyles();
@@ -146,7 +160,11 @@ const TotalItemCell = React.memo(({ program, itemNumber }) => {
         .itemDetails.totalItems
   );
   return (
-    <TableCell classes={{ root: classes.root }} style={{ textAlign: "center" }}>
+    <TableCell
+      classes={{ root: classes.root }}
+      style={{ textAlign: "center" }}
+      className={classes.borderRightLight}
+    >
       <div className={classes.infoCell}>{value}</div>
     </TableCell>
   );
@@ -160,7 +178,11 @@ const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
         .itemDetails.estTotal
   );
   return (
-    <TableCell classes={{ root: classes.root }} style={{ textAlign: "center" }}>
+    <TableCell
+      classes={{ root: classes.root }}
+      style={{ textAlign: "center" }}
+      className={classes.borderRightLight}
+    >
       <div className={classes.infoCell}>{`$${value.toFixed(2)}`}</div>
     </TableCell>
   );
@@ -181,6 +203,7 @@ const PreOrderCartTable = (props) => {
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
+  const tableRef = useRef(null);
 
   const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
   const currentItemsObj = useSelector(
@@ -222,7 +245,7 @@ const PreOrderCartTable = (props) => {
 
   return (
     <>
-      <TableContainer className={classes.cartContainer}>
+      <TableContainer className={classes.cartContainer} ref={tableRef}>
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
           {Object.keys(currentItemsObj).length === 0 ? (
             <TableHead>
@@ -230,21 +253,26 @@ const PreOrderCartTable = (props) => {
                 <TableCell
                   classes={{ root: classes.root }}
                   style={{ zIndex: "100", width: "300px" }}
+                  className={classes.borderRight}
                 >
-                  <div style={{ display: "flex", alignItems: "flex-end" }}>
-                    <SelectorMenus
-                      type="programs"
-                      programs={currentPrograms}
-                      handler={handleProgram}
-                      currentProgram={currentProgram}
-                    />
-                    <Tooltip title="Complete">
-                      <Checkbox
-                        checked={isComplete}
-                        onChange={handleComplete}
-                        inputProps={{ "aria-label": "complete checkbox" }}
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                      <SelectorMenus
+                        type="programs"
+                        programs={currentPrograms}
+                        handler={handleProgram}
+                        currentProgram={currentProgram}
                       />
-                    </Tooltip>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isComplete}
+                            onChange={handleComplete}
+                            inputProps={{ "aria-label": "complete checkbox" }}
+                          />
+                        }
+                        label="Complete"
+                        labelPlacement="end"
+                      />
                   </div>
                 </TableCell>
                 <TableCell classes={{ root: classes.root }}>
@@ -281,27 +309,33 @@ const PreOrderCartTable = (props) => {
                 <TableRow>
                   <TableCell
                     classes={{ root: classes.root }}
+                    className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    <div style={{ display: "flex", alignItems: "flex-end" }}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                       <SelectorMenus
                         type="programs"
                         programs={currentPrograms}
                         handler={handleProgram}
                         currentProgram={currentProgram}
                       />
-                      <Tooltip title="Complete">
-                        <Checkbox
-                          checked={isComplete}
-                          onChange={handleComplete}
-                          inputProps={{ "aria-label": "complete checkbox" }}
-                        />
-                      </Tooltip>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isComplete}
+                            onChange={handleComplete}
+                            inputProps={{ "aria-label": "complete checkbox" }}
+                          />
+                        }
+                        label="Complete"
+                        labelPlacement="end"
+                      />
                     </div>
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell
                       classes={{ root: classes.root }}
+                      className={classes.borderRight}
                       key={item.itemNumber}
                     >
                       <div className={classes.headerCell}>
@@ -310,8 +344,9 @@ const PreOrderCartTable = (props) => {
                             onClick={() => {
                               handleRemove(currentProgram, item.itemNumber);
                             }}
+                            style={{ position: "absolute", top: 0, right: -15 }}
                           >
-                            <DeleteForeverIcon />
+                            <CancelIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
                         <img
@@ -340,7 +375,7 @@ const PreOrderCartTable = (props) => {
                     classes={{ root: classes.root }}
                     className={classes.borderRight}
                     align="right"
-                    style={{ top: 197, zIndex: "100" }}
+                    style={{ top: 138, zIndex: "100" }}
                   >
                     <div className={classes.tableControl}>
                       <Typography>Order Details</Typography>
@@ -365,7 +400,8 @@ const PreOrderCartTable = (props) => {
                     return (
                       <TableCell
                         classes={{ root: classes.root }}
-                        style={{ top: 197, textAlign: "center" }}
+                        style={{ top: 138, textAlign: "center" }}
+                        className={classes.borderRight}
                         key={item.itemNumber}
                       >
                         <div className={classes.infoCell}>
@@ -380,7 +416,7 @@ const PreOrderCartTable = (props) => {
                 <TableRow>
                   <TableCell
                     classes={{ root: classes.root }}
-                    style={{ padding: 0, top: 258 }}
+                    style={{ padding: 0, top: 199 }}
                     colSpan={currentItems.length + 1}
                     className={classes[tableStyle]}
                   >
@@ -416,6 +452,7 @@ const PreOrderCartTable = (props) => {
                                   classes={{ root: classes.root }}
                                   align="center"
                                   key={item.itemNumber}
+                                  className={classes.borderRightLight}
                                 >
                                   <div className={classes.infoCell}>
                                     {item.qty !== "Single Unit"
@@ -472,6 +509,7 @@ const PreOrderCartTable = (props) => {
                                   classes={{ root: classes.root }}
                                   align="center"
                                   key={item.itemNumber}
+                                  className={classes.borderRightLight}
                                 >
                                   {`$${item.price.toFixed(2)}`}
                                 </TableCell>
@@ -528,12 +566,14 @@ const PreOrderCartTable = (props) => {
                         </Typography>
                       </div>
                     </TableCell>
-                    {currentItems.map((item) => (
+                    {currentItems.map((item, index) => (
                       <MemoInputCell
                         key={item.itemNumber}
                         program={currentProgram}
                         distributor={dist.name}
                         itemNumber={item.itemNumber}
+                        index={index}
+                        ref={tableRef}
                       />
                     ))}
                   </TableRow>

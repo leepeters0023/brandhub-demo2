@@ -198,7 +198,6 @@ export const fetchProgramOrders = (user, program) => async dispatch => {
   try {
     dispatch(setIsLoading())
     const currentOrders = await fetchOrdersByProgram(user, program)
-    console.log(currentOrders)
     if (currentOrders.length !== 0) {
       dispatch(setFetchedOrders({ program, orders: currentOrders}))
     }

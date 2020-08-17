@@ -37,8 +37,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   programImg: {
-    width: "125px",
-    height: "125px",
+    width: "85px",
+    height: "85px",
+    marginTop: "15px",
     borderRadius: "50%",
     objectFit: "cover",
     filter: "sepia(100%)",
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     textAlign: "center",
-    height: "325px",
+    height: "275px",
     marginBottom: "40px",
     padding: "10px",
     backgroundColor: "whitesmoke",
@@ -218,7 +219,7 @@ const OrderPreOrder = ({ currentPrograms }) => {
                   </Tooltip>
                 </Link>
                 <Typography className={classes.headerText}>
-                  {prog.name}
+                  {`${prog.name} - ${prog.focusMonth}`}
                 </Typography>
                 <div>
                   <Typography variant="body2" color="textSecondary">
