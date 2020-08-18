@@ -11,6 +11,7 @@ import { getProgramsSuccess } from "./redux/slices/programsSlice";
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Dashboard from "./pages/Dashboard";
+import Programs from "./pages/Programs";
 import PlaceOrder from "./pages/PlaceOrder";
 import Budget from "./pages/Budget";
 import Reports from "./pages/Reports";
@@ -81,14 +82,20 @@ const App = () => {
             currentUser
           )}
           {handleAuth(
+            <Programs path="/programs" />,
+            "/programs",
+            ["field1", "field2", "super"],
+            currentUser
+          )}
+          {handleAuth(
             <PastOrders path="/orders/past" />,
-            "/orders",
+            "/orders/past",
             ["field1", "field2", "super"],
             currentUser
           )}
           {handleAuth(
             <CurrentOrders path="/orders/open" userType={currentUser}/>,
-            "/orders/current",
+            "/orders/open",
             ["field1", "field2", "super"],
             currentUser
           )}

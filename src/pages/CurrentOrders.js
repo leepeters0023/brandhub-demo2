@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import CurrentPreOrder from "../components/Purchasing/CurrentPreOrder";
 import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
+import CurrentInStockOrder from "../components/Purchasing/CurrentInStockOrder";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -116,8 +117,9 @@ const CurrentOrders = ({ userType }) => {
           centered
         >
           <Tab className={classes.headerText} label="Pre Order" value={1} />
-          <Tab className={classes.headerText} label="Drafts" value={2} />
-          <Tab className={classes.headerText} label="Order Status" value={3} />
+          <Tab className={classes.headerText} label="In-Stock" value={2} />
+          <Tab className={classes.headerText} label="On-Demand" value={3} />
+          <Tab className={classes.headerText} label="Order Status" value={4} />
         </Tabs>
         <br />
         {value === 1 && (
@@ -126,8 +128,13 @@ const CurrentOrders = ({ userType }) => {
             handleModalOpen={handleModalOpen}
           />
         )}
-
+        {value === 2 && (
+          <CurrentInStockOrder userType={userType} handleModalOpen={handleModalOpen} />
+        )}
         {value === 3 && (
+          <CurrentInStockOrder userType={userType} handleModalOpen={handleModalOpen} />
+        )}
+        {value === 4 && (
           <OrdersCurrentTable />
         )}
       </Container>

@@ -27,6 +27,7 @@ import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import GavelIcon from "@material-ui/icons/Gavel";
 import ContactMailIcon from "@material-ui/icons/ContactMail";
 import CategoryIcon from "@material-ui/icons/Category";
+import ClassIcon from "@material-ui/icons/Class";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -106,7 +107,7 @@ const NavMenu = ({ userType }) => {
                       button
                       onClick={handleClose}
                       component={Link}
-                      to="/order#pre"
+                      to="/order#instock"
                       className={classes.nested}
                     >
                       <ListItemIcon>
@@ -140,6 +141,17 @@ const NavMenu = ({ userType }) => {
                     </ListItem>
                   </List>
                 </Collapse>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs"
+                >
+                  <ListItemIcon>
+                    <ClassIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Programs" />
+                </ListItem>
                 <ListItem
                   button
                   onClick={handleClose}
@@ -232,7 +244,7 @@ const NavMenu = ({ userType }) => {
                   button
                   onClick={handleClose}
                   component={Link}
-                  to="/order#pre"
+                  to="/order#instock"
                 >
                   <ListItemIcon>
                     <ShopIcon fontSize="large" color="secondary" />
@@ -271,6 +283,17 @@ const NavMenu = ({ userType }) => {
                     <CardGiftcardIcon fontSize="large" color="secondary" />
                   </ListItemIcon>
                   <ListItemText primary="Coupons" />
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs"
+                >
+                  <ListItemIcon>
+                    <ClassIcon fontSize="large" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary="Programs" />
                 </ListItem>
               </>
             )}
