@@ -43,9 +43,11 @@ const CurrentOrders = ({ userType }) => {
     if (newValue === 1) {
       window.location.hash = "#preorder";
     } else if (newValue === 2) {
-      window.location.hash = "#drafts";
+      window.location.hash = "#instock";
     } else if (newValue === 3) {
-      window.location.hash = "#status";
+      window.location.hash = "#ondemand";
+    } else if (newValue === 4) {
+      window.location.hash = "#status"
     }
     updateValue(newValue);
   };
@@ -63,16 +65,27 @@ const CurrentOrders = ({ userType }) => {
     });
     handleModal(true);
   }, []);
+  
+  useEffect(() => {
+    handleHash()
+  }, []);
 
   useEffect(() => {
+    window.addEventListener("popstate", handleHash)
+    return () => window.removeEventListener("popstate", handleHash)
+  }, [])
+
+  const handleHash = () => {
     if (window.location.hash === "#preorder") {
       updateValue(1);
-    } else if (window.location.hash === "#drafts") {
+    } else if (window.location.hash === "#instock") {
       updateValue(2);
-    } else if (window.location.hash === "#status") {
+    } else if (window.location.hash === "#ondemand") {
       updateValue(3);
+    } else if (window.location.hash === "#status") {
+      updateValue(4)
     }
-  }, []);
+  }
 
   return (
     <>

@@ -119,7 +119,7 @@ const NavMenu = ({ userType }) => {
                       button
                       onClick={handleClose}
                       component={Link}
-                      to="/orders/open"
+                      to="/orders/open#preorder"
                       className={classes.nested}
                     >
                       <ListItemIcon>
@@ -255,7 +255,7 @@ const NavMenu = ({ userType }) => {
                   button
                   onClick={handleClose}
                   component={Link}
-                  to="/orders/open"
+                  to="/orders/open#preorder"
                 >
                   <ListItemIcon>
                     <TrackChangesIcon fontSize="large" color="secondary" />
