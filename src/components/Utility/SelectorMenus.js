@@ -12,7 +12,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   //data would be pulled from store
-  const regions = ["Region 1", "Region 2", "Region 3"];
+  const regions = ["North West", "Walmart"];
   const fieldUsers = [
     "Field User 1",
     "Field User 2",
@@ -21,14 +21,13 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   ];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
 
-  const [region, updateRegion] = useState(0);
+  const [region, updateRegion] = useState(regions[0]);
   const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState("");
   const currentPrograms = useSelector((state) => state.programTable.programs)
-
   const handleChangeSelect = (evt) => {
-    if (evt.target.id === "regions") {
+    if (evt.target.name === "regions") {
       updateRegion(evt.target.value);
     } else if (evt.target.id === "cart") {
       updateCart(evt.target.value);
@@ -47,22 +46,21 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   }, [currentProgram]);
 
   if (type === "regions") {
+    console.log(region)
     return (
       <>
-        <FormControl variant="outlined" style={{ margin: "0 5px" }}>
-          <InputLabel id="region-select">Region</InputLabel>
+        <FormControl variant="outlined" size="small" style={{ margin: "0 5px" }}>
           <Select
-            native
+            name="regions"
             labelId="region-select"
             id="regions"
             value={region}
             onChange={handleChangeSelect}
-            label="Region"
           >
             {regions.map((region, index) => (
-              <option value={index} key={index}>
-                {region}
-              </option>
+              <MenuItem value={region} key={index}>
+                <Typography variant="body2">{region}</Typography>
+              </MenuItem>
             ))}
           </Select>
         </FormControl>

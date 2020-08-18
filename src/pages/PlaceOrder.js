@@ -7,6 +7,7 @@ import items from "../assets/mockdata/Items";
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -94,6 +95,9 @@ const PlaceOrder = ({ userType }) => {
           </Typography>
 
           <div className={classes.configButtons}>
+            <div className={classes.innerConfigDiv}>
+              <SelectorMenus type="regions" />
+            </div>
             <div className={classes.innerConfigDiv}>
               <Tooltip title="View List">
                 <IconButton

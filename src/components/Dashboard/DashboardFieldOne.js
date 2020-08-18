@@ -1,10 +1,4 @@
 import React, { useState } from "react";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import format from "date-fns/format";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-
 //import { Link } from "@reach/router";
 
 //import Button from "@material-ui/core/Button";
@@ -21,25 +15,6 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   ...theme.dashboard,
 }));
-
-const locales = {
-  "en-US": require("date-fns/locale/en-US"),
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
-const ColoredDateCellWrapper = ({ children }) =>
-  React.cloneElement(React.Children.only(children), {
-    style: {
-      backgroundColor: "lightblue",
-    },
-  });
 
 const DashboardFieldOne = () => {
   const classes = useStyles();
@@ -77,28 +52,10 @@ const DashboardFieldOne = () => {
               md={4}
               sm={12}
               xs={12}
-              style={{ minHeight: "620px", textAlign: "center" }}
+              style={{ textAlign: "center" }}
             >
               <Typography className={classes.headerText}>Calendar</Typography>
               <br />
-              <Calendar
-                events={[
-                  {
-                    id: 0,
-                    title: "Sample Event",
-                    allDay: true,
-                    start: new Date(),
-                    end: new Date(2020, 7, 25),
-                  },
-                ]}
-                style={{ height: "600px" }}
-                showMultiDayTimes
-                defaultDate={new Date()}
-                components={{
-                  timeSlotWrapper: ColoredDateCellWrapper,
-                }}
-                localizer={localizer}
-              />
             </Grid>
             <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>

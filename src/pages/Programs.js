@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import ProgramFilter from "../components/Utility/ProgramFilter";
 import ProgramSort from "../components/Utility/ProgramSort";
@@ -57,7 +58,9 @@ const Programs = () => {
           </Typography>
 
           <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv}></div>
+            <div className={classes.innerConfigDiv}>
+              <SelectorMenus type="regions" />
+            </div>
           </div>
         </div>
         <br />

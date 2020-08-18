@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import CurrentPreOrder from "../components/Purchasing/CurrentPreOrder";
 import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
 import CurrentInStockOrder from "../components/Purchasing/CurrentInStockOrder";
+import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -44,7 +45,7 @@ const CurrentOrders = ({ userType }) => {
     } else if (newValue === 2) {
       window.location.hash = "#drafts";
     } else if (newValue === 3) {
-      window.location.hash = "#status"
+      window.location.hash = "#status";
     }
     updateValue(newValue);
   };
@@ -69,14 +70,13 @@ const CurrentOrders = ({ userType }) => {
     } else if (window.location.hash === "#drafts") {
       updateValue(2);
     } else if (window.location.hash === "#status") {
-      updateValue(3)
+      updateValue(3);
     }
   }, []);
 
-
   return (
     <>
-    <div className={classes.relativeContainer}>
+      <div className={classes.relativeContainer}>
         <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="sm">
           <DialogContent>
             <IconButton
@@ -105,11 +105,18 @@ const CurrentOrders = ({ userType }) => {
         </Dialog>
       </div>
       <Container className={classes.mainWrapper}>
-      <Typography className={classes.titleText} variant="h5">
-        Current Orders
-      </Typography>
-      <br />
-      <Tabs
+        <div className={classes.titleBar}>
+          <Typography className={classes.titleText} variant="h5">
+            Current Orders
+          </Typography>
+          <div className={classes.configButtons}>
+            <div className={classes.innerConfigDiv}>
+              <SelectorMenus type="regions" />
+            </div>
+          </div>
+        </div>
+        <br />
+        <Tabs
           variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
@@ -129,21 +136,25 @@ const CurrentOrders = ({ userType }) => {
           />
         )}
         {value === 2 && (
-          <CurrentInStockOrder userType={userType} handleModalOpen={handleModalOpen} />
+          <CurrentInStockOrder
+            userType={userType}
+            handleModalOpen={handleModalOpen}
+          />
         )}
         {value === 3 && (
-          <CurrentInStockOrder userType={userType} handleModalOpen={handleModalOpen} />
+          <CurrentInStockOrder
+            userType={userType}
+            handleModalOpen={handleModalOpen}
+          />
         )}
-        {value === 4 && (
-          <OrdersCurrentTable />
-        )}
+        {value === 4 && <OrdersCurrentTable />}
       </Container>
     </>
-  )
-}
+  );
+};
 
 CurrentOrders.propTypes = {
-  userType: PropTypes.string.isRequired
-}
+  userType: PropTypes.string.isRequired,
+};
 
-export default CurrentOrders
+export default CurrentOrders;
