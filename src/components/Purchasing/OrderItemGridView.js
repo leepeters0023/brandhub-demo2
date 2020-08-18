@@ -81,7 +81,7 @@ const OrderItemGridView = (props) => {
                 className={classes.previewImg}
                 src={item.imgUrl}
                 alt={item.itemType}
-                onClick={handlePreview}
+                onClick={()=>handlePreview(item.itemNumber)}
               />
             </div>
             <br />

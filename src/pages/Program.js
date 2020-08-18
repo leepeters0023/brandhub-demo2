@@ -6,7 +6,6 @@ import { Link } from "@reach/router";
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
 
-import AddItemConfirmation from "../components/Purchasing/AddItemConfirmation";
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -24,7 +23,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AddBoxIcon from '@material-ui/icons/AddBox';
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
@@ -59,8 +57,6 @@ const Program = ({ userType, programId }) => {
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
-  const [currentOrder, setCurrentOrder] = useCallback(useState({}))
-  const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {
@@ -82,9 +78,9 @@ const Program = ({ userType, programId }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [programId]);
 
-  const handlePreview = (evt) => {
+  const handlePreview = (itemNumber) => {
     let item = items.find(
-      (item) => item.itemNumber === parseInt(evt.target.id)
+      (item) => item.itemNumber === itemNumber
     );
     handleCurrentItem(item);
     handlePreviewModal(true);
@@ -94,34 +90,12 @@ const Program = ({ userType, programId }) => {
     handlePreviewModal(false);
   };
 
-  const handleAddProgramItem = (item) => {
-    setCurrentOrder({program: currentProgram.id, items: [item]})
-    setConfirmOpen(true);
-  }
-
-  const handleAddAllProgramItems = () => {
-    setCurrentOrder({program: currentProgram.id, items: currentProgram.items})
-    setConfirmOpen(true);
-  }
-
-  const handleConfirmClose = () => {
-    setConfirmOpen(false);
-  }
-
   if (!currentProgram) {
     return <CircularProgress />;
   }
 
   return (
     <>
-      {currentOrder.program && (
-        <AddItemConfirmation
-          itemArray={currentOrder.items}
-          program={currentOrder.program}
-          confirmOpen={confirmOpen}
-          handleConfirmClose={handleConfirmClose}
-        />
-      )}
       <div className={classes.relativeContainer}>
         <Dialog
           open={previewModal}
@@ -225,17 +199,6 @@ const Program = ({ userType, programId }) => {
                     <PictureAsPdfIcon className={classes.navIcon} />
                   </Button>
                 </Tooltip>
-                <Tooltip title="Add All to Order">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id="addAllCart"
-                    style={{ marginLeft: "2.5px" }}
-                    onClick={handleAddAllProgramItems}
-                  >
-                    <AddBoxIcon className={classes.navIcon} />
-                  </Button>
-                </Tooltip>
               </div>
             </div>
 
@@ -244,8 +207,6 @@ const Program = ({ userType, programId }) => {
               currentView={currentView}
               handlePreview={handlePreview}
               currentProgram={currentProgram}
-              handleAddProgramItem={handleAddProgramItem}
-              handleAddAllProgramItems={handleAddAllProgramItems}
             />
           </>
         )}

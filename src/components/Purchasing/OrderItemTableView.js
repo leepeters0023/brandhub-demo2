@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemTableView = (props) => {
-  const { type, currentItems, handlePreview, handleAddProgramItem } = props;
+  const { type, currentItems, handlePreview } = props;
   const classes = useStyles();
   return (
     <>
@@ -82,7 +82,7 @@ const OrderItemTableView = (props) => {
                     className={classes.previewImageFloat}
                     src={row.imgUrl}
                     alt={row.itemType}
-                    onClick={handlePreview}
+                    onClick={() => handlePreview(row.itemNumber)}
                   />
                 </TableCell>
                 <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
@@ -121,19 +121,20 @@ const OrderItemTableView = (props) => {
                         </Button>
                       </span>
                     </Tooltip>
-                    <Tooltip title="Add to Order">
-                      <span>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          id={`${row.itemNumber}`}
-                          style={{ margin: "5px 2.5px" }}
-                          onClick={() => handleAddProgramItem(row)}
-                        >
-                          <AddBoxIcon className={classes.navIcon} />
-                        </Button>
-                      </span>
-                    </Tooltip>
+                    {type !== "preOrder" && (
+                      <Tooltip title="Add to Order">
+                        <span>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            id={`${row.itemNumber}`}
+                            style={{ margin: "5px 2.5px" }}
+                          >
+                            <AddBoxIcon className={classes.navIcon} />
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -149,7 +150,6 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func,
 };
 
 export default OrderItemTableView;

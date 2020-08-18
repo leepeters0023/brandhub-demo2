@@ -49,9 +49,9 @@ const PlaceOrder = ({ userType }) => {
     updateValue(newValue);
   };
 
-  const handlePreview = (evt) => {
+  const handlePreview = (itemNumber) => {
     let item = items.find(
-      (item) => item.itemNumber === parseInt(evt.target.id)
+      (item) => item.itemNumber === itemNumber
     );
     handleCurrentItem(item);
     handlePreviewModal(true);

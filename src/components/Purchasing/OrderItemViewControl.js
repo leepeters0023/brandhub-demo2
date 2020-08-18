@@ -8,7 +8,7 @@ import OrderPreGridView from "./OrderItemGridView";
 import items from "../../assets/mockdata/Items";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, handleAddProgramItem, handleAddAllProgramItems } = props;
+  const { type, currentView, handlePreview, currentProgram } = props;
 
   return (
     <>
@@ -18,8 +18,7 @@ const OrderItemViewControl = (props) => {
           type={type}
           currentItems={items}
           handlePreview={handlePreview}
-          handleAddProgramItem={handleAddProgramItem}
-          handleAddAllProgramItems={handleAddAllProgramItems}
+          currentProgram={currentProgram}
         />
       )}
       {currentView === "grid" && (
@@ -27,8 +26,7 @@ const OrderItemViewControl = (props) => {
           type={type}
           currentItems={items}
           handlePreview={handlePreview}
-          handleAddProgramItem={handleAddProgramItem}
-          handleAddAllProgramItems={handleAddAllProgramItems}
+          currentProgram={currentProgram}
         />
       )}
     </>
@@ -39,8 +37,7 @@ OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func,
-  handleAddAllProgramItems: PropTypes.func,
+  currentProgram: PropTypes.object
 };
 
 export default OrderItemViewControl;
