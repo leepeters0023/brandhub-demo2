@@ -1,159 +1,201 @@
-import React from "react";
-import { Link } from "@reach/router";
+import React, { useState } from "react";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import format from "date-fns/format";
+import parse from "date-fns/parse";
+import startOfWeek from "date-fns/startOfWeek";
+import getDay from "date-fns/getDay";
 
-import Button from "@material-ui/core/Button";
+//import { Link } from "@reach/router";
+
+//import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import { makeStyles } from "@material-ui/core/styles";
 
-//mockdata
-import programs from "../../assets/mockdata/Programs";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   ...theme.dashboard,
 }));
 
+const locales = {
+  "en-US": require("date-fns/locale/en-US"),
+};
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
+
+const ColoredDateCellWrapper = ({ children }) =>
+  React.cloneElement(React.Children.only(children), {
+    style: {
+      backgroundColor: "lightblue",
+    },
+  });
+
 const DashboardFieldOne = () => {
   const classes = useStyles();
+  const [expanded, setExpanded] = useState("panel1");
+
+  const handleChange = (panel) => (_event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
   return (
-    <>
-      <Grid
-        container
-        spacing={2}
-        alignItems="stretch"
+    <div style={{ width: "100%" }}>
+      <Accordion
+        className={classes.accordian}
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
+        style={{
+          backgroundColor: `${
+            expanded === "panel1" ? "whitesmoke" : "#bebebe"
+          }`,
+        }}
       >
-        <Grid item md={8} sm={12}>
-          <Grid
-            item
-            container
-            spacing={2}
-            direction="column"
-            justify="space-between"
-          >
-            <Grid item sm>
-              <Paper className={classes.paper}>
-                <Typography variant="h4" className={classes.subTitle}>
-                  Notifications
-                </Typography>
-                <br />
-                <Typography variant="h5" className={classes.content}>
-                  Recently Shipped Orders:
-                </Typography>
-                <br />
-                <Typography variant="h5" className={classes.content}>
-                  Recently Approved Orders:
-                </Typography>
-                <br />
-                <Typography variant="h5" className={classes.content}>
-                  Orders Pending Approval:
-                </Typography>
-                <br />
-              </Paper>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <Typography className={classes.titleText}>
+            Programs &amp; Products
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid
+              item
+              md={4}
+              sm={12}
+              xs={12}
+              style={{ minHeight: "620px", textAlign: "center" }}
+            >
+              <Typography className={classes.headerText}>Calendar</Typography>
+              <br />
+              <Calendar
+                events={[
+                  {
+                    id: 0,
+                    title: "Sample Event",
+                    allDay: true,
+                    start: new Date(),
+                    end: new Date(2020, 7, 25),
+                  },
+                ]}
+                style={{ height: "600px" }}
+                showMultiDayTimes
+                defaultDate={new Date()}
+                components={{
+                  timeSlotWrapper: ColoredDateCellWrapper,
+                }}
+                localizer={localizer}
+              />
             </Grid>
-            <Grid item sm>
-              <Paper className={classes.paper}>
-                <Typography variant="h4" className={classes.subTitle}>
-                  Current Programs
-                </Typography>
-                <br />
-                <GridList className={classes.gridList} cols={2.5}>
-                  {programs.map((program) => (
-                    <GridListTile key={program.id}>
-                      <img src={program.imgUrl} alt={program.name} />
-                      <GridListTileBar
-                        title={program.name}
-                        classes={{
-                          root: classes.gridTitleBar,
-                          title: classes.title,
-                        }}
-                      />
-                    </GridListTile>
-                  ))}
-                </GridList>
-                <br />
-              </Paper>
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                New In-Stock Items
+              </Typography>
+              <br />
+            </Grid>
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                Canceled Items
+              </Typography>
+              <br />
             </Grid>
           </Grid>
-        </Grid>
-        <Grid item md={4} sm={12}>
-          <Paper className={classes.paper}>
-            <Typography variant="h4" className={classes.subTitle}>
-              Actions
-            </Typography>
-            <br />
-            <br />
-            <div className={classes.buttons}>
-            <Typography variant="h5" className={classes.content}>
-                Orders:
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        className={classes.accordian}
+        expanded={expanded === "panel2"}
+        onChange={handleChange("panel2")}
+        style={{
+          backgroundColor: `${
+            expanded === "panel2" ? "whitesmoke" : "#bebebe"
+          }`,
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2bh-content"
+          id="panel2bh-header"
+        >
+          <Typography className={classes.titleText}>Your Orders</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Grid container spacing={2}>
+            <Grid item md={3} sm={6} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                New Tracking
               </Typography>
               <br />
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                component={Link}
-                to="/order#pre"
-              >
-                PRE-ORDER
-              </Button>
-              <br />
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                component={Link}
-                to="/order#instock"
-              >
-                IN-STOCK ORDER
-              </Button>
-              <br />
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                component={Link}
-                to="/order#ondemand"
-              >
-                ON-DEMAND ORDER
-              </Button>
-              <br />
-              <Typography variant="h5" className={classes.content}>
-                Coupons:
+            </Grid>
+            <Grid item md={3} sm={6} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                In Progress
               </Typography>
               <br />
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                component={Link}
-                to="/coupons"
-              >
-                CREATE A COUPON
-              </Button>
+            </Grid>
+            <Grid item md={3} sm={6} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>Compliance</Typography>
               <br />
-              <Typography variant="h5" className={classes.content}>
-                Order History:
+            </Grid>
+            <Grid item md={3} sm={6} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                Rush Requests
               </Typography>
               <br />
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                component={Link}
-                to="/orders#current"
-              >
-                OPEN ORDERS
-              </Button>
-            </div>
-          </Paper>
-        </Grid>
-      </Grid>
-    </>
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        className={classes.accordian}
+        expanded={expanded === "panel3"}
+        onChange={handleChange("panel3")}
+        style={{
+          backgroundColor: `${
+            expanded === "panel3" ? "whitesmoke" : "#bebebe"
+          }`,
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel3bh-content"
+          id="panel3bh-header"
+        >
+          <Typography className={classes.titleText}>Your Info</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+        <Grid container spacing={2}>
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>
+                Order History
+              </Typography>
+              <br />
+            </Grid>
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>Spend</Typography>
+              <br />
+            </Grid>
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
+              <Typography className={classes.headerText}>Reporting</Typography>
+              <br />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
+    </div>
   );
 };
 

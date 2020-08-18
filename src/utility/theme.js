@@ -18,35 +18,8 @@ export default {
     }
   },
   dashboard: {
-    paper: {
-      height: "100%",
-      padding: "40px",
-      backgroundColor: "#bebebe",
-    },
-    welcomeText: {
-      fontWeight: "600",
-    },
-    subTitle: {
-      fontWeight: "600",
-    },
-    content: {
-      fontSize: "1.25rem",
-    },
-    buttons: {
-      display: "flex",
-      flexDirection: "column",
-      width: "100%",
-    },
-    gridList: {
-      flexWrap: "nowrap",
-      transform: "translateZ(0)",
-    },
-    title: {
-      color: "#cbcbcb",
-    },
-    gridTitleBar: {
-      background:
-        "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+    accordian: {
+      transition: "background-color .5s ease",
     },
   },
   global: {

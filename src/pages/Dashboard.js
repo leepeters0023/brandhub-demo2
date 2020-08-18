@@ -9,18 +9,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  centerGrid: {
-    width: "100%",
-    height: "80vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    [theme.breakpoints.down("sm")]: {
-      height: "auto",
-      flexDirection: "column",
-      justifyContent: "flex-start",
-    }
-  },
 }));
 
 const Dashboard = () => {
@@ -46,12 +34,12 @@ const Dashboard = () => {
   return (
     <>
       <Container className={classes.mainWrapper}>
-        <div className={classes.centerGrid}>
+        
           {currentUser === "field1" && <DashboardFieldOne />}
           {currentUser === "field2" && <DashboardFieldOne />}
           {currentUser === "super" && <DashboardFieldOne />}
           {currentUser === "compliance" && <DashboardCompliance />}
-        </div>
+    
       </Container>
       <br />
     </>
