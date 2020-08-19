@@ -18,7 +18,8 @@ programObj: {
   strategies: string,
   focusMonth: string,
   imgUrl: string,
-  items: [...{ itemObj }]
+  items: [...{ itemObj }], 
+  isComplete: bool,
 }
 
 itemObj: {
@@ -55,9 +56,29 @@ const programsSlice = createSlice({
     setIsLoading: startLoading,
     getProgramsSuccess(state, action) {
       const {programs} = action.payload
-      state.programs = [...programs]
+      const programArray = [...programs];
+      programArray.sort((a, b) => {
+        return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
+          ? -1
+          : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+          ? 1
+          : 0;
+      });
+      state.programs = [...programArray]
       state.isLoading = false
       state.error = null
+    },
+    setProgramComplete(state, action) {
+      const { program, status } = action.payload;
+      let updatedPrograms = state.programs.map((prog) => {
+        if (prog.id === program) {
+          return {
+            ...prog,
+            isComplete: status
+          }
+        } else return prog
+      })
+      state.programs = updatedPrograms
     },
     setFailure: loadingFailed
   }
@@ -66,6 +87,7 @@ const programsSlice = createSlice({
 export const {
   setIsLoading,
   getProgramsSuccess,
+  setProgramComplete,
   setFailure
 } = programsSlice.actions
 

@@ -111,6 +111,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [backdrop, setBackdrop] = useCallback(useState(false));
 
   const isLoading = useSelector((state) => state.orders.isLoading);
+  const userPrograms = useSelector((state) => state.programs.programs);
 
   const tableData = useSelector(
     (state) => state.programTable.programs,
@@ -185,26 +186,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
     }, 1000);
   };
 
-  const programArray = [];
-  for (let program in tableData) {
-    programArray.push({
-      id: tableData[program].details.id,
-      name: tableData[program].details.name,
-      focusMonth: tableData[program].details.focusMonth,
-      isComplete: tableData[program].programDetails.isComplete
-    });
-  }
-  programArray.sort((a, b) => {
-    return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
-      ? -1
-      : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-      ? 1
-      : 0;
-  });
-
   useEffect(() => {
-    if (programArray.length > 0 && !program) {
-      setProgram(programArray[0].id);
+    if (userPrograms.length > 0 && !program) {
+      setProgram(userPrograms[0].id);
     }
   });
 
@@ -215,7 +199,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
     }
   }, [program, userType, dispatch, hasFetched]);
 
-  if (programArray.length === 0 || !program) {
+  if (userPrograms.length === 0 || !program) {
     return (
       <Backdrop className={classes.backdrop} open={true}>
         <CircularProgress color="inherit" />
@@ -229,7 +213,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
         <CircularProgress color="inherit" />
       </Backdrop>
       <PreOrderCartTable
-        currentPrograms={programArray}
+        currentProgram={program}
         distributors={distributors}
         open={open}
         setOpen={setOpen}

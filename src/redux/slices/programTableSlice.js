@@ -135,51 +135,6 @@ const programTableSlice = createSlice({
       const {program} = action.payload;
       state.hasFetched[`${program}`] = true;
     },
-    addItem(state, action) {
-      const { program, item } = action.payload;
-      let distributorValues = {};
-      let currentDistributors = [...state.distributors];
-      currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
-      let newItem = {
-        itemDetails: {
-          itemNumber: item.itemNumber,
-          brand: item.brand,
-          itemType: item.itemType,
-          price: item.price,
-          qty: item.qty,
-          imgUrl: item.imgUrl,
-          complianceStatus: "pending",
-          totalItems: 0,
-          estTotal: 0,
-        },
-        distributors: { ...distributorValues },
-      };
-      state.programs[`${program}`].items[`${item.itemNumber}`] = newItem;
-    },
-    addItems(state, action) {
-      const { program, items } = action.payload;
-      let distributorValues = {};
-      let currentDistributors = [...state.distributors];
-      currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
-      items.forEach((item) => {
-        if (!state.programs[`${program}`].items[`${item.itemNumber}`]) {
-          state.programs[`${program}`].items[`${item.itemNumber}`] = {
-            itemDetails: {
-              itemNumber: item.itemNumber,
-              brand: item.brand,
-              itemType: item.itemType,
-              price: item.price,
-              qty: item.qty,
-              imgUrl: item.imgUrl,
-              complianceStatus: "pending",
-              totalItems: 0,
-              estTotal: 0,
-            },
-            distributors: { ...distributorValues },
-          };
-        }
-      });
-    },
     setGridItem(state, action) {
       const { program, itemNumber, distributor, value } = action.payload;
       state.programs[`${program}`].items[`${itemNumber}`].distributors[
@@ -237,8 +192,6 @@ export const {
   setOrders,
   setFetchedOrders,
   setHasFetched,
-  addItem,
-  addItems,
   setGridItem,
   setItemTotal,
   setProgramComplete,

@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
-const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
+const SelectorMenus = ({ type, handler, currentProgram }) => {
   //data would be pulled from store
   const regions = ["North West", "Walmart"];
   const fieldUsers = [
@@ -25,7 +25,7 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   const [cart, updateCart] = useState(0);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState("");
-  const currentPrograms = useSelector((state) => state.programTable.programs)
+  const currentPrograms = useSelector((state) => state.programs.programs)
   const handleChangeSelect = (evt) => {
     if (evt.target.name === "regions") {
       updateRegion(evt.target.value);
@@ -46,7 +46,6 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
   }, [currentProgram]);
 
   if (type === "regions") {
-    console.log(region)
     return (
       <>
         <FormControl variant="outlined" size="small" style={{ margin: "0 5px" }}>
@@ -122,9 +121,9 @@ const SelectorMenus = ({ type, programs, handler, currentProgram }) => {
             value={program}
             onChange={handleChangeSelect}
           >
-            {programs.map((program, index) => (
+            {currentPrograms.map((program, index) => (
               <MenuItem value={program.id} key={index}>
-                {currentPrograms[program.id].programDetails.isComplete ? (
+                {program.isComplete ? (
                   <div
                     style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}
                   >

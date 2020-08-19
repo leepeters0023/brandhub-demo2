@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, {  useCallback, useRef } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setGridItem,
   setItemTotal,
-  setProgramComplete,
 } from "../../redux/slices/programTableSlice";
+
+import {
+  setProgramComplete,
+} from "../../redux/slices/programsSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -190,7 +193,7 @@ const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
 
 const PreOrderCartTable = (props) => {
   const {
-    currentPrograms,
+    currentProgram,
     distributors,
     open,
     setOpen,
@@ -204,15 +207,13 @@ const PreOrderCartTable = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const tableRef = useRef(null);
-
-  const [currentProgram, setCurrentProgram] = useState(currentPrograms[0].id);
   const currentItemsObj = useSelector(
     (state) => state.programTable.programs[`${currentProgram}`].items
   );
 
   const isComplete = useSelector(
     (state) =>
-      state.programTable.programs[`${currentProgram}`].programDetails.isComplete
+      state.programs.programs.find(prog => prog.id === currentProgram).isComplete
   );
 
   const currentItems =
@@ -224,11 +225,17 @@ const PreOrderCartTable = (props) => {
 
   const handleProgram = useCallback(
     (id) => {
-      setCurrentProgram(id);
       setProgram(id);
     },
     [setProgram]
   );
+
+  const handleComplete = () => {
+    dispatch(
+      setProgramComplete({ program: currentProgram, status: !isComplete })
+    );
+  };
+
   if (isLoading) {
     return (
       <Backdrop className={classes.backdrop} open={true}>
@@ -236,12 +243,6 @@ const PreOrderCartTable = (props) => {
       </Backdrop>
     );
   }
-
-  const handleComplete = () => {
-    dispatch(
-      setProgramComplete({ program: currentProgram, status: !isComplete })
-    );
-  };
 
   return (
     <>
@@ -258,7 +259,6 @@ const PreOrderCartTable = (props) => {
                   <div style={{ display: "flex", flexDirection: "column" }}>
                       <SelectorMenus
                         type="programs"
-                        programs={currentPrograms}
                         handler={handleProgram}
                         currentProgram={currentProgram}
                       />
@@ -315,7 +315,6 @@ const PreOrderCartTable = (props) => {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <SelectorMenus
                         type="programs"
-                        programs={currentPrograms}
                         handler={handleProgram}
                         currentProgram={currentProgram}
                       />
@@ -588,7 +587,7 @@ const PreOrderCartTable = (props) => {
 };
 
 PreOrderCartTable.propTypes = {
-  currentPrograms: PropTypes.array.isRequired,
+  currentProgram: PropTypes.string.isRequired,
   distributors: PropTypes.array.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
@@ -601,7 +600,7 @@ PreOrderCartTable.propTypes = {
 
 export default React.memo(PreOrderCartTable, (prev, next) => {
   return (
-    prev.currentPrograms.length === next.currentPrograms.length &&
+    prev.currentProgram === next.currentPrograms &&
     prev.distributors.length === next.distributors.length &&
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&

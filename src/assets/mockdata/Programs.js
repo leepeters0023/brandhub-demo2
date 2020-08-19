@@ -78,6 +78,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "2",
@@ -167,6 +168,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_fleurdemer_casestacker_ftmn8d.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "3",
@@ -283,6 +285,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "4",
@@ -363,6 +366,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_whitehaven_minimass_ruq2m4.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "5",
@@ -434,6 +438,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "6",
@@ -550,6 +555,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_highnoon_corrugatebin_zsv8mk.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "7",
@@ -639,6 +645,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_darkhorse_bin_ujhalx.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "8",
@@ -710,6 +717,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_barefoot_necker_kgxead.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "9",
@@ -808,6 +816,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "10",
@@ -888,6 +897,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "11",
@@ -977,6 +987,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_fleurdemer_casestacker_ftmn8d.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "12",
@@ -1093,6 +1104,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "13",
@@ -1173,6 +1185,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_whitehaven_minimass_ruq2m4.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "14",
@@ -1244,6 +1257,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "15",
@@ -1360,6 +1374,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_highnoon_corrugatebin_zsv8mk.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "16",
@@ -1449,6 +1464,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_darkhorse_bin_ujhalx.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "17",
@@ -1520,6 +1536,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_barefoot_necker_kgxead.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "18",
@@ -1618,6 +1635,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "19",
@@ -1698,6 +1716,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "20",
@@ -1787,6 +1806,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_fleurdemer_casestacker_ftmn8d.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "21",
@@ -1903,6 +1923,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "22",
@@ -1983,6 +2004,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_whitehaven_minimass_ruq2m4.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "23",
@@ -2054,6 +2076,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "24",
@@ -2170,6 +2193,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_highnoon_corrugatebin_zsv8mk.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "25",
@@ -2259,6 +2283,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_darkhorse_bin_ujhalx.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "26",
@@ -2330,6 +2355,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_barefoot_necker_kgxead.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "27",
@@ -2428,6 +2454,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "28",
@@ -2508,6 +2535,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "29",
@@ -2597,6 +2625,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_fleurdemer_casestacker_ftmn8d.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "30",
@@ -2713,6 +2742,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "31",
@@ -2793,6 +2823,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_whitehaven_minimass_ruq2m4.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "32",
@@ -2864,6 +2895,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_lamarca_casetalker_lpxvl1.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "33",
@@ -2980,6 +3012,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_highnoon_corrugatebin_zsv8mk.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "34",
@@ -3069,6 +3102,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_darkhorse_bin_ujhalx.jpg",
       },
     ],
+    isComplete: false
   },
   {
     id: "35",
@@ -3140,5 +3174,6 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_barefoot_necker_kgxead.jpg",
       },
     ],
+    isComplete: false
   },
 ];
