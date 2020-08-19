@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
+import { useWindowHash } from "../hooks/UtilityHooks";
+
 //mockdata
 import items from "../assets/mockdata/Items";
 import programs from "../assets/mockdata/Programs";
@@ -57,26 +59,14 @@ const Program = ({ userType, programId }) => {
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
+  const handleChangeTab = useWindowHash(["#details", "#items"], updateValue)
 
-  const handleChangeTab = (_evt, newValue) => {
-    if (newValue === 1) {
-      window.location.hash = "#details";
-    } else if (newValue === 2) {
-      window.location.hash = "#items";
-    }
-    updateValue(newValue);
-  };
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
     setCurrentProgram(program);
-    if (window.location.hash === "#details") {
-      updateValue(1);
-    } else if (window.location.hash === "#items") {
-      updateValue(2);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [programId]);
+  
+  }, [programId, setCurrentProgram]);
 
   const handlePreview = (itemNumber) => {
     let item = items.find(

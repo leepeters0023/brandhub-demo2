@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
+
+import { useWindowHash } from "../hooks/UtilityHooks";
 
 //mockdata
 import items from "../assets/mockdata/Items";
@@ -34,20 +36,12 @@ const others = ["Growth Engines", "Key Brands", "High Potential"];
 
 const PlaceOrder = ({ userType }) => {
   const classes = useStyles();
-  const [value, updateValue] = useState(1);
+  const [value, updateValue] = useCallback(useState(1));
   const [currentView, setView] = useState("list");
   const [previewModal, handlePreviewModal] = useState(false);
   const [currentItem, handleCurrentItem] = useState({});
   //const [itemFilters, setItemFilters] = useState([]);
-
-  const handleChangeTab = (_evt, newValue) => {
-    if (newValue === 1) {
-      window.location.hash = "#instock";
-    } else if (newValue === 2) {
-      window.location.hash = "#ondemand";
-    }
-    updateValue(newValue);
-  };
+  const handleChangeTab = useWindowHash(["#instock", "#ondemand"], updateValue)
 
   const handlePreview = (itemNumber) => {
     let item = items.find(
@@ -60,14 +54,6 @@ const PlaceOrder = ({ userType }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
-
-  useEffect(() => {
-    if (window.location.hash === "#instock") {
-      updateValue(1);
-    } else if (window.location.hash === "#ondemand") {
-      updateValue(2);
-    }
-  }, []);
 
   return (
     <>

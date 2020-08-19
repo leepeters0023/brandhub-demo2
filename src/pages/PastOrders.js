@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
-//import PropTypes from "prop-types";
+import React, { useState, useCallback } from "react";
 import "date-fns";
+
+import { useWindowHash } from "../hooks/UtilityHooks";
 
 import OrdersPastTable from "../components/OrderHistory/OrdersPastTable";
 import OrderHistoryItemModal from "../components/OrderHistory/OrderHistoryItemModal";
@@ -61,10 +62,11 @@ const PastOrders = () => {
     new Date().toLocaleDateString()
   );
   const [modal, handleModal] = useState(false);
-  const [value, updateValue] = useState(1);
-  const [tableType, setTableType] = useState(null);
+  const [value, updateValue] = useCallback(useState(1));
+  const [tableType, setTableType] = useCallback(useState(null));
   const [modalType, setModalType] = useState("order");
   const [currentOrder, setCurrentOrder] = useState(null);
+  const handleChangeTab = useWindowHash(["#byorder", "#byitems"], updateValue, setTableType);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDate(date);
@@ -72,35 +74,14 @@ const PastOrders = () => {
   const handleToDateChange = (date) => {
     setSelectedToDate(date);
   };
-  const handlePreview = (id, type) => {
+  const handlePreview = useCallback((id, type) => {
     setCurrentOrder(id);
     setModalType(type);
     handleModal(true);
-  };
+  }, []);
   const handleModalClose = () => {
     handleModal(false);
   };
-
-  const handleChangeTab = (_evt, newValue) => {
-    if (newValue === 1) {
-      window.location.hash = "#byorder";
-      setTableType("byOrder");
-    } else if (newValue === 2) {
-      window.location.hash = "#byitems";
-      setTableType("byItems");
-    }
-    updateValue(newValue);
-  };
-
-  useEffect(() => {
-    if (window.location.hash === "#byorder") {
-      updateValue(1);
-      setTableType("byOrder");
-    } else if (window.location.hash === "#byitems") {
-      updateValue(2);
-      setTableType("byItems");
-    }
-  }, []);
 
   return (
     <>

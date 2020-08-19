@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
+
+import { useWindowHash } from "../hooks/UtilityHooks";
 
 import CurrentPreOrder from "../components/Purchasing/CurrentPreOrder";
 import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
@@ -35,22 +37,13 @@ const useStyles = makeStyles((theme) => ({
 const CurrentOrders = ({ userType }) => {
   const classes = useStyles();
 
-  const [value, updateValue] = useState(1);
+  const [value, updateValue] = useCallback(useState(1));
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
-
-  const handleChangeTab = (_evt, newValue) => {
-    if (newValue === 1) {
-      window.location.hash = "#preorder";
-    } else if (newValue === 2) {
-      window.location.hash = "#instock";
-    } else if (newValue === 3) {
-      window.location.hash = "#ondemand";
-    } else if (newValue === 4) {
-      window.location.hash = "#status"
-    }
-    updateValue(newValue);
-  };
+  const handleChangeTab = useWindowHash(
+    ["#preorder", "#instock", "#ondemand", "#status"],
+    updateValue
+  );
 
   const handleModalClose = () => {
     handleModal(false);
@@ -65,27 +58,6 @@ const CurrentOrders = ({ userType }) => {
     });
     handleModal(true);
   }, []);
-  
-  useEffect(() => {
-    handleHash()
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("popstate", handleHash)
-    return () => window.removeEventListener("popstate", handleHash)
-  }, [])
-
-  const handleHash = () => {
-    if (window.location.hash === "#preorder") {
-      updateValue(1);
-    } else if (window.location.hash === "#instock") {
-      updateValue(2);
-    } else if (window.location.hash === "#ondemand") {
-      updateValue(3);
-    } else if (window.location.hash === "#status") {
-      updateValue(4)
-    }
-  }
 
   return (
     <>

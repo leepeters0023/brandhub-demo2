@@ -181,4 +181,4 @@ ApprovalPrior.propTypes = {
   handleModal: PropTypes.func.isRequired,
 };
 
-export default ApprovalPrior;
+export default React.memo(ApprovalPrior);

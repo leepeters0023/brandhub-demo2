@@ -147,4 +147,4 @@ OrdersPastTable.propTypes = {
   tableType: PropTypes.string,
 };
 
-export default OrdersPastTable;
+export default React.memo(OrdersPastTable);

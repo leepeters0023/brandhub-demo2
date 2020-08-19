@@ -181,4 +181,4 @@ ApprovalPending.propTypes = {
   handleModal: PropTypes.func.isRequired,
 };
 
-export default ApprovalPending;
+export default React.memo(ApprovalPending);

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
+
+import { useWindowHash } from "../hooks/UtilityHooks";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -23,30 +25,14 @@ const useStyles = makeStyles((theme) => ({
 const Approvals = () => {
   const classes = useStyles();
 
-  const [value, updateValue] = useState(1);
+  const [value, updateValue] = useCallback(useState(1));
   const [modal, setModal] = useState(false);
   const [currentId, setCurrentId] = useState("");
+  const handleChangeTab = useWindowHash(["#pending", "#prior"], updateValue)
 
-  const handleChangeTab = (_evt, newValue) => {
-    if (newValue === 1) {
-      window.location.hash = "#pending";
-    } else if (newValue === 2) {
-      window.location.hash = "#prior";
-    }
-    updateValue(newValue);
-  };
-
-  const handleModal = (id) => {
+  const handleModal = useCallback((id) => {
     setCurrentId(id);
     setModal(true);
-  };
-
-  useEffect(() => {
-    if (window.location.hash === "#pending") {
-      updateValue(1);
-    } else if (window.location.hash === "#prior") {
-      updateValue(2);
-    }
   }, []);
 
   return (
