@@ -1,14 +1,17 @@
 import { configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+//import { middleware as beesMiddleware } from "redux-bees";
 
 import rootReducer from "./rootReducer";
 
+const middleware = [...getDefaultMiddleware({
+  thunk: true,
+  immutableCheck: false,
+  serializableCheck: false,
+})]
+
 const store = configureStore({
   reducer: rootReducer,
-  middleware: getDefaultMiddleware({
-    thunk: true,
-    immutableCheck: false,
-    serializableCheck: false,
-  })
+  middleware
 });
 
 if (process.env.NODE_ENV === "development" && module.hot) {
