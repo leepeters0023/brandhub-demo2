@@ -1,23 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   removeGridItem,
-  setOrders,
-  setHasFetched,
-} from "../../redux/slices/programTableSlice";
-import {
-  addNewOrder,
-  updateOrder,
-  removeProgramOrders,
   fetchProgramOrders,
-} from "../../redux/slices/ordersSlice";
-
-import {
-  mapNewOrdersToProgram,
-  updateProgramOrders,
-} from "../../utility/utilityFunctions";
+} from "../../redux/slices/programTableSlice";
 
 import PreOrderCartTable from "./CurrentPreOrderTable";
 
@@ -32,8 +20,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 
-//mock data
-import distributors from "../../assets/mockdata/distributors";
 const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
 
 const useStyles = makeStyles((theme) => ({
@@ -83,9 +69,9 @@ const useStyles = makeStyles((theme) => ({
 const TotalsDiv = React.memo(({ program }) => {
   const classes = useStyles();
   const programTotal = useSelector(
-    (state) => state.programTable.programs[`${program}`].programDetails.total
+    (state) => state.programTable.programTotal
   );
-  const grandTotal = useSelector((state) => state.programTable.details.total);
+  const grandTotal = useSelector((state) => state.programTable.preOrderTotal.actualTotal);
 
   return (
     <>
@@ -110,80 +96,11 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [program, setProgram] = useCallback(useState(undefined));
   const [backdrop, setBackdrop] = useCallback(useState(false));
 
-  const isLoading = useSelector((state) => state.orders.isLoading);
+  const isLoading = useSelector((state) => state.programTable.isLoading);
   const userPrograms = useSelector((state) => state.programs.programs);
-
-  const tableData = useSelector(
-    (state) => state.programTable.programs,
-    shallowEqual
-  );
-
-  const hasFetched = useSelector((state) => state.programTable.hasFetched)
 
   const handleRemove = (program, itemNum) => {
     dispatch(removeGridItem({ program, itemNum }));
-  };
-
-  const handleSaveOrder = () => {
-    for (let program in tableData) {
-      if (
-        !(
-          Object.keys(tableData[`${program}`].items).length === 0 &&
-          tableData[`${program}`].orders.length === 0
-        )
-      ) {
-        if (tableData[program].orders.length === 0) {
-          let orders = mapNewOrdersToProgram(
-            tableData[program].details,
-            distributors,
-            tableData[program].items
-          );
-          orders.forEach((ord) => {
-            dispatch(
-              addNewOrder({
-                id: ord.id,
-                distributorId: ord.distributorId,
-                distributorName: ord.distributorName,
-                type: ord.type,
-                program: ord.program,
-                items: ord.items,
-                budget: ord.budget,
-                totalItems: ord.totalItems,
-                totalEstCost: ord.totalEstCost,
-                status: ord.status,
-              })
-            );
-          });
-          dispatch(setOrders({ program: program, orders: orders }));
-        } else {
-          let updatedOrders = updateProgramOrders(
-            tableData[program].orders,
-            tableData[program].items
-          );
-          if (updatedOrders.length === 0) {
-            dispatch(removeProgramOrders({ program: program }));
-            dispatch(setOrders({ program: program, orders: [] }));
-          } else {
-            updatedOrders.forEach((ord) => {
-              dispatch(
-                updateOrder({
-                  orderId: ord.id,
-                  items: ord.items,
-                  budget: ord.budget,
-                  totalItems: ord.totalItems,
-                  totalEstCost: ord.totalEstCost,
-                  status: ord.status,
-                })
-              );
-            });
-            dispatch(setOrders({ program: program, orders: updatedOrders }));
-          }
-        }
-      }
-    }
-    setTimeout(() => {
-      setBackdrop(false);
-    }, 1000);
   };
 
   useEffect(() => {
@@ -193,11 +110,10 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   });
 
   useEffect(() => {
-    if (!hasFetched[program] && program) {
+    if (program) {
       dispatch(fetchProgramOrders(userType, program));
-      dispatch(setHasFetched({ program: [`${program}`] }));
     }
-  }, [program, userType, dispatch, hasFetched]);
+  }, [program, userType, dispatch]);
 
   if (userPrograms.length === 0 || !program) {
     return (
@@ -214,7 +130,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       </Backdrop>
       <PreOrderCartTable
         currentProgram={program}
-        distributors={distributors}
         open={open}
         setOpen={setOpen}
         tableStyle={tableStyle}
@@ -309,7 +224,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
           variant="contained"
           onClick={() => {
             setBackdrop(true);
-            handleSaveOrder(program);
+            // handleSaveOrder(program);
           }}
         >
           SAVE ORDER

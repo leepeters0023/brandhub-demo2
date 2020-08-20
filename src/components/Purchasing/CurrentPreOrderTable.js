@@ -1,4 +1,4 @@
-import React, {  useCallback, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -8,9 +8,7 @@ import {
   setItemTotal,
 } from "../../redux/slices/programTableSlice";
 
-import {
-  setProgramComplete,
-} from "../../redux/slices/programsSlice";
+import { setProgramComplete } from "../../redux/slices/programsSlice";
 
 import SelectorMenus from "../Utility/SelectorMenus";
 
@@ -87,14 +85,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ program, distributor, itemNumber, index }, ref) => {
+  React.forwardRef(({ orderNumber, itemNumber, index }, ref) => {
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
+    // const value = useSelector(
+    //   (state) =>
+    //     state.programTable.programs[`${program}`].items[`${itemNumber}`]
+    //       .distributors[distributor]
+    // );
     const value = useSelector(
       (state) =>
-        state.programTable.programs[`${program}`].items[`${itemNumber}`]
-          .distributors[distributor]
+        state.programTable.orders
+          .find((ord) => ord.orderNumber === orderNumber)
+          .items.find((item) => item.itemNumber === itemNumber).totalItems
     );
 
     const handleScrollLeft = () => {
@@ -112,21 +116,18 @@ const MemoInputCell = React.memo(
           style={{ textAlign: "center", zIndex: "0" }}
           fullWidth
           size="small"
-          id={`${distributor}-${itemNumber}`}
+          id={`${orderNumber}-${itemNumber}`}
           value={value}
           onBlur={(evt) => {
             if (evt.target.value === "") {
               dispatch(
                 setGridItem({
-                  program: program,
                   itemNumber: `${itemNumber}`,
-                  distributor: distributor,
+                  orderNumber: orderNumber,
                   value: 0,
                 })
               );
-              dispatch(
-                setItemTotal({ program: program, itemNumber: `${itemNumber}` })
-              );
+              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
             }
           }}
           onChange={(evt) => {
@@ -138,14 +139,13 @@ const MemoInputCell = React.memo(
             ) {
               dispatch(
                 setGridItem({
-                  program: program,
                   itemNumber: `${itemNumber}`,
-                  distributor: distributor,
+                  orderNumber: orderNumber,
                   value: evt.target.value,
                 })
               );
               dispatch(
-                setItemTotal({ program: program, itemNumber: `${itemNumber}` })
+                setItemTotal({ itemNumber: `${itemNumber}` })
               );
             }
           }}
@@ -155,13 +155,14 @@ const MemoInputCell = React.memo(
   })
 );
 
-const TotalItemCell = React.memo(({ program, itemNumber }) => {
+const TotalItemCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector(
-    (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`]
-        .itemDetails.totalItems
-  );
+  const value = useSelector((state) => state.programTable.items.find(item => item.itemNumber === itemNumber).totalItems)
+  // const value = useSelector(
+  //   (state) =>
+  //     state.programTable.programs[`${program}`].items[`${itemNumber}`]
+  //       .itemDetails.totalItems
+  // );
   return (
     <TableCell
       classes={{ root: classes.root }}
@@ -173,12 +174,11 @@ const TotalItemCell = React.memo(({ program, itemNumber }) => {
   );
 });
 
-const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
+const TotalEstCostCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
     (state) =>
-      state.programTable.programs[`${program}`].items[`${itemNumber}`]
-        .itemDetails.estTotal
+     state.programTable.items.find(item => item.itemNumber === itemNumber).estTotal
   );
   return (
     <TableCell
@@ -194,7 +194,6 @@ const TotalEstCostCell = React.memo(({ program, itemNumber }) => {
 const PreOrderCartTable = (props) => {
   const {
     currentProgram,
-    distributors,
     open,
     setOpen,
     tableStyle,
@@ -207,21 +206,13 @@ const PreOrderCartTable = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const tableRef = useRef(null);
-  const currentItemsObj = useSelector(
-    (state) => state.programTable.programs[`${currentProgram}`].items
-  );
-
+  const currentItems = useSelector((state) => state.programTable.items);
+  const orders = useSelector((state) => state.programTable.orders);
   const isComplete = useSelector(
     (state) =>
-      state.programs.programs.find(prog => prog.id === currentProgram).isComplete
+      state.programs.programs.find((prog) => prog.id === currentProgram)
+        .isComplete
   );
-
-  const currentItems =
-    Object.keys(currentItemsObj).length > 0
-      ? Object.keys(currentItemsObj).map((key) => ({
-          ...currentItemsObj[key].itemDetails,
-        }))
-      : [];
 
   const handleProgram = useCallback(
     (id) => {
@@ -248,7 +239,7 @@ const PreOrderCartTable = (props) => {
     <>
       <TableContainer className={classes.cartContainer} ref={tableRef}>
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
-          {Object.keys(currentItemsObj).length === 0 ? (
+          {currentItems.length === 0 ? (
             <TableHead>
               <TableRow>
                 <TableCell
@@ -257,22 +248,22 @@ const PreOrderCartTable = (props) => {
                   className={classes.borderRight}
                 >
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                      <SelectorMenus
-                        type="programs"
-                        handler={handleProgram}
-                        currentProgram={currentProgram}
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={isComplete}
-                            onChange={handleComplete}
-                            inputProps={{ "aria-label": "complete checkbox" }}
-                          />
-                        }
-                        label="Complete"
-                        labelPlacement="end"
-                      />
+                    <SelectorMenus
+                      type="programs"
+                      handler={handleProgram}
+                      currentProgram={currentProgram}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isComplete}
+                          onChange={handleComplete}
+                          inputProps={{ "aria-label": "complete checkbox" }}
+                        />
+                      }
+                      label="Complete"
+                      labelPlacement="end"
+                    />
                   </div>
                 </TableCell>
                 <TableCell classes={{ root: classes.root }}>
@@ -288,7 +279,7 @@ const PreOrderCartTable = (props) => {
                       className={classes.bodyText}
                       style={{ marginRight: "10px" }}
                     >
-                      You have not added any items from this program...
+                      There are no items currently in this program...
                     </Typography>
                     <Button
                       className={classes.largeButton}
@@ -480,7 +471,6 @@ const PreOrderCartTable = (props) => {
                               </TableCell>
                               {currentItems.map((item) => (
                                 <TotalItemCell
-                                  program={currentProgram}
                                   itemNumber={item.itemNumber}
                                   key={item.itemNumber}
                                 />
@@ -533,7 +523,6 @@ const PreOrderCartTable = (props) => {
                               </TableCell>
                               {currentItems.map((item) => (
                                 <TotalEstCostCell
-                                  program={currentProgram}
                                   itemNumber={item.itemNumber}
                                   key={item.itemNumber}
                                 />
@@ -547,8 +536,8 @@ const PreOrderCartTable = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody style={{ position: "relative" }}>
-                {distributors.map((dist) => (
-                  <TableRow key={dist.id}>
+                {orders.map((ord) => (
+                  <TableRow key={ord.orderNumber}>
                     <TableCell
                       classes={{ root: classes.root }}
                       className={classes.borderRight}
@@ -561,15 +550,14 @@ const PreOrderCartTable = (props) => {
                     >
                       <div>
                         <Typography className={classes.headerText}>
-                          {dist.name}
+                          {ord.distributorName}
                         </Typography>
                       </div>
                     </TableCell>
                     {currentItems.map((item, index) => (
                       <MemoInputCell
                         key={item.itemNumber}
-                        program={currentProgram}
-                        distributor={dist.name}
+                        orderNumber={ord.orderNumber}
                         itemNumber={item.itemNumber}
                         index={index}
                         ref={tableRef}
@@ -588,7 +576,6 @@ const PreOrderCartTable = (props) => {
 
 PreOrderCartTable.propTypes = {
   currentProgram: PropTypes.string.isRequired,
-  distributors: PropTypes.array.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   tableStyle: PropTypes.string,

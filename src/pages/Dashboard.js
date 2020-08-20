@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
-
   const [currentUser, setCurrentUser] = useState("");
 
   const [loading, setLoading] = useState(false);

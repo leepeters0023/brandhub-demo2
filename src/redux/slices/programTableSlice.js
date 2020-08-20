@@ -1,201 +1,178 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { fetchOrdersByProgram } from "../../api/programApi";
+
 /*
-state: {
-  programs: {
-    programId: {
-      items: { 
-        itemNumber: {
-          itemDetails: {
-            itemNumber: string,
-            brand: string,
-            itemType: string,
-            price: float,
-            qty: string,
-            imgUrl: string,
-            complianceStatus: string,
-            totalItems: int,
-            estTotal: float,
-          }
-          distributors: {
-            distributor: {
-              orderNum: string || undefined(when being created)
-              value: int,
-            }
-          }
-        }
-      },
-      programDetails: {
-        total: float,
-        isComplete: bool,
-        budget: string
-      }
+programsTable: {
+  programId: string,
+  items: [
+    (array of items sorted by itemNumber)
+    {
+      itemNumber: string,
+      brand: string,
+      itemType: string,
+      price: string,
+      qty: string,
+      imgUrl: string,
+      complianceStatus: string,
+      totalItems: int,
+      estTotal: float,
     }
-  },
-  distributors: [...distributor list, strings],
-  details: {
-    total: *total cart cost all programs, float,
-    budgets: { *amount allocated to each budget, key(budget): value(float) }
+  ]
+  orders: [
+    (array of orders sorted alphabetically by distributor name)
+    {
+      distributor: string,
+      type: string,
+      program: null || [...string(programIds)],
+      status: string,
+      items: [...{ itemObj } sorted by itemNumber],
+      shipping: { shippingObj },
+      budget: “string”,
+      totalItems: int,
+      totalEstCost: float,
+    }
+  ],
+  programTotal: float,
+  preOrderTotal: {
+    currentTotal: float (fetched from db for initial total value),
+    actualTotal: float (based on change in the current program)
   }
 }
 */
 
 let initialState = {
-  programs: {},
-  distributors: [],
-  details: {
-    total: 0,
-    budgets: {},
+  isLoading: false,
+  programId: null,
+  items: [],
+  orders: [],
+  programTotal: 0,
+  preOrderTotal: {
+    currentTotal: 0,
+    actualTotal: 0,
   },
-  hasFetched: {},
+  error: null,
+}
+
+const startLoading = (state) => {
+  state.isLoading = true;
+};
+
+const loadingFailed = (state, action) => {
+  const { error } = action.payload;
+  state.isLoading = false;
+  state.error = error;
 };
 
 const programTableSlice = createSlice({
   name: "programTable",
   initialState,
   reducers: {
-    setTableData(state, action) {
-      const { tableData } = action.payload;
-      const currentPrograms = { ...tableData.programs };
-      const currentDist = [...tableData.distributors];
-      const currentDetails = { ...tableData.details };
-      state.programs = currentPrograms;
-      state.distributors = currentDist;
-      state.details = currentDetails;
-    },
-    setInitialTableData(state, action) {
-      const { programs, distributors } = action.payload;
-      let initialPrograms = {};
-      let initialFetched = {};
-      let initialDistributors = [];
-      programs.forEach((prog) => {
-        initialPrograms[`${prog.id}`] = {
-          details: {
-            id: prog.id,
-            name: prog.name,
-            focusMonth: prog.focusMonth,
-          },
-          items: {},
-          orders: [],
-          programDetails: { total: 0, isComplete: false, budget: "" },
-        };
-        initialFetched[`${prog.id}`] = false;
-      });
-      distributors.forEach((dist) => initialDistributors.push(dist.name));
-      state.programs = { ...initialPrograms };
-      state.distributors = initialDistributors;
-      state.hasFetched = { ...initialFetched };
-    },
-    setOrders(state, action) {
-      const { program, orders } = action.payload;
-      state.programs[`${program}`].orders = [...orders];
-    },
-    setFetchedOrders(state, action) {
-      const { program, orders } = action.payload;
-      state.programs[`${program}`].orders = [...orders];
-      //need to map orders to table
-      let distributorValues = {};
-      let currentDistributors = [...state.distributors];
-      currentDistributors.forEach((dist) => (distributorValues[dist] = 0));
-      orders[0].items.forEach((item) => {
-        state.programs[`${program}`].items[`${item.itemNumber}`] = {
-          itemDetails: {
-            itemNumber: item.itemNumber,
-            brand: item.brand,
-            itemType: item.itemType,
-            price: item.price,
-            qty: item.qty,
-            imgUrl: item.imgUrl,
-            complianceStatus: "pending",
-            totalItems: 0,
-            estTotal: 0,
-          },
-          distributors: { ...distributorValues },
-        };
-      });
-      orders.forEach((order) => {
-        order.items.forEach((item) => {
-          state.programs[`${program}`].items[`${item.itemNumber}`].distributors[
-            `${order.distributorName}`
-          ] = item.totalItems;
-          state.programs[`${program}`].items[
-            `${item.itemNumber}`
-          ].itemDetails.totalItems += item.totalItems;
-          state.programs[`${program}`].items[
-            `${item.itemNumber}`
-          ].itemDetails.estTotal += parseFloat(item.estTotal);
-          state.programs[`${program}`].programDetails.total += parseFloat(
-            item.estTotal
-          );
-          state.details.total += parseFloat(item.estTotal);
-        });
-      });
-    },
-    setHasFetched(state, action) {
-      const {program} = action.payload;
-      state.hasFetched[`${program}`] = true;
+    setIsLoading: startLoading,
+    buildTableFromOrders(state, action) {
+      const { programId, orders } = action.payload;
+      if (orders.length !== 0) {
+
+        let currentItems = [...orders[0].items]
+        currentItems = currentItems.map((item) => ({...item, estTotal: 0, totalItems: 0}))
+        let progTotal = 0;
+        orders.forEach(ord => {
+          let orderItems = [...ord.items]
+          orderItems.forEach(item => {
+            progTotal += item.estTotal
+            currentItems.find(cItem => item.itemNumber === cItem.itemNumber).totalItems += item.totalItems
+            currentItems.find(cItem => item.itemNumber === cItem.itemNumber).estTotal += item.estTotal
+          })
+        })
+        state.programId = programId;
+        state.items = currentItems;
+        state.orders = [...orders];
+        state.programTotal = progTotal;
+        state.isLoading = false;
+      } else {
+        state.orders = []
+        state.items = []
+        state.isLoading = false;
+      }
     },
     setGridItem(state, action) {
-      const { program, itemNumber, distributor, value } = action.payload;
-      state.programs[`${program}`].items[`${itemNumber}`].distributors[
-        `${distributor}`
-      ] = value;
+      const { itemNumber, orderNumber, value } = action.payload;
+      let orders = [...state.orders]
+      let currentOrder = orders.find(ord => ord.orderNumber === orderNumber)
+      let newItems = currentOrder.items.map(item => {
+        if (item.itemNumber === itemNumber) {
+          let numVal = value === "" ? 0 : parseInt(value)
+          return {...item, totalItems: numVal, estTotal: numVal * item.price}
+        } else return item
+      })
+      currentOrder.items = [...newItems]
+      orders.splice(orders.indexOf(currentOrder), 1, currentOrder)
+      state.orders = [...orders]
     },
     setItemTotal(state, action) {
-      const { program, itemNumber } = action.payload;
-      let initialTotal = state.programs[`${program}`].programDetails.total;
-      let total = 0;
-      for (let dist in state.programs[`${program}`].items[`${itemNumber}`]
-        .distributors) {
-        total +=
-          parseInt(
-            state.programs[`${program}`].items[`${itemNumber}`].distributors[
-              dist
-            ]
-          ) || 0;
-      }
-      let totalCost =
-        total *
-        state.programs[`${program}`].items[`${itemNumber}`].itemDetails.price;
-      state.programs[`${program}`].items[
-        `${itemNumber}`
-      ].itemDetails.totalItems = total;
-      state.programs[`${program}`].items[
-        `${itemNumber}`
-      ].itemDetails.estTotal = totalCost;
-      let totalProgramCost = 0;
-      for (let item in state.programs[`${program}`].items) {
-        totalProgramCost +=
-          state.programs[`${program}`].items[item].itemDetails.estTotal;
-      }
-      state.programs[`${program}`].programDetails.total = totalProgramCost;
-      state.details.total += totalProgramCost - initialTotal;
-    },
-    setProgramComplete(state, action) {
-      const { program, status } = action.payload;
-      state.programs[`${program}`].programDetails.isComplete = status
+      const { itemNumber } = action.payload
+      let items = [...state.items]
+      let currentItem = items.find(item => item.itemNumber === itemNumber)
+      let totalItems = 0;
+      let totalEstCost = 0;
+      let progTotal = 0;
+      state.orders.forEach((ord) => {
+        totalItems += ord.items.find(item => item.itemNumber === itemNumber).totalItems
+        totalEstCost += ord.items.find(item => item.itemNumber === itemNumber).estTotal
+        ord.items.forEach(item => progTotal += item.estTotal)
+      })
+      currentItem.totalItems = totalItems
+      currentItem.estTotal = totalEstCost
+      items.splice(items.indexOf(currentItem), 1, currentItem)
+      state.items = [...items]
+      state.programTotal = progTotal
     },
     removeGridItem(state, action) {
-      const { program, itemNum } = action.payload;
-      state.programs[`${program}`].programDetails.total -=
-        state.programs[`${program}`].items[`${itemNum}`].itemDetails.estTotal;
-      state.details.total -=
-        state.programs[`${program}`].items[`${itemNum}`].itemDetails.estTotal;
-      delete state.programs[`${program}`].items[`${itemNum}`];
+      const { itemNum } = action.payload;
+      state.programTotal -=
+        state.items.find(item => item.itemNumber === itemNum).estTotal
+      state.preOrderTotal.actualTotal -=
+      state.items.find(item => item.itemNumber === itemNum).estTotal
+      let currentItems = state.items.filter(item => item.itemNumber !== itemNum)
+      state.items = currentItems
+      let currentOrders = [...state.orders]
+      currentOrders.forEach(ord => {
+        let currentItems = ord.items.filter(item => item.itemNumber !== itemNum)
+        let totalItems = 0
+        let estTotal = 0
+        currentItems.forEach(item => {
+          totalItems += item.totalItems
+          estTotal += item.estTotal
+        })
+        ord.items = currentItems
+        ord.totalItems = totalItems
+        ord.totalEstCost = estTotal
+      })
+      state.orders = currentOrders
     },
+    setFailure: loadingFailed
   },
 });
 
 export const {
-  setTableData,
-  setInitialTableData,
-  setOrders,
-  setFetchedOrders,
-  setHasFetched,
+  setIsLoading,
+  buildTableFromOrders,
   setGridItem,
   setItemTotal,
-  setProgramComplete,
   removeGridItem,
+  setFailure,
 } = programTableSlice.actions;
 
 export default programTableSlice.reducer;
+
+export const fetchProgramOrders = (user, program) => async dispatch => {
+  try {
+    dispatch(setIsLoading())
+    const currentOrders = await fetchOrdersByProgram(user, program)
+  
+      dispatch(buildTableFromOrders({ programId: program, orders: currentOrders}))
+    
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }))
+  }
+}

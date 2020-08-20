@@ -1,6 +1,6 @@
 export default [
   {
-    id: "12300006124",
+    orderNumber: "12300006124",
     distributorId: "31203",
     distributorName: "ABC Storage",
     type: "program",
@@ -16,7 +16,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -28,7 +28,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -40,7 +40,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -52,7 +52,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -61,7 +61,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300006366",
+    orderNumber: "12300006366",
     distributorId: "1662",
     distributorName: "Albermarle Dist.",
     type: "program",
@@ -77,7 +77,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -89,7 +89,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -101,7 +101,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -113,7 +113,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -122,7 +122,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300002654",
+    orderNumber: "12300002654",
     distributorId: "501009",
     distributorName: "Albertson's LLC Intermtn Div",
     type: "program",
@@ -138,7 +138,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -150,7 +150,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -162,7 +162,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -174,7 +174,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -183,7 +183,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300008257",
+    orderNumber: "12300008257",
     distributorId: "1912",
     distributorName: "Alpena Bev Co",
     type: "program",
@@ -199,7 +199,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -211,7 +211,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -223,7 +223,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -235,7 +235,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -244,7 +244,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300005955",
+    orderNumber: "12300005955",
     distributorId: "1112",
     distributorName: "Antonio Origliio Inc",
     type: "program",
@@ -260,7 +260,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -272,7 +272,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -284,7 +284,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -296,7 +296,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -305,7 +305,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300002429",
+    orderNumber: "12300002429",
     distributorId: "57746",
     distributorName: "Binks Wines & Beverages",
     type: "program",
@@ -321,7 +321,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -333,7 +333,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -345,7 +345,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -357,7 +357,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -366,7 +366,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300007313",
+    orderNumber: "12300007313",
     distributorId: "436404",
     distributorName: "Blue Ridge Bev Co",
     type: "program",
@@ -382,7 +382,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -394,7 +394,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -406,7 +406,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -418,7 +418,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -427,7 +427,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300009032",
+    orderNumber: "12300009032",
     distributorId: "1085",
     distributorName: "Blue Ridge Dist",
     type: "program",
@@ -443,7 +443,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -455,7 +455,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -467,7 +467,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -479,7 +479,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -488,7 +488,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300009580",
+    orderNumber: "12300009580",
     distributorId: "1971",
     distributorName: "Blue Rock Dist",
     type: "program",
@@ -504,7 +504,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -516,7 +516,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -528,7 +528,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -540,7 +540,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -549,7 +549,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300006516",
+    orderNumber: "12300006516",
     distributorId: "434604",
     distributorName: "Breakthru Bev",
     type: "program",
@@ -565,7 +565,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -577,7 +577,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -589,7 +589,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -601,7 +601,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -610,7 +610,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300007194",
+    orderNumber: "12300007194",
     distributorId: "1876",
     distributorName: "Bronkens Good Time Co",
     type: "program",
@@ -626,7 +626,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -638,7 +638,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -650,7 +650,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -662,7 +662,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -671,7 +671,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300002119",
+    orderNumber: "12300002119",
     distributorId: "33995",
     distributorName: "C Stein Inc",
     type: "program",
@@ -687,7 +687,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -699,7 +699,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -711,7 +711,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -723,7 +723,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -732,7 +732,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300005131",
+    orderNumber: "12300005131",
     distributorId: "489866",
     distributorName: "Cactus Bev Co",
     type: "program",
@@ -748,7 +748,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -760,7 +760,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -772,7 +772,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -784,7 +784,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -793,7 +793,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300007188",
+    orderNumber: "12300007188",
     distributorId: "146084",
     distributorName: "Capital City Bev",
     type: "program",
@@ -809,7 +809,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -821,7 +821,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -833,7 +833,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -845,7 +845,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -854,7 +854,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300000937",
+    orderNumber: "12300000937",
     distributorId: "436305",
     distributorName: "Clark Bev Group",
     type: "program",
@@ -870,7 +870,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -882,7 +882,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -894,7 +894,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -906,7 +906,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -915,7 +915,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300004256",
+    orderNumber: "12300004256",
     distributorId: "123819",
     distributorName: "Clatsop Dist",
     type: "program",
@@ -931,7 +931,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -943,7 +943,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -955,7 +955,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -967,7 +967,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -976,7 +976,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300005101",
+    orderNumber: "12300005101",
     distributorId: "10041410",
     distributorName: "Coast Guard Exchange",
     type: "program",
@@ -992,7 +992,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1004,7 +1004,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1016,7 +1016,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1028,7 +1028,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -1037,7 +1037,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300008269",
+    orderNumber: "12300008269",
     distributorId: "31202",
     distributorName: "College Drive Self Stor",
     type: "program",
@@ -1053,7 +1053,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1065,7 +1065,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1077,7 +1077,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1089,7 +1089,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -1098,7 +1098,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300007304",
+    orderNumber: "12300007304",
     distributorId: "426855",
     distributorName: "Connecticut Dist",
     type: "program",
@@ -1114,7 +1114,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1126,7 +1126,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1138,7 +1138,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1150,7 +1150,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -1159,7 +1159,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300002567",
+    orderNumber: "12300002567",
     distributorId: "491960",
     distributorName: "Core-Mark Dist",
     type: "program",
@@ -1175,7 +1175,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1187,7 +1187,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1199,7 +1199,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1211,7 +1211,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -1220,7 +1220,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300007437",
+    orderNumber: "12300007437",
     distributorId: "1150",
     distributorName: "Crown Dist",
     type: "program",
@@ -1236,7 +1236,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1248,7 +1248,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1260,7 +1260,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1272,7 +1272,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,
@@ -1281,7 +1281,7 @@ export default [
     shipping: {},
   },
   {
-    id: "12300001231",
+    orderNumber: "12300001231",
     distributorId: "503129",
     distributorName: "Dayton Heidelberg",
     type: "program",
@@ -1297,7 +1297,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "1185325614",
@@ -1309,7 +1309,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
       {
         itemNumber: "15463506614",
@@ -1321,7 +1321,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 5,
-        estTotal: "29.95",
+        estTotal: 29.95,
       },
       {
         itemNumber: "74552146614",
@@ -1333,7 +1333,7 @@ export default [
           "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013431/Select/bh_apothic_carton_rider_eohtnt.jpg",
         complianceStatus: "pending",
         totalItems: 3,
-        estTotal: "17.97",
+        estTotal: 17.97,
       },
     ],
     totalItems: 16,

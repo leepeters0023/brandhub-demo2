@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { setFetchedOrders } from "./programTableSlice";
-
-import { fetchOrdersByProgram } from "../../api/programApi";
-
 /*
 * Data Format
 orders: {
@@ -48,7 +44,6 @@ shippingObj: {
 let initialState = {
   isLoading: false,
   orders: [],
-  activePrograms: [],
   programTotal: 0,
   error: null,
 };
@@ -80,11 +75,6 @@ const ordersSlice = createSlice({
       state.orders = currentOrders.concat(orders);
       state.isLoading = false;
       state.error = null;
-    },
-    setActivePrograms(state, action) {
-      const { programs } = action.payload;
-      let programList = programs.map(prog => ({[`${prog.id}`]: 0}))
-      state.activePrograms = [...programList]
     },
     addNewOrder(state, action) {
       const {
@@ -183,7 +173,6 @@ const ordersSlice = createSlice({
 export const {
   setIsLoading,
   getOrdersSuccess,
-  setActivePrograms,
   addNewOrder,
   updateOrder,
   updateOrders,
@@ -194,15 +183,3 @@ export const {
 
 export default ordersSlice.reducer
 
-export const fetchProgramOrders = (user, program) => async dispatch => {
-  try {
-    dispatch(setIsLoading())
-    const currentOrders = await fetchOrdersByProgram(user, program)
-    if (currentOrders.length !== 0) {
-      dispatch(setFetchedOrders({ program, orders: currentOrders}))
-    }
-    dispatch(getOrdersSuccess({orders: currentOrders}))
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }))
-  }
-}
