@@ -139,7 +139,7 @@ const CurrentOrders = ({ userType }) => {
 };
 
 CurrentOrders.propTypes = {
-  userType: PropTypes.string.isRequired,
+  userType: PropTypes.string,
 };
 
 export default CurrentOrders;

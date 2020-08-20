@@ -1,17 +1,6 @@
-// import { buildApi, get, post, patch, destroy } from 'redux-bees';
-
-// const apiEndpoints = {
-//   getUser: { method: get, path: '/user'}
-// }
-
-// const config = {
-//   baseUrl: ""
-// }
-
-// const api = buildApi(apiEndpoints, config)
+import orders from "../assets/mockdata/Orders";
 
 //mock fetch
-import orders from "../assets/mockdata/Orders";
 
 const timeout = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));

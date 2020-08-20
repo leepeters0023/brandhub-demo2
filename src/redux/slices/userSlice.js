@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getUser } from "../../api/userApi";
 
 /*
 * DataFormat
@@ -15,7 +16,7 @@ let initialState = {
   firstName: "",
   lastName: "",
   email: "",
-  roles: [],
+  roles: "",
   territories: [],
 }
 
@@ -35,12 +36,15 @@ const userSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     getUserSuccess(state, action) {
-      const { user: { firstName, lastName, email, roles, territories}} = action.payload;
+      const { user: { firstName, lastName, email, role}} = action.payload;
       state.firstName = firstName
       state.lastName = lastName
       state.email = email
-      state.roles = [...roles]
-      state.territories = [...territories]
+      state.role = role
+      state.territories = ["North East", "Walmart"]
+    },
+    removeUser: (state) => {
+      state = { ...initialState}
     },
     setFailure: loadingFailed
   }
@@ -49,17 +53,18 @@ const userSlice = createSlice({
 export const {
   setIsLoading,
   getUserSuccess,
+  removeUser,
   setFailure,
 } = userSlice.actions
 
 export default userSlice.reducer
 
-// export const fetchUser = (email, password) => async dispatch => {
-//   try {
-//     dispatch(setIsLoading())
-//     const user = await getUser(email, password)
-//     dispatch(getUserSuccess(user))
-//   } catch (err) {
-//     dispatch(setFailure({error: err.toString()}))
-//   }
-// }
+export const fetchUser = (email, password) => async dispatch => {
+    dispatch(setIsLoading())
+    const user = await getUser(email, password)
+    if (user.status === "ok") {
+      dispatch(getUserSuccess({user: user.data}))
+    } else {
+      dispatch(setFailure({error: user.error}))
+    }
+}

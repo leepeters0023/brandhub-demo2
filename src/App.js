@@ -4,6 +4,8 @@ import { Router, Redirect } from "@reach/router";
 import { useDispatch } from "react-redux";
 import { getProgramsSuccess } from "./redux/slices/programsSlice";
 
+import { logoutUser } from "./api/userApi"
+
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Dashboard from "./pages/Dashboard";
@@ -44,7 +46,7 @@ const App = () => {
 
   const handleLogout = () => {
     setCurrentUser(null)
-    localStorage.removeItem("user")
+    logoutUser();
   };
 
   useEffect(()=>{
