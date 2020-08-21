@@ -1,6 +1,6 @@
 [[redirects]]
-  from  = "/api/*"
-  to = "https://brandhub-api.onrender.com/api/1"
+  from  = "/api/user/1"
+  to = "https://brandhub-api.onrender.com/api/user/1"
   status = 200
   force = true
   [redirects.headers]
