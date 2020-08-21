@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const Budget = () => {
   const classes = useStyles();
   const [value, updateValue] = useState(1);
-  const currentUser = window.localStorage.getItem("user");
+  const currentUser = window.localStorage.getItem("brandhub-role");
 
   const handleChangeTab = (_evt, newValue) => {
     if (newValue === 1) {

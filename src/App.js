@@ -52,9 +52,9 @@ const App = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [currentUser, setCurrentUser] = useState(
-    window.localStorage.getItem("user")
+    window.localStorage.getItem("brandhub-user")
   );
-  const [role, setRole] = useState(window.localStorage.getItem("role"));
+  const [role, setRole] = useState(window.localStorage.getItem("brandhub-role"));
 
   const currentRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -90,7 +90,7 @@ const App = () => {
 
   useEffect(()=>{
     if (loggedIn && !currentUser) {
-      setCurrentUser(window.localStorage.getItem("user"))
+      setCurrentUser(window.localStorage.getItem("brandhub-user"))
     }
   },[loggedIn, currentUser])
 

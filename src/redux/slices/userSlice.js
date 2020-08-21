@@ -97,7 +97,7 @@ export const fetchUser = () => async dispatch => {
     dispatch(setIsLoading())
     const user = await getUser("1")
     if (user.status === "ok") {
-      window.localStorage.setItem("role", user.data.data.attributes.role)
+      window.localStorage.setItem("brandhub-role", user.data.data.attributes.role)
       dispatch(getUserSuccess({user: user.data.data.attributes}))
     } else {
       dispatch(setFailure({error: user.error}))
