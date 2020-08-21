@@ -3,6 +3,18 @@
   to = "/index.html"
   status = 200
 
+[[redirects]]
+  from  = "/api/*"
+  to = "https://brandhub-api.onrender.com"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/auth/token"
+  to = "https://brandhub-api.onrender.com"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/index.html"
   [headers.values]
@@ -11,6 +23,3 @@
     no-cache,
     no-store,
     must-revalidate'''
-
-/api/* https://brandhub-api.onrender.com
-/auth/token https://brandhub-api.onrender.com
