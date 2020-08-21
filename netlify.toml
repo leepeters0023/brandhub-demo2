@@ -11,3 +11,6 @@
     no-cache,
     no-store,
     must-revalidate'''
+
+/api/* https://brandhub-api.onrender.com
+/auth/token https://brandhub-api.onrender.com
