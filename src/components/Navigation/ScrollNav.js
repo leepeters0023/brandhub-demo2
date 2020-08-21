@@ -121,7 +121,7 @@ const ScrollNav = (props) => {
 };
 
 ScrollNav.propTypes = {
-  userType: PropTypes.string.isRequired,
+  userType: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
 };
 

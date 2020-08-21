@@ -16,7 +16,7 @@ let initialState = {
   firstName: "",
   lastName: "",
   email: "",
-  roles: "",
+  role: "",
   territories: [],
 }
 
@@ -36,12 +36,15 @@ const userSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     getUserSuccess(state, action) {
-      const { user: { firstName, lastName, email, role}} = action.payload;
-      state.firstName = firstName
-      state.lastName = lastName
+      const { user: { name, email, role}} = action.payload;
+      state.firstName = name.split(" ")[0]
+      state.lastName = name.split(" ")[1]
       state.email = email
       state.role = role
       state.territories = ["North East", "Walmart"]
+    },
+    setUserFetched: (state) => {
+      state.isLoading = false
     },
     removeUser: (state) => {
       state = { ...initialState}
@@ -53,17 +56,19 @@ const userSlice = createSlice({
 export const {
   setIsLoading,
   getUserSuccess,
+  setUserFetched,
   removeUser,
   setFailure,
 } = userSlice.actions
 
 export default userSlice.reducer
 
-export const fetchUser = (email, password) => async dispatch => {
+export const fetchUser = () => async dispatch => {
     dispatch(setIsLoading())
-    const user = await getUser(email, password)
+    const user = await getUser("1")
+    console.log(user)
     if (user.status === "ok") {
-      dispatch(getUserSuccess({user: user.data}))
+      dispatch(getUserSuccess({user: user.data.data.attributes}))
     } else {
       dispatch(setFailure({error: user.error}))
     }

@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import { useSelector, useDispatch } from "react-redux";
+
 import { useInput } from "../hooks/UtilityHooks";
+
+import { logInUser } from "../api/userApi";
+
+import { setIsLoading, setUserFetched, fetchUser } from "../redux/slices/userSlice";
 
 import BrandHubLogo from "../assets/brandhub.svg";
 
@@ -13,6 +19,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
@@ -65,17 +73,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const userTypes = [
-  "super",
-  "field1",
-  "field2",
-  "compliance",
-  "marketing",
-  "creative",
-];
+// const userTypes = [
+//   "super",
+//   "field1",
+//   "field2",
+//   "compliance",
+//   "marketing",
+//   "creative",
+// ];
 
 const Login = ({ setAuth }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const currentRole = useSelector((state) => state.user.role)
+
   const {
     value: userName,
     bind: bindUserName,
@@ -88,26 +100,40 @@ const Login = ({ setAuth }) => {
   } = useInput("");
 
   const [error, setError] = useState({ user: undefined });
+  const isLoading = useSelector((state) => state.user.isLoading)
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
-    let error = { user: undefined };
-    setError(error);
-    if (!userTypes.includes(userName)) {
-      error = { user: "User does not exist" };
-      setError(error);
-      resetUserName();
-    }
-    if (password !== "admin") {
-      error = { ...error, password: "Invalid Password" };
-      setError(error);
-      resetPassword();
-    }
-    if (!error.user && !error.password) {
-      localStorage.setItem("user", userName);
-      setAuth(userName);
+    dispatch(setIsLoading());
+    const response = await logInUser(userName, password) 
+    console.log(response)
+    if (response.status === "ok") {
+      resetUserName()
+      resetPassword()
+      await dispatch(fetchUser())
+    } else if (response.error) {
+      resetUserName()
+      resetPassword()
+      setError({error: response.error})
+      dispatch(setUserFetched())
     }
   };
+
+  useEffect(()=>{
+    if (currentRole.length !== 0) {
+      setAuth(currentRole)
+      dispatch(setUserFetched)
+    }
+  }, [currentRole, dispatch, setAuth])
+  
+  if (isLoading) {
+    return (
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    )
+  }
+
   return (
     <div className={classes.welcomContainer}>
       <img src={BrandHubLogo} className={classes.logo} alt="Logo" />
@@ -134,8 +160,8 @@ const Login = ({ setAuth }) => {
               name="email"
               autoComplete="email"
               autoFocus
-              helperText={error.user}
-              error={error.user ? true : false}
+              helperText={error.error}
+              error={error.error ? true : false}
               {...bindUserName}
             />
             <TextField
@@ -149,8 +175,8 @@ const Login = ({ setAuth }) => {
               type="password"
               id="password"
               autoComplete="current-password"
-              helperText={error.password}
-              error={error.password ? true : false}
+              helperText={error.error}
+              error={error.error ? true : false}
               {...bindPassword}
             />
             <FormControlLabel

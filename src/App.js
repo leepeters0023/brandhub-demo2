@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Router, Redirect } from "@reach/router";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProgramsSuccess } from "./redux/slices/programsSlice";
 
 import { logoutUser } from "./api/userApi"
+
+import { removeUser, setIsLoading, fetchUser } from "./redux/slices/userSlice"
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -40,27 +42,39 @@ const theme = createMuiTheme(themeFile);
 const App = () => {
   const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState(window.localStorage.getItem("user"));
+  const [role, setRole] = useState(undefined)
+
+  const currentRole = useSelector((state) => state.user.role)
+  console.log(currentRole)
+  console.log(role)
   const handleLogIn = (user) => {
-    setCurrentUser(user);
+    setRole(user);
   };
 
   const handleLogout = () => {
     setCurrentUser(null)
+    dispatch(removeUser())
     logoutUser();
   };
 
   useEffect(()=>{
-    if (currentUser) {
+    if (currentUser && currentRole.length > 0) {
       //dispatch(setInitialTableData({ programs, distributors }));
+      setRole(currentRole)
       dispatch(getProgramsSuccess({ programs }));
+    } else if (currentUser && currentUser.access_token) {
+      dispatch(setIsLoading())
+      dispatch(fetchUser())
+    } else {
+      setCurrentUser(null)
     }
-  },[dispatch, currentUser])
+  },[dispatch, currentUser, currentRole])
 
   return (
     <MuiThemeProvider theme={theme}>
       {currentUser && (
         <ScrollNav
-          userType={currentUser}
+          userType={role}
           handleLogout={handleLogout}
         />
       )}
@@ -74,95 +88,95 @@ const App = () => {
            <Dashboard path="/" />,
             "/",
             ["field1", "field2", "compliance", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <Programs path="/programs" />,
             "/programs",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <PastOrders path="/orders/past" />,
             "/orders/past",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
-            <CurrentOrders path="/orders/open" userType={currentUser}/>,
+            <CurrentOrders path="/orders/open" userType={role}/>,
             "/orders/open",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
-            <PlaceOrder path="/order" userType={currentUser} />,
+            <PlaceOrder path="/order" userType={role} />,
             "/order",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
-            <Program path="/program/:programId" userType={currentUser} />,
+            <Program path="/program/:programId" userType={role} />,
             "/program",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <Coupons path="/coupons" />,
             "/coupons",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <Reports path="/reports" />,
             "/reports",
             ["super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <Budget path="/budget" />,
             "/budget",
             ["field1", "field2", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <Approvals path="/approval" />,
             "/approval",
             ["compliance", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <RulesByState path="/rules" />,
             "/rules",
             ["compliance", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <ContactsByState path="/compliance-contacts" />,
             "/compliance-contacts",
             ["compliance", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
             <POSClassifications path="/classifications" />,
             "/classifications",
             ["compliance", "super"],
-            currentUser
+            role
           )}
           {handleAuth(
-            <Settings path="/settings" userType={currentUser} />,
+            <Settings path="/settings" userType={role} />,
             "/settings",
             ["field1", "field2", "compliance", "super"],
-            currentUser
+            role
           )}
           {/* <Calendar path="/calendar" /> */}
           {handleAuth(
             <Help path="/help" />,
             "/help",
             ["field1", "field2", "compliance", "super"],
-            currentUser
+            role
           )}
           <FourOhFour default path="/whoops" />
-          {!currentUser && (
+          {!role && (
             <LogIn
               setAuth={handleLogIn}
               path="/login"
@@ -176,10 +190,10 @@ const App = () => {
 
 export default App;
 
-const handleAuth = (component, path, users, currentUser) => {
-  if (users.includes(currentUser)) {
+const handleAuth = (component, path, users, role) => {
+  if (users.includes(role)) {
     return component;
-  } else if (!currentUser) {
+  } else if (!role) {
     return <Redirect noThrow from={path} to="/login" />
   } else return <Redirect noThrow from={path} to="/whoops" />;
 };
