@@ -71,10 +71,6 @@ const useStyles = makeStyles((theme) => ({
     height: "5px",
     margin: "10px 0",
   },
-  cartButton: {
-    width: theme.spacing(38),
-    marginTop: "10px",
-  },
 }));
 
 const ItemPreviewModal = (props) => {
@@ -189,33 +185,32 @@ const ItemPreviewModal = (props) => {
           <br />
           <Box bgcolor="primary.main" className={classes.dividerBox} />
           <br />
-          {userType !== "field1" && (
-            <div>
-              <SelectorMenus type="cart" />
-              <br />
-              <br />
-            </div>
-          )}
           {type !== "preOrder" && (
             <>
+              {userType !== "field1" && (
+                <div>
+                  <SelectorMenus type="cart" />
+                </div>
+              )}
               <TextField
                 color="secondary"
-                style={{ width: "150px", marginLeft: "5px" }}
+                style={{ width: "150px", marginLeft: "5px", marginTop: "10px" }}
                 id={`${itemNumber}`}
                 placeholder="Qty"
                 variant="outlined"
               />
-              <SelectorMenus type="budgets" />
+              {/* <SelectorMenus type="budgets" /> */}
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.largeButton}
+                style={{ width: "150px", marginLeft: "5px", marginTop: "10px" }}
+              >
+                ADD TO ORDER
+              </Button>
             </>
           )}
-          <br />
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.cartButton}
-          >
-            ADD TO CART
-          </Button>
         </Grid>
       </Grid>
       <br />

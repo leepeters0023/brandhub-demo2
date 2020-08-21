@@ -9,9 +9,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
+//import FormControl from "@material-ui/core/FormControl";
+//import InputLabel from "@material-ui/core/InputLabel";
+//import Select from "@material-ui/core/Select";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -22,7 +22,7 @@ import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 //mock data
 import items from "../../assets/mockdata/Items";
@@ -41,27 +41,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 let itemList = [...items];
-let initialBudgets = itemList.map((item) => {
-  return { id: `${item.itemNumber}`, budget: "" };
-});
+// let initialBudgets = itemList.map((item) => {
+//   return { id: `${item.itemNumber}`, budget: "" };
+// });
 
 const OrderCart = ({ userType, handleModalOpen }) => {
   const classes = useStyles();
 
-  const [budgets, setBudget] = useState(initialBudgets);
+  //const [budgets, setBudget] = useState(initialBudgets);
   const [currentItems, setItems] = useState(itemList);
   const [terms, setTermsChecked] = useState(false);
   const [rush, setRushChecked] = useState(false);
   const [shippingLocation, setShippingLocation] = useState(null);
 
-  const handleChangeBudget = (evt) => {
-    let newBudgets = budgets.map((budget) => {
-      return budget.id === evt.target.id
-        ? { id: budget.id, budget: evt.target.value }
-        : budget;
-    });
-    setBudget(newBudgets);
-  };
+  // const handleChangeBudget = (evt) => {
+  //   let newBudgets = budgets.map((budget) => {
+  //     return budget.id === evt.target.id
+  //       ? { id: budget.id, budget: evt.target.value }
+  //       : budget;
+  //   });
+  //   setBudget(newBudgets);
+  // };
 
   const handleRemove = (i) => {
     currentItems.splice(i, 1);
@@ -94,9 +94,9 @@ const OrderCart = ({ userType, handleModalOpen }) => {
               <TableCell className={classes.headerText} align="left">
                 Qty
               </TableCell>
-              <TableCell className={classes.headerText} align="left">
+              {/* <TableCell className={classes.headerText} align="left">
                 Budget
-              </TableCell>
+              </TableCell> */}
               <TableCell className={classes.headerText} align="left">
                 Total Cost
               </TableCell>
@@ -107,9 +107,9 @@ const OrderCart = ({ userType, handleModalOpen }) => {
             {currentItems.map((row, index) => (
               <TableRow key={row.itemNumber} hover>
                 <TableCell>
-                  <Tooltip title="Remove from Cart">
+                  <Tooltip title="Remove from Order">
                     <IconButton onClick={() => handleRemove(index)}>
-                      <DeleteForeverIcon />
+                      <CancelIcon />
                     </IconButton>
                   </Tooltip>
                 </TableCell>
@@ -142,7 +142,7 @@ const OrderCart = ({ userType, handleModalOpen }) => {
                     id={`${row.itemNumber}`}
                   />
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
@@ -169,7 +169,7 @@ const OrderCart = ({ userType, handleModalOpen }) => {
                       <option value={3}>Retion 3 Budget</option>
                     </Select>
                   </FormControl>
-                </TableCell>
+                </TableCell> */}
                 <TableCell align="center">$TBD</TableCell>
               </TableRow>
             ))}

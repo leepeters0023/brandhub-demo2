@@ -41,12 +41,10 @@ const PlaceOrder = ({ userType }) => {
   const [previewModal, handlePreviewModal] = useState(false);
   const [currentItem, handleCurrentItem] = useState({});
   //const [itemFilters, setItemFilters] = useState([]);
-  const handleChangeTab = useWindowHash(["#instock", "#ondemand"], updateValue)
+  const handleChangeTab = useWindowHash(["#instock", "#ondemand"], updateValue);
 
   const handlePreview = (itemNumber) => {
-    let item = items.find(
-      (item) => item.itemNumber === itemNumber
-    );
+    let item = items.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
     handlePreviewModal(true);
   };
@@ -82,6 +80,9 @@ const PlaceOrder = ({ userType }) => {
 
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+              {(userType === "super" || userType === "field2") && (
+                <SelectorMenus type="cart" />
+              )}
               <SelectorMenus type="regions" />
             </div>
             <div className={classes.innerConfigDiv}>

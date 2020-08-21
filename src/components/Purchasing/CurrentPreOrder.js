@@ -8,6 +8,7 @@ import {
 } from "../../redux/slices/programTableSlice";
 
 import PreOrderCartTable from "./CurrentPreOrderTable";
+import AreYouSure from "../Utility/AreYouSure";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -15,12 +16,14 @@ import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
-import AutoComplete from "@material-ui/lab/Autocomplete";
+//import AutoComplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import { makeStyles } from "@material-ui/core/styles";
 
-const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
+//const budgets = ["Regional Budget", "User Budget", "Key Account Budget"];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -68,10 +71,10 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalsDiv = React.memo(({ program }) => {
   const classes = useStyles();
-  const programTotal = useSelector(
-    (state) => state.programTable.programTotal
+  const programTotal = useSelector((state) => state.programTable.programTotal);
+  const grandTotal = useSelector(
+    (state) => state.programTable.preOrderTotal.actualTotal
   );
-  const grandTotal = useSelector((state) => state.programTable.preOrderTotal.actualTotal);
 
   return (
     <>
@@ -92,15 +95,30 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [open, setOpen] = useCallback(useState(true));
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
-  const [budget, setBudget] = useCallback(useState(null));
+  //const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useCallback(useState(undefined));
   const [backdrop, setBackdrop] = useCallback(useState(false));
+  const [confirmModal, handleConfirmModal] = useCallback(useState(false));
+  const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
 
   const isLoading = useSelector((state) => state.programTable.isLoading);
   const userPrograms = useSelector((state) => state.programs.programs);
 
-  const handleRemove = (program, itemNum) => {
-    dispatch(removeGridItem({ program, itemNum }));
+  const handleCloseConfirm = useCallback(() => {
+    handleConfirmModal(false);
+  }, [handleConfirmModal]);
+
+  const handleOpenConfirm = useCallback(
+    (itemNum) => {
+      setCurrentItemNum(itemNum);
+      handleConfirmModal(true);
+    },
+    [setCurrentItemNum, handleConfirmModal]
+  );
+
+  const handleRemove = (itemNum) => {
+    dispatch(removeGridItem({ itemNum }));
+    handleConfirmModal(false);
   };
 
   useEffect(() => {
@@ -128,6 +146,22 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       <Backdrop className={classes.backdrop} open={backdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <div className={classes.relativeContainer}>
+        <Dialog
+          open={confirmModal}
+          onClose={handleCloseConfirm}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogContent>
+            <AreYouSure
+              handleRemove={handleRemove}
+              handleModalClose={handleCloseConfirm}
+              itemNumber={currentItemNum}
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
       <PreOrderCartTable
         currentProgram={program}
         open={open}
@@ -135,7 +169,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
         tableStyle={tableStyle}
         setTableStyle={setTableStyle}
         handleModalOpen={handleModalOpen}
-        handleRemove={handleRemove}
+        handleOpenConfirm={handleOpenConfirm}
         setProgram={setProgram}
         isLoading={isLoading}
       />
@@ -183,7 +217,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
           />
           <br />
           <br />
-          <AutoComplete
+          {/* <AutoComplete
             value={budget}
             onChange={(event, value) => setBudget(value)}
             id="budget"
@@ -199,7 +233,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
               />
             )}
           />
-          <br />
+          <br /> */}
 
           {program ? (
             <TotalsDiv program={program} />

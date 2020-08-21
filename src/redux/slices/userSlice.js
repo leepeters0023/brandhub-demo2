@@ -5,6 +5,7 @@ import { getUser, logInUser } from "../../api/userApi";
 /*
 * DataFormat
 user: {
+  loginIsLoading: bool,
   isLoading: bool,
   loggedIn: bool,
   firstName: string,
@@ -17,6 +18,7 @@ user: {
 */
 
 let initialState = {
+  loginIsLoading: false,
   isLoading: false,
   loggedIn: false,
   firstName: "",
@@ -32,9 +34,14 @@ const startLoading = (state) => {
   state.isLoading = true;
 }
 
+const startLogin = (state) => {
+  state.loginIsLoading = true;
+}
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.loginIsLoading = false;
   state.error = error;
 }
 
@@ -43,8 +50,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setLoginLoading: startLogin,
     setLoginSuccess(state) {
-      state.isLoading = false
+      state.loginIsLoading = false
       state.loggedIn = true
       state.error = null
     },
@@ -76,6 +84,7 @@ const userSlice = createSlice({
 
 export const {
   setIsLoading,
+  setLoginLoading,
   getUserSuccess,
   setLoginSuccess,
   removeUser,
@@ -96,7 +105,7 @@ export const fetchUser = () => async dispatch => {
 }
 
 export const logIn = (email, password) => async dispatch => {
-  dispatch(setIsLoading())
+  dispatch(setLoginLoading())
   const res = await logInUser(email, password);
   if (res.status === "ok") {
     dispatch(setLoginSuccess());

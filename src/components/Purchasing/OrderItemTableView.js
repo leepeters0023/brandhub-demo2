@@ -9,11 +9,11 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+//import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
-import StarBorderIcon from "@material-ui/icons/StarBorder";
+//import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
   tableButtonWrapper: {
     display: "flex",
     flexWrap: "none",
+    width: "148px"
+  },
+  root: {
+    width: "150px !important",
+    maxWidth: "150px !important",
+    minWidth: "150px !important",
   },
 }));
 
@@ -34,7 +40,7 @@ const OrderItemTableView = (props) => {
         <Table className={classes.table} aria-label="in-stock-table">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.headerText}></TableCell>
+              {/* <TableCell className={classes.headerText}></TableCell> */}
               <TableCell className={classes.headerText} align="left">
                 Preview
               </TableCell>
@@ -63,19 +69,19 @@ const OrderItemTableView = (props) => {
                   Qty
                 </TableCell>
               )}
-              <TableCell className={classes.headerText}></TableCell>
+              <TableCell className={classes.headerText} classes={{root: classes.root}} align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {currentItems.map((row) => (
               <TableRow key={row.itemNumber} hover>
-                <TableCell component="th" scope="row">
+                {/* <TableCell component="th" scope="row">
                   <Tooltip title="Favorite">
                     <IconButton>
                       <StarBorderIcon />
                     </IconButton>
                   </Tooltip>
-                </TableCell>
+                </TableCell> */}
                 <TableCell align="left">
                   <img
                     id={row.itemNumber}
@@ -107,7 +113,7 @@ const OrderItemTableView = (props) => {
                     />
                   </TableCell>
                 )}
-                <TableCell>
+                <TableCell align="right">
                   <div className={classes.tableButtonWrapper}>
                     <Tooltip placement="top" title="Add to PDF">
                       <span>

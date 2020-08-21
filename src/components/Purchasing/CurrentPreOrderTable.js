@@ -89,11 +89,6 @@ const MemoInputCell = React.memo(
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
-    // const value = useSelector(
-    //   (state) =>
-    //     state.programTable.programs[`${program}`].items[`${itemNumber}`]
-    //       .distributors[distributor]
-    // );
     const value = useSelector(
       (state) =>
         state.programTable.orders
@@ -158,11 +153,6 @@ const MemoInputCell = React.memo(
 const TotalItemCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
   const value = useSelector((state) => state.programTable.items.find(item => item.itemNumber === itemNumber).totalItems)
-  // const value = useSelector(
-  //   (state) =>
-  //     state.programTable.programs[`${program}`].items[`${itemNumber}`]
-  //       .itemDetails.totalItems
-  // );
   return (
     <TableCell
       classes={{ root: classes.root }}
@@ -199,7 +189,7 @@ const PreOrderCartTable = (props) => {
     tableStyle,
     setTableStyle,
     handleModalOpen,
-    handleRemove,
+    handleOpenConfirm,
     setProgram,
     isLoading,
   } = props;
@@ -329,10 +319,10 @@ const PreOrderCartTable = (props) => {
                       key={item.itemNumber}
                     >
                       <div className={classes.headerCell}>
-                        <Tooltip title="Remove from Cart">
+                        <Tooltip title="Remove from Order">
                           <IconButton
                             onClick={() => {
-                              handleRemove(currentProgram, item.itemNumber);
+                              handleOpenConfirm(item.itemNumber);
                             }}
                             style={{ position: "absolute", top: 0, right: -15 }}
                           >
@@ -581,7 +571,7 @@ PreOrderCartTable.propTypes = {
   tableStyle: PropTypes.string,
   setTableStyle: PropTypes.func.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
+  handleOpenConfirm: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 

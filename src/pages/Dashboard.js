@@ -19,6 +19,7 @@ const Dashboard = () => {
 
   const isLoading = useSelector(state => state.user.isLoading)
   const role = useSelector(state => state.user.role)
+  const name = useSelector(state => state.user.firstName)
 
   useEffect(()=>{
     if (role.length > 0) {
@@ -38,9 +39,9 @@ const Dashboard = () => {
     <>
       <Container className={classes.mainWrapper}>
         
-          {currentRole === "field1" && <DashboardFieldOne />}
-          {currentRole === "field2" && <DashboardFieldOne />}
-          {currentRole === "super" && <DashboardFieldOne />}
+          {currentRole === "field1" && <DashboardFieldOne name={name} />}
+          {currentRole === "field2" && <DashboardFieldOne name={name} />}
+          {currentRole === "super" && <DashboardFieldOne name={name} />}
           {currentRole === "compliance" && <DashboardCompliance />}
     
       </Container>

@@ -6,10 +6,10 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
+//import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
-import StarBorderIcon from "@material-ui/icons/StarBorder";
+//import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
@@ -71,11 +71,11 @@ const OrderItemGridView = (props) => {
             key={item.itemNumber}
           >
             <div className={classes.singleItemWrapper}>
-              <Tooltip placement="top-start" title="Favorite">
+              {/* <Tooltip placement="top-start" title="Favorite">
                 <IconButton className={classes.favorite}>
                   <StarBorderIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
               <img
                 id={item.itemNumber}
                 className={classes.previewImg}

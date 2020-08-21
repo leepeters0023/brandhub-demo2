@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -12,13 +12,10 @@ import BrandHubLogo from "../assets/brandhub.svg";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
@@ -71,54 +68,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const userTypes = [
-//   "super",
-//   "field1",
-//   "field2",
-//   "compliance",
-//   "marketing",
-//   "creative",
-// ];
-
 const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const {
-    value: userName,
-    bind: bindUserName,
-    reset: resetUserName,
-  } = useInput("");
-  const {
-    value: password,
-    bind: bindPassword,
-    reset: resetPassword,
-  } = useInput("");
+  const { value: userName, bind: bindUserName } = useInput("");
+  const { value: password, bind: bindPassword } = useInput("");
 
-  const error = useSelector((state) => state.user.error)
-  const isLoading = useSelector((state) => state.user.isLoading)
-  const loggedIn = useSelector((state) => state.user.loggedIn)
+  const error = useSelector((state) => state.user.error);
+  const isLoading = useSelector((state) => state.user.loginIsLoading);
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    await dispatch(logIn(userName, password))
+    await dispatch(logIn(userName, password));
   };
 
-  useEffect(() => {
-    if (error) {
-      resetUserName()
-      resetPassword()
-    }
-    
-  }, [error, loggedIn, resetPassword, resetUserName])
-  
-  if (isLoading) {
-    return (
-      <Backdrop className={classes.backdrop} open={true}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    )
-  }
+  console.log(error);
 
   return (
     <div className={classes.welcomContainer}>
@@ -146,8 +111,14 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
-              helperText={error}
-              error={error? true : false}
+              helperText={
+                error
+                  ? error.includes("status code 422")
+                    ? "Invalid username or password"
+                    : error
+                  : null
+              }
+              error={error ? true : false}
               {...bindUserName}
             />
             <TextField
@@ -161,13 +132,15 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-              helperText={error}
+              helperText={
+                error
+                  ? error.includes("status code 422")
+                    ? "Invalid username or password"
+                    : error
+                  : null
+              }
               error={error ? true : false}
               {...bindPassword}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
@@ -176,17 +149,12 @@ const Login = () => {
               color="secondary"
               className={classes.submit}
             >
-              Sign In
+              {!isLoading ? "Sign In" : <CircularProgress />}
             </Button>
             <Grid container justify="center" alignItems="center">
-              <Grid item xs={5}>
+              <Grid item xs={12} style={{textAlign: "center"}}>
                 <Link href="#" color="secondary" variant="body2">
                   Forgot password?
-                </Link>
-              </Grid>
-              <Grid item xs={7}>
-                <Link href="#" color="secondary" variant="body2">
-                  {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>

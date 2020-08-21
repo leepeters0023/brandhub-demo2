@@ -13,7 +13,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+//import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core";
@@ -50,7 +50,7 @@ const ItemFilter = (props) => {
   const [unitsOpen, setUnitsOpen] = useState(false);
   const [channelsOpen, setChannelsOpen] = useState(false);
   const [othersOpen, setOthersOpen] = useState(false);
-  const [favItemChecked, setFavItemChecked] = useState(false);
+  //const [favItemChecked, setFavItemChecked] = useState(false);
 
   const [brandsChecked, setBrandsChecked] = useState([]);
   const [itemTypesChecked, setItemTypesChecked] = useState([]);
@@ -323,7 +323,7 @@ const ItemFilter = (props) => {
               overflowY: "auto",
             }}
           >
-            <ListItem>
+            {/* <ListItem>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -335,7 +335,7 @@ const ItemFilter = (props) => {
                 }
                 label=" Favorites"
               />
-            </ListItem>
+            </ListItem> */}
             <ListItem
               button
               onClick={() => {

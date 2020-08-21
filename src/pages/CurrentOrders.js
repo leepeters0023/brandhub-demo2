@@ -96,6 +96,9 @@ const CurrentOrders = ({ userType }) => {
           </Typography>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+              {(userType === "super" || userType === "field2") && (
+                <SelectorMenus type="cart" />
+              )}
               <SelectorMenus type="regions" />
             </div>
           </div>

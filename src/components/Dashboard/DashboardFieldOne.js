@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 //import { Link } from "@reach/router";
 
 //import Button from "@material-ui/core/Button";
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.dashboard,
 }));
 
-const DashboardFieldOne = () => {
+const DashboardFieldOne = ({ name }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState("panel1");
 
@@ -26,6 +27,12 @@ const DashboardFieldOne = () => {
 
   return (
     <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <Typography className={classes.titleText}>
+          {`Welcome back ${name}!`}
+        </Typography>
+      </div>
+      <br />
       <Accordion
         className={classes.accordian}
         expanded={expanded === "panel1"}
@@ -47,13 +54,7 @@ const DashboardFieldOne = () => {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            <Grid
-              item
-              md={4}
-              sm={12}
-              xs={12}
-              style={{ textAlign: "center" }}
-            >
+            <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>Calendar</Typography>
               <br />
             </Grid>
@@ -134,7 +135,7 @@ const DashboardFieldOne = () => {
           <Typography className={classes.titleText}>Your Info</Typography>
         </AccordionSummary>
         <AccordionDetails>
-        <Grid container spacing={2}>
+          <Grid container spacing={2}>
             <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>
                 Order History
@@ -154,6 +155,10 @@ const DashboardFieldOne = () => {
       </Accordion>
     </div>
   );
+};
+
+DashboardFieldOne.propTypes = {
+  name: PropTypes.string,
 };
 
 export default DashboardFieldOne;

@@ -12,25 +12,24 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const SelectorMenus = ({ type, handler, currentProgram }) => {
   //data would be pulled from store
-  const regions = useSelector(state => state.user.territories)
+  const regions = useSelector((state) => state.user.territories);
   const fieldUsers = [
     "Field User 1",
     "Field User 2",
     "Field User 3",
-    "Total Cart",
   ];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
 
-  const [region, updateRegion] = useState(regions[0]);
-  const [cart, updateCart] = useState(0);
+  const [region, updateRegion] = useState(regions[0] || "");
+  const [user, updateUser] = useState(fieldUsers[0]);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState("");
-  const currentPrograms = useSelector((state) => state.programs.programs)
+  const currentPrograms = useSelector((state) => state.programs.programs);
   const handleChangeSelect = (evt) => {
     if (evt.target.name === "regions") {
       updateRegion(evt.target.value);
-    } else if (evt.target.id === "cart") {
-      updateCart(evt.target.value);
+    } else if (evt.target.name === "user") {
+      updateUser(evt.target.value);
     } else if (evt.target.id === "budgets") {
       updateBudget(evt.target.value);
     } else if (evt.target.name === "programs") {
@@ -48,7 +47,11 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
   if (type === "regions") {
     return (
       <>
-        <FormControl variant="outlined" size="small" style={{ margin: "0 5px" }}>
+        <FormControl
+          variant="outlined"
+          size="small"
+          style={{ margin: "0 5px" }}
+        >
           <Select
             name="regions"
             labelId="region-select"
@@ -68,20 +71,18 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
   } else if (type === "cart") {
     return (
       <>
-        <FormControl variant="outlined" style={{ margin: "0 5px" }}>
-          <InputLabel id="cart-select">Cart</InputLabel>
+        <FormControl variant="outlined" size="small" style={{ margin: "0 5px" }}>
           <Select
-            native
-            labelId="cart-select"
-            id="cart"
-            value={cart}
+            name="user"
+            labelId="user-select"
+            id="user"
+            value={user}
             onChange={handleChangeSelect}
-            label="Cart"
           >
             {fieldUsers.map((user, index) => (
-              <option value={index} key={index}>
-                {user}
-              </option>
+              <MenuItem value={user} key={index}>
+                <Typography variant="body2">{user}</Typography>
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -125,12 +126,20 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
               <MenuItem value={program.id} key={index}>
                 {program.isComplete ? (
                   <div
-                    style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      alignItems: "center",
+                    }}
                   >
-                    <Typography variant="body2" style={{overflow: "hidden"}}>
+                    <Typography variant="body2" style={{ overflow: "hidden" }}>
                       {`${program.name}-${program.focusMonth}`}
                     </Typography>
-                    <CheckCircleIcon color="secondary" style={{marginLeft: "5px"}} />
+                    <CheckCircleIcon
+                      color="secondary"
+                      style={{ marginLeft: "5px" }}
+                    />
                   </div>
                 ) : (
                   <Typography variant="body2">
