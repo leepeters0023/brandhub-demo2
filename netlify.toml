@@ -8,12 +8,16 @@
   to = "https://brandhub-api.onrender.com"
   status = 200
   force = true
+  [redirects.headers]
+    X-from = "Netlify"
 
 [[redirects]]
   from = "/auth/token"
   to = "https://brandhub-api.onrender.com"
   status = 200
   force = true
+  [redirects.headers]
+    X-from = "Netlify"
 
 [[headers]]
   for = "/index.html"
