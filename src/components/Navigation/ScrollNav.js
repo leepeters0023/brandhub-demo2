@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
 //import { Link } from "@reach/router";
@@ -52,6 +53,7 @@ const ScrollNav = (props) => {
   const classes = useStyles();
 
   const [userModal, handleUserModal] = useState(false);
+  const initials = useSelector(state => state.user.initials)
 
   return (
     <>
@@ -108,6 +110,7 @@ const ScrollNav = (props) => {
             )} */}
               <Notifications />
               <UserNavMenu
+                initials={initials}
                 handleLogout={handleLogout}
                 handleUserModal={handleUserModal}
               />

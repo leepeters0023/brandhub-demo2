@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Router, Redirect } from "@reach/router";
+import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
 import { getProgramsSuccess } from "./redux/slices/programsSlice";
 
-import { logoutUser } from "./api/userApi"
+import { logoutUser } from "./api/userApi";
 
-import { removeUser, setIsLoading, fetchUser } from "./redux/slices/userSlice"
+import { removeUser, fetchUser } from "./redux/slices/userSlice";
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -28,6 +29,10 @@ import POSClassifications from "./pages/POSClassifications";
 import Settings from "./pages/Settings";
 import FourOhFour from "./pages/FourOhFour";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
+import { makeStyles } from "@material-ui/core/styles";
+
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import themeFile from "./utility/theme.js";
@@ -39,57 +44,81 @@ import programs from "./assets/mockdata/Programs";
 
 const theme = createMuiTheme(themeFile);
 
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+}));
+
 const App = () => {
   const dispatch = useDispatch();
-  const [currentUser, setCurrentUser] = useState(window.localStorage.getItem("user"));
-  const [role, setRole] = useState(undefined)
+  const classes = useStyles();
+  const [currentUser, setCurrentUser] = useState(
+    window.localStorage.getItem("user")
+  );
+  const [role, setRole] = useState(window.localStorage.getItem("role"));
 
-  const currentRole = useSelector((state) => state.user.role)
-  console.log(currentRole)
-  console.log(role)
+  const currentRole = useSelector((state) => state.user.role);
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const loggedIn = useSelector((state) => state.user.loggedIn);
+
   const handleLogIn = (user) => {
     setRole(user);
   };
 
   const handleLogout = () => {
-    setCurrentUser(null)
-    dispatch(removeUser())
     logoutUser();
+    setCurrentUser(null);
+    dispatch(removeUser());
   };
 
-  useEffect(()=>{
+  useEffect(() => {
+    const fetchCurrentUser = async (token) => {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      
+      await dispatch(fetchUser());
+    };
+
     if (currentUser && currentRole.length > 0) {
       //dispatch(setInitialTableData({ programs, distributors }));
-      setRole(currentRole)
+      setRole(currentRole);
       dispatch(getProgramsSuccess({ programs }));
-    } else if (currentUser && currentUser.access_token) {
-      dispatch(setIsLoading())
-      dispatch(fetchUser())
+    } else if (currentUser && JSON.parse(currentUser).access_token) {
+      fetchCurrentUser(JSON.parse(currentUser).access_token);
     } else {
-      setCurrentUser(null)
+      setCurrentUser(null);
     }
-  },[dispatch, currentUser, currentRole])
+  }, [dispatch, currentUser, currentRole, loggedIn]);
 
+  useEffect(()=>{
+    if (loggedIn && !currentUser) {
+      setCurrentUser(window.localStorage.getItem("user"))
+    }
+  },[loggedIn, currentUser])
+
+  if (isLoading) {
+    return (
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
+
+  if (!loggedIn && !currentUser) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Redirect noThrow to="/login" />
+        <Router>
+          <LogIn setAuth={handleLogIn} path="/login" />
+        </Router>
+      </MuiThemeProvider>
+    );
+  } 
   return (
     <MuiThemeProvider theme={theme}>
-      {currentUser && (
-        <ScrollNav
-          userType={role}
-          handleLogout={handleLogout}
-        />
-      )}
+      {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}
       <div id="main-container">
-        {!currentUser && <Redirect noThrow to="/login" />}
-        {currentUser && window.location.pathname === "/login" && (
-          <Redirect noThrow to="/" />
-        )}
+        {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
         <Router primary={false}>
-          {handleAuth(
-           <Dashboard path="/" />,
-            "/",
-            ["field1", "field2", "compliance", "super"],
-            role
-          )}
+          <Dashboard path="/" />
           {handleAuth(
             <Programs path="/programs" />,
             "/programs",
@@ -103,7 +132,7 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <CurrentOrders path="/orders/open" userType={role}/>,
+            <CurrentOrders path="/orders/open" userType={role} />,
             "/orders/open",
             ["field1", "field2", "super"],
             role
@@ -126,12 +155,7 @@ const App = () => {
             ["field1", "field2", "super"],
             role
           )}
-          {handleAuth(
-            <Reports path="/reports" />,
-            "/reports",
-            ["super"],
-            role
-          )}
+          {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
           {handleAuth(
             <Budget path="/budget" />,
             "/budget",
@@ -169,31 +193,23 @@ const App = () => {
             role
           )}
           {/* <Calendar path="/calendar" /> */}
-          {handleAuth(
-            <Help path="/help" />,
-            "/help",
-            ["field1", "field2", "compliance", "super"],
-            role
-          )}
+          {handleAuth(<Help path="/help" />, "/help", [], role)}
           <FourOhFour default path="/whoops" />
-          {!role && (
-            <LogIn
-              setAuth={handleLogIn}
-              path="/login"
-            />
-          )}
         </Router>
       </div>
     </MuiThemeProvider>
-  );
+  )
+
 };
 
 export default App;
 
 const handleAuth = (component, path, users, role) => {
-  if (users.includes(role)) {
+  if (users.length === 0) {
+    return component;
+  } else if (users.includes(role)) {
     return component;
   } else if (!role) {
-    return <Redirect noThrow from={path} to="/login" />
+    return <Redirect noThrow from={path} to="/whoops" />;
   } else return <Redirect noThrow from={path} to="/whoops" />;
 };

@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { useInput } from "../hooks/UtilityHooks";
 
-import { logInUser } from "../api/userApi";
-
-import { setIsLoading, setUserFetched, fetchUser } from "../redux/slices/userSlice";
+import { logIn } from "../redux/slices/userSlice";
 
 import BrandHubLogo from "../assets/brandhub.svg";
 
@@ -82,11 +80,9 @@ const useStyles = makeStyles((theme) => ({
 //   "creative",
 // ];
 
-const Login = ({ setAuth }) => {
+const Login = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const currentRole = useSelector((state) => state.user.role)
 
   const {
     value: userName,
@@ -99,32 +95,22 @@ const Login = ({ setAuth }) => {
     reset: resetPassword,
   } = useInput("");
 
-  const [error, setError] = useState({ user: undefined });
+  const error = useSelector((state) => state.user.error)
   const isLoading = useSelector((state) => state.user.isLoading)
+  const loggedIn = useSelector((state) => state.user.loggedIn)
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    dispatch(setIsLoading());
-    const response = await logInUser(userName, password) 
-    console.log(response)
-    if (response.status === "ok") {
-      resetUserName()
-      resetPassword()
-      await dispatch(fetchUser())
-    } else if (response.error) {
-      resetUserName()
-      resetPassword()
-      setError({error: response.error})
-      dispatch(setUserFetched())
-    }
+    await dispatch(logIn(userName, password))
   };
 
-  useEffect(()=>{
-    if (currentRole.length !== 0) {
-      setAuth(currentRole)
-      dispatch(setUserFetched)
+  useEffect(() => {
+    if (error) {
+      resetUserName()
+      resetPassword()
     }
-  }, [currentRole, dispatch, setAuth])
+    
+  }, [error, loggedIn, resetPassword, resetUserName])
   
   if (isLoading) {
     return (
@@ -160,8 +146,8 @@ const Login = ({ setAuth }) => {
               name="email"
               autoComplete="email"
               autoFocus
-              helperText={error.error}
-              error={error.error ? true : false}
+              helperText={error}
+              error={error? true : false}
               {...bindUserName}
             />
             <TextField
@@ -175,8 +161,8 @@ const Login = ({ setAuth }) => {
               type="password"
               id="password"
               autoComplete="current-password"
-              helperText={error.error}
-              error={error.error ? true : false}
+              helperText={error}
+              error={error ? true : false}
               {...bindPassword}
             />
             <FormControlLabel

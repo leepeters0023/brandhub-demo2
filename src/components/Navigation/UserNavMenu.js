@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ handleLogout, handleUserModal }) => {
+const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,7 +44,7 @@ const UserNavMenu = ({ handleLogout, handleUserModal }) => {
           aria-haspopup="true"
           onClick={handleOpen}
         >
-          <Avatar className={classes.avatar}>JD</Avatar>
+          <Avatar className={classes.avatar}>{initials}</Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -116,6 +116,7 @@ const UserNavMenu = ({ handleLogout, handleUserModal }) => {
 };
 
 UserNavMenu.propTypes = {
+  initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
   handleUserModal: PropTypes.func.isRequired,
 };

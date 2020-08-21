@@ -18,7 +18,6 @@ export const getUser = async (id) => {
   const response = {status: "", error: null, data: null}
   await axios.get(`/api/users/${id}`)
   .then((res) => {
-    console.log(res)
     response.status = "ok"
     response.data = res.data
   })

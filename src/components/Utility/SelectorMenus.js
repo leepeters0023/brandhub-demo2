@@ -12,7 +12,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const SelectorMenus = ({ type, handler, currentProgram }) => {
   //data would be pulled from store
-  const regions = ["North West", "Walmart"];
+  const regions = useSelector(state => state.user.territories)
   const fieldUsers = [
     "Field User 1",
     "Field User 2",
