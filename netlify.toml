@@ -4,7 +4,7 @@
   status = 200
   force = true
   [redirects.headers]
-    X-from = "Netlify"
+    X-From = "Netlify"
 
 [[redirects]]
   from = "/auth/token"
@@ -12,8 +12,8 @@
   status = 200
   force = true
   [redirects.headers]
-    X-from = "Netlify"
-    
+    X-From = "Netlify"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
