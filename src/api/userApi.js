@@ -19,11 +19,12 @@ export const logInUser = async (email, password) => {
   return response;
 };
 
-export const getUser = async (id) => {
+export const getUser = async () => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/users/${id}`)
+    .get(`/api/current-user`)
     .then((res) => {
+      console.log(res.data)
       response.status = "ok";
       response.data = res.data;
     })

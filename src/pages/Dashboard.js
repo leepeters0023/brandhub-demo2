@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import DashboardFieldOne from "../components/Dashboard/DashboardFieldOne";
-import DashboardCompliance from "../components/Dashboard/DashboardCompliance";
+//import DashboardCompliance from "../components/Dashboard/DashboardCompliance";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -42,7 +42,7 @@ const Dashboard = () => {
           {currentRole === "field1" && <DashboardFieldOne name={name} />}
           {currentRole === "field2" && <DashboardFieldOne name={name} />}
           {currentRole === "super" && <DashboardFieldOne name={name} />}
-          {currentRole === "compliance" && <DashboardCompliance />}
+          {currentRole === "compliance" && <DashboardFieldOne name={name} />}
     
       </Container>
       <br />
