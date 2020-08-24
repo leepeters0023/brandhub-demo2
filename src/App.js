@@ -78,7 +78,6 @@ const App = () => {
     };
 
     if (currentUser && currentRole.length > 0) {
-      //dispatch(setInitialTableData({ programs, distributors }));
       setRole(currentRole);
       dispatch(getProgramsSuccess({ programs }));
     } else if (currentUser && JSON.parse(currentUser).access_token) {

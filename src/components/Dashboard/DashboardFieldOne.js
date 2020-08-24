@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 //import { Link } from "@reach/router";
 
+import DashCalendar from "./DashCalendar";
+import DashInStockItems from "./DashInStockItems";
+
 //import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -53,22 +56,25 @@ const DashboardFieldOne = ({ name }) => {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems="stretch">
             <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>Calendar</Typography>
               <br />
+              <DashCalendar />
             </Grid>
             <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>
                 New In-Stock Items
               </Typography>
               <br />
+              <DashInStockItems />
             </Grid>
             <Grid item md={4} sm={12} xs={12} style={{ textAlign: "center" }}>
               <Typography className={classes.headerText}>
                 Canceled Items
               </Typography>
               <br />
+              <DashInStockItems />
             </Grid>
           </Grid>
         </AccordionDetails>
