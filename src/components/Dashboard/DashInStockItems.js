@@ -15,17 +15,25 @@ import items from "../../assets/mockdata/Items";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  ...theme.dashboard
-}))
+  ...theme.dashboard,
+}));
 
 const DashInStockItems = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
     <>
-      <Paper variant="outlined" style={{display: "flex", alignItems: "center", height: "Calc(100% - 44px)", padding: "10px"}}>
+      <Paper
+        variant="outlined"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          height: "Calc(100% - 44px)",
+          padding: "10px",
+        }}
+      >
         <br />
-        <List style={{width: "100%"}}>
+        <List style={{ width: "100%" }}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar
@@ -41,10 +49,12 @@ const DashInStockItems = () => {
                   <Typography
                     component="span"
                     className={classes.bodyText}
-                    style={{display: "inline"}}
+                    style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${items[0].itemNumber}  -  ${items[0].qty}  -  $${items[0].price.toFixed(2)}`}
+                    {`${items[0].itemNumber}  -  ${
+                      items[0].qty
+                    }  -  $${items[0].price.toFixed(2)}`}
                   </Typography>
                 </>
               }
@@ -66,10 +76,12 @@ const DashInStockItems = () => {
                   <Typography
                     component="span"
                     className={classes.bodyText}
-                    style={{display: "inline"}}
+                    style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${items[1].itemNumber}  -  ${items[1].qty}  -  $${items[1].price.toFixed(2)}`}
+                    {`${items[1].itemNumber}  -  ${
+                      items[1].qty
+                    }  -  $${items[1].price.toFixed(2)}`}
                   </Typography>
                 </>
               }
@@ -91,10 +103,12 @@ const DashInStockItems = () => {
                   <Typography
                     component="span"
                     className={classes.bodyText}
-                    style={{display: "inline"}}
+                    style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${items[2].itemNumber}  -  ${items[2].qty}  -  $${items[2].price.toFixed(2)}`}
+                    {`${items[2].itemNumber}  -  ${
+                      items[2].qty
+                    }  -  $${items[2].price.toFixed(2)}`}
                   </Typography>
                 </>
               }
@@ -116,10 +130,12 @@ const DashInStockItems = () => {
                   <Typography
                     component="span"
                     className={classes.bodyText}
-                    style={{display: "inline"}}
+                    style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${items[3].itemNumber}  -  ${items[3].qty}  -  $${items[3].price.toFixed(2)}`}
+                    {`${items[3].itemNumber}  -  ${
+                      items[3].qty
+                    }  -  $${items[3].price.toFixed(2)}`}
                   </Typography>
                 </>
               }
@@ -128,7 +144,7 @@ const DashInStockItems = () => {
         </List>
       </Paper>
     </>
-  )
-}
+  );
+};
 
 export default DashInStockItems;

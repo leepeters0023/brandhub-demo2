@@ -63,7 +63,7 @@ const userSlice = createSlice({
       state.initials = `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
       state.email = email
       state.role = role
-      state.territories = ["North East", "Walmart"]
+      state.territories = role !== "field1" ? ["North East", "Walmart"] : ["North East"]
       state.isLoading = false
       state.loggedIn = true
       state.error = null

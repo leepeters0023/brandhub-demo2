@@ -13,11 +13,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 const SelectorMenus = ({ type, handler, currentProgram }) => {
   //data would be pulled from store
   const regions = useSelector((state) => state.user.territories);
-  const fieldUsers = [
-    "Field User 1",
-    "Field User 2",
-    "Field User 3",
-  ];
+  const fieldUsers = ["Field User 1", "Field User 2", "Field User 3"];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
 
   const [region, updateRegion] = useState(regions[0] || "");
@@ -45,6 +41,48 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
   }, [currentProgram]);
 
   if (type === "regions") {
+    if (regions.length === 1) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "103.5px",
+            height: "41px",
+            margin: "0 5px",
+            border: "1px solid #cbcbcb",
+            borderRadius: "5px",
+          }}
+        >
+          <Typography variant="body2">{regions[0]}</Typography>
+        </div>
+      );
+    } else
+      return (
+        <>
+          <FormControl
+            variant="outlined"
+            size="small"
+            style={{ margin: "0 5px" }}
+          >
+            <Select
+              name="regions"
+              labelId="region-select"
+              id="regions"
+              value={region}
+              onChange={handleChangeSelect}
+            >
+              {regions.map((region, index) => (
+                <MenuItem value={region} key={index}>
+                  <Typography variant="body2">{region}</Typography>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </>
+      );
+  } else if (type === "cart") {
     return (
       <>
         <FormControl
@@ -52,26 +90,6 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
           size="small"
           style={{ margin: "0 5px" }}
         >
-          <Select
-            name="regions"
-            labelId="region-select"
-            id="regions"
-            value={region}
-            onChange={handleChangeSelect}
-          >
-            {regions.map((region, index) => (
-              <MenuItem value={region} key={index}>
-                <Typography variant="body2">{region}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </>
-    );
-  } else if (type === "cart") {
-    return (
-      <>
-        <FormControl variant="outlined" size="small" style={{ margin: "0 5px" }}>
           <Select
             name="user"
             labelId="user-select"
