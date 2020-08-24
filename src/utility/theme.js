@@ -15,11 +15,16 @@ export default {
     text: {
       primary: "#4C4C4C",
       secondary: "#737373",
-    }
+    },
   },
   dashboard: {
     accordian: {
       transition: "background-color .5s ease",
+    },
+    dashboardAvatar: {
+      height: "75px",
+      width: "75px",
+      marginRight: "16px",
     },
   },
   global: {
@@ -60,10 +65,10 @@ export default {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      textAlign: "center"
+      textAlign: "center",
     },
     navIcon: {
-      color: "#FFFFFF"
+      color: "#FFFFFF",
     },
     navText: {
       fontSize: ".7rem",
@@ -87,7 +92,7 @@ export default {
       color: "#4C4C4C",
     },
     bodyText: {
-      fontSize: "1rem",
+      fontSize: ".9rem",
       color: "#4C4C4C",
     },
     titleBar: {
@@ -98,7 +103,7 @@ export default {
       fontWeight: "600",
       fontSize: "1rem",
       textAlign: "center",
-      color: "#FFFFFF"
+      color: "#FFFFFF",
     },
     tabContainer: {
       display: "flex",
@@ -135,17 +140,17 @@ export default {
       height: "2px",
       margin: "0",
       flexShrink: "0",
-      backgroundColor: "#737373"
+      backgroundColor: "#737373",
     },
     configButtons: {
       display: "flex",
       flexDirection: "column",
-      alignItems: "flex-end"
+      alignItems: "flex-end",
     },
     innerConfigDiv: {
       display: "flex",
       justifyContent: "flex-end",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
 };
