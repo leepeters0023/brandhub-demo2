@@ -83,8 +83,6 @@ const Login = () => {
     await dispatch(logIn(userName, password));
   };
 
-  console.log(error);
-
   return (
     <div className={classes.welcomContainer}>
       <img src={BrandHubLogo} className={classes.logo} alt="Logo" />
