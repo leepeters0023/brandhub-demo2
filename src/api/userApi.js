@@ -3,7 +3,7 @@ import axios from "axios";
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
   await axios
-    .post(`/auth/token`, {
+    .post(`https://brandhub-api.onrender.com/auth/token`, {
       grant_type: "password",
       username: email,
       password: password,
@@ -22,7 +22,7 @@ export const logInUser = async (email, password) => {
 export const getUser = async () => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/current-user`)
+    .get(`https://brandhub-api.onrender.com/api/current-user`)
     .then((res) => {
       console.log(res.data)
       response.status = "ok";
