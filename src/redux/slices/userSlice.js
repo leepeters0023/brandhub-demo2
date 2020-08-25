@@ -72,6 +72,7 @@ const userSlice = createSlice({
       state.isLoading = false
       state.firstName = ""
       state.lastName = ""
+      state.initials = ""
       state.email = ""
       state.role = ""
       state.territories = []
