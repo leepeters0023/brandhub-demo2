@@ -95,7 +95,7 @@ export default userSlice.reducer
 
 export const fetchUser = () => async dispatch => {
     dispatch(setIsLoading())
-    const user = await getUser("1")
+    const user = await getUser()
     if (user.status === "ok") {
       window.localStorage.setItem("brandhub-role", user.data.data.attributes.role)
       dispatch(getUserSuccess({user: user.data.data.attributes}))
