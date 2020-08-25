@@ -42,6 +42,8 @@ import "./App.css";
 //mock data
 import programs from "./assets/mockdata/Programs";
 
+axios.defaults.headers.get["Cache-Control"] = "no-cache";
+
 const theme = createMuiTheme(themeFile);
 
 const useStyles = makeStyles((theme) => ({
@@ -54,7 +56,9 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(
     window.localStorage.getItem("brandhub-user")
   );
-  const [role, setRole] = useState(window.localStorage.getItem("brandhub-role"));
+  const [role, setRole] = useState(
+    window.localStorage.getItem("brandhub-role")
+  );
 
   const currentRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -73,7 +77,7 @@ const App = () => {
   useEffect(() => {
     const fetchCurrentUser = async (token) => {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      
+
       await dispatch(fetchUser());
     };
 
@@ -87,11 +91,11 @@ const App = () => {
     }
   }, [dispatch, currentUser, currentRole, loggedIn]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (loggedIn && !currentUser) {
-      setCurrentUser(window.localStorage.getItem("brandhub-user"))
+      setCurrentUser(window.localStorage.getItem("brandhub-user"));
     }
-  },[loggedIn, currentUser])
+  }, [loggedIn, currentUser]);
 
   if (isLoading) {
     return (
@@ -110,7 +114,7 @@ const App = () => {
         </Router>
       </MuiThemeProvider>
     );
-  } 
+  }
   return (
     <MuiThemeProvider theme={theme}>
       {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}
@@ -197,8 +201,7 @@ const App = () => {
         </Router>
       </div>
     </MuiThemeProvider>
-  )
-
+  );
 };
 
 export default App;
