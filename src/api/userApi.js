@@ -24,7 +24,6 @@ export const getUser = async () => {
   await axios
     .get(`/api/current-user`)
     .then((res) => {
-      console.log(res.data)
       response.status = "ok";
       response.data = res.data;
     })

@@ -31,7 +31,8 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const units = ["Compass", "Popular", "Renaissance", "Spirits"];
-const channels = ["Channel 1", "Channel 2", "Channel 3"];
+const families = ["Wine", "Spirits", "Beer"];
+//const channels = ["Channel 1", "Channel 2", "Channel 3"];
 const others = ["Growth Engines", "Key Brands", "High Potential"];
 const brands = items.map((item) => item.brand);
 const itemTypes = items.map((item) => item.itemType);
@@ -168,7 +169,7 @@ const Program = ({ userType, programId }) => {
               <ItemFilter
                 brands={brands}
                 units={units}
-                channels={channels}
+                families={families}
                 itemTypes={itemTypes}
                 others={others}
               />
