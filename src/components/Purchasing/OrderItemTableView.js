@@ -114,7 +114,7 @@ const OrderItemTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Cost
               </TableCell>
-              {type !== "preOrder" && (
+              {type !== "program" && (
                 <TableCell className={classes.headerText} align="left">
                   Qty
                 </TableCell>
@@ -208,7 +208,7 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  currentProgram: PropTypes.string,
+  currentProgram: PropTypes.object,
   handleAddItem: PropTypes.func.isRequired,
 };
 

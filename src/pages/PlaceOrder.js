@@ -30,8 +30,9 @@ const useStyles = makeStyles((theme) => ({
 
 const brands = items.map((item) => item.brand);
 const itemTypes = items.map((item) => item.itemType);
+const families = ["Wine", "Spirits", "Beer"];
 const units = ["Compass", "Popular", "Renaissance", "Spirits"];
-const channels = ["Channel 1", "Channel 2", "Channel 3"];
+//const channels = ["Channel 1", "Channel 2", "Channel 3"];
 const others = ["Growth Engines", "Key Brands", "High Potential"];
 
 const PlaceOrder = ({ userType }) => {
@@ -130,8 +131,8 @@ const PlaceOrder = ({ userType }) => {
           <ItemFilter
             brands={brands}
             itemTypes={itemTypes}
+            families={families}
             units={units}
-            channels={channels}
             others={others}
           />
           {value === 1 && (

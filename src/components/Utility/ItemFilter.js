@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import FilterChipList from "./FilterChipList";
@@ -42,24 +42,26 @@ const useStyles = makeStyles((theme) => ({
 const ItemFilter = (props) => {
   const classes = useStyles();
 
-  const { brands, itemTypes, units, channels, others } = props;
+  const { brands, itemTypes, families, units, others } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [brandsOpen, setBrandsOpen] = useState(false);
-  const [itemTypesOpen, setItemTypesOpen] = useState(false);
-  const [unitsOpen, setUnitsOpen] = useState(false);
-  const [channelsOpen, setChannelsOpen] = useState(false);
-  const [othersOpen, setOthersOpen] = useState(false);
-  //const [favItemChecked, setFavItemChecked] = useState(false);
+  const [brandsOpen, setBrandsOpen] = useCallback(useState(false));
+  const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
+  const [familyOpen, setFamilyOpen] = useCallback(useState(false));
+  const [unitsOpen, setUnitsOpen] = useCallback(useState(false));
+  //const [channelsOpen, setChannelsOpen] = useCallback(useState(false));
+  const [othersOpen, setOthersOpen] = useCallback(useState(false));
+  //const [favItemChecked, setFavItemChecked] = useCallback(useState(false));
 
-  const [brandsChecked, setBrandsChecked] = useState([]);
-  const [itemTypesChecked, setItemTypesChecked] = useState([]);
-  const [unitsChecked, setUnitsChecked] = useState([]);
-  const [channelsChecked, setChannelsChecked] = useState([]);
-  const [othersChecked, setOthersChecked] = useState([]);
-  const [allFilters, setAllFilters] = useState([]);
+  const [brandsChecked, setBrandsChecked] = useCallback(useState([]));
+  const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
+  const [familyChecked, setFamilyChecked] = useCallback(useState([]));
+  const [unitsChecked, setUnitsChecked] = useCallback(useState([]));
+  const [channelsChecked, setChannelsChecked] = useCallback(useState([]));
+  const [othersChecked, setOthersChecked] = useCallback(useState([]));
+  const [allFilters, setAllFilters] = useCallback(useState([]));
 
-  const handleCheckToggle = (value, array, func) => {
+  const handleCheckToggle = useCallback((value, array, func) => {
     const currentIndex = array.indexOf(value);
     const newChecked = [...array];
 
@@ -70,7 +72,7 @@ const ItemFilter = (props) => {
     }
 
     func(newChecked);
-  };
+  }, []);
 
   const handleChipClick = (type, value) => {
     if (type === "brand") {
@@ -106,6 +108,9 @@ const ItemFilter = (props) => {
     itemTypesChecked.forEach((itemType) =>
       currentFilters.push({ type: "itemType", value: itemType })
     );
+    familyChecked.forEach((family) =>
+      currentFilters.push({ type: "family", value: family })
+    );
     unitsChecked.forEach((unit) =>
       currentFilters.push({ type: "unit", value: unit })
     );
@@ -119,9 +124,11 @@ const ItemFilter = (props) => {
   }, [
     brandsChecked,
     itemTypesChecked,
+    familyChecked,
     unitsChecked,
     channelsChecked,
     othersChecked,
+    setAllFilters,
   ]);
 
   const brandsList = (listItems) => {
@@ -190,6 +197,39 @@ const ItemFilter = (props) => {
     );
   };
 
+  const familyList = (listItems) => {
+    return (
+      <List component="div" disablePadding>
+        {listItems.map((item) => {
+          const labelId = `checkbox-list-label-${item}`;
+
+          return (
+            <ListItem
+              key={item}
+              role={undefined}
+              dense
+              button
+              onClick={() => {
+                handleCheckToggle(item, familyChecked, setFamilyChecked);
+              }}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  color="secondary"
+                  edge="start"
+                  checked={familyChecked.indexOf(item) !== -1}
+                  disableRipple
+                  inputProps={{ "aria-labelledby": labelId }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`${item}`} />
+            </ListItem>
+          );
+        })}
+      </List>
+    );
+  };
+
   const unitsList = (listItems) => {
     return (
       <List component="div" disablePadding>
@@ -223,38 +263,38 @@ const ItemFilter = (props) => {
     );
   };
 
-  const channelsList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
+  // const channelsList = (listItems) => {
+  //   return (
+  //     <List component="div" disablePadding>
+  //       {listItems.map((item) => {
+  //         const labelId = `checkbox-list-label-${item}`;
 
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, channelsChecked, setChannelsChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={channelsChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
+  //         return (
+  //           <ListItem
+  //             key={item}
+  //             role={undefined}
+  //             dense
+  //             button
+  //             onClick={() => {
+  //               handleCheckToggle(item, channelsChecked, setChannelsChecked);
+  //             }}
+  //           >
+  //             <ListItemIcon>
+  //               <Checkbox
+  //                 color="secondary"
+  //                 edge="start"
+  //                 checked={channelsChecked.indexOf(item) !== -1}
+  //                 disableRipple
+  //                 inputProps={{ "aria-labelledby": labelId }}
+  //               />
+  //             </ListItemIcon>
+  //             <ListItemText id={labelId} primary={`${item}`} />
+  //           </ListItem>
+  //         );
+  //       })}
+  //     </List>
+  //   );
+  // };
 
   const othersList = (listItems) => {
     return (
@@ -365,6 +405,19 @@ const ItemFilter = (props) => {
             <ListItem
               button
               onClick={() => {
+                handleListToggle(familyOpen, setFamilyOpen);
+              }}
+            >
+              <ListItemText primary="Item Family" />
+              {familyOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={familyOpen} timeout="auto" unmountOnExit>
+              {familyList(families)}
+            </Collapse>
+            <Divider />
+            <ListItem
+              button
+              onClick={() => {
                 handleListToggle(unitsOpen, setUnitsOpen);
               }}
             >
@@ -374,7 +427,7 @@ const ItemFilter = (props) => {
             <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
               {unitsList(units)}
             </Collapse>
-            <Divider />
+            {/* <Divider />
             <ListItem
               button
               onClick={() => {
@@ -386,7 +439,7 @@ const ItemFilter = (props) => {
             </ListItem>
             <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
               {channelsList(channels)}
-            </Collapse>
+            </Collapse> */}
             <Divider />
             <ListItem
               button
