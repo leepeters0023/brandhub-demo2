@@ -23,7 +23,6 @@ const DashCalendar = () => {
   const classes = useStyles();
 
   const currentPrograms = useSelector((state) => state.programs.programs);
-  console.log(currentPrograms);
 
   return (
     <>

@@ -80,10 +80,10 @@ const inStockOrderSlice = createSlice({
       state.distributorId = distributorId;
       state.distributorName = distributorName;
       state.type = type;
-      state.program = program ? [ ...program] : null;
+      state.program = program ? [...program] : null;
       state.status = status;
       state.items = [...items];
-      state.shipping = {...shipping};
+      state.shipping = { ...shipping };
       state.budget = budget;
       state.totalItems = totalItems;
       state.totalCost = totalCost;
@@ -92,22 +92,36 @@ const inStockOrderSlice = createSlice({
     addInStockItem(state, action) {
       const { item } = action.payload;
       let items = [...state.items];
-      items.push(item);
-      state.items = items;
-      state.totalItems += item.totalItems;
-      state.totalCost += item.estTotal;
+      if (items.filter((i) => i.itemNumber === item.itemNumber).length === 0) {
+        items.push(item);
+        state.items = items;
+        state.totalItems += item.totalItems;
+        state.totalCost += item.estTotal;
+      } else {
+        let currentItem = items.find((i) => i.itemNumber === item.itemNumber);
+        let tempOrderTotalItems = state.totalItems ;
+        let tempOrderTotalCost = state.totalCost;
+        currentItem.totalItems += item.totalItems;
+        tempOrderTotalItems += item.totalItems;
+        currentItem.estTotal += item.estTotal;
+        tempOrderTotalCost += item.estTotal;
+        items.splice(items.indexOf(currentItem), 1, currentItem);
+        state.items = items;
+        state.totalItems = tempOrderTotalItems;
+        state.totalCost = tempOrderTotalCost;
+      }
     },
     updateInStockOrder(state, action) {
-      const { item, totalItems } = action.payload;
+      const { itemNumber, totalItems } = action.payload;
       let items = [...state.items];
-      let currentItem = items.find((i) => i.itemNumber === item.itemNumber);
+      let currentItem = items.find((i) => i.itemNumber === itemNumber);
       let tempOrderTotalItems = state.totalItems - currentItem.totalItems;
       let tempOrderTotalCost = state.totalCost - currentItem.estTotal;
       currentItem.totalItems = totalItems;
       tempOrderTotalItems += totalItems;
       currentItem.estTotal = totalItems * currentItem.price;
       tempOrderTotalCost += totalItems * currentItem.price;
-      items.splice(items.indexOf(currentItem), 1, currentItem)
+      items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = items;
       state.totalItems = tempOrderTotalItems;
       state.totalCost = tempOrderTotalCost;
@@ -118,7 +132,7 @@ const inStockOrderSlice = createSlice({
       let currentItem = items.find((i) => i.itemNumber === item.itemNumber);
       state.totalItems -= currentItem.totalItems;
       state.totalCost -= currentItem.estTotal;
-      state.items = items.filter((i) => i.itemNumber !== item.itemNumber)
+      state.items = items.filter((i) => i.itemNumber !== item.itemNumber);
     },
     setFailure: loadingFailed,
   },

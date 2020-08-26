@@ -78,10 +78,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "200px !important",
     minWidth: "200px !important",
   },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
 }));
 
 const MemoInputCell = React.memo(

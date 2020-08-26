@@ -63,10 +63,6 @@ const useStyles = makeStyles((theme) => ({
   tableClosed: {
     zIndex: "-5",
   },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: "#fff",
-  },
 }));
 
 const TotalsDiv = React.memo(({ program }) => {

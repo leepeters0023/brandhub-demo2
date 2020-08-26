@@ -5,7 +5,6 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
 //import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -16,6 +15,7 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   itemGridContainer: {
+    maxWidth: "2000px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -55,19 +55,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemGridView = (props) => {
-  const { type, currentItems, handlePreview, handleAddProgramItem } = props;
+  const {
+    type,
+    currentItems,
+    handlePreview,
+    currentProgram,
+    handleAddItem,
+  } = props;
   const classes = useStyles();
 
+  //nounused vars (current program not needed yet until api integration)
+  console.log(currentProgram);
+
   return (
-    <Container>
+    <Container className={classes.mainWrapper}>
       <br />
       <Grid container spacing={10} className={classes.itemGridContainer}>
         {currentItems.map((item) => (
           <Grid
             className={classes.singleItem}
             item
-            lg={4}
-            md={6}
+            lg={3}
+            md={4}
+            sm={6}
+            xs={12}
             key={item.itemNumber}
           >
             <div className={classes.singleItemWrapper}>
@@ -81,7 +92,7 @@ const OrderItemGridView = (props) => {
                 className={classes.previewImg}
                 src={item.imgUrl}
                 alt={item.itemType}
-                onClick={()=>handlePreview(item.itemNumber)}
+                onClick={() => handlePreview(item.itemNumber)}
               />
             </div>
             <br />
@@ -98,29 +109,24 @@ const OrderItemGridView = (props) => {
             )}
             <br />
             <div className={classes.itemControl}>
-              <Tooltip title="Add to PDF">
-                <span>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id={`${item.itemNumber}`}
-                  >
-                    <PictureAsPdfIcon className={classes.navIcon} />
-                  </Button>
-                </span>
-              </Tooltip>
-              <Tooltip title="Add to Order">
-                <span>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id={`${item.itemNumber}`}
-                    onClick={() => handleAddProgramItem(item)}
-                  >
-                    <AddBoxIcon className={classes.navIcon} />
-                  </Button>
-                </span>
-              </Tooltip>
+              <Button
+                variant="contained"
+                color="secondary"
+                id={`${item.itemNumber}`}
+              >
+                <PictureAsPdfIcon className={classes.navIcon} />
+              </Button>
+
+              {type !== "program" && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  id={`${item.itemNumber}`}
+                  onClick={() => handleAddItem(item, 1)}
+                >
+                  <AddBoxIcon className={classes.navIcon} />
+                </Button>
+              )}
             </div>
           </Grid>
         ))}
@@ -133,8 +139,8 @@ OrderItemGridView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  handleAddProgramItem: PropTypes.func,
-  handleAddAllProgramItems: PropTypes.func,
+  currentProgram: PropTypes.string,
+  handleAddItem: PropTypes.func.isRequired,
 };
 
 export default OrderItemGridView;
