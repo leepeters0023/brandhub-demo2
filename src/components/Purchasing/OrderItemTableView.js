@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Button from "@material-ui/core/Button";
@@ -8,7 +8,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Tooltip from "@material-ui/core/Tooltip";
 //import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   tableButtonWrapper: {
     display: "flex",
     flexWrap: "none",
-    width: "148px"
+    width: "148px",
   },
   root: {
     width: "150px !important",
@@ -31,9 +30,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const MemoInputCell = React.memo(
+  ({ item, currentItemValues, handleItemUpdate }) => {
+    return (
+      <TableCell>
+        <TextField
+          color="secondary"
+          size="small"
+          style={{ width: "55px" }}
+          id={`${item.itemNumber}`}
+          placeholder="Qty"
+          variant="outlined"
+          value={currentItemValues[item.itemNumber] || ""}
+          onChange={handleItemUpdate}
+        />
+      </TableCell>
+    );
+  }
+);
+
 const OrderItemTableView = (props) => {
-  const { type, currentItems, handlePreview } = props;
+  const {
+    type,
+    currentItems,
+    handlePreview,
+    currentProgram,
+    handleAddItem,
+  } = props;
   const classes = useStyles();
+
+  //nounused vars (current program not needed yet until api integration)
+  console.log(currentProgram);
+
+  const [currentItemValues, updateCurrentItemValues] = useCallback(
+    useState({})
+  );
+
+  const handleItemUpdate = useCallback(
+    (evt) => {
+      let itemValues = { ...currentItemValues };
+      itemValues[evt.target.id] = evt.target.value;
+      updateCurrentItemValues(itemValues);
+    },
+    [currentItemValues, updateCurrentItemValues]
+  );
+
+  useEffect(() => {
+    if (Object.keys(currentItemValues).length === 0) {
+      let itemObj = {};
+      currentItems.forEach((item) => {
+        itemObj[item.itemNumber] = "";
+      });
+    }
+  }, [currentItemValues, currentItems]);
+
   return (
     <>
       <TableContainer className={classes.tableContainer}>
@@ -69,7 +119,13 @@ const OrderItemTableView = (props) => {
                   Qty
                 </TableCell>
               )}
-              <TableCell className={classes.headerText} classes={{root: classes.root}} align="center">Actions</TableCell>
+              <TableCell
+                className={classes.headerText}
+                classes={{ root: classes.root }}
+                align="center"
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -95,51 +151,47 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
-                {type === "inStock" && (
-                  <TableCell>
-                    {Math.floor(Math.random() * 10 + 1) * 5}
-                  </TableCell>
-                )}
+                {type === "inStock" && <TableCell>{row.stock}</TableCell>}
                 <TableCell>{row.price}</TableCell>
-                {type !== "preOrder" && (
-                  <TableCell>
-                    <TextField
-                      color="secondary"
-                      size="small"
-                      style={{ width: "55px" }}
-                      id={`${row.itemNumber}`}
-                      placeholder="Qty"
-                      variant="outlined"
-                    />
-                  </TableCell>
+                {type !== "program" && (
+                  <MemoInputCell
+                    item={row}
+                    currentItemValues={currentItemValues}
+                    handleItemUpdate={handleItemUpdate}
+                  />
                 )}
                 <TableCell align="right">
                   <div className={classes.tableButtonWrapper}>
-                    <Tooltip placement="top" title="Add to PDF">
-                      <span>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          id={`${row.itemNumber}`}
-                          style={{ margin: "5px 2.5px" }}
-                        >
-                          <PictureAsPdfIcon className={classes.navIcon} />
-                        </Button>
-                      </span>
-                    </Tooltip>
-                    {type !== "preOrder" && (
-                      <Tooltip title="Add to Order">
-                        <span>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            id={`${row.itemNumber}`}
-                            style={{ margin: "5px 2.5px" }}
-                          >
-                            <AddBoxIcon className={classes.navIcon} />
-                          </Button>
-                        </span>
-                      </Tooltip>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      id={`${row.itemNumber}`}
+                      style={{ margin: "5px 2.5px" }}
+                    >
+                      <PictureAsPdfIcon className={classes.navIcon} />
+                    </Button>
+
+                    {type !== "program" && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        id={`${row.itemNumber}`}
+                        style={{ margin: "5px 2.5px" }}
+                        disabled={
+                          currentItemValues[row.itemNumber] === "" ||
+                          !currentItemValues[row.itemNumber]
+                        }
+                        value=""
+                        onClick={(evt) => {
+                          handleAddItem(
+                            row,
+                            parseInt(currentItemValues[row.itemNumber])
+                          );
+                          handleItemUpdate(evt);
+                        }}
+                      >
+                        <AddBoxIcon className={classes.navIcon} />
+                      </Button>
                     )}
                   </div>
                 </TableCell>
@@ -156,6 +208,8 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
+  currentProgram: PropTypes.string,
+  handleAddItem: PropTypes.func.isRequired,
 };
 
 export default OrderItemTableView;

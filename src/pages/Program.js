@@ -193,7 +193,7 @@ const Program = ({ userType, programId }) => {
             </div>
 
             <OrderItemViewControl
-              type={"preOrder"}
+              type={"program"}
               currentView={currentView}
               handlePreview={handlePreview}
               currentProgram={currentProgram}

@@ -152,5 +152,9 @@ export default {
       justifyContent: "flex-end",
       alignItems: "center",
     },
+    backdrop: {
+      zIndex: 1250,
+      color: "#fff",
+    },
   },
 };
