@@ -3,7 +3,7 @@ import { getUser, logInUser } from "../../api/userApi";
 
 
 /*
-* DataFormat
+* DataFormat:
 user: {
   loginIsLoading: bool,
   isLoading: bool,

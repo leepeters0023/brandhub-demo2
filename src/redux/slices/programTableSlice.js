@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchOrdersByProgram } from "../../api/programApi";
 
 /*
+* Data Format:
 programsTable: {
+  isLoading: bool,
   programId: string,
   items: [
     (array of items sorted by itemNumber)
@@ -11,7 +13,7 @@ programsTable: {
       itemNumber: string,
       brand: string,
       itemType: string,
-      price: string,
+      price: float,
       qty: string,
       imgUrl: string,
       complianceStatus: string,
@@ -22,13 +24,15 @@ programsTable: {
   orders: [
     (array of orders sorted alphabetically by distributor name)
     {
-      distributor: string,
+      orderNumber: string,
+      distributorId: string,
+      distributorName: string,
       type: string,
       program: null || [...string(programIds)],
       status: string,
       items: [...{ itemObj } sorted by itemNumber],
       shipping: { shippingObj },
-      budget: “string”,
+      budget: string,
       totalItems: int,
       totalEstCost: float,
     }
@@ -38,6 +42,7 @@ programsTable: {
     currentTotal: float (fetched from db for initial total value),
     actualTotal: float (based on change in the current program)
   }
+  error: null || string
 }
 */
 

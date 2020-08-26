@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 /*
-* DataFormat
+* DataFormat:
 programs: {
   isLoading: bool,
   programs: [...{ programObj }],
