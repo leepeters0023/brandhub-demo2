@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { addInStockItem } from "../../redux/slices/inStockOrderSlice";
 import { addOnDemandItem } from "../../redux/slices/onDemandOrderSlice";
 
-import OrderInStockTableView from "./OrderItemTableView";
+import OrderItemTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
 import OrderConfirmation from "../Utility/OrderConfirmation";
 
@@ -72,7 +72,7 @@ const OrderItemViewControl = (props) => {
         </Dialog>
       </div>
       {currentView === "list" && (
-        <OrderInStockTableView
+        <OrderItemTableView
           type={type}
           currentItems={currentItems}
           handlePreview={handlePreview}

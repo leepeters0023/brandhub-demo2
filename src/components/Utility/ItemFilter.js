@@ -478,7 +478,7 @@ ItemFilter.propTypes = {
   brands: PropTypes.array.isRequired,
   itemTypes: PropTypes.array.isRequired,
   units: PropTypes.array.isRequired,
-  channels: PropTypes.array.isRequired,
+  families: PropTypes.array.isRequired,
   others: PropTypes.array.isRequired,
 };
 
