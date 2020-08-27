@@ -27,41 +27,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  headerCell: {
-    padding: "0",
-    height: "184px",
-    width: "150px",
-    maxWidth: "150px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-around",
-    textAlign: "center",
-  },
-  borderRight: {
-    borderRight: "1px solid lightgrey",
-    width: "196px",
-  },
-  colTitle: {
-    width: "150px",
-  },
-  infoRow: {
-    backgroundColor: "#cbcbcb",
-  },
-  infoCell: {
-    width: "150px",
-  },
-  tableControl: {
-    display: "flex",
-    alignItems: "center",
-  },
   orderControl: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     width: "100%",
-  },
-  tableClosed: {
-    zIndex: "-5",
   },
 }));
 
@@ -93,7 +62,7 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   //const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useCallback(useState(undefined));
-  const [backdrop, setBackdrop] = useCallback(useState(false));
+  //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
 
@@ -139,9 +108,9 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
 
   return (
     <>
-      <Backdrop className={classes.backdrop} open={backdrop}>
+      {/* <Backdrop className={classes.backdrop} open={backdrop}>
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
       <div className={classes.relativeContainer}>
         <Dialog
           open={confirmModal}
@@ -248,17 +217,6 @@ const OrderPreOrderCart = ({ userType, handleModalOpen }) => {
       <br />
       <br />
       <div className={classes.orderControl}>
-        <Button
-          className={classes.largeButton}
-          color="secondary"
-          variant="contained"
-          onClick={() => {
-            setBackdrop(true);
-            // handleSaveOrder(program);
-          }}
-        >
-          SAVE ORDER
-        </Button>
         {userType !== "field1" && (
           <Button
             className={classes.largeButton}

@@ -5,9 +5,9 @@ import { Link } from "@reach/router";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  removeOnDemandItem,
-  updateOnDemandOrder,
-} from "../../redux/slices/onDemandOrderSlice";
+  removeInStockItem,
+  updateInStockOrder,
+} from "../../redux/slices/inStockOrderSlice";
 
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
@@ -41,25 +41,25 @@ const useStyles = makeStyles((theme) => ({
   },
   orderControl: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     width: "100%",
   },
 }));
 
-const OnDemandOrder = ({ userType, handleModalOpen }) => {
+const InStockOrder = ({ userType, handleModalOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const items = useSelector((state) => state.onDemandOrder.items);
-  const orderTotal = useSelector((state) => state.onDemandOrder.totalCost);
-  const isLoading = useSelector((state) => state.onDemandOrder.isLoading);
+  const items = useSelector((state) => state.inStockOrder.items);
+  const orderTotal = useSelector((state) => state.inStockOrder.totalCost);
+  const isLoading = useSelector((state) => state.inStockOrder.isLoading);
 
   const [terms, setTermsChecked] = useState(false);
   const [rush, setRushChecked] = useState(false);
   const [shippingLocation, setShippingLocation] = useState(null);
 
   const handleRemove = (i) => {
-    dispatch(removeOnDemandItem(items[i]));
+    dispatch(removeInStockItem({ item: items[i] }));
   };
 
   const handleValue = (evt) => {
@@ -74,7 +74,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
       } else total = parseInt(evt.target.value);
 
       dispatch(
-        updateOnDemandOrder({ itemNumber: evt.target.id, totalItems: total })
+        updateInStockOrder({ itemNumber: evt.target.id, totalItems: total })
       );
     }
   };
@@ -93,7 +93,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
         <Container style={{ textAlign: "center" }}>
           <br />
           <Typography className={classes.headerText}>
-            You currently do not have an active On-Demand order.
+            You currently do not have an active In-Stock order.
           </Typography>
           <br />
           <br />
@@ -102,9 +102,9 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
             color="secondary"
             variant="contained"
             component={Link}
-            to="/order#ondemand"
+            to="/orders/items/instock"
           >
-            PLACE AN ON-DEMAND ORDER
+            PLACE AN IN-STOCK ORDER
           </Button>
         </Container>
       </>
@@ -113,7 +113,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
     return (
       <>
         <TableContainer className={classes.cartContainer}>
-          <Table className={classes.table} aria-label="on-demand-table">
+          <Table className={classes.table} aria-label="in-stock-table">
             <TableHead>
               <TableRow>
                 <TableCell />
@@ -277,13 +277,6 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
         </Grid>
         <br />
         <div className={classes.orderControl}>
-          <Button
-            className={classes.largeButton}
-            color="secondary"
-            variant="contained"
-          >
-            SAVE ORDER
-          </Button>
           {userType !== "field1" && (
             <Button
               className={classes.largeButton}
@@ -309,9 +302,9 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
     );
 };
 
-OnDemandOrder.propTypes = {
+InStockOrder.propTypes = {
   userType: PropTypes.string.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
 };
 
-export default OnDemandOrder;
+export default InStockOrder;

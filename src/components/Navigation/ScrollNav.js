@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
-//import { Link } from "@reach/router";
+import { Link } from "@reach/router";
 
 import Notifications from "../User/Notifications";
 import UserNavMenu from "./UserNavMenu";
-import NavMenu from "./NavMenu";
+import OrdersNav from "./OrdersNav";
+//import NavMenu from "./NavMenu";
 import AddressBook from "../User/AddressBook";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -21,7 +23,8 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-//import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import HomeIcon from "@material-ui/icons/Home";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,11 +52,33 @@ function HideOnScroll(props) {
 }
 
 const ScrollNav = (props) => {
-  const { handleLogout, userType } = props;
+  const { handleLogout } = props;
   const classes = useStyles();
 
-  const [userModal, handleUserModal] = useState(false);
-  const initials = useSelector(state => state.user.initials)
+  const [userModal, handleUserModal] = useCallback(useState(false));
+  const [selected, setSelected] = useCallback(useState("home"));
+  const initials = useSelector((state) => state.user.initials);
+
+  const handleNav = useCallback(() => {
+    if (window.location.pathname === "/") {
+      setSelected("home")
+    } else if (window.location.pathname.includes("program")) {
+      setSelected("programs")
+    } else if (window.location.pathname.includes("order")) {
+      setSelected("orders")
+    } else {
+      setSelected("other")
+    }
+  }, [setSelected])
+
+  useEffect(()=>{
+    handleNav()
+  }, [handleNav])
+
+  useEffect(()=>{
+    window.addEventListener("popstate", handleNav);
+    return () => window.removeEventListener("popstate", handleNav)
+  }, [handleNav])
 
   return (
     <>
@@ -91,12 +116,37 @@ const ScrollNav = (props) => {
             }}
           >
             <div className={classes.navBreak}>
-              <NavMenu userType={userType} />
+              {/* <NavMenu userType={userType} /> */}
               <img
                 src={BrandHubLogo}
                 alt="Logo"
                 style={{ filter: "brightness(0%)" }}
               />
+              <Tooltip title="Home">
+                <IconButton
+                  component={Link}
+                  to="/"
+                  onClick={() => setSelected("home")}
+                >
+                  <HomeIcon
+                    fontSize="large"
+                    color={selected === "home" ? "primary" : "inherit"}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Programs">
+                <IconButton
+                  component={Link}
+                  to="/programs"
+                  onClick={() => setSelected("programs")}
+                >
+                  <DashboardIcon
+                    fontSize="large"
+                    color={selected === "programs" ? "primary" : "inherit"}
+                  />
+                </IconButton>
+              </Tooltip>
+              <OrdersNav setSelected={setSelected} selected={selected} />
             </div>
             <div className={classes.navBreak}>
               {/* {userType !== "compliance" && (

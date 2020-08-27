@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
@@ -28,7 +28,10 @@ const OrderItemViewControl = (props) => {
   const classes = useStyles();
 
   const [itemAddedModal, handleItemAddedModal] = useCallback(useState(false));
-  const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null))
+  const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
+  const [currentItemValues, updateCurrentItemValues] = useCallback(
+    useState({})
+  );
 
   const handleAddItem = useCallback((item, qty) => {
     let newItem = {
@@ -52,6 +55,34 @@ const OrderItemViewControl = (props) => {
       dispatch(addOnDemandItem({ item: newItem }))
     }
   }, [dispatch, type, setCurrentItemAdded, handleItemAddedModal])
+
+  const handleItemUpdate = useCallback(
+    (evt) => {
+      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+      let itemValues = { ...currentItemValues };
+      let total;
+      if (
+        numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
+        evt.target.value === ""
+      ) {
+        if (evt.target.value === "") {
+          total = 0;
+        } else total = parseInt(evt.target.value);
+        itemValues[evt.target.id] = total;
+        updateCurrentItemValues(itemValues);
+      }
+    },
+    [currentItemValues, updateCurrentItemValues]
+  );
+
+  useEffect(() => {
+    if (Object.keys(currentItemValues).length === 0) {
+      let itemObj = {};
+      currentItems.forEach((item) => {
+        itemObj[item.itemNumber] = "";
+      });
+    }
+  }, [currentItemValues]);
 
   return (
     <>
@@ -78,6 +109,8 @@ const OrderItemViewControl = (props) => {
           handlePreview={handlePreview}
           currentProgram={currentProgram}
           handleAddItem={handleAddItem}
+          currentItemValues={currentItemValues}
+          handleItemUpdate={handleItemUpdate}
         />
       )}
       {currentView === "grid" && (
@@ -87,6 +120,8 @@ const OrderItemViewControl = (props) => {
           handlePreview={handlePreview}
           currentProgram={currentProgram}
           handleAddItem={handleAddItem}
+          currentItemValues={currentItemValues}
+          handleItemUpdate={handleItemUpdate}
         />
       )}
     </>

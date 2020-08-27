@@ -4,8 +4,10 @@ import PropTypes from "prop-types";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-//import IconButton from "@material-ui/core/IconButton";
+//import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
@@ -14,6 +16,16 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  paperWrapper: {
+    backgroundColor: "whitesmoke",
+    width: "95%",
+    height: "100%",
+    padding: "10px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   itemGridContainer: {
     maxWidth: "2000px",
     display: "flex",
@@ -54,6 +66,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const MemoInput = React.memo(
+  ({ item, currentItemValues, handleItemUpdate }) => {
+    return (
+      <TextField
+        color="secondary"
+        size="small"
+        style={{ width: "55px" }}
+        id={`${item.itemNumber}`}
+        placeholder="Qty"
+        variant="outlined"
+        value={currentItemValues[item.itemNumber] || ""}
+        onChange={handleItemUpdate}
+      />
+    );
+  }
+);
+
 const OrderItemGridView = (props) => {
   const {
     type,
@@ -61,6 +90,8 @@ const OrderItemGridView = (props) => {
     handlePreview,
     currentProgram,
     handleAddItem,
+    currentItemValues,
+    handleItemUpdate,
   } = props;
   const classes = useStyles();
 
@@ -81,53 +112,67 @@ const OrderItemGridView = (props) => {
             xs={12}
             key={item.itemNumber}
           >
-            <div className={classes.singleItemWrapper}>
-              {/* <Tooltip placement="top-start" title="Favorite">
+            <Paper className={classes.paperWrapper}>
+              <div className={classes.singleItemWrapper}>
+                {/* <Tooltip placement="top-start" title="Favorite">
                 <IconButton className={classes.favorite}>
-                  <StarBorderIcon />
+                <StarBorderIcon />
                 </IconButton>
               </Tooltip> */}
-              <img
-                id={item.itemNumber}
-                className={classes.previewImg}
-                src={item.imgUrl}
-                alt={item.itemType}
-                onClick={() => handlePreview(item.itemNumber)}
-              />
-            </div>
-            <br />
-            <Typography className={classes.headerText}>
-              {`${item.brand} ${item.itemType}`}
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              {`#${item.itemNumber} | ${item.qty}`}
-            </Typography>
-            {type === "inStock" && (
-              <Typography variant="body1" color="textSecondary">
-                {`Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
+                <img
+                  id={item.itemNumber}
+                  className={classes.previewImg}
+                  src={item.imgUrl}
+                  alt={item.itemType}
+                  onClick={() => handlePreview(item.itemNumber)}
+                />
+              </div>
+              <br />
+              <Typography className={classes.headerText}>
+                {`${item.brand} ${item.itemType}`}
               </Typography>
-            )}
-            <br />
-            <div className={classes.itemControl}>
-              <Button
-                variant="contained"
-                color="secondary"
-                id={`${item.itemNumber}`}
-              >
-                <PictureAsPdfIcon className={classes.navIcon} />
-              </Button>
-
-              {type !== "program" && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  id={`${item.itemNumber}`}
-                  onClick={() => handleAddItem(item, 1)}
-                >
-                  <AddBoxIcon className={classes.navIcon} />
-                </Button>
+              <Typography variant="body1" color="textSecondary">
+                {`#${item.itemNumber} | ${item.qty}`}
+              </Typography>
+              {type === "inStock" && (
+                <Typography variant="body1" color="textSecondary">
+                  {`Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
+                </Typography>
               )}
-            </div>
+              <br />
+              <div className={classes.itemControl}>
+                <IconButton id={`${item.itemNumber}`}>
+                  <PictureAsPdfIcon />
+                </IconButton>
+
+                {type !== "program" && (
+                  <>
+                    <MemoInput
+                      item={item}
+                      currentItemValues={currentItemValues}
+                      handleItemUpdate={handleItemUpdate}
+                    />
+                    <IconButton
+                      id={`${item.itemNumber}`}
+                      disabled={
+                        currentItemValues[item.itemNumber] === "" ||
+                        !currentItemValues[item.itemNumber]
+                      }
+                      value=""
+                      onClick={() => {
+                        handleAddItem(
+                          item,
+                          parseInt(currentItemValues[item.itemNumber])
+                        );
+                        handleItemUpdate({target: {value: "", id: item.itemNumber}});
+                      }}
+                    >
+                      <AddBoxIcon />
+                    </IconButton>
+                  </>
+                )}
+              </div>
+            </Paper>
           </Grid>
         ))}
       </Grid>

@@ -57,6 +57,7 @@ const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
           vertical: "top",
           horizontal: "right",
         }}
+        style={{ marginTop: "10px" }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
