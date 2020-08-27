@@ -23,7 +23,7 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-import HomeIcon from "@material-ui/icons/Home";
+//import HomeIcon from "@material-ui/icons/Home";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import CancelIcon from "@material-ui/icons/Cancel";
 
@@ -37,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     alignItems: "center",
     margin: "0",
+  },
+  logoLink: {
+    filter: "brightness(0%)",
+    marginTop: "5px",
+    "&&:hover": {
+      cursor: "pointer",
+    },
   },
 }));
 
@@ -61,24 +68,24 @@ const ScrollNav = (props) => {
 
   const handleNav = useCallback(() => {
     if (window.location.pathname === "/") {
-      setSelected("home")
+      setSelected("home");
     } else if (window.location.pathname.includes("program")) {
-      setSelected("programs")
+      setSelected("programs");
     } else if (window.location.pathname.includes("order")) {
-      setSelected("orders")
+      setSelected("orders");
     } else {
-      setSelected("other")
+      setSelected("other");
     }
-  }, [setSelected])
+  }, [setSelected]);
 
-  useEffect(()=>{
-    handleNav()
-  }, [handleNav])
+  useEffect(() => {
+    handleNav();
+  }, [handleNav]);
 
-  useEffect(()=>{
+  useEffect(() => {
     window.addEventListener("popstate", handleNav);
-    return () => window.removeEventListener("popstate", handleNav)
-  }, [handleNav])
+    return () => window.removeEventListener("popstate", handleNav);
+  }, [handleNav]);
 
   return (
     <>
@@ -117,12 +124,17 @@ const ScrollNav = (props) => {
           >
             <div className={classes.navBreak}>
               {/* <NavMenu userType={userType} /> */}
-              <img
-                src={BrandHubLogo}
-                alt="Logo"
-                style={{ filter: "brightness(0%)" }}
-              />
               <Tooltip title="Home">
+                <Link to="/">
+                  <img
+                    src={BrandHubLogo}
+                    alt="Logo"
+                    className={classes.logoLink}
+                    style={{ filter: "brightness(0%)" }}
+                  />
+                </Link>
+              </Tooltip>
+              {/* <Tooltip title="Home">
                 <IconButton
                   component={Link}
                   to="/"
@@ -133,7 +145,7 @@ const ScrollNav = (props) => {
                     color={selected === "home" ? "primary" : "inherit"}
                   />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
               <Tooltip title="Programs">
                 <IconButton
                   component={Link}
