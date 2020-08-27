@@ -51,6 +51,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   const dispatch = useDispatch();
 
   const items = useSelector((state) => state.onDemandOrder.items);
+  const orderTotal = useSelector((state) => state.onDemandOrder.totalCost);
   const isLoading = useSelector((state) => state.onDemandOrder.isLoading);
 
   const [terms, setTermsChecked] = useState(false);
@@ -262,13 +263,16 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               }
               label=" This is a rush order"
             />
-            <Typography className={classes.titleText}>Subtotal:</Typography>
-            <Typography className={classes.titleText}>Shipping:</Typography>
-            <Typography className={classes.titleText}>Handling:</Typography>
+            <br />
             <br />
             <Divider />
             <br />
-            <Typography className={classes.titleText}>Total:</Typography>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography className={classes.titleText}>Total:</Typography>
+              <Typography className={classes.titleText}>{`$${orderTotal.toFixed(
+                2
+              )}`}</Typography>
+            </div>
           </Grid>
         </Grid>
         <br />
