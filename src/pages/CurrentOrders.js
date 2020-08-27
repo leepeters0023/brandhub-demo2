@@ -5,8 +5,8 @@ import { useWindowHash } from "../hooks/UtilityHooks";
 
 import CurrentPreOrder from "../components/Purchasing/CurrentPreOrder";
 import OrdersCurrentTable from "../components/OrderHistory/OrdersCurrentTable";
-import CurrentInStockOrder from "../components/Purchasing/CurrentInStockOrder";
-import CurrentOnDemandOrder from "../components/Purchasing/CurrentOnDemandOrder";
+import CurrentInStockOrder from "../components/Purchasing/InStockOrder";
+import CurrentOnDemandOrder from "../components/Purchasing/OnDemandOrder";
 import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import Tabs from "@material-ui/core/Tabs";

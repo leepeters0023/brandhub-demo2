@@ -23,6 +23,7 @@ import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -108,7 +109,7 @@ const Program = ({ userType, programId }) => {
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
             <Tooltip title="Back to All Programs" placement="bottom-start">
-              <IconButton component={Link} to="/order#pre">
+              <IconButton component={Link} to="/programs">
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
@@ -150,15 +151,14 @@ const Program = ({ userType, programId }) => {
           </div>
         </div>
         <Tabs
-          variant="fullWidth"
           value={value}
           onChange={handleChangeTab}
           indicatorColor="primary"
-          centered
         >
           <Tab className={classes.headerText} label="Details" value={1} />
           <Tab className={classes.headerText} label="Items" value={2} />
         </Tabs>
+        <Divider />
         <br />
         <br />
 

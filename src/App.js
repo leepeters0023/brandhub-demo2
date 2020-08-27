@@ -13,15 +13,21 @@ import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Dashboard from "./pages/Dashboard";
 import Programs from "./pages/Programs";
-import PlaceOrder from "./pages/PlaceOrder";
+//import PlaceOrder from "./pages/PlaceOrder";
+import PlaceInStockOrder from "./pages/PlaceInStockOrder";
+import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import Budget from "./pages/Budget";
 import Reports from "./pages/Reports";
 //import Calendar from "./pages/Calendar";
 import Approvals from "./pages/Approvals";
 import Coupons from "./pages/Coupons";
 import Help from "./pages/Help";
-import CurrentOrders from "./pages/CurrentOrders";
-import PastOrders from "./pages/PastOrders";
+//import CurrentOrders from "./pages/CurrentOrders";
+import CurrentPreOrder from "./pages/CurrentPreOrder";
+import CurrentInStockOrder from "./pages/CurrentInStockOrder";
+import CurrentOnDemandOrder from "./pages/CurrentOnDemandOrder";
+//import PastOrders from "./pages/PastOrders";
+import OrderHistory from "./pages/OrderHistory";
 import Program from "./pages/Program";
 import RulesByState from "./pages/RulesByState";
 import ContactsByState from "./pages/ContactsByState";
@@ -128,21 +134,57 @@ const App = () => {
             ["field1", "field2", "super"],
             role
           )}
-          {handleAuth(
+          {/* {handleAuth(
             <PastOrders path="/orders/past" />,
             "/orders/past",
             ["field1", "field2", "super"],
             role
-          )}
-          {handleAuth(
+          )} */}
+          {/* {handleAuth(
             <CurrentOrders path="/orders/open" userType={role} />,
             "/orders/open",
             ["field1", "field2", "super"],
             role
+          )} */}
+          {handleAuth(
+            <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
+            "/orders/open/preorder",
+            ["field1", "field2", "super"],
+            role
           )}
           {handleAuth(
+            <CurrentInStockOrder path="/orders/open/instock" userType={role} />,
+            "/orders/open/instock",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <CurrentOnDemandOrder path="/orders/open/ondemand" userType={role} />,
+            "/orders/open/ondemand",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {/* {handleAuth(
             <PlaceOrder path="/order" userType={role} />,
             "/order",
+            ["field1", "field2", "super"],
+            role
+          )} */}
+          {handleAuth(
+            <PlaceInStockOrder path="/orders/items/instock" userType={role} />,
+            "/orders/items/instock",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PlaceOnDemandOrder path="/orders/items/ondemand" userType={role} />,
+            "/orders/items/ondemand",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <OrderHistory path="/orders/history" userType={role} />,
+            "/orders/history",
             ["field1", "field2", "super"],
             role
           )}

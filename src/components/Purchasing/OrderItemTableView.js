@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import Button from "@material-ui/core/Button";
@@ -56,43 +56,13 @@ const OrderItemTableView = (props) => {
     handlePreview,
     currentProgram,
     handleAddItem,
+    currentItemValues,
+    handleItemUpdate
   } = props;
   const classes = useStyles();
 
   //nounused vars (current program not needed yet until api integration)
   console.log(currentProgram);
-
-  const [currentItemValues, updateCurrentItemValues] = useCallback(
-    useState({})
-  );
-
-  const handleItemUpdate = useCallback(
-    (evt) => {
-      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-      let itemValues = { ...currentItemValues };
-      let total;
-      if (
-        numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
-        evt.target.value === ""
-      ) {
-        if (evt.target.value === "") {
-          total = 0;
-        } else total = parseInt(evt.target.value);
-        itemValues[evt.target.id] = total;
-        updateCurrentItemValues(itemValues);
-      }
-    },
-    [currentItemValues, updateCurrentItemValues]
-  );
-
-  useEffect(() => {
-    if (Object.keys(currentItemValues).length === 0) {
-      let itemObj = {};
-      currentItems.forEach((item) => {
-        itemObj[item.itemNumber] = "";
-      });
-    }
-  }, [currentItemValues, currentItems]);
 
   return (
     <>
@@ -220,6 +190,8 @@ OrderItemTableView.propTypes = {
   handlePreview: PropTypes.func.isRequired,
   currentProgram: PropTypes.object,
   handleAddItem: PropTypes.func.isRequired,
+  currentItemValues: PropTypes.object.isRequired,
+  handleItemUpdate: PropTypes.func.isRequired
 };
 
 export default OrderItemTableView;
