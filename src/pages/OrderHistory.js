@@ -76,45 +76,12 @@ const OrderHistory = () => {
             <Typography className={classes.titleText}>Order History</Typography>
           </Grid>
           <Grid item md={10}>
-              <div className={classes.queryRow}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.queryField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="fromDate"
-                    label="Order From Date"
-                    value={selectedFromDate}
-                    onChange={handleFromDateChange}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.queryField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="toDate"
-                    label="Order To Date"
-                    value={selectedToDate}
-                    onChange={handleToDateChange}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </div>
+              
           </Grid>
         </Grid>
+        <br />
               <div className={classes.queryButtonRow}>
+                
                 <ButtonGroup
                   style={{ height: "40px", marginRight: "10px" }}
                   color="secondary"
@@ -166,13 +133,49 @@ const OrderHistory = () => {
                     </Button>
                   </Tooltip>
                 </ButtonGroup>
+                <div className={classes.queryRow}>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    className={classes.queryField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="fromDate"
+                    label="Order From Date"
+                    value={selectedFromDate}
+                    onChange={handleFromDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    className={classes.queryField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="toDate"
+                    label="Order To Date"
+                    value={selectedToDate}
+                    onChange={handleToDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
                 <Button
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"
-                >
+                  >
                   SEARCH
                 </Button>
+                  </div>
               </div>
         <br />
       </Container>

@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-//import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -142,19 +142,15 @@ const OrderItemTableView = (props) => {
                 )}
                 <TableCell align="right">
                   <div className={classes.tableButtonWrapper}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
+                    <IconButton
                       id={`${row.itemNumber}`}
                       style={{ margin: "5px 2.5px" }}
                     >
-                      <PictureAsPdfIcon className={classes.navIcon} />
-                    </Button>
+                      <PictureAsPdfIcon />
+                    </IconButton>
 
                     {type !== "program" && (
-                      <Button
-                        variant="contained"
-                        color="secondary"
+                      <IconButton
                         id={`${row.itemNumber}`}
                         style={{ margin: "5px 2.5px" }}
                         disabled={
@@ -167,11 +163,11 @@ const OrderItemTableView = (props) => {
                             row,
                             parseInt(currentItemValues[row.itemNumber])
                           );
-                          handleItemUpdate(evt);
+                          handleItemUpdate({target: {value: "", id: row.itemNumber}});
                         }}
                       >
-                        <AddBoxIcon className={classes.navIcon} />
-                      </Button>
+                        <AddBoxIcon />
+                      </IconButton>
                     )}
                   </div>
                 </TableCell>
