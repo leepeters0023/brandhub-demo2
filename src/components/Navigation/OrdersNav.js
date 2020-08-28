@@ -74,7 +74,7 @@ const OrdersNav = ({ setSelected, selected }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <List style={{ width: "250px" }}>
+        <List style={{ width: "200px" }}>
           <ListItem button onClick={handlePlaceOrder}>
             <ListItemText primary="Place an Order" />
             {placeOrderOpen ? <ExpandLess /> : <ExpandMore />}

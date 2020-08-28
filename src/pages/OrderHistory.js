@@ -6,7 +6,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Tooltip from "@material-ui/core/Tooltip";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -23,17 +22,18 @@ const useStyles = makeStyles((theme) => ({
   },
   queryRow: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   queryButtonRow: {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
+    alignItems: "center"
   },
   queryField: {
-    width: "23%",
-    marginLeft: "10px",
+    width: "38%",
+    marginBottom: "16px",
   },
   trackingLogo: {
     width: "100px",
@@ -71,112 +71,105 @@ const OrderHistory = () => {
   return (
     <>
       <Container className={classes.mainWrapper}>
-        <Grid container>
-          <Grid item md={2}>
-            <Typography className={classes.titleText}>Order History</Typography>
-          </Grid>
-          <Grid item md={10}>
-              
-          </Grid>
-        </Grid>
+        <Typography className={classes.titleText}>Order History</Typography>
+
         <br />
-              <div className={classes.queryButtonRow}>
-                
-                <ButtonGroup
-                  style={{ height: "40px", marginRight: "10px" }}
-                  color="secondary"
-                  aria-label="order-sort"
-                >
-                  <Tooltip title="View Pending Orders">
-                    <Button
-                      className={
-                        sortValue === "pending"
-                          ? classes.largeButton
-                          : classes.selectedButton
-                      }
-                      variant={sortValue === "pending" ? "contained" : "outlined"}
-                      onClick={() => {
-                        setSortValue("pending");
-                      }}
-                    >
-                      PENDING
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="View Shipped Orders">
-                    <Button
-                      className={
-                        sortValue === "shipped"
-                          ? classes.largeButton
-                          : classes.selectedButton
-                      }
-                      variant={sortValue === "shipped" ? "contained" : "outlined"}
-                      onClick={() => {
-                        setSortValue("shipped");
-                      }}
-                    >
-                      SHIPPED
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="View Complete Orders">
-                    <Button
-                      className={
-                        sortValue === "complete"
-                          ? classes.largeButton
-                          : classes.selectedButton
-                      }
-                      variant={sortValue === "complete" ? "contained" : "outlined"}
-                      onClick={() => {
-                        setSortValue("complete");
-                      }}
-                    >
-                      COMPLETE
-                    </Button>
-                  </Tooltip>
-                </ButtonGroup>
-                <div className={classes.queryRow}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.queryField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="fromDate"
-                    label="Order From Date"
-                    value={selectedFromDate}
-                    onChange={handleFromDateChange}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.queryField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="toDate"
-                    label="Order To Date"
-                    value={selectedToDate}
-                    onChange={handleToDateChange}
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  >
-                  SEARCH
-                </Button>
-                  </div>
-              </div>
+        <div className={classes.queryButtonRow}>
+          <ButtonGroup
+            style={{ height: "40px", marginRight: "10px" }}
+            color="secondary"
+            aria-label="order-sort"
+          >
+            <Tooltip title="View Pending Orders">
+              <Button
+                className={
+                  sortValue === "pending"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={sortValue === "pending" ? "contained" : "outlined"}
+                onClick={() => {
+                  setSortValue("pending");
+                }}
+              >
+                PENDING
+              </Button>
+            </Tooltip>
+            <Tooltip title="View Shipped Orders">
+              <Button
+                className={
+                  sortValue === "shipped"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={sortValue === "shipped" ? "contained" : "outlined"}
+                onClick={() => {
+                  setSortValue("shipped");
+                }}
+              >
+                SHIPPED
+              </Button>
+            </Tooltip>
+            <Tooltip title="View Complete Orders">
+              <Button
+                className={
+                  sortValue === "complete"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={sortValue === "complete" ? "contained" : "outlined"}
+                onClick={() => {
+                  setSortValue("complete");
+                }}
+              >
+                COMPLETE
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+          <div className={classes.queryRow}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                color="secondary"
+                className={classes.queryField}
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="fromDate"
+                label="Order From Date"
+                value={selectedFromDate}
+                onChange={handleFromDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                color="secondary"
+                className={classes.queryField}
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="toDate"
+                label="Order To Date"
+                value={selectedToDate}
+                onChange={handleToDateChange}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+            >
+              SEARCH
+            </Button>
+          </div>
+        </div>
         <br />
       </Container>
       <br />

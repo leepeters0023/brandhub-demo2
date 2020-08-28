@@ -3,11 +3,11 @@ import { Router, Redirect } from "@reach/router";
 import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getProgramsSuccess } from "./redux/slices/programsSlice";
 
 import { logoutUser } from "./api/userApi";
 
 import { removeUser, fetchUser } from "./redux/slices/userSlice";
+import { fetchInitialPrograms, setIsLoading } from "./redux/slices/programsSlice";
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -45,9 +45,6 @@ import themeFile from "./utility/theme.js";
 
 import "./App.css";
 
-//mock data
-import programs from "./assets/mockdata/Programs";
-
 axios.defaults.headers.get["Cache-Control"] = "no-cache";
 
 const theme = createMuiTheme(themeFile);
@@ -67,7 +64,9 @@ const App = () => {
   );
 
   const currentRole = useSelector((state) => state.user.role);
+  const currentTerritory = useSelector((state) => state.user.territories[0])
   const isLoading = useSelector((state) => state.user.isLoading);
+  const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const handleLogIn = (user) => {
@@ -89,12 +88,14 @@ const App = () => {
 
     if (currentUser && currentRole.length > 0) {
       setRole(currentRole);
-      dispatch(getProgramsSuccess({ programs }));
+      dispatch(fetchInitialPrograms(currentTerritory.id))
     } else if (currentUser && JSON.parse(currentUser).access_token) {
+      dispatch(setIsLoading())
       fetchCurrentUser(JSON.parse(currentUser).access_token);
     } else {
       setCurrentUser(null);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, currentUser, currentRole, loggedIn]);
 
   useEffect(() => {
@@ -103,7 +104,7 @@ const App = () => {
     }
   }, [loggedIn, currentUser]);
 
-  if (isLoading) {
+  if (isLoading || programsIsLoading) {
     return (
       <Backdrop className={classes.backdrop} open={true}>
         <CircularProgress color="inherit" />
@@ -129,7 +130,7 @@ const App = () => {
         <Router primary={false}>
           <Dashboard path="/" />
           {handleAuth(
-            <Programs path="/programs" />,
+            <Programs path="/programs" userType={role} />,
             "/programs",
             ["field1", "field2", "super"],
             role

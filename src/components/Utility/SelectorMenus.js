@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+
+import { updateCurrentTerritory } from "../../redux/slices/userSlice";
+
+import { fetchPrograms } from "../../redux/slices/programsSlice";
 
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -11,12 +15,13 @@ import Typography from "@material-ui/core/Typography";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const SelectorMenus = ({ type, handler, currentProgram }) => {
+  const dispatch = useDispatch();
   //data would be pulled from store
   const regions = useSelector((state) => state.user.territories);
   const fieldUsers = ["Field User 1", "Field User 2", "Field User 3"];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
 
-  const [region, updateRegion] = useState(regions[0] || "");
+  const [region, updateRegion] = useState("");
   const [user, updateUser] = useState(fieldUsers[0]);
   const [budget, updateBudget] = useState(0);
   const [program, updateProgram] = useState("");
@@ -24,6 +29,9 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
   const handleChangeSelect = (evt) => {
     if (evt.target.name === "regions") {
       updateRegion(evt.target.value);
+      let currentTerritory = regions.find(reg => reg.name === evt.target.value)
+      dispatch(updateCurrentTerritory({territory: currentTerritory.id}))
+      dispatch(fetchPrograms(currentTerritory.id))
     } else if (evt.target.name === "user") {
       updateUser(evt.target.value);
     } else if (evt.target.id === "budgets") {
@@ -40,6 +48,13 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
     }
   }, [currentProgram]);
 
+  useEffect(() => {
+    if (regions.length > 0) {
+      console.log(regions);
+      updateRegion(regions[0].name)
+    }
+  }, [regions])
+
   if (type === "regions") {
     if (regions.length === 1) {
       return (
@@ -55,7 +70,7 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
             borderRadius: "5px",
           }}
         >
-          <Typography variant="body2">{regions[0]}</Typography>
+          <Typography variant="body2">{regions[0].name}</Typography>
         </div>
       );
     } else
@@ -74,8 +89,8 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
               onChange={handleChangeSelect}
             >
               {regions.map((region, index) => (
-                <MenuItem value={region} key={index}>
-                  <Typography variant="body2">{region}</Typography>
+                <MenuItem value={region.name} key={index}>
+                  <Typography variant="body2">{region.name}</Typography>
                 </MenuItem>
               ))}
             </Select>

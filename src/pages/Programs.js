@@ -1,5 +1,7 @@
-import React, { useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useCallback, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchInitialPrograms } from "../redux/slices/programsSlice";
 
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
 import SelectorMenus from "../components/Utility/SelectorMenus";
@@ -12,12 +14,9 @@ import { useProgramSort } from "../hooks/UtilityHooks";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 
-//mockdata
-import items from "../assets/mockdata/Items";
-
-const brands = items.map((item) => item.brand);
 const focusMonths = [
   "January",
   "February",
@@ -38,16 +37,73 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Programs = () => {
+const Programs = ({ userType }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [programFilters, setProgramFilters] = useCallback(useState([]));
   const [sortOption, setSortOption] = useCallback(useState("brand"));
+  const [currentBrands, setCurrentBrands] = useCallback(useState([]));
+  const [currentMonths, setCurrentMonths] = useCallback(useState([]));
+
   let activePrograms = useSelector((state) => state.programs.programs);
+  const isLoading = useSelector((state) => state.programs.isLoading);
+  const currentTerritory = useSelector((state) => state.user.currentTerritory)
+
   const currentPrograms = useProgramSort(
     activePrograms,
     sortOption,
     programFilters
   );
+
+  useEffect(() => {
+    if (activePrograms.length === 0 && userType && currentTerritory) {
+      dispatch(fetchInitialPrograms(currentTerritory));
+    }
+  }, [userType, dispatch, activePrograms, currentTerritory]);
+
+  useEffect(() => {
+    if (currentBrands.length === 0 && currentPrograms.length !== 0) {
+      let currentBrandArray = [];
+      currentPrograms.forEach((prog) => {
+        if (!currentBrandArray.includes(prog.name)) {
+          currentBrandArray.push(prog.name);
+        }
+      });
+      setCurrentBrands(currentBrandArray);
+    }
+  }, [
+    currentBrands.length,
+    currentBrands,
+    currentPrograms.length,
+    currentPrograms,
+    setCurrentBrands,
+  ]);
+
+  useEffect(() => {
+    if (currentMonths.length === 0 && currentPrograms.length !== 0) {
+      let currentMonthArray = [];
+      currentPrograms.forEach((prog) => {
+        if (!currentMonthArray.includes(prog.focusMonth)) {
+          currentMonthArray.push(prog.focusMonth);
+        }
+      });
+      setCurrentMonths(currentMonthArray);
+    }
+  }, [
+    currentMonths.length,
+    currentMonths,
+    currentPrograms.length,
+    currentPrograms,
+    setCurrentMonths
+  ]);
+
+  if (isLoading) {
+    return (
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
 
   return (
     <>
@@ -66,7 +122,7 @@ const Programs = () => {
         <br />
         <div style={{ display: "flex", alignItems: "center" }}>
           <ProgramFilter
-            brands={brands}
+            brands={currentBrands}
             focusMonths={focusMonths}
             units={units}
             setProgramFilters={setProgramFilters}
@@ -74,11 +130,7 @@ const Programs = () => {
           <ProgramSort setSortOption={setSortOption} />
         </div>
         <br />
-        {currentPrograms.length === 0 ? (
-          <CircularProgress />
-        ) : (
-          <CurrentPrograms currentPrograms={currentPrograms} />
-        )}
+        <CurrentPrograms currentPrograms={currentPrograms} />
       </Container>
     </>
   );

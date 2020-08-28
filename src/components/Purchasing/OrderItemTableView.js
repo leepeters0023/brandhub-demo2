@@ -67,7 +67,7 @@ const OrderItemTableView = (props) => {
   return (
     <>
       <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="in-stock-table">
+        <Table className={classes.table} aria-label="in-stock-table" >
           <TableHead>
             <TableRow>
               {/* <TableCell className={classes.headerText}></TableCell> */}
@@ -110,7 +110,7 @@ const OrderItemTableView = (props) => {
           </TableHead>
           <TableBody>
             {currentItems.map((row) => (
-              <TableRow key={row.itemNumber} hover>
+              <TableRow key={row.itemNumber} hover >
                 {/* <TableCell component="th" scope="row">
                   <Tooltip title="Favorite">
                     <IconButton>

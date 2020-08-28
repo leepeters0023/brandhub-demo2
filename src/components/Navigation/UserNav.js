@@ -14,8 +14,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
-import ContactMailIcon from "@material-ui/icons/ContactMail";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import HelpIcon from "@material-ui/icons/Help";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
+const UserNavMenu = ({ initials, handleLogout }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -65,13 +66,12 @@ const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            handleUserModal(true);
           }}
         >
           <ListItemIcon>
-            <ContactMailIcon color="secondary" fontSize="small" />
+            <NotificationsIcon color="secondary" fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Address Book" />
+          <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
         <MenuItem
@@ -100,6 +100,19 @@ const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
         <Divider />
         <MenuItem
           component={Link}
+          to="/help"
+          onClick={() => {
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <HelpIcon color="secondary" fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Help" />
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          component={Link}
           to="/login"
           onClick={() => {
             handleLogout();
@@ -119,7 +132,6 @@ const UserNavMenu = ({ initials, handleLogout, handleUserModal }) => {
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
-  handleUserModal: PropTypes.func.isRequired,
 };
 
 export default UserNavMenu;
