@@ -4,28 +4,29 @@ import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
 import { Link } from "@reach/router";
 
-import Notifications from "../User/Notifications";
-import UserNavMenu from "./UserNavMenu";
+//import Notifications from "../User/Notifications";
+import UserNav from "./UserNav";
 import OrdersNav from "./OrdersNav";
+import MoreNav from "./MoreNav";
 //import NavMenu from "./NavMenu";
-import AddressBook from "../User/AddressBook";
+//import AddressBook from "../User/AddressBook";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
+// import Dialog from "@material-ui/core/Dialog";
+// import DialogContent from "@material-ui/core/DialogContent";
+// import DialogTitle from "@material-ui/core/DialogTitle";
+// import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
 //import HomeIcon from "@material-ui/icons/Home";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import CancelIcon from "@material-ui/icons/Cancel";
+//import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -62,9 +63,10 @@ const ScrollNav = (props) => {
   const { handleLogout } = props;
   const classes = useStyles();
 
-  const [userModal, handleUserModal] = useCallback(useState(false));
+  //const [userModal, handleUserModal] = useCallback(useState(false));
   const [selected, setSelected] = useCallback(useState("home"));
   const initials = useSelector((state) => state.user.initials);
+  const role = useSelector((state) => state.user.role);
 
   const handleNav = useCallback(() => {
     if (window.location.pathname === "/") {
@@ -89,7 +91,7 @@ const ScrollNav = (props) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
+      {/* <div className={classes.relativeContainer}>
         <Dialog
           open={userModal}
           onClose={() => handleUserModal(false)}
@@ -111,7 +113,7 @@ const ScrollNav = (props) => {
             <AddressBook />
           </DialogContent>
         </Dialog>
-      </div>
+      </div> */}
       <CssBaseline />
       <HideOnScroll {...props}>
         <AppBar elevation={0} className={classes.scrollNav}>
@@ -131,6 +133,7 @@ const ScrollNav = (props) => {
                     alt="Logo"
                     className={classes.logoLink}
                     style={{ filter: "brightness(0%)" }}
+                    onClick={() => setSelected("home")}
                   />
                 </Link>
               </Tooltip>
@@ -159,6 +162,7 @@ const ScrollNav = (props) => {
                 </IconButton>
               </Tooltip>
               <OrdersNav setSelected={setSelected} selected={selected} />
+              {role === "super" && <MoreNav setSelected={setSelected} selected={selected} />}
             </div>
             <div className={classes.navBreak}>
               {/* {userType !== "compliance" && (
@@ -170,11 +174,10 @@ const ScrollNav = (props) => {
                 </Tooltip>{" "}
               </>
             )} */}
-              <Notifications />
-              <UserNavMenu
+              {/* <Notifications /> */}
+              <UserNav
                 initials={initials}
                 handleLogout={handleLogout}
-                handleUserModal={handleUserModal}
               />
             </div>
           </div>

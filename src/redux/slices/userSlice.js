@@ -13,6 +13,7 @@ user: {
   email: string,
   roles: [ ...array of permissions as strings ],
   territories: [ ...array of regions and key accounts assigned to user ],
+  currentTerritory: string
   error: null || string
 }
 */
@@ -27,6 +28,7 @@ let initialState = {
   email: "",
   role: "",
   territories: [],
+  currentTerritory: "",
   error: null
 }
 
@@ -57,16 +59,25 @@ const userSlice = createSlice({
       state.error = null
     },
     getUserSuccess(state, action) {
-      const { user: { name, email, role}} = action.payload;
-      state.firstName = name.split(" ")[0]
-      state.lastName = name.split(" ")[1]
-      state.initials = `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
-      state.email = email
-      state.role = role
-      state.territories = role !== "field1" ? ["North East", "Walmart"] : ["North East"]
+      const { user} = action.payload;
+      let userTerritories = user.included.map((data) => {
+        return {name: data.attributes.name, id: data.id}
+      })
+      console.log(userTerritories)
+      state.firstName = user.data.attributes.name.split(" ")[0]
+      state.lastName = user.data.attributes.name.split(" ")[1]
+      state.initials = `${user.data.attributes.name.split(" ")[0][0]}${user.data.attributes.name.split(" ")[1][0]}`
+      state.email = user.data.attributes.email
+      state.role = user.data.attributes.role
+      state.territories = userTerritories
+      state.currentTerritory = userTerritories[0].id
       state.isLoading = false
       state.loggedIn = true
       state.error = null
+    },
+    updateCurrentTerritory(state,action) {
+      const { territory } = action.payload;
+      state.currentTerritory = territory
     },
     removeUser: (state) => {
       state.isLoading = false
@@ -88,6 +99,7 @@ export const {
   setLoginLoading,
   getUserSuccess,
   setLoginSuccess,
+  updateCurrentTerritory,
   removeUser,
   setFailure,
 } = userSlice.actions
@@ -99,7 +111,7 @@ export const fetchUser = () => async dispatch => {
     const user = await getUser()
     if (user.status === "ok") {
       window.localStorage.setItem("brandhub-role", user.data.data.attributes.role)
-      dispatch(getUserSuccess({user: user.data.data.attributes}))
+      dispatch(getUserSuccess({user: user.data}))
     } else {
       dispatch(setFailure({error: user.error}))
     }

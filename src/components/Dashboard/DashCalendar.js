@@ -13,7 +13,6 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { makeStyles } from "@material-ui/core/styles";
 
-
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   ...theme.dashboard,
@@ -23,6 +22,7 @@ const DashCalendar = () => {
   const classes = useStyles();
 
   const currentPrograms = useSelector((state) => state.programs.programs);
+ 
 
   return (
     <>
