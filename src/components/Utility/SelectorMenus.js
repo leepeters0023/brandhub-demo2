@@ -18,6 +18,7 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
   const dispatch = useDispatch();
   //data would be pulled from store
   const regions = useSelector((state) => state.user.territories);
+  const currentRegion = useSelector((state) => state.user.currentTerritory);
   const fieldUsers = ["Field User 1", "Field User 2", "Field User 3"];
   const budgets = ["Budget 1", "Budget 2", "Budget 3"];
 
@@ -50,10 +51,9 @@ const SelectorMenus = ({ type, handler, currentProgram }) => {
 
   useEffect(() => {
     if (regions.length > 0) {
-      console.log(regions);
-      updateRegion(regions[0].name)
+      updateRegion(regions.find(reg => reg.id === currentRegion).name)
     }
-  }, [regions])
+  }, [regions, currentRegion])
 
   if (type === "regions") {
     if (regions.length === 1) {

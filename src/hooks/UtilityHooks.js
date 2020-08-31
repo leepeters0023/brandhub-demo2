@@ -42,9 +42,9 @@ export const useProgramSort = (programList, sortOption, filters) => {
       let tempList = filter(programList, filters);
       tempList = tempList.slice();
       tempList.sort((a, b) => {
-        return a.brand.toLowerCase()[0] < b.brand.toLowerCase()[0]
+        return a.brand[0].toLowerCase()[0] < b.brand[0].toLowerCase()[0]
           ? -1
-          : a.brand.toLowerCase()[0] > b.brand.toLowerCase()[0]
+          : a.brand[0].toLowerCase()[0] > b.brand[0].toLowerCase()[0]
           ? 1
           : 0;
       });

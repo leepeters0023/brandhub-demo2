@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "./api/userApi";
 
 import { removeUser, fetchUser } from "./redux/slices/userSlice";
-import { fetchInitialPrograms, setIsLoading } from "./redux/slices/programsSlice";
+import { fetchInitialPrograms, setIsLoading, clearPrograms } from "./redux/slices/programsSlice";
 
 import LogIn from "./components/Login";
 import ScrollNav from "./components/Navigation/ScrollNav";
@@ -77,6 +77,7 @@ const App = () => {
     logoutUser();
     setCurrentUser(null);
     dispatch(removeUser());
+    dispatch(clearPrograms());
   };
 
   useEffect(() => {

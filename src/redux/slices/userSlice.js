@@ -63,7 +63,6 @@ const userSlice = createSlice({
       let userTerritories = user.included.map((data) => {
         return {name: data.attributes.name, id: data.id}
       })
-      console.log(userTerritories)
       state.firstName = user.data.attributes.name.split(" ")[0]
       state.lastName = user.data.attributes.name.split(" ")[1]
       state.initials = `${user.data.attributes.name.split(" ")[0][0]}${user.data.attributes.name.split(" ")[1][0]}`
