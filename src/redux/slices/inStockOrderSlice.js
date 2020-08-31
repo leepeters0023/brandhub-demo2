@@ -16,6 +16,7 @@ inStockOrder: {
   budget: string,
   totalItems: int,
   totalCost: float,
+  orderNote: string,
   error: null || string
 }
 
@@ -37,6 +38,7 @@ let initialState = {
   orderNumber: null,
   distributorId: null,
   distributorName: null,
+  attention: null,
   type: null,
   program: null,
   status: null,
@@ -47,6 +49,7 @@ let initialState = {
   budget: null,
   totalItems: 0,
   totalCost: 0,
+  orderNote: "",
   error: null,
 };
 
@@ -136,6 +139,15 @@ const inStockOrderSlice = createSlice({
       state.distributorName = location.name;
       state.distributorId = location.id;
     },
+    addAttention(state, action) {
+      const { attention } = action.payload;
+      state.attention = attention;
+    },
+    updateOrderNote(state, action) {
+      const { value } = action.payload;
+      console.log(value);
+      state.orderNote = value;
+    },
     setTerms(state, action) {
       const { terms } = action.payload;
       state.termsAccepted = terms;
@@ -162,6 +174,8 @@ export const {
   addInStockItem,
   updateInStockOrder,
   setShippingLocation,
+  addAttention,
+  updateOrderNote,
   setTerms,
   setRushOrder,
   removeInStockItem,
