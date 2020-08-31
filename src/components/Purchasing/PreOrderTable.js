@@ -25,7 +25,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -135,9 +134,7 @@ const MemoInputCell = React.memo(
                   value: evt.target.value,
                 })
               );
-              dispatch(
-                setItemTotal({ itemNumber: `${itemNumber}` })
-              );
+              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
             }
           }}
         />
@@ -148,7 +145,11 @@ const MemoInputCell = React.memo(
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector((state) => state.programTable.items.find(item => item.itemNumber === itemNumber).totalItems)
+  const value = useSelector(
+    (state) =>
+      state.programTable.items.find((item) => item.itemNumber === itemNumber)
+        .totalItems
+  );
   return (
     <TableCell
       classes={{ root: classes.root }}
@@ -164,7 +165,8 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
   const value = useSelector(
     (state) =>
-     state.programTable.items.find(item => item.itemNumber === itemNumber).estTotal
+      state.programTable.items.find((item) => item.itemNumber === itemNumber)
+        .estTotal
   );
   return (
     <TableCell
@@ -177,7 +179,7 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
   );
 });
 
-const PreOrderCartTable = (props) => {
+const PreOrderTable = (props) => {
   const {
     currentProgram,
     open,
@@ -214,11 +216,7 @@ const PreOrderCartTable = (props) => {
   };
 
   if (isLoading) {
-    return (
-      <Backdrop className={classes.backdrop} open={true}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+    return <CircularProgress color="inherit" />;
   }
 
   return (
@@ -560,7 +558,7 @@ const PreOrderCartTable = (props) => {
   );
 };
 
-PreOrderCartTable.propTypes = {
+PreOrderTable.propTypes = {
   currentProgram: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
@@ -571,7 +569,7 @@ PreOrderCartTable.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default React.memo(PreOrderCartTable, (prev, next) => {
+export default React.memo(PreOrderTable, (prev, next) => {
   return (
     prev.currentProgram === next.currentPrograms &&
     prev.distributors.length === next.distributors.length &&

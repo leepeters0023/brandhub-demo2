@@ -14,7 +14,7 @@ import { useProgramSort } from "../hooks/UtilityHooks";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop";
+//import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 
 const focusMonths = [
@@ -65,9 +65,11 @@ const Programs = ({ userType }) => {
     if (currentBrands.length === 0 && currentPrograms.length !== 0) {
       let currentBrandArray = [];
       currentPrograms.forEach((prog) => {
-        if (!currentBrandArray.includes(prog.name)) {
-          currentBrandArray.push(prog.name);
-        }
+        prog.brand.forEach((brand) => {
+          if (!currentBrandArray.includes(brand)) {
+            currentBrandArray.push(brand);
+          }
+        })
       });
       setCurrentBrands(currentBrandArray);
     }
@@ -97,14 +99,6 @@ const Programs = ({ userType }) => {
     setCurrentMonths
   ]);
 
-  if (isLoading) {
-    return (
-      <Backdrop className={classes.backdrop} open={true}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-  }
-
   return (
     <>
       <Container className={classes.mainWrapper}>
@@ -130,7 +124,7 @@ const Programs = ({ userType }) => {
           <ProgramSort setSortOption={setSortOption} />
         </div>
         <br />
-        <CurrentPrograms currentPrograms={currentPrograms} />
+        {isLoading ? <CircularProgress color="inherit" /> : <CurrentPrograms currentPrograms={currentPrograms} />}
       </Container>
     </>
   );

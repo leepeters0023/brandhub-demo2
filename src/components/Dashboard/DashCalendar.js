@@ -85,11 +85,11 @@ const DashCalendar = () => {
               <Avatar
                 className={classes.dashboardAvatar}
                 alt="program"
-                src={`${currentPrograms[7].imgUrl}`}
+                src={`${currentPrograms[4].imgUrl}`}
               />
             </ListItemAvatar>
             <ListItemText
-              primary={`${currentPrograms[7].brand}-${currentPrograms[7].focusMonth}`}
+              primary={`${currentPrograms[4].name}-${currentPrograms[4].focusMonth}`}
               secondary={
                 <>
                   <Typography
@@ -98,7 +98,7 @@ const DashCalendar = () => {
                     style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${currentPrograms[7].goals}`}
+                    {`${currentPrograms[4].goals}`}
                   </Typography>
                 </>
               }

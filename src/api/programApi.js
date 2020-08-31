@@ -3,6 +3,7 @@ import orders from "../assets/mockdata/Orders";
 
 export const fetchProgramsByTerritory = async (id) => {
   const response = { status: "", error: null, data: null };
+  await timeout(1000)
   await axios
     .get(`/api/programs?filter[territory_id]=${id}`)
     .then((res) => {

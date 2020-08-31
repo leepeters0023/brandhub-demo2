@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const CurrentOrders = ({ userType }) => {
+const CurrentInStockOrder = ({ userType }) => {
   const classes = useStyles();
 
   const [modal, handleModal] = useState(false);
@@ -63,8 +63,8 @@ const CurrentOrders = ({ userType }) => {
   );
 };
 
-CurrentOrders.propTypes = {
+CurrentInStockOrder.propTypes = {
   userType: PropTypes.string,
 };
 
-export default CurrentOrders;
+export default CurrentInStockOrder;
