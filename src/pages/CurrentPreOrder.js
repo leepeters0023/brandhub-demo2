@@ -7,7 +7,7 @@ import {
   fetchProgramOrders,
 } from "../redux/slices/programTableSlice";
 
-import PreOrderCartTable from "../components/Purchasing/CurrentPreOrderTable";
+import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import SelectorMenus from "../components/Utility/SelectorMenus";
@@ -20,7 +20,6 @@ import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 //import AutoComplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Container from "@material-ui/core/Container";
@@ -73,7 +72,7 @@ const CurrentPreOrder = ({ userType }) => {
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   //const [budget, setBudget] = useCallback(useState(null));
-  const [program, setProgram] = useCallback(useState(undefined));
+  const [program, setProgram] = useState(undefined);
   //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
@@ -81,6 +80,7 @@ const CurrentPreOrder = ({ userType }) => {
   const [currentItem, setCurrentItem] = useState({});
 
   const isLoading = useSelector((state) => state.programTable.isLoading);
+  const programsLoading = useSelector((state) => state.programs.isLoading);
   const userPrograms = useSelector((state) => state.programs.programs);
 
   const handleModalClose = () => {
@@ -118,21 +118,14 @@ const CurrentPreOrder = ({ userType }) => {
     if (userPrograms.length > 0 && !program) {
       setProgram(userPrograms[0].id);
     }
-  });
+    
+  }, [userPrograms, userPrograms.length, setProgram, program]);
 
   useEffect(() => {
     if (program) {
       dispatch(fetchProgramOrders(userType, program));
     }
   }, [program, userType, dispatch]);
-
-  if (userPrograms.length === 0 || !program) {
-    return (
-      <Backdrop className={classes.backdrop} open={true}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
-  }
 
   return (
     <>
@@ -175,17 +168,21 @@ const CurrentPreOrder = ({ userType }) => {
           </div>
         </div>
         <br />
-        <PreOrderCartTable
-          currentProgram={program}
-          open={open}
-          setOpen={setOpen}
-          tableStyle={tableStyle}
-          setTableStyle={setTableStyle}
-          handleModalOpen={handleModalOpen}
-          handleOpenConfirm={handleOpenConfirm}
-          setProgram={setProgram}
-          isLoading={isLoading}
-        />
+        {(userPrograms.length === 0 || !program || programsLoading) ? (
+          <CircularProgress color="inherit" />
+        ) : (
+          <PreOrderTable
+            currentProgram={program}
+            open={open}
+            setOpen={setOpen}
+            tableStyle={tableStyle}
+            setTableStyle={setTableStyle}
+            handleModalOpen={handleModalOpen}
+            handleOpenConfirm={handleOpenConfirm}
+            setProgram={setProgram}
+            isLoading={isLoading}
+          />
+        )}
         <br />
         <br />
         <Grid container spacing={5}>

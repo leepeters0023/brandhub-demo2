@@ -126,6 +126,19 @@ const onDemandOrderSlice = createSlice({
       state.totalItems = tempOrderTotalItems;
       state.totalCost = tempOrderTotalCost;
     },
+    setShippingLocation(state, action) {
+      const { location } = action.payload;
+      state.distributorName = location.name;
+      state.distributorId = location.id;
+    },
+    setTerms(state, action) {
+      const { terms } = action.payload;
+      state.termsAccepted = terms;
+    },
+    setRushOrder(state, action) {
+      const { rush } = action.payload;
+      state.rushOrder = rush;
+    },
     removeOnDemandItem(state, action) {
       const { item } = action.payload;
       let items = [...state.items];
@@ -143,6 +156,9 @@ export const {
   getCurrentOnDemandOrderSuccess,
   addOnDemandItem,
   updateOnDemandOrder,
+  setShippingLocation,
+  setTerms,
+  setRushOrder,
   removeOnDemandItem,
   setFailure,
 } = onDemandOrderSlice.actions;

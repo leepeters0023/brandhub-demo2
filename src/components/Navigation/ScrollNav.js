@@ -4,29 +4,20 @@ import PropTypes from "prop-types";
 import BrandHubLogo from "../../assets/brandhub.svg";
 import { Link } from "@reach/router";
 
-//import Notifications from "../User/Notifications";
 import UserNav from "./UserNav";
 import OrdersNav from "./OrdersNav";
 import MoreNav from "./MoreNav";
-//import NavMenu from "./NavMenu";
-//import AddressBook from "../User/AddressBook";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
-// import Dialog from "@material-ui/core/Dialog";
-// import DialogContent from "@material-ui/core/DialogContent";
-// import DialogTitle from "@material-ui/core/DialogTitle";
-// import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-//import HomeIcon from "@material-ui/icons/Home";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-//import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -91,29 +82,6 @@ const ScrollNav = (props) => {
 
   return (
     <>
-      {/* <div className={classes.relativeContainer}>
-        <Dialog
-          open={userModal}
-          onClose={() => handleUserModal(false)}
-          fullWidth
-          maxWidth="lg"
-        >
-          <IconButton
-            className={classes.closeButton}
-            onClick={() => {
-              handleUserModal(false);
-            }}
-          >
-            <CancelIcon fontSize="large" color="secondary" />
-          </IconButton>
-          <DialogTitle>
-            <Typography className={classes.titleText}>Address Book</Typography>
-          </DialogTitle>
-          <DialogContent>
-            <AddressBook />
-          </DialogContent>
-        </Dialog>
-      </div> */}
       <CssBaseline />
       <HideOnScroll {...props}>
         <AppBar elevation={0} className={classes.scrollNav}>
@@ -125,7 +93,6 @@ const ScrollNav = (props) => {
             }}
           >
             <div className={classes.navBreak}>
-              {/* <NavMenu userType={userType} /> */}
               <Tooltip title="Home">
                 <Link to="/">
                   <img
@@ -137,18 +104,6 @@ const ScrollNav = (props) => {
                   />
                 </Link>
               </Tooltip>
-              {/* <Tooltip title="Home">
-                <IconButton
-                  component={Link}
-                  to="/"
-                  onClick={() => setSelected("home")}
-                >
-                  <HomeIcon
-                    fontSize="large"
-                    color={selected === "home" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip> */}
               <Tooltip title="Programs">
                 <IconButton
                   component={Link}
@@ -165,16 +120,6 @@ const ScrollNav = (props) => {
               {role === "super" && <MoreNav setSelected={setSelected} selected={selected} />}
             </div>
             <div className={classes.navBreak}>
-              {/* {userType !== "compliance" && (
-              <>
-                <Tooltip title="View Cart">
-                  <IconButton component={Link} to="/cart#preorder">
-                    <ShoppingCartIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>{" "}
-              </>
-            )} */}
-              {/* <Notifications /> */}
               <UserNav
                 initials={initials}
                 handleLogout={handleLogout}

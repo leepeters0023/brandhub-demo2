@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
@@ -7,6 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   removeOnDemandItem,
   updateOnDemandOrder,
+  setShippingLocation,
+  setTerms,
+  setRushOrder,
 } from "../../redux/slices/onDemandOrderSlice";
 
 import Container from "@material-ui/core/Container";
@@ -54,9 +57,9 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   const orderTotal = useSelector((state) => state.onDemandOrder.totalCost);
   const isLoading = useSelector((state) => state.onDemandOrder.isLoading);
 
-  const [terms, setTermsChecked] = useState(false);
-  const [rush, setRushChecked] = useState(false);
-  const [shippingLocation, setShippingLocation] = useState(null);
+  const [terms, setTermsChecked] = useCallback(useState(false));
+  const [rush, setRushChecked] = useCallback(useState(false));
+  const [shipping, setShipping] = useCallback(useState(null));
 
   const handleRemove = (i) => {
     dispatch(removeOnDemandItem(items[i]));
@@ -212,7 +215,10 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               control={
                 <Checkbox
                   checked={terms}
-                  onChange={() => setTermsChecked(!terms)}
+                  onChange={() => {
+                    setTermsChecked(!terms);
+                    dispatch(setTerms({ terms: !terms }));
+                  }}
                   name="Terms"
                   color="primary"
                 />
@@ -234,9 +240,19 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
           </Grid>
           <Grid item md={5} xs={12}>
             <AutoComplete
-              value={shippingLocation}
-              onChange={(event, value) => setShippingLocation(value)}
-              id="shippingLocation"
+              value={shipping}
+              onChange={(event, value) => {
+                setShipping(value);
+                dispatch(
+                  setShippingLocation({
+                    location: {
+                      name: value ? value.name : null,
+                      id: value ? value.id : null,
+                    },
+                  })
+                );
+              }}
+              id="shipping"
               options={distributors}
               getOptionLabel={(distributor) => distributor.name}
               renderInput={(params) => (
@@ -256,7 +272,10 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               control={
                 <Checkbox
                   checked={rush}
-                  onChange={() => setRushChecked(!rush)}
+                  onChange={() => {
+                    setRushChecked(!rush);
+                    dispatch(setRushOrder({ rush: !rush }));
+                  }}
                   name="Rush Order"
                   color="primary"
                 />
@@ -282,6 +301,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
+              disabled={!terms || shipping===null}
             >
               PURCHASE ORDER
             </Button>
@@ -291,6 +311,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
+              disabled={!terms || shipping===null}
             >
               SUBMIT ORDER
             </Button>

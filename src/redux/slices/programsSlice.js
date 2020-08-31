@@ -4,6 +4,7 @@ import { fetchProgramsByTerritory, fetchNationalPrograms } from "../../api/progr
 /*
 * DataFormat:
 programs: {
+  initialLoading: bool,
   isLoading: bool,
   programs: [...{ programObj }],
   error: null || string
@@ -145,6 +146,7 @@ const programsSlice = createSlice({
           : 0;
         });
         state.programs = [...programArray]
+        state.initialLoading = false;
       } else {
         const currentPrograms = [...state.programs];
         const natPrograms = currentPrograms.filter(prog => prog.type === "national");
@@ -320,6 +322,9 @@ export const fetchPrograms = (id) => async dispatch => {
     dispatch(setIsLoading())
     const progBrands = {};
     const programs = await fetchProgramsByTerritory(id);
+    if (programs.data.data.length === 0) {
+      dispatch(getProgramsSuccess({programs: []}))
+    }
     programs.data.included.forEach((incBrand) => {
       progBrands[`${incBrand.id}`] = incBrand.attributes.name
     })

@@ -11,6 +11,8 @@ inStockOrder: {
   status: string,
   items: [... {itemObj} sorted by itemNumber],
   shipping: { shippingObj },
+  rushOrder: bool,
+  termsAccepted: bool,
   budget: string,
   totalItems: int,
   totalCost: float,
@@ -40,6 +42,8 @@ let initialState = {
   status: null,
   items: [],
   shipping: {},
+  rushOrder: false,
+  termsAccepted: false,
   budget: null,
   totalItems: 0,
   totalCost: 0,
@@ -126,6 +130,19 @@ const inStockOrderSlice = createSlice({
       state.totalItems = tempOrderTotalItems;
       state.totalCost = tempOrderTotalCost;
     },
+    setShippingLocation(state, action) {
+      const { location } = action.payload;
+      state.distributorName = location.name;
+      state.distributorId = location.id;
+    },
+    setTerms(state, action) {
+      const { terms } = action.payload;
+      state.termsAccepted = terms;
+    },
+    setRushOrder(state, action) {
+      const { rush } = action.payload;
+      state.rushOrder = rush;
+    },
     removeInStockItem(state, action) {
       const { item } = action.payload;
       let items = [...state.items];
@@ -143,6 +160,9 @@ export const {
   getCurrentInStockOrderSuccess,
   addInStockItem,
   updateInStockOrder,
+  setShippingLocation,
+  setTerms,
+  setRushOrder,
   removeInStockItem,
   setFailure,
 } = inStockOrderSlice.actions;
