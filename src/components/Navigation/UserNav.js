@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
 
@@ -85,17 +84,6 @@ const UserNavMenu = ({ initials, handleLogout }) => {
             <SettingsIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Settings" />
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <PictureAsPdfIcon color="secondary" fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Current PDF" />
         </MenuItem>
         <Divider />
         <MenuItem

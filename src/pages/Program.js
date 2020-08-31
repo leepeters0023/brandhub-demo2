@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
+import { useSelector } from "react-redux";
+
 import { useWindowHash } from "../hooks/UtilityHooks";
 
 //mockdata
 import items from "../assets/mockdata/Items";
-import programs from "../assets/mockdata/Programs";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
-//import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
@@ -22,7 +22,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-//import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -30,13 +29,6 @@ import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 //import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
-// const units = ["Compass", "Popular", "Renaissance", "Spirits"];
-// const families = ["Wine", "Spirits", "Beer"];
-//const channels = ["Channel 1", "Channel 2", "Channel 3"];
-// const others = ["Growth Engines", "Key Brands", "High Potential"];
-// const brands = items.map((item) => item.brand);
-// const itemTypes = items.map((item) => item.itemType);
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -63,12 +55,14 @@ const Program = ({ userType, programId }) => {
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
   const handleChangeTab = useWindowHash(["#details", "#items"], updateValue)
 
+  const programs = useSelector((state) => state.programs.programs);
+
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
     setCurrentProgram(program);
   
-  }, [programId, setCurrentProgram]);
+  }, [programId, setCurrentProgram, programs]);
 
   const handlePreview = (itemNumber) => {
     let item = items.find(

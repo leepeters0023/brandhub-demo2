@@ -10,7 +10,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 //import { makeStyles } from "@material-ui/core/styles";
 
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 // const useStyles = makeStyles((theme) => ({
 //   ...theme.global,
@@ -19,7 +19,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 //   },
 // }));
 
-const MoreNav = ({ setSelected, selected }) => {
+const MoreNav = ({ setSelected, selected, userType }) => {
   //const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useCallback(useState(null));
@@ -56,39 +56,65 @@ const MoreNav = ({ setSelected, selected }) => {
           vertical: "top",
           horizontal: "left",
         }}
-        style={{ marginTop: "10px"}}
+        style={{ marginTop: "10px" }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
         <List style={{ width: "200px" }}>
-        <ListItem
+          {userType === "super" && (
+            <>
+              <ListItem
+                button
+                onClick={() => {
+                  setSelected("more");
+                  handleClose();
+                }}
+                component={Link}
+                to="/reports"
+              >
+                <ListItemText primary="Reports" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  setSelected("more");
+                  handleClose();
+                }}
+                // component={Link}
+                // to="/compliance"
+              >
+                <ListItemText primary="Compliance" />
+              </ListItem>
+            </>
+          )}
+          <ListItem
             button
-            onClick={()=>{
-              setSelected("more")
-              handleClose()
+            onClick={() => {
+              setSelected("more");
+              handleClose();
             }}
-            component={Link}
-            to="/reports"
+            // component={Link}
+            // to="/items"
           >
-            <ListItemText primary="Reports" />
+            <ListItemText primary="Item Catalog" />
           </ListItem>
           <ListItem
             button
-            onClick={()=>{
-              setSelected("more")
-              handleClose()
+            onClick={() => {
+              setSelected("more");
+              handleClose();
             }}
             // component={Link}
-            // to="/compliance"
+            // to="/currentpdf"
           >
-            <ListItemText primary="Compliance" />
+            <ListItemText primary="Current PDF" />
           </ListItem>
         </List>
       </Menu>
     </>
-  )
-}
+  );
+};
 
 MoreNav.propTypes = {
   setSelected: PropTypes.func.isRequired,

@@ -84,7 +84,7 @@ const OrderItemTableView = (props) => {
                 Brand
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Qty / Item
+                Qty / Pack
               </TableCell>
               {type === "inStock" && (
                 <TableCell className={classes.headerText} align="left">

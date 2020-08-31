@@ -28,6 +28,7 @@ import Help from "./pages/Help";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import CurrentInStockOrder from "./pages/CurrentInStockOrder";
 import CurrentOnDemandOrder from "./pages/CurrentOnDemandOrder";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import Program from "./pages/Program";
 import RulesByState from "./pages/RulesByState";
@@ -169,6 +170,12 @@ const App = () => {
               userType={role}
             />,
             "/orders/open/ondemand",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <OrderConfirmation path="/orders/confirmation/:orderType" userType={role}/>,
+            "/orders/confirmation",
             ["field1", "field2", "super"],
             role
           )}

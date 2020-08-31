@@ -130,7 +130,7 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
                   Item #
                 </TableCell>
                 <TableCell className={classes.headerText} align="left">
-                  Qty / Item
+                  Qty / Pack
                 </TableCell>
                 <TableCell className={classes.headerText} align="left">
                   Cost
@@ -302,6 +302,8 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
               color="secondary"
               variant="contained"
               disabled={!terms || shipping===null}
+              component={ Link }
+              to="/orders/confirmation/inStock"
             >
               PURCHASE ORDER
             </Button>
@@ -312,6 +314,8 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
               color="secondary"
               variant="contained"
               disabled={!terms || shipping===null}
+              component={ Link }
+              to="/orders/confirmation/inStock"
             >
               SUBMIT ORDER
             </Button>
