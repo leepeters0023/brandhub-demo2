@@ -40,7 +40,7 @@ const timeout = (ms) => {
 export const fetchOrdersByProgram = async (user, program) => {
   await timeout(1000);
   //fetch to api with user and program for orders relating to that program
-  if (program === "9") {
+  if (program === "10") {
     return orders;
   } else return [];
 };
