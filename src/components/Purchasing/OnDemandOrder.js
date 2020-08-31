@@ -10,6 +10,7 @@ import {
   setShippingLocation,
   setTerms,
   setRushOrder,
+  updateOrderNote
 } from "../../redux/slices/onDemandOrderSlice";
 
 import Container from "@material-ui/core/Container";
@@ -56,6 +57,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   const items = useSelector((state) => state.onDemandOrder.items);
   const orderTotal = useSelector((state) => state.onDemandOrder.totalCost);
   const isLoading = useSelector((state) => state.onDemandOrder.isLoading);
+  const orderNote = useSelector((state) => state.onDemandOrder.orderNote)
 
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [rush, setRushChecked] = useCallback(useState(false));
@@ -64,6 +66,11 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   const handleRemove = (i) => {
     dispatch(removeOnDemandItem(items[i]));
   };
+
+  const handleOrderNote = (evt) => {
+    dispatch(updateOrderNote({value: evt.target.value}))
+  }
+
 
   const handleValue = (evt) => {
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -236,6 +243,8 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               variant="outlined"
               size="small"
               rows="5"
+              value={orderNote}
+              onChange={handleOrderNote}
             />
           </Grid>
           <Grid item md={5} xs={12}>

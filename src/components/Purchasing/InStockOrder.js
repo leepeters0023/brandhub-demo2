@@ -10,6 +10,7 @@ import {
   setShippingLocation,
   setTerms,
   setRushOrder,
+  updateOrderNote,
 } from "../../redux/slices/inStockOrderSlice";
 
 import Container from "@material-ui/core/Container";
@@ -56,6 +57,7 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
   const items = useSelector((state) => state.inStockOrder.items);
   const orderTotal = useSelector((state) => state.inStockOrder.totalCost);
   const isLoading = useSelector((state) => state.inStockOrder.isLoading);
+  const orderNote = useSelector((state) => state.inStockOrder.orderNote)
 
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [rush, setRushChecked] = useCallback(useState(false));
@@ -64,6 +66,10 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
   const handleRemove = (i) => {
     dispatch(removeInStockItem({ item: items[i] }));
   };
+
+  const handleOrderNote = (evt) => {
+    dispatch(updateOrderNote({value: evt.target.value}))
+  }
 
   const handleValue = (evt) => {
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -236,6 +242,8 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
               variant="outlined"
               size="small"
               rows="5"
+              value={orderNote}
+              onChange={handleOrderNote}
             />
           </Grid>
           <Grid item md={5} xs={12}>

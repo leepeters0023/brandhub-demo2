@@ -11,9 +11,12 @@ inStockOrder: {
   status: string,
   items: [... {itemObj} sorted by itemNumber],
   shipping: { shippingObj },
+  rushOrder: bool,
+  termsAccepted: bool,
   budget: string,
   totalItems: int,
   totalCost: float,
+  orderNote: string,
   error: null || string
 }
 
@@ -35,14 +38,18 @@ let initialState = {
   orderNumber: null,
   distributorId: null,
   distributorName: null,
+  attention: null,
   type: null,
   program: null,
   status: null,
   items: [],
   shipping: {},
+  rushOrder: false,
+  termsAccepted: false,
   budget: null,
   totalItems: 0,
   totalCost: 0,
+  orderNote: "",
   error: null,
 };
 
@@ -132,6 +139,14 @@ const onDemandOrderSlice = createSlice({
       state.distributorName = location.name;
       state.distributorId = location.id;
     },
+    addAttention(state, action) {
+      const { attention } = action.payload;
+      state.attention = attention;
+    },
+    updateOrderNote(state, action) {
+      const { value } = action.payload;
+      state.orderNote = value;
+    },
     setTerms(state, action) {
       const { terms } = action.payload;
       state.termsAccepted = terms;
@@ -158,6 +173,8 @@ export const {
   addOnDemandItem,
   updateOnDemandOrder,
   setShippingLocation,
+  addAttention,
+  updateOrderNote,
   setTerms,
   setRushOrder,
   removeOnDemandItem,
