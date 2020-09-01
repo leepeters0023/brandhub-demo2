@@ -13,29 +13,30 @@ import {
   clearPrograms,
 } from "./redux/slices/programsSlice";
 
-import LogIn from "./components/Login";
-import ScrollNav from "./components/Navigation/ScrollNav";
-import Dashboard from "./pages/Dashboard";
-import Programs from "./pages/Programs";
-import PlaceInStockOrder from "./pages/PlaceInStockOrder";
-import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
-import Budget from "./pages/Budget";
-import Reports from "./pages/Reports";
-//import Calendar from "./pages/Calendar";
 import Approvals from "./pages/Approvals";
+import Budget from "./pages/Budget";
+//import Calendar from "./pages/Calendar";
+import ContactsByState from "./pages/ContactsByState";
 import Coupons from "./pages/Coupons";
-import Help from "./pages/Help";
-import CurrentPreOrder from "./pages/CurrentPreOrder";
 import CurrentInStockOrder from "./pages/CurrentInStockOrder";
 import CurrentOnDemandOrder from "./pages/CurrentOnDemandOrder";
+import CurrentPreOrder from "./pages/CurrentPreOrder";
+import Dashboard from "./pages/Dashboard";
+import FourOhFour from "./pages/FourOhFour";
+import Help from "./pages/Help";
+import ItemCatalog from "./pages/ItemCatalog";
+import LogIn from "./components/Login";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
-import Program from "./pages/Program";
-import RulesByState from "./pages/RulesByState";
-import ContactsByState from "./pages/ContactsByState";
+import PlaceInStockOrder from "./pages/PlaceInStockOrder";
+import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import POSClassifications from "./pages/POSClassifications";
+import Program from "./pages/Program";
+import Programs from "./pages/Programs";
+import Reports from "./pages/Reports";
+import RulesByState from "./pages/RulesByState";
+import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
-import FourOhFour from "./pages/FourOhFour";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -123,7 +124,7 @@ const App = () => {
           }}
         >
           <br />
-          <CircularProgress color="inherit" disableShrink/>
+          <CircularProgress color="inherit" disableShrink />
         </div>
       </Backdrop>
     );
@@ -153,6 +154,12 @@ const App = () => {
             role
           )}
           {handleAuth(
+            <Program path="/program/:programId" userType={role} />,
+            "/program",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
             <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
             "/orders/open/preorder",
             ["field1", "field2", "super"],
@@ -174,7 +181,10 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <OrderConfirmation path="/orders/confirmation/:orderType" userType={role}/>,
+            <OrderConfirmation
+              path="/orders/confirmation/:orderType"
+              userType={role}
+            />,
             "/orders/confirmation",
             ["field1", "field2", "super"],
             role
@@ -201,15 +211,15 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <Program path="/program/:programId" userType={role} />,
-            "/program",
+            <Coupons path="/coupons" />,
+            "/coupons",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <Coupons path="/coupons" />,
-            "/coupons",
-            ["field1", "field2", "super"],
+            <ItemCatalog path="/items" />,
+            "/items",
+            ["field1", "field2", "compliance", "super"],
             role
           )}
           {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}

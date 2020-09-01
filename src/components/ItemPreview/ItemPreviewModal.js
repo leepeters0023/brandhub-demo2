@@ -179,13 +179,17 @@ const ItemPreviewModal = (props) => {
               {`Amount Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
             </Typography>
           )}
-          <Typography variant="body1" color="textSecondary">
-            {qty}
-          </Typography>
-          <br />
-          <Box bgcolor="primary.main" className={classes.dividerBox} />
-          <br />
-          {type !== "preOrder" && (
+          {type && (
+            <>
+              <Typography variant="body1" color="textSecondary">
+                {qty}
+              </Typography>
+              <br />
+              <Box bgcolor="primary.main" className={classes.dividerBox} />
+              <br />
+            </>
+          )}
+          {(type && type !== "preOrder") && (
             <>
               {userType !== "field1" && (
                 <div>
@@ -236,10 +240,10 @@ const ItemPreviewModal = (props) => {
 };
 
 ItemPreviewModal.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   currentItem: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
-  userType: PropTypes.string.isRequired,
+  userType: PropTypes.string,
 };
 
 export default ItemPreviewModal;

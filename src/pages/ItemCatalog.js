@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import PropTypes from "prop-types";
 
 import { brands, itemTypes, families, units, others } from "../utility/constants";
 
@@ -9,7 +8,6 @@ import items from "../assets/mockdata/Items";
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
-import SelectorMenus from "../components/Utility/SelectorMenus";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -26,12 +24,11 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PlaceOnDemandOrder = ({ userType }) => {
+const ItemCatalog = () => {
   const classes = useStyles();
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
-  //const [itemFilters, setItemFilters] = useState([]);
 
   const handlePreview = (itemNumber) => {
     let item = items.find((item) => item.itemNumber === itemNumber);
@@ -54,10 +51,10 @@ const PlaceOnDemandOrder = ({ userType }) => {
         >
           <DialogContent>
             <ItemPreviewModal
-              type={"onDemand"}
+              type={null}
               currentItem={currentItem}
               handleClose={handleModalClose}
-              userType={userType}
+              userType={null}
             />
           </DialogContent>
         </Dialog>
@@ -65,7 +62,7 @@ const PlaceOnDemandOrder = ({ userType }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
-            Place an On-Demand Order
+            Item Catalog
           </Typography>
 
           <div className={classes.innerConfigDiv}>
@@ -93,13 +90,9 @@ const PlaceOnDemandOrder = ({ userType }) => {
                 />
               </IconButton>
             </Tooltip>
-            {(userType === "super" || userType === "field2") && (
-              <SelectorMenus type="cart" />
-            )}
-            <SelectorMenus type="regions" />
           </div>
         </div>
-    
+
         <br />
         <>
           <ItemFilter
@@ -109,20 +102,16 @@ const PlaceOnDemandOrder = ({ userType }) => {
             units={units}
             others={others}
           />
-            <OrderItemViewControl
-              type={"onDemand"}
-              currentView={currentView}
-              handlePreview={handlePreview}
-            />
+          <OrderItemViewControl
+            type={"catalog"}
+            currentView={currentView}
+            handlePreview={handlePreview}
+          />
         </>
       </Container>
       <br />
     </>
-  );
-};
+  )
+}
 
-PlaceOnDemandOrder.propTypes = {
-  userType: PropTypes.string,
-};
-
-export default PlaceOnDemandOrder;
+export default ItemCatalog;

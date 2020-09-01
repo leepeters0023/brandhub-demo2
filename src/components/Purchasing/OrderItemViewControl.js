@@ -8,6 +8,8 @@ import { addOnDemandItem } from "../../redux/slices/onDemandOrderSlice";
 import OrderItemTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
 import OrderConfirmation from "../Utility/OrderConfirmation";
+import ItemCatalogTable from "./ItemCatalogTable";
+import ItemCatalogGrid from "./ItemCatalogGrid";
 
 import Dialog from "@material-ui/core/Dialog"
 import DialogContent from "@material-ui/core/DialogContent"
@@ -102,7 +104,19 @@ const OrderItemViewControl = (props) => {
           </DialogContent>
         </Dialog>
       </div>
-      {currentView === "list" && (
+      {(currentView === "list" && type === "catalog") && (
+        <ItemCatalogTable
+          currentItems={currentItems}
+          handlePreview={handlePreview}
+        />
+      )}
+      {(currentView === "grid" && type === "catalog") && (
+        <ItemCatalogGrid
+          currentItems={currentItems}
+          handlePreview={handlePreview}
+        />
+      )}
+      {(currentView === "list" && type !== "catalog") && (
         <OrderItemTableView
           type={type}
           currentItems={currentItems}
@@ -113,7 +127,7 @@ const OrderItemViewControl = (props) => {
           handleItemUpdate={handleItemUpdate}
         />
       )}
-      {currentView === "grid" && (
+      {(currentView === "grid" && type !== "catalog") && (
         <OrderPreGridView
           type={type}
           currentItems={currentItems}

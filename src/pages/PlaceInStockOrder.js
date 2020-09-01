@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
+import { brands, itemTypes, families, units, others } from "../utility/constants";
+
 //mockdata
 import items from "../assets/mockdata/Items";
 
@@ -23,13 +25,6 @@ import ViewModuleIcon from "@material-ui/icons/ViewModule";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
-
-const brands = items.map((item) => item.brand);
-const itemTypes = items.map((item) => item.itemType);
-const families = ["Wine", "Spirits", "Beer"];
-const units = ["Compass", "Popular", "Renaissance", "Spirits"];
-//const channels = ["Channel 1", "Channel 2", "Channel 3"];
-const others = ["Growth Engines", "Key Brands", "High Potential"];
 
 const PlaceInStockOrder = ({ userType }) => {
   const classes = useStyles();
