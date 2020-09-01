@@ -125,7 +125,7 @@ export const brands = [
   "Madria Sangria",
   "Maison No. 9",
   "Mark West",
-  "Martin Codax",  
+  "Martin Codax",
   "Maso Canali",
   "Mia Dolcea",
   "Mirassou",
@@ -169,10 +169,114 @@ export const brands = [
   "Vin Vault",
   "Whitehaven",
   "William Hill",
-]
+];
 
-export const families = ["Wine", "Spirits", "Beer"]
+export const families = ["Wine", "Spirits", "Beer"];
 
-export const units = ["Compass", "Popular", "Renaissance", "Spirits"]
+export const units = ["Compass", "Popular", "Renaissance", "Spirits"];
 
-export const others = ["Growth Engines", "Key Brands", "High Potential"]
+export const others = ["Growth Engines", "Key Brands", "High Potential"];
+
+export const regions = [
+  {
+    code: "ALL",
+    name: "National",
+  },
+  {
+    code: "ATL",
+    name: "Atlantic",
+  },
+  {
+    code: "CAL",
+    name: "California",
+  },
+  {
+    code: "CEN",
+    name: "Central",
+  },
+  {
+    code: "CON",
+    name: "Control",
+  },
+  {
+    code: "EAS",
+    name: "East",
+  },
+  {
+    code: "MEG",
+    name: "Mega",
+  },
+  {
+    code: "MIW",
+    name: "Midwest",
+  },
+  {
+    code: "NOE",
+    name: "Northeast",
+  },
+  {
+    code: "SOE",
+    name: "Southeast",
+  },
+  {
+    code: "SOU",
+    name: "Southern",
+  },
+  {
+    code: "WES",
+    name: "Western",
+  },
+];
+
+export const keyAccounts = [
+  "ABC",
+  "Ahold",
+  "Albertsons National",
+  "Albertson's NorCal",
+  "Albertsons Shaws",
+  "Albertsons SoCal",
+  "Albertsons Southern",
+  "Albertsons Southwest",
+  "BJ's",
+  "C Store",
+  "CVS",
+  "Dierbergs",
+  "Dollar General",
+  "Family Dollar",
+  "Food Lion",
+  "Fresh Market",
+  "Fresh Thyme",
+  "Giant Eagle",
+  "Hannaford",
+  "Harris Teeter",
+  "HEB",
+  "Hy Vee",
+  "Jewel",
+  "Kroger",
+  "KVAT",
+  "Lowes",
+  "Meijer",
+  "Military",
+  "Publix",
+  "Ralphs",
+  "Rite Aid",
+  "Roundys",
+  "Sam's Club",
+  "Southeastern Grocers",
+  "Sprouts",
+  "Target",
+  "Total Wine",
+  "Walgreens",
+  "Walmart",
+  "Whole Foods",
+  "Winco",
+];
+
+export const roles = [
+  "field1",
+  "field2",
+  "compliance",
+  "finance",
+  "supplier",
+  "super",
+];
