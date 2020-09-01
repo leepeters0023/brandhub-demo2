@@ -170,3 +170,9 @@ export const brands = [
   "Whitehaven",
   "William Hill",
 ]
+
+export const families = ["Wine", "Spirits", "Beer"]
+
+export const units = ["Compass", "Popular", "Renaissance", "Spirits"]
+
+export const others = ["Growth Engines", "Key Brands", "High Potential"]

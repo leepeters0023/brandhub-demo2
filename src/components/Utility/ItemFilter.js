@@ -385,7 +385,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Brand" />
               {brandsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={brandsOpen} timeout="auto" unmountOnExit>
+            <Collapse in={brandsOpen} timeout="auto" >
               {brandsList(brands)}
             </Collapse>
             <Divider />
@@ -398,7 +398,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Item Type" />
               {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={itemTypesOpen} timeout="auto" unmountOnExit>
+            <Collapse in={itemTypesOpen} timeout="auto" >
               {itemTypesList(itemTypes)}
             </Collapse>
             <Divider />
@@ -411,7 +411,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Item Family" />
               {familyOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={familyOpen} timeout="auto" unmountOnExit>
+            <Collapse in={familyOpen} timeout="auto" >
               {familyList(families)}
             </Collapse>
             <Divider />
@@ -424,7 +424,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Business Unit" />
               {unitsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
+            <Collapse in={unitsOpen} timeout="auto" >
               {unitsList(units)}
             </Collapse>
             {/* <Divider />
@@ -437,7 +437,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Channel" />
               {channelsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={channelsOpen} timeout="auto" unmountOnExit>
+            <Collapse in={channelsOpen} timeout="auto" >
               {channelsList(channels)}
             </Collapse> */}
             <Divider />
@@ -450,7 +450,7 @@ const ItemFilter = (props) => {
               <ListItemText primary="Other" />
               {othersOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={othersOpen} timeout="auto" unmountOnExit>
+            <Collapse in={othersOpen} timeout="auto" >
               {othersList(others)}
             </Collapse>
           </List>

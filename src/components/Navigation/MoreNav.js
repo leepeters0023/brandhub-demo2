@@ -94,8 +94,8 @@ const MoreNav = ({ setSelected, selected, userType }) => {
               setSelected("more");
               handleClose();
             }}
-            // component={Link}
-            // to="/items"
+            component={Link}
+            to="/items"
           >
             <ListItemText primary="Item Catalog" />
           </ListItem>
