@@ -25,6 +25,7 @@ import Dashboard from "./pages/Dashboard";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
+import Loading from "./components/Utility/Loading";
 import LogIn from "./components/Login";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
@@ -38,27 +39,16 @@ import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop";
-import { makeStyles } from "@material-ui/core/styles";
-
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import themeFile from "./utility/theme.js";
-
-import "./App.css";
 
 axios.defaults.headers.get["Cache-Control"] = "no-cache";
 
 const theme = createMuiTheme(themeFile);
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-}));
-
 const App = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const [currentUser, setCurrentUser] = useState(
     window.localStorage.getItem("brandhub-user")
   );
@@ -109,25 +99,7 @@ const App = () => {
   }, [loggedIn, currentUser]);
 
   if (isLoading || programsIsLoading) {
-    return (
-      <Backdrop className={classes.backdrop} open={true}>
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "white",
-          }}
-        >
-          <br />
-          <CircularProgress color="inherit" disableShrink />
-        </div>
-      </Backdrop>
-    );
+    return <Loading />;
   }
 
   if (!loggedIn && !currentUser) {
@@ -145,124 +117,136 @@ const App = () => {
       {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}
       <div id="main-container">
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
-        <Router primary={false}>
-          <Dashboard path="/" />
-          {handleAuth(
-            <Programs path="/programs" userType={role} />,
-            "/programs",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <Program path="/program/:programId" userType={role} />,
-            "/program",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
-            "/orders/open/preorder",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <CurrentInStockOrder path="/orders/open/instock" userType={role} />,
-            "/orders/open/instock",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <CurrentOnDemandOrder
-              path="/orders/open/ondemand"
-              userType={role}
-            />,
-            "/orders/open/ondemand",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <OrderConfirmation
-              path="/orders/confirmation/:orderType"
-              userType={role}
-            />,
-            "/orders/confirmation",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <PlaceInStockOrder path="/orders/items/instock" userType={role} />,
-            "/orders/items/instock",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <PlaceOnDemandOrder
-              path="/orders/items/ondemand"
-              userType={role}
-            />,
-            "/orders/items/ondemand",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <OrderHistory path="/orders/history" userType={role} />,
-            "/orders/history",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <Coupons path="/coupons" />,
-            "/coupons",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <ItemCatalog path="/items" />,
-            "/items",
-            ["field1", "field2", "compliance", "super"],
-            role
-          )}
-          {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
-          {handleAuth(
-            <Budget path="/budget" />,
-            "/budget",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <Approvals path="/approval" />,
-            "/approval",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <RulesByState path="/rules" />,
-            "/rules",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <ContactsByState path="/compliance-contacts" />,
-            "/compliance-contacts",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <POSClassifications path="/classifications" />,
-            "/classifications",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <Settings path="/settings" userType={role} />,
-            "/settings",
-            ["field1", "field2", "compliance", "super"],
-            role
-          )}
-          {/* <Calendar path="/calendar" /> */}
-          {handleAuth(<Help path="/help" />, "/help", [], role)}
-          <FourOhFour default path="/whoops" />
-        </Router>
+        
+          <Router primary={false}>
+            <Dashboard path="/" />
+            {handleAuth(
+              <Programs path="/programs" userType={role} />,
+              "/programs",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <Program path="/program/:programId" userType={role} />,
+              "/program",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
+              "/orders/open/preorder",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <CurrentInStockOrder
+                path="/orders/open/instock"
+                userType={role}
+              />,
+              "/orders/open/instock",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <CurrentOnDemandOrder
+                path="/orders/open/ondemand"
+                userType={role}
+              />,
+              "/orders/open/ondemand",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <OrderConfirmation
+                path="/orders/confirmation/:orderType"
+                userType={role}
+              />,
+              "/orders/confirmation",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <PlaceInStockOrder
+                path="/orders/items/instock"
+                userType={role}
+              />,
+              "/orders/items/instock",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <PlaceOnDemandOrder
+                path="/orders/items/ondemand"
+                userType={role}
+              />,
+              "/orders/items/ondemand",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <OrderHistory path="/orders/history" userType={role} />,
+              "/orders/history",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <Coupons path="/coupons" />,
+              "/coupons",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <ItemCatalog path="/items" />,
+              "/items",
+              ["field1", "field2", "compliance", "super"],
+              role
+            )}
+            {handleAuth(
+              <Reports path="/reports" />,
+              "/reports",
+              ["super"],
+              role
+            )}
+            {handleAuth(
+              <Budget path="/budget" />,
+              "/budget",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <Approvals path="/approval" />,
+              "/approval",
+              ["compliance", "super"],
+              role
+            )}
+            {handleAuth(
+              <RulesByState path="/rules" />,
+              "/rules",
+              ["compliance", "super"],
+              role
+            )}
+            {handleAuth(
+              <ContactsByState path="/compliance-contacts" />,
+              "/compliance-contacts",
+              ["compliance", "super"],
+              role
+            )}
+            {handleAuth(
+              <POSClassifications path="/classifications" />,
+              "/classifications",
+              ["compliance", "super"],
+              role
+            )}
+            {handleAuth(
+              <Settings path="/settings" userType={role} />,
+              "/settings",
+              ["field1", "field2", "compliance", "super"],
+              role
+            )}
+            {/* <Calendar path="/calendar" /> */}
+            {handleAuth(<Help path="/help" />, "/help", [], role)}
+            <FourOhFour default path="/whoops" />
+          </Router>
       </div>
     </MuiThemeProvider>
   );
