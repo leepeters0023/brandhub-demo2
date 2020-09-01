@@ -10,7 +10,8 @@ import {
   setShippingLocation,
   setTerms,
   setRushOrder,
-  updateOrderNote
+  updateOrderNote,
+  addAttention,
 } from "../../redux/slices/onDemandOrderSlice";
 
 import Container from "@material-ui/core/Container";
@@ -57,7 +58,8 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   const items = useSelector((state) => state.onDemandOrder.items);
   const orderTotal = useSelector((state) => state.onDemandOrder.totalCost);
   const isLoading = useSelector((state) => state.onDemandOrder.isLoading);
-  const orderNote = useSelector((state) => state.onDemandOrder.orderNote)
+  const orderNote = useSelector((state) => state.onDemandOrder.orderNote);
+  const attention = useSelector((state) => state.onDemandOrder.attention);
 
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [rush, setRushChecked] = useCallback(useState(false));
@@ -68,9 +70,12 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
   };
 
   const handleOrderNote = (evt) => {
-    dispatch(updateOrderNote({value: evt.target.value}))
-  }
+    dispatch(updateOrderNote({ value: evt.target.value }));
+  };
 
+  const handleAttention = (evt) => {
+    dispatch(addAttention({ attention: evt.target.value }));
+  };
 
   const handleValue = (evt) => {
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -234,7 +239,21 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
             />
             <br />
             <br />
-            <Typography className={classes.headerText}>Order Notes</Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Typography className={classes.headerText}>
+                Order Notes
+              </Typography>
+              <Typography className={classes.bodyText} color="textSecondary">
+                {`${orderNote.length} / 300`}
+              </Typography>
+            </div>
             <br />
             <TextField
               color="secondary"
@@ -275,25 +294,42 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               )}
             />
             <br />
-            <br />
-            <Typography className={classes.headerText}>Rush Order</Typography>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={rush}
-                  onChange={() => {
-                    setRushChecked(!rush);
-                    dispatch(setRushOrder({ rush: !rush }));
-                  }}
-                  name="Rush Order"
-                  color="primary"
-                />
-              }
-              label=" This is a rush order"
+            <TextField
+              label="Attention"
+              color="secondary"
+              fullWidth
+              variant="outlined"
+              size="small"
+              value={attention}
+              onChange={handleAttention}
             />
             <br />
             <br />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Typography
+                className={classes.headerText}
+                style={{ marginRight: "10px" }}
+              >
+                Rush Order:
+              </Typography>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={rush}
+                    onChange={() => {
+                      setRushChecked(!rush);
+                      dispatch(setRushOrder({ rush: !rush }));
+                    }}
+                    name="Rush Order"
+                    color="primary"
+                  />
+                }
+              />
+            </div>
+            <br />
+            <br />
             <Divider />
+            <br />
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography className={classes.titleText}>Total:</Typography>
@@ -310,8 +346,8 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
-              disabled={!terms || shipping===null}
-              component={ Link }
+              disabled={!terms || shipping === null}
+              component={Link}
               to="/orders/confirmation/onDemand"
             >
               PURCHASE ORDER
@@ -322,8 +358,8 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
-              disabled={!terms || shipping===null}
-              component={ Link }
+              disabled={!terms || shipping === null}
+              component={Link}
               to="/orders/confirmation/onDemand"
             >
               SUBMIT ORDER

@@ -38,7 +38,7 @@ let initialState = {
   orderNumber: null,
   distributorId: null,
   distributorName: null,
-  attention: null,
+  attention: "",
   type: null,
   program: null,
   status: null,
@@ -145,8 +145,9 @@ const inStockOrderSlice = createSlice({
     },
     updateOrderNote(state, action) {
       const { value } = action.payload;
-      console.log(value);
-      state.orderNote = value;
+      if (value.length <= 300) {
+        state.orderNote = value;
+      }
     },
     setTerms(state, action) {
       const { terms } = action.payload;

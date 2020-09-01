@@ -82,7 +82,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
               {`Address: 123 Address Rd., Burlington VT 05401`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Attention:`}
+              {`Attention: ${order.attention}`}
             </Typography>
             {order.rushOrder && (
               <Typography className={classes.headerText}>Rush Order</Typography>
@@ -98,7 +98,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
             </Typography>
             <br />
             <Typography className={classes.headerText}>
-              {`Order Notes:`}
+              {`Order Notes: ${order.orderNote}`}
             </Typography>
             <br />
             <Button
