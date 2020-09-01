@@ -118,7 +118,7 @@ const App = () => {
       <div id="main-container">
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
         
-          <Router primary={false}>
+          <Router primary={false} style={{backgroundColor: "#ffffff"}}>
             <Dashboard path="/" />
             {handleAuth(
               <Programs path="/programs" userType={role} />,

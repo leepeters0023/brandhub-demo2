@@ -50,7 +50,6 @@ export default {
     mainWrapper: {
       backgroundColor: "#FFFFFF",
       maxWidth: "2000px",
-      margin: "0px",
       paddingTop: "24px",
     },
     navList: {
