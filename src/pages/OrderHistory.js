@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "date-fns";
+import subDays from "date-fns/subDays";
+
+import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
 
 import Typography from "@material-ui/core/Typography";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -12,6 +15,22 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
+
+//mockdata
+import { orderHistory } from "../assets/mockdata/orderHistory";
+
+const orderRows = orderHistory.map((data) => ({
+  orderNum: data.orderNum,
+  distributor: data.distributor,
+  state: data.state,
+  program: data.program,
+  orderDate: data.orderDate,
+  shipDate: data.shipDate,
+  deliveredDate: "---",
+  trackingNum: data.trackingNum,
+  totalItems: Math.floor(Math.random() * 100 + 50),
+  orderTotal: data.orderTotal,
+}))
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -55,7 +74,7 @@ const OrderHistory = () => {
 
   const [sortValue, setSortValue] = useState("pending");
   const [selectedFromDate, setSelectedFromDate] = useState(
-    new Date().toLocaleDateString()
+    subDays(new Date(), 7).toLocaleDateString()
   );
   const [selectedToDate, setSelectedToDate] = useState(
     new Date().toLocaleDateString()
@@ -171,6 +190,8 @@ const OrderHistory = () => {
           </div>
         </div>
         <br />
+        <br />
+        <OrderHistoryTable orders={orderRows} filter={sortValue} />
       </Container>
       <br />
     </>
