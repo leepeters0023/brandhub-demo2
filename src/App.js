@@ -38,6 +38,7 @@ import Reports from "./pages/Reports";
 import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
+import SingleOrder from "./pages/SingleOrder";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -180,6 +181,12 @@ const App = () => {
                 userType={role}
               />,
               "/orders/items/ondemand",
+              ["field1", "field2", "super"],
+              role
+            )}
+            {handleAuth(
+              <SingleOrder path="/orders/history/:orderId" />,
+              "/orders/history",
               ["field1", "field2", "super"],
               role
             )}

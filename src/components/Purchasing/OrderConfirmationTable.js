@@ -19,7 +19,7 @@ const OrderConfirmationTable = ({ items }) => {
 
   return (
     <>
-      <TableContainer className={classes.cartContainer}>
+      <TableContainer className={classes.tableContainer}>
         <Table className={classes.table} aria-label="order-items">
           <TableHead>
             <TableRow>
