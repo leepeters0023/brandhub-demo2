@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { fetchOrdersByProgram } from "../../api/programApi";
 
+//TODO sort items on fetch by item id
 /*
 * Data Format:
 programsTable: {
@@ -189,7 +190,7 @@ export const fetchProgramOrders = (user, program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(user, program);
-
+    
     dispatch(
       buildTableFromOrders({ programId: program, orders: currentOrders })
     );
