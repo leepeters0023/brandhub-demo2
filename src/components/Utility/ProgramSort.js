@@ -24,7 +24,7 @@ const ProgramSort = ({ setSortOption }) => {
   return (
     <>
       <ButtonGroup
-        style={{ height: "40px", width: "450px" }}
+        style={{ height: "40px", width: "450px", display: "flex", justifyContent: "flex-end" }}
         color="secondary"
         aria-label="program-sort"
       >
@@ -53,7 +53,7 @@ const ProgramSort = ({ setSortOption }) => {
               setSortOption("month");
             }}
           >
-            {"FOCUS-MONTH"}
+            FOCUS MONTH
           </Button>
         </Tooltip>
         <Tooltip title="Sort by Business Unit">
@@ -67,7 +67,7 @@ const ProgramSort = ({ setSortOption }) => {
               setSortOption("unit");
             }}
           >
-            {"BUSINESS-UNIT"}
+            BUSINESS UNIT
           </Button>
         </Tooltip>
       </ButtonGroup>

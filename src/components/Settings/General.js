@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { useSelector } from "react-redux";
+
 import { useInput } from "../../hooks/UtilityHooks";
 
 import Typography from "@material-ui/core/Typography";
@@ -17,10 +19,12 @@ const useStyles = makeStyles((theme) => ({
 const General = () => {
   const classes = useStyles();
 
+  const currentUser = useSelector((state) => state.user)
+  
   const [info, setInfo] = useState({
-    first: "Firstname",
-    last: "Lastname",
-    email: "email@email.com",
+    first: currentUser.firstName,
+    last: currentUser.lastName,
+    email: currentUser.email,
     phone: "999-999-9999",
   });
 

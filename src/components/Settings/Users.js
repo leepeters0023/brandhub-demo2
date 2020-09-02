@@ -5,6 +5,7 @@ import { useInput } from "../../hooks/UtilityHooks";
 import UserTable from "./UserTable";
 import EditUserModal from "./EditUserModal";
 import UserTerritoryTable from "./UserTerritoryTable";
+import UserRoleSelect from "./UserRoleSelect";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -15,11 +16,6 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
@@ -43,28 +39,16 @@ const Users = () => {
   const { value: lastName, bind: bindLastName } = useInput("");
   const { value: email, bind: bindEmail } = useInput("");
   const { value: phone, bind: bindPhone } = useInput("");
-  const { value: password, bind: bindPassword} = useInput("");
+  const { value: password, bind: bindPassword } = useInput("");
 
   const [modal, handleModal] = useState(false);
   const [region, setRegion] = useState(null);
   const [keyAccount, setKeyAccount] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
-
-  const [roles, setRoles] = useState({
-    fieldOne: false,
-    fieldTwo: false,
-    compliance: false,
-    finance: false,
-    supplier: false,
-    superUser: false,
-  });
+  const [role, setRole] = useState("field1");
 
   const [regionsList, setRegionsList] = useState([]);
   const [keyAccountList, setKeyAccountList] = useState([]);
-
-  const handleRoleChange = (evt) => {
-    setRoles({ ...roles, [evt.target.name]: evt.target.checked });
-  };
 
   const handleRegion = () => {
     const currentRegions = [...regionsList];
@@ -91,19 +75,6 @@ const Users = () => {
       setKeyAccountList(newAccounts);
     }
   };
-
-  const {
-    fieldOne,
-    fieldTwo,
-    compliance,
-    finance,
-    supplier,
-    superUser,
-  } = roles;
-  const error =
-    [fieldOne, fieldTwo, compliance, finance, supplier, superUser].filter(
-      (v) => v
-    ).length < 1;
 
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
@@ -139,7 +110,6 @@ const Users = () => {
       <br />
       <form>
         <TextField
-          size="small"
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -150,7 +120,6 @@ const Users = () => {
           fullWidth
         />
         <TextField
-          size="small"
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -161,7 +130,6 @@ const Users = () => {
           fullWidth
         />
         <TextField
-          size="small"
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -172,7 +140,6 @@ const Users = () => {
           fullWidth
         />
         <TextField
-          size="small"
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -183,7 +150,6 @@ const Users = () => {
           fullWidth
         />
         <TextField
-          size="small"
           className={classes.settingsMargin}
           variant="outlined"
           color="secondary"
@@ -194,78 +160,14 @@ const Users = () => {
           fullWidth
         />
         <br />
+        <br />
         <Typography
           className={classes.headerText}
           style={{ marginBottom: "15px" }}
         >
           User Role
         </Typography>
-
-        <FormControl required error={error} component="fieldset">
-          <FormLabel component="legend">Pick at least 1</FormLabel>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={fieldOne}
-                  onChange={handleRoleChange}
-                  name="fieldOne"
-                />
-              }
-              label="Field User Lvl. One"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={fieldTwo}
-                  onChange={handleRoleChange}
-                  name="fieldTwo"
-                />
-              }
-              label="Field User Lvl. Two"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={compliance}
-                  onChange={handleRoleChange}
-                  name="compliance"
-                />
-              }
-              label="Compliance"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={finance}
-                  onChange={handleRoleChange}
-                  name="finance"
-                />
-              }
-              label="Finance"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={supplier}
-                  onChange={handleRoleChange}
-                  name="supplier"
-                />
-              }
-              label="Supplier"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={superUser}
-                  onChange={handleRoleChange}
-                  name="superUser"
-                />
-              }
-              label="Super"
-            />
-          </FormGroup>
-        </FormControl>
+        <UserRoleSelect role={role} setRole={setRole} />
       </form>
       <br />
       <br />
@@ -275,7 +177,7 @@ const Users = () => {
       >
         Region / Key Acct. Assignment
       </Typography>
-      <Grid container spacing={2}>
+      <Grid container spacing={6}>
         <Grid item md={6} xs={12}>
           <div
             style={{

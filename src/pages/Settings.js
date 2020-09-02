@@ -6,6 +6,7 @@ import Users from "../components/Settings/Users";
 import Billing from "../components/Settings/Billing";
 import Budgets from "../components/Settings/Budgets";
 import Programs from "../components/Settings/Programs";
+import AddressBook from "../components/User/AddressBook";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -40,18 +41,21 @@ const Settings = ({ userType }) => {
     if (window.location.hash === "#general") {
       setSetting("general");
       setSelectedIndex(0);
+    } else if (window.location.hash ==="#addressBook") {
+      setSetting("addressBook");
+      setSelectedIndex(1);
     } else if (window.location.hash === "#billing") {
       setSetting("billing");
-      setSelectedIndex(1);
+      setSelectedIndex(2);
     } else if (window.location.hash === "#budgets") {
       setSetting("budgets");
-      setSelectedIndex(2);
+      setSelectedIndex(3);
     } else if (window.location.hash === "#users") {
       setSetting("users");
-      setSelectedIndex(3);
+      setSelectedIndex(4);
     } else if (window.location.hash === "#programs") {
       setSetting("programs");
-      setSelectedIndex(4);
+      setSelectedIndex(5);
     }
   }, []);
 
@@ -76,7 +80,17 @@ const Settings = ({ userType }) => {
                 button
                 selected={selectedIndex === 1}
                 onClick={() => {
-                  handleClick("billing", 1);
+                  handleClick("addressBook", 1);
+                }}
+              >
+                <ListItemText primary="Address Book" />
+              </ListItem>
+              <Divider />
+              <ListItem
+                button
+                selected={selectedIndex === 2}
+                onClick={() => {
+                  handleClick("billing", 2);
                 }}
               >
                 <ListItemText primary="Billing" />
@@ -86,9 +100,9 @@ const Settings = ({ userType }) => {
                 <>
                 <ListItem
                     button
-                    selected={selectedIndex === 2}
+                    selected={selectedIndex === 3}
                     onClick={() => {
-                      handleClick("budgets", 2);
+                      handleClick("budgets", 3);
                     }}
                   >
                     <ListItemText primary="Budgets" />
@@ -96,9 +110,9 @@ const Settings = ({ userType }) => {
                   <Divider />
                   <ListItem
                     button
-                    selected={selectedIndex === 3}
+                    selected={selectedIndex === 4}
                     onClick={() => {
-                      handleClick("users", 3);
+                      handleClick("users", 4);
                     }}
                   >
                     <ListItemText primary="Users" />
@@ -106,9 +120,9 @@ const Settings = ({ userType }) => {
                   <Divider />
                   {/* <ListItem
                     button
-                    selected={selectedIndex === 4}
+                    selected={selectedIndex === 5}
                     onClick={() => {
-                      handleClick("programs", 4);
+                      handleClick("programs", 5);
                     }}
                   >
                     <ListItemText primary="Programs" />
@@ -120,6 +134,7 @@ const Settings = ({ userType }) => {
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
             {setting === "general" && <General />}
+            {setting === "addressBook" && <AddressBook />}
             {setting === "billing" && <Billing />}
             {setting === "budgets" && <Budgets />}
             {setting === "users" && <Users />}
