@@ -7,6 +7,8 @@ import {
   fetchProgramOrders,
 } from "../redux/slices/programTableSlice";
 
+import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
+
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
@@ -76,6 +78,7 @@ const CurrentPreOrder = ({ userType }) => {
   //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
+  const [currentItemId, setCurrentItemId] = useCallback(useState(null))
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
@@ -102,15 +105,17 @@ const CurrentPreOrder = ({ userType }) => {
   }, [handleConfirmModal]);
 
   const handleOpenConfirm = useCallback(
-    (itemNum) => {
+    (itemNum, itemId) => {
       setCurrentItemNum(itemNum);
+      setCurrentItemId(itemId)
       handleConfirmModal(true);
     },
-    [setCurrentItemNum, handleConfirmModal]
+    [setCurrentItemNum, setCurrentItemId, handleConfirmModal]
   );
 
   const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
+    dispatch(deletePreOrdItem(currentItemId));
     handleConfirmModal(false);
   };
 
@@ -123,9 +128,9 @@ const CurrentPreOrder = ({ userType }) => {
 
   useEffect(() => {
     if (program) {
-      dispatch(fetchProgramOrders(userType, program));
+      dispatch(fetchProgramOrders(program));
     }
-  }, [program, userType, dispatch]);
+  }, [program, dispatch]);
 
   return (
     <>

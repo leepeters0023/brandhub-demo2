@@ -10,6 +10,8 @@ import {
 
 import { setProgramComplete } from "../../redux/slices/programsSlice";
 
+import { patchItem } from "../../redux/slices/patchOrderSlice";
+
 import SelectorMenus from "../Utility/SelectorMenus";
 
 import Box from "@material-ui/core/Box";
@@ -80,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ orderNumber, itemNumber, index }, ref) => {
+  React.forwardRef(({ orderNumber, itemNumber, itemId, index }, ref) => {
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
@@ -118,6 +120,10 @@ const MemoInputCell = React.memo(
                 })
               );
               dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+
+              dispatch(patchItem(itemId, 0));
+            } else {
+              dispatch(patchItem(itemId, evt.target.value));
             }
           }}
           onChange={(evt) => {
@@ -316,7 +322,7 @@ const PreOrderTable = (props) => {
                         <Tooltip title="Remove from Order">
                           <IconButton
                             onClick={() => {
-                              handleOpenConfirm(item.itemNumber);
+                              handleOpenConfirm(item.itemNumber, item.id);
                             }}
                             style={{ position: "absolute", top: 0, right: -15 }}
                           >
@@ -538,11 +544,12 @@ const PreOrderTable = (props) => {
                         </Typography>
                       </div>
                     </TableCell>
-                    {currentItems.map((item, index) => (
+                    {ord.items.map((item, index) => (
                       <MemoInputCell
                         key={item.itemNumber}
                         orderNumber={ord.orderNumber}
                         itemNumber={item.itemNumber}
+                        itemId={item.id}
                         index={index}
                         ref={tableRef}
                       />

@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchOrdersByProgram } from "../../api/programApi";
+import { fetchOrdersByProgram } from "../../api/orderApi";
 
-//TODO sort items on fetch by item id
 /*
 * Data Format:
 programsTable: {
@@ -76,14 +75,9 @@ const programTableSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     buildTableFromOrders(state, action) {
-      const { programId, orders } = action.payload;
+      const { programId, orders, items } = action.payload;
       if (orders.length !== 0) {
-        let currentItems = [...orders[0].items];
-        currentItems = currentItems.map((item) => ({
-          ...item,
-          estTotal: 0,
-          totalItems: 0,
-        }));
+        let currentItems = [...items];
         let progTotal = 0;
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
@@ -186,13 +180,63 @@ export const {
 
 export default programTableSlice.reducer;
 
-export const fetchProgramOrders = (user, program) => async (dispatch) => {
+export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const currentOrders = await fetchOrdersByProgram(user, program);
-    
+    const currentOrders = await fetchOrdersByProgram(program);
+    let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
+      id: item.id,
+      itemNumber: item.item["item-number"],
+      brand: "BRAND",
+      itemType: item.item.type,
+      price: item.item.price,
+      qty: "5 / Pack",
+      imgUrl: item.item["img-url"],
+      estTotal: 0,
+      totalItems: 0,
+    }));
+
+    currentItems.sort((a, b) => {
+      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+        ? -1
+        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+        ? 1
+        : 0;
+    });
+
+    let orders = currentOrders.data[0].orders.map((ord) => ({
+      orderNumber: ord.id,
+      distributorId: ord.id,
+      distributorName: `DIST - ${ord.id}`,
+      type: "program",
+      program: ord.program.id,
+      items: ord["order-items"].map((item) => ({
+        id: item.id,
+        itemNumber: item.item["item-number"],
+        brand: "BRAND",
+        itemType: item.item.type,
+        price: item.item.price,
+        qty: "5 / Pack",
+        imgUrl: item.item["img-url"],
+        estTotal: item.qty * item.item.price,
+        totalItems: item.qty,
+      })).sort((a, b) => {
+        return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+          ? -1
+          : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+          ? 1
+          : 0;
+      }),
+      totalItems: ord["order-items"].map((item) => item.qty).reduce((a,b) => a+b),
+      estTotal: ord["order-items"].map((item) => item.qty * item.item.price).reduce((a,b) => a+b)
+    }));
+
     dispatch(
-      buildTableFromOrders({ programId: program, orders: currentOrders })
+      buildTableFromOrders({
+        programId: program,
+        orders: orders,
+        items: currentItems,
+      })
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

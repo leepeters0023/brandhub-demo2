@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProgramsByTerritory, fetchNationalPrograms } from "../../api/programApi";
+import {
+  fetchProgramsByTerritory,
+  fetchNationalPrograms,
+} from "../../api/programApi";
 
 /*
 * DataFormat:
@@ -40,17 +43,17 @@ let initialState = {
   isLoading: false,
   programs: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.error = error;
-}
+};
 
 const programsSlice = createSlice({
   name: "programs",
@@ -58,19 +61,20 @@ const programsSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     getProgramsSuccess(state, action) {
-      const {programs} = action.payload
+      const { programs } = action.payload;
       if (state.programs.length === 0) {
         const programArray = programs.map((prog) => ({
           id: prog.id,
           type: prog.type,
           name: prog.name,
-          brand: prog.brand,
-          unit: prog.unit,
-          desc: prog.desc,
+          brand: prog.brands.map((brand) => brand.name),
+          unit: "Compass",
+          desc:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
           goals: prog.goals,
           strategies: prog.strategies,
-          focusMonth: prog.focusMonth,
-          imgUrl: prog.imgUrl,
+          focusMonth: prog["focus-month"],
+          imgUrl: prog["img-url"],
           items: [
             {
               itemNumber: "110009456",
@@ -79,7 +83,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110234066",
@@ -88,7 +92,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110346066",
@@ -97,7 +101,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110006246",
@@ -106,7 +110,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "123009066",
@@ -115,7 +119,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110234666",
@@ -124,7 +128,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "112369066",
@@ -133,34 +137,37 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
           ],
-          isComplete: prog.isComplete
-        }))
+          isComplete: false,
+        }));
         programArray.sort((a, b) => {
           return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
-          ? -1
-          : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-          ? 1
-          : 0;
+            ? -1
+            : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+            ? 1
+            : 0;
         });
-        state.programs = [...programArray]
+        state.programs = [...programArray];
         state.initialLoading = false;
       } else {
         const currentPrograms = [...state.programs];
-        const natPrograms = currentPrograms.filter(prog => prog.type === "national");
+        const natPrograms = currentPrograms.filter(
+          (prog) => prog.type === "national"
+        );
         const programArray = programs.map((prog) => ({
           id: prog.id,
           type: prog.type,
           name: prog.name,
-          brand: prog.brand,
-          unit: prog.unit,
-          desc: prog.desc,
+          brand: prog.brands.map((brand) => brand.name),
+          unit: "Compass",
+          desc:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
           goals: prog.goals,
           strategies: prog.strategies,
-          focusMonth: prog.focusMonth,
-          imgUrl: prog.imgUrl,
+          focusMonth: prog["focus-month"],
+          imgUrl: prog["img-url"],
           items: [
             {
               itemNumber: "110009456",
@@ -169,7 +176,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110234066",
@@ -178,7 +185,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110346066",
@@ -187,7 +194,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110006246",
@@ -196,7 +203,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "123009066",
@@ -205,7 +212,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "110234666",
@@ -214,7 +221,7 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
             {
               itemNumber: "112369066",
@@ -223,23 +230,23 @@ const programsSlice = createSlice({
               price: 5.5,
               qty: "5 / Pack",
               imgUrl:
-              "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
             },
           ],
-          isComplete: prog.isComplete
-        }))
+          isComplete: false,
+        }));
         const newProgramArray = programArray.concat(natPrograms);
         newProgramArray.sort((a, b) => {
           return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
-          ? -1
-          : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-          ? 1
-          : 0;
+            ? -1
+            : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+            ? 1
+            : 0;
         });
-        state.programs = [...newProgramArray]
+        state.programs = [...newProgramArray];
       }
-      state.isLoading = false
-      state.error = null
+      state.isLoading = false;
+      state.error = null;
     },
     setProgramComplete(state, action) {
       const { program, status } = action.payload;
@@ -247,104 +254,52 @@ const programsSlice = createSlice({
         if (prog.id === program) {
           return {
             ...prog,
-            isComplete: status
-          }
-        } else return prog
-      })
-      state.programs = updatedPrograms
+            isComplete: status,
+          };
+        } else return prog;
+      });
+      state.programs = updatedPrograms;
     },
     clearPrograms(state) {
       state.programs = [];
     },
-    setFailure: loadingFailed
-  }
-})
+    setFailure: loadingFailed,
+  },
+});
 
 export const {
   setIsLoading,
   getProgramsSuccess,
   setProgramComplete,
   clearPrograms,
-  setFailure
-} = programsSlice.actions
+  setFailure,
+} = programsSlice.actions;
 
-export default programsSlice.reducer
+export default programsSlice.reducer;
 
-export const fetchInitialPrograms = (id) => async dispatch => {
+export const fetchInitialPrograms = (id) => async (dispatch) => {
   try {
-    dispatch(setIsLoading())
-    const terrBrands = {};
-    const natBrands = {};
+    dispatch(setIsLoading());
     const terrPrograms = await fetchProgramsByTerritory(id);
-    terrPrograms.data.included.forEach((incBrand) => {
-      terrBrands[`${incBrand.id}`] = incBrand.attributes.name
-    })
-    const terrProgramsBrands = terrPrograms.data.data.map((prog) => ({
-      id: prog.id,
-      type: prog.attributes.type,
-      name: `${prog.attributes.name}`,
-      brand: prog.relationships.brands.data.map(brand => (terrBrands[brand.id])),
-      unit: "Compass",
-      desc: "Aute id elit laborum anim reprehenderit commodo veniam aliqua ad sit nulla elit laboris id. Tempor excepteur duis do voluptate aliqua est id Lorem dolore enim mollit minim. Dolor aute labore nulla consectetur labore ullamco nisi exercitation velit aliqua commodo duis fugiat commodo. Deserunt eiusmod dolor esse nostrud ipsum qui proident consequat incididunt nostrud sit laboris tempor. Est est aliquip aliqua eu ad duis velit. Magna sunt do ullamco anim. Exercitation minim cupidatat adipisicing ad occaecat consequat duis cupidatat.",
-      goals: prog.attributes.goals,
-      strategies: prog.attributes.strategies,
-      focusMonth: prog.attributes["focus-month"],
-      imgUrl: prog.attributes["img-url"],
-      isComplete: false,
-      })
-    )
     const natPrograms = await fetchNationalPrograms();
-    natPrograms.data.included.forEach((incBrand) => {
-      natBrands[`${incBrand.id}`] = incBrand.attributes.name
-    })
-    const natProgramsBrands = natPrograms.data.data.map((prog) => ({
-      id: prog.id,
-      type: prog.attributes.type,
-      name: `${prog.attributes.name}`,
-      brand: prog.relationships.brands.data.map(brand => (natBrands[brand.id])),
-      unit: "Compass",
-      desc: "Aute id elit laborum anim reprehenderit commodo veniam aliqua ad sit nulla elit laboris id. Tempor excepteur duis do voluptate aliqua est id Lorem dolore enim mollit minim. Dolor aute labore nulla consectetur labore ullamco nisi exercitation velit aliqua commodo duis fugiat commodo. Deserunt eiusmod dolor esse nostrud ipsum qui proident consequat incididunt nostrud sit laboris tempor. Est est aliquip aliqua eu ad duis velit. Magna sunt do ullamco anim. Exercitation minim cupidatat adipisicing ad occaecat consequat duis cupidatat.",
-      goals: prog.attributes.goals,
-      strategies: prog.attributes.strategies,
-      focusMonth: prog.attributes["focus-month"],
-      imgUrl: prog.attributes["img-url"],
-      isComplete: false,
-    }))
-    const programs = terrProgramsBrands.concat(natProgramsBrands)
-    dispatch(getProgramsSuccess({programs: programs}))
+    const programs = terrPrograms.data.concat(natPrograms.data);
+    dispatch(getProgramsSuccess({ programs: programs }));
   } catch (err) {
-    dispatch(setFailure(err.toString()))
+    dispatch(setFailure(err.toString()));
   }
-}
+};
 
-export const fetchPrograms = (id) => async dispatch => {
+export const fetchPrograms = (id) => async (dispatch) => {
   try {
-    dispatch(setIsLoading())
-    const progBrands = {};
+    dispatch(setIsLoading());
+
     const programs = await fetchProgramsByTerritory(id);
-    if (programs.data.data.length === 0) {
-      dispatch(getProgramsSuccess({programs: []}))
+    if (programs.length === 0) {
+      dispatch(getProgramsSuccess({ programs: [] }));
     }
-    programs.data.included.forEach((incBrand) => {
-      progBrands[`${incBrand.id}`] = incBrand.attributes.name
-    })
-    const programsBrands = programs.data.data.map((prog) => ({
-      id: prog.id,
-      type: prog.attributes.type,
-      name: `${prog.attributes.name}`,
-      brand: prog.relationships.brands.data.map(brand => (progBrands[brand.id])),
-      unit: "Compass",
-      desc: "Aute id elit laborum anim reprehenderit commodo veniam aliqua ad sit nulla elit laboris id. Tempor excepteur duis do voluptate aliqua est id Lorem dolore enim mollit minim. Dolor aute labore nulla consectetur labore ullamco nisi exercitation velit aliqua commodo duis fugiat commodo. Deserunt eiusmod dolor esse nostrud ipsum qui proident consequat incididunt nostrud sit laboris tempor. Est est aliquip aliqua eu ad duis velit. Magna sunt do ullamco anim. Exercitation minim cupidatat adipisicing ad occaecat consequat duis cupidatat.",
-      goals: prog.attributes.goals,
-      strategies: prog.attributes.strategies,
-      focusMonth: prog.attributes["focus-month"],
-      imgUrl: prog.attributes["img-url"],
-      isComplete: false,
-      })
-    )
-    dispatch(getProgramsSuccess({programs: programsBrands}))
+
+    dispatch(getProgramsSuccess({ programs: programs.data }));
+  } catch (err) {
+    dispatch(setFailure(err.toString()));
   }
-  catch (err) {
-    dispatch(setFailure(err.toString()))
-  }
-}
+};
