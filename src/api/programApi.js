@@ -1,5 +1,12 @@
 import axios from "axios";
-import orders from "../assets/mockdata/Orders";
+import Jsona from 'jsona';
+
+const dataFormatter = new Jsona();
+
+//mock fetch
+const timeout = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 export const fetchProgramsByTerritory = async (id) => {
   const response = { status: "", error: null, data: null };
@@ -7,8 +14,9 @@ export const fetchProgramsByTerritory = async (id) => {
   await axios
     .get(`/api/programs?filter[territory_id]=${id}`)
     .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
-      response.data = res.data;
+      response.data = data;
     })
     .catch((err) => {
       response.status = "error";
@@ -22,26 +30,14 @@ export const fetchNationalPrograms = async () => {
   await axios
     .get(`/api/programs?filter[type]=national`)
     .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+
       response.status = "ok";
-      response.data = res.data;
+      response.data = data;
     })
     .catch((err) => {
       response.status = "error";
       response.error = err.toString();
     });
   return response;
-};
-
-//mock fetch
-
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-export const fetchOrdersByProgram = async (user, program) => {
-  await timeout(1000);
-  //fetch to api with user and program for orders relating to that program
-  if (program === "10") {
-    return orders;
-  } else return [];
 };
