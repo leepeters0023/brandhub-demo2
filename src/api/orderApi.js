@@ -35,6 +35,7 @@ export const patchOrderItem = async (id, qty) => {
       "Content-Type": "application/vnd.api+json"
     }
   }
+  await timeout(500)
   await axios
     .patch(`/api/order-items/${id}`, {
       data: {

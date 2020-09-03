@@ -13,6 +13,7 @@ import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import SelectorMenus from "../components/Utility/SelectorMenus";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -289,6 +290,7 @@ const CurrentPreOrder = ({ userType }) => {
         <br />
         <br />
       </Container>
+      <OrderPatchLoading />
     </>
   );
 };
