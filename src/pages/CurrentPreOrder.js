@@ -51,18 +51,18 @@ const useStyles = makeStyles((theme) => ({
 const TotalsDiv = React.memo(({ program }) => {
   const classes = useStyles();
   const programTotal = useSelector((state) => state.programTable.programTotal);
-  const grandTotal = useSelector(
-    (state) => state.programTable.preOrderTotal.actualTotal
-  );
+  // const grandTotal = useSelector(
+  //   (state) => state.programTable.preOrderTotal.actualTotal
+  // );
 
   return (
     <>
       <Typography
         className={classes.titleText}
       >{`Program Total: $${programTotal.toFixed(2)}`}</Typography>
-      <Typography
+      {/* <Typography
         className={classes.titleText}
-      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography>
+      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
     </>
   );
 });
@@ -135,9 +135,6 @@ const CurrentPreOrder = ({ userType }) => {
 
   return (
     <>
-      {/* <Backdrop className={classes.backdrop} open={backdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop> */}
       <div className={classes.relativeContainer}>
         <Dialog
           open={confirmModal}
@@ -258,9 +255,9 @@ const CurrentPreOrder = ({ userType }) => {
                 <Typography
                   className={classes.titleText}
                 >{`Program Total:`}</Typography>
-                <Typography
+                {/* <Typography
                   className={classes.titleText}
-                >{`Pre-Order Total:`}</Typography>
+                >{`Pre-Order Total:`}</Typography> */}
               </>
             )}
           </Grid>

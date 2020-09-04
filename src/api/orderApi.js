@@ -14,7 +14,6 @@ export const fetchOrdersByProgram = async (program) => {
   await axios
     .get(`/api/pre_orders?filter[program_id]=${program}`)
     .then((res) => {
-      console.log(res);
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
@@ -24,7 +23,6 @@ export const fetchOrdersByProgram = async (program) => {
       response.status = "error";
       response.error = err.toString();
     });
-    console.log(response)
   return response;
 };
 
@@ -48,7 +46,6 @@ export const patchOrderItem = async (id, qty) => {
       },
     }, headers)
     .then((res) => {
-      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {
