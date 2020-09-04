@@ -67,7 +67,10 @@ const programsSlice = createSlice({
           id: prog.id,
           type: prog.type,
           name: prog.name,
-          brand: prog.brands.map((brand) => brand.name),
+          brand:
+            prog.brands.length > 0
+              ? prog.brands.map((brand) => brand.name)
+              : ["BRAND"],
           unit: "Compass",
           desc:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
@@ -160,7 +163,10 @@ const programsSlice = createSlice({
           id: prog.id,
           type: prog.type,
           name: prog.name,
-          brand: prog.brands.map((brand) => brand.name),
+          brand:
+            prog.brands.length > 0
+              ? prog.brands.map((brand) => brand.name)
+              : ["BRAND"],
           unit: "Compass",
           desc:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
