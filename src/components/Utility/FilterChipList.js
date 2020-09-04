@@ -10,7 +10,7 @@ const FilterChipList = ({ filters, handleChipClick }) => {
         <Chip
           style={{ margin: "auto 2.5px" }}
           color="primary"
-          key={filter.value}
+          key={`${filter.type}-${filter.value}`}
           label={filter.value}
           onDelete={() => handleChipClick(filter.type, filter.value)}
         />

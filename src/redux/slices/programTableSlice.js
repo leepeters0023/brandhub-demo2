@@ -188,7 +188,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       id: item.id,
       itemNumber: item.item["item-number"],
       brand: "BRAND",
-      itemType: item.item.type,
+      itemType: item.item.type[0].toUpperCase()+item.item.type.slice(1),
       price: item.item.price,
       qty: "5 / Pack",
       imgUrl: item.item["img-url"],
