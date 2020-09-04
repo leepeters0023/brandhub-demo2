@@ -39,7 +39,172 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ItemFilter = (props) => {
+const BrandsList = React.memo(({ listItems, handleCheckToggle, brandsChecked, setBrandsChecked }) => {
+  return (
+    <List component="div" disablePadding>
+      {listItems.map((item) => {
+        const labelId = `checkbox-list-label-${item}`;
+
+        return (
+          <ListItem
+            key={item}
+            role={undefined}
+            dense
+            button
+            onClick={() => {
+              handleCheckToggle(item, brandsChecked, setBrandsChecked);
+            }}
+          >
+            <ListItemIcon>
+              <Checkbox
+                color="secondary"
+                edge="start"
+                checked={brandsChecked.indexOf(item) !== -1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${item}`} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+});
+
+const ItemTypesList = React.memo(({ listItems, handleCheckToggle, itemTypesChecked, setItemTypesChecked }) => {
+  return (
+    <List component="div" disablePadding>
+      {listItems.map((item) => {
+        const labelId = `checkbox-list-label-${item}`;
+
+        return (
+          <ListItem
+            key={item}
+            role={undefined}
+            dense
+            button
+            onClick={() => {
+              handleCheckToggle(item, itemTypesChecked, setItemTypesChecked);
+            }}
+          >
+            <ListItemIcon>
+              <Checkbox
+                color="secondary"
+                edge="start"
+                checked={itemTypesChecked.indexOf(item) !== -1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${item}`} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+});
+
+const FamilyList = React.memo(({ listItems, handleCheckToggle, familyChecked, setFamilyChecked }) => {
+  return (
+    <List component="div" disablePadding>
+      {listItems.map((item) => {
+        const labelId = `checkbox-list-label-${item}`;
+
+        return (
+          <ListItem
+            key={item}
+            role={undefined}
+            dense
+            button
+            onClick={() => {
+              handleCheckToggle(item, familyChecked, setFamilyChecked);
+            }}
+          >
+            <ListItemIcon>
+              <Checkbox
+                color="secondary"
+                edge="start"
+                checked={familyChecked.indexOf(item) !== -1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${item}`} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+});
+
+const UnitsList = React.memo(({ listItems, handleCheckToggle, unitsChecked, setUnitsChecked }) => {
+  return (
+    <List component="div" disablePadding>
+      {listItems.map((item) => {
+        const labelId = `checkbox-list-label-${item}`;
+
+        return (
+          <ListItem
+            key={item}
+            role={undefined}
+            dense
+            button
+            onClick={() => {
+              handleCheckToggle(item, unitsChecked, setUnitsChecked);
+            }}
+          >
+            <ListItemIcon>
+              <Checkbox
+                color="secondary"
+                edge="start"
+                checked={unitsChecked.indexOf(item) !== -1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${item}`} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+});
+
+const OthersList = React.memo(({ listItems, handleCheckToggle, othersChecked, setOthersChecked }) => {
+  return (
+    <List component="div" disablePadding>
+      {listItems.map((item) => {
+        const labelId = `checkbox-list-label-${item}`;
+
+        return (
+          <ListItem
+            key={item}
+            role={undefined}
+            dense
+            button
+            onClick={() => {
+              handleCheckToggle(item, othersChecked, setOthersChecked);
+            }}
+          >
+            <ListItemIcon>
+              <Checkbox
+                color="secondary"
+                edge="start"
+                checked={othersChecked.indexOf(item) !== -1}
+                disableRipple
+                inputProps={{ "aria-labelledby": labelId }}
+              />
+            </ListItemIcon>
+            <ListItemText id={labelId} primary={`${item}`} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+});
+
+const ItemFilter = React.memo((props) => {
   const classes = useStyles();
 
   const { brands, itemTypes, families, units, others } = props;
@@ -81,6 +246,8 @@ const ItemFilter = (props) => {
       handleCheckToggle(value, itemTypesChecked, setItemTypesChecked);
     } else if (type === "unit") {
       handleCheckToggle(value, unitsChecked, setUnitsChecked);
+    } else if (type === "family") {
+      handleCheckToggle(value, familyChecked, setFamilyChecked);
     } else if (type === "channel") {
       handleCheckToggle(value, channelsChecked, setChannelsChecked);
     } else if (type === "other") {
@@ -131,203 +298,7 @@ const ItemFilter = (props) => {
     setAllFilters,
   ]);
 
-  const brandsList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, brandsChecked, setBrandsChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={brandsChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  const itemTypesList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, itemTypesChecked, setItemTypesChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={itemTypesChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  const familyList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, familyChecked, setFamilyChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={familyChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  const unitsList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, unitsChecked, setUnitsChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={unitsChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
-
-  // const channelsList = (listItems) => {
-  //   return (
-  //     <List component="div" disablePadding>
-  //       {listItems.map((item) => {
-  //         const labelId = `checkbox-list-label-${item}`;
-
-  //         return (
-  //           <ListItem
-  //             key={item}
-  //             role={undefined}
-  //             dense
-  //             button
-  //             onClick={() => {
-  //               handleCheckToggle(item, channelsChecked, setChannelsChecked);
-  //             }}
-  //           >
-  //             <ListItemIcon>
-  //               <Checkbox
-  //                 color="secondary"
-  //                 edge="start"
-  //                 checked={channelsChecked.indexOf(item) !== -1}
-  //                 disableRipple
-  //                 inputProps={{ "aria-labelledby": labelId }}
-  //               />
-  //             </ListItemIcon>
-  //             <ListItemText id={labelId} primary={`${item}`} />
-  //           </ListItem>
-  //         );
-  //       })}
-  //     </List>
-  //   );
-  // };
-
-  const othersList = (listItems) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(item, othersChecked, setOthersChecked);
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={othersChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  };
+  
 
   return (
     <div className={classes.filterList}>
@@ -385,8 +356,8 @@ const ItemFilter = (props) => {
               <ListItemText primary="Brand" />
               {brandsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={brandsOpen} timeout="auto" >
-              {brandsList(brands)}
+            <Collapse in={brandsOpen} timeout={{appear: 500, enter: 500, exit: 0}} >
+              <BrandsList listItems = { brands } handleCheckToggle={handleCheckToggle} brandsChecked={brandsChecked} setBrandsChecked={setBrandsChecked} />
             </Collapse>
             <Divider />
             <ListItem
@@ -398,8 +369,8 @@ const ItemFilter = (props) => {
               <ListItemText primary="Item Type" />
               {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={itemTypesOpen} timeout="auto" >
-              {itemTypesList(itemTypes)}
+            <Collapse in={itemTypesOpen} timeout={{appear: 400, enter: 400, exit: 0}} >
+              <ItemTypesList listItems={ itemTypes} handleCheckToggle={handleCheckToggle} itemTypesChecked={itemTypesChecked} setItemTypesChecked={setItemTypesChecked} />
             </Collapse>
             <Divider />
             <ListItem
@@ -411,8 +382,8 @@ const ItemFilter = (props) => {
               <ListItemText primary="Item Family" />
               {familyOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={familyOpen} timeout="auto" >
-              {familyList(families)}
+            <Collapse in={familyOpen} timeout={{appear: 250, enter: 250, exit: 0}} >
+              <FamilyList listItems = {families} handleCheckToggle={handleCheckToggle} familyChecked={familyChecked} setFamilyChecked={setFamilyChecked} />
             </Collapse>
             <Divider />
             <ListItem
@@ -424,22 +395,9 @@ const ItemFilter = (props) => {
               <ListItemText primary="Business Unit" />
               {unitsOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={unitsOpen} timeout="auto" >
-              {unitsList(units)}
+            <Collapse in={unitsOpen} timeout={{appear: 250, enter: 250, exit: 0}} >
+              <UnitsList listItems={units} handleCheckToggle={handleCheckToggle} unitsChecked={unitsChecked} setUnitsChecked={setUnitsChecked} />
             </Collapse>
-            {/* <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(channelsOpen, setChannelsOpen);
-              }}
-            >
-              <ListItemText primary="Channel" />
-              {channelsOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={channelsOpen} timeout="auto" >
-              {channelsList(channels)}
-            </Collapse> */}
             <Divider />
             <ListItem
               button
@@ -450,8 +408,8 @@ const ItemFilter = (props) => {
               <ListItemText primary="Other" />
               {othersOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={othersOpen} timeout="auto" >
-              {othersList(others)}
+            <Collapse in={othersOpen} timeout={{appear: 250, enter: 250, exit: 0}} >
+              <OthersList listItems={others} handleCheckToggle={handleCheckToggle} othersChecked={othersChecked} setOthersChecked={setOthersChecked} />
             </Collapse>
           </List>
         </Menu>
@@ -472,7 +430,7 @@ const ItemFilter = (props) => {
       <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />
     </div>
   );
-};
+});
 
 ItemFilter.propTypes = {
   brands: PropTypes.array.isRequired,
