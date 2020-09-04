@@ -14,6 +14,7 @@ export const fetchOrdersByProgram = async (program) => {
   await axios
     .get(`/api/pre_orders?filter[program_id]=${program}`)
     .then((res) => {
+      console.log(res);
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
