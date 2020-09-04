@@ -92,6 +92,11 @@ const MemoInputCell = React.memo(
           .find((ord) => ord.orderNumber === orderNumber)
           .items.find((item) => item.itemNumber === itemNumber).totalItems
     );
+    const loading = useSelector((state) =>
+      state.patchOrder.cellsLoading.find(
+        (cell) => cell.id === itemId && cell.orderNumber === orderNumber
+      )
+    );
 
     const handleScrollLeft = () => {
       ref.current.scrollLeft = 0;
@@ -104,46 +109,49 @@ const MemoInputCell = React.memo(
         style={{ zIndex: "-100" }}
         onFocus={() => (index === 0 ? handleScrollLeft() : null)}
       >
-        <InputBase
-          style={{ textAlign: "center", zIndex: "0" }}
-          fullWidth
-          size="small"
-          id={`${orderNumber}-${itemNumber}`}
-          value={value}
-          onBlur={(evt) => {
-            if (evt.target.value === "") {
-              dispatch(
-                setGridItem({
-                  itemNumber: `${itemNumber}`,
-                  orderNumber: orderNumber,
-                  value: 0,
-                })
-              );
-              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <InputBase
+            style={{ textAlign: "center", zIndex: "0" }}
+            fullWidth
+            size="small"
+            id={`${orderNumber}-${itemNumber}`}
+            value={value}
+            onBlur={(evt) => {
+              if (evt.target.value === "") {
+                dispatch(
+                  setGridItem({
+                    itemNumber: `${itemNumber}`,
+                    orderNumber: orderNumber,
+                    value: 0,
+                  })
+                );
+                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
 
-              dispatch(patchItem(itemId, 0));
-            } else {
-              dispatch(patchItem(itemId, evt.target.value));
-            }
-          }}
-          onChange={(evt) => {
-            if (
-              numArray.includes(
-                evt.target.value[evt.target.value.length - 1]
-              ) ||
-              evt.target.value === ""
-            ) {
-              dispatch(
-                setGridItem({
-                  itemNumber: `${itemNumber}`,
-                  orderNumber: orderNumber,
-                  value: evt.target.value,
-                })
-              );
-              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-            }
-          }}
-        />
+                dispatch(patchItem(itemId, 0, orderNumber));
+              } else {
+                dispatch(patchItem(itemId, evt.target.value, orderNumber));
+              }
+            }}
+            onChange={(evt) => {
+              if (
+                numArray.includes(
+                  evt.target.value[evt.target.value.length - 1]
+                ) ||
+                evt.target.value === ""
+              ) {
+                dispatch(
+                  setGridItem({
+                    itemNumber: `${itemNumber}`,
+                    orderNumber: orderNumber,
+                    value: evt.target.value,
+                  })
+                );
+                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+              }
+            }}
+          />
+          {loading && <CircularProgress size={20} />}
+        </div>
       </TableCell>
     );
   })

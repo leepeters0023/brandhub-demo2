@@ -6,12 +6,16 @@ import { patchOrderItem, deletePreOrderItem } from "../../api/orderApi";
 * Data Format:
 patchOrder: {
   isLoading: bool,
+  cellsLoading: [],
+  cellsError: [],
   error: string || null
 }
 */
 
 let initialState = {
   isLoading: false,
+  cellsLoading: [],
+  cellsError: [],
   error: null,
 }
 
@@ -20,7 +24,10 @@ const startLoading = (state) => {
 };
 
 const loadingFailed = (state, action) => {
-  const { error } = action.payload;
+  const { error, cell } = action.payload;
+  let currentErrors = [...state.cellsError];
+  currentErrors.push(cell);
+  state.cellsError = currentErrors;
   state.isLoading = false;
   state.error = error;
 };
@@ -30,7 +37,19 @@ const patchOrderSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
-    patchItemSuccess(state) {
+    addLoadingCell(state, action) {
+      const { cell } = action.payload;
+      let currentLoading = [...state.cellsLoading];
+      currentLoading.push(cell)
+      state.cellsLoading = currentLoading;
+    },
+    patchItemSuccess(state, action) {
+      const {id, orderNumber} = action.payload;
+      let currentLoading = [...state.cellsLoading];
+      let currentCell = currentLoading.find((cell) => cell.id === id && cell.orderNumber === orderNumber);
+      currentLoading.splice(currentLoading.indexOf(currentCell), 1)
+
+      state.cellsLoading = [...currentLoading]
       state.isLoading = false
     },
     deleteItemSuccess(state) {
@@ -42,6 +61,7 @@ const patchOrderSlice = createSlice({
 
 export const {
   setIsLoading,
+  addLoadingCell,
   patchItemSuccess,
   deleteItemSuccess,
   setFailure
@@ -49,15 +69,16 @@ export const {
 
 export default patchOrderSlice.reducer;
 
-export const patchItem = (id, qty) => async (dispatch) => {
+export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(addLoadingCell({cell: {id: id, orderNumber: orderNumber}}))
     const patchStatus = await patchOrderItem(id, qty);
     console.log(patchStatus);
 
-    dispatch(patchItemSuccess());
+    dispatch(patchItemSuccess({id, orderNumber}));
   } catch(err) {
-    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setFailure({ error: err.toString(), cell: {id: id, orderNumber: orderNumber, error: err.toString()} }));
   }
 }
 
