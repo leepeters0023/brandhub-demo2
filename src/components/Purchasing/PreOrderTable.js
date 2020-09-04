@@ -12,7 +12,7 @@ import { setProgramComplete } from "../../redux/slices/programsSlice";
 
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
-import SelectorMenus from "../Utility/SelectorMenus";
+import ProgramSelector from "../Utility/ProgramSelector";
 
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -246,8 +246,7 @@ const PreOrderTable = (props) => {
                   className={classes.borderRight}
                 >
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <SelectorMenus
-                      type="programs"
+                    <ProgramSelector
                       handler={handleProgram}
                       currentProgram={currentProgram}
                     />
@@ -302,8 +301,7 @@ const PreOrderTable = (props) => {
                     style={{ zIndex: "100" }}
                   >
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                      <SelectorMenus
-                        type="programs"
+                      <ProgramSelector
                         handler={handleProgram}
                         currentProgram={currentProgram}
                       />

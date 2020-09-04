@@ -12,8 +12,9 @@ import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import UserSelector from "../components/Utility/UserSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -164,9 +165,9 @@ const CurrentPreOrder = ({ userType }) => {
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               {(userType === "super" || userType === "field2") && (
-                <SelectorMenus type="cart" />
+                <UserSelector />
               )}
-              <SelectorMenus type="regions" />
+              <RegionSelector />
             </div>
           </div>
         </div>

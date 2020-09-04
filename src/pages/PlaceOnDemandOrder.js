@@ -9,7 +9,8 @@ import items from "../assets/mockdata/Items";
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import UserSelector from "../components/Utility/UserSelector";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -94,9 +95,9 @@ const PlaceOnDemandOrder = ({ userType }) => {
               </IconButton>
             </Tooltip>
             {(userType === "super" || userType === "field2") && (
-              <SelectorMenus type="cart" />
+              <UserSelector />
             )}
-            <SelectorMenus type="regions" />
+            <RegionSelector />
           </div>
         </div>
     
