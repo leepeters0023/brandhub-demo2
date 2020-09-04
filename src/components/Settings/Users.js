@@ -102,7 +102,7 @@ const Users = () => {
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <EditUserModal handleClose={handleModalClose} />
+            <EditUserModal handleClose={handleModalClose} userId={currentUserId} />
           </DialogContent>
         </Dialog>
       </div>
