@@ -188,7 +188,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       id: item.id,
       itemNumber: item.item["item-number"],
       brand: "BRAND",
-      itemType: item.item.type[0].toUpperCase()+item.item.type.slice(1),
+      itemType: item.item.name,
       price: item.item.price,
       qty: "5 / Pack",
       imgUrl: item.item["img-url"],
@@ -206,8 +206,8 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
 
     let orders = currentOrders.data[0].orders.map((ord) => ({
       orderNumber: ord.id,
-      distributorId: ord.id,
-      distributorName: `DIST - ${ord.id}`,
+      distributorId: ord.distributor.id,
+      distributorName: ord.distributor.name,
       type: "program",
       program: ord.program.id,
       items: ord["order-items"].map((item) => ({
@@ -230,6 +230,14 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       totalItems: ord["order-items"].map((item) => item.qty).reduce((a,b) => a+b),
       estTotal: ord["order-items"].map((item) => item.qty * item.item.price).reduce((a,b) => a+b)
     }));
+
+    orders.sort((a, b) => {
+      return a.distributorName < b.distributorName
+        ? -1
+        : a.distributorName > b.distributorName
+        ? 1
+        : 0;
+    })
 
     dispatch(
       buildTableFromOrders({
