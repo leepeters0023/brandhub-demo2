@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, currentProgram } = props;
+  const { type, currentView, handlePreview, items } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -119,9 +119,8 @@ const OrderItemViewControl = (props) => {
       {(currentView === "list" && type !== "catalog") && (
         <OrderItemTableView
           type={type}
-          currentItems={currentItems}
+          currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
-          currentProgram={currentProgram}
           handleAddItem={handleAddItem}
           currentItemValues={currentItemValues}
           handleItemUpdate={handleItemUpdate}
@@ -130,9 +129,8 @@ const OrderItemViewControl = (props) => {
       {(currentView === "grid" && type !== "catalog") && (
         <OrderPreGridView
           type={type}
-          currentItems={currentItems}
+          currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
-          currentProgram={currentProgram}
           handleAddItem={handleAddItem}
           currentItemValues={currentItemValues}
           handleItemUpdate={handleItemUpdate}
@@ -146,7 +144,7 @@ OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  currentProgram: PropTypes.object
+  items: PropTypes.array
 };
 
 export default OrderItemViewControl;

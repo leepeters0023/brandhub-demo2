@@ -2,8 +2,9 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import OnDemandOrder from "../components/Purchasing/OnDemandOrder";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import UserSelector from "../components/Utility/UserSelector";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -49,9 +50,9 @@ const CurrentOnDemandOrder = ({ userType }) => {
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               {(userType === "super" || userType === "field2") && (
-                <SelectorMenus type="cart" />
+                <UserSelector />
               )}
-              <SelectorMenus type="regions" />
+              <RegionSelector />
             </div>
           </div>
         </div>

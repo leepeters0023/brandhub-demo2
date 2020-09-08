@@ -7,10 +7,14 @@ import {
   fetchProgramOrders,
 } from "../redux/slices/programTableSlice";
 
+import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
+
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import UserSelector from "../components/Utility/UserSelector";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -48,18 +52,18 @@ const useStyles = makeStyles((theme) => ({
 const TotalsDiv = React.memo(({ program }) => {
   const classes = useStyles();
   const programTotal = useSelector((state) => state.programTable.programTotal);
-  const grandTotal = useSelector(
-    (state) => state.programTable.preOrderTotal.actualTotal
-  );
+  // const grandTotal = useSelector(
+  //   (state) => state.programTable.preOrderTotal.actualTotal
+  // );
 
   return (
     <>
       <Typography
         className={classes.titleText}
       >{`Program Total: $${programTotal.toFixed(2)}`}</Typography>
-      <Typography
+      {/* <Typography
         className={classes.titleText}
-      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography>
+      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
     </>
   );
 });
@@ -76,6 +80,7 @@ const CurrentPreOrder = ({ userType }) => {
   //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
+  const [currentItemId, setCurrentItemId] = useCallback(useState(null))
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
@@ -102,15 +107,17 @@ const CurrentPreOrder = ({ userType }) => {
   }, [handleConfirmModal]);
 
   const handleOpenConfirm = useCallback(
-    (itemNum) => {
+    (itemNum, itemId) => {
       setCurrentItemNum(itemNum);
+      setCurrentItemId(itemId)
       handleConfirmModal(true);
     },
-    [setCurrentItemNum, handleConfirmModal]
+    [setCurrentItemNum, setCurrentItemId, handleConfirmModal]
   );
 
   const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
+    dispatch(deletePreOrdItem(currentItemId));
     handleConfirmModal(false);
   };
 
@@ -123,15 +130,12 @@ const CurrentPreOrder = ({ userType }) => {
 
   useEffect(() => {
     if (program) {
-      dispatch(fetchProgramOrders(userType, program));
+      dispatch(fetchProgramOrders(program));
     }
-  }, [program, userType, dispatch]);
+  }, [program, dispatch]);
 
   return (
     <>
-      {/* <Backdrop className={classes.backdrop} open={backdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop> */}
       <div className={classes.relativeContainer}>
         <Dialog
           open={confirmModal}
@@ -161,9 +165,9 @@ const CurrentPreOrder = ({ userType }) => {
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               {(userType === "super" || userType === "field2") && (
-                <SelectorMenus type="cart" />
+                <UserSelector />
               )}
-              <SelectorMenus type="regions" />
+              <RegionSelector />
             </div>
           </div>
         </div>
@@ -252,9 +256,9 @@ const CurrentPreOrder = ({ userType }) => {
                 <Typography
                   className={classes.titleText}
                 >{`Program Total:`}</Typography>
-                <Typography
+                {/* <Typography
                   className={classes.titleText}
-                >{`Pre-Order Total:`}</Typography>
+                >{`Pre-Order Total:`}</Typography> */}
               </>
             )}
           </Grid>
@@ -284,6 +288,7 @@ const CurrentPreOrder = ({ userType }) => {
         <br />
         <br />
       </Container>
+      <OrderPatchLoading />
     </>
   );
 };

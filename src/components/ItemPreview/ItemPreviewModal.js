@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import ItemOneSheet from "./ItemOneSheet";
 import ItemFeedback from "./ItemFeedback";
 import ItemAssembly from "./ItemAssembly";
-import SelectorMenus from "../Utility/SelectorMenus";
+import UserSelector from "../Utility/UserSelector";
 
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -193,7 +193,7 @@ const ItemPreviewModal = (props) => {
             <>
               {userType !== "field1" && (
                 <div>
-                  <SelectorMenus type="cart" />
+                  <UserSelector />
                 </div>
               )}
               <TextField
@@ -203,7 +203,6 @@ const ItemPreviewModal = (props) => {
                 placeholder="Qty"
                 variant="outlined"
               />
-              {/* <SelectorMenus type="budgets" /> */}
               <br />
               <Button
                 variant="contained"

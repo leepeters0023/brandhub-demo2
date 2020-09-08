@@ -8,9 +8,11 @@ import {
   setItemTotal,
 } from "../../redux/slices/programTableSlice";
 
-import { setProgramComplete } from "../../redux/slices/programsSlice";
+import { setProgComplete } from "../../redux/slices/patchOrderSlice";
 
-import SelectorMenus from "../Utility/SelectorMenus";
+import { patchItem } from "../../redux/slices/patchOrderSlice";
+
+import ProgramSelector from "../Utility/ProgramSelector";
 
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -80,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ orderNumber, itemNumber, index }, ref) => {
+  React.forwardRef(({ orderNumber, itemNumber, itemId, index }, ref) => {
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
@@ -89,6 +91,11 @@ const MemoInputCell = React.memo(
         state.programTable.orders
           .find((ord) => ord.orderNumber === orderNumber)
           .items.find((item) => item.itemNumber === itemNumber).totalItems
+    );
+    const loading = useSelector((state) =>
+      state.patchOrder.cellsLoading.find(
+        (cell) => cell.id === itemId && cell.orderNumber === orderNumber
+      )
     );
 
     const handleScrollLeft = () => {
@@ -102,42 +109,49 @@ const MemoInputCell = React.memo(
         style={{ zIndex: "-100" }}
         onFocus={() => (index === 0 ? handleScrollLeft() : null)}
       >
-        <InputBase
-          style={{ textAlign: "center", zIndex: "0" }}
-          fullWidth
-          size="small"
-          id={`${orderNumber}-${itemNumber}`}
-          value={value}
-          onBlur={(evt) => {
-            if (evt.target.value === "") {
-              dispatch(
-                setGridItem({
-                  itemNumber: `${itemNumber}`,
-                  orderNumber: orderNumber,
-                  value: 0,
-                })
-              );
-              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-            }
-          }}
-          onChange={(evt) => {
-            if (
-              numArray.includes(
-                evt.target.value[evt.target.value.length - 1]
-              ) ||
-              evt.target.value === ""
-            ) {
-              dispatch(
-                setGridItem({
-                  itemNumber: `${itemNumber}`,
-                  orderNumber: orderNumber,
-                  value: evt.target.value,
-                })
-              );
-              dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-            }
-          }}
-        />
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <InputBase
+            style={{ textAlign: "center", zIndex: "0" }}
+            fullWidth
+            size="small"
+            id={`${orderNumber}-${itemNumber}`}
+            value={value}
+            onBlur={(evt) => {
+              if (evt.target.value === "") {
+                dispatch(
+                  setGridItem({
+                    itemNumber: `${itemNumber}`,
+                    orderNumber: orderNumber,
+                    value: 0,
+                  })
+                );
+                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+
+                dispatch(patchItem(itemId, 0, orderNumber));
+              } else {
+                dispatch(patchItem(itemId, evt.target.value, orderNumber));
+              }
+            }}
+            onChange={(evt) => {
+              if (
+                numArray.includes(
+                  evt.target.value[evt.target.value.length - 1]
+                ) ||
+                evt.target.value === ""
+              ) {
+                dispatch(
+                  setGridItem({
+                    itemNumber: `${itemNumber}`,
+                    orderNumber: orderNumber,
+                    value: evt.target.value,
+                  })
+                );
+                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+              }
+            }}
+          />
+          {loading && <CircularProgress size={20} />}
+        </div>
       </TableCell>
     );
   })
@@ -196,6 +210,7 @@ const PreOrderTable = (props) => {
   const tableRef = useRef(null);
   const currentItems = useSelector((state) => state.programTable.items);
   const orders = useSelector((state) => state.programTable.orders);
+  const preOrderId = useSelector((state) => state.programTable.preOrderId);
   const isComplete = useSelector(
     (state) =>
       state.programs.programs.find((prog) => prog.id === currentProgram)
@@ -211,7 +226,7 @@ const PreOrderTable = (props) => {
 
   const handleComplete = () => {
     dispatch(
-      setProgramComplete({ program: currentProgram, status: !isComplete })
+      setProgComplete(currentProgram, !isComplete, preOrderId)
     );
   };
 
@@ -232,8 +247,7 @@ const PreOrderTable = (props) => {
                   className={classes.borderRight}
                 >
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <SelectorMenus
-                      type="programs"
+                    <ProgramSelector
                       handler={handleProgram}
                       currentProgram={currentProgram}
                     />
@@ -288,8 +302,7 @@ const PreOrderTable = (props) => {
                     style={{ zIndex: "100" }}
                   >
                     <div style={{ display: "flex", flexDirection: "column" }}>
-                      <SelectorMenus
-                        type="programs"
+                      <ProgramSelector
                         handler={handleProgram}
                         currentProgram={currentProgram}
                       />
@@ -310,13 +323,13 @@ const PreOrderTable = (props) => {
                     <TableCell
                       classes={{ root: classes.root }}
                       className={classes.borderRight}
-                      key={item.itemNumber}
+                      key={item.id}
                     >
                       <div className={classes.headerCell}>
                         <Tooltip title="Remove from Order">
                           <IconButton
                             onClick={() => {
-                              handleOpenConfirm(item.itemNumber);
+                              handleOpenConfirm(item.itemNumber, item.id);
                             }}
                             style={{ position: "absolute", top: 0, right: -15 }}
                           >
@@ -324,7 +337,7 @@ const PreOrderTable = (props) => {
                           </IconButton>
                         </Tooltip>
                         <img
-                          id={item.itemNumber}
+                          id={item.id}
                           className={classes.previewImageFloat}
                           src={item.imgUrl}
                           alt={item.itemType}
@@ -376,7 +389,7 @@ const PreOrderTable = (props) => {
                         classes={{ root: classes.root }}
                         style={{ top: 138, textAlign: "center" }}
                         className={classes.borderRight}
-                        key={item.itemNumber}
+                        key={item.id}
                       >
                         <div className={classes.infoCell}>
                           <Typography variant="body2" color="textSecondary">
@@ -425,7 +438,7 @@ const PreOrderTable = (props) => {
                                 <TableCell
                                   classes={{ root: classes.root }}
                                   align="center"
-                                  key={item.itemNumber}
+                                  key={item.id}
                                   className={classes.borderRightLight}
                                 >
                                   <div className={classes.infoCell}>
@@ -456,7 +469,7 @@ const PreOrderTable = (props) => {
                               {currentItems.map((item) => (
                                 <TotalItemCell
                                   itemNumber={item.itemNumber}
-                                  key={item.itemNumber}
+                                  key={item.id}
                                 />
                               ))}
                             </TableRow>
@@ -481,7 +494,7 @@ const PreOrderTable = (props) => {
                                 <TableCell
                                   classes={{ root: classes.root }}
                                   align="center"
-                                  key={item.itemNumber}
+                                  key={item.id}
                                   className={classes.borderRightLight}
                                 >
                                   {`$${item.price.toFixed(2)}`}
@@ -508,7 +521,7 @@ const PreOrderTable = (props) => {
                               {currentItems.map((item) => (
                                 <TotalEstCostCell
                                   itemNumber={item.itemNumber}
-                                  key={item.itemNumber}
+                                  key={item.id}
                                 />
                               ))}
                             </TableRow>
@@ -538,11 +551,12 @@ const PreOrderTable = (props) => {
                         </Typography>
                       </div>
                     </TableCell>
-                    {currentItems.map((item, index) => (
+                    {ord.items.map((item, index) => (
                       <MemoInputCell
-                        key={item.itemNumber}
+                        key={item.id}
                         orderNumber={ord.orderNumber}
                         itemNumber={item.itemNumber}
+                        itemId={item.id}
                         index={index}
                         ref={tableRef}
                       />

@@ -45,6 +45,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import themeFile from "./utility/theme.js";
 
 axios.defaults.headers.get["Cache-Control"] = "no-cache";
+axios.defaults.timeout = 5000;
 
 const theme = createMuiTheme(themeFile);
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import BudgetRegional from "../components/Budgets/BudgetRegional";
 import BudgetUser from "../components/Budgets/BudgetUser";
 import BudgetBrand from "../components/Budgets/BudgetBrand";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -50,7 +50,7 @@ const Budget = () => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.formControl}>
-          <SelectorMenus type="regions" />
+          <RegionSelector />
         </div>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchOrdersByProgram } from "../../api/programApi";
+import { fetchOrdersByProgram } from "../../api/orderApi";
 
-//TODO sort items on fetch by item id
+import { setProgramComplete } from "./programsSlice";
+
 /*
 * Data Format:
 programsTable: {
@@ -49,6 +50,7 @@ programsTable: {
 
 let initialState = {
   isLoading: false,
+  preOrderId: null,
   programId: null,
   items: [],
   orders: [],
@@ -76,14 +78,9 @@ const programTableSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     buildTableFromOrders(state, action) {
-      const { programId, orders } = action.payload;
+      const { programId, orders, items, preOrderId } = action.payload;
       if (orders.length !== 0) {
-        let currentItems = [...orders[0].items];
-        currentItems = currentItems.map((item) => ({
-          ...item,
-          estTotal: 0,
-          totalItems: 0,
-        }));
+        let currentItems = [...items];
         let progTotal = 0;
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
@@ -97,6 +94,7 @@ const programTableSlice = createSlice({
             ).estTotal += item.estTotal;
           });
         });
+        state.preOrderId = preOrderId;
         state.programId = programId;
         state.items = currentItems;
         state.orders = [...orders];
@@ -186,13 +184,74 @@ export const {
 
 export default programTableSlice.reducer;
 
-export const fetchProgramOrders = (user, program) => async (dispatch) => {
+export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const currentOrders = await fetchOrdersByProgram(user, program);
+    const currentOrders = await fetchOrdersByProgram(program);
+    if (currentOrders.data[0]["is-complete"]) {
+      dispatch(setProgramComplete({ program: program, status: true }))
+    }
+    let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
+      id: item.id,
+      itemNumber: item.item["item-number"],
+      brand: item.item.brand.name,
+      itemType: item.item.name,
+      price: item.item.price,
+      qty: `${item.item["qty-per-pack"]} / pack`,
+      imgUrl: item.item["img-url"],
+      estTotal: 0,
+      totalItems: 0,
+    }));
+
+    currentItems.sort((a, b) => {
+      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+        ? -1
+        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+        ? 1
+        : 0;
+    });
+
+    let orders = currentOrders.data[0].orders.map((ord) => ({
+      orderNumber: ord.id,
+      distributorId: ord.distributor.id,
+      distributorName: ord.distributor.name,
+      type: "program",
+      program: ord.program.id,
+      items: ord["order-items"].map((item) => ({
+        id: item.id,
+        itemNumber: item.item["item-number"],
+        itemType: item.item.type,
+        price: item.item.price,
+        estTotal: item.qty * item.item.price,
+        totalItems: item.qty,
+      })).sort((a, b) => {
+        return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+          ? -1
+          : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+          ? 1
+          : 0;
+      }),
+      totalItems: ord["order-items"].map((item) => item.qty).reduce((a,b) => a+b),
+      estTotal: ord["order-items"].map((item) => item.qty * item.item.price).reduce((a,b) => a+b)
+    }));
+
+    orders.sort((a, b) => {
+      return a.distributorName < b.distributorName
+        ? -1
+        : a.distributorName > b.distributorName
+        ? 1
+        : 0;
+    })
     
+    let preOrderId = currentOrders.data[0].id;
+
     dispatch(
-      buildTableFromOrders({ programId: program, orders: currentOrders })
+      buildTableFromOrders({
+        programId: program,
+        orders: orders,
+        items: currentItems,
+        preOrderId: preOrderId,
+      })
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

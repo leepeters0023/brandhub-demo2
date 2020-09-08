@@ -6,6 +6,7 @@ import programsReducer from "./slices/programsSlice";
 import ordersReducer from "./slices/ordersSlice";
 import inStockOrderReducer from "./slices/inStockOrderSlice";
 import onDemandOrderReducer from "./slices/onDemandOrderSlice";
+import patchOrderReducer from "./slices/patchOrderSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   onDemandOrder: onDemandOrderReducer,
   programTable: programTableReducer,
   programs: programsReducer,
+  patchOrder: patchOrderReducer
 })
 
 export default rootReducer
