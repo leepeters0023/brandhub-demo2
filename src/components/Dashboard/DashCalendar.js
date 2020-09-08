@@ -61,11 +61,11 @@ const DashCalendar = () => {
               <Avatar
                 className={classes.dashboardAvatar}
                 alt="program"
-                src={`${currentPrograms[3].imgUrl}`}
+                src={`${currentPrograms[1].imgUrl}`}
               />
             </ListItemAvatar>
             <ListItemText
-              primary={`${currentPrograms[3].brand}-${currentPrograms[3].focusMonth}`}
+              primary={`${currentPrograms[1].brand}-${currentPrograms[1].focusMonth}`}
               secondary={
                 <>
                   <Typography
@@ -74,7 +74,7 @@ const DashCalendar = () => {
                     style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${currentPrograms[3].goals}`}
+                    {`${currentPrograms[1].goals}`}
                   </Typography>
                 </>
               }
@@ -85,11 +85,11 @@ const DashCalendar = () => {
               <Avatar
                 className={classes.dashboardAvatar}
                 alt="program"
-                src={`${currentPrograms[4].imgUrl}`}
+                src={`${currentPrograms[2].imgUrl}`}
               />
             </ListItemAvatar>
             <ListItemText
-              primary={`${currentPrograms[4].name}-${currentPrograms[4].focusMonth}`}
+              primary={`${currentPrograms[2].name}-${currentPrograms[2].focusMonth}`}
               secondary={
                 <>
                   <Typography
@@ -98,7 +98,7 @@ const DashCalendar = () => {
                     style={{ display: "inline" }}
                     color="textSecondary"
                   >
-                    {`${currentPrograms[4].goals}`}
+                    {`${currentPrograms[2].goals}`}
                   </Typography>
                 </>
               }
