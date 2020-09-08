@@ -67,7 +67,7 @@ const OrderItemGridView = (props) => {
             md={4}
             sm={6}
             xs={12}
-            key={item.itemNumber}
+            key={item.id}
           >
             <Paper className={classes.paperWrapper}>
               <div className={classes.singleItemWrapper}>

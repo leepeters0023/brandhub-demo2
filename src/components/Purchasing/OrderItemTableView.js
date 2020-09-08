@@ -30,21 +30,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInputCell = React.memo(
+const MemoInputField = React.memo(
   ({ item, currentItemValues, handleItemUpdate }) => {
     return (
-      <TableCell>
-        <TextField
-          color="secondary"
-          size="small"
-          style={{ width: "55px" }}
-          id={`${item.itemNumber}`}
-          placeholder="Qty"
-          variant="outlined"
-          value={currentItemValues[item.itemNumber] || ""}
-          onChange={handleItemUpdate}
-        />
-      </TableCell>
+      <TextField
+        color="secondary"
+        size="small"
+        style={{ width: "55px" }}
+        id={`${item.id}`}
+        placeholder="Qty"
+        variant="outlined"
+        value={currentItemValues[item.id] || ""}
+        onChange={handleItemUpdate}
+      />
+    );
+  },
+  (prev, next) => {
+    return (
+      prev.item.id === next.item.id &&
+      prev.currentItemValues[`${prev.item.id}`] ===
+        next.currentItemValues[`${next.item.id}`]
     );
   }
 );
@@ -56,14 +61,14 @@ const OrderItemTableView = (props) => {
     handlePreview,
     handleAddItem,
     currentItemValues,
-    handleItemUpdate
+    handleItemUpdate,
   } = props;
   const classes = useStyles();
 
   return (
     <>
       <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="in-stock-table" >
+        <Table className={classes.table} aria-label="in-stock-table">
           <TableHead>
             <TableRow>
               {/* <TableCell className={classes.headerText}></TableCell> */}
@@ -106,7 +111,7 @@ const OrderItemTableView = (props) => {
           </TableHead>
           <TableBody>
             {currentItems.map((row) => (
-              <TableRow key={row.itemNumber} hover >
+              <TableRow key={row.id} hover>
                 {/* <TableCell component="th" scope="row">
                   <Tooltip title="Favorite">
                     <IconButton>
@@ -116,7 +121,7 @@ const OrderItemTableView = (props) => {
                 </TableCell> */}
                 <TableCell align="left">
                   <img
-                    id={row.itemNumber}
+                    id={row.id}
                     className={classes.previewImageFloat}
                     src={row.imgUrl}
                     alt={row.itemType}
@@ -128,18 +133,20 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
                 {type === "inStock" && <TableCell>{row.stock}</TableCell>}
-                <TableCell>{row.price}</TableCell>
+                <TableCell>{`$${row.price.toFixed(2)}`}</TableCell>
                 {type !== "program" && (
-                  <MemoInputCell
-                    item={row}
-                    currentItemValues={currentItemValues}
-                    handleItemUpdate={handleItemUpdate}
-                  />
+                  <TableCell>
+                    <MemoInputField
+                      item={row}
+                      currentItemValues={currentItemValues}
+                      handleItemUpdate={handleItemUpdate}
+                    />
+                  </TableCell>
                 )}
                 <TableCell align="right">
                   <div className={classes.tableButtonWrapper}>
                     <IconButton
-                      id={`${row.itemNumber}`}
+                      id={`${row.id}`}
                       style={{ margin: "5px 2.5px" }}
                     >
                       <PictureAsPdfIcon />
@@ -147,19 +154,21 @@ const OrderItemTableView = (props) => {
 
                     {type !== "program" && (
                       <IconButton
-                        id={`${row.itemNumber}`}
+                        id={`${row.id}`}
                         style={{ margin: "5px 2.5px" }}
                         disabled={
-                          currentItemValues[row.itemNumber] === "" ||
-                          !currentItemValues[row.itemNumber]
+                          currentItemValues[row.id] === "" ||
+                          !currentItemValues[row.id]
                         }
                         value=""
                         onClick={(evt) => {
                           handleAddItem(
                             row,
-                            parseInt(currentItemValues[row.itemNumber])
+                            parseInt(currentItemValues[row.id])
                           );
-                          handleItemUpdate({target: {value: "", id: row.itemNumber}});
+                          handleItemUpdate({
+                            target: { value: "", id: row.id },
+                          });
                         }}
                       >
                         <AddBoxIcon />
@@ -182,7 +191,7 @@ OrderItemTableView.propTypes = {
   handlePreview: PropTypes.func.isRequired,
   handleAddItem: PropTypes.func.isRequired,
   currentItemValues: PropTypes.object.isRequired,
-  handleItemUpdate: PropTypes.func.isRequired
+  handleItemUpdate: PropTypes.func.isRequired,
 };
 
-export default OrderItemTableView;
+export default React.memo(OrderItemTableView);

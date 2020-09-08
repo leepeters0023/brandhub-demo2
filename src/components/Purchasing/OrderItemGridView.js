@@ -73,12 +73,19 @@ const MemoInput = React.memo(
         color="secondary"
         size="small"
         style={{ width: "55px" }}
-        id={`${item.itemNumber}`}
+        id={`${item.id}`}
         placeholder="Qty"
         variant="outlined"
-        value={currentItemValues[item.itemNumber] || ""}
+        value={currentItemValues[item.id] || ""}
         onChange={handleItemUpdate}
       />
+    );
+  },
+  (prev, next) => {
+    return (
+      prev.item.id === next.item.id &&
+      prev.currentItemValues[`${prev.item.id}`] ===
+        next.currentItemValues[`${next.item.id}`]
     );
   }
 );
@@ -106,7 +113,7 @@ const OrderItemGridView = (props) => {
             md={4}
             sm={6}
             xs={12}
-            key={item.itemNumber}
+            key={item.id}
           >
             <Paper className={classes.paperWrapper}>
               <div className={classes.singleItemWrapper}>
@@ -132,7 +139,7 @@ const OrderItemGridView = (props) => {
               </Typography>
               {type === "inStock" && (
                 <Typography variant="body1" color="textSecondary">
-                  {`Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
+                  {`Available: ${item.stock}`}
                 </Typography>
               )}
               <br />
@@ -149,18 +156,20 @@ const OrderItemGridView = (props) => {
                       handleItemUpdate={handleItemUpdate}
                     />
                     <IconButton
-                      id={`${item.itemNumber}`}
+                      id={`${item.id}`}
                       disabled={
-                        currentItemValues[item.itemNumber] === "" ||
-                        !currentItemValues[item.itemNumber]
+                        currentItemValues[item.id] === "" ||
+                        !currentItemValues[item.id]
                       }
                       value=""
                       onClick={() => {
                         handleAddItem(
                           item,
-                          parseInt(currentItemValues[item.itemNumber])
+                          parseInt(currentItemValues[item.id])
                         );
-                        handleItemUpdate({target: {value: "", id: item.itemNumber}});
+                        handleItemUpdate({
+                          target: { value: "", id: item.id },
+                        });
                       }}
                     >
                       <AddBoxIcon />
