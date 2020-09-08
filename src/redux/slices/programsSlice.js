@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchProgramsByTerritory,
   fetchNationalPrograms,
+  fetchProgramItems,
 } from "../../api/programApi";
 
 /*
@@ -41,12 +42,17 @@ itemObj: {
 
 let initialState = {
   isLoading: false,
+  itemsIsLoading: false,
   programs: [],
   error: null,
 };
 
 const startLoading = (state) => {
   state.isLoading = true;
+};
+
+const startItemsLoading = (state) => {
+  state.itemsIsLoading = true;
 };
 
 const loadingFailed = (state, action) => {
@@ -60,6 +66,7 @@ const programsSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setItemsIsLoading: startItemsLoading,
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
       if (state.programs.length === 0) {
@@ -78,72 +85,8 @@ const programsSlice = createSlice({
           strategies: prog.strategies,
           focusMonth: prog["focus-month"],
           imgUrl: prog["img-url"],
-          items: [
-            {
-              itemNumber: "110009456",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110234066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110346066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110006246",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "123009066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110234666",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "112369066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-          ],
-          isComplete: false,
+          items: [],
+          isComplete: prog["is-pre-order-complete"] ? true : false,
         }));
         programArray.sort((a, b) => {
           return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
@@ -174,72 +117,8 @@ const programsSlice = createSlice({
           strategies: prog.strategies,
           focusMonth: prog["focus-month"],
           imgUrl: prog["img-url"],
-          items: [
-            {
-              itemNumber: "110009456",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110234066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110346066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110006246",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "123009066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "110234666",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-            {
-              itemNumber: "112369066",
-              brand: "New Amsterdam",
-              itemType: "Glorifier",
-              price: 5.5,
-              qty: "5 / Pack",
-              imgUrl:
-                "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-            },
-          ],
-          isComplete: false,
+          items: [],
+          isComplete: prog["is-pre-order-complete"] ? true : false,
         }));
         const newProgramArray = programArray.concat(natPrograms);
         newProgramArray.sort((a, b) => {
@@ -252,6 +131,33 @@ const programsSlice = createSlice({
         state.programs = [...newProgramArray];
       }
       state.isLoading = false;
+      state.error = null;
+    },
+    getProgramItemsSuccess(state, action) {
+      const { program, items } = action.payload;
+
+      let progItems = items.map((item) => ({
+        itemNumber: item["item-number"],
+        brand: item.brand.name,
+        itemType: item.name,
+        price: item.price,
+        qty: `${item["qty-per-pack"]} / pack`,
+        imgUrl: item["img-url"],
+      }));
+
+      let updatedPrograms = state.programs.map((prog) => {
+        if (prog.id === program) {
+          return {
+            ...prog,
+            items: [...progItems],
+          };
+        } else {
+          return prog;
+        }
+      });
+
+      state.programs = updatedPrograms;
+      state.itemsIsLoading = false;
       state.error = null;
     },
     setProgramComplete(state, action) {
@@ -275,7 +181,9 @@ const programsSlice = createSlice({
 
 export const {
   setIsLoading,
+  setItemsIsLoading,
   getProgramsSuccess,
+  getProgramItemsSuccess,
   setProgramComplete,
   clearPrograms,
   setFailure,
@@ -298,13 +206,21 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
 export const fetchPrograms = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-
     const programs = await fetchProgramsByTerritory(id);
     if (programs.length === 0) {
       dispatch(getProgramsSuccess({ programs: [] }));
     }
-
     dispatch(getProgramsSuccess({ programs: programs.data }));
+  } catch (err) {
+    dispatch(setFailure(err.toString()));
+  }
+};
+
+export const fetchItems = (id) => async (dispatch) => {
+  try {
+    dispatch(setItemsIsLoading());
+    const items = await fetchProgramItems(id);
+    dispatch(getProgramItemsSuccess({ program: id, items: items.data }));
   } catch (err) {
     dispatch(setFailure(err.toString()));
   }

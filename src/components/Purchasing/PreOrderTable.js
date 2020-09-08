@@ -8,7 +8,7 @@ import {
   setItemTotal,
 } from "../../redux/slices/programTableSlice";
 
-import { setProgramComplete } from "../../redux/slices/programsSlice";
+import { setProgComplete } from "../../redux/slices/patchOrderSlice";
 
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
@@ -210,6 +210,7 @@ const PreOrderTable = (props) => {
   const tableRef = useRef(null);
   const currentItems = useSelector((state) => state.programTable.items);
   const orders = useSelector((state) => state.programTable.orders);
+  const preOrderId = useSelector((state) => state.programTable.preOrderId);
   const isComplete = useSelector(
     (state) =>
       state.programs.programs.find((prog) => prog.id === currentProgram)
@@ -225,7 +226,7 @@ const PreOrderTable = (props) => {
 
   const handleComplete = () => {
     dispatch(
-      setProgramComplete({ program: currentProgram, status: !isComplete })
+      setProgComplete(currentProgram, !isComplete, preOrderId)
     );
   };
 
@@ -322,7 +323,7 @@ const PreOrderTable = (props) => {
                     <TableCell
                       classes={{ root: classes.root }}
                       className={classes.borderRight}
-                      key={item.itemNumber}
+                      key={item.id}
                     >
                       <div className={classes.headerCell}>
                         <Tooltip title="Remove from Order">
@@ -336,7 +337,7 @@ const PreOrderTable = (props) => {
                           </IconButton>
                         </Tooltip>
                         <img
-                          id={item.itemNumber}
+                          id={item.id}
                           className={classes.previewImageFloat}
                           src={item.imgUrl}
                           alt={item.itemType}
@@ -388,7 +389,7 @@ const PreOrderTable = (props) => {
                         classes={{ root: classes.root }}
                         style={{ top: 138, textAlign: "center" }}
                         className={classes.borderRight}
-                        key={item.itemNumber}
+                        key={item.id}
                       >
                         <div className={classes.infoCell}>
                           <Typography variant="body2" color="textSecondary">
@@ -437,7 +438,7 @@ const PreOrderTable = (props) => {
                                 <TableCell
                                   classes={{ root: classes.root }}
                                   align="center"
-                                  key={item.itemNumber}
+                                  key={item.id}
                                   className={classes.borderRightLight}
                                 >
                                   <div className={classes.infoCell}>
@@ -468,7 +469,7 @@ const PreOrderTable = (props) => {
                               {currentItems.map((item) => (
                                 <TotalItemCell
                                   itemNumber={item.itemNumber}
-                                  key={item.itemNumber}
+                                  key={item.id}
                                 />
                               ))}
                             </TableRow>
@@ -493,7 +494,7 @@ const PreOrderTable = (props) => {
                                 <TableCell
                                   classes={{ root: classes.root }}
                                   align="center"
-                                  key={item.itemNumber}
+                                  key={item.id}
                                   className={classes.borderRightLight}
                                 >
                                   {`$${item.price.toFixed(2)}`}
@@ -520,7 +521,7 @@ const PreOrderTable = (props) => {
                               {currentItems.map((item) => (
                                 <TotalEstCostCell
                                   itemNumber={item.itemNumber}
-                                  key={item.itemNumber}
+                                  key={item.id}
                                 />
                               ))}
                             </TableRow>
@@ -552,7 +553,7 @@ const PreOrderTable = (props) => {
                     </TableCell>
                     {ord.items.map((item, index) => (
                       <MemoInputCell
-                        key={item.itemNumber}
+                        key={item.id}
                         orderNumber={ord.orderNumber}
                         itemNumber={item.itemNumber}
                         itemId={item.id}

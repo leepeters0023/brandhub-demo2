@@ -2,6 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { patchOrderItem, deletePreOrderItem } from "../../api/orderApi";
 
+import { markProgramComplete } from "../../api/programApi";
+
+import { setProgramComplete } from "./programsSlice";
+
 /*
 * Data Format:
 patchOrder: {
@@ -52,6 +56,9 @@ const patchOrderSlice = createSlice({
       state.cellsLoading = [...currentLoading]
       state.isLoading = false
     },
+    setProgCompleteSuccess(state) {
+      state.isLoading = false;
+    },
     deleteItemSuccess(state) {
       state.isLoading = false
     },
@@ -63,6 +70,7 @@ export const {
   setIsLoading,
   addLoadingCell,
   patchItemSuccess,
+  setProgCompleteSuccess,
   deleteItemSuccess,
   setFailure
 } = patchOrderSlice.actions;
@@ -89,6 +97,18 @@ export const deletePreOrdItem = (id) => async (dispatch) => {
     console.log(deleteStatus);
 
     dispatch(deleteItemSuccess());
+  } catch(err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const setProgComplete = (id, value, preOrderId) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const compStatus = await markProgramComplete(preOrderId, value);
+    dispatch(setProgramComplete({ program: id, status: value }))
+    dispatch(setProgCompleteSuccess());
+    console.log(compStatus);
   } catch(err) {
     dispatch(setFailure({ error: err.toString() }));
   }
