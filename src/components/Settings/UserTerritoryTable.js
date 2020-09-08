@@ -14,6 +14,9 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  removeCell: {
+    width: "100px !important"
+  }
 }));
 
 const UserTerritoryTable = ({ type, territories, handleRemove }) => {
@@ -24,7 +27,7 @@ const UserTerritoryTable = ({ type, territories, handleRemove }) => {
       <Table className={classes.table} size="small">
         <TableHead>
           <TableRow>
-            <TableCell className={classes.headerText} align="center">
+            <TableCell className={classes.headerText} align="left" classes={{root: classes.removeCell}}>
               Remove
             </TableCell>
             <TableCell className={classes.headerText} align="center">
@@ -36,7 +39,7 @@ const UserTerritoryTable = ({ type, territories, handleRemove }) => {
           {territories.length > 0 ? (
             territories.map((terr) => (
               <TableRow key={terr}>
-                <TableCell align="center">
+                <TableCell align="left">
                   <Tooltip title="Remove">
                     <IconButton onClick={() => handleRemove(terr, type)}>
                       <CancelIcon />

@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 
+import { useInput } from "../hooks/UtilityHooks";
+
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
 
+import TextField from "@material-ui/core/TextField";
+import AutoComplete from "@material-ui/lab/Autocomplete";
 import Typography from "@material-ui/core/Typography";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -18,6 +22,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 //mockdata
 import { orderHistory } from "../assets/mockdata/orderHistory";
+import distributors from "../assets/mockdata/distributors";
 
 const orderRows = orderHistory.map((data) => ({
   orderNum: data.orderNum,
@@ -30,28 +35,24 @@ const orderRows = orderHistory.map((data) => ({
   trackingNum: data.trackingNum,
   totalItems: Math.floor(Math.random() * 100 + 50),
   orderTotal: data.orderTotal,
-}))
+}));
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  queryButton: {
-    width: "100px",
-    height: "40px",
-    margin: "5px",
-  },
   queryRow: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
+    width: "70%",
   },
   queryButtonRow: {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
   queryField: {
-    width: "38%",
+    width: "22%",
     marginBottom: "16px",
   },
   trackingLogo: {
@@ -60,12 +61,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("sm")]: {
       display: "none",
     },
-    selectedButton: {
-      fontWeight: "600",
-      fontSize: "1rem",
-      textAlign: "center",
-      color: "#737373",
-    },
+  },
+  selectedButton: {
+    fontWeight: "600",
+    fontSize: "1rem",
+    textAlign: "center",
+    color: "#737373",
   },
 }));
 
@@ -73,6 +74,8 @@ const OrderHistory = () => {
   const classes = useStyles();
 
   const [sortValue, setSortValue] = useState("pending");
+  const [vendor, setVendor] = useState(null);
+  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput("");
   const [selectedFromDate, setSelectedFromDate] = useState(
     subDays(new Date(), 7).toLocaleDateString()
   );
@@ -95,7 +98,7 @@ const OrderHistory = () => {
         <br />
         <div className={classes.queryButtonRow}>
           <ButtonGroup
-            style={{ height: "40px", marginRight: "10px" }}
+            style={{ height: "40px", marginRight: "10px", marginTop: "7px" }}
             color="secondary"
             aria-label="order-sort"
           >
@@ -144,6 +147,21 @@ const OrderHistory = () => {
                 COMPLETE
               </Button>
             </Tooltip>
+            <Tooltip title="View All Orders">
+              <Button
+                className={
+                  sortValue === "all"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={sortValue === "all" ? "contained" : "outlined"}
+                onClick={() => {
+                  setSortValue("all");
+                }}
+              >
+                ALL
+              </Button>
+            </Tooltip>
           </ButtonGroup>
           <div className={classes.queryRow}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -179,9 +197,39 @@ const OrderHistory = () => {
                   "aria-label": "change date",
                 }}
               />
+              <AutoComplete
+                value={vendor}
+                className={classes.queryField}
+                onChange={(event, value) => setVendor(value)}
+                id="vendor"
+                options={distributors}
+                getOptionLabel={(dist) => dist.name}
+                renderInput={(params) => (
+                  <TextField
+                    color="secondary"
+                    {...params}
+                    label="Vendor"
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+              />
+              <TextField
+                className={classes.queryField}
+                color="secondary"
+                fullWidth
+                name="sequenceNumber"
+                type="text"
+                label="Sequence Number"
+                value={sequenceNumber}
+                {...bindSequenceNumber}
+                variant="outlined"
+                size="small"
+              />
             </MuiPickersUtilsProvider>
             <Button
               className={classes.largeButton}
+              style={{ margin: "0 5px 16px 5px" }}
               variant="contained"
               color="secondary"
             >

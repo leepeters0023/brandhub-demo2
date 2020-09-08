@@ -2,12 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchItems } from "../redux/slices/programsSlice";
 
 import { useWindowHash } from "../hooks/UtilityHooks";
-
-//mockdata
-import items from "../assets/mockdata/Items";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -48,26 +47,27 @@ const useStyles = makeStyles((theme) => ({
 
 const Program = ({ userType, programId }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [value, updateValue] = useCallback(useState(1));
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
-  const handleChangeTab = useWindowHash(["#details", "#items"], updateValue)
+  const handleChangeTab = useWindowHash(["#details", "#items"], updateValue);
 
   const programs = useSelector((state) => state.programs.programs);
-
+  const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
     setCurrentProgram(program);
-  
-  }, [programId, setCurrentProgram, programs]);
+    if (program && program.items.length === 0) {
+      dispatch(fetchItems(programId));
+    }
+  }, [programId, setCurrentProgram, programs, dispatch]);
 
   const handlePreview = (itemNumber) => {
-    let item = items.find(
-      (item) => item.itemNumber === itemNumber
-    );
+    let item = currentProgram.items.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
     handlePreviewModal(true);
   };
@@ -144,11 +144,7 @@ const Program = ({ userType, programId }) => {
             </div>
           </div>
         </div>
-        <Tabs
-          value={value}
-          onChange={handleChangeTab}
-          indicatorColor="primary"
-        >
+        <Tabs value={value} onChange={handleChangeTab} indicatorColor="primary">
           <Tab className={classes.headerText} label="Details" value={1} />
           <Tab className={classes.headerText} label="Items" value={2} />
         </Tabs>
@@ -186,13 +182,16 @@ const Program = ({ userType, programId }) => {
                 </Tooltip>
               </div>
             </div> */}
-
-            <OrderItemViewControl
-              type={"program"}
-              currentView={currentView}
-              handlePreview={handlePreview}
-              currentProgram={currentProgram}
-            />
+            {itemsLoading ? (
+              <CircularProgress />
+            ) : (
+              <OrderItemViewControl
+                type={"program"}
+                currentView={currentView}
+                handlePreview={handlePreview}
+                items={currentProgram.items}
+              />
+            )}
           </>
         )}
       </Container>

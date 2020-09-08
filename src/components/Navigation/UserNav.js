@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ initials, handleLogout }) => {
+const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -65,6 +65,7 @@ const UserNavMenu = ({ initials, handleLogout }) => {
         <MenuItem
           onClick={() => {
             handleClose();
+            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -78,6 +79,7 @@ const UserNavMenu = ({ initials, handleLogout }) => {
           to="/settings#general"
           onClick={() => {
             handleClose();
+            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -91,6 +93,7 @@ const UserNavMenu = ({ initials, handleLogout }) => {
           to="/help"
           onClick={() => {
             handleClose();
+            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -105,6 +108,7 @@ const UserNavMenu = ({ initials, handleLogout }) => {
           onClick={() => {
             handleLogout();
             handleClose();
+            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -120,6 +124,7 @@ const UserNavMenu = ({ initials, handleLogout }) => {
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
+  setSelected: PropTypes.func.isRequired
 };
 
 export default UserNavMenu;

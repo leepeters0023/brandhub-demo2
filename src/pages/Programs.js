@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchInitialPrograms } from "../redux/slices/programsSlice";
 
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import ProgramFilter from "../components/Utility/ProgramFilter";
 import ProgramSort from "../components/Utility/ProgramSort";
@@ -109,7 +109,7 @@ const Programs = ({ userType }) => {
 
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              <SelectorMenus type="regions" />
+              <RegionSelector />
             </div>
           </div>
         </div>

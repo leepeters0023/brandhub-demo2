@@ -78,9 +78,9 @@ const Login = () => {
   const error = useSelector((state) => state.user.error);
   const isLoading = useSelector((state) => state.user.loginIsLoading);
 
-  const handleSubmit = async (evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
-    await dispatch(logIn(userName, password));
+    dispatch(logIn(userName, password));
   };
 
   return (

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from "prop-types";
 
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -80,6 +81,11 @@ const UserRoleSelect = ({role, setRole}) => {
         </ButtonGroup>
     </>
   )
+}
+
+UserRoleSelect.propTypes = {
+  role: PropTypes.string,
+  setRole: PropTypes.func.isRequired
 }
 
 export default UserRoleSelect;

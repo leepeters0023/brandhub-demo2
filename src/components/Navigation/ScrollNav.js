@@ -123,6 +123,7 @@ const ScrollNav = (props) => {
               <UserNav
                 initials={initials}
                 handleLogout={handleLogout}
+                setSelected={setSelected}
               />
             </div>
           </div>

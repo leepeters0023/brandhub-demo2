@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import SelectorMenus from "../components/Utility/SelectorMenus";
+import RegionSelector from "../components/Utility/RegionSelector";
 
 import GalloLogo from "../assets/gallologo.png";
 
@@ -30,7 +30,7 @@ const Calendar = () => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.formControl}>
-          <SelectorMenus type="regions" />
+          <RegionSelector />
         </div>
         <div className={classes.titleImage}>
           <img className={classes.logo} src={GalloLogo} alt="Gallo" />
