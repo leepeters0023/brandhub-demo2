@@ -4,17 +4,19 @@ import Jsona from "jsona";
 const dataFormatter = new Jsona();
 
 //mock fetch
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+// const timeout = (ms) => {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// };
 
 export const fetchOrdersByProgram = async (program) => {
   const response = { status: "", error: null, data: null };
-  await timeout(1000);
+  //await timeout(1000);
   await axios
     .get(`/api/pre_orders?filter[program_id]=${program}`)
     .then((res) => {
+      console.log(res)
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -34,7 +36,7 @@ export const patchOrderItem = async (id, qty) => {
       "Content-Type": "application/vnd.api+json"
     }
   }
-  await timeout(500)
+  //await timeout(500)
   await axios
     .patch(`/api/order-items/${id}`, {
       data: {

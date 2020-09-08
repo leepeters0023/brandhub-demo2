@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { fetchOrdersByProgram } from "../../api/orderApi";
 
+import { setProgramComplete } from "./programsSlice";
+
 /*
 * Data Format:
 programsTable: {
@@ -48,6 +50,7 @@ programsTable: {
 
 let initialState = {
   isLoading: false,
+  preOrderId: null,
   programId: null,
   items: [],
   orders: [],
@@ -75,7 +78,7 @@ const programTableSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     buildTableFromOrders(state, action) {
-      const { programId, orders, items } = action.payload;
+      const { programId, orders, items, preOrderId } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
         let progTotal = 0;
@@ -91,6 +94,7 @@ const programTableSlice = createSlice({
             ).estTotal += item.estTotal;
           });
         });
+        state.preOrderId = preOrderId;
         state.programId = programId;
         state.items = currentItems;
         state.orders = [...orders];
@@ -184,13 +188,16 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
+    if (currentOrders.data[0]["is-complete"]) {
+      dispatch(setProgramComplete({ program: program, status: true }))
+    }
     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
       id: item.id,
       itemNumber: item.item["item-number"],
-      brand: "BRAND",
+      brand: item.item.brand.name,
       itemType: item.item.name,
       price: item.item.price,
-      qty: "5 / Pack",
+      qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
       totalItems: 0,
@@ -213,11 +220,8 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       items: ord["order-items"].map((item) => ({
         id: item.id,
         itemNumber: item.item["item-number"],
-        brand: "BRAND",
         itemType: item.item.type,
         price: item.item.price,
-        qty: "5 / Pack",
-        imgUrl: item.item["img-url"],
         estTotal: item.qty * item.item.price,
         totalItems: item.qty,
       })).sort((a, b) => {
@@ -238,12 +242,15 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
         ? 1
         : 0;
     })
+    
+    let preOrderId = currentOrders.data[0].id;
 
     dispatch(
       buildTableFromOrders({
         programId: program,
         orders: orders,
         items: currentItems,
+        preOrderId: preOrderId,
       })
     );
   } catch (err) {

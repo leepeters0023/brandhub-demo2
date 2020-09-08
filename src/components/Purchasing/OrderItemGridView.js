@@ -88,15 +88,11 @@ const OrderItemGridView = (props) => {
     type,
     currentItems,
     handlePreview,
-    currentProgram,
     handleAddItem,
     currentItemValues,
     handleItemUpdate,
   } = props;
   const classes = useStyles();
-
-  //nounused vars (current program not needed yet until api integration)
-  console.log(currentProgram);
 
   return (
     <Container className={classes.mainWrapper}>
@@ -184,7 +180,6 @@ OrderItemGridView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
-  currentProgram: PropTypes.object,
   handleAddItem: PropTypes.func.isRequired,
 };
 
