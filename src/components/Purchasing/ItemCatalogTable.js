@@ -45,7 +45,7 @@ const ItemCatalogTable = ({ currentItems, handlePreview }) => {
           </TableHead>
           <TableBody>
             {currentItems.map((item) => (
-              <TableRow key={item.itemNumber} hover>
+              <TableRow key={item.id} hover>
                 <TableCell align="left">
                   <img
                     id={item.itemNumber}

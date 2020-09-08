@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+ 
 /*
 * Data Format:
 orders: {
@@ -43,16 +43,25 @@ shippingObj: {
 
 let initialState = {
   isLoading: false,
-  orders: [],
-  programTotal: 0,
+  id: null,
+  orderNumber: null,
+  distributorName: null,
+  distributorId: null,
+  type: null,
+	status: null,
+	items: [],
+	shipping: {},
+	budget: null,
+	totalItems: 0,
+	totalEstCost: 0,
   error: null,
 };
 
-let shippingState = {
-  handler: undefined,
-  trackingNum: undefined,
-  shippingStatus: undefined,
-};
+// let shippingState = {
+//   handler: undefined,
+//   trackingNum: undefined,
+//   shippingStatus: undefined,
+// };
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -70,101 +79,20 @@ const ordersSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     getOrdersSuccess(state, action) {
-      const { orders } = action.payload;
-      const currentOrders = [...state.orders];
-      state.orders = currentOrders.concat(orders);
+      const { order, items } = action.payload;
+      state.id = order.id;
+      state.orderNumber = order.orderNumber;
+      state.distributorName = order.distributorName;
+      state.distributorId = order.distributorId;
+      state.type = order.type;
+      state.status = order.status;
+      state.items = [...items];
+      state.shipping = {...order.shipping}
+      state.budget = order.budget;
+      state.totalItems = order.totalItems;
+      state.totalEstCost = order.totalEstCost;
       state.isLoading = false;
       state.error = null;
-    },
-    addNewOrder(state, action) {
-      const {
-        id,
-        distributorId,
-        distributorName,
-        type,
-        program,
-        items,
-        budget,
-        totalItems,
-        totalEstCost,
-        status = "draft",
-        shipping = shippingState,
-      } = action.payload;
-      const newOrder = {
-        id: id,
-        distributorId: distributorId,
-        distributorName: distributorName,
-        type: type,
-        program: program,
-        items: items,
-        budget: budget,
-        totalItems: totalItems,
-        totalEstCost: totalEstCost,
-        status: status,
-        shipping: shipping,
-      };
-      let newOrders = [...state.orders];
-      newOrders.push(newOrder);
-      state.orders = newOrders;
-    },
-    updateOrder(state, action) {
-      const { orderId, items, budget, totalItems, totalEstCost, status } = action.payload;
-      let currentOrder = state.orders.find((ord) => ord.id === orderId);
-      let index = state.orders.indexOf(currentOrder);
-      let ordersArray = [...state.orders]
-
-      currentOrder.items = [...items];
-      currentOrder.budget = budget;
-      currentOrder.totalItems = totalItems;
-      currentOrder.totalEstCost = totalEstCost;
-      currentOrder.status = status;
-
-      ordersArray.splice(index, 1, currentOrder);
-
-      state.orders = ordersArray;
-    },
-    updateOrders(state, action) {
-      const { orders } = action.payload;
-
-      const ordersArray = state.orders.map((ord, index) => {
-        let totalItems = 0;
-        let totalEstCost = 0;
-
-        orders[index].items.forEach((i) => {
-          totalItems += i.totalItems;
-          totalEstCost += i.estTotal;
-        });
-
-        return {
-          id: ord.id,
-          distributorId: ord.distributorId,
-          distributorName: ord.distributorName,
-          type: ord.type,
-          program: ord.program,
-          items: [...orders[index].items],
-          budget: orders[index].budget,
-          totalItems: totalItems,
-          totalEstCost: totalEstCost,
-          status: ord.status,
-          shipping: { ...ord.shipping },
-        };
-      });
-
-      state.orders = ordersArray;
-    },
-    removeProgramOrders(state,action) {
-      const { program } = action.payload;
-      const currentOrders = state.orders.map(order => ({...order}))
-      const programsArray = currentOrders.filter((order) => order.type==="program")
-      const otherOrdersArray = currentOrders.filter((order) => order.type !== "program")
-      const filteredProgramOrders = programsArray.filter((order) => order.program.id !== program)
-      state.orders = otherOrdersArray.concat(filteredProgramOrders)
-    },
-    removeOrder(state, action) {
-      const { orderId } = action.payload;
-      const ordersArray = state.orders.filter((order) => order.id !== orderId);
-
-      state.orders = ordersArray;
     },
     setFailure: loadingFailed
   },
@@ -173,11 +101,6 @@ const ordersSlice = createSlice({
 export const {
   setIsLoading,
   getOrdersSuccess,
-  addNewOrder,
-  updateOrder,
-  updateOrders,
-  removeProgramOrders,
-  removeOrder,
   setFailure,
 } = ordersSlice.actions
 

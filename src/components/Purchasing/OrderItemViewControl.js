@@ -70,7 +70,7 @@ const OrderItemViewControl = (props) => {
         if (evt.target.value === "") {
           total = 0;
         } else total = parseInt(evt.target.value);
-        itemValues[evt.target.id] = total;
+        itemValues[`${evt.target.id}`] = total;
         updateCurrentItemValues(itemValues);
       }
     },
@@ -80,11 +80,12 @@ const OrderItemViewControl = (props) => {
   useEffect(() => {
     if (Object.keys(currentItemValues).length === 0) {
       let itemObj = {};
-      currentItems.forEach((item) => {
-        itemObj[item.itemNumber] = "";
+      items.forEach((item) => {
+        itemObj[`${item.id}`] = "";
       });
+      updateCurrentItemValues(itemObj);
     }
-  }, [currentItemValues]);
+  }, [items, currentItemValues, updateCurrentItemValues]);
 
   return (
     <>
@@ -106,13 +107,13 @@ const OrderItemViewControl = (props) => {
       </div>
       {(currentView === "list" && type === "catalog") && (
         <ItemCatalogTable
-          currentItems={currentItems}
+          currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
         />
       )}
       {(currentView === "grid" && type === "catalog") && (
         <ItemCatalogGrid
-          currentItems={currentItems}
+          currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
         />
       )}

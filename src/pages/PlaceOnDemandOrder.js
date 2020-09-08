@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { brands, itemTypes, families, units, others } from "../utility/constants";
+import { useDispatch, useSelector } from "react-redux";
 
-//mockdata
-import items from "../assets/mockdata/Items";
+import { fetchFilteredItems } from "../redux/slices/itemSlice";
+
+import { brands, itemTypes, families, units, others } from "../utility/constants";
 
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -18,6 +19,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -29,13 +31,16 @@ const useStyles = makeStyles((theme) => ({
 
 const PlaceOnDemandOrder = ({ userType }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   //const [itemFilters, setItemFilters] = useState([]);
+  const currentItems = useSelector((state) => state.items.items);
+  const itemsLoading = useSelector((state) => state.items.isLoading);
 
   const handlePreview = (itemNumber) => {
-    let item = items.find((item) => item.itemNumber === itemNumber);
+    let item = currentItems.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
     handlePreviewModal(true);
   };
@@ -43,6 +48,12 @@ const PlaceOnDemandOrder = ({ userType }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    if (currentItems.length === 0 && userType) {
+      dispatch(fetchFilteredItems("onDemand"));
+    }
+  }, [currentItems, dispatch, userType]);
 
   return (
     <>
@@ -110,11 +121,16 @@ const PlaceOnDemandOrder = ({ userType }) => {
             units={units}
             others={others}
           />
+          {itemsLoading ? (
+            <CircularProgress />
+          ) : (
             <OrderItemViewControl
               type={"onDemand"}
               currentView={currentView}
               handlePreview={handlePreview}
+              items={currentItems}
             />
+          )}
         </>
       </Container>
       <br />
