@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "@reach/router";
+import FourOhFour from "../../pages/FourOhFour";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -21,7 +22,12 @@ class ErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
-      return <Redirect noThrow to="/whoops" />;
+      return (
+        <>
+          <Redirect noThrow to="/whoops" />
+          <FourOhFour />
+        </>
+      );
     }
 
     return this.props.children;
