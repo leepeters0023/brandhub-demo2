@@ -6,7 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
-import { brands, itemTypes, families, units, others } from "../utility/constants";
+import {
+  brands,
+  itemTypes,
+  families,
+  units,
+  others,
+} from "../utility/constants";
 
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -14,8 +20,6 @@ import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -58,23 +62,13 @@ const PlaceOnDemandOrder = ({ userType }) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={previewModal}
-          onClose={handleModalClose}
-          fullWidth
-          maxWidth="lg"
-        >
-          <DialogContent>
-            <ItemPreviewModal
-              type={"onDemand"}
-              currentItem={currentItem}
-              handleClose={handleModalClose}
-              userType={userType}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <ItemPreviewModal
+        type={"onDemand"}
+        currentItem={currentItem}
+        handleClose={handleModalClose}
+        previewModal={previewModal}
+      />
+
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
@@ -82,7 +76,7 @@ const PlaceOnDemandOrder = ({ userType }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-          <Tooltip title="View Current Order">
+            <Tooltip title="View Current Order">
               <IconButton component={Link} to="/orders/open/ondemand">
                 <ExitToAppIcon fontSize="large" color="inherit" />
               </IconButton>
@@ -114,7 +108,7 @@ const PlaceOnDemandOrder = ({ userType }) => {
             <RegionSelector />
           </div>
         </div>
-    
+
         <br />
         <>
           <ItemFilter

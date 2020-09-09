@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
+
+import { useDispatch } from "react-redux";
+
+import { addStockItem } from "../../redux/slices/inStockOrderSlice";
+import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
+
+import AddItemConfirmation from "../Utility/AddItemConfirmation";
 
 import ItemOneSheet from "./ItemOneSheet";
 import ItemFeedback from "./ItemFeedback";
 import ItemAssembly from "./ItemAssembly";
-import UserSelector from "../Utility/UserSelector";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Tabs from "@material-ui/core/Tabs";
@@ -75,166 +83,242 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemPreviewModal = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const {
     type,
-    currentItem: { itemNumber, brand, itemType, price, imgUrl, qty },
+    currentItem: { itemNumber, brand, itemType, price, imgUrl, qty, stock },
     handleClose,
-    userType,
+    previewModal,
   } = props;
 
   const [currentImage, setImage] = useState(imgUrl);
   const [value, setValue] = useState(1);
+  const [itemQty, setItemQty] = useState("");
+  const [currentItem, setCurrentItem] = useState(null);
 
   const handleChangeTab = (_evt, newValue) => {
     setValue(newValue);
   };
 
+  const handleItemQty = (evt) => {
+    const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    let total;
+    if (
+      numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
+      evt.target.value === ""
+    ) {
+      if (evt.target.value === "") {
+        total = 0;
+      } else total = parseInt(evt.target.value);
+      setItemQty(total);
+    }
+  };
+
+  const handleModalClose = () => {
+    setCurrentItem(null);
+    handleClose();
+  };
+
+  const handleAddItem = useCallback(() => {
+    let newItem = {
+      itemNumber: itemNumber,
+      brand: brand,
+      itemType: itemType,
+      price: price,
+      qty: qty,
+      imgUrl: imgUrl,
+      complianceStatus: "pending",
+      totalItems: parseInt(itemQty),
+      estTotal: parseInt(itemQty) * price,
+    };
+
+    setCurrentItem(newItem);
+    setItemQty("0");
+
+    if (type === "inStock") {
+      dispatch(addStockItem("1", newItem, newItem.qty));
+    } else if (type === "onDemand") {
+      dispatch(addDemandItem("1", newItem, newItem.qty));
+    }
+  }, [
+    dispatch,
+    type,
+    setCurrentItem,
+    brand,
+    qty,
+    itemNumber,
+    itemType,
+    price,
+    imgUrl,
+    itemQty,
+  ]);
+
   return (
-    <>
-      <Grid container spacing={5} className={classes.dialogGrid}>
-        <IconButton
-          className={classes.closeButton}
-          onClick={() => {
-            handleClose(false);
-          }}
-        >
-          <CancelIcon fontSize="large" color="secondary" />
-        </IconButton>
-        <Grid item className={classes.previewGrid} md={7} xs={12}>
-          <div className={classes.imgPreview}>
-            <div className={classes.largeImageWrapper}>
-              <img
-                className={classes.largeImage}
-                src={currentImage}
-                alt={`${brand} ${itemType}`}
-              />
-            </div>
-            <div className={classes.carousel}>
-              <img
-                id={currentImage}
-                className={classes.previewImg}
-                src={currentImage}
-                alt={`${brand} ${itemType}`}
-                onClick={() => {
-                  setImage(currentImage);
-                }}
-              />
-              <img
-                id={currentImage}
-                className={classes.previewImg}
-                src={currentImage}
-                alt={`${brand} ${itemType}`}
-                onClick={() => {
-                  setImage(currentImage);
-                }}
-              />
-              <img
-                id={currentImage}
-                className={classes.previewImg}
-                src={currentImage}
-                alt={`${brand} ${itemType}`}
-                onClick={() => {
-                  setImage(currentImage);
-                }}
-              />
-            </div>
-          </div>
-        </Grid>
-        <Grid item className={classes.detailGrid} md={5} xs={12}>
-          <Typography color="textSecondary" variant="body2">
-            {brand}
-          </Typography>
-          <div className={classes.itemTitle}>
-            <Typography className={classes.titleText} variant="h2">
-              {`${brand} ${itemType}`}
-            </Typography>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-              className={classes.itemNumber}
+    <div className={classes.relativeContainer}>
+      <Dialog
+        open={previewModal}
+        onClose={handleModalClose}
+        fullWidth
+        maxWidth="lg"
+      >
+        <DialogContent>
+          <Grid container spacing={5} className={classes.dialogGrid}>
+            <IconButton
+              className={classes.closeButton}
+              onClick={() => {
+                handleModalClose();
+              }}
             >
-              {` | #${itemNumber}`}
-            </Typography>
-          </div>
-          <Typography className={classes.headerText} variant="h5">
-            {price}
-          </Typography>
-          <Box bgcolor="primary.main" className={classes.dividerBox} />
-          <br />
-          <Typography className={classes.bodyText} variant="body1">
-            Item description here
-          </Typography>
-          <Typography className={classes.bodyText} variant="body1">
-            - Item bullet point
-          </Typography>
-          <Typography className={classes.bodyText} variant="body1">
-            - Item bullet point
-          </Typography>
-          <Typography className={classes.bodyText} variant="body1">
-            - Item bullet point
-          </Typography>
-          <br />
-          {type === "inStock" && (
-            <Typography variant="body1" color="textSecondary">
-              {`Amount Available: ${Math.floor(Math.random() * 10 + 1) * 5}`}
-            </Typography>
-          )}
-          {type && (
-            <>
-              <Typography variant="body1" color="textSecondary">
-                {qty}
+              <CancelIcon fontSize="large" color="secondary" />
+            </IconButton>
+            <Grid item className={classes.previewGrid} md={7} xs={12}>
+              <div className={classes.imgPreview}>
+                <div className={classes.largeImageWrapper}>
+                  <img
+                    className={classes.largeImage}
+                    src={currentImage || imgUrl}
+                    alt={`${brand} ${itemType}`}
+                  />
+                </div>
+                <div className={classes.carousel}>
+                  <img
+                    id={currentImage || imgUrl}
+                    className={classes.previewImg}
+                    src={currentImage || imgUrl}
+                    alt={`${brand} ${itemType}`}
+                    onClick={() => {
+                      setImage(currentImage || imgUrl);
+                    }}
+                  />
+                  <img
+                    id={currentImage || imgUrl}
+                    className={classes.previewImg}
+                    src={currentImage || imgUrl}
+                    alt={`${brand} ${itemType}`}
+                    onClick={() => {
+                      setImage(currentImage || imgUrl);
+                    }}
+                  />
+                  <img
+                    id={currentImage || imgUrl}
+                    className={classes.previewImg}
+                    src={currentImage || imgUrl}
+                    alt={`${brand} ${itemType}`}
+                    onClick={() => {
+                      setImage(currentImage || imgUrl);
+                    }}
+                  />
+                </div>
+              </div>
+            </Grid>
+            <Grid item className={classes.detailGrid} md={5} xs={12}>
+              <Typography color="textSecondary" variant="body2">
+                {brand}
               </Typography>
-              <br />
+              <div className={classes.itemTitle}>
+                <Typography className={classes.titleText} variant="h2">
+                  {`${brand} ${itemType}`}
+                </Typography>
+                <Typography
+                  color="textSecondary"
+                  variant="body2"
+                  className={classes.itemNumber}
+                >
+                  {` | #${itemNumber}`}
+                </Typography>
+              </div>
+              <Typography className={classes.headerText} variant="h5">
+                {price}
+              </Typography>
               <Box bgcolor="primary.main" className={classes.dividerBox} />
               <br />
-            </>
-          )}
-          {(type && type !== "preOrder") && (
-            <>
-              {userType !== "field1" && (
-                <div>
-                  <UserSelector />
-                </div>
-              )}
-              <TextField
-                color="secondary"
-                style={{ width: "150px", marginLeft: "5px", marginTop: "10px" }}
-                id={`${itemNumber}`}
-                placeholder="Qty"
-                variant="outlined"
-              />
+              <Typography className={classes.bodyText} variant="body1">
+                Item description here
+              </Typography>
+              <Typography className={classes.bodyText} variant="body1">
+                - Item bullet point
+              </Typography>
+              <Typography className={classes.bodyText} variant="body1">
+                - Item bullet point
+              </Typography>
+              <Typography className={classes.bodyText} variant="body1">
+                - Item bullet point
+              </Typography>
               <br />
-              <Button
-                variant="contained"
-                color="secondary"
-                className={classes.largeButton}
-                style={{ width: "150px", marginLeft: "5px", marginTop: "10px" }}
-              >
-                ADD TO ORDER
-              </Button>
-            </>
-          )}
-        </Grid>
-      </Grid>
-      <br />
-      <Tabs
-        variant="fullWidth"
-        value={value}
-        onChange={handleChangeTab}
-        indicatorColor="primary"
-        centered
-      >
-        <Tab className={classes.headerText} label="One Sheet" value={1} />
-        <Tab className={classes.headerText} label="Item Feedback" value={2} />
-        <Tab className={classes.headerText} label="Assembly" value={3} />
-      </Tabs>
-      <hr />
-      <br />
-      {value === 1 && <ItemOneSheet />}
-      {value === 2 && <ItemFeedback />}
-      {value === 3 && <ItemAssembly />}
-      <br />
-    </>
+              {type === "inStock" && (
+                <Typography variant="body1" color="textSecondary">
+                  {`Amount Available: ${stock}`}
+                </Typography>
+              )}
+              {type && (
+                <>
+                  <Typography variant="body1" color="textSecondary">
+                    {qty}
+                  </Typography>
+                  <br />
+                  <Box bgcolor="primary.main" className={classes.dividerBox} />
+                  <br />
+                </>
+              )}
+              {type && type !== "preOrder" && (
+                <>
+                  <TextField
+                    color="secondary"
+                    style={{
+                      width: "150px",
+                      marginLeft: "5px",
+                      marginTop: "10px",
+                    }}
+                    id={`${itemNumber}`}
+                    placeholder="Qty"
+                    variant="outlined"
+                    value={itemQty}
+                    onChange={handleItemQty}
+                  />
+                  <br />
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.largeButton}
+                    style={{
+                      width: "150px",
+                      marginLeft: "5px",
+                      marginTop: "10px",
+                    }}
+                    onClick={handleAddItem}
+                  >
+                    ADD TO ORDER
+                  </Button>
+                </>
+              )}
+            </Grid>
+          </Grid>
+          <br />
+          <Tabs
+            variant="fullWidth"
+            value={value}
+            onChange={handleChangeTab}
+            indicatorColor="primary"
+            centered
+          >
+            <Tab className={classes.headerText} label="One Sheet" value={1} />
+            <Tab
+              className={classes.headerText}
+              label="Item Feedback"
+              value={2}
+            />
+            <Tab className={classes.headerText} label="Assembly" value={3} />
+          </Tabs>
+          <hr />
+          <br />
+          {value === 1 && <ItemOneSheet />}
+          {value === 2 && <ItemFeedback />}
+          {value === 3 && <ItemAssembly />}
+          <br />
+          <AddItemConfirmation type={type} item={currentItem} />
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 
@@ -242,7 +326,6 @@ ItemPreviewModal.propTypes = {
   type: PropTypes.string,
   currentItem: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
-  userType: PropTypes.string,
 };
 
 export default ItemPreviewModal;

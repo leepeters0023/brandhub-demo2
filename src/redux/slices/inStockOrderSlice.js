@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { addOrderItem } from "../../api/orderApi";
 
 /*
 * Data Format:
@@ -35,6 +36,7 @@ itemObj: {
 
 let initialState = {
   isLoading: false,
+  orderUpdateLoading: false,
   orderNumber: null,
   distributorId: null,
   distributorName: null,
@@ -57,6 +59,10 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startUpdateLoading = (state) => {
+  state.orderUpdateLoading = true;
+};
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
@@ -68,6 +74,7 @@ const inStockOrderSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setUpdateLoading: startUpdateLoading,
     getCurrentInStockOrderSuccess(state, action) {
       const {
         orderNumber,
@@ -104,9 +111,11 @@ const inStockOrderSlice = createSlice({
         state.items = items;
         state.totalItems += item.totalItems;
         state.totalCost += item.estTotal;
+        state.orderUpdateLoading = false;
+        state.error = null;
       } else {
         let currentItem = items.find((i) => i.itemNumber === item.itemNumber);
-        let tempOrderTotalItems = state.totalItems ;
+        let tempOrderTotalItems = state.totalItems;
         let tempOrderTotalCost = state.totalCost;
         currentItem.totalItems += item.totalItems;
         tempOrderTotalItems += item.totalItems;
@@ -116,6 +125,8 @@ const inStockOrderSlice = createSlice({
         state.items = items;
         state.totalItems = tempOrderTotalItems;
         state.totalCost = tempOrderTotalCost;
+        state.orderUpdateLoading = false;
+        state.error = null;
       }
     },
     updateInStockOrder(state, action) {
@@ -132,6 +143,8 @@ const inStockOrderSlice = createSlice({
       state.items = items;
       state.totalItems = tempOrderTotalItems;
       state.totalCost = tempOrderTotalCost;
+      state.orderUpdateLoading = false;
+      state.error = null;
     },
     setShippingLocation(state, action) {
       const { location } = action.payload;
@@ -170,6 +183,7 @@ const inStockOrderSlice = createSlice({
 
 export const {
   setIsLoading,
+  setUpdateLoading,
   getCurrentInStockOrderSuccess,
   addInStockItem,
   updateInStockOrder,
@@ -185,3 +199,15 @@ export const {
 export default inStockOrderSlice.reducer;
 
 //async thunks for fetching orders and updating orders here!
+
+export const addStockItem = (id, item, qty) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const response = await addOrderItem(id, item, qty);
+    console.log(response);
+    dispatch(addInStockItem({item: item}))
+  } catch (err) {
+    console.log(err)
+    dispatch(setFailure({error: err.toString()}))
+  } 
+}
