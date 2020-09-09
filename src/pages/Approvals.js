@@ -7,7 +7,7 @@ import GalloLogo from "../assets/gallologo.png";
 import ApprovalPrior from "../components/Compliance/ApprovalPrior";
 import ApprovalPending from "../components/Compliance/ApprovalPending";
 import ComplianceModal from "../components/Compliance/ComplianceModal";
-import RegionSelector from "../components/Utility/RegionSelector";
+//import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Dialog from "@material-ui/core/Dialog";
@@ -58,7 +58,7 @@ const Approvals = () => {
             </Typography>
           </div>
           <div>
-            <RegionSelector />
+            {/* <RegionSelector /> */}
           </div>
         </div>
         <Tabs

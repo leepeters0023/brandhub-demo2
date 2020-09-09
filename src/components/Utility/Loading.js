@@ -2,7 +2,7 @@ import React from 'react'
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const Loading = () => {
+const Loading = ({ partial }) => {
   return (
     <div
           style={{
@@ -18,7 +18,7 @@ const Loading = () => {
           }}
         >
           <br />
-          <CircularProgress color="inherit" disableShrink />
+          <CircularProgress color="inherit" disableShrink size={100}/>
         </div>
   )
 }
