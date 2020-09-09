@@ -99,6 +99,9 @@ const Login = () => {
           <Typography variant="h5">Sign in to access your account</Typography>
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
+              inputProps={{
+                'data-cy': "email"
+              }}
               color="secondary"
               variant="outlined"
               margin="normal"
@@ -120,6 +123,9 @@ const Login = () => {
               {...bindUserName}
             />
             <TextField
+              inputProps={{
+                'data-cy': "password"
+              }}
               color="secondary"
               variant="outlined"
               margin="normal"
@@ -141,6 +147,7 @@ const Login = () => {
               {...bindPassword}
             />
             <Button
+              data-cy="submit"
               type="submit"
               fullWidth
               variant="contained"
