@@ -4,6 +4,13 @@ import Jsona from "jsona";
 const dataFormatter = new Jsona();
 
 //TODO incorporate limit, item type (instock vs ondemand), filters, pagination ... 
+// export const fetchFilteredItems = async (filters) => {
+//   const response = { status: "", error: null, data: null };
+//   let filterString = "";
+//   await axios
+//     .get()
+// }
+
 export const fetchItems = async () => {
   const response = { status: "", error: null, data: null };
   await axios

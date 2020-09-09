@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderConfirmationTable = ({ items }) => {
-  console.log(items);
   const classes = useStyles();
 
   return (
