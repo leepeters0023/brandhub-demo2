@@ -1,10 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
 
 import { addStockItem } from "../../redux/slices/inStockOrderSlice";
 import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
+
+import { useItemUpdate } from "../../hooks/UtilityHooks";
 
 import OrderItemTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
@@ -22,9 +24,7 @@ const OrderItemViewControl = (props) => {
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
-  const [currentItemValues, updateCurrentItemValues] = useCallback(
-    useState({})
-  );
+  const {itemValues, handleItemUpdate} = useItemUpdate(items);
 
   const handleAddItem = useCallback((item, qty) => {
     let newItem = {
@@ -47,36 +47,8 @@ const OrderItemViewControl = (props) => {
       dispatch(addDemandItem("1", newItem, newItem.qty))
     }
   }, [dispatch, type, setCurrentItemAdded])
-
-  const handleItemUpdate = useCallback(
-    (evt) => {
-      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-      let itemValues = { ...currentItemValues };
-      let total;
-      if (
-        numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
-        evt.target.value === ""
-      ) {
-        if (evt.target.value === "") {
-          total = 0;
-        } else total = parseInt(evt.target.value);
-        itemValues[`${evt.target.id}`] = total;
-        updateCurrentItemValues(itemValues);
-      }
-    },
-    [currentItemValues, updateCurrentItemValues]
-  );
-
-  useEffect(() => {
-    if (Object.keys(currentItemValues).length === 0) {
-      let itemObj = {};
-      items.forEach((item) => {
-        itemObj[`${item.id}`] = "";
-      });
-      updateCurrentItemValues(itemObj);
-    }
-  }, [items, currentItemValues, updateCurrentItemValues]);
-
+  
+  console.log(itemValues);
   return (
     <>
       {(currentView === "list" && type === "catalog") && (
@@ -97,7 +69,7 @@ const OrderItemViewControl = (props) => {
           currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
           handleAddItem={handleAddItem}
-          currentItemValues={currentItemValues}
+          currentItemValues={itemValues}
           handleItemUpdate={handleItemUpdate}
           setCurrentItemAdded={setCurrentItemAdded}
         />
@@ -108,7 +80,7 @@ const OrderItemViewControl = (props) => {
           currentItems={items ? items : currentItems}
           handlePreview={handlePreview}
           handleAddItem={handleAddItem}
-          currentItemValues={currentItemValues}
+          currentItemValues={itemValues}
           handleItemUpdate={handleItemUpdate}
           setCurrentItemAdded={setCurrentItemAdded}
         />
