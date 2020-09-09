@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexWrap: "none",
     width: "148px",
+    justifyContent: "center",
   },
   root: {
     width: "150px !important",
@@ -62,6 +63,7 @@ const OrderItemTableView = (props) => {
     handleAddItem,
     currentItemValues,
     handleItemUpdate,
+    setCurrentItemAdded,
   } = props;
   const classes = useStyles();
 
@@ -125,7 +127,10 @@ const OrderItemTableView = (props) => {
                     className={classes.previewImageFloat}
                     src={row.imgUrl}
                     alt={row.itemType}
-                    onClick={() => handlePreview(row.itemNumber)}
+                    onClick={() => {
+                      handlePreview(row.itemNumber);
+                      setCurrentItemAdded(null);
+                    }}
                   />
                 </TableCell>
                 <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
@@ -143,7 +148,7 @@ const OrderItemTableView = (props) => {
                     />
                   </TableCell>
                 )}
-                <TableCell align="right">
+                <TableCell align="center">
                   <div className={classes.tableButtonWrapper}>
                     <IconButton
                       id={`${row.id}`}
@@ -192,6 +197,7 @@ OrderItemTableView.propTypes = {
   handleAddItem: PropTypes.func.isRequired,
   currentItemValues: PropTypes.object.isRequired,
   handleItemUpdate: PropTypes.func.isRequired,
+  setCurrentItemAdded: PropTypes.func.isRequired,
 };
 
 export default React.memo(OrderItemTableView);

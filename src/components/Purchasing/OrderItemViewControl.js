@@ -2,34 +2,25 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
-import { addInStockItem } from "../../redux/slices/inStockOrderSlice";
-import { addOnDemandItem } from "../../redux/slices/onDemandOrderSlice";
+
+import { addStockItem } from "../../redux/slices/inStockOrderSlice";
+import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
 
 import OrderItemTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
-import OrderConfirmation from "../Utility/OrderConfirmation";
+import AddItemConfirmation from "../Utility/AddItemConfirmation";
 import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
-
-import Dialog from "@material-ui/core/Dialog"
-import DialogContent from "@material-ui/core/DialogContent"
-import { makeStyles } from "@material-ui/core/styles"
 
 //mockdata
 import items from "../../assets/mockdata/Items";
 
 let currentItems = items.map((item) => ({...item, stock: Math.floor(Math.random() * 10 + 1) * 5}))
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global
-}))
-
 const OrderItemViewControl = (props) => {
   const { type, currentView, handlePreview, items } = props;
   const dispatch = useDispatch();
-  const classes = useStyles();
 
-  const [itemAddedModal, handleItemAddedModal] = useCallback(useState(false));
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
   const [currentItemValues, updateCurrentItemValues] = useCallback(
     useState({})
@@ -49,14 +40,13 @@ const OrderItemViewControl = (props) => {
     }
 
     setCurrentItemAdded(newItem);
-    handleItemAddedModal(true);
 
     if (type === "inStock") {
-      dispatch(addInStockItem({ item: newItem }))
+      dispatch(addStockItem("1", newItem, newItem.qty))
     } else if ( type === "onDemand") {
-      dispatch(addOnDemandItem({ item: newItem }))
+      dispatch(addDemandItem("1", newItem, newItem.qty))
     }
-  }, [dispatch, type, setCurrentItemAdded, handleItemAddedModal])
+  }, [dispatch, type, setCurrentItemAdded])
 
   const handleItemUpdate = useCallback(
     (evt) => {
@@ -89,22 +79,6 @@ const OrderItemViewControl = (props) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={itemAddedModal}
-          onClose={()=>handleItemAddedModal(false)}
-          fullWidth
-          maxWidth="sm"
-        >
-          <DialogContent>
-            <OrderConfirmation
-              item={currentItemAdded}
-              type={type}
-              handleModalClose={handleItemAddedModal}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
       {(currentView === "list" && type === "catalog") && (
         <ItemCatalogTable
           currentItems={items ? items : currentItems}
@@ -125,6 +99,7 @@ const OrderItemViewControl = (props) => {
           handleAddItem={handleAddItem}
           currentItemValues={currentItemValues}
           handleItemUpdate={handleItemUpdate}
+          setCurrentItemAdded={setCurrentItemAdded}
         />
       )}
       {(currentView === "grid" && type !== "catalog") && (
@@ -135,8 +110,10 @@ const OrderItemViewControl = (props) => {
           handleAddItem={handleAddItem}
           currentItemValues={currentItemValues}
           handleItemUpdate={handleItemUpdate}
+          setCurrentItemAdded={setCurrentItemAdded}
         />
       )}
+      <AddItemConfirmation type={type} item={currentItemAdded} />
     </>
   );
 };

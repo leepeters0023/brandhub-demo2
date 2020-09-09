@@ -98,6 +98,7 @@ const OrderItemGridView = (props) => {
     handleAddItem,
     currentItemValues,
     handleItemUpdate,
+    setCurrentItemAdded,
   } = props;
   const classes = useStyles();
 
@@ -127,7 +128,10 @@ const OrderItemGridView = (props) => {
                   className={classes.previewImg}
                   src={item.imgUrl}
                   alt={item.itemType}
-                  onClick={() => handlePreview(item.itemNumber)}
+                  onClick={() => {
+                    handlePreview(item.itemNumber);
+                    setCurrentItemAdded(null);
+                  }}
                 />
               </div>
               <br />
@@ -190,6 +194,7 @@ OrderItemGridView.propTypes = {
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
   handleAddItem: PropTypes.func.isRequired,
+  setCurrentItemAdded: PropTypes.func.isRequired,
 };
 
 export default OrderItemGridView;

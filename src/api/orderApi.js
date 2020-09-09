@@ -4,9 +4,9 @@ import Jsona from "jsona";
 const dataFormatter = new Jsona();
 
 //mock fetch
-// const timeout = (ms) => {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// };
+const timeout = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 export const fetchOrdersByProgram = async (program) => {
   const response = { status: "", error: null, data: null };
@@ -57,6 +57,20 @@ export const patchOrderItem = async (id, qty) => {
     });
   return response;
 };
+//TODO
+export const addOrderItem = async (id, item, qty) => {
+  const response = { status: "", error: null };
+  // let headers = {
+  //   headers: {
+  //     "Accept": "application/vnd.api+json",
+  //     "Content-Type": "application/vnd.api+json"
+  //   }
+  // }
+
+  await timeout(1000)
+  response.status = "ok"
+  return response;
+}
 
 export const deletePreOrderItem = async (id) => {
   const response = { status: "", error: null };
