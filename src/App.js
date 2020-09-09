@@ -112,7 +112,11 @@ const App = () => {
   }
 
   if (isLoading) {
-    return <Loading partial={false}/>;
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Loading partial={false} />;
+      </MuiThemeProvider>
+    );
   }
 
   if (programsIsLoading) {
@@ -121,7 +125,7 @@ const App = () => {
         <ScrollNav userType={role} handleLogout={handleLogout} />
         <Loading partial={true} />
       </MuiThemeProvider>
-    )
+    );
   }
 
   return (
