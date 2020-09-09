@@ -47,8 +47,7 @@ const OrderItemViewControl = (props) => {
       dispatch(addDemandItem("1", newItem, newItem.qty))
     }
   }, [dispatch, type, setCurrentItemAdded])
-  
-  console.log(itemValues);
+
   return (
     <>
       {(currentView === "list" && type === "catalog") && (
