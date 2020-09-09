@@ -1,16 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
-import { brands, itemTypes, families, units, others } from "../utility/constants";
+import {
+  brands,
+  itemTypes,
+  families,
+  units,
+  others,
+} from "../utility/constants";
 
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
-import UserSelector from "../components/Utility/UserSelector";
 import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
@@ -24,6 +30,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -81,6 +88,11 @@ const PlaceInStockOrder = ({ userType }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
+            <Tooltip title="View Current Order">
+              <IconButton component={Link} to="/orders/open/instock">
+                <ExitToAppIcon fontSize="large" color="inherit" />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="View List">
               <IconButton
                 onClick={() => {
@@ -105,9 +117,6 @@ const PlaceInStockOrder = ({ userType }) => {
                 />
               </IconButton>
             </Tooltip>
-            {(userType === "super" || userType === "field2") && (
-              <UserSelector />
-            )}
             <RegionSelector />
           </div>
         </div>

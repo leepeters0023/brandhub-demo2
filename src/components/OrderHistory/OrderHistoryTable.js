@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     }
   }
 }));
-
-const OrderHistoryTable = ({ orders, filter }) => {
+//TODO add sort by options on table head! (material ui enhanced table)
+const OrderHistoryTable = ({ orders }) => {
   const classes = useStyles();
 
   const handleRowClick = (orderNum) => {
@@ -31,9 +31,7 @@ const OrderHistoryTable = ({ orders, filter }) => {
     return (
       <>
         <Typography className={classes.headerText}>
-          {`You currently don't have any ${
-            filter[0].toUppercase() + filter.slice(1)
-          } orders on record..`}
+          {`You currently don't have any orders on record..`}
         </Typography>
       </>
     );
@@ -75,6 +73,9 @@ const OrderHistoryTable = ({ orders, filter }) => {
               <TableCell className={classes.headerText} align="left">
                 Order Total
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -109,6 +110,9 @@ const OrderHistoryTable = ({ orders, filter }) => {
                 </TableCell>
                 <TableCell align="left">
                   {row.orderTotal}
+                </TableCell>
+                <TableCell align="left">
+                  {row.orderStatus}
                 </TableCell>
               </TableRow>
             ))}
