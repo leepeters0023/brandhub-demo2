@@ -17,7 +17,7 @@ import {
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
-import RegionSelector from "../components/Utility/RegionSelector";
+//import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -106,7 +106,7 @@ const PlaceInStockOrder = ({ userType }) => {
                 />
               </IconButton>
             </Tooltip>
-            <RegionSelector />
+            {/* <RegionSelector /> */}
           </div>
         </div>
 

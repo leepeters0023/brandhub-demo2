@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import OnDemandOrder from "../components/Purchasing/OnDemandOrder";
 import UserSelector from "../components/Utility/UserSelector";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
-import RegionSelector from "../components/Utility/RegionSelector";
+//import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -52,7 +52,7 @@ const CurrentOnDemandOrder = ({ userType }) => {
               {(userType === "super" || userType === "field2") && (
                 <UserSelector />
               )}
-              <RegionSelector />
+              {/* <RegionSelector /> */}
             </div>
           </div>
         </div>

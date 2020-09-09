@@ -7,6 +7,7 @@ import { Link } from "@reach/router";
 import UserNav from "./UserNav";
 import OrdersNav from "./OrdersNav";
 import MoreNav from "./MoreNav";
+import RegionSelector from "../Utility/RegionSelector";
 
 import AppBar from "@material-ui/core/AppBar";
 import IconButton from "@material-ui/core/IconButton";
@@ -120,6 +121,7 @@ const ScrollNav = (props) => {
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>
             <div className={classes.navBreak}>
+              <RegionSelector />
               <UserNav
                 initials={initials}
                 handleLogout={handleLogout}

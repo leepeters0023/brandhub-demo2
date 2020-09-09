@@ -14,7 +14,7 @@ import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import UserSelector from "../components/Utility/UserSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
-import RegionSelector from "../components/Utility/RegionSelector";
+//import RegionSelector from "../components/Utility/RegionSelector";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -167,7 +167,7 @@ const CurrentPreOrder = ({ userType }) => {
               {(userType === "super" || userType === "field2") && (
                 <UserSelector />
               )}
-              <RegionSelector />
+              {/* <RegionSelector /> */}
             </div>
           </div>
         </div>

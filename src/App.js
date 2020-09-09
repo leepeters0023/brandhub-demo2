@@ -100,10 +100,6 @@ const App = () => {
     }
   }, [loggedIn, currentUser]);
 
-  if (isLoading || programsIsLoading) {
-    return <Loading />;
-  }
-
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
@@ -114,6 +110,20 @@ const App = () => {
       </MuiThemeProvider>
     );
   }
+
+  if (isLoading) {
+    return <Loading partial={false}/>;
+  }
+
+  if (programsIsLoading) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <ScrollNav userType={role} handleLogout={handleLogout} />
+        <Loading partial={true} />
+      </MuiThemeProvider>
+    )
+  }
+
   return (
     <MuiThemeProvider theme={theme}>
       {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}

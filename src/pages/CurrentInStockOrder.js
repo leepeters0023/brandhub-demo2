@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import InStockOrder from "../components/Purchasing/InStockOrder";
 import UserSelector from "../components/Utility/UserSelector";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
-import RegionSelector from "../components/Utility/RegionSelector";
+//import RegionSelector from "../components/Utility/RegionSelector";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -53,7 +53,7 @@ const CurrentInStockOrder = ({ userType }) => {
               {(userType === "super" || userType === "field2") && (
                 <UserSelector />
               )}
-              <RegionSelector />
+              {/* <RegionSelector /> */}
             </div>
           </div>
         </div>
