@@ -113,3 +113,38 @@ export const useWindowHash = (
 
   return handleChangeTab;
 };
+
+export const useItemUpdate = (items) => {
+  const [currentItemValues, updateCurrentItemValues] = useCallback(useState({}));
+  
+  const handleItemUpdate = useCallback(
+    (evt) => {
+      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+      let itemValues = { ...currentItemValues };
+      let total;
+      if (
+        numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
+        evt.target.value === ""
+      ) {
+        if (evt.target.value === "") {
+          total = 0;
+        } else total = parseInt(evt.target.value);
+        itemValues[`${evt.target.id}`] = total;
+        updateCurrentItemValues(itemValues);
+      }
+    },
+    [currentItemValues, updateCurrentItemValues]
+  );
+
+  useEffect(() => {
+    if (Object.keys(currentItemValues).length === 0) {
+      let itemObj = {};
+      items.forEach((item) => {
+        itemObj[`${item.id}`] = "";
+      });
+      updateCurrentItemValues(itemObj);
+    }
+  }, [items, currentItemValues, updateCurrentItemValues]);
+
+  return {itemValues: currentItemValues, handleItemUpdate}
+}
