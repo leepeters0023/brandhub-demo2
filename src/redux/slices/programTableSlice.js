@@ -193,6 +193,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
     }
     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
       id: item.id,
+      complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.name,
@@ -219,6 +220,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       program: ord.program.id,
       items: ord["order-items"].map((item) => ({
         id: item.id,
+        complianceStatus: item.item["compliance-status"],
         itemNumber: item.item["item-number"],
         itemType: item.item.type,
         price: item.item.price,

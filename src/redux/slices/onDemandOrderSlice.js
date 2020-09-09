@@ -63,7 +63,6 @@ const loadingFailed = (state, action) => {
   state.error = error;
 };
 
-//TODO add order notes and attention line actions, update inStockOrderView / orderConfirmation
 const onDemandOrderSlice = createSlice({
   name: "onDemandOrder",
   initialState,
