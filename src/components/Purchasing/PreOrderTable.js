@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ orderNumber, itemNumber, itemId, index }, ref) => {
+  React.forwardRef(({ orderNumber, compliance, itemNumber, itemId, index }, ref) => {
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
@@ -101,6 +101,20 @@ const MemoInputCell = React.memo(
     const handleScrollLeft = () => {
       ref.current.scrollLeft = 0;
     };
+
+    if (compliance !== "active") {
+      return (
+        <TableCell
+        align="center"
+        classes={{ root: classes.root }}
+        className={classes.borderRight}
+        style={{ zIndex: "-100", backgroundColor: "#999999"}}
+        onFocus={() => (index === 0 ? handleScrollLeft() : null)}
+      >
+        <Typography className={classes.headerText}>NOT COMPLIANT</Typography>
+      </TableCell>
+      )
+    }
 
     return (
       <TableCell
@@ -554,6 +568,7 @@ const PreOrderTable = (props) => {
                     {ord.items.map((item, index) => (
                       <MemoInputCell
                         key={item.id}
+                        compliance={item.complianceStatus}
                         orderNumber={ord.orderNumber}
                         itemNumber={item.itemNumber}
                         itemId={item.id}
