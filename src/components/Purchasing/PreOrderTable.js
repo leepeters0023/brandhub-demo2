@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, {  useRef } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -8,11 +8,7 @@ import {
   setItemTotal,
 } from "../../redux/slices/programTableSlice";
 
-import { setProgComplete } from "../../redux/slices/patchOrderSlice";
-
 import { patchItem } from "../../redux/slices/patchOrderSlice";
-
-import ProgramSelector from "../Utility/ProgramSelector";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -30,8 +26,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -218,34 +212,12 @@ const PreOrderTable = (props) => {
     setTableStyle,
     handleModalOpen,
     handleOpenConfirm,
-    setProgram,
     isLoading,
   } = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
   const tableRef = useRef(null);
   const currentItems = useSelector((state) => state.programTable.items);
   const orders = useSelector((state) => state.programTable.orders);
-  const preOrderId = useSelector((state) => state.programTable.preOrderId);
-  const isComplete = useSelector(
-    (state) =>
-      state.programs.programs.find((prog) => prog.id === currentProgram)
-        .isComplete
-  );
-
-  const handleProgram = useCallback(
-    (id) => {
-      setProgram(id);
-      window.location.hash = id
-    },
-    [setProgram]
-  );
-
-  const handleComplete = () => {
-    dispatch(
-      setProgComplete(currentProgram, !isComplete, preOrderId)
-    );
-  };
 
   if (isLoading) {
     return <CircularProgress color="inherit" />;
@@ -263,23 +235,6 @@ const PreOrderTable = (props) => {
                   style={{ zIndex: "100", width: "300px" }}
                   className={classes.borderRight}
                 >
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <ProgramSelector
-                      handler={handleProgram}
-                      currentProgram={currentProgram}
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isComplete}
-                          onChange={handleComplete}
-                          inputProps={{ "aria-label": "complete checkbox" }}
-                        />
-                      }
-                      label="Complete"
-                      labelPlacement="end"
-                    />
-                  </div>
                 </TableCell>
                 <TableCell classes={{ root: classes.root }}>
                   <div
@@ -318,23 +273,6 @@ const PreOrderTable = (props) => {
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <ProgramSelector
-                        handler={handleProgram}
-                        currentProgram={currentProgram}
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={isComplete}
-                            onChange={handleComplete}
-                            inputProps={{ "aria-label": "complete checkbox" }}
-                          />
-                        }
-                        label="Complete"
-                        labelPlacement="end"
-                      />
-                    </div>
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell

@@ -1,10 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
   removeGridItem,
   fetchProgramOrders,
+  setProgramName,
+  updatePreOrderNote,
 } from "../redux/slices/programTableSlice";
 
 import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
@@ -15,8 +18,8 @@ import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import UserSelector from "../components/Utility/UserSelector";
+import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
-//import RegionSelector from "../components/Utility/RegionSelector";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -24,7 +27,6 @@ import Grid from "@material-ui/core/Grid";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
-//import AutoComplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -60,9 +62,9 @@ const TotalsDiv = React.memo(({ program }) => {
 
   return (
     <>
-      <Typography
-        className={classes.titleText}
-      >{`Program Total: ${formatMoney(programTotal)}`}</Typography>
+      <Typography className={classes.titleText}>{`Program Total: ${formatMoney(
+        programTotal
+      )}`}</Typography>
       {/* <Typography
         className={classes.titleText}
       >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
@@ -77,9 +79,7 @@ const CurrentPreOrder = ({ userType }) => {
   const [open, setOpen] = useCallback(useState(true));
   const [terms, setTermsChecked] = useCallback(useState(false));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
-  //const [budget, setBudget] = useCallback(useState(null));
   const [program, setProgram] = useState(undefined);
-  //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
@@ -88,6 +88,7 @@ const CurrentPreOrder = ({ userType }) => {
 
   const isLoading = useSelector((state) => state.programTable.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
+  const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
   const userPrograms = useSelector((state) => state.programs.programs);
   const handleModalClose = () => {
     handleModal(false);
@@ -126,6 +127,15 @@ const CurrentPreOrder = ({ userType }) => {
     setProgram(window.location.hash.slice(1));
   }, []);
 
+  const handleProgram = useCallback((id) => {
+    setProgram(id);
+    window.location.hash = id;
+  }, []);
+
+  const handlePreOrderNote = (evt) => {
+    dispatch(updatePreOrderNote({ value: evt.target.value }));
+  };
+
   useEffect(() => {
     if (window.location.hash.length === 0) {
       if (userPrograms.length > 0 && !program) {
@@ -145,9 +155,17 @@ const CurrentPreOrder = ({ userType }) => {
 
   useEffect(() => {
     if (program) {
+      console.log("fetching!")
       dispatch(fetchProgramOrders(program));
+      let currentProg = userPrograms.find((prog) => prog.id === program);
+      dispatch(
+        setProgramName({
+          name: `${currentProg.name}-${currentProg.focusMonth}`,
+        })
+      );
     }
-  }, [program, dispatch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [program, dispatch, userPrograms.length]);
 
   useEffect(() => {
     window.addEventListener("popstate", handleProgramIdHash);
@@ -179,15 +197,13 @@ const CurrentPreOrder = ({ userType }) => {
       />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText} variant="h5">
-            Open Pre-Orders
-          </Typography>
+          <ProgramSelector handler={handleProgram} currentProgram={program} />
           <div className={classes.configButtons}>
+            {program && <TotalsDiv program={program} />}
             <div className={classes.innerConfigDiv}>
               {(userType === "super" || userType === "field2") && (
                 <UserSelector />
               )}
-              {/* <RegionSelector /> */}
             </div>
           </div>
         </div>
@@ -239,7 +255,21 @@ const CurrentPreOrder = ({ userType }) => {
             />
           </Grid>
           <Grid item md={5} xs={12}>
-            <Typography className={classes.headerText}>Order Notes</Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Typography className={classes.headerText}>
+                Order Notes
+              </Typography>
+              <Typography className={classes.bodyText} color="textSecondary">
+                {`${preOrderNote.length} / 300`}
+              </Typography>
+            </div>
             <br />
             <TextField
               color="secondary"
@@ -248,39 +278,11 @@ const CurrentPreOrder = ({ userType }) => {
               variant="outlined"
               size="small"
               rows="5"
+              value={preOrderNote}
+              onChange={handlePreOrderNote}
             />
             <br />
             <br />
-            {/* <AutoComplete
-            value={budget}
-            onChange={(event, value) => setBudget(value)}
-            id="budget"
-            options={budgets}
-            getOptionLabel={(budget) => budget}
-            renderInput={(params) => (
-              <TextField
-                color="secondary"
-                {...params}
-                label="Budget"
-                variant="outlined"
-                size="small"
-              />
-            )}
-          />
-          <br /> */}
-
-            {program ? (
-              <TotalsDiv program={program} />
-            ) : (
-              <>
-                <Typography
-                  className={classes.titleText}
-                >{`Program Total:`}</Typography>
-                {/* <Typography
-                  className={classes.titleText}
-                >{`Pre-Order Total:`}</Typography> */}
-              </>
-            )}
           </Grid>
         </Grid>
         <br />
@@ -291,6 +293,9 @@ const CurrentPreOrder = ({ userType }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
+              disabled={!terms}
+              component={Link}
+              to="/orders/preorder/confirmation"
             >
               PURCHASE ORDER
             </Button>
@@ -300,6 +305,9 @@ const CurrentPreOrder = ({ userType }) => {
               className={classes.largeButton}
               color="secondary"
               variant="contained"
+              disabled={!terms}
+              component={Link}
+              to="/orders/preorder/confirmation"
             >
               SUBMIT ORDER
             </Button>
