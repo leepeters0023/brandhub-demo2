@@ -65,22 +65,24 @@ export const renderChip = (rowData) => {
 export const filter = (array, filters) => {
   let filteredArray = [];
   if (filters.length !== 0) {
-    filters.forEach((filter) => {
-      array
-        .filter((item) => {
-          if (filter.type !== "brand") {
-            return item[filter.type] === filter.value
-          } else {
-            return item.brand.includes(filter.value)
+    array.forEach(item => {
+      let filtered = true
+      for (let i = 0; i < filters.length; i++) {
+        if (filters[i].type !== "brand") {
+          if (item[filters[i].type] !== filters[i].value) {
+            filtered = false
+            break
           }
-        })
-        .forEach((item) => {
-          if (filteredArray.filter((i) => i.id === item.id).length === 0) {
-            filteredArray.push(item);
-          }
-        });
-    });
-    return filteredArray;
+        } else if (!item.brand.includes(filters[i].value)) {
+          filtered = false
+          break
+        }
+      }
+      if (filtered) {
+        filteredArray.push(item)
+      }
+    })
+    return filteredArray
   } else return array;
 };
 
