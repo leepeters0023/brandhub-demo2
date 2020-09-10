@@ -28,6 +28,7 @@ import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 //import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -67,7 +68,9 @@ const Program = ({ userType, programId }) => {
   }, [programId, setCurrentProgram, programs, dispatch]);
 
   const handlePreview = (itemNumber) => {
-    let item = currentProgram.items.find((item) => item.itemNumber === itemNumber);
+    let item = currentProgram.items.find(
+      (item) => item.itemNumber === itemNumber
+    );
     handleCurrentItem(item);
     handlePreviewModal(true);
   };
@@ -113,6 +116,14 @@ const Program = ({ userType, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+              <Tooltip title="View Program Pre-Order">
+                <IconButton
+                  component={Link}
+                  to={`/orders/open/preorder#${programId}`}
+                >
+                  <ExitToAppIcon fontSize="large" color="inherit" />
+                </IconButton>
+              </Tooltip>
               {value !== 1 && (
                 <>
                   <Tooltip title="View List">

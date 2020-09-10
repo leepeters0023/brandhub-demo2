@@ -9,6 +9,8 @@ import {
 
 import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
 
+import { formatMoney } from "../utility/utilityFunctions";
+
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
@@ -60,7 +62,7 @@ const TotalsDiv = React.memo(({ program }) => {
     <>
       <Typography
         className={classes.titleText}
-      >{`Program Total: $${programTotal.toFixed(2)}`}</Typography>
+      >{`Program Total: ${formatMoney(programTotal)}`}</Typography>
       {/* <Typography
         className={classes.titleText}
       >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
@@ -80,14 +82,13 @@ const CurrentPreOrder = ({ userType }) => {
   //const [backdrop, setBackdrop] = useCallback(useState(false));
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
-  const [currentItemId, setCurrentItemId] = useCallback(useState(null))
+  const [currentItemId, setCurrentItemId] = useCallback(useState(null));
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
   const isLoading = useSelector((state) => state.programTable.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const userPrograms = useSelector((state) => state.programs.programs);
-
   const handleModalClose = () => {
     handleModal(false);
   };
@@ -109,7 +110,7 @@ const CurrentPreOrder = ({ userType }) => {
   const handleOpenConfirm = useCallback(
     (itemNum, itemId) => {
       setCurrentItemNum(itemNum);
-      setCurrentItemId(itemId)
+      setCurrentItemId(itemId);
       handleConfirmModal(true);
     },
     [setCurrentItemNum, setCurrentItemId, handleConfirmModal]
@@ -121,18 +122,37 @@ const CurrentPreOrder = ({ userType }) => {
     handleConfirmModal(false);
   };
 
+  const handleProgramIdHash = useCallback(() => {
+    setProgram(window.location.hash.slice(1));
+  }, []);
+
   useEffect(() => {
-    if (userPrograms.length > 0 && !program) {
-      setProgram(userPrograms[0].id);
+    if (window.location.hash.length === 0) {
+      if (userPrograms.length > 0 && !program) {
+        setProgram(userPrograms[0].id);
+        window.location.hash = userPrograms[0].id;
+      }
+    } else {
+      handleProgramIdHash();
     }
-    
-  }, [userPrograms, userPrograms.length, setProgram, program]);
+  }, [
+    userPrograms,
+    userPrograms.length,
+    setProgram,
+    program,
+    handleProgramIdHash,
+  ]);
 
   useEffect(() => {
     if (program) {
       dispatch(fetchProgramOrders(program));
     }
   }, [program, dispatch]);
+
+  useEffect(() => {
+    window.addEventListener("popstate", handleProgramIdHash);
+    return () => window.removeEventListener("popstate", handleProgramIdHash);
+  }, [handleProgramIdHash]);
 
   return (
     <>
@@ -172,7 +192,7 @@ const CurrentPreOrder = ({ userType }) => {
           </div>
         </div>
         <br />
-        {(userPrograms.length === 0 || !program || programsLoading) ? (
+        {userPrograms.length === 0 || !program || programsLoading ? (
           <CircularProgress color="inherit" />
         ) : (
           <PreOrderTable

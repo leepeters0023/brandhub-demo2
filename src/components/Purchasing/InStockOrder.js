@@ -14,6 +14,8 @@ import {
   addAttention
 } from "../../redux/slices/inStockOrderSlice";
 
+import { formatMoney } from "../../utility/utilityFunctions"
+
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import AutoComplete from "@material-ui/lab/Autocomplete";
@@ -184,7 +186,7 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
                   <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.qty}</TableCell>
-                  <TableCell>{`$${row.price.toFixed(2)}`}</TableCell>
+                  <TableCell>{`${formatMoney(row.price)}`}</TableCell>
                   <TableCell>
                     <TextField
                       color="secondary"
@@ -196,9 +198,7 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
                       onChange={handleValue}
                     />
                   </TableCell>
-                  <TableCell align="center">{`$${row.estTotal.toFixed(
-                    2
-                  )}`}</TableCell>
+                  <TableCell align="center">{`${formatMoney(row.estTotal)}`}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -333,9 +333,7 @@ const InStockOrder = ({ userType, handleModalOpen }) => {
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography className={classes.titleText}>Total:</Typography>
-              <Typography className={classes.titleText}>{`$${orderTotal.toFixed(
-                2
-              )}`}</Typography>
+              <Typography className={classes.titleText}>{`${formatMoney(orderTotal)}`}</Typography>
             </div>
           </Grid>
         </Grid>

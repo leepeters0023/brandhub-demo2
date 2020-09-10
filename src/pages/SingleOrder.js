@@ -49,7 +49,7 @@ const SingleOrder = ({ orderId }) => {
           <div
             style={{
               display: "flex",
-              width: "100px",
+              width: "150px",
               justifyContent: "flex-end",
             }}
           >
@@ -81,6 +81,9 @@ const SingleOrder = ({ orderId }) => {
             </Typography>
             <Divider />
             <br />
+            <Typography className={classes.headerText}>
+              {`Status:`}
+            </Typography>
             <Typography className={classes.headerText}>
               {`Shipping Location: ${order.distributorName} - ${order.distributorId}`}
             </Typography>

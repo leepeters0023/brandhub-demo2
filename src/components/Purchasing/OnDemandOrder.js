@@ -14,6 +14,8 @@ import {
   addAttention,
 } from "../../redux/slices/onDemandOrderSlice";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import AutoComplete from "@material-ui/lab/Autocomplete";
@@ -184,7 +186,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
                   <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.qty}</TableCell>
-                  <TableCell>{`$${row.price.toFixed(2)}`}</TableCell>
+                  <TableCell>{`${formatMoney(row.price)}`}</TableCell>
                   <TableCell>
                     <TextField
                       color="secondary"
@@ -333,9 +335,7 @@ const OnDemandOrder = ({ userType, handleModalOpen }) => {
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Typography className={classes.titleText}>Total:</Typography>
-              <Typography className={classes.titleText}>{`$${orderTotal.toFixed(
-                2
-              )}`}</Typography>
+              <Typography className={classes.titleText}>{`$${formatMoney(orderTotal)}`}</Typography>
             </div>
           </Grid>
         </Grid>

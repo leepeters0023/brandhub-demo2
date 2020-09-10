@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 //import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -66,7 +68,6 @@ const OrderItemTableView = (props) => {
     setCurrentItemAdded,
   } = props;
   const classes = useStyles();
-
   return (
     <>
       <TableContainer className={classes.tableContainer}>
@@ -138,7 +139,7 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
                 {type === "inStock" && <TableCell>{row.stock}</TableCell>}
-                <TableCell>{`$${row.price.toFixed(2)}`}</TableCell>
+                <TableCell>{`${formatMoney(row.price)}`}</TableCell>
                 {type !== "program" && (
                   <TableCell>
                     <MemoInputField

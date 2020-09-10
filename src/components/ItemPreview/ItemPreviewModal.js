@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { addStockItem } from "../../redux/slices/inStockOrderSlice";
 import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
 
 import ItemOneSheet from "./ItemOneSheet";
@@ -228,7 +230,7 @@ const ItemPreviewModal = (props) => {
                 </Typography>
               </div>
               <Typography className={classes.headerText} variant="h5">
-                {price}
+                {`${formatMoney(price)}`}
               </Typography>
               <Box bgcolor="primary.main" className={classes.dividerBox} />
               <br />

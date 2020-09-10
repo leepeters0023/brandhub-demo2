@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -146,6 +148,9 @@ const OrderItemGridView = (props) => {
                   {`Available: ${item.stock}`}
                 </Typography>
               )}
+              <Typography variant="body1" color="textSecondary">
+                {`${formatMoney(item.price)}`}
+              </Typography>
               <br />
               <div className={classes.itemControl}>
                 <IconButton id={`${item.itemNumber}`}>

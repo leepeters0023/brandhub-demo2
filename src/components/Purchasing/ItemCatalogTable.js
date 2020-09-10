@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -59,7 +61,7 @@ const ItemCatalogTable = ({ currentItems, handlePreview }) => {
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.brand}</TableCell>
                 <TableCell align="left">{item.qty}</TableCell>
-                <TableCell>{item.price}</TableCell>
+                <TableCell>{`${formatMoney(item.price)}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

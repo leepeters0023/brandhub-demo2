@@ -19,6 +19,7 @@ const RegionSelector = () => {
   const [region, updateRegion] = useState("");
 
   const handleChangeSelect = (evt) => {
+      window.location.hash = ""
       updateRegion(evt.target.value);
       let currentTerritory = regions.find(
         (reg) => reg.name === evt.target.value

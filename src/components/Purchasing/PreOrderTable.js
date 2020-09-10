@@ -14,6 +14,8 @@ import { patchItem } from "../../redux/slices/patchOrderSlice";
 
 import ProgramSelector from "../Utility/ProgramSelector";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -202,7 +204,7 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{`$${value.toFixed(2)}`}</div>
+      <div className={classes.infoCell}>{`${formatMoney(value)}`}</div>
     </TableCell>
   );
 });
@@ -234,6 +236,7 @@ const PreOrderTable = (props) => {
   const handleProgram = useCallback(
     (id) => {
       setProgram(id);
+      window.location.hash = id
     },
     [setProgram]
   );
@@ -511,7 +514,7 @@ const PreOrderTable = (props) => {
                                   key={item.id}
                                   className={classes.borderRightLight}
                                 >
-                                  {`$${item.price.toFixed(2)}`}
+                                  {`${formatMoney(item.price)}`}
                                 </TableCell>
                               ))}
                             </TableRow>

@@ -83,3 +83,7 @@ export const filter = (array, filters) => {
     return filteredArray;
   } else return array;
 };
+
+export const formatMoney = (value) => {
+  return `$${(value/100).toFixed(2)}`
+}
