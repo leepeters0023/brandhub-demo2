@@ -59,6 +59,7 @@ let initialState = {
     currentTotal: 0,
     actualTotal: 0,
   },
+  preOrderNote: "",
   error: null,
 };
 
@@ -169,6 +170,16 @@ const programTableSlice = createSlice({
       });
       state.orders = currentOrders;
     },
+    updatePreOrderNote(state, action) {
+      const { value } = action.payload;
+      if (value.length <= 300) {
+        state.preOrderNote = value;
+      }
+    },
+    setProgramName(state, action) {
+      const { name } = action.payload;
+      state.name = name
+    },
     setFailure: loadingFailed,
   },
 });
@@ -179,6 +190,8 @@ export const {
   setGridItem,
   setItemTotal,
   removeGridItem,
+  updatePreOrderNote,
+  setProgramName,
   setFailure,
 } = programTableSlice.actions;
 

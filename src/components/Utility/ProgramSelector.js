@@ -3,20 +3,25 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+}));
+
 const ProgramSelector = ({ handler, currentProgram }) => {
+  const classes = useStyles();
 
   const [program, updateProgram] = useState("");
   const currentPrograms = useSelector((state) => state.programs.programs);
   const handleChangeSelect = (evt) => {
-      updateProgram(evt.target.value);
-      handler(evt.target.value);
+    updateProgram(evt.target.value);
+    handler(evt.target.value);
   };
 
   useEffect(() => {
@@ -24,54 +29,67 @@ const ProgramSelector = ({ handler, currentProgram }) => {
       updateProgram(currentProgram);
     }
   }, [currentProgram]);
-  
-    return (
-      <>
-        <FormControl style={{ margin: "0 5px" }}>
-          <InputLabel id="program-select">Program</InputLabel>
-          <Select
-            name="programs"
-            labelId="program-select"
-            id="programs"
-            value={program}
-            onChange={handleChangeSelect}
-          >
-            {currentPrograms.map((program, index) => (
-              <MenuItem value={program.id} key={index}>
-                {program.isComplete ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                      alignItems: "center",
-                    }}
+
+  return (
+    <>
+      <FormControl style={{ margin: "0 5px", width: "300px" }} size="small">
+        <Select
+          variant="outlined"
+          name="programs"
+          labelId="program-select"
+          id="programs"
+          MenuProps={{
+            getContentAnchorEl: null,
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left",
+            },
+          }}
+          value={program}
+          onChange={handleChangeSelect}
+        >
+          {currentPrograms.map((program, index) => (
+            <MenuItem value={program.id} key={index}>
+              {program.isComplete ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    className={classes.headerText}
+                    style={{ overflow: "hidden" }}
                   >
-                    <Typography variant="body2" style={{ overflow: "hidden" }}>
-                      {`${program.name}-${program.focusMonth}`}
-                    </Typography>
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: "5px" }}
-                    />
-                  </div>
-                ) : (
-                  <Typography variant="body2">
                     {`${program.name}-${program.focusMonth}`}
                   </Typography>
-                )}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </>
-    );
-
+                  <CheckCircleIcon
+                    color="secondary"
+                    style={{ marginLeft: "5px" }}
+                  />
+                </div>
+              ) : (
+                <Typography className={classes.headerText}>
+                  {`${program.name}-${program.focusMonth}`}
+                </Typography>
+              )}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </>
+  );
 };
 
 ProgramSelector.propTypes = {
   handler: PropTypes.func.isRequired,
-  currentProgram: PropTypes.string
+  currentProgram: PropTypes.string,
 };
 
 export default React.memo(ProgramSelector);

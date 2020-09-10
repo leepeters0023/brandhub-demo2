@@ -59,6 +59,7 @@ const ScrollNav = (props) => {
   const [selected, setSelected] = useCallback(useState("home"));
   const initials = useSelector((state) => state.user.initials);
   const role = useSelector((state) => state.user.role);
+  const territories = useSelector((state) => state.user.territories)
 
   const handleNav = useCallback(() => {
     if (window.location.pathname === "/") {
@@ -121,7 +122,7 @@ const ScrollNav = (props) => {
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>
             <div className={classes.navBreak}>
-              <RegionSelector />
+              {territories.length > 1 && <RegionSelector />}
               <UserNav
                 initials={initials}
                 handleLogout={handleLogout}

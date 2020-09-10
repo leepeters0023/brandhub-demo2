@@ -32,6 +32,7 @@ import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import POSClassifications from "./pages/POSClassifications";
+import PreOrderConfirmation from "./pages/PreOrderConfirmation";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
@@ -175,6 +176,15 @@ const App = () => {
               userType={role}
             />,
             "/orders/confirmation",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PreOrderConfirmation
+              path="/orders/preorder/confirmation"
+              userType={role}
+            />,
+            "/orders/preorder/confirmation",
             ["field1", "field2", "super"],
             role
           )}
