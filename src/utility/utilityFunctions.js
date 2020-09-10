@@ -60,12 +60,20 @@ export const renderChip = (rowData) => {
   }
 };
 
+//TODO make work for items!
+
 export const filter = (array, filters) => {
   let filteredArray = [];
   if (filters.length !== 0) {
     filters.forEach((filter) => {
       array
-        .filter((item) => item[filter.type] === filter.value)
+        .filter((item) => {
+          if (filter.type !== "brand") {
+            return item[filter.type] === filter.value
+          } else {
+            return item.brand.includes(filter.value)
+          }
+        })
         .forEach((item) => {
           if (filteredArray.filter((i) => i.id === item.id).length === 0) {
             filteredArray.push(item);
