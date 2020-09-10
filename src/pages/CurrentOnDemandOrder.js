@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import OnDemandOrder from "../components/Purchasing/OnDemandOrder";
@@ -8,8 +9,11 @@ import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -49,6 +53,11 @@ const CurrentOnDemandOrder = ({ userType }) => {
           </Typography>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+            <Tooltip title="Add Items to Order">
+              <IconButton component={Link} to="/orders/items/ondemand">
+                <ExitToAppIcon fontSize="large" color="inherit" style={{transform: "rotate(180deg)"}}/>
+              </IconButton>
+            </Tooltip>
               {(userType === "super" || userType === "field2") && (
                 <UserSelector />
               )}

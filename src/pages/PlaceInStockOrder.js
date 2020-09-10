@@ -48,7 +48,6 @@ const PlaceInStockOrder = ({ userType }) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
     handlePreviewModal(true);
-    console.log(item)
   };
 
   const handleModalClose = () => {

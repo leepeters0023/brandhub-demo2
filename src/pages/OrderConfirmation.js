@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 
 import { useSelector } from "react-redux";
 
+import { formatMoney } from "../utility/utilityFunctions";
+
 import OrderConfirmationTable from "../components/Purchasing/OrderConfirmationTable";
 
 import Typography from "@material-ui/core/Typography";
@@ -94,7 +96,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
               {`Total Items: ${order.totalItems}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Cost: $${order.totalCost}`}
+              {`Total Cost: ${formatMoney(order.totalCost)}`}
             </Typography>
             <br />
             <Typography className={classes.headerText}>

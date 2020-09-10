@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -59,9 +61,9 @@ const OrderConfirmationTable = ({ items }) => {
                 <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.qty}</TableCell>
-                <TableCell align="left">{`$${item.price.toFixed(2)}`}</TableCell>
+                <TableCell align="left">{`${formatMoney(item.price)}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
-                <TableCell align="left">{`$${item.estTotal.toFixed(2)}`}</TableCell>
+                <TableCell align="left">{`${formatMoney(item.estTotal)}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

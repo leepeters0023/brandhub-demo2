@@ -13,11 +13,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Collapse from "@material-ui/core/Collapse";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+//import Button from "@material-ui/core/Button";
+//import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core";
 
-import SearchIcon from "@material-ui/icons/Search";
+//import SearchIcon from "@material-ui/icons/Search";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    minWidth: "350px",
     marginRight: "15px",
   },
   filterList: {
@@ -209,7 +208,7 @@ const ProgramFilter = (props) => {
   return (
     <div className={classes.filterList}>
       <div className={classes.filterControl}>
-        <Tooltip title="Filter Items">
+        <Tooltip title="Filter Programs">
           <IconButton
             aria-owns={anchorEl ? "filters" : undefined}
             aria-haspopup="true"
@@ -278,10 +277,9 @@ const ProgramFilter = (props) => {
             <Collapse in={unitsOpen} timeout="auto" unmountOnExit>
               {unitsList(units)}
             </Collapse>
-            <Divider />
           </List>
         </Menu>
-        <TextField
+        {/* <TextField
           style={{ margin: 0 }}
           size="small"
           color="secondary"
@@ -293,7 +291,7 @@ const ProgramFilter = (props) => {
         />
         <Button variant="contained" color="secondary" style={{ width: "50px", height: "40px" }}>
           <SearchIcon className={classes.navIcon} />
-        </Button>
+        </Button> */}
       </div>
       <FilterChipList filters={allFilters} handleChipClick={handleChipClick} />
     </div>

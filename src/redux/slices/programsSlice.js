@@ -136,8 +136,8 @@ const programsSlice = createSlice({
     },
     getProgramItemsSuccess(state, action) {
       const { program, items } = action.payload;
-
       let progItems = items.map((item) => ({
+        id: item.id,
         itemNumber: item["item-number"],
         brand: item.brand.name,
         itemType: item.name,

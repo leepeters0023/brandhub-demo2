@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
 const ProgramDetails = (props) => {
   const classes = useStyles();
   const {
-    program: { name, imgUrl, desc, goals, focusMonth, strategies },  
+    program: { name, imgUrl, desc, goals, focusMonth, strategies, brand },  
   } = props;
-
+  console.log(brand)
   return (
     <>
       <br />
@@ -30,6 +30,13 @@ const ProgramDetails = (props) => {
           <Typography className={classes.bodyText}>{`Focus Month: ${focusMonth}`}</Typography>
         </Grid>
         <Grid item md={9}>
+          <Typography className={classes.headerText}>
+            {brand.length === 1 ? "Brand" : "Brands"}
+          </Typography>
+          <Typography className={classes.bodyText}>
+            {brand.length === 1 ? brand[0] : brand.join(", ")}
+          </Typography>
+          <br />
           <Typography className={classes.headerText}>Description</Typography>
           <Typography className={classes.bodyText}>{desc}</Typography>
           <br />

@@ -84,7 +84,7 @@ const OrderItemViewControl = (props) => {
           setCurrentItemAdded={setCurrentItemAdded}
         />
       )}
-      <AddItemConfirmation type={type} item={currentItemAdded} />
+      {(type !== "program" && type !== "catalog") && <AddItemConfirmation type={type} item={currentItemAdded} />}
     </>
   );
 };
