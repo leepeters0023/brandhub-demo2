@@ -14,8 +14,6 @@ import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -85,23 +83,13 @@ const Program = ({ userType, programId }) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={previewModal}
-          onClose={handleModalClose}
-          fullWidth
-          maxWidth="lg"
-        >
-          <DialogContent>
-            <ItemPreviewModal
-              type="preOrder"
-              currentItem={currentItem}
-              handleClose={handleModalClose}
-              userType={userType}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <ItemPreviewModal
+        type="program"
+        currentItem={currentItem}
+        handleClose={handleModalClose}
+        previewModal={previewModal}
+      />
+
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>

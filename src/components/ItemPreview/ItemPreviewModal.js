@@ -317,7 +317,7 @@ const ItemPreviewModal = (props) => {
           {value === 2 && <ItemFeedback />}
           {value === 3 && <ItemAssembly />}
           <br />
-          <AddItemConfirmation type={type} item={currentItem} />
+          {(type !== "program" && type !== "catalog") && <AddItemConfirmation type={type} item={currentItem} />}
         </DialogContent>
       </Dialog>
     </div>
