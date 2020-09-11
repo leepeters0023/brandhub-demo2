@@ -117,7 +117,15 @@ const programTableSlice = createSlice({
           return { ...item, totalItems: numVal, estTotal: numVal * item.price };
         } else return item;
       });
+      let newTotalItems = 0;
+      let newEstTotal = 0;
+      newItems.forEach(item => {
+        newTotalItems += item.totalItems
+        newEstTotal += item.estTotal
+      })
       currentOrder.items = [...newItems];
+      currentOrder.totalItems = newTotalItems;
+      currentOrder.estTotal = newEstTotal;
       orders.splice(orders.indexOf(currentOrder), 1, currentOrder);
       state.orders = [...orders];
     },

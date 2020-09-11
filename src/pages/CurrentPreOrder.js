@@ -143,7 +143,9 @@ const CurrentPreOrder = ({ userType }) => {
         window.location.hash = userPrograms[0].id;
       }
     } else {
-      handleProgramIdHash();
+      if (userPrograms.length > 0) {
+        handleProgramIdHash();
+      } else window.location.hash = "";
     }
   }, [
     userPrograms,
@@ -155,7 +157,6 @@ const CurrentPreOrder = ({ userType }) => {
 
   useEffect(() => {
     if (program) {
-      console.log("fetching!")
       dispatch(fetchProgramOrders(program));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
@@ -164,7 +165,7 @@ const CurrentPreOrder = ({ userType }) => {
         })
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [program, dispatch, userPrograms.length]);
 
   useEffect(() => {
@@ -199,10 +200,12 @@ const CurrentPreOrder = ({ userType }) => {
         <div className={classes.titleBar}>
           <ProgramSelector handler={handleProgram} currentProgram={program} />
           <div className={classes.configButtons}>
-            {program && <TotalsDiv program={program} />}
             <div className={classes.innerConfigDiv}>
+              {program && <TotalsDiv program={program} />}
               {(userType === "super" || userType === "field2") && (
-                <UserSelector />
+                <div style={{ marginLeft: "20px" }}>
+                  <UserSelector />
+                </div>
               )}
             </div>
           </div>

@@ -93,7 +93,6 @@ const PreOrderConfirmation = ({ userType }) => {
             </Typography>
             <Divider />
             <br />
-            <Typography className={classes.headerText}>{`Budget:`}</Typography>
             <Typography className={classes.headerText}>
               {`Total Items: ${preOrder.items
                 .map((item) => item.totalItems)
