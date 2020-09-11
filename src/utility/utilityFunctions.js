@@ -60,8 +60,6 @@ export const renderChip = (rowData) => {
   }
 };
 
-//TODO make work for items!
-//TODO needs to get smaller, not inclusive
 export const filter = (array, filters) => {
   let filteredArray = [];
   if (filters.length !== 0) {
