@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { setProgComplete } from "../../redux/slices/patchOrderSlice";
+import { setProgStatus } from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -30,7 +30,7 @@ const PreOrderOverview = () => {
   const preOrder = useSelector((state) => state.programTable);
 
   const handleEditOrder = () => {
-    dispatch(setProgComplete(preOrder.programId, false, preOrder.preOrderId))
+    dispatch(setProgStatus(preOrder.programId, "in-progress", preOrder.preOrderId))
   }
 
   return (

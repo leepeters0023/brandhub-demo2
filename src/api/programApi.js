@@ -59,7 +59,7 @@ export const fetchProgramItems = async (id) => {
   return response;
 };
 
-export const markProgramComplete = async (id, value) => {
+export const setPreOrderProgramStatus = async (id, value) => {
   const response = { status: "", error: null };
   let headers = {
     headers: {
@@ -76,7 +76,7 @@ export const markProgramComplete = async (id, value) => {
           type: "pre-order",
           id: id,
           attributes: {
-            "is-complete": value,
+            "status": value,
           },
         },
       },

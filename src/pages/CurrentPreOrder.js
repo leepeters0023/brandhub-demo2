@@ -8,11 +8,12 @@ import {
   fetchProgramOrders,
   setProgramName,
   updatePreOrderNote,
+  fetchPreOrders
 } from "../redux/slices/programTableSlice";
 
 import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
 
-import { setProgComplete } from "../redux/slices/patchOrderSlice";
+import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -22,7 +23,11 @@ import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import PreOrderSummary from "../components/Purchasing/PreOrderSummary";
 
+import Accordion from "@material-ui/core/Accordion";
+import AccordianSummary from "@material-ui/core/AccordionSummary";
+import AccordianDetails from "@material-ui/core/AccordionDetails";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputBase from "@material-ui/core/InputBase";
@@ -36,6 +41,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Container from "@material-ui/core/Container";
+
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -78,6 +85,7 @@ const TotalsDiv = React.memo(() => {
           inputProps={{ "aria-label": "naked" }}
           style={{
             marginTop: "10px",
+            marginBottom: "0px",
             width: `Calc(${programTotal.toString().length}*15px + 20px)`,
             minWidth: "100px",
             readonly: "readonly",
@@ -85,7 +93,9 @@ const TotalsDiv = React.memo(() => {
           }}
         />
       </FormControl>
-      <FormControl style={{ pointerEvents: "none", minWidth: "100px", marginLeft: "30px" }}>
+      <FormControl
+        style={{ pointerEvents: "none", minWidth: "100px", marginLeft: "30px" }}
+      >
         <InputLabel htmlFor="grand-total" style={{ whiteSpace: "nowrap" }}>
           Quarterly Spend
         </InputLabel>
@@ -96,6 +106,7 @@ const TotalsDiv = React.memo(() => {
           inputProps={{ "aria-label": "naked" }}
           style={{
             marginTop: "10px",
+            marginBottom: "0px",
             width: `Calc(${grandTotal.toString().length}*15px + 20px)`,
             minWidth: "100px",
             readonly: "readonly",
@@ -103,7 +114,6 @@ const TotalsDiv = React.memo(() => {
           }}
         />
       </FormControl>
-
     </>
   );
 });
@@ -162,7 +172,7 @@ const CurrentPreOrder = ({ userType }) => {
   };
 
   const handleComplete = () => {
-    dispatch(setProgComplete(program, true, preOrderId));
+    dispatch(setProgStatus(program, "complete", preOrderId));
   };
 
   const handleProgramIdHash = useCallback(() => {
@@ -200,6 +210,7 @@ const CurrentPreOrder = ({ userType }) => {
   useEffect(() => {
     if (program) {
       dispatch(fetchProgramOrders(program));
+      dispatch(fetchPreOrders("summary"))
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
         setProgramName({
@@ -239,34 +250,48 @@ const CurrentPreOrder = ({ userType }) => {
         currentItem={currentItem}
       />
       <Container className={classes.mainWrapper}>
-        <div className={classes.titleBar}>
-          <ProgramSelector handler={handleProgram} currentProgram={program} />
-          <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv}>
-              {program && <TotalsDiv program={program} />}
+        {/* eslint-disable-next-line no-dupe-keys */}
+        <Accordion style={{backgroundColor: "#fafafa"}}>
+          <AccordianSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="pre-order-summary"
+            id="pre-order-summary-header"
+          >
+            <div className={classes.titleBar} style={{width: "100%", alignItems: "center"}}>
+              <ProgramSelector
+                handler={handleProgram}
+                currentProgram={program}
+              />
+              <div className={classes.configButtons}>
+                <div className={classes.innerConfigDiv}>
+                  {program && <TotalsDiv program={program} />}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </AccordianSummary>
+          <AccordianDetails>
+            <PreOrderSummary />
+          </AccordianDetails>
+        </Accordion>
         <br />
         {userPrograms.length === 0 || !program || programsLoading ? (
           <CircularProgress color="inherit" />
+        ) : preOrderStatus === "complete" || preOrderStatus === "submitted" ? (
+          <PreOrderOverview />
         ) : (
-          preOrderStatus === true ? (
-            <PreOrderOverview />
-          ) : (
-
-            <PreOrderTable
-              currentProgram={program}
-              open={open}
-              setOpen={setOpen}
-              tableStyle={tableStyle}
-              setTableStyle={setTableStyle}
-              handleModalOpen={handleModalOpen}
-              handleOpenConfirm={handleOpenConfirm}
-              setProgram={setProgram}
-              isLoading={isLoading}
-            />
-          )
+          <PreOrderTable
+            currentProgram={program}
+            open={open}
+            setOpen={setOpen}
+            tableStyle={tableStyle}
+            setTableStyle={setTableStyle}
+            handleModalOpen={handleModalOpen}
+            handleOpenConfirm={handleOpenConfirm}
+            setProgram={setProgram}
+            isLoading={isLoading}
+            preOrderId={preOrderId}
+            preOrderStatus={preOrderStatus}
+          />
         )}
         <br />
         <br />
@@ -333,29 +358,26 @@ const CurrentPreOrder = ({ userType }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          
-            <Button
-              className={classes.largeButton}
-              color="secondary"
-              variant="contained"
-              style={{marginRight: "20px"}}
-              onClick={handleComplete}
-            >
-              SAVE ORDER
-            </Button>
-          
-          
-            <Button
-              className={classes.largeButton}
-              color="secondary"
-              variant="contained"
-              disabled={!terms}
-              component={Link}
-              to="/orders/preorder/confirmation"
-            >
-              SUBMIT ORDER
-            </Button>
-          
+          <Button
+            className={classes.largeButton}
+            color="secondary"
+            variant="contained"
+            style={{ marginRight: "20px" }}
+            onClick={handleComplete}
+          >
+            SAVE ORDER
+          </Button>
+
+          <Button
+            className={classes.largeButton}
+            color="secondary"
+            variant="contained"
+            disabled={!terms}
+            component={Link}
+            to="/orders/preorder/confirmation"
+          >
+            SUBMIT ORDER
+          </Button>
         </div>
         <br />
         <br />

@@ -8,6 +8,8 @@ import {
   setItemTotal,
 } from "../../redux/slices/programTableSlice";
 
+import { setProgStatus } from "../../redux/slices/patchOrderSlice";
+
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -78,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ orderNumber, compliance, itemNumber, itemId, index }, ref) => {
+  React.forwardRef(({ orderNumber, compliance, itemNumber, itemId, index, preOrderId, preOrderStatus, program }, ref) => {
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
@@ -145,6 +147,9 @@ const MemoInputCell = React.memo(
                     dispatch(patchItem(itemId, evt.target.value, orderNumber));
                   }
                   setChange(false);
+                  if (preOrderStatus === "inactive") {
+                    dispatch(setProgStatus(program, "in-progress", preOrderId))
+                  }
                 }
             }}
             onChange={(evt) => {
@@ -219,6 +224,8 @@ const PreOrderTable = (props) => {
     handleModalOpen,
     handleOpenConfirm,
     isLoading,
+    preOrderId,
+    preOrderStatus,
   } = props;
   const classes = useStyles();
   const tableRef = useRef(null);
@@ -520,6 +527,9 @@ const PreOrderTable = (props) => {
                         itemNumber={item.itemNumber}
                         itemId={item.id}
                         index={index}
+                        preOrderStatus={preOrderStatus}
+                        preOrderId={preOrderId}
+                        program={currentProgram}
                         ref={tableRef}
                       />
                     ))}
@@ -543,6 +553,8 @@ PreOrderTable.propTypes = {
   handleModalOpen: PropTypes.func.isRequired,
   handleOpenConfirm: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  preOrderId: PropTypes.string,
+  preOrderStatus: PropTypes.string
 };
 
 export default React.memo(PreOrderTable, (prev, next) => {

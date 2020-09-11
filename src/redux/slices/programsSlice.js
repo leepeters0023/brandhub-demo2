@@ -87,7 +87,7 @@ const programsSlice = createSlice({
           focusMonth: prog["focus-month"],
           imgUrl: prog["img-url"],
           items: [],
-          isComplete: prog["is-pre-order-complete"] ? true : false,
+          status: false,
         }));
         programArray.sort((a, b) => {
           return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
@@ -119,7 +119,7 @@ const programsSlice = createSlice({
           focusMonth: prog["focus-month"],
           imgUrl: prog["img-url"],
           items: [],
-          isComplete: prog["is-pre-order-complete"] ? true : false,
+          status: false,
         }));
         const newProgramArray = programArray.concat(natPrograms);
         newProgramArray.sort((a, b) => {
@@ -161,13 +161,13 @@ const programsSlice = createSlice({
       state.itemsIsLoading = false;
       state.error = null;
     },
-    setProgramComplete(state, action) {
+    setProgramStatus(state, action) {
       const { program, status } = action.payload;
       let updatedPrograms = state.programs.map((prog) => {
         if (prog.id === program) {
           return {
             ...prog,
-            isComplete: status,
+            status: status,
           };
         } else return prog;
       });
@@ -185,7 +185,7 @@ export const {
   setItemsIsLoading,
   getProgramsSuccess,
   getProgramItemsSuccess,
-  setProgramComplete,
+  setProgramStatus,
   clearPrograms,
   setFailure,
 } = programsSlice.actions;
@@ -197,6 +197,7 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
     dispatch(setIsLoading());
     const terrPrograms = await fetchProgramsByTerritory(id);
     const natPrograms = await fetchNationalPrograms();
+    console.log(terrPrograms)
     const programs = terrPrograms.data.concat(natPrograms.data);
     dispatch(getProgramsSuccess({ programs: programs }));
   } catch (err) {

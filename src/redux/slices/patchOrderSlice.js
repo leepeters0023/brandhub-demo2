@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { patchOrderItem, deletePreOrderItem } from "../../api/orderApi";
 
-import { markProgramComplete } from "../../api/programApi";
+import { setPreOrderProgramStatus } from "../../api/programApi";
 
-import { setProgramComplete } from "./programsSlice";
+import { setProgramStatus } from "./programsSlice";
 import { setPreOrderStatus } from "./programTableSlice";
 
 /*
@@ -57,7 +57,7 @@ const patchOrderSlice = createSlice({
       state.cellsLoading = [...currentLoading]
       state.isLoading = false
     },
-    setProgCompleteSuccess(state) {
+    setProgStatusSuccess(state) {
       state.isLoading = false;
     },
     deleteItemSuccess(state) {
@@ -71,7 +71,7 @@ export const {
   setIsLoading,
   addLoadingCell,
   patchItemSuccess,
-  setProgCompleteSuccess,
+  setProgStatusSuccess,
   deleteItemSuccess,
   setFailure
 } = patchOrderSlice.actions;
@@ -103,13 +103,13 @@ export const deletePreOrdItem = (id) => async (dispatch) => {
   }
 }
 
-export const setProgComplete = (id, value, preOrderId) => async (dispatch) => {
+export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const compStatus = await markProgramComplete(preOrderId, value);
-    dispatch(setProgramComplete({ program: id, status: value }))
+    const compStatus = await setPreOrderProgramStatus(preOrderId, value);
+    dispatch(setProgramStatus({ program: id, status: value }))
     dispatch(setPreOrderStatus({ status: value }))
-    dispatch(setProgCompleteSuccess());
+    dispatch(setProgStatusSuccess());
     console.log(compStatus);
   } catch(err) {
     dispatch(setFailure({ error: err.toString() }));

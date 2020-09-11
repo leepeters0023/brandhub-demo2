@@ -35,7 +35,6 @@ import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import POSClassifications from "./pages/POSClassifications";
-import PreOrderConfirmation from "./pages/PreOrderConfirmation";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
@@ -90,7 +89,7 @@ const App = () => {
     if (currentUser && currentRole.length > 0) {
       setRole(currentRole);
       dispatch(fetchInitialPrograms(currentTerritory.id));
-      dispatch(fetchPreOrders());
+      dispatch(fetchPreOrders("initial"));
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);
@@ -181,15 +180,6 @@ const App = () => {
               userType={role}
             />,
             "/orders/confirmation",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <PreOrderConfirmation
-              path="/orders/preorder/confirmation"
-              userType={role}
-            />,
-            "/orders/preorder/confirmation",
             ["field1", "field2", "super"],
             role
           )}
