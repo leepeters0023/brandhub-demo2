@@ -3,7 +3,6 @@ import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import InStockOrder from "../components/Purchasing/InStockOrder";
-import UserSelector from "../components/Utility/UserSelector";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 //import RegionSelector from "../components/Utility/RegionSelector";
 
@@ -58,10 +57,6 @@ const CurrentInStockOrder = ({ userType }) => {
                 <ExitToAppIcon fontSize="large" color="inherit" style={{transform: "rotate(180deg)"}}/>
               </IconButton>
             </Tooltip>
-              {(userType === "super" || userType === "field2") && (
-                <UserSelector />
-              )}
-              {/* <RegionSelector /> */}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, {  useRef } from "react";
+import React, {  useState, useRef } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -82,6 +82,7 @@ const MemoInputCell = React.memo(
     const classes = useStyles();
     const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
     const dispatch = useDispatch();
+    const [change, setChange] = useState(false);
     const value = useSelector(
       (state) =>
         state.programTable.orders
@@ -127,20 +128,24 @@ const MemoInputCell = React.memo(
             id={`${orderNumber}-${itemNumber}`}
             value={value}
             onBlur={(evt) => {
-              if (evt.target.value === "") {
-                dispatch(
-                  setGridItem({
-                    itemNumber: `${itemNumber}`,
-                    orderNumber: orderNumber,
-                    value: 0,
-                  })
-                );
-                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+              if (change) {
 
-                dispatch(patchItem(itemId, 0, orderNumber));
-              } else {
-                dispatch(patchItem(itemId, evt.target.value, orderNumber));
-              }
+                if (evt.target.value === "") {
+                  dispatch(
+                    setGridItem({
+                      itemNumber: `${itemNumber}`,
+                      orderNumber: orderNumber,
+                      value: 0,
+                    })
+                    );
+                    dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+                    
+                    dispatch(patchItem(itemId, 0, orderNumber));
+                  } else {
+                    dispatch(patchItem(itemId, evt.target.value, orderNumber));
+                  }
+                  setChange(false);
+                }
             }}
             onChange={(evt) => {
               if (
@@ -157,6 +162,7 @@ const MemoInputCell = React.memo(
                   })
                 );
                 dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+                setChange(true);
               }
             }}
           />

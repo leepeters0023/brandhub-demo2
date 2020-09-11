@@ -8,6 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     display: "flex",
     justifyContent: "space-around",
+    alignItems: "center"
   },
 }));
 
@@ -105,6 +107,13 @@ const CurrentPrograms = ({ currentPrograms }) => {
                   </Typography>
                 </div>
                 <div className={classes.itemControl}>
+                  <Button
+                  size="small"
+                    color="primary"
+                    variant="contained"
+                    component={Link}
+                    to={`/orders/open/preorder#${prog.id}`}
+                  >Pre-Order</Button>
                   <Tooltip title="Add All Items to PDF">
                     <span>
                       <IconButton id={`${prog.id}`}>

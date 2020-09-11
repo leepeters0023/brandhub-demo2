@@ -75,29 +75,28 @@ const OrdersNav = ({ setSelected, selected }) => {
         onClose={handleClose}
       >
         <List style={{ width: "200px" }}>
-          <ListItem
-            button
-            onClick={() => {
-              setSelected("orders");
-              handleClose();
-              if (openOrdersOpen) {
-                handleOpenOrders();
-              }
-              if (placeOrderOpen) {
-                handlePlaceOrder();
-              }
-            }}
-            component={Link}
-            to="/orders/open/preorder"
-          >
-            <ListItemText primary="Pre-Order" />
-          </ListItem>
           <ListItem button onClick={handlePlaceOrder}>
             <ListItemText primary="Place an Order" />
             {placeOrderOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={placeOrderOpen} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => {
+                  setSelected("orders");
+                  handleClose();
+                  handlePlaceOrder();
+                  if (openOrdersOpen) {
+                    handleOpenOrders();
+                  }
+                }}
+                component={Link}
+                to="/orders/open/preorder"
+                className={classes.nested}
+              >
+                <ListItemText primary="Pre-Order" />
+              </ListItem>
               <ListItem
                 button
                 onClick={() => {
