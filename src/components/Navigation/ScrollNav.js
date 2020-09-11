@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import BrandHubLogo from "../../assets/brandhub.svg";
+import Logo from "../../assets/RTA_Logo_Stacked.png";
 import { Link } from "@reach/router";
 
 import UserNav from "./UserNav";
@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   },
   logoLink: {
     filter: "brightness(0%)",
+    height: "58px",
+    width: "auto",
+    marginLeft: "20px",
+    marginRight: "20px",
     marginTop: "5px",
     "&&:hover": {
       cursor: "pointer",
@@ -99,7 +103,7 @@ const ScrollNav = (props) => {
               <Tooltip title="Home">
                 <Link to="/">
                   <img
-                    src={BrandHubLogo}
+                    src={Logo}
                     alt="Logo"
                     className={classes.logoLink}
                     style={{ filter: "brightness(0%)" }}

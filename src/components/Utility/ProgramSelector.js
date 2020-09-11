@@ -20,6 +20,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
   const [program, updateProgram] = useState("");
   const currentPrograms = useSelector((state) => state.programs.programs);
   const handleChangeSelect = (evt) => {
+    evt.stopPropagation();
     updateProgram(evt.target.value);
     handler(evt.target.value);
   };
@@ -32,7 +33,11 @@ const ProgramSelector = ({ handler, currentProgram }) => {
 
   return (
     <>
-      <FormControl style={{ margin: "0 5px", width: "300px" }} size="small">
+      <FormControl
+        aria-label="program-selector"
+        style={{ margin: "0 5px", width: "300px" }}
+        size="small"
+      >
         <Select
           variant="outlined"
           name="programs"
@@ -51,10 +56,13 @@ const ProgramSelector = ({ handler, currentProgram }) => {
           }}
           value={program}
           onChange={handleChangeSelect}
+          onFocus={(evt) => evt.stopPropagation()}
+          onBlur={(evt) => evt.stopPropagation()}
+          onClose={(evt) => evt.stopPropagation()}
         >
           {currentPrograms.map((program, index) => (
             <MenuItem value={program.id} key={index}>
-              {program.isComplete ? (
+              {program.status === "complete" ? (
                 <div
                   style={{
                     display: "flex",

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { fetchOrdersByProgram, fetchAllPreOrders } from "../../api/orderApi";
 
-import { setProgramComplete } from "./programsSlice";
+import { setProgramStatus } from "./programsSlice";
 
 /*
 * Data Format:
@@ -56,6 +56,7 @@ let initialState = {
   status: null,
   preOrderId: null,
   programId: null,
+  territories: [],
   items: [],
   orders: [],
   programTotal: 0,
@@ -75,6 +76,10 @@ const startInitialLoading = (state) => {
   state.initialPreOrderLoading = true;
 };
 
+const startSummaryLoading = (state) => {
+  state.preOrderSummaryLoading = true;
+}
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
@@ -87,6 +92,7 @@ const programTableSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     setInitialPreOrdersLoading: startInitialLoading,
+    setSummaryLoading: startSummaryLoading,
     setPreOrderSummary(state, action) {
       const { preOrders, totalCost } = action.payload;
       console.log(preOrders);
@@ -98,7 +104,14 @@ const programTableSlice = createSlice({
       state.error = null;
     },
     buildTableFromOrders(state, action) {
-      const { programId, orders, items, preOrderId, status } = action.payload;
+      const {
+        programId,
+        orders,
+        items,
+        preOrderId,
+        status,
+        territories,
+      } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
         let progTotal = 0;
@@ -117,6 +130,7 @@ const programTableSlice = createSlice({
         state.preOrderId = preOrderId;
         state.programId = programId;
         state.status = status;
+        state.territories = [...territories];
         state.items = currentItems;
         state.orders = [...orders];
         state.programTotal = progTotal;
@@ -222,6 +236,7 @@ const programTableSlice = createSlice({
 export const {
   setIsLoading,
   setInitialPreOrdersLoading,
+  setSummaryLoading,
   setPreOrderSummary,
   buildTableFromOrders,
   setGridItem,
@@ -235,20 +250,33 @@ export const {
 
 export default programTableSlice.reducer;
 
-export const fetchPreOrders = () => async (dispatch) => {
+export const fetchPreOrders = (type) => async (dispatch) => {
   try {
-    dispatch(setInitialPreOrdersLoading());
+    if (type === "initial") {
+      dispatch(setInitialPreOrdersLoading());
+    } else {
+      dispatch(setSummaryLoading());
+    }
     const currentPreOrders = await fetchAllPreOrders();
     let preOrders = currentPreOrders.data.map((order) => ({
       preOrderId: order.id,
       programId: order.program.id,
+      territories:
+        order["territory-names"].length === 0
+          ? ["National"]
+          : order["territory-names"].split(", "),
       totalItems: order["total-quantity"],
       totalEstCost: order["total-cost"],
-      status: order["is-complete"],
+      status: order.status,
     }));
     let totalCost = preOrders
       .map((order) => order.totalEstCost)
       .reduce((a, b) => a + b);
+    preOrders.forEach((order) => {
+      dispatch(
+        setProgramStatus({ program: order.programId, status: order.status })
+      );
+    });
     dispatch(
       setPreOrderSummary({ preOrders: preOrders, totalCost: totalCost })
     );
@@ -261,9 +289,10 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
-    if (currentOrders.data[0]["is-complete"]) {
-      dispatch(setProgramComplete({ program: program, status: true }));
+    if (currentOrders.data[0].status === "complete") {
+      dispatch(setProgramStatus({ program: program, status: "complete" }));
     }
+    // if (currentOrders.data[0].status === "submitted")
     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
       id: item.id,
       complianceStatus: item.item["compliance-status"],
@@ -325,7 +354,11 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
     });
 
     let preOrderId = currentOrders.data[0].id;
-    let preOrderStatus = currentOrders.data[0]["is-complete"];
+    let preOrderStatus = currentOrders.data[0].status;
+    let territories =
+      currentOrders.data[0]["territory-names"].length === 0
+        ? ["National"]
+        : currentOrders.data[0]["territory-names"].split(", ");
 
     dispatch(
       buildTableFromOrders({
@@ -334,6 +367,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
         items: currentItems,
         preOrderId: preOrderId,
         status: preOrderStatus,
+        territories: territories,
       })
     );
   } catch (err) {
