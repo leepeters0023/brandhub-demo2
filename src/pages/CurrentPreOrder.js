@@ -17,10 +17,12 @@ import { formatMoney } from "../utility/utilityFunctions";
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
-import UserSelector from "../components/Utility/UserSelector";
 import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputBase from "@material-ui/core/InputBase";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -62,9 +64,25 @@ const TotalsDiv = React.memo(({ program }) => {
 
   return (
     <>
-      <Typography className={classes.titleText}>{`Program Total: ${formatMoney(
-        programTotal
-      )}`}</Typography>
+      <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
+        <InputLabel htmlFor="program-total" style={{ whiteSpace: "nowrap" }}>
+          Program Total
+        </InputLabel>
+        <InputBase
+          className={classes.titleText}
+          id="program-total"
+          defaultValue="$0.00"
+          value={`${formatMoney(programTotal)}`}
+          inputProps={{ "aria-label": "naked" }}
+          style={{
+            marginTop: "10px",
+            width: `Calc(${programTotal.toString().length}*15px + 20px)`,
+            minWidth: "100px",
+            readonly: "readonly",
+            pointerEvents: "none",
+          }}
+        />
+      </FormControl>
       {/* <Typography
         className={classes.titleText}
       >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
@@ -202,11 +220,6 @@ const CurrentPreOrder = ({ userType }) => {
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               {program && <TotalsDiv program={program} />}
-              {(userType === "super" || userType === "field2") && (
-                <div style={{ marginLeft: "20px" }}>
-                  <UserSelector />
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -291,19 +304,19 @@ const CurrentPreOrder = ({ userType }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          {userType !== "field1" && (
+          
             <Button
               className={classes.largeButton}
               color="secondary"
               variant="contained"
-              disabled={!terms}
+              style={{marginRight: "20px"}}
               component={Link}
               to="/orders/preorder/confirmation"
             >
-              PURCHASE ORDER
+              SAVE ORDER
             </Button>
-          )}
-          {userType === "field1" && (
+          
+          
             <Button
               className={classes.largeButton}
               color="secondary"
@@ -314,7 +327,7 @@ const CurrentPreOrder = ({ userType }) => {
             >
               SUBMIT ORDER
             </Button>
-          )}
+          
         </div>
         <br />
         <br />

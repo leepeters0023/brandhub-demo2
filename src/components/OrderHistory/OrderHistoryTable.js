@@ -13,17 +13,31 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "orderNum", disablePadding: false, label: "Order #" },
-  { id: "distributor", disablePadding: false, label: "Distributor" },
-  { id: "state", disablePadding: false, label: "State" },
-  { id: "program", disablePadding: false, label: "Program" },
-  { id: "orderDate", disablePadding: true, label: "Order Date" },
-  { id: "shipDate", disablePadding: false, label: "Ship Date" },
-  { id: "deliveredDate", disablePadding: false, label: "Delivered Date" },
-  { id: "tracking", disablePadding: false, label: "Tracking" },
-  { id: "totalItems", disablePadding: false, label: "Total Items" },
-  { id: "orderTotal", disablePadding: false, label: "Order Total" },
-  { id: "status", disablePadding: false, label: "Status" },
+  { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  {
+    id: "distributor",
+    disablePadding: false,
+    label: "Distributor",
+    sort: true,
+  },
+  { id: "state", disablePadding: false, label: "State", sort: true },
+  { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "orderDate", disablePadding: true, label: "Order Date", sort: true },
+  { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
+  { id: "tracking", disablePadding: false, label: "Tracking", sort: false },
+  {
+    id: "totalItems",
+    disablePadding: false,
+    label: "Total Items",
+    sort: false,
+  },
+  {
+    id: "orderTotal",
+    disablePadding: false,
+    label: "Order Total",
+    sort: false,
+  },
+  { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -35,28 +49,44 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            className={classes.headerText}
-            key={headCell.id}
-            align="left"
-            padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+        {headCells.map((headCell) => {
+          if (!headCell.sort) {
+            return (
+              <TableCell
+                className={classes.headerText}
+                key={headCell.id}
+                align="left"
+              >
+                {headCell.label}
+              </TableCell>
+            );
+          } else {
+            return (
+              <TableCell
+                className={classes.headerText}
+                key={headCell.id}
+                align="left"
+                padding={headCell.disablePadding ? "none" : "default"}
+                sortDirection={orderBy === headCell.id ? order : false}
+              >
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <span className={classes.visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </span>
+                  ) : null}
+                </TableSortLabel>
+              </TableCell>
+            );
+          }
+        })}
       </TableRow>
     </TableHead>
   );
@@ -141,7 +171,6 @@ const OrderHistoryTable = ({ orders }) => {
                 <TableCell align="left">{row.program}</TableCell>
                 <TableCell align="left">{row.orderDate}</TableCell>
                 <TableCell align="left">{row.shipDate}</TableCell>
-                <TableCell align="left">{row.deliveredDate}</TableCell>
                 <TableCell align="left">{row.trackingNum}</TableCell>
                 <TableCell align="left">{row.totalItems}</TableCell>
                 <TableCell align="left">{row.orderTotal}</TableCell>

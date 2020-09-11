@@ -154,33 +154,6 @@ const Program = ({ userType, programId }) => {
         {value === 1 && <ProgramDetails program={currentProgram} />}
         {value === 2 && (
           <>
-            {/* <div style={{ display: "flex" }}>
-              <ItemFilter
-                brands={brands}
-                units={units}
-                families={families}
-                itemTypes={itemTypes}
-                others={others}
-              />
-              <div
-                style={{
-                  width: "133px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Tooltip placement="top" title="Add All to PDF">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    id="addAllPdf"
-                    style={{ marginRight: "2.5px" }}
-                  >
-                    <PictureAsPdfIcon className={classes.navIcon} />
-                  </Button>
-                </Tooltip>
-              </div>
-            </div> */}
             {itemsLoading ? (
               <CircularProgress />
             ) : (
