@@ -5,6 +5,7 @@ import { patchOrderItem, deletePreOrderItem } from "../../api/orderApi";
 import { markProgramComplete } from "../../api/programApi";
 
 import { setProgramComplete } from "./programsSlice";
+import { setPreOrderStatus } from "./programTableSlice";
 
 /*
 * Data Format:
@@ -107,6 +108,7 @@ export const setProgComplete = (id, value, preOrderId) => async (dispatch) => {
     dispatch(setIsLoading());
     const compStatus = await markProgramComplete(preOrderId, value);
     dispatch(setProgramComplete({ program: id, status: value }))
+    dispatch(setPreOrderStatus({ status: value }))
     dispatch(setProgCompleteSuccess());
     console.log(compStatus);
   } catch(err) {

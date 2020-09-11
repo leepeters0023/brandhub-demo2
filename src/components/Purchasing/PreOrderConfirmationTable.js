@@ -76,7 +76,10 @@ const CollapseRow = ({ classes, rowData, items }) => {
                           }}
                         >
                           <Typography variant="body2" color="textSecondary">
-                            {`${item.brand}-${item.itemType}`}
+                            {`${item.brand}`}
+                          </Typography>
+                          <Typography variant="body2" color="textSecondary">
+                            {`${item.itemType}`}
                           </Typography>
                           <Typography variant="body2" color="textSecondary">
                             {item.itemNumber}

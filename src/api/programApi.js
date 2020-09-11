@@ -70,7 +70,7 @@ export const markProgramComplete = async (id, value) => {
   //await timeout(500)
   await axios
     .patch(
-      `/api/pre_orders/${id}`,
+      `/api/pre-orders/${id}`,
       {
         data: {
           type: "pre-order",
