@@ -12,9 +12,10 @@ export const fetchOrdersByProgram = async (program) => {
   const response = { status: "", error: null, data: null };
   //await timeout(1000);
   await axios
-    .get(`/api/pre_orders?filter[program_id]=${program}`)
+    .get(`/api/pre-orders?filter[program_id]=${program}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -25,6 +26,24 @@ export const fetchOrdersByProgram = async (program) => {
     });
   return response;
 };
+
+export const fetchAllPreOrders = async () => {
+  const response = { status: "", error: null, data: null };
+  await axios
+  .get("/api/pre-orders")
+  .then((res) => {
+    let data = dataFormatter.deserialize(res.data)
+    console.log(data)
+    response.status = "ok"
+    response.data = data
+  })
+  .catch((err) => {
+    console.log(err.toString());
+    response.status = "error";
+    response.error = err.toString();
+  });
+return response;
+}
 
 export const patchOrderItem = async (id, qty) => {
   const response = { status: "", error: null };

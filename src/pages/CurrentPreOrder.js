@@ -12,9 +12,12 @@ import {
 
 import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
 
+import { setProgComplete } from "../redux/slices/patchOrderSlice";
+
 import { formatMoney } from "../utility/utilityFunctions";
 
 import PreOrderTable from "../components/Purchasing/PreOrderTable";
+import PreOrderOverview from "../components/Purchasing/PreOrderOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import ProgramSelector from "../components/Utility/ProgramSelector";
@@ -55,12 +58,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TotalsDiv = React.memo(({ program }) => {
+const TotalsDiv = React.memo(() => {
   const classes = useStyles();
   const programTotal = useSelector((state) => state.programTable.programTotal);
-  // const grandTotal = useSelector(
-  //   (state) => state.programTable.preOrderTotal.actualTotal
-  // );
+  const grandTotal = useSelector(
+    (state) => state.programTable.preOrderTotal.updatedTotal
+  );
 
   return (
     <>
@@ -71,7 +74,6 @@ const TotalsDiv = React.memo(({ program }) => {
         <InputBase
           className={classes.titleText}
           id="program-total"
-          defaultValue="$0.00"
           value={`${formatMoney(programTotal)}`}
           inputProps={{ "aria-label": "naked" }}
           style={{
@@ -83,9 +85,25 @@ const TotalsDiv = React.memo(({ program }) => {
           }}
         />
       </FormControl>
-      {/* <Typography
-        className={classes.titleText}
-      >{`Pre-Order Total: $${grandTotal.toFixed(2)}`}</Typography> */}
+      <FormControl style={{ pointerEvents: "none", minWidth: "100px", marginLeft: "30px" }}>
+        <InputLabel htmlFor="grand-total" style={{ whiteSpace: "nowrap" }}>
+          Quarterly Spend
+        </InputLabel>
+        <InputBase
+          className={classes.titleText}
+          id="grand-total"
+          value={`${formatMoney(grandTotal)}`}
+          inputProps={{ "aria-label": "naked" }}
+          style={{
+            marginTop: "10px",
+            width: `Calc(${grandTotal.toString().length}*15px + 20px)`,
+            minWidth: "100px",
+            readonly: "readonly",
+            pointerEvents: "none",
+          }}
+        />
+      </FormControl>
+
     </>
   );
 });
@@ -107,6 +125,8 @@ const CurrentPreOrder = ({ userType }) => {
   const isLoading = useSelector((state) => state.programTable.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
+  const preOrderId = useSelector((state) => state.programTable.preOrderId);
+  const preOrderStatus = useSelector((state) => state.programTable.status);
   const userPrograms = useSelector((state) => state.programs.programs);
   const handleModalClose = () => {
     handleModal(false);
@@ -139,6 +159,10 @@ const CurrentPreOrder = ({ userType }) => {
     dispatch(removeGridItem({ itemNum }));
     dispatch(deletePreOrdItem(currentItemId));
     handleConfirmModal(false);
+  };
+
+  const handleComplete = () => {
+    dispatch(setProgComplete(program, true, preOrderId));
   };
 
   const handleProgramIdHash = useCallback(() => {
@@ -227,17 +251,22 @@ const CurrentPreOrder = ({ userType }) => {
         {userPrograms.length === 0 || !program || programsLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-          <PreOrderTable
-            currentProgram={program}
-            open={open}
-            setOpen={setOpen}
-            tableStyle={tableStyle}
-            setTableStyle={setTableStyle}
-            handleModalOpen={handleModalOpen}
-            handleOpenConfirm={handleOpenConfirm}
-            setProgram={setProgram}
-            isLoading={isLoading}
-          />
+          preOrderStatus === true ? (
+            <PreOrderOverview />
+          ) : (
+
+            <PreOrderTable
+              currentProgram={program}
+              open={open}
+              setOpen={setOpen}
+              tableStyle={tableStyle}
+              setTableStyle={setTableStyle}
+              handleModalOpen={handleModalOpen}
+              handleOpenConfirm={handleOpenConfirm}
+              setProgram={setProgram}
+              isLoading={isLoading}
+            />
+          )
         )}
         <br />
         <br />
@@ -310,8 +339,7 @@ const CurrentPreOrder = ({ userType }) => {
               color="secondary"
               variant="contained"
               style={{marginRight: "20px"}}
-              component={Link}
-              to="/orders/preorder/confirmation"
+              onClick={handleComplete}
             >
               SAVE ORDER
             </Button>

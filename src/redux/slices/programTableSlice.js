@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchOrdersByProgram } from "../../api/orderApi";
+import { fetchOrdersByProgram, fetchAllPreOrders } from "../../api/orderApi";
 
 import { setProgramComplete } from "./programsSlice";
 
@@ -50,14 +50,18 @@ programsTable: {
 
 let initialState = {
   isLoading: false,
+  initialPreOrderLoading: false,
+  preOrderSummaryLoading: false,
+  preOrderSummary: [],
+  status: null,
   preOrderId: null,
   programId: null,
   items: [],
   orders: [],
   programTotal: 0,
   preOrderTotal: {
-    currentTotal: 0,
-    actualTotal: 0,
+    initialTotal: 0,
+    updatedTotal: 0,
   },
   preOrderNote: "",
   error: null,
@@ -65,6 +69,10 @@ let initialState = {
 
 const startLoading = (state) => {
   state.isLoading = true;
+};
+
+const startInitialLoading = (state) => {
+  state.initialPreOrderLoading = true;
 };
 
 const loadingFailed = (state, action) => {
@@ -78,8 +86,19 @@ const programTableSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setInitialPreOrdersLoading: startInitialLoading,
+    setPreOrderSummary(state, action) {
+      const { preOrders, totalCost } = action.payload;
+      console.log(preOrders);
+      state.preOrderSummary = [...preOrders];
+      state.preOrderTotal.initialTotal = totalCost;
+      state.preOrderTotal.updatedTotal = totalCost;
+      state.initialPreOrderLoading = false;
+      state.preOrderSummaryLoading = false;
+      state.error = null;
+    },
     buildTableFromOrders(state, action) {
-      const { programId, orders, items, preOrderId } = action.payload;
+      const { programId, orders, items, preOrderId, status } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
         let progTotal = 0;
@@ -97,6 +116,7 @@ const programTableSlice = createSlice({
         });
         state.preOrderId = preOrderId;
         state.programId = programId;
+        state.status = status;
         state.items = currentItems;
         state.orders = [...orders];
         state.programTotal = progTotal;
@@ -119,10 +139,10 @@ const programTableSlice = createSlice({
       });
       let newTotalItems = 0;
       let newEstTotal = 0;
-      newItems.forEach(item => {
-        newTotalItems += item.totalItems
-        newEstTotal += item.estTotal
-      })
+      newItems.forEach((item) => {
+        newTotalItems += item.totalItems;
+        newEstTotal += item.estTotal;
+      });
       currentOrder.items = [...newItems];
       currentOrder.totalItems = newTotalItems;
       currentOrder.estTotal = newEstTotal;
@@ -147,7 +167,10 @@ const programTableSlice = createSlice({
       currentItem.estTotal = totalEstCost;
       items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = [...items];
+      let initialTotal = state.programTotal;
       state.programTotal = progTotal;
+      state.preOrderTotal.updatedTotal =
+        progTotal + state.preOrderTotal.updatedTotal - initialTotal;
     },
     removeGridItem(state, action) {
       const { itemNum } = action.payload;
@@ -186,7 +209,11 @@ const programTableSlice = createSlice({
     },
     setProgramName(state, action) {
       const { name } = action.payload;
-      state.name = name
+      state.name = name;
+    },
+    setPreOrderStatus(state, action) {
+      const { status } = action.payload;
+      state.status = status;
     },
     setFailure: loadingFailed,
   },
@@ -194,23 +221,48 @@ const programTableSlice = createSlice({
 
 export const {
   setIsLoading,
+  setInitialPreOrdersLoading,
+  setPreOrderSummary,
   buildTableFromOrders,
   setGridItem,
   setItemTotal,
   removeGridItem,
   updatePreOrderNote,
   setProgramName,
+  setPreOrderStatus,
   setFailure,
 } = programTableSlice.actions;
 
 export default programTableSlice.reducer;
+
+export const fetchPreOrders = () => async (dispatch) => {
+  try {
+    dispatch(setInitialPreOrdersLoading());
+    const currentPreOrders = await fetchAllPreOrders();
+    let preOrders = currentPreOrders.data.map((order) => ({
+      preOrderId: order.id,
+      programId: order.program.id,
+      totalItems: order["total-quantity"],
+      totalEstCost: order["total-cost"],
+      status: order["is-complete"],
+    }));
+    let totalCost = preOrders
+      .map((order) => order.totalEstCost)
+      .reduce((a, b) => a + b);
+    dispatch(
+      setPreOrderSummary({ preOrders: preOrders, totalCost: totalCost })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
 
 export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
     if (currentOrders.data[0]["is-complete"]) {
-      dispatch(setProgramComplete({ program: program, status: true }))
+      dispatch(setProgramComplete({ program: program, status: true }));
     }
     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
       id: item.id,
@@ -218,7 +270,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.name,
-      price: item.item.price,
+      price: item.item.cost,
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
@@ -239,23 +291,29 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       distributorName: ord.distributor.name,
       type: "program",
       program: ord.program.id,
-      items: ord["order-items"].map((item) => ({
-        id: item.id,
-        complianceStatus: item.item["compliance-status"],
-        itemNumber: item.item["item-number"],
-        itemType: item.item.type,
-        price: item.item.price,
-        estTotal: item.qty * item.item.price,
-        totalItems: item.qty,
-      })).sort((a, b) => {
-        return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-          ? -1
-          : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-          ? 1
-          : 0;
-      }),
-      totalItems: ord["order-items"].map((item) => item.qty).reduce((a,b) => a+b),
-      estTotal: ord["order-items"].map((item) => item.qty * item.item.price).reduce((a,b) => a+b)
+      items: ord["order-items"]
+        .map((item) => ({
+          id: item.id,
+          complianceStatus: item.item["compliance-status"],
+          itemNumber: item.item["item-number"],
+          itemType: item.item.type,
+          price: item.item.cost,
+          estTotal: item.qty * item.item.cost,
+          totalItems: item.qty,
+        }))
+        .sort((a, b) => {
+          return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+            ? -1
+            : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+            ? 1
+            : 0;
+        }),
+      totalItems: ord["order-items"]
+        .map((item) => item.qty)
+        .reduce((a, b) => a + b),
+      estTotal: ord["order-items"]
+        .map((item) => item.qty * item.item.cost)
+        .reduce((a, b) => a + b),
     }));
 
     orders.sort((a, b) => {
@@ -264,9 +322,10 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
         : a.distributorName > b.distributorName
         ? 1
         : 0;
-    })
-    
+    });
+
     let preOrderId = currentOrders.data[0].id;
+    let preOrderStatus = currentOrders.data[0]["is-complete"];
 
     dispatch(
       buildTableFromOrders({
@@ -274,6 +333,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
         orders: orders,
         items: currentItems,
         preOrderId: preOrderId,
+        status: preOrderStatus,
       })
     );
   } catch (err) {

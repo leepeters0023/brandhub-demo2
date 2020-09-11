@@ -1,12 +1,12 @@
 import React from 'react'
 
-import { useSelector, dispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { setProgComplete } from "../redux/slices/patchOrderSlice";
+import { setProgComplete } from "../../redux/slices/patchOrderSlice";
 
-import { formatMoney } from "../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
 
-import PreOrderConfirmationTable from "../components/Purchasing/PreOrderConfirmationTable";
+import PreOrderConfirmationTable from "./PreOrderConfirmationTable";
 
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PreOrderOverview = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const preOrder = useSelector((state) => state.programTable);
 
