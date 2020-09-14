@@ -98,7 +98,7 @@ export const deletePreOrderItem = async (id) => {
     }
   }
   await axios
-    .delete(`/api/pre_order_items/${id}`, {
+    .delete(`/api/pre-order-items/${id}`, {
       data: {
         type: "pre-order-item",
         id: id
