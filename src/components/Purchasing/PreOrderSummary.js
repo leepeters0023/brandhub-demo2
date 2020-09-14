@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 
@@ -25,32 +25,51 @@ const PreOrderSummary = () => {
   const preOrders = useSelector((state) => state.programTable.preOrderSummary);
   const currentOrder = useSelector((state) => state.programTable);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!currentSummary && preOrders.length > 0) {
       let summary = preOrders.map((preOrder) => {
-        if (programs.filter((prog) => prog.id === preOrder.programId).length > 0) {
-          let currentProgram = programs.find((prog) => prog.id === preOrder.programId)
-          return ({
+        if (
+          programs.filter((prog) => prog.id === preOrder.programId).length > 0
+        ) {
+          let currentProgram = programs.find(
+            (prog) => prog.id === preOrder.programId
+          );
+          return {
             name: `${currentProgram.name} - ${currentProgram.focusMonth}`,
             ...preOrder,
-          })
-        } else return null
-      })
-      console.log(summary)
+          };
+        } else return null;
+      });
+      console.log(summary);
       setCurrentSummary(summary);
     }
-  }, [currentSummary, preOrders, programs, programs.length, preOrders.length])
+  }, [currentSummary, preOrders, programs, programs.length, preOrders.length]);
+
+  const statusConverter = (status) => {
+    if (status === "inactive") {
+      return "Not Started";
+    } else if (status === "in-progress") {
+      return "In Progress";
+    } else if (status === "complete") {
+      return "Saved";
+    } else if (status === "submitted") {
+      return "Order Submitted";
+    } else {
+      return "Error";
+    }
+  };
 
   if (currentOrder.preOrderSummaryLoading) {
-    return <CircularProgress />
+    return <CircularProgress />;
   }
+
   return (
     <>
       <TableContainer className={classes.tableContainer}>
         <Table className={classes.table} aria-label="pre-order-summary">
           <TableHead>
             <TableRow>
-            <TableCell className={classes.headerText} align="left">
+              <TableCell className={classes.headerText} align="left">
                 Pre-Order Program
               </TableCell>
               <TableCell className={classes.headerText} align="left">
@@ -65,27 +84,38 @@ const PreOrderSummary = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentSummary && currentSummary.map((preOrder) => (
-              <TableRow key={preOrder.preOrderId}>
-                <TableCell align="left">
-                  {preOrder.name}
-                </TableCell>
-                <TableCell align="left">
-                  {preOrder.preOrderId !== currentOrder.preOrderId ? preOrder.status : currentOrder.status}
-                </TableCell>
-                <TableCell align="left">
-                  {preOrder.preOrderId !== currentOrder.preOrderId ? preOrder.totalItems : currentOrder.items.map(item => item.totalItems).reduce((a, b) => a + b)}
-                </TableCell>
-                <TableCell align="left">
-                  {preOrder.preOrderId !== currentOrder.preOrderId ? formatMoney(preOrder.totalEstCost) : formatMoney(currentOrder.programTotal)}
-                </TableCell>
-              </TableRow>
-            ))}
+            {currentSummary &&
+              currentSummary.map((preOrder) => {
+                if (preOrder) {
+                  return (
+                    <TableRow key={preOrder.preOrderId}>
+                      <TableCell align="left">{preOrder.name}</TableCell>
+                      <TableCell align="left">
+                        {preOrder.preOrderId !== currentOrder.preOrderId
+                          ? statusConverter(preOrder.status)
+                          : statusConverter(currentOrder.status)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {preOrder.preOrderId !== currentOrder.preOrderId
+                          ? preOrder.totalItems
+                          : currentOrder.items
+                              .map((item) => item.totalItems)
+                              .reduce((a, b) => a + b)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {preOrder.preOrderId !== currentOrder.preOrderId
+                          ? formatMoney(preOrder.totalEstCost)
+                          : formatMoney(currentOrder.programTotal)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                } else return null;
+              })}
           </TableBody>
         </Table>
       </TableContainer>
     </>
-  )
-}
+  );
+};
 
 export default PreOrderSummary;
