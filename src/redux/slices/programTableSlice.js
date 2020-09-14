@@ -308,6 +308,7 @@ export const fetchPreOrders = (type) => async (dispatch) => {
 };
 
 export const fetchProgramOrders = (program) => async (dispatch) => {
+  //TODO get note / patch note on save and submit
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
@@ -323,7 +324,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
-      itemType: item.item.name,
+      itemType: item.item.type,
       price: item.item.cost,
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],

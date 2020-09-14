@@ -20,7 +20,6 @@ const ProgramDetails = (props) => {
   const {
     program: { name, imgUrl, desc, goals, focusMonth, strategies, brand },  
   } = props;
-  console.log(brand)
   return (
     <>
       <br />

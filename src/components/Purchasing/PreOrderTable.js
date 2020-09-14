@@ -101,7 +101,7 @@ const MemoInputCell = React.memo(
       ref.current.scrollLeft = 0;
     };
 
-    if (compliance !== "active") {
+    if (compliance !== "compliant") {
       return (
         <TableCell
         align="center"

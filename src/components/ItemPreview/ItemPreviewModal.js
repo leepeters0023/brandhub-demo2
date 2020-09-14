@@ -262,7 +262,7 @@ const ItemPreviewModal = (props) => {
                   <br />
                 </>
               )}
-              {type && type !== "preOrder" && (
+              {type && type !== "program" && (
                 <>
                   <TextField
                     color="secondary"
