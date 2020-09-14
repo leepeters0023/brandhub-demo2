@@ -28,8 +28,7 @@ class ErrorBoundary extends Component {
       this.props.onDemandOrder ||
       this.props.orderHistory ||
       this.props.items ||
-      this.props.programTable ||
-      this.props.patchOrder
+      this.props.programTable
     ) {
       if (this.props.programs) {
         throw this.props.programs
@@ -43,8 +42,6 @@ class ErrorBoundary extends Component {
         throw this.props.items
       } else if (this.props.programTable) {
         throw this.props.programTable
-      } else if (this.props.patchOrder) {
-        throw this.props.patchOrder
       }
     }
   }
@@ -75,7 +72,7 @@ const mapStateToProps = (state) => {
     orderHistory: state.orderHistory.error,
     items: state.items.error,
     programTable: state.programTable.error,
-    patchOrder: state.patchOrder.error,
+
   };
   return errors;
 };

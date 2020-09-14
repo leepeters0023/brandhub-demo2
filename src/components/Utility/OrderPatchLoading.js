@@ -24,6 +24,7 @@ const OrderPatchLoading = () => {
   const [open, setOpen] = useCallback(useState(false))
 
   const isLoading = useSelector((state) => state.patchOrder.isLoading);
+  const error = useSelector((state) => state.patchOrder.error);
 
   useEffect(() => {
     let timeOut;
@@ -47,9 +48,13 @@ const OrderPatchLoading = () => {
         <Alert severity="info" classes={{filledInfo: classes.alertColor}}>
           ...Saving...
         </Alert>
-        ) : (
+        ) : !error ? (
           <Alert severity="success" classes={{filledSuccess: classes.alertColor}}>
             Work is Saved!
+          </Alert>
+        ) : (
+          <Alert severity="error">
+            Something went wrong...
           </Alert>
         )}
       </Snackbar>
