@@ -141,7 +141,7 @@ const programsSlice = createSlice({
         itemNumber: item["item-number"],
         brand: item.brand.name,
         itemType: item.name,
-        price: item.price,
+        price: item.cost,
         qty: `${item["qty-per-pack"]} / pack`,
         imgUrl: item["img-url"],
       }));
@@ -196,10 +196,14 @@ export default programsSlice.reducer;
 export const fetchInitialPrograms = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const terrPrograms = await fetchProgramsByTerritory(id);
-    if (terrPrograms.error) {
-      throw terrPrograms.error
-    }
+    let terrPrograms;
+    if (id) {
+
+      terrPrograms = await fetchProgramsByTerritory(id);
+      if (terrPrograms.error) {
+        throw terrPrograms.error
+      }
+    } else terrPrograms = {data: []};
     const natPrograms = await fetchNationalPrograms();
     if (natPrograms.error) {
       throw natPrograms.error

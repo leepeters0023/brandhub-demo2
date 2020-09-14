@@ -49,11 +49,12 @@ const CollapseRow = ({ classes, rowData, items }) => {
         </TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
         <TableCell align="left">{`${formatMoney(rowData.estTotal)}`}</TableCell>
+        <TableCell align="left">---</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
+            <Box margin={1} style={{overFlowX: "scroll"}}>
               <Typography
                 className={classes.headerText}
                 gutterBottom
@@ -61,7 +62,8 @@ const CollapseRow = ({ classes, rowData, items }) => {
               >
                 Item Details
               </Typography>
-              <Table size="small" aria-label="item-details">
+              <TableContainer>
+              <Table size="small" aria-label="item-details" >
                 <TableHead>
                   <TableRow>
                     <TableCell />
@@ -128,6 +130,7 @@ const CollapseRow = ({ classes, rowData, items }) => {
                   </TableRow>
                 </TableBody>
               </Table>
+              </TableContainer>
             </Box>
           </Collapse>
         </TableCell>
@@ -141,7 +144,7 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
 
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer} style={{maxWidth: "100%"}}>
         <Table>
           <TableHead>
             <TableRow>
@@ -159,7 +162,10 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
                 Total Items
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Total Cost
+                Est Cost
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Act. Cost
               </TableCell>
             </TableRow>
           </TableHead>

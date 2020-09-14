@@ -75,7 +75,7 @@ const Login = () => {
   const { value: userName, bind: bindUserName } = useInput("");
   const { value: password, bind: bindPassword } = useInput("");
 
-  const error = useSelector((state) => state.user.error);
+  const error = useSelector((state) => state.user.logInError);
   const isLoading = useSelector((state) => state.user.loginIsLoading);
 
   const handleSubmit = (evt) => {

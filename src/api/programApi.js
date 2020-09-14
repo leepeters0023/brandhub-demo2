@@ -31,7 +31,6 @@ export const fetchNationalPrograms = async () => {
     .get(`/api/programs?filter[type]=national`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-
       response.status = "ok";
       response.data = data;
     })

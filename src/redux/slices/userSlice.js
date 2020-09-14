@@ -28,6 +28,7 @@ let initialState = {
   role: "",
   territories: [],
   currentTerritory: "",
+  logInError: null,
   error: null,
 };
 
@@ -46,6 +47,13 @@ const loadingFailed = (state, action) => {
   state.error = error;
 };
 
+const logInFailed = (state, action) => {
+  const { error } = action.payload;
+  state.isLoading = false;
+  state.loginIsLoading = false;
+  state.logInError = error;
+};
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -59,9 +67,12 @@ const userSlice = createSlice({
     },
     getUserSuccess(state, action) {
       const { user } = action.payload;
-      let userTerritories = user.included.map((data) => {
-        return { name: data.attributes.name, id: data.id };
-      });
+      let userTerritories;
+      if (user.included) {
+        userTerritories = user.included.map((data) => {
+          return { name: data.attributes.name, id: data.id };
+        });
+      } else userTerritories = [{name: "National", id: null}];
       state.firstName = user.data.attributes.name.split(" ")[0];
       state.lastName = user.data.attributes.name.split(" ")[1];
       state.initials = `${user.data.attributes.name.split(" ")[0][0]}${
@@ -73,6 +84,7 @@ const userSlice = createSlice({
       state.currentTerritory = userTerritories[0].id;
       state.isLoading = false;
       state.loggedIn = true;
+      state.logInError = null;
       state.error = null;
     },
     updateCurrentTerritory(state, action) {
@@ -88,8 +100,10 @@ const userSlice = createSlice({
       state.role = "";
       state.territories = [];
       state.error = null;
+      state.logInError = null;
       state.loggedIn = false;
     },
+    setLogInFailure: logInFailed,
     setFailure: loadingFailed,
   },
 });
@@ -101,6 +115,7 @@ export const {
   setLoginSuccess,
   updateCurrentTerritory,
   removeUser,
+  setLogInFailure,
   setFailure,
 } = userSlice.actions;
 
@@ -132,6 +147,6 @@ export const logIn = (email, password) => async (dispatch) => {
     }
     dispatch(setLoginSuccess());
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setLogInFailure({ error: err.toString() }));
   }
 };
