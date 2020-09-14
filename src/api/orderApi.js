@@ -15,7 +15,6 @@ export const fetchOrdersByProgram = async (program) => {
     .get(`/api/pre-orders?filter[program_id]=${program}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -33,7 +32,6 @@ export const fetchAllPreOrders = async () => {
   .get("/api/pre-orders")
   .then((res) => {
     let data = dataFormatter.deserialize(res.data)
-    console.log(data)
     response.status = "ok"
     response.data = data
   })
@@ -105,7 +103,6 @@ export const deletePreOrderItem = async (id) => {
       }
     }, headers)
     .then((res) => {
-      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {
@@ -127,7 +124,6 @@ export const submitPreOrder = async (id) => {
   await axios
     .post(`/api/pre-orders/${id}/submit`, null, headers)
     .then((res) => {
-      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {

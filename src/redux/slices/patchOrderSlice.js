@@ -83,7 +83,9 @@ export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
     dispatch(setIsLoading());
     dispatch(addLoadingCell({cell: {id: id, orderNumber: orderNumber}}))
     const patchStatus = await patchOrderItem(id, qty);
-    console.log(patchStatus);
+    if (patchStatus.error) {
+      throw patchStatus.error
+    }
 
     dispatch(patchItemSuccess({id, orderNumber}));
   } catch(err) {
@@ -95,7 +97,9 @@ export const deletePreOrdItem = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const deleteStatus = await deletePreOrderItem(id);
-    console.log(deleteStatus);
+    if (deleteStatus.error) {
+      throw deleteStatus.error
+    }
 
     dispatch(deleteItemSuccess());
   } catch(err) {
@@ -107,13 +111,17 @@ export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const compStatus = await setPreOrderProgramStatus(preOrderId, value);
+    if (compStatus.error) {
+      throw compStatus.error
+    }
     dispatch(setProgramStatus({ program: id, status: value }))
     dispatch(setPreOrderStatus({ status: value }))
     dispatch(setProgStatusSuccess());
-    console.log(compStatus);
     if (value === "submitted") {
       const submitStatus = await submitPreOrder(preOrderId)
-      console.log(submitStatus)
+      if (submitStatus.error) {
+        throw submitStatus.error
+      }
     }
   } catch(err) {
     dispatch(setFailure({ error: err.toString() }));

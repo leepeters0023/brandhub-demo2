@@ -108,6 +108,9 @@ export default userSlice.reducer
 export const fetchUser = () => async dispatch => {
     dispatch(setIsLoading())
     const user = await getUser()
+    if (user.error) {
+      throw user.error
+    }
     if (user.status === "ok") {
       window.localStorage.setItem("brandhub-role", user.data.data.attributes.role)
       dispatch(getUserSuccess({user: user.data}))
@@ -119,6 +122,9 @@ export const fetchUser = () => async dispatch => {
 export const logIn = (email, password) => async dispatch => {
   dispatch(setLoginLoading())
   const res = await logInUser(email, password);
+  if (res.error) {
+    throw res.error
+  }
   if (res.status === "ok") {
     dispatch(setLoginSuccess());
   } else {

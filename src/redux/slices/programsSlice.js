@@ -196,8 +196,13 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const terrPrograms = await fetchProgramsByTerritory(id);
+    if (terrPrograms.error) {
+      throw terrPrograms.error
+    }
     const natPrograms = await fetchNationalPrograms();
-    console.log(terrPrograms)
+    if (natPrograms.error) {
+      throw natPrograms.error
+    }
     const programs = terrPrograms.data.concat(natPrograms.data);
     dispatch(getProgramsSuccess({ programs: programs }));
   } catch (err) {
@@ -209,6 +214,9 @@ export const fetchPrograms = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const programs = await fetchProgramsByTerritory(id);
+    if (programs.error) {
+      throw programs.error
+    }
     if (programs.length === 0) {
       dispatch(getProgramsSuccess({ programs: [] }));
     }
@@ -222,6 +230,9 @@ export const fetchItems = (id) => async (dispatch) => {
   try {
     dispatch(setItemsIsLoading());
     const items = await fetchProgramItems(id);
+    if (items.error) {
+      throw items.error
+    }
     dispatch(getProgramItemsSuccess({ program: id, items: items.data }));
   } catch (err) {
     dispatch(setFailure(err.toString()));

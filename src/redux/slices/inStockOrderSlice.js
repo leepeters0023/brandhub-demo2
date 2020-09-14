@@ -204,7 +204,9 @@ export const addStockItem = (id, item, qty) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     const response = await addOrderItem(id, item, qty);
-    console.log(response);
+    if (response.error) {
+      throw response.error
+    }
     dispatch(addInStockItem({item: item}))
   } catch (err) {
     console.log(err)

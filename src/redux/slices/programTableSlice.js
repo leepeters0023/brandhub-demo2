@@ -258,6 +258,9 @@ export const fetchPreOrders = (type) => async (dispatch) => {
       dispatch(setSummaryLoading());
     }
     const currentPreOrders = await fetchAllPreOrders();
+    if (currentPreOrders.error) {
+      throw currentPreOrders.error
+    }
     let preOrders = currentPreOrders.data.map((order) => ({
       preOrderId: order.id,
       programId: order.program.id,
@@ -289,6 +292,9 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
+    if (currentOrders.error) {
+      throw currentOrders.error
+    }
     if (currentOrders.data[0].status === "complete") {
       dispatch(setProgramStatus({ program: program, status: "complete" }));
     }
