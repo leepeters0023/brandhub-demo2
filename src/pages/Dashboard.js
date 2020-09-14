@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
-import DashboardFieldOne from "../components/Dashboard/DashboardFieldOne";
+//import DashboardFieldOne from "../components/Dashboard/DashboardFieldOne";
 //import DashboardCompliance from "../components/Dashboard/DashboardCompliance";
 
 import Container from "@material-ui/core/Container";
@@ -40,16 +40,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
-  const [currentRole, setCurrentRole] = useState(undefined)
+  //const [currentRole, setCurrentRole] = useState(undefined)
 
-  const role = useSelector(state => state.user.role)
+  //const role = useSelector(state => state.user.role)
   const name = useSelector(state => state.user.firstName)
 
-  useEffect(()=>{
-    if (role.length > 0) {
-      setCurrentRole(role)
-    }
-  }, [role])
+  // useEffect(()=>{
+  //   if (role.length > 0) {
+  //     setCurrentRole(role)
+  //   }
+  // }, [role])
 
   return (
     <>
@@ -117,10 +117,10 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         
-          {currentRole === "field1" && <DashboardFieldOne name={name} />}
+          {/* {currentRole === "field1" && <DashboardFieldOne name={name} />}
           {currentRole === "field2" && <DashboardFieldOne name={name} />}
           {currentRole === "super" && <DashboardFieldOne name={name} />}
-          {currentRole === "compliance" && <DashboardFieldOne name={name} />}
+          {currentRole === "compliance" && <DashboardFieldOne name={name} />} */}
     
       </Container>
       <br />
