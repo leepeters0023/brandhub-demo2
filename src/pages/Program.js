@@ -104,7 +104,7 @@ const Program = ({ userType, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              <Tooltip title="View Program Pre-Order">
+              <Tooltip title="Place Program Pre-Order">
                 <IconButton
                   component={Link}
                   to={`/orders/open/preorder#${programId}`}

@@ -62,7 +62,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
         >
           {currentPrograms.map((program, index) => (
             <MenuItem value={program.id} key={index}>
-              {program.status === "complete" ? (
+              {(program.status === "complete" || program.status === "submitted") ? (
                 <div
                   style={{
                     display: "flex",
