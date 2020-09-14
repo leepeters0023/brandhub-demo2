@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { patchOrderItem, deletePreOrderItem } from "../../api/orderApi";
+import { patchOrderItem, deletePreOrderItem, submitPreOrder } from "../../api/orderApi";
 
 import { setPreOrderProgramStatus } from "../../api/programApi";
 
@@ -111,6 +111,10 @@ export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
     dispatch(setPreOrderStatus({ status: value }))
     dispatch(setProgStatusSuccess());
     console.log(compStatus);
+    if (value === "submitted") {
+      const submitStatus = await submitPreOrder(preOrderId)
+      console.log(submitStatus)
+    }
   } catch(err) {
     dispatch(setFailure({ error: err.toString() }));
   }

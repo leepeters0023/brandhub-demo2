@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "@reach/router";
 
 import { fetchInitialPrograms } from "../redux/slices/programsSlice";
 
@@ -12,10 +13,15 @@ import ProgramSort from "../components/Utility/ProgramSort";
 import { useProgramSort } from "../hooks/UtilityHooks";
 
 import Container from "@material-ui/core/Container";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 //import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const focusMonths = [
   "January",
@@ -47,7 +53,7 @@ const Programs = ({ userType }) => {
 
   let activePrograms = useSelector((state) => state.programs.programs);
   const isLoading = useSelector((state) => state.programs.isLoading);
-  const currentTerritory = useSelector((state) => state.user.currentTerritory)
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -69,7 +75,7 @@ const Programs = ({ userType }) => {
           if (!currentBrandArray.includes(brand)) {
             currentBrandArray.push(brand);
           }
-        })
+        });
       });
       setCurrentBrands(currentBrandArray);
     }
@@ -96,7 +102,7 @@ const Programs = ({ userType }) => {
     currentMonths,
     currentPrograms.length,
     currentPrograms,
-    setCurrentMonths
+    setCurrentMonths,
   ]);
 
   return (
@@ -104,12 +110,23 @@ const Programs = ({ userType }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
-            Programs
+            Pre-Orders
           </Typography>
 
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              {/* <RegionSelector /> */}
+              <Tooltip title="Place Pre-Orders">
+                <IconButton component={Link} to={`/orders/open/preorder`}>
+                  <ExitToAppIcon fontSize="large" color="inherit" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Add All Items to PDF">
+                <span>
+                  <IconButton>
+                    <PictureAsPdfIcon fontSize="large" color="inherit" />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -124,7 +141,11 @@ const Programs = ({ userType }) => {
           <ProgramSort setSortOption={setSortOption} />
         </div>
         <br />
-        {isLoading ? <CircularProgress color="inherit" /> : <CurrentPrograms currentPrograms={currentPrograms} />}
+        {isLoading ? (
+          <CircularProgress color="inherit" />
+        ) : (
+          <CurrentPrograms currentPrograms={currentPrograms} />
+        )}
       </Container>
     </>
   );

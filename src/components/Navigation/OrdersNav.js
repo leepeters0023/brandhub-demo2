@@ -92,22 +92,6 @@ const OrdersNav = ({ setSelected, selected }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/open/preorder"
-                className={classes.nested}
-              >
-                <ListItemText primary="Pre-Order" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={() => {
-                  setSelected("orders");
-                  handleClose();
-                  handlePlaceOrder();
-                  if (openOrdersOpen) {
-                    handleOpenOrders();
-                  }
-                }}
-                component={Link}
                 to="/orders/items/instock"
                 className={classes.nested}
               >

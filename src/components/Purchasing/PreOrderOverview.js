@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -30,27 +30,32 @@ const PreOrderOverview = () => {
   const preOrder = useSelector((state) => state.programTable);
 
   const handleEditOrder = () => {
-    dispatch(setProgStatus(preOrder.programId, "in-progress", preOrder.preOrderId))
-  }
+    dispatch(
+      setProgStatus(preOrder.programId, "in-progress", preOrder.preOrderId)
+    );
+  };
 
   return (
     <>
       <Grid container spacing={5}>
-          <Grid item lg={9} sm={12} xs={12}>
-            <Typography className={classes.headerText}>
-              Pre-Order Overview:
-            </Typography>
-            <Divider />
-            <br />
-            <PreOrderConfirmationTable orders={preOrder.orders} items={preOrder.items} />
-          </Grid>
-          <Grid item lg={3} sm={12} xs={12}>
-            <Typography className={classes.headerText}>
-              Pre-Order Summary:
-            </Typography>
-            <Divider />
-            <br />
-            <div
+        <Grid item lg={9} sm={12} xs={12}>
+          <Typography className={classes.headerText}>
+            Pre-Order Overview:
+          </Typography>
+          <Divider />
+          <br />
+          <PreOrderConfirmationTable
+            orders={preOrder.orders}
+            items={preOrder.items}
+          />
+        </Grid>
+        <Grid item lg={3} sm={12} xs={12}>
+          <Typography className={classes.headerText}>
+            Pre-Order Summary:
+          </Typography>
+          <Divider />
+          <br />
+          <div
             style={{
               display: "flex",
               width: "100px",
@@ -69,19 +74,20 @@ const PreOrderOverview = () => {
             </Tooltip>
           </div>
           <br />
-            <Typography className={classes.headerText}>
-              {`Total Items: ${preOrder.items
-                .map((item) => item.totalItems)
-                .reduce((a, b) => a + b)}`}
-            </Typography>
-            <Typography className={classes.headerText}>
-              {`Total Cost: ${formatMoney(preOrder.programTotal)}`}
-            </Typography>
-            <br />
-            <Typography className={classes.headerText}>
-              {`Order Notes: ${preOrder.preOrderNote}`}
-            </Typography>
-            <br />
+          <Typography className={classes.headerText}>
+            {`Total Items: ${preOrder.items
+              .map((item) => item.totalItems)
+              .reduce((a, b) => a + b)}`}
+          </Typography>
+          <Typography className={classes.headerText}>
+            {`Total Cost: ${formatMoney(preOrder.programTotal)}`}
+          </Typography>
+          <br />
+          <Typography className={classes.headerText}>
+            {`Order Notes: ${preOrder.preOrderNote}`}
+          </Typography>
+          <br />
+          {preOrder.status !== "submitted" && (
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -91,11 +97,12 @@ const PreOrderOverview = () => {
             >
               EDIT ORDER
             </Button>
-            <br />
-          </Grid>
+          )}
+          <br />
         </Grid>
+      </Grid>
     </>
-  )
-}
+  );
+};
 
 export default PreOrderOverview;

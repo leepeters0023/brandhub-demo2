@@ -7,11 +7,11 @@ import { Link } from "@reach/router";
 import UserNav from "./UserNav";
 import OrdersNav from "./OrdersNav";
 import MoreNav from "./MoreNav";
+import PreOrderNav from "./PreOrderNav";
 import RegionSelector from "../Utility/RegionSelector";
 import UserSelector from "../Utility/UserSelector";
 
 import AppBar from "@material-ui/core/AppBar";
-import IconButton from "@material-ui/core/IconButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -19,7 +19,6 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 
-import DashboardIcon from "@material-ui/icons/Dashboard";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -69,9 +68,9 @@ const ScrollNav = (props) => {
   const handleNav = useCallback(() => {
     if (window.location.pathname === "/") {
       setSelected("home");
-    } else if (window.location.pathname.includes("program")) {
-      setSelected("programs");
-    } else if (window.location.pathname.includes("order")) {
+    } else if (window.location.pathname.includes("program") || window.location.pathname.includes("preorder")) {
+      setSelected("preOrder");
+    } else if (window.location.pathname.includes("orders")) {
       setSelected("orders");
     } else {
       setSelected("other");
@@ -111,18 +110,7 @@ const ScrollNav = (props) => {
                   />
                 </Link>
               </Tooltip>
-              <Tooltip title="Programs">
-                <IconButton
-                  component={Link}
-                  to="/programs"
-                  onClick={() => setSelected("programs")}
-                >
-                  <DashboardIcon
-                    fontSize="large"
-                    color={selected === "programs" ? "primary" : "inherit"}
-                  />
-                </IconButton>
-              </Tooltip>
+              <PreOrderNav setSelected={setSelected} selected={selected} />
               <OrdersNav setSelected={setSelected} selected={selected} />
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>

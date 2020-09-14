@@ -40,7 +40,14 @@ const PreOrderSummary = () => {
           };
         } else return null;
       });
-      console.log(summary);
+      summary = summary.filter((order) => order)
+      summary.sort((a, b) => {
+        return a.name[0].toLowerCase()[0] < b.name[0].toLowerCase()[0]
+          ? -1
+          : a.name[0].toLowerCase()[0] > b.name[0].toLowerCase()[0]
+          ? 1
+          : 0;
+      });
       setCurrentSummary(summary);
     }
   }, [currentSummary, preOrders, programs, programs.length, preOrders.length]);
@@ -72,14 +79,17 @@ const PreOrderSummary = () => {
               <TableCell className={classes.headerText} align="left">
                 Pre-Order Program
               </TableCell>
-              <TableCell className={classes.headerText} align="left">
+              <TableCell className={classes.headerText} align="center">
                 Status
               </TableCell>
-              <TableCell className={classes.headerText} align="left">
+              <TableCell className={classes.headerText} align="center">
                 Total Items
               </TableCell>
-              <TableCell className={classes.headerText} align="left">
+              <TableCell className={classes.headerText} align="center">
                 Total Est Cost
+              </TableCell>
+              <TableCell className={classes.headerText} align="right">
+                Remaining Budget
               </TableCell>
             </TableRow>
           </TableHead>
@@ -90,22 +100,25 @@ const PreOrderSummary = () => {
                   return (
                     <TableRow key={preOrder.preOrderId}>
                       <TableCell align="left">{preOrder.name}</TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.preOrderId
                           ? statusConverter(preOrder.status)
                           : statusConverter(currentOrder.status)}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.preOrderId
                           ? preOrder.totalItems
                           : currentOrder.items
                               .map((item) => item.totalItems)
                               .reduce((a, b) => a + b)}
                       </TableCell>
-                      <TableCell align="left">
+                      <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.preOrderId
                           ? formatMoney(preOrder.totalEstCost)
                           : formatMoney(currentOrder.programTotal)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {formatMoney(Math.floor(Math.random()*1000000 + 1000000))}
                       </TableCell>
                     </TableRow>
                   );

@@ -30,11 +30,6 @@ const DashboardFieldOne = ({ name }) => {
 
   return (
     <div style={{ width: "100%" }}>
-      <div style={{ width: "100%", textAlign: "center" }}>
-        <Typography className={classes.titleText}>
-          {`Welcome back ${name}!`}
-        </Typography>
-      </div>
       <br />
       <Accordion
         className={classes.accordian}

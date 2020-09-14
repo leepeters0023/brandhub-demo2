@@ -2,16 +2,18 @@ import React from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -69,15 +71,8 @@ const CurrentPrograms = ({ currentPrograms }) => {
           }}
         >
           <Typography className={classes.titleText}>
-            Current Programs
+            Current Pre-Order Programs
           </Typography>
-          <Tooltip title="Add All Items to PDF">
-            <span>
-              <IconButton>
-                <PictureAsPdfIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
         </div>
         <br />
         <br />
@@ -103,17 +98,20 @@ const CurrentPrograms = ({ currentPrograms }) => {
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    {`Business Unit: ${prog.unit}`}
+                    {`Budget: ${formatMoney(Math.floor(Math.random()*1000000 + 1000000))}`}
                   </Typography>
                 </div>
                 <div className={classes.itemControl}>
-                  <Button
-                  size="small"
-                    color="primary"
-                    variant="contained"
-                    component={Link}
-                    to={`/orders/open/preorder#${prog.id}`}
-                  >Pre-Order</Button>
+                  <Tooltip title="Place Pre-Order">
+                    <span>
+                      <IconButton
+                        component={Link}
+                        to={`/orders/open/preorder#${prog.id}`}
+                      >
+                        <ExitToAppIcon />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
                   <Tooltip title="Add All Items to PDF">
                     <span>
                       <IconButton id={`${prog.id}`}>

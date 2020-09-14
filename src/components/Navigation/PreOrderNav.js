@@ -9,10 +9,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 
-const MoreNav = ({ setSelected, selected, userType }) => {
-
+const PreOrderNav = ({ setSelected, selected }) => {
   const [anchorEl, setAnchorEl] = useCallback(useState(null));
 
   const handleOpen = (evt) => {
@@ -25,15 +24,15 @@ const MoreNav = ({ setSelected, selected, userType }) => {
 
   return (
     <>
-      <Tooltip title="More">
+      <Tooltip title="Pre-Order">
         <IconButton
-          aria-owns={anchorEl ? "more" : undefined}
+          aria-owns={anchorEl ? "pre-order" : undefined}
           aria-haspopup="true"
           onClick={handleOpen}
         >
-          <MoreHorizIcon
+          <DashboardIcon
             fontSize="large"
-            color={selected === "more" ? "primary" : "inherit"}
+            color={selected === "preOrder" ? "primary" : "inherit"}
           />
         </IconButton>
       </Tooltip>
@@ -52,54 +51,28 @@ const MoreNav = ({ setSelected, selected, userType }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <List style={{ width: "200px" }}>
-          {userType === "super" && (
-            <>
-              <ListItem
-                button
-                onClick={() => {
-                  setSelected("more");
-                  handleClose();
-                }}
-                component={Link}
-                to="/reports"
-              >
-                <ListItemText primary="Reports" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={() => {
-                  setSelected("more");
-                  handleClose();
-                }}
-                // component={Link}
-                // to="/compliance"
-              >
-                <ListItemText primary="Compliance" />
-              </ListItem>
-            </>
-          )}
+        <List style={{width: "200px"}}>
           <ListItem
             button
-            onClick={() => {
-              setSelected("more");
-              handleClose();
+            onClick={()=>{
+              setSelected("preOrder")
+              handleClose()
             }}
             component={Link}
-            to="/items"
+            to="/programs"
           >
-            <ListItemText primary="Item Catalog" />
+            <ListItemText primary="Pre-Order Programs" />
           </ListItem>
           <ListItem
             button
-            onClick={() => {
-              setSelected("more");
-              handleClose();
+            onClick={()=>{
+              setSelected("preOrder")
+              handleClose()
             }}
-            // component={Link}
-            // to="/currentpdf"
+            component={Link}
+            to="/orders/open/preorder"
           >
-            <ListItemText primary="Current PDF" />
+            <ListItemText primary="Place Pre-Order" />
           </ListItem>
         </List>
       </Menu>
@@ -107,9 +80,9 @@ const MoreNav = ({ setSelected, selected, userType }) => {
   );
 };
 
-MoreNav.propTypes = {
+PreOrderNav.propTypes = {
   setSelected: PropTypes.func.isRequired,
   selected: PropTypes.string.isRequired,
 };
 
-export default MoreNav;
+export default PreOrderNav;

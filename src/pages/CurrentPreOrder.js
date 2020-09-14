@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -8,7 +7,7 @@ import {
   fetchProgramOrders,
   setProgramName,
   updatePreOrderNote,
-  fetchPreOrders
+  fetchPreOrders,
 } from "../redux/slices/programTableSlice";
 
 import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
@@ -175,6 +174,10 @@ const CurrentPreOrder = ({ userType }) => {
     dispatch(setProgStatus(program, "complete", preOrderId));
   };
 
+  const handleSubmit = () => {
+    dispatch(setProgStatus(program, "submitted", preOrderId))
+  }
+
   const handleProgramIdHash = useCallback(() => {
     setProgram(window.location.hash.slice(1));
   }, []);
@@ -210,7 +213,7 @@ const CurrentPreOrder = ({ userType }) => {
   useEffect(() => {
     if (program) {
       dispatch(fetchProgramOrders(program));
-      dispatch(fetchPreOrders("summary"))
+      dispatch(fetchPreOrders("summary"));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
         setProgramName({
@@ -251,13 +254,16 @@ const CurrentPreOrder = ({ userType }) => {
       />
       <Container className={classes.mainWrapper}>
         {/* eslint-disable-next-line no-dupe-keys */}
-        <Accordion style={{backgroundColor: "#fafafa"}}>
+        <Accordion style={{ backgroundColor: "#fafafa" }}>
           <AccordianSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="pre-order-summary"
             id="pre-order-summary-header"
           >
-            <div className={classes.titleBar} style={{width: "100%", alignItems: "center"}}>
+            <div
+              className={classes.titleBar}
+              style={{ width: "100%", alignItems: "center" }}
+            >
               <ProgramSelector
                 handler={handleProgram}
                 currentProgram={program}
@@ -295,90 +301,97 @@ const CurrentPreOrder = ({ userType }) => {
         )}
         <br />
         <br />
-        <Grid container spacing={5}>
-          <Grid item md={7} xs={12}>
-            <Typography className={classes.headerText}>
-              TERMS AND CONDITIONS
-            </Typography>
-            <br />
-            <Typography className={classes.bodyText}>
-              Use of this site is subject to all Gallo use policies. By using
-              this site, you warrant that you are a Gallo or Gallo Sales
-              employee and that you have reviewed, read, and understand the
-              Compliance rules below associated with this site and with your
-              intended order. You further warrant that you will not, under any
-              circumstances, order items for use in stated where prohibited or
-              use items in a prohibited manner. If you have any questions,
-              please contact your Compliance representative.
-            </Typography>
-            <br />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={terms}
-                  onChange={() => setTermsChecked(!terms)}
-                  name="Terms"
-                  color="primary"
+        {preOrderStatus !== "submitted" && (
+          <>
+            <Grid container spacing={5}>
+              <Grid item md={7} xs={12}>
+                <Typography className={classes.headerText}>
+                  TERMS AND CONDITIONS
+                </Typography>
+                <br />
+                <Typography className={classes.bodyText}>
+                  Use of this site is subject to all Gallo use policies. By
+                  using this site, you warrant that you are a Gallo or Gallo
+                  Sales employee and that you have reviewed, read, and
+                  understand the Compliance rules below associated with this
+                  site and with your intended order. You further warrant that
+                  you will not, under any circumstances, order items for use in
+                  stated where prohibited or use items in a prohibited manner.
+                  If you have any questions, please contact your Compliance
+                  representative.
+                </Typography>
+                <br />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={terms}
+                      onChange={() => setTermsChecked(!terms)}
+                      name="Terms"
+                      color="primary"
+                    />
+                  }
+                  label=" I have read and accept the Terms and Conditions"
                 />
-              }
-              label=" I have read and accept the Terms and Conditions"
-            />
-          </Grid>
-          <Grid item md={5} xs={12}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Typography className={classes.headerText}>
-                Order Notes
-              </Typography>
-              <Typography className={classes.bodyText} color="textSecondary">
-                {`${preOrderNote.length} / 300`}
-              </Typography>
-            </div>
+              </Grid>
+              <Grid item md={5} xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className={classes.headerText}>
+                    Order Notes
+                  </Typography>
+                  <Typography
+                    className={classes.bodyText}
+                    color="textSecondary"
+                  >
+                    {`${preOrderNote.length} / 300`}
+                  </Typography>
+                </div>
+                <br />
+                <TextField
+                  color="secondary"
+                  multiline
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  rows="5"
+                  value={preOrderNote}
+                  onChange={handlePreOrderNote}
+                />
+                <br />
+                <br />
+              </Grid>
+            </Grid>
             <br />
-            <TextField
-              color="secondary"
-              multiline
-              fullWidth
-              variant="outlined"
-              size="small"
-              rows="5"
-              value={preOrderNote}
-              onChange={handlePreOrderNote}
-            />
             <br />
-            <br />
-          </Grid>
-        </Grid>
-        <br />
-        <br />
-        <div className={classes.orderControl}>
-          <Button
-            className={classes.largeButton}
-            color="secondary"
-            variant="contained"
-            style={{ marginRight: "20px" }}
-            onClick={handleComplete}
-          >
-            SAVE ORDER
-          </Button>
+            <div className={classes.orderControl}>
+              <Button
+                className={classes.largeButton}
+                color="secondary"
+                variant="contained"
+                style={{ marginRight: "20px" }}
+                onClick={handleComplete}
+              >
+                SAVE ORDER
+              </Button>
 
-          <Button
-            className={classes.largeButton}
-            color="secondary"
-            variant="contained"
-            disabled={!terms}
-            component={Link}
-            to="/orders/preorder/confirmation"
-          >
-            SUBMIT ORDER
-          </Button>
-        </div>
+              <Button
+                className={classes.largeButton}
+                color="secondary"
+                variant="contained"
+                disabled={!terms}
+                onClick={handleSubmit}
+              >
+                SUBMIT ORDER
+              </Button>
+            </div>
+          </>
+        )}
         <br />
         <br />
       </Container>

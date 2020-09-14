@@ -115,3 +115,25 @@ export const deletePreOrderItem = async (id) => {
     });
   return response;
 }
+
+export const submitPreOrder = async (id) => {
+  const response = { status: "", error: null };
+  let headers = {
+    headers: {
+      "Accept": "application/vnd.api+json",
+      "Content-Type": "application/vnd.api+json"
+    }
+  }
+  await axios
+    .post(`/api/pre-orders/${id}/submit`, null, headers)
+    .then((res) => {
+      console.log(res);
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
