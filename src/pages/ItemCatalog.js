@@ -40,6 +40,7 @@ const ItemCatalog = ({ userType }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -52,10 +53,10 @@ const ItemCatalog = ({ userType }) => {
   };
 
   useEffect(() => {
-    if (currentItems.length === 0 && userType) {
+    if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
       dispatch(fetchFilteredItems("catalog"));
     }
-  }, [currentItems, dispatch, userType]);
+  }, [currentItems, dispatch, userType, currentUserRole]);
 
   return (
     <>

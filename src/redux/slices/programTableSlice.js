@@ -78,7 +78,7 @@ const startInitialLoading = (state) => {
 
 const startSummaryLoading = (state) => {
   state.preOrderSummaryLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
@@ -95,7 +95,6 @@ const programTableSlice = createSlice({
     setSummaryLoading: startSummaryLoading,
     setPreOrderSummary(state, action) {
       const { preOrders, totalCost } = action.payload;
-      console.log(preOrders);
       state.preOrderSummary = [...preOrders];
       state.preOrderTotal.initialTotal = totalCost;
       state.preOrderTotal.updatedTotal = totalCost;
@@ -229,6 +228,25 @@ const programTableSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
+    resetState(state) {
+      state.isLoading = false;
+      state.initialPreOrderLoading = false;
+      state.preOrderSummaryLoading = false;
+      state.preOrderSummary = [];
+      state.status = null;
+      state.preOrderId = null;
+      state.programId = null;
+      state.territories = [];
+      state.items = [];
+      state.orders = [];
+      state.programTotal = 0;
+      state.preOrderTotal = {
+        initialTotal: 0,
+        updatedTotal: 0,
+      };
+      state.preOrderNote = "";
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -245,6 +263,7 @@ export const {
   updatePreOrderNote,
   setProgramName,
   setPreOrderStatus,
+  resetState,
   setFailure,
 } = programTableSlice.actions;
 
@@ -259,7 +278,7 @@ export const fetchPreOrders = (type) => async (dispatch) => {
     }
     const currentPreOrders = await fetchAllPreOrders();
     if (currentPreOrders.error) {
-      throw currentPreOrders.error
+      throw currentPreOrders.error;
     }
     let preOrders = currentPreOrders.data.map((order) => ({
       preOrderId: order.id,
@@ -293,7 +312,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
     if (currentOrders.error) {
-      throw currentOrders.error
+      throw currentOrders.error;
     }
     if (currentOrders.data[0].status === "complete") {
       dispatch(setProgramStatus({ program: program, status: "complete" }));

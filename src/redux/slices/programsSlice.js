@@ -175,6 +175,7 @@ const programsSlice = createSlice({
     },
     clearPrograms(state) {
       state.programs = [];
+      state.isLoading = false;
     },
     setFailure: loadingFailed,
   },
@@ -206,7 +207,7 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
     const programs = terrPrograms.data.concat(natPrograms.data);
     dispatch(getProgramsSuccess({ programs: programs }));
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({error: err.toString()}));
   }
 };
 
@@ -222,7 +223,7 @@ export const fetchPrograms = (id) => async (dispatch) => {
     }
     dispatch(getProgramsSuccess({ programs: programs.data }));
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({error: err.toString()}));
   }
 };
 
@@ -235,6 +236,6 @@ export const fetchItems = (id) => async (dispatch) => {
     }
     dispatch(getProgramItemsSuccess({ program: id, items: items.data }));
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({error: err.toString()}));
   }
 };

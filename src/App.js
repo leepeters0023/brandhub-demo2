@@ -13,7 +13,8 @@ import {
   clearPrograms,
 } from "./redux/slices/programsSlice";
 import {
-  fetchPreOrders
+  fetchPreOrders,
+  resetState,
 } from "./redux/slices/programTableSlice";
 
 import Approvals from "./pages/Approvals";
@@ -62,6 +63,7 @@ const App = () => {
   );
 
   const currentRole = useSelector((state) => state.user.role);
+  const userError = useSelector((state) => state.user.error);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
   const isLoading = useSelector((state) => state.user.isLoading);
   const isPreOrdersLoading = useSelector((state) => state.programTable.isPreOrdersLoading);
@@ -77,6 +79,7 @@ const App = () => {
     setCurrentUser(null);
     dispatch(removeUser());
     dispatch(clearPrograms());
+    dispatch(resetState());
   };
 
   useEffect(() => {
@@ -104,6 +107,10 @@ const App = () => {
       setCurrentUser(window.localStorage.getItem("brandhub-user"));
     }
   }, [loggedIn, currentUser]);
+
+  if (userError) {
+    handleLogout();
+  }
 
   if (!loggedIn && !currentUser) {
     return (
