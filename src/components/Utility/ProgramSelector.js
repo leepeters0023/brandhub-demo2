@@ -9,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import CheckIcon from "@material-ui/icons/Check";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -62,7 +64,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
         >
           {currentPrograms.map((program, index) => (
             <MenuItem value={program.id} key={index}>
-              {(program.status === "complete" || program.status === "submitted") ? (
+              {program.status !== "inactive" ? (
                 <div
                   style={{
                     display: "flex",
@@ -77,10 +79,24 @@ const ProgramSelector = ({ handler, currentProgram }) => {
                   >
                     {`${program.name}-${program.focusMonth}`}
                   </Typography>
-                  <CheckCircleIcon
-                    color="secondary"
-                    style={{ marginLeft: "5px" }}
-                  />
+                  {program.status === "submitted" && (
+                    <CheckCircleIcon
+                      color="secondary"
+                      style={{ marginLeft: "5px" }}
+                    />
+                  )}
+                  {program.status === "complete" && (
+                    <CheckIcon
+                      color="secondary"
+                      style={{ marginLeft: "5px" }}
+                    />
+                  )}
+                  {program.status === "in-progress" && (
+                    <MoreHorizIcon
+                      color="secondary"
+                      style={{ marginLeft: "5px" }}
+                    />
+                  )}
                 </div>
               ) : (
                 <Typography className={classes.headerText}>
