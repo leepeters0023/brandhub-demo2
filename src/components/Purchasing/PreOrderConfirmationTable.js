@@ -67,79 +67,62 @@ const CollapseRow = ({ classes, rowData, items }) => {
                   <TableHead>
                     <TableRow>
                       <TableCell />
-                      {items.map((item) => (
-                        <TableCell align="center" key={item.id}>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Est. Cost:
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Total Items:
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Est. Total:
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Act. Total
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rowData.items.map((item, index) => (
+                      <TableRow key={`${rowData.orderNumber}-${item.id}`}>
+                        <TableCell align="center">
                           <div
                             style={{
                               width: "100%",
                               display: "flex",
                               flexDirection: "column",
-                              alignItem: "center",
+                              alignItems: "flex-start",
                             }}
                           >
                             <Typography variant="body2" color="textSecondary">
-                              {`${item.brand}`}
+                              {`${items[index].brand} - ${items[index].itemType}`}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              {`${item.itemType}`}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              {item.itemNumber}
+                              {items[index].itemNumber}
                             </Typography>
                           </div>
                         </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="left">
-                        <Typography className={classes.bodyText}>
-                          Est. Cost:
-                        </Typography>
-                      </TableCell>
-                      {rowData.items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
+                        <TableCell align="center" >
                           {`${formatMoney(item.price)}`}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left">
-                        <Typography className={classes.bodyText}>
-                          Total Items:
-                        </Typography>
-                      </TableCell>
-                      {rowData.items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
+                        <TableCell align="center" >
                           {item.totalItems}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left">
-                        <Typography className={classes.bodyText}>
-                          Est. Total:
-                        </Typography>
-                      </TableCell>
-                      {rowData.items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
+                        <TableCell align="center" >
                           {`${formatMoney(item.estTotal)}`}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left">
-                        <Typography className={classes.bodyText}>
-                          Act. Total
-                        </Typography>
-                      </TableCell>
-                      {rowData.items.map((item) => (
-                        <TableCell align="center" key={item.itemNumber}>
+                        <TableCell align="center" >
                           ---
                         </TableCell>
-                      ))}
-                    </TableRow>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
