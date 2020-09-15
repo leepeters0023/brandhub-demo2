@@ -1,4 +1,4 @@
-import React, {  useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -80,102 +80,144 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MemoInputCell = React.memo(
-  React.forwardRef(({ orderNumber, compliance, itemNumber, itemId, index, preOrderId, preOrderStatus, program }, ref) => {
-    const classes = useStyles();
-    const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-    const dispatch = useDispatch();
-    const [change, setChange] = useState(false);
-    const value = useSelector(
-      (state) =>
-        state.programTable.orders
-          .find((ord) => ord.orderNumber === orderNumber)
-          .items.find((item) => item.itemNumber === itemNumber).totalItems
-    );
-    const loading = useSelector((state) =>
-      state.patchOrder.cellsLoading.find(
-        (cell) => cell.id === itemId && cell.orderNumber === orderNumber
-      )
-    );
+  React.forwardRef(
+    (
+      {
+        orderNumber,
+        compliance,
+        itemNumber,
+        itemId,
+        index,
+        preOrderId,
+        preOrderStatus,
+        program,
+        cellRef,
+        handleEnter,
+      },
+      ref
+    ) => {
+      const classes = useStyles();
+      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+      const dispatch = useDispatch();
+      const [change, setChange] = useState(false);
+      const value = useSelector(
+        (state) =>
+          state.programTable.orders
+            .find((ord) => ord.orderNumber === orderNumber)
+            .items.find((item) => item.itemNumber === itemNumber).totalItems
+      );
+      const loading = useSelector((state) =>
+        state.patchOrder.cellsLoading.find(
+          (cell) => cell.id === itemId && cell.orderNumber === orderNumber
+        )
+      );
 
-    const handleScrollLeft = () => {
-      ref.current.scrollLeft = 0;
-    };
+      const handleScrollLeft = () => {
+        ref.current.scrollLeft = 0;
+      };
 
-    if (compliance !== "compliant") {
+      const handleEnterEvent = ({ key }) => {
+        console.log(key);
+        if (key === "Enter") {
+          handleEnter(`${orderNumber}-${itemNumber}`);
+        }
+      };
+
+      if (compliance !== "compliant") {
+        return (
+          <TableCell
+            ref={cellRef}
+            align="center"
+            classes={{ root: classes.root }}
+            className={classes.borderRight}
+            style={{ zIndex: "-100", backgroundColor: "#999999" }}
+            onFocus={() => {
+              window.addEventListener("keydown", handleEnterEvent);
+              return index === 0 ? handleScrollLeft() : null;
+            }}
+            onBlur={() =>
+              window.removeEventListener("keydown", handleEnterEvent)
+            }
+          >
+            <Typography className={classes.headerText}>
+              NOT COMPLIANT
+            </Typography>
+          </TableCell>
+        );
+      }
+
       return (
         <TableCell
-        align="center"
-        classes={{ root: classes.root }}
-        className={classes.borderRight}
-        style={{ zIndex: "-100", backgroundColor: "#999999"}}
-        onFocus={() => (index === 0 ? handleScrollLeft() : null)}
-      >
-        <Typography className={classes.headerText}>NOT COMPLIANT</Typography>
-      </TableCell>
-      )
-    }
-
-    return (
-      <TableCell
-        classes={{ root: classes.root }}
-        className={classes.borderRight}
-        style={{ zIndex: "-100" }}
-        onFocus={() => (index === 0 ? handleScrollLeft() : null)}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <InputBase
-            style={{ textAlign: "center", zIndex: "0" }}
-            fullWidth
-            size="small"
-            id={`${orderNumber}-${itemNumber}`}
-            value={value}
-            onBlur={(evt) => {
-              if (change) {
-
-                if (evt.target.value === "") {
-                  dispatch(
-                    setGridItem({
-                      itemNumber: `${itemNumber}`,
-                      orderNumber: orderNumber,
-                      value: 0,
-                    })
+          classes={{ root: classes.root }}
+          className={classes.borderRight}
+          style={{ zIndex: "-100" }}
+          onFocus={() => {
+            window.addEventListener("keydown", handleEnterEvent);
+            return index === 0 ? handleScrollLeft() : null;
+          }}
+          onBlur={() => window.removeEventListener("keydown", handleEnterEvent)}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <InputBase
+              ref={cellRef}
+              style={{ textAlign: "center", zIndex: "0" }}
+              fullWidth
+              size="small"
+              id={`${orderNumber}-${itemNumber}`}
+              value={value}
+              onBlur={(evt) => {
+                if (change) {
+                  if (evt.target.value === "") {
+                    dispatch(
+                      setGridItem({
+                        itemNumber: `${itemNumber}`,
+                        orderNumber: orderNumber,
+                        value: 0,
+                      })
                     );
                     dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-                    
+
                     dispatch(patchItem(itemId, 0, orderNumber));
                   } else {
                     dispatch(patchItem(itemId, evt.target.value, orderNumber));
                   }
                   setChange(false);
                   if (preOrderStatus === "inactive") {
-                    dispatch(setProgStatus(program, "in-progress", preOrderId))
+                    dispatch(setProgStatus(program, "in-progress", preOrderId));
                   }
                 }
-            }}
-            onChange={(evt) => {
-              if (
-                numArray.includes(
-                  evt.target.value[evt.target.value.length - 1]
-                ) ||
-                evt.target.value === ""
-              ) {
-                dispatch(
-                  setGridItem({
-                    itemNumber: `${itemNumber}`,
-                    orderNumber: orderNumber,
-                    value: evt.target.value,
-                  })
-                );
-                dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-                setChange(true);
-              }
-            }}
-          />
-          {loading && <CircularProgress size={20} />}
-        </div>
-      </TableCell>
-    );
-  })
+              }}
+              onChange={(evt) => {
+                if (
+                  numArray.includes(
+                    evt.target.value[evt.target.value.length - 1]
+                  ) ||
+                  evt.target.value === ""
+                ) {
+                  dispatch(
+                    setGridItem({
+                      itemNumber: `${itemNumber}`,
+                      orderNumber: orderNumber,
+                      value: evt.target.value,
+                    })
+                  );
+                  dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+                  setChange(true);
+                }
+              }}
+            />
+            {loading && <CircularProgress size={20} />}
+          </div>
+        </TableCell>
+      );
+    }
+  )
 );
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
@@ -232,7 +274,41 @@ const PreOrderTable = (props) => {
   const currentItems = useSelector((state) => state.programTable.items);
   const orders = useSelector((state) => state.programTable.orders);
 
-  if (isLoading) {
+  const [refTable, setRefTable] = useState(null);
+  const [itemLength, setItemLength] = useState(null);
+
+  const handleEnter = useCallback(
+    (ref) => {
+      let keys = Object.keys(refTable);
+      let currentIndex = keys.indexOf(ref);
+      if (keys.length-(currentIndex+1) >= itemLength) {
+        return refTable[keys[currentIndex + itemLength]].current.firstChild.focus();
+      } else return null
+    },
+    [itemLength, refTable]
+  );
+
+  useEffect(() => {
+    if (orders && !refTable) {
+      let refs = {};
+      orders.forEach((order) => {
+        order.items.forEach((item) => {
+          refs[`${order.orderNumber}-${item.itemNumber}`] = React.createRef(
+            null
+          );
+        });
+      });
+      setRefTable(refs);
+    }
+  }, [orders, refTable]);
+
+  useEffect(() => {
+    if (currentItems && !itemLength) {
+      setItemLength(currentItems.length);
+    }
+  }, [itemLength, currentItems]);
+
+  if (isLoading || !refTable || !itemLength) {
     return <CircularProgress color="inherit" />;
   }
 
@@ -247,8 +323,7 @@ const PreOrderTable = (props) => {
                   classes={{ root: classes.root }}
                   style={{ zIndex: "100", width: "300px" }}
                   className={classes.borderRight}
-                >
-                </TableCell>
+                ></TableCell>
                 <TableCell classes={{ root: classes.root }}>
                   <div
                     style={{
@@ -285,8 +360,7 @@ const PreOrderTable = (props) => {
                     classes={{ root: classes.root }}
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
-                  >
-                  </TableCell>
+                  ></TableCell>
                   {currentItems.map((item) => (
                     <TableCell
                       classes={{ root: classes.root }}
@@ -530,6 +604,10 @@ const PreOrderTable = (props) => {
                         preOrderStatus={preOrderStatus}
                         preOrderId={preOrderId}
                         program={currentProgram}
+                        cellRef={
+                          refTable[`${ord.orderNumber}-${item.itemNumber}`]
+                        }
+                        handleEnter={handleEnter}
                         ref={tableRef}
                       />
                     ))}
@@ -554,7 +632,7 @@ PreOrderTable.propTypes = {
   handleOpenConfirm: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   preOrderId: PropTypes.string,
-  preOrderStatus: PropTypes.string
+  preOrderStatus: PropTypes.string,
 };
 
 export default React.memo(PreOrderTable, (prev, next) => {
