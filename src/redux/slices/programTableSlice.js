@@ -110,6 +110,7 @@ const programTableSlice = createSlice({
         preOrderId,
         status,
         territories,
+        note
       } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
@@ -132,6 +133,7 @@ const programTableSlice = createSlice({
         state.territories = [...territories];
         state.items = currentItems;
         state.orders = [...orders];
+        state.preOrderNote = note;
         state.programTotal = progTotal;
         state.isLoading = false;
       } else {
@@ -308,17 +310,13 @@ export const fetchPreOrders = (type) => async (dispatch) => {
 };
 
 export const fetchProgramOrders = (program) => async (dispatch) => {
-  //TODO get note / patch note on save and submit
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
+    console.log(currentOrders.data)
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    if (currentOrders.data[0].status === "complete") {
-      dispatch(setProgramStatus({ program: program, status: "complete" }));
-    }
-    // if (currentOrders.data[0].status === "submitted")
     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
       id: item.id,
       complianceStatus: item.item["compliance-status"],
@@ -385,6 +383,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       currentOrders.data[0]["territory-names"].length === 0
         ? ["National"]
         : currentOrders.data[0]["territory-names"].split(", ");
+    let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : ""
 
     dispatch(
       buildTableFromOrders({
@@ -394,6 +393,7 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
         preOrderId: preOrderId,
         status: preOrderStatus,
         territories: territories,
+        note: note
       })
     );
   } catch (err) {

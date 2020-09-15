@@ -4,6 +4,7 @@ import {
   patchOrderItem,
   deletePreOrderItem,
   submitPreOrder,
+  setPreOrderNote,
 } from "../../api/orderApi";
 
 import { setPreOrderProgramStatus } from "../../api/programApi";
@@ -76,6 +77,10 @@ const patchOrderSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    setPreOrderNoteSuccess(state) {
+      state.isLoading = false;
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -86,6 +91,7 @@ export const {
   patchItemSuccess,
   setProgStatusSuccess,
   deleteItemSuccess,
+  setPreOrderNoteSuccess,
   setFailure,
 } = patchOrderSlice.actions;
 
@@ -141,6 +147,19 @@ export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
         throw submitStatus.error;
       }
     }
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const setPreOrderNotes = (id, note) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const noteStatus = await setPreOrderNote(id, note);
+    if (noteStatus.error) {
+      throw noteStatus.error;
+    }
+    dispatch(setPreOrderNoteSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
