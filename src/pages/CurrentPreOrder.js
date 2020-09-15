@@ -10,7 +10,7 @@ import {
   fetchPreOrders,
 } from "../redux/slices/programTableSlice";
 
-import { deletePreOrdItem } from "../redux/slices/patchOrderSlice";
+import { deletePreOrdItem, setPreOrderNotes } from "../redux/slices/patchOrderSlice";
 
 import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
@@ -172,10 +172,12 @@ const CurrentPreOrder = ({ userType }) => {
 
   const handleComplete = () => {
     dispatch(setProgStatus(program, "complete", preOrderId));
+    dispatch(setPreOrderNotes(preOrderId, preOrderNote))
   };
 
   const handleSubmit = () => {
     dispatch(setProgStatus(program, "submitted", preOrderId))
+    dispatch(setPreOrderNotes(preOrderId, preOrderNote))
   }
 
   const handleProgramIdHash = useCallback(() => {

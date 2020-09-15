@@ -98,6 +98,11 @@ const PreOrderOverview = () => {
               EDIT ORDER
             </Button>
           )}
+          {preOrder.status === "submitted" && (
+            <Typography className={classes.headerText}>
+              Thank you for your Submission!
+            </Typography>
+          )}
           <br />
         </Grid>
       </Grid>
