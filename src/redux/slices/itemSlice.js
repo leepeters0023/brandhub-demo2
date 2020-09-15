@@ -66,7 +66,7 @@ export const fetchFilteredItems = (orderType) => async (dispatch) => {
       id: item.id,
       itemNumber: item["item-number"],
       brand: item.brand.name,
-      itemType: item.name,
+      itemType: item.type,
       price: item.cost,
       qty: `${item["qty-per-pack"]} / Pack`,
       stock: Math.floor(Math.random()*25 + 26),

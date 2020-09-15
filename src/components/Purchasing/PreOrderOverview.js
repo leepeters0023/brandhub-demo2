@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { CSVLink } from "react-csv";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -16,7 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import PrintIcon from "@material-ui/icons/Print";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +28,8 @@ const PreOrderOverview = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+
   const preOrder = useSelector((state) => state.programTable);
 
   const handleEditOrder = () => {
@@ -34,6 +37,35 @@ const PreOrderOverview = () => {
       setProgStatus(preOrder.programId, "in-progress", preOrder.preOrderId)
     );
   };
+
+  useEffect(() => {
+    if (preOrder && currentCSV.data.length === 0) {
+      let orderHeaders = [
+        { label: "Order Number", key: "orderNum" },
+        { label: "Distributor", key: "distributorName" },
+        { label: "Total Items", key: "totalItems" },
+        { label: "Est. Cost", key: "estTotal" },
+      ];
+      let itemHeaders = preOrder.items.map((item) => ({
+        label: item.itemNumber,
+        key: item.itemNumber,
+      }));
+      let headers = orderHeaders.concat(itemHeaders);
+      let orderData = preOrder.orders.map((order) => {
+        let dataObject = {};
+        dataObject.orderNum = order.orderNumber;
+        dataObject.distributorName = order.distributorName;
+        dataObject.totalItems = order.totalItems;
+        dataObject.estTotal = formatMoney(order.estTotal);
+        order.items.forEach((item) => {
+          dataObject[item.itemNumber] = item.totalItems;
+        });
+        return dataObject;
+      });
+      console.log(orderData)
+      setCurrentCSV({ data: orderData, headers: headers });
+    }
+  }, [currentCSV.data, preOrder]);
 
   return (
     <>
@@ -67,10 +99,12 @@ const PreOrderOverview = () => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export PDF">
-              <IconButton>
-                <PictureAsPdfIcon color="secondary" />
-              </IconButton>
+            <Tooltip title="Export CSV">
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
           <br />
@@ -110,4 +144,4 @@ const PreOrderOverview = () => {
   );
 };
 
-export default PreOrderOverview;
+export default React.memo(PreOrderOverview);
