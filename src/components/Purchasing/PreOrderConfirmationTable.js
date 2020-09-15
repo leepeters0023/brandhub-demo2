@@ -54,7 +54,7 @@ const CollapseRow = ({ classes, rowData, items }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1} style={{overFlowX: "scroll"}}>
+            <Box margin={1} style={{ overFlowX: "scroll" }}>
               <Typography
                 className={classes.headerText}
                 gutterBottom
@@ -63,73 +63,85 @@ const CollapseRow = ({ classes, rowData, items }) => {
                 Item Details
               </Typography>
               <TableContainer>
-              <Table size="small" aria-label="item-details" >
-                <TableHead>
-                  <TableRow>
-                    <TableCell />
-                    {items.map((item) => (
-                      <TableCell align="center" key={item.id}>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItem: "center",
-                          }}
-                        >
-                          <Typography variant="body2" color="textSecondary">
-                            {`${item.brand}`}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            {`${item.itemType}`}
-                          </Typography>
-                          <Typography variant="body2" color="textSecondary">
-                            {item.itemNumber}
-                          </Typography>
-                        </div>
+                <Table size="small" aria-label="item-details">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      {items.map((item) => (
+                        <TableCell align="center" key={item.id}>
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItem: "center",
+                            }}
+                          >
+                            <Typography variant="body2" color="textSecondary">
+                              {`${item.brand}`}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              {`${item.itemType}`}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              {item.itemNumber}
+                            </Typography>
+                          </div>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="left">
+                        <Typography className={classes.bodyText}>
+                          Est. Cost:
+                        </Typography>
                       </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell align="left">
-                      <Typography className={classes.bodyText}>
-                        Price:
-                      </Typography>
-                    </TableCell>
-                    {rowData.items.map((item) => (
-                      <TableCell align="center" key={item.itemNumber}>
-                        {`${formatMoney(item.price)}`}
+                      {rowData.items.map((item) => (
+                        <TableCell align="center" key={item.itemNumber}>
+                          {`${formatMoney(item.price)}`}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">
+                        <Typography className={classes.bodyText}>
+                          Total Items:
+                        </Typography>
                       </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="left">
-                      <Typography className={classes.bodyText}>
-                        Total Items:
-                      </Typography>
-                    </TableCell>
-                    {rowData.items.map((item) => (
-                      <TableCell align="center" key={item.itemNumber}>
-                        {item.totalItems}
+                      {rowData.items.map((item) => (
+                        <TableCell align="center" key={item.itemNumber}>
+                          {item.totalItems}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">
+                        <Typography className={classes.bodyText}>
+                          Est. Total:
+                        </Typography>
                       </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow>
-                    <TableCell align="left">
-                      <Typography className={classes.bodyText}>
-                        Total Price:
-                      </Typography>
-                    </TableCell>
-                    {rowData.items.map((item) => (
-                      <TableCell align="center" key={item.itemNumber}>
-                        {`${formatMoney(item.estTotal)}`}
+                      {rowData.items.map((item) => (
+                        <TableCell align="center" key={item.itemNumber}>
+                          {`${formatMoney(item.estTotal)}`}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">
+                        <Typography className={classes.bodyText}>
+                          Act. Total
+                        </Typography>
                       </TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
+                      {rowData.items.map((item) => (
+                        <TableCell align="center" key={item.itemNumber}>
+                          ---
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </TableContainer>
             </Box>
           </Collapse>
@@ -144,7 +156,10 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
 
   return (
     <>
-      <TableContainer className={classes.tableContainer} style={{maxWidth: "100%"}}>
+      <TableContainer
+        className={classes.tableContainer}
+        style={{ maxHeight: "600px" }}
+      >
         <Table>
           <TableHead>
             <TableRow>
@@ -162,7 +177,7 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
                 Total Items
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Est Cost
+                Est. Cost
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Act. Cost

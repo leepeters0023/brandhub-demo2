@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
+import { CSVLink } from "react-csv";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -12,12 +13,17 @@ import AutoComplete from "@material-ui/lab/Autocomplete";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
+
+import PrintIcon from "@material-ui/icons/Print";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 //mockdata
 import { orderHistory } from "../assets/mockdata/orderHistory";
@@ -30,12 +36,26 @@ const orderRows = orderHistory.map((data) => ({
   program: data.program,
   orderDate: data.orderDate,
   shipDate: data.shipDate,
-  deliveredDate: "---",
   trackingNum: data.trackingNum,
   totalItems: Math.floor(Math.random() * 100 + 50),
-  orderTotal: data.orderTotal,
+  estTotal: data.orderTotal,
+  actTotal: "---",
   orderStatus: data.orderStatus,
 }));
+
+const csvHeaders = [
+  { label: "Order Number", key: "orderNum" },
+  { label: "Distributor", key: "distributor" },
+  { label: "State", key: "state" },
+  { label: "Program", key: "program" },
+  { label: "Order Date", key: "orderDate" },
+  { label: "Ship Date", key: "shipDate" },
+  { label: "Tracking", key: "trackingNum" },
+  { label: "Total Items", key: "totalItems" },
+  { label: "Est. Total", key: "estTotal" },
+  { label: "Act. Total", key: "actTotal" },
+  { label: "Status", key: "orderStatus" },
+];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -64,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   dateField: {
     marginBottom: "17px",
     marginTop: "12px",
-  }
+  },
 }));
 
 const OrderHistory = () => {
@@ -90,8 +110,29 @@ const OrderHistory = () => {
   return (
     <>
       <Container className={classes.mainWrapper}>
-        <Typography className={classes.titleText}>Order History</Typography>
-
+        <div className={classes.titleBar}>
+          <Typography className={classes.titleText}>Order History</Typography>
+          <div
+            style={{
+              display: "flex",
+              width: "150px",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Tooltip title="Print Order History">
+              <IconButton>
+                <PrintIcon color="secondary" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Export CSV">
+              <CSVLink data={orderRows} headers={csvHeaders}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
+            </Tooltip>
+          </div>
+        </div>
         <br />
         <div className={classes.queryRow}>
           <Grid container spacing={2}>

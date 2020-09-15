@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const OrderConfirmationTable = ({ items }) => {
+const SingleOrderDetailTable = ({ items }) => {
   const classes = useStyles();
 
   return (
@@ -45,6 +45,9 @@ const OrderConfirmationTable = ({ items }) => {
               <TableCell className={classes.headerText} align="left">
                 Est. Total
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Act. Total
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -64,17 +67,18 @@ const OrderConfirmationTable = ({ items }) => {
                 <TableCell align="left">{`${formatMoney(item.price)}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
                 <TableCell align="left">{`${formatMoney(item.estTotal)}`}</TableCell>
+                <TableCell align="left">---</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     </>
-  );
-};
+  )
+}
 
-OrderConfirmationTable.propTypes = {
-  items: PropTypes.array.isRequired,
-};
+SingleOrderDetailTable.propTypes = {
+  items: PropTypes.array.isRequired
+}
 
-export default OrderConfirmationTable;
+export default SingleOrderDetailTable;
