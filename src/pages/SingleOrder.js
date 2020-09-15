@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "@reach/router";
+//import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 
 //import { useSelector } from "react-redux";
 
-import OrderConfirmationTable from "../components/Purchasing/OrderConfirmationTable";
+import SingleOrderDetailTable from "../components/OrderHistory/SingleOrderDetailTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -14,7 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import PrintIcon from "@material-ui/icons/Print";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
@@ -58,9 +59,9 @@ const SingleOrder = ({ orderId }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export PDF">
+            <Tooltip title="Export CSV">
               <IconButton>
-                <PictureAsPdfIcon color="secondary" />
+                <GetAppIcon color="secondary" />
               </IconButton>
             </Tooltip>
           </div>
@@ -72,8 +73,7 @@ const SingleOrder = ({ orderId }) => {
             <Typography className={classes.headerText}>Order Items:</Typography>
             <Divider />
             <br />
-            {/*//TODO make actual order history items table*/}
-            <OrderConfirmationTable items={order.items} />
+            <SingleOrderDetailTable items={order.items} />
           </Grid>
           <Grid item lg={3} sm={12} xs={12}>
             <Typography className={classes.headerText}>
@@ -96,12 +96,14 @@ const SingleOrder = ({ orderId }) => {
             {order.rushOrder && (
               <Typography className={classes.headerText}>Rush Order</Typography>
             )}
-            <Typography className={classes.headerText}>{`Budget:`}</Typography>
             <Typography className={classes.headerText}>
               {`Total Items: ${order.totalItems}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Cost: $${order.totalEstCost}`}
+              {`Total Est. Cost: $${order.totalEstCost}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Act. Cost:`}
             </Typography>
             <br />
             <Typography className={classes.headerText}>

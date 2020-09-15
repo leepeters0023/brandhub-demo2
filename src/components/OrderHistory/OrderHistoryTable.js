@@ -32,9 +32,15 @@ const headCells = [
     sort: false,
   },
   {
-    id: "orderTotal",
+    id: "estTotal",
     disablePadding: false,
-    label: "Order Total",
+    label: "Est. Total",
+    sort: false,
+  },
+  {
+    id: "actTotal",
+    disablePadding: false,
+    label: "Act. Total",
     sort: false,
   },
   { id: "status", disablePadding: false, label: "Status", sort: true },
@@ -173,7 +179,8 @@ const OrderHistoryTable = ({ orders }) => {
                 <TableCell align="left">{row.shipDate}</TableCell>
                 <TableCell align="left">{row.trackingNum}</TableCell>
                 <TableCell align="left">{row.totalItems}</TableCell>
-                <TableCell align="left">{row.orderTotal}</TableCell>
+                <TableCell align="left">{row.estTotal}</TableCell>
+                <TableCell align="left">{row.actTotal}</TableCell>
                 <TableCell align="left">{row.orderStatus}</TableCell>
               </TableRow>
             ))}
