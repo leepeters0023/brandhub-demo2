@@ -278,6 +278,7 @@ const PreOrderTable = (props) => {
   const [itemLength, setItemLength] = useState(null);
 
   const handleEnter = useCallback(
+    //TODO add arrow key functionality as well
     (ref) => {
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
