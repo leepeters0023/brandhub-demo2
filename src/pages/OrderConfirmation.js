@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link, navigate } from "@reach/router";
 import PropTypes from "prop-types";
+import { CSVLink } from "react-csv";
 
 import { useSelector } from "react-redux";
 
@@ -17,7 +18,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import PrintIcon from "@material-ui/icons/Print";
 
 const useStyles = makeStyles((theme) => ({
@@ -27,12 +28,64 @@ const useStyles = makeStyles((theme) => ({
 const OrderConfirmation = ({ userType, orderType }) => {
   const classes = useStyles();
   const formattedType = `${orderType}Order`;
+
+  const [currentCSV, setCurrentCSV] = useState({data: [], headers: []})
   const order = useSelector((state) => state[formattedType]);
   
   if (order.items.length === 0) {
     const path = orderType === "inStock" ? "/orders/items/instock" : "/orders/items/ondemand"
     navigate(path)
   }
+
+  useEffect(()=>{
+    if (order && currentCSV.data.length === 0) {
+      let headers = [
+        { label: "Item", key: "item"},
+        { label: "Sequence #", key: "itemNumber"},
+        { label: "Qty /Pack", key: "qty"}, 
+        { label: "Est. Cost", key: "price" },
+        { label: "Qty", key: "totalItems"},
+        { label: "Est. Total", key: "estTotal"},
+        { label: "", key: "blank"},
+        { label: "Shipping Location", key: "distributor"},
+        { label: "Address", key: "address"},
+        { label: "Attention", key: "attn"},
+        { label: "Rush Order", key: "rush"},
+        { label: "Order Total Items", key: "ordTotalItems"},
+        { label: "Est. Order Total", key: "ordEstTotal"}
+      ]
+      let csvData = order.items.map((item, index) => {
+        if (index === 0) {
+          return {
+            item: `${item.brand} - ${item.itemType}`,
+            itemNumber: item.itemNumber,
+            qty: item.qty,
+            price: formatMoney(item.price),
+            totalItems: item.totalItems,
+            estTotal: item.estTotal,
+            blank: "",
+            distributor: `${order.distributorName} - ${order.distributorId}`,
+            address: "123 Address Rd., Burlington VT 05401",
+            attn: order.attention,
+            rush: order.rushOrder ? "True" : "False",
+            ordTotalItems: order.totalItems,
+            ordEstTotal: formatMoney(order.totalCost)
+          }
+          } else {
+            return {
+              item: `${item.brand} - ${item.itemType}`,
+            itemNumber: item.itemNumber,
+            qty: item.qty,
+            price: formatMoney(item.price),
+            totalItems: item.totalItems,
+            estTotal: item.estTotal,
+            }
+          }
+        }
+      )
+      setCurrentCSV({data: csvData, headers: headers})
+    }
+  }, [currentCSV.data.length, order])
 
   return (
     <>
@@ -56,11 +109,13 @@ const OrderConfirmation = ({ userType, orderType }) => {
                   <PrintIcon color="secondary" />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Export PDF">
+              <Tooltip title="Export CSV">
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
-                  <PictureAsPdfIcon color="secondary" />
+                  <GetAppIcon color="secondary" />
                 </IconButton>
-              </Tooltip>
+              </CSVLink>
+            </Tooltip>
             </div>
             </div>
         <br />
@@ -89,9 +144,6 @@ const OrderConfirmation = ({ userType, orderType }) => {
             {order.rushOrder && (
               <Typography className={classes.headerText}>Rush Order</Typography>
             )}
-            <Typography className={classes.headerText}>
-              {`Budget: ${order.budget}`}
-            </Typography>
             <Typography className={classes.headerText}>
               {`Total Items: ${order.totalItems}`}
             </Typography>
@@ -142,4 +194,4 @@ OrderConfirmation.propTypes = {
   orderType: PropTypes.string,
 };
 
-export default OrderConfirmation;
+export default React.memo(OrderConfirmation);
