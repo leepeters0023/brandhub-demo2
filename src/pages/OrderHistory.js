@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {useSelector, useDispatch} from "react-redux";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import { CSVLink } from "react-csv";
 
+import {fetchUserDistributors} from "../redux/slices/distributorSlice";
+
 import { useInput } from "../hooks/UtilityHooks";
 
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
+import Loading from "../components/Utility/Loading";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -27,7 +31,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 //mockdata
 import { orderHistory } from "../assets/mockdata/orderHistory";
-import distributors from "../assets/mockdata/distributors";
+//import distributors from "../assets/mockdata/distributors";
 
 const orderRows = orderHistory.map((data) => ({
   orderNum: data.orderNum,
@@ -89,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderHistory = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [distributor, setDistributor] = useState(null);
   const { value: sequenceNumber, bind: bindSequenceNumber } = useInput("");
@@ -99,6 +104,17 @@ const OrderHistory = () => {
   const [selectedToDate, setSelectedToDate] = useState(
     new Date().toLocaleDateString()
   );
+  const [currentFilters, setCurrentFilters] = useState({
+    fromDate: subDays(new Date(), 7).toLocaleDateString(),
+    toDate: new Date().toLocaleDateString(),
+    distributor: null,
+    program: "",
+    sequenceNum: "",
+  })
+
+  const isDistLoading = useSelector((state) => state.distributors.isLoading)
+  const currentDistributors = useSelector((state) => state.distributors.distributorList)
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handleFromDateChange = (date) => {
     setSelectedFromDate(date);
@@ -106,6 +122,24 @@ const OrderHistory = () => {
   const handleToDateChange = (date) => {
     setSelectedToDate(date);
   };
+  const handleSetDistributor = (value) => {
+    setCurrentFilters({
+      ...currentFilters,
+      distributor: value ? value.id : null
+    })
+  }
+
+  useEffect(()=>{
+    if (currentDistributors.length === 0 && currentUserRole.length > 0) {
+      dispatch(fetchUserDistributors())
+    }
+  }, [currentDistributors, dispatch, currentUserRole])
+
+  if (isDistLoading || currentDistributors.length === 0) {
+    return <Loading />
+  }
+
+  console.log(currentFilters);
 
   return (
     <>
@@ -181,9 +215,12 @@ const OrderHistory = () => {
                 fullWidth
                 value={distributor}
                 className={classes.queryField}
-                onChange={(event, value) => setDistributor(value)}
+                onChange={(event, value) => {
+                  setDistributor(value)
+                  handleSetDistributor(value)
+                }}
                 id="distributor"
-                options={distributors}
+                options={currentDistributors}
                 getOptionLabel={(dist) => dist.name}
                 renderInput={(params) => (
                   <TextField
