@@ -6,6 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -80,22 +81,28 @@ const ProgramSelector = ({ handler, currentProgram }) => {
                     {`${program.name}-${program.focusMonth}`}
                   </Typography>
                   {program.status === "submitted" && (
-                    <CheckCircleIcon
-                      color="secondary"
-                      style={{ marginLeft: "5px" }}
-                    />
+                    <Tooltip title="Submitted">
+                      <CheckCircleIcon
+                        color="secondary"
+                        style={{ marginLeft: "5px" }}
+                      />
+                    </Tooltip>
                   )}
                   {program.status === "complete" && (
-                    <CheckIcon
-                      color="secondary"
-                      style={{ marginLeft: "5px" }}
-                    />
+                    <Tooltip title="Saved for Review">
+                      <CheckIcon
+                        color="secondary"
+                        style={{ marginLeft: "5px" }}
+                      />
+                    </Tooltip>
                   )}
                   {program.status === "in-progress" && (
-                    <MoreHorizIcon
-                      color="secondary"
-                      style={{ marginLeft: "5px" }}
-                    />
+                    <Tooltip title="In Progress">
+                      <MoreHorizIcon
+                        color="secondary"
+                        style={{ marginLeft: "5px" }}
+                      />
+                    </Tooltip>
                   )}
                 </div>
               ) : (

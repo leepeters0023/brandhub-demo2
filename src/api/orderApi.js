@@ -163,3 +163,41 @@ export const submitPreOrder = async (id) => {
     });
   return response;
 }
+
+export const fetchOrderHistory = async (filterObject) => {
+  const response = {status: "", error: null, data: null };
+  console.log(filterObject)
+  const sortMap = {
+    "orderNum": "id",
+    "distributor": "distributor-name",
+    "state": "distributor-state",
+    "program": "program-name",
+    "orderDate": "order-date",
+    "shipDate": "ship-date",
+    "status": "order-status",
+  }
+  let dateString = `filter[order-date-range]=${filterObject.fromDate} - ${filterObject.toDate}`
+  let distString = filterObject.distributor ? `&filter[distributor-id]=${filterObject.distributor}` : "";
+  let progString = filterObject.program.length > 0 ? `&filter[program-name]=${filterObject.program}` : "";
+  let seqString = filterObject.sequenceNum.length > 0 ? `&filter[item-number]=${filterObject.sequenceNum}` : "";
+  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${sortMap[filterObject.sortOrderBy]}`
+  let queryString = "/api/orders?filter[status]=not-draft&"+dateString+distString+progString+seqString+sortString;
+  
+  await axios
+    .get(queryString)
+    .then((res) => {
+      console.log(res);
+      let dataObject = {orders: null, nextLink: null}
+      let data = dataFormatter.deserialize(res.data)
+      dataObject.orders = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null
+      response.status = "ok"
+      response.data = dataObject
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}

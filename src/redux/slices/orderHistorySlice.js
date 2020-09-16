@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchOrderHistory } from "../../api/orderApi";
 
 /*
 * Data Format:
@@ -40,8 +41,7 @@ shippingObj: {
 let initialState = {
   isLoading: false,
   ordersPerPage: 20,
-  totalPages: null,
-  pagesLoaded: null,
+  nextPage: null,
   nextLink: null,
   orders: [],
   singleOrder: {
@@ -97,8 +97,8 @@ const orderHistorySlice = createSlice({
       state.error = null;
     },
     getOrderHistorySuccess(state, action) {
-      const { orders, totalPages, nextLink } = action.payload;
-      state.totalPages = totalPages;
+      const { orders, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
       state.nextLink = nextLink;
       state.orders = [...orders];
       state.isLoading = false;
@@ -116,3 +116,30 @@ export const {
 } = orderHistorySlice.actions;
 
 export default orderHistorySlice.reducer;
+
+export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let orders = await fetchOrderHistory(filterObject);
+    if (orders.error) {
+      throw orders.error
+    }
+    console.log(orders);
+    let mappedOrders = orders.data.orders.map((order) => ({
+      orderNum: order.id,
+      distributor: order.distributor.name,
+      state: order.distributor.state,
+      program: order.program.name,
+      orderDate: order["order-date"] ? order["order-date"] : "---",
+      shipDate: order["ship-date"] ? order["ship-date"] : "---",
+      trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
+      totalItems: order["total-quantity"],
+      estTotal: order["total-cost"],
+      actTotal: "---",
+      orderStatus: order.status === "submitted" ? "Pending" : order.status
+    }))
+    dispatch(getOrderHistorySuccess({orders: mappedOrders, nextLink: orders.data.nextLink ? orders.data.nextLink : null}))
+  } catch (err) {
+    dispatch(setFailure({error: err.toString()}))
+  }
+}
