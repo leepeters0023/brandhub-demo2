@@ -19,6 +19,7 @@
     "material-table": "^1.66.0",
     "react": "^16.13.1",
     "react-big-calendar": "^0.26.0",
+    "react-bottom-scroll-listener": "^4.1.0",
     "react-csv": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-player": "^2.6.0",

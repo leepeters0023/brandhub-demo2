@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import format from "date-fns/format";
+
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -10,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
@@ -125,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderHistoryTable = ({ orders }) => {
+const OrderHistoryTable = ({ orders, handleSort, isOrdersLoading }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
@@ -134,22 +138,22 @@ const OrderHistoryTable = ({ orders }) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-    //TODO make api call to get sorted data
+    handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
   const handleRowClick = (orderNum) => {
     navigate(`/orders/history/${orderNum}`);
   };
 
-  if (orders.length === 0) {
-    return (
-      <>
-        <Typography className={classes.headerText}>
-          {`You currently don't have any orders on record..`}
-        </Typography>
-      </>
-    );
-  }
+  // if (orders.length === 0) {
+  //   return (
+  //     <>
+  //       <Typography className={classes.headerText}>
+  //         {`You currently don't have any orders on record..`}
+  //       </Typography>
+  //     </>
+  //   );
+  // }
 
   return (
     <>
@@ -162,28 +166,54 @@ const OrderHistoryTable = ({ orders }) => {
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {orders.map((row) => (
-              <TableRow
-                key={row.orderNum}
-                hover
-                className={classes.orderHistoryRow}
-                onClick={() => {
-                  handleRowClick(row.orderNum);
-                }}
-              >
-                <TableCell align="left">{row.orderNum}</TableCell>
-                <TableCell align="left">{row.distributor}</TableCell>
-                <TableCell align="left">{row.state}</TableCell>
-                <TableCell align="left">{row.program}</TableCell>
-                <TableCell align="left">{row.orderDate}</TableCell>
-                <TableCell align="left">{row.shipDate}</TableCell>
-                <TableCell align="left">{row.trackingNum}</TableCell>
-                <TableCell align="left">{row.totalItems}</TableCell>
-                <TableCell align="left">{row.estTotal}</TableCell>
-                <TableCell align="left">{row.actTotal}</TableCell>
-                <TableCell align="left">{row.orderStatus}</TableCell>
+            {!isOrdersLoading && orders.length === 0 && (
+              <TableRow>
+                <TableCell align="left" colSpan={11}>
+                  <Typography className={classes.headerText}>
+                    {`You currently don't have any orders on record that match this search criteria..`}
+                  </Typography>
+                </TableCell>
               </TableRow>
-            ))}
+            )}
+            {!isOrdersLoading &&
+              orders.length > 0 &&
+              orders.map((row) => (
+                <TableRow
+                  key={row.orderNum}
+                  hover
+                  className={classes.orderHistoryRow}
+                  onClick={() => {
+                    handleRowClick(row.orderNum);
+                  }}
+                >
+                  <TableCell align="left">{row.orderNum}</TableCell>
+                  <TableCell align="left">{row.distributor}</TableCell>
+                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">{format(new Date(row.orderDate), "MM/dd/yyyy")}</TableCell>
+                  <TableCell align="left">{row.shipDate}</TableCell>
+                  <TableCell align="left">{row.trackingNum}</TableCell>
+                  <TableCell align="left">{row.totalItems}</TableCell>
+                  <TableCell align="left">
+                    {row.estTotal !== "---"
+                      ? formatMoney(row.estTotal)
+                      : row.estTotal}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.actTotal !== "---"
+                      ? formatMoney(row.actTotal)
+                      : row.actTotal}
+                  </TableCell>
+                  <TableCell align="left">{row.orderStatus}</TableCell>
+                </TableRow>
+              ))}
+            {isOrdersLoading && (
+              <TableRow>
+                <TableCell align="left" colSpan={11}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -195,6 +225,4 @@ OrderHistoryTable.propTypes = {
   orders: PropTypes.array,
 };
 
-export default React.memo(OrderHistoryTable, (prev, next) => {
-  return prev.orders.length === next.orders.length
-});
+export default OrderHistoryTable;

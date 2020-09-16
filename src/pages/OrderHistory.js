@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "date-fns";
 import subDays from "date-fns/subDays";
+import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 
-import {fetchUserDistributors} from "../redux/slices/distributorSlice";
+import { fetchUserDistributors } from "../redux/slices/distributorSlice";
+import { fetchFilteredOrderHistory } from "../redux/slices/orderHistorySlice";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -30,22 +32,22 @@ import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 //mockdata
-import { orderHistory } from "../assets/mockdata/orderHistory";
+//import { orderHistory } from "../assets/mockdata/orderHistory";
 //import distributors from "../assets/mockdata/distributors";
 
-const orderRows = orderHistory.map((data) => ({
-  orderNum: data.orderNum,
-  distributor: data.distributor,
-  state: data.state,
-  program: data.program,
-  orderDate: data.orderDate,
-  shipDate: data.shipDate,
-  trackingNum: data.trackingNum,
-  totalItems: Math.floor(Math.random() * 100 + 50),
-  estTotal: data.orderTotal,
-  actTotal: "---",
-  orderStatus: data.orderStatus,
-}));
+// const orderRows = orderHistory.map((data) => ({
+//   orderNum: data.orderNum,
+//   distributor: data.distributor,
+//   state: data.state,
+//   program: data.program,
+//   orderDate: data.orderDate,
+//   shipDate: data.shipDate,
+//   trackingNum: data.trackingNum,
+//   totalItems: Math.floor(Math.random() * 100 + 50),
+//   estTotal: data.orderTotal,
+//   actTotal: "---",
+//   orderStatus: data.orderStatus,
+// }));
 
 const csvHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -94,31 +96,42 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  
+
   const [currentFilters, setCurrentFilters] = useState({
-    fromDate: subDays(new Date(), 7).toLocaleDateString(),
-    toDate: new Date().toLocaleDateString(),
+    fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+    toDate: format(new Date(), "MM/dd/yyyy"),
     distributor: null,
     program: "",
     sequenceNum: "",
-  })
+    sortOrder: "asc",
+    sortOrderBy: "orderDate",
+  });
 
-  const handleProgram = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      program: value
-    })
-  }, [currentFilters])
+  const handleProgram = useCallback(
+    (value) => {
+      setCurrentFilters({
+        ...currentFilters,
+        program: value,
+      });
+    },
+    [currentFilters]
+  );
 
-  const handleSequence = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      sequenceNum: value
-    })
-  }, [currentFilters])
+  const handleSequence = useCallback(
+    (value) => {
+      setCurrentFilters({
+        ...currentFilters,
+        sequenceNum: value,
+      });
+    },
+    [currentFilters]
+  );
 
   const [distributor, setDistributor] = useState(null);
-  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput("", handleSequence);
+  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput(
+    "",
+    handleSequence
+  );
   const { value: program, bind: bindProgram } = useInput("", handleProgram);
   const [selectedFromDate, setSelectedFromDate] = useState(
     subDays(new Date(), 7).toLocaleDateString()
@@ -127,41 +140,89 @@ const OrderHistory = () => {
     new Date().toLocaleDateString()
   );
 
-  const isDistLoading = useSelector((state) => state.distributors.isLoading)
-  const currentDistributors = useSelector((state) => state.distributors.distributorList)
+  const isDistLoading = useSelector((state) => state.distributors.isLoading);
+  const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
+  const currentOrders = useSelector((state) => state.orderHistory.orders);
+  const currentDistributors = useSelector(
+    (state) => state.distributors.distributorList
+  );
   const currentUserRole = useSelector((state) => state.user.role);
 
-  const handleFromDateChange = useCallback((date) => {
-    setSelectedFromDate(date);
-    setCurrentFilters({
-      ...currentFilters,
-      fromDate: date.toLocaleDateString()
-    })
-  }, [currentFilters]);
+  const handleFromDateChange = useCallback(
+    (date) => {
+      setSelectedFromDate(date);
+      setCurrentFilters({
+        ...currentFilters,
+        fromDate: format(date, "MM/dd/yyyy"),
+      });
+    },
+    [currentFilters]
+  );
 
-  const handleToDateChange = useCallback((date) => {
-    setSelectedToDate(date);
-    setCurrentFilters({
-      ...currentFilters,
-      toDate: date.toLocaleDateString()
-    })
-  }, [currentFilters]);
+  const handleToDateChange = useCallback(
+    (date) => {
+      setSelectedToDate(date);
+      setCurrentFilters({
+        ...currentFilters,
+        toDate: format(date, "MM/dd/yyyy"),
+      });
+    },
+    [currentFilters]
+  );
 
-  const handleSetDistributor = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      distributor: value ? value.id : null
-    })
-  }, [currentFilters])
+  const handleSetDistributor = useCallback(
+    (value) => {
+      setCurrentFilters({
+        ...currentFilters,
+        distributor: value ? value.id : null,
+      });
+    },
+    [currentFilters]
+  );
 
-  useEffect(()=>{
-    if (currentDistributors.length === 0 && currentUserRole.length > 0) {
-      dispatch(fetchUserDistributors())
+  const handleSearch = (sortBy=undefined) => {
+    let filterObject;
+    if (sortBy.order) {
+      console.log(sortBy)
+      filterObject = {
+        ...currentFilters,
+        sortOrder: sortBy.order,
+        sortOrderBy: sortBy.orderBy
+      }
+    } else {
+      console.log(currentFilters)
+      filterObject = {...currentFilters}
     }
-  }, [currentDistributors, dispatch, currentUserRole])
+    console.log("searching")
+    dispatch(fetchFilteredOrderHistory(filterObject))
+  }
+  
+  const handleSort = 
+    (sortObject) => {
+      setCurrentFilters({
+        ...currentFilters,
+        sortOrder: sortObject.order,
+        sortOrderBy: sortObject.orderBy
+      });
+      handleSearch(sortObject)
+    };
+
+
+  useEffect(() => {
+    if (currentDistributors.length === 0 && currentUserRole.length > 0) {
+      dispatch(fetchUserDistributors());
+    }
+  }, [currentDistributors, dispatch, currentUserRole]);
+  
+  useEffect(()=> {
+    if (currentOrders.length === 0 && currentUserRole.length > 0) {
+      dispatch(fetchFilteredOrderHistory(currentFilters))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isDistLoading || currentDistributors.length === 0) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
@@ -182,7 +243,7 @@ const OrderHistory = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              <CSVLink data={orderRows} headers={csvHeaders}>
+              <CSVLink data={currentOrders} headers={csvHeaders}>
                 <IconButton>
                   <GetAppIcon color="secondary" />
                 </IconButton>
@@ -239,8 +300,8 @@ const OrderHistory = () => {
                 value={distributor}
                 className={classes.queryField}
                 onChange={(event, value) => {
-                  setDistributor(value)
-                  handleSetDistributor(value)
+                  setDistributor(value);
+                  handleSetDistributor(value);
                 }}
                 id="distributor"
                 options={currentDistributors}
@@ -290,6 +351,7 @@ const OrderHistory = () => {
                 className={classes.largeButton}
                 variant="contained"
                 color="secondary"
+                onClick={handleSearch}
               >
                 SEARCH
               </Button>
@@ -298,7 +360,7 @@ const OrderHistory = () => {
         </div>
         <br />
         <br />
-        <OrderHistoryTable orders={orderRows} />
+        <OrderHistoryTable orders={currentOrders} isOrdersLoading={isOrdersLoading} handleSort={handleSort} />
       </Container>
       <br />
     </>
