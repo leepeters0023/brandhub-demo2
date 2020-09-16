@@ -117,7 +117,6 @@ const MemoInputCell = React.memo(
       };
 
       const handleEnterEvent = ({ key }) => {
-        console.log(key);
         if (key === "Enter") {
           handleEnter(`${orderNumber}-${itemNumber}`);
         }

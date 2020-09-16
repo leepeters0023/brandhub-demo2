@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {useSelector, useDispatch} from "react-redux";
 import "date-fns";
 import subDays from "date-fns/subDays";
@@ -94,16 +94,7 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const [distributor, setDistributor] = useState(null);
-  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput("");
-  const { value: program, bind: bindProgram } = useInput("");
-  const [selectedFromDate, setSelectedFromDate] = useState(
-    subDays(new Date(), 7).toLocaleDateString()
-  );
-  const [selectedToDate, setSelectedToDate] = useState(
-    new Date().toLocaleDateString()
-  );
+  
   const [currentFilters, setCurrentFilters] = useState({
     fromDate: subDays(new Date(), 7).toLocaleDateString(),
     toDate: new Date().toLocaleDateString(),
@@ -112,22 +103,56 @@ const OrderHistory = () => {
     sequenceNum: "",
   })
 
+  const handleProgram = useCallback((value) => {
+    setCurrentFilters({
+      ...currentFilters,
+      program: value
+    })
+  }, [currentFilters])
+
+  const handleSequence = useCallback((value) => {
+    setCurrentFilters({
+      ...currentFilters,
+      sequenceNum: value
+    })
+  }, [currentFilters])
+
+  const [distributor, setDistributor] = useState(null);
+  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput("", handleSequence);
+  const { value: program, bind: bindProgram } = useInput("", handleProgram);
+  const [selectedFromDate, setSelectedFromDate] = useState(
+    subDays(new Date(), 7).toLocaleDateString()
+  );
+  const [selectedToDate, setSelectedToDate] = useState(
+    new Date().toLocaleDateString()
+  );
+
   const isDistLoading = useSelector((state) => state.distributors.isLoading)
   const currentDistributors = useSelector((state) => state.distributors.distributorList)
   const currentUserRole = useSelector((state) => state.user.role);
 
-  const handleFromDateChange = (date) => {
+  const handleFromDateChange = useCallback((date) => {
     setSelectedFromDate(date);
-  };
-  const handleToDateChange = (date) => {
+    setCurrentFilters({
+      ...currentFilters,
+      fromDate: date.toLocaleDateString()
+    })
+  }, [currentFilters]);
+
+  const handleToDateChange = useCallback((date) => {
     setSelectedToDate(date);
-  };
-  const handleSetDistributor = (value) => {
+    setCurrentFilters({
+      ...currentFilters,
+      toDate: date.toLocaleDateString()
+    })
+  }, [currentFilters]);
+
+  const handleSetDistributor = useCallback((value) => {
     setCurrentFilters({
       ...currentFilters,
       distributor: value ? value.id : null
     })
-  }
+  }, [currentFilters])
 
   useEffect(()=>{
     if (currentDistributors.length === 0 && currentUserRole.length > 0) {
@@ -138,8 +163,6 @@ const OrderHistory = () => {
   if (isDistLoading || currentDistributors.length === 0) {
     return <Loading />
   }
-
-  console.log(currentFilters);
 
   return (
     <>

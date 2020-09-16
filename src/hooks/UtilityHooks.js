@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { filter } from "../utility/utilityFunctions";
 
-export const useInput = (initialValue) => {
+export const useInput = (initialValue, secondaryFunc) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -13,6 +13,9 @@ export const useInput = (initialValue) => {
       value,
       onChange: (event) => {
         setValue(event.target.value);
+        if (secondaryFunc) {
+          secondaryFunc(event.target.value);
+        }
       },
     },
   };
