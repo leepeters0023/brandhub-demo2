@@ -33,7 +33,6 @@ const distributorSlice = createSlice({
     setIsLoading: startLoading,
     getDistributorsSuccess(state, action) {
       const { distributors } = action.payload;
-      console.log(distributors);
       state.distributorList = distributors
       state.isLoading = false;
       state.error = null;

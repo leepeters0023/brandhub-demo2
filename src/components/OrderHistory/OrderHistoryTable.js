@@ -192,7 +192,9 @@ const OrderHistoryTable = ({ orders }) => {
 };
 
 OrderHistoryTable.propTypes = {
-  order: PropTypes.array,
+  orders: PropTypes.array,
 };
 
-export default OrderHistoryTable;
+export default React.memo(OrderHistoryTable, (prev, next) => {
+  return prev.orders.length === next.orders.length
+});
