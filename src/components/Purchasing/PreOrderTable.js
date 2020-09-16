@@ -282,26 +282,30 @@ const PreOrderTable = (props) => {
     (ref) => {
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
-      if (keys.length-(currentIndex+1) >= itemLength) {
-        return refTable[keys[currentIndex + itemLength]].current.firstChild.focus();
-      } else return null
+      if (keys.length - (currentIndex + 1) >= itemLength) {
+        return refTable[
+          keys[currentIndex + itemLength]
+        ].current.firstChild.focus();
+      } else return null;
     },
     [itemLength, refTable]
   );
 
   useEffect(() => {
     if (orders && !refTable) {
-      let refs = {};
-      orders.forEach((order) => {
-        order.items.forEach((item) => {
-          refs[`${order.orderNumber}-${item.itemNumber}`] = React.createRef(
-            null
-          );
+      if (orders.length !== 0) {
+        let refs = {};
+        orders.forEach((order) => {
+          order.items.forEach((item) => {
+            refs[`${order.orderNumber}-${item.itemNumber}`] = React.createRef(
+              null
+            );
+          });
         });
-      });
-      setRefTable(refs);
+        setRefTable(refs);
+      }
     }
-  }, [orders, refTable]);
+  }, [orders, refTable, orders.length]);
 
   useEffect(() => {
     if (currentItems && !itemLength) {
