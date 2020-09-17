@@ -92,7 +92,7 @@ const MemoInputCell = React.memo(
         preOrderStatus,
         program,
         cellRef,
-        handleEnter,
+        handleKeyDown,
       },
       ref
     ) => {
@@ -116,13 +116,20 @@ const MemoInputCell = React.memo(
         ref.current.scrollLeft = 0;
       };
 
-      const handleEnterEvent = ({ key }) => {
-        if (key === "Enter") {
-          handleEnter(`${orderNumber}-${itemNumber}`);
-          window.removeEventListener("keydown", handleEnterEvent)
+      const handleKeyEvent = (evt) => {
+        if (
+          evt.key === "Enter" ||
+          evt.key === "ArrowUp" ||
+          evt.key === "ArrowDown" ||
+          evt.key === "ArrowLeft" ||
+          evt.key === "ArrowRight"
+        ) {
+          evt.preventDefault()
+          handleKeyDown(`${orderNumber}-${itemNumber}`, evt.key);
+          window.removeEventListener("keydown", handleKeyEvent);
         }
-        if (key === "Tab") {
-          window.removeEventListener("keydown", handleEnterEvent)
+        if (evt.key === "Tab") {
+          window.removeEventListener("keydown", handleKeyEvent);
         }
       };
 
@@ -135,12 +142,10 @@ const MemoInputCell = React.memo(
             className={classes.borderRight}
             style={{ zIndex: "-100", backgroundColor: "#999999" }}
             onFocus={() => {
-              window.addEventListener("keydown", handleEnterEvent);
+              window.addEventListener("keydown", handleKeyEvent);
               return index === 0 ? handleScrollLeft() : null;
             }}
-            onBlur={() =>
-              window.removeEventListener("keydown", handleEnterEvent)
-            }
+            onBlur={() => window.removeEventListener("keydown", handleKeyEvent)}
           >
             <Typography className={classes.headerText}>
               NOT COMPLIANT
@@ -172,8 +177,9 @@ const MemoInputCell = React.memo(
               size="small"
               id={`${orderNumber}-${itemNumber}`}
               value={value}
-              onFocus={()=>{
-                window.addEventListener("keydown", handleEnterEvent);
+              onFocus={() => {
+                cellRef.current.firstChild.select()
+                window.addEventListener("keydown", handleKeyEvent);
               }}
               onBlur={(evt) => {
                 if (change) {
@@ -195,7 +201,7 @@ const MemoInputCell = React.memo(
                   if (preOrderStatus === "inactive") {
                     dispatch(setProgStatus(program, "in-progress", preOrderId));
                   }
-                }                
+                }
               }}
               onChange={(evt) => {
                 if (
@@ -281,16 +287,32 @@ const PreOrderTable = (props) => {
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
 
-  const handleEnter = useCallback(
+  const handleKeyDown = useCallback(
     //TODO add arrow key functionality as well
-    (ref) => {
+    (ref, key) => {
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
-      if (keys.length - (currentIndex + 1) >= itemLength) {
-        return refTable[
-          keys[currentIndex + itemLength]
-        ].current.firstChild.focus();
-      } else return null;
+      if (key === "Enter" || key === "ArrowDown") {
+        if (keys.length - (currentIndex + 1) >= itemLength) {
+          return refTable[
+            keys[currentIndex + itemLength]
+          ].current.firstChild.focus();
+        } else return null;
+      } else if (key === "ArrowUp") {
+        if (currentIndex + 1 >= itemLength) {
+          return refTable[
+            keys[currentIndex - itemLength]
+          ].current.firstChild.focus();
+        }
+      } else if (key === "ArrowLeft") {
+        if (currentIndex !== 0) {
+          return refTable[keys[currentIndex - 1]].current.firstChild.focus();
+        }
+      } else if (key === "ArrowRight") {
+        if (currentIndex !== keys.length - 1) {
+          return refTable[keys[currentIndex + 1]].current.firstChild.focus();
+        }
+      }
     },
     [itemLength, refTable]
   );
@@ -616,7 +638,7 @@ const PreOrderTable = (props) => {
                         cellRef={
                           refTable[`${ord.orderNumber}-${item.itemNumber}`]
                         }
-                        handleEnter={handleEnter}
+                        handleKeyDown={handleKeyDown}
                         ref={tableRef}
                       />
                     ))}
