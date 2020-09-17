@@ -133,6 +133,10 @@ const MemoInputCell = React.memo(
         }
       };
 
+      useEffect(()=> {
+        return () => window.removeEventListener("keydown", handleKeyEvent)
+      })
+
       if (compliance !== "compliant") {
         return (
           <TableCell
