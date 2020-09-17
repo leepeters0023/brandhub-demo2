@@ -122,7 +122,6 @@ const MemoInputCell = React.memo(
           window.removeEventListener("keydown", handleEnterEvent)
         }
         if (key === "Tab") {
-          console.log("tabbed!")
           window.removeEventListener("keydown", handleEnterEvent)
         }
       };
@@ -174,7 +173,6 @@ const MemoInputCell = React.memo(
               id={`${orderNumber}-${itemNumber}`}
               value={value}
               onFocus={()=>{
-                console.log(cellRef.current.firstChild)
                 window.addEventListener("keydown", handleEnterEvent);
               }}
               onBlur={(evt) => {
@@ -285,10 +283,7 @@ const PreOrderTable = (props) => {
 
   const handleEnter = useCallback(
     //TODO add arrow key functionality as well
-    //TODO play with user-select css attribute
     (ref) => {
-      console.log("click")
-      console.log(ref)
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
       if (keys.length - (currentIndex + 1) >= itemLength) {
@@ -311,7 +306,6 @@ const PreOrderTable = (props) => {
             );
           });
         });
-        console.log(refs);
         setRefTable(refs);
       }
     }
@@ -319,7 +313,6 @@ const PreOrderTable = (props) => {
 
   useEffect(() => {
     if (currentItems && !itemLength) {
-      console.log("here")
       setItemLength(currentItems.length);
     }
   }, [itemLength, currentItems]);

@@ -313,7 +313,6 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const currentOrders = await fetchOrdersByProgram(program);
-    console.log(currentOrders.data)
     if (currentOrders.error) {
       throw currentOrders.error;
     }
