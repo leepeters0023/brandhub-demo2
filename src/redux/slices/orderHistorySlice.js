@@ -62,11 +62,6 @@ let initialState = {
   error: null,
 };
 
-// let shippingState = {
-//   handler: undefined,
-//   trackingNum: undefined,
-//   shippingStatus: undefined,
-// };
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -122,6 +117,29 @@ const orderHistorySlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    resetOrderHistory(state) {
+      state.isLoading = false;
+      state.nextIsLoading = false;
+      state.ordersPerPage = 20;
+      state.nextPage = null;
+      state.nextLink = null;
+      state.orders = [];
+      state.singleOrder = {
+        orderNumber: null,
+        distributorName: null,
+        distributorId: null,
+        type: null,
+        status: null,
+        orderDate: null,
+        shipDate: null,
+        trackingNum: null,
+        totalItems: 0,
+        totalEstCost: 0,
+        totalActCost: 0,
+        note: null
+      };
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -132,6 +150,7 @@ export const {
   getSingleOrderSuccess,
   getOrderHistorySuccess,
   getNextHistorySuccess,
+  resetOrderHistory,
   setFailure,
 } = orderHistorySlice.actions;
 

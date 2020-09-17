@@ -12,10 +12,13 @@ import {
   setIsLoading,
   clearPrograms,
 } from "./redux/slices/programsSlice";
-import {
-  fetchPreOrders,
-  resetState,
-} from "./redux/slices/programTableSlice";
+import { fetchPreOrders, resetState } from "./redux/slices/programTableSlice";
+import { clearDistributors } from "./redux/slices/distributorSlice";
+import { clearInStockOrder } from "./redux/slices/inStockOrderSlice";
+import { clearOnDemandOrder } from "./redux/slices/onDemandOrderSlice";
+import { resetItems } from "./redux/slices/itemSlice";
+import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
+import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 
 import Approvals from "./pages/Approvals";
 import Budget from "./pages/Budget";
@@ -66,7 +69,9 @@ const App = () => {
   const userError = useSelector((state) => state.user.error);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
   const isLoading = useSelector((state) => state.user.isLoading);
-  const isPreOrdersLoading = useSelector((state) => state.programTable.isPreOrdersLoading);
+  const isPreOrdersLoading = useSelector(
+    (state) => state.programTable.isPreOrdersLoading
+  );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
 
@@ -80,6 +85,12 @@ const App = () => {
     dispatch(removeUser());
     dispatch(clearPrograms());
     dispatch(resetState());
+    dispatch(clearDistributors());
+    dispatch(clearInStockOrder());
+    dispatch(clearOnDemandOrder());
+    dispatch(resetItems());
+    dispatch(resetOrderHistory());
+    dispatch(resetPatchOrders());
   };
 
   useEffect(() => {
