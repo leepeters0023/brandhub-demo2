@@ -216,6 +216,19 @@ const programTableSlice = createSlice({
       });
       state.orders = currentOrders;
     },
+    updateOrderDetails(state, action) {
+      const { orderNumber, note, attn } = action.payload
+      let currentOrders = state.orders.map((order) => {
+        if (order.orderNumber === orderNumber) {
+          return {
+            ...order,
+            note: note ? note : "",
+            attn: attn ? attn : ""
+          }
+        } else return order
+      })
+      state.orders = currentOrders;
+    },
     updatePreOrderNote(state, action) {
       const { value } = action.payload;
       if (value.length <= 300) {
@@ -263,6 +276,7 @@ export const {
   setItemTotal,
   removeGridItem,
   updatePreOrderNote,
+  updateOrderDetails,
   setProgramName,
   setPreOrderStatus,
   resetState,
@@ -341,6 +355,10 @@ export const fetchProgramOrders = (program) => async (dispatch) => {
       orderNumber: ord.id,
       distributorId: ord.distributor.id,
       distributorName: ord.distributor.name,
+      distributorCity: ord.distributor.city,
+      distributorState: ord.distributor.state,
+      note: ord.notes ? ord.notes : "",
+      attn: ord.attn ? ord.attn : "",
       type: "program",
       program: ord.program.id,
       items: ord["order-items"]

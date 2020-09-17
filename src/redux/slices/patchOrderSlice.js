@@ -5,12 +5,13 @@ import {
   deletePreOrderItem,
   submitPreOrder,
   setPreOrderNote,
+  setOrderDetail
 } from "../../api/orderApi";
 
 import { setPreOrderProgramStatus } from "../../api/programApi";
 
 import { setProgramStatus } from "./programsSlice";
-import { setPreOrderStatus } from "./programTableSlice";
+import { setPreOrderStatus, updateOrderDetails } from "./programTableSlice";
 
 /*
 * Data Format:
@@ -77,7 +78,7 @@ const patchOrderSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-    setPreOrderNoteSuccess(state) {
+    setOrderNoteSuccess(state) {
       state.isLoading = false;
       state.error = null;
     },
@@ -97,7 +98,7 @@ export const {
   patchItemSuccess,
   setProgStatusSuccess,
   deleteItemSuccess,
-  setPreOrderNoteSuccess,
+  setOrderNoteSuccess,
   resetPatchOrders,
   setFailure,
 } = patchOrderSlice.actions;
@@ -166,8 +167,22 @@ export const setPreOrderNotes = (id, note) => async (dispatch) => {
     if (noteStatus.error) {
       throw noteStatus.error;
     }
-    dispatch(setPreOrderNoteSuccess());
+    dispatch(setOrderNoteSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const setOrderDetails = (id, note, attn) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const noteStatus = await setOrderDetail(id, note, attn);
+    if (noteStatus.error) {
+      throw noteStatus.error;
+    }
+    dispatch(updateOrderDetails({orderNumber: id, note: note, attn: attn}))
+    dispatch(setOrderNoteSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
