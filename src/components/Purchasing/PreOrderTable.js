@@ -133,9 +133,9 @@ const MemoInputCell = React.memo(
         }
       };
 
-      useEffect(()=> {
-        return () => window.removeEventListener("keydown", handleKeyEvent)
-      })
+      // useEffect(()=> {
+      //   return () => window.removeEventListener("keydown", handleKeyEvent)
+      // })
 
       if (compliance !== "compliant") {
         return (
@@ -186,6 +186,7 @@ const MemoInputCell = React.memo(
                 window.addEventListener("keydown", handleKeyEvent);
               }}
               onBlur={(evt) => {
+                window.removeEventListener("keydown", handleKeyEvent)
                 if (change) {
                   if (evt.target.value === "") {
                     dispatch(
