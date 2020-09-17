@@ -181,6 +181,7 @@ const CurrentPreOrder = ({ userType }) => {
   const handleSubmit = () => {
     dispatch(setProgStatus(program, "submitted", preOrderId));
     dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+    setTermsChecked(false);
   };
 
   const handleProgramIdHash = useCallback(() => {
