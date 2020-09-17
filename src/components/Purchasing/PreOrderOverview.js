@@ -62,7 +62,6 @@ const PreOrderOverview = () => {
         });
         return dataObject;
       });
-      console.log(orderData)
       setCurrentCSV({ data: orderData, headers: headers });
     }
   }, [currentCSV.data, preOrder]);

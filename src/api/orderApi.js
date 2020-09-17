@@ -166,7 +166,6 @@ export const submitPreOrder = async (id) => {
 
 export const fetchOrderHistory = async (filterObject) => {
   const response = {status: "", error: null, data: null };
-  console.log(filterObject)
   const sortMap = {
     "orderNum": "id",
     "distributor": "distributor-name",
@@ -186,13 +185,50 @@ export const fetchOrderHistory = async (filterObject) => {
   await axios
     .get(queryString)
     .then((res) => {
-      console.log(res);
       let dataObject = {orders: null, nextLink: null}
       let data = dataFormatter.deserialize(res.data)
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null
       response.status = "ok"
       response.data = dataObject
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchNextHistory = async (url) => {
+  const response = {status: "", error: null, data: null };
+  let queryString = decodeURIComponent(url).split("+").join(" ")
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = {orders: null, nextLink: null}
+      let data = dataFormatter.deserialize(res.data)
+      dataObject.orders = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null
+      response.status = "ok"
+      response.data = dataObject
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchSingleOrder = async (id) => {
+  const response = {status: "", error: null, data: null };
+  await axios
+    .get(`/api/orders/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data)
+      response.status = "ok"
+      response.data = data
     })
     .catch((err) => {
       console.log(err.toString());
