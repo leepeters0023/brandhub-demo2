@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "@reach/router";
 //import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 
-//import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchOrder } from "../redux/slices/orderHistorySlice";
+
+import { formatMoney } from "../utility/utilityFunctions";
 
 import SingleOrderDetailTable from "../components/OrderHistory/SingleOrderDetailTable";
+import Loading from "../components/Utility/Loading";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -15,14 +20,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import GetAppIcon from '@material-ui/icons/GetApp';
+import GetAppIcon from "@material-ui/icons/GetApp";
 import PrintIcon from "@material-ui/icons/Print";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
-//mockData
-import orders from "../assets/mockdata/Orders";
-
-const order = orders[0];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -30,8 +30,25 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleOrder = ({ orderId }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  //const order = useSelector((state) => state.currentOrder);
+  const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
+  const currentUserRole = useSelector((state) => state.user.role);
+  const isLoading = useSelector((state) => state.orderHistory.isLoading);
+
+  useEffect(() => {
+    if (
+      (!currentOrder.orderNumber && currentUserRole.length > 0) ||
+      (currentOrder.orderNumber !== orderId && currentUserRole.length > 0)
+    ) {
+      dispatch(fetchOrder(orderId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isLoading || !currentOrder.orderNumber) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -43,7 +60,10 @@ const SingleOrder = ({ orderId }) => {
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
-            <Typography className={classes.titleText} style={{marginTop: "5px"}}>
+            <Typography
+              className={classes.titleText}
+              style={{ marginTop: "5px" }}
+            >
               {`Order ${orderId}`}
             </Typography>
           </div>
@@ -73,7 +93,7 @@ const SingleOrder = ({ orderId }) => {
             <Typography className={classes.headerText}>Order Items:</Typography>
             <Divider />
             <br />
-            <SingleOrderDetailTable items={order.items} />
+            <SingleOrderDetailTable items={currentOrder.items} />
           </Grid>
           <Grid item lg={3} sm={12} xs={12}>
             <Typography className={classes.headerText}>
@@ -82,32 +102,32 @@ const SingleOrder = ({ orderId }) => {
             <Divider />
             <br />
             <Typography className={classes.headerText}>
-              {`Status:`}
+              {`Status: ${currentOrder.status}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Shipping Location: ${order.distributorName} - ${order.distributorId}`}
+              {`Shipping Location: ${currentOrder.distributorName} - ${currentOrder.distributorId}`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Address: 123 Address Rd., Burlington VT 05401`}
             </Typography>
-            <Typography className={classes.headerText}>
+            {/* <Typography className={classes.headerText}>
               {`Attention:`}
-            </Typography>
-            {order.rushOrder && (
+            </Typography> */}
+            {/* {order.rushOrder && (
               <Typography className={classes.headerText}>Rush Order</Typography>
-            )}
+            )} */}
             <Typography className={classes.headerText}>
-              {`Total Items: ${order.totalItems}`}
+              {`Total Items: ${currentOrder.totalItems}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Est. Cost: $${order.totalEstCost}`}
+              {`Total Est. Cost: ${formatMoney(currentOrder.totalEstCost)}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Act. Cost:`}
+              {`Total Act. Cost: ${currentOrder.totalActCost}`}
             </Typography>
             <br />
             <Typography className={classes.headerText}>
-              {`Order Notes:`}
+              {`Order Notes: ${currentOrder.note ? currentOrder.note : "---"}`}
             </Typography>
             <br />
           </Grid>

@@ -151,10 +151,11 @@ const MemoInputCell = React.memo(
           className={classes.borderRight}
           style={{ zIndex: "-100" }}
           onFocus={() => {
-            window.addEventListener("keydown", handleEnterEvent);
             return index === 0 ? handleScrollLeft() : null;
           }}
-          onBlur={() => window.removeEventListener("keydown", handleEnterEvent)}
+          onBlur={() =>
+            window.removeEventListener("keydown", handleEnterEvent)
+          }
         >
           <div
             style={{
@@ -170,6 +171,10 @@ const MemoInputCell = React.memo(
               size="small"
               id={`${orderNumber}-${itemNumber}`}
               value={value}
+              onFocus={()=>{
+                console.log(cellRef.current.firstChild)
+                window.addEventListener("keydown", handleEnterEvent);
+              }}
               onBlur={(evt) => {
                 if (change) {
                   if (evt.target.value === "") {
@@ -191,6 +196,7 @@ const MemoInputCell = React.memo(
                     dispatch(setProgStatus(program, "in-progress", preOrderId));
                   }
                 }
+                window.removeEventListener("keydown", handleEnterEvent)
               }}
               onChange={(evt) => {
                 if (
@@ -279,6 +285,7 @@ const PreOrderTable = (props) => {
   const handleEnter = useCallback(
     //TODO add arrow key functionality as well
     (ref) => {
+      console.log(ref)
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
       if (keys.length - (currentIndex + 1) >= itemLength) {
@@ -301,6 +308,7 @@ const PreOrderTable = (props) => {
             );
           });
         });
+        console.log(refs);
         setRefTable(refs);
       }
     }
@@ -308,6 +316,7 @@ const PreOrderTable = (props) => {
 
   useEffect(() => {
     if (currentItems && !itemLength) {
+      console.log("here")
       setItemLength(currentItems.length);
     }
   }, [itemLength, currentItems]);

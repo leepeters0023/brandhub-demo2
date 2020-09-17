@@ -4,9 +4,10 @@ import "date-fns";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { fetchUserDistributors } from "../redux/slices/distributorSlice";
-import { fetchFilteredOrderHistory } from "../redux/slices/orderHistorySlice";
+import { fetchFilteredOrderHistory, fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -26,28 +27,11 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
-
-//mockdata
-//import { orderHistory } from "../assets/mockdata/orderHistory";
-//import distributors from "../assets/mockdata/distributors";
-
-// const orderRows = orderHistory.map((data) => ({
-//   orderNum: data.orderNum,
-//   distributor: data.distributor,
-//   state: data.state,
-//   program: data.program,
-//   orderDate: data.orderDate,
-//   shipDate: data.shipDate,
-//   trackingNum: data.trackingNum,
-//   totalItems: Math.floor(Math.random() * 100 + 50),
-//   estTotal: data.orderTotal,
-//   actTotal: "---",
-//   orderStatus: data.orderStatus,
-// }));
 
 const csvHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -96,6 +80,17 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const nextLink = useSelector((state) => state.orderHistory.nextLink)
+  const isNextLoading = useSelector((state) => state.orderHistory.isNextLoading);
+
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      dispatch(fetchNextOrderHistory(nextLink))
+    }
+  }
+
+  useBottomScrollListener(handleBottomScroll)
 
   const [currentFilters, setCurrentFilters] = useState({
     fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -361,6 +356,11 @@ const OrderHistory = () => {
         <br />
         <br />
         <OrderHistoryTable orders={currentOrders} isOrdersLoading={isOrdersLoading} handleSort={handleSort} />
+        {isNextLoading && (
+          <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+            <CircularProgress />
+          </div>
+        )}
       </Container>
       <br />
     </>
