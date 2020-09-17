@@ -118,6 +118,7 @@ const MemoInputCell = React.memo(
 
       const handleEnterEvent = ({ key }) => {
         if (key === "Enter") {
+          //TODO try just sending actual ref
           handleEnter(`${orderNumber}-${itemNumber}`);
         }
       };
@@ -284,6 +285,8 @@ const PreOrderTable = (props) => {
 
   const handleEnter = useCallback(
     //TODO add arrow key functionality as well
+    //TODO try removing useCallback????
+    //TODO play with user-select css attribute
     (ref) => {
       console.log(ref)
       let keys = Object.keys(refTable);
