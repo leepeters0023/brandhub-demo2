@@ -14,6 +14,8 @@ import { patchItem } from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import EditOrderDetailModal from "./EditOrderDetailModal";
+
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -33,6 +35,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CancelIcon from "@material-ui/icons/Cancel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -73,9 +76,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-5",
   },
   root: {
-    width: "200px !important",
-    maxWidth: "200px !important",
-    minWidth: "200px !important",
+    width: "300px !important",
+    maxWidth: "300px !important",
+    minWidth: "300px !important",
   },
 }));
 
@@ -124,7 +127,7 @@ const MemoInputCell = React.memo(
           evt.key === "ArrowLeft" ||
           evt.key === "ArrowRight"
         ) {
-          evt.preventDefault()
+          evt.preventDefault();
           handleKeyDown(`${orderNumber}-${itemNumber}`, evt.key);
           window.removeEventListener("keydown", handleKeyEvent);
         }
@@ -182,11 +185,11 @@ const MemoInputCell = React.memo(
               id={`${orderNumber}-${itemNumber}`}
               value={value}
               onFocus={() => {
-                cellRef.current.firstChild.select()
+                cellRef.current.firstChild.select();
                 window.addEventListener("keydown", handleKeyEvent);
               }}
               onBlur={(evt) => {
-                window.removeEventListener("keydown", handleKeyEvent)
+                window.removeEventListener("keydown", handleKeyEvent);
                 if (change) {
                   if (evt.target.value === "") {
                     dispatch(
@@ -291,6 +294,7 @@ const PreOrderTable = (props) => {
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
+  const [orderNumberModal, setOrderNumber] = useState(false);
 
   const handleKeyDown = useCallback(
     //TODO add arrow key functionality as well
@@ -350,6 +354,12 @@ const PreOrderTable = (props) => {
 
   return (
     <>
+      {orderNumberModal && (
+        <EditOrderDetailModal
+          orderNumber={orderNumberModal}
+          handleClose={setOrderNumber}
+        />
+      )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
         <Table stickyHeader={true} size="small" aria-label="pre-order-table">
           {currentItems.length === 0 ? (
@@ -623,10 +633,35 @@ const PreOrderTable = (props) => {
                         zIndex: "1",
                       }}
                     >
-                      <div>
-                        <Typography className={classes.headerText}>
-                          {ord.distributorName}
-                        </Typography>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                          position: "absolute",
+                          top: "0",
+                          left: "0",
+                          height: "100%",
+                          padding: "6px 0px 6px 6px",
+                        }}
+                      >
+                        <Tooltip
+                          placement="right"
+                          title={`${ord.distributorCity}, ${ord.distributorState}`}
+                        >
+                          <Typography className={classes.headerText} noWrap>
+                            {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
+                          </Typography>
+                        </Tooltip>
+
+                        <Tooltip title="Edit Details">
+                          <IconButton
+                            onClick={() => setOrderNumber(ord.orderNumber)}
+                          >
+                            <EditIcon fontSize="small" color="inherit" />
+                          </IconButton>
+                        </Tooltip>
                       </div>
                     </TableCell>
                     {ord.items.map((item, index) => (

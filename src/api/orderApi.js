@@ -15,6 +15,7 @@ export const fetchOrdersByProgram = async (program) => {
     .get(`/api/pre-orders?filter[program_id]=${program}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -103,6 +104,37 @@ export const setPreOrderNote = async (id, note) => {
         id: id,
         attributes: {
           notes: note,
+        },
+      },
+    }, headers)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
+export const setOrderDetail = async (id, note, attn) => {
+  const response = { status: "", error: null }
+  let headers = {
+    headers: {
+      "Accept": "application/vnd.api+json",
+      "Content-Type": "application/vnd.api+json"
+    }
+  }
+  await axios
+    .patch(`/api/orders/${id}`,
+    {
+      data: {
+        type: "pre-order",
+        id: id,
+        attributes: {
+          notes: note,
+          attn: attn,
         },
       },
     }, headers)
