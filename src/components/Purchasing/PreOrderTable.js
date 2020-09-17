@@ -118,8 +118,12 @@ const MemoInputCell = React.memo(
 
       const handleEnterEvent = ({ key }) => {
         if (key === "Enter") {
-          //TODO try just sending actual ref
           handleEnter(`${orderNumber}-${itemNumber}`);
+          window.removeEventListener("keydown", handleEnterEvent)
+        }
+        if (key === "Tab") {
+          console.log("tabbed!")
+          window.removeEventListener("keydown", handleEnterEvent)
         }
       };
 
@@ -154,9 +158,6 @@ const MemoInputCell = React.memo(
           onFocus={() => {
             return index === 0 ? handleScrollLeft() : null;
           }}
-          onBlur={() =>
-            window.removeEventListener("keydown", handleEnterEvent)
-          }
         >
           <div
             style={{
@@ -196,8 +197,7 @@ const MemoInputCell = React.memo(
                   if (preOrderStatus === "inactive") {
                     dispatch(setProgStatus(program, "in-progress", preOrderId));
                   }
-                }
-                window.removeEventListener("keydown", handleEnterEvent)
+                }                
               }}
               onChange={(evt) => {
                 if (
@@ -285,9 +285,9 @@ const PreOrderTable = (props) => {
 
   const handleEnter = useCallback(
     //TODO add arrow key functionality as well
-    //TODO try removing useCallback????
     //TODO play with user-select css attribute
     (ref) => {
+      console.log("click")
       console.log(ref)
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);
