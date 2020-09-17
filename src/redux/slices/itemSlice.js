@@ -42,6 +42,16 @@ const itemSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    resetItems(state) {
+      state.isLoading = false;
+      state.orderType = null;
+      state.itemsPerPage = 20;
+      state.totalPages = null;
+      state.pageLoaded = 0;
+      state.nextLink = null;
+      state.items = [];
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -50,6 +60,7 @@ export const {
   setIsLoading,
   setTotalPages,
   getItemsSuccess,
+  resetItems,
   setFailure,
 } = itemSlice.actions;
 

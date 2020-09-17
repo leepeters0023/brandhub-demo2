@@ -81,6 +81,12 @@ const patchOrderSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    resetPatchOrders(state) {
+      state.isLoading = false;
+      state.cellsLoading = [];
+      state.cellsError = [];
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -92,6 +98,7 @@ export const {
   setProgStatusSuccess,
   deleteItemSuccess,
   setPreOrderNoteSuccess,
+  resetPatchOrders,
   setFailure,
 } = patchOrderSlice.actions;
 

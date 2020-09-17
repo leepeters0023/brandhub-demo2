@@ -174,8 +174,10 @@ const programsSlice = createSlice({
       state.programs = updatedPrograms;
     },
     clearPrograms(state) {
-      state.programs = [];
       state.isLoading = false;
+      state.itemsIsLoading = false;
+      state.programs = [];
+      state.error = null;
     },
     setFailure: loadingFailed,
   },

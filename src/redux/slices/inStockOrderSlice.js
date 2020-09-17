@@ -177,6 +177,26 @@ const inStockOrderSlice = createSlice({
       state.totalCost -= currentItem.estTotal;
       state.items = items.filter((i) => i.itemNumber !== item.itemNumber);
     },
+    clearInStockOrder(state) {
+      state.isLoading = false;
+      state.orderUpdateLoading = false;
+      state.orderNumber = null;
+      state.distributorId = null;
+      state.distributorName = null;
+      state.attention = "";
+      state.type = null;
+      state.program = null;
+      state.status = null;
+      state.items = [];
+      state.shipping = {};
+      state.rushOrder = false;
+      state.termsAccepted = false;
+      state.budget = null;
+      state.totalItems = 0;
+      state.totalCost = 0;
+      state.orderNote = "";
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -193,6 +213,7 @@ export const {
   setTerms,
   setRushOrder,
   removeInStockItem,
+  clearInStockOrder,
   setFailure,
 } = inStockOrderSlice.actions;
 

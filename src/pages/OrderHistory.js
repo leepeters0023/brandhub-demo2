@@ -7,7 +7,10 @@ import { CSVLink } from "react-csv";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { fetchUserDistributors } from "../redux/slices/distributorSlice";
-import { fetchFilteredOrderHistory, fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
+import {
+  fetchFilteredOrderHistory,
+  fetchNextOrderHistory,
+} from "../redux/slices/orderHistorySlice";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -27,7 +30,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
@@ -81,16 +84,18 @@ const OrderHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const nextLink = useSelector((state) => state.orderHistory.nextLink)
-  const isNextLoading = useSelector((state) => state.orderHistory.isNextLoading);
+  const nextLink = useSelector((state) => state.orderHistory.nextLink);
+  const isNextLoading = useSelector(
+    (state) => state.orderHistory.isNextLoading
+  );
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
-      dispatch(fetchNextOrderHistory(nextLink))
+      dispatch(fetchNextOrderHistory(nextLink));
     }
-  }
+  };
 
-  useBottomScrollListener(handleBottomScroll)
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [currentFilters, setCurrentFilters] = useState({
     fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -175,46 +180,44 @@ const OrderHistory = () => {
     [currentFilters]
   );
 
-  const handleSearch = (sortBy=undefined) => {
+  const handleSearch = (sortBy = undefined) => {
     let filterObject;
     if (sortBy.order) {
-      console.log(sortBy)
+      console.log(sortBy);
       filterObject = {
         ...currentFilters,
         sortOrder: sortBy.order,
-        sortOrderBy: sortBy.orderBy
-      }
+        sortOrderBy: sortBy.orderBy,
+      };
     } else {
-      console.log(currentFilters)
-      filterObject = {...currentFilters}
+      console.log(currentFilters);
+      filterObject = { ...currentFilters };
     }
-    console.log("searching")
-    dispatch(fetchFilteredOrderHistory(filterObject))
-  }
-  
-  const handleSort = 
-    (sortObject) => {
-      setCurrentFilters({
-        ...currentFilters,
-        sortOrder: sortObject.order,
-        sortOrderBy: sortObject.orderBy
-      });
-      handleSearch(sortObject)
-    };
+    console.log("searching");
+    dispatch(fetchFilteredOrderHistory(filterObject));
+  };
 
+  const handleSort = (sortObject) => {
+    setCurrentFilters({
+      ...currentFilters,
+      sortOrder: sortObject.order,
+      sortOrderBy: sortObject.orderBy,
+    });
+    handleSearch(sortObject);
+  };
 
   useEffect(() => {
     if (currentDistributors.length === 0 && currentUserRole.length > 0) {
       dispatch(fetchUserDistributors());
     }
   }, [currentDistributors, dispatch, currentUserRole]);
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     if (currentOrders.length === 0 && currentUserRole.length > 0) {
-      dispatch(fetchFilteredOrderHistory(currentFilters))
+      dispatch(fetchFilteredOrderHistory(currentFilters));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isDistLoading || currentDistributors.length === 0) {
     return <Loading />;
@@ -355,10 +358,17 @@ const OrderHistory = () => {
         </div>
         <br />
         <br />
-        <OrderHistoryTable orders={currentOrders} isOrdersLoading={isOrdersLoading} handleSort={handleSort} />
+        <OrderHistoryTable
+          orders={currentOrders}
+          isOrdersLoading={isOrdersLoading}
+          handleSort={handleSort}
+          scrollRef={scrollRef}
+        />
         {isNextLoading && (
-          <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-            <CircularProgress />
+          <div
+            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <LinearProgress />
           </div>
         )}
       </Container>

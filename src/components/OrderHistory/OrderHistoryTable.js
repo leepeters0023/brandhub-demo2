@@ -129,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderHistoryTable = ({ orders, handleSort, isOrdersLoading }) => {
+const OrderHistoryTable = ({ orders, handleSort, isOrdersLoading, scrollRef }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
@@ -145,20 +145,10 @@ const OrderHistoryTable = ({ orders, handleSort, isOrdersLoading }) => {
     navigate(`/orders/history/${orderNum}`);
   };
 
-  // if (orders.length === 0) {
-  //   return (
-  //     <>
-  //       <Typography className={classes.headerText}>
-  //         {`You currently don't have any orders on record..`}
-  //       </Typography>
-  //     </>
-  //   );
-  // }
-
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table}>
+      <TableContainer className={classes.tableContainer} style={{maxHeight: "Calc(100vh - 300px)"}} ref={scrollRef}>
+        <Table stickyHeader className={classes.table}>
           <EnhancedTableHead
             classes={classes}
             order={order}
