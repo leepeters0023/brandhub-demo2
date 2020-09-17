@@ -10,7 +10,10 @@ import {
   fetchPreOrders,
 } from "../redux/slices/programTableSlice";
 
-import { deletePreOrdItem, setPreOrderNotes } from "../redux/slices/patchOrderSlice";
+import {
+  deletePreOrdItem,
+  setPreOrderNotes,
+} from "../redux/slices/patchOrderSlice";
 
 import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
@@ -67,9 +70,6 @@ const useStyles = makeStyles((theme) => ({
 const TotalsDiv = React.memo(() => {
   const classes = useStyles();
   const programTotal = useSelector((state) => state.programTable.programTotal);
-  const grandTotal = useSelector(
-    (state) => state.programTable.preOrderTotal.updatedTotal
-  );
 
   return (
     <>
@@ -95,18 +95,18 @@ const TotalsDiv = React.memo(() => {
       <FormControl
         style={{ pointerEvents: "none", minWidth: "100px", marginLeft: "30px" }}
       >
-        <InputLabel htmlFor="grand-total" style={{ whiteSpace: "nowrap" }}>
-          Quarterly Spend
+        <InputLabel htmlFor="current-budget" style={{ whiteSpace: "nowrap" }}>
+          Current Budget
         </InputLabel>
         <InputBase
           className={classes.titleText}
-          id="grand-total"
-          value={`${formatMoney(grandTotal)}`}
+          id="current-budget"
+          value={`$24,560.00`}
           inputProps={{ "aria-label": "naked" }}
           style={{
             marginTop: "10px",
             marginBottom: "0px",
-            width: `Calc(${grandTotal.toString().length}*15px + 20px)`,
+            width: `Calc(7*15px + 20px)`,
             minWidth: "100px",
             readonly: "readonly",
             pointerEvents: "none",
@@ -140,6 +140,9 @@ const CurrentPreOrder = ({ userType }) => {
   const handleModalClose = () => {
     handleModal(false);
   };
+  const grandTotal = useSelector(
+    (state) => state.programTable.preOrderTotal.updatedTotal
+  );
 
   const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
     setCurrentItem({
@@ -172,13 +175,13 @@ const CurrentPreOrder = ({ userType }) => {
 
   const handleComplete = () => {
     dispatch(setProgStatus(program, "complete", preOrderId));
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote))
+    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
   };
 
   const handleSubmit = () => {
-    dispatch(setProgStatus(program, "submitted", preOrderId))
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote))
-  }
+    dispatch(setProgStatus(program, "submitted", preOrderId));
+    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+  };
 
   const handleProgramIdHash = useCallback(() => {
     setProgram(window.location.hash.slice(1));
@@ -278,7 +281,46 @@ const CurrentPreOrder = ({ userType }) => {
             </div>
           </AccordianSummary>
           <AccordianDetails>
-            <PreOrderSummary />
+            <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+              <PreOrderSummary />
+              <br />
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <FormControl
+                  style={{
+                    pointerEvents: "none",
+                    minWidth: "100px",
+                    marginLeft: "30px",
+                  }}
+                >
+                  <InputLabel
+                    htmlFor="grand-total"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    Quarterly Spend
+                  </InputLabel>
+                  <InputBase
+                    className={classes.titleText}
+                    id="grand-total"
+                    value={`${formatMoney(grandTotal)}`}
+                    inputProps={{ "aria-label": "naked" }}
+                    style={{
+                      marginTop: "10px",
+                      marginBottom: "0px",
+                      width: `Calc(${grandTotal.toString().length}*15px + 20px)`,
+                      minWidth: "100px",
+                      readonly: "readonly",
+                      pointerEvents: "none",
+                    }}
+                  />
+                </FormControl>
+              </div>
+            </div>
           </AccordianDetails>
         </Accordion>
         <br />
