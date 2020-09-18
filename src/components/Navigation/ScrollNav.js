@@ -115,7 +115,7 @@ const ScrollNav = (props) => {
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>
             <div className={classes.navBreak}>
-              {role === "super" && <UserSelector />}
+              {(role === "super" || role === "field2") && <UserSelector />}
               {territories.length > 1 && <RegionSelector />}
               <UserNav
                 initials={initials}

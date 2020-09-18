@@ -42,6 +42,7 @@ import POSClassifications from "./pages/POSClassifications";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
+import Rollup from "./pages/Rollup";
 import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
@@ -226,6 +227,12 @@ const App = () => {
             <OrderHistory path="/orders/history" userType={role} />,
             "/orders/history",
             ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <Rollup path="/rollup" />,
+            "/rollup",
+            ["field2", "super"],
             role
           )}
           {handleAuth(

@@ -1,46 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchOrderHistory, fetchNextHistory, fetchSingleOrder } from "../../api/orderApi";
 
-/*
-* Data Format:
-orders: {
-  isLoading: bool,
-  id: string,
-  orderNumber: string,
-  distributorName: string,
-	distributorId: string,
-  type: string,
-	status: string,
-	items: [...{ itemObj }],
-	shipping: { shippingObj },
-	budget: “string”,
-	totalItems: int,
-	totalEstCost: float,
-	error: null || string
-}
-
-itemObj: {
-	itemNumber: string,
-	brand: string,
-	itemType: string,
-	price: float,
-	qty: string,
-	imgUrl: string,
-  complianceStatus: string,
-  totalItems: int,
-  estTotal: float,
-}
-
-shippingObj: {
-  handler: string,
-  trackingNum: string,
-  shippingStatus: string
-}	
-*/
-
 let initialState = {
   isLoading: false,
-  nextIsLoading: false,
+  isNextLoading: false,
   ordersPerPage: 20,
   nextPage: null,
   nextLink: null,
@@ -68,7 +31,7 @@ const startLoading = (state) => {
 };
 
 const startNextLoading = (state) => {
-  state.nextIsLoading = true;
+  state.isNextLoading = true;
 };
 
 const loadingFailed = (state, action) => {
@@ -119,7 +82,7 @@ const orderHistorySlice = createSlice({
     },
     resetOrderHistory(state) {
       state.isLoading = false;
-      state.nextIsLoading = false;
+      state.isNextLoading = false;
       state.ordersPerPage = 20;
       state.nextPage = null;
       state.nextLink = null;
