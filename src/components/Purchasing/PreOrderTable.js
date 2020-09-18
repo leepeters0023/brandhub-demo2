@@ -207,7 +207,11 @@ const MemoInputCell = React.memo(
                   }
                   setChange(false);
                   if (preOrderStatus === "inactive") {
-                    dispatch(setProgStatus(program, "in-progress", preOrderId));
+                    if (program) {
+                      dispatch(
+                        setProgStatus(program, "in-progress", preOrderId)
+                      );
+                    }
                   }
                 }
               }}
@@ -694,7 +698,7 @@ const PreOrderTable = (props) => {
 };
 
 PreOrderTable.propTypes = {
-  currentProgram: PropTypes.string.isRequired,
+  currentProgram: PropTypes.string,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
   tableStyle: PropTypes.string,

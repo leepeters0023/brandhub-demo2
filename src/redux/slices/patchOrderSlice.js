@@ -146,7 +146,9 @@ export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
     if (compStatus.error) {
       throw compStatus.error;
     }
-    dispatch(setProgramStatus({ program: id, status: value }));
+    if (id) {
+      dispatch(setProgramStatus({ program: id, status: value }));
+    }
     dispatch(setPreOrderStatus({ status: value }));
     dispatch(setProgStatusSuccess());
     if (value === "submitted") {

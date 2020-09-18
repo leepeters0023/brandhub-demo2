@@ -98,7 +98,10 @@ const Program = ({ userType, programId }) => {
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
-            <Typography className={classes.titleText}>
+            <Typography
+              className={classes.titleText}
+              style={{ marginLeft: "5px", marginTop: "5px" }}
+            >
               {`${currentProgram.name} - ${currentProgram.focusMonth}`}
             </Typography>
           </div>

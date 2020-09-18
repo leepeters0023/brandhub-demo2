@@ -43,6 +43,7 @@ import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
+import RollupPreOrderDetail from "./pages/RollupPreOrderDetail";
 import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
@@ -232,6 +233,12 @@ const App = () => {
           {handleAuth(
             <Rollup path="/rollup" />,
             "/rollup",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <RollupPreOrderDetail path="/rollup/detail/:orderId" />,
+            "/rollup/detail",
             ["field2", "super"],
             role
           )}
