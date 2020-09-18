@@ -79,6 +79,19 @@ const MoreNav = ({ setSelected, selected, userType }) => {
               </ListItem>
             </>
           )}
+          {(userType === "super" || userType === "field2") && (
+            <ListItem
+              button
+              onClick={() => {
+                setSelected("more")
+                handleClose();
+              }}
+              component={Link}
+              to="/rollup"
+            >
+              <ListItemText primary="Quarterly Rollup" />
+            </ListItem>
+          )}
           <ListItem
             button
             onClick={() => {

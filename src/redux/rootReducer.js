@@ -9,6 +9,7 @@ import onDemandOrderReducer from "./slices/onDemandOrderSlice";
 import patchOrderReducer from "./slices/patchOrderSlice";
 import itemReducer from "./slices/itemSlice";
 import distributorReducer from "./slices/distributorSlice";
+import rollupReducer from "./slices/rollupSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   patchOrder: patchOrderReducer,
   items: itemReducer,
   distributors: distributorReducer,
+  rollup: rollupReducer,
 })
 
 export default rootReducer

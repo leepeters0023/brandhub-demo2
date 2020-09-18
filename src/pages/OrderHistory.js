@@ -366,7 +366,7 @@ const OrderHistory = () => {
         />
         {isNextLoading && (
           <div
-            style={{ width: "100%", display: "flex", justifyContent: "center" }}
+            style={{ width: "100%" }}
           >
             <LinearProgress />
           </div>

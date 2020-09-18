@@ -296,7 +296,7 @@ export const fetchPreOrders = (type) => async (dispatch) => {
     if (currentPreOrders.error) {
       throw currentPreOrders.error;
     }
-    let preOrders = currentPreOrders.data.map((order) => ({
+    let preOrders = currentPreOrders.data.preOrders.map((order) => ({
       preOrderId: order.id,
       programId: order.program.id,
       territories:
