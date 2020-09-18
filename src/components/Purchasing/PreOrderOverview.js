@@ -31,6 +31,7 @@ const PreOrderOverview = () => {
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const preOrder = useSelector((state) => state.programTable);
+  const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleEditOrder = () => {
     dispatch(
@@ -120,7 +121,7 @@ const PreOrderOverview = () => {
             {`Order Notes: ${preOrder.preOrderNote}`}
           </Typography>
           <br />
-          {preOrder.status !== "submitted" && (
+          {(currentUserRoll === "super" || currentUserRoll === "field2" || preOrder.status !== "submitted") && (
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -131,7 +132,7 @@ const PreOrderOverview = () => {
               EDIT ORDER
             </Button>
           )}
-          {preOrder.status === "submitted" && (
+          {(preOrder.status === "submitted" && currentUserRoll !== "super" && currentUserRoll !== "field2") && (
             <Typography className={classes.headerText}>
               Thank you for your Submission!
             </Typography>

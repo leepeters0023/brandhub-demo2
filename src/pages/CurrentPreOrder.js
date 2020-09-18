@@ -338,7 +338,6 @@ const CurrentPreOrder = ({ userType }) => {
             setTableStyle={setTableStyle}
             handleModalOpen={handleModalOpen}
             handleOpenConfirm={handleOpenConfirm}
-            setProgram={setProgram}
             isLoading={isLoading}
             preOrderId={preOrderId}
             preOrderStatus={preOrderStatus}

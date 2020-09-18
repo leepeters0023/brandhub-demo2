@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-//import { navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -174,6 +174,7 @@ const RollupOverViewTable = ({
                   key={row.id}
                   hover
                   className={classes.orderHistoryRow}
+                  onClick={()=>{navigate(`/rollup/detail/${row.id}#${row.user} - ${row.program}`)}}
                 >
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>

@@ -27,14 +27,13 @@ export const fetchOrdersByProgram = async (program) => {
   return response;
 };
 
-export const fetchOrdersById = async (id) => {
+export const fetchPreOrderById = async (id) => {
   const response = { status: "", error: null, data: null };
   //await timeout(1000);
   await axios
     .get(`/api/pre-orders/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -107,7 +106,6 @@ export const fetchNextPreOrders = async (url) => {
     .get(url)
     .then((res) => {
       let dataObject = {preOrders: null, nextLink: null}
-      console.log(res);
       let data = dataFormatter.deserialize(res.data)
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null
