@@ -14,6 +14,7 @@ import {
 
 import { useInput } from "../hooks/UtilityHooks";
 
+import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
 import Loading from "../components/Utility/Loading";
 
@@ -101,6 +102,7 @@ const OrderHistory = () => {
     fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
     toDate: format(new Date(), "MM/dd/yyyy"),
     distributor: null,
+    brand: null,
     program: "",
     sequenceNum: "",
     sortOrder: "asc",
@@ -180,6 +182,13 @@ const OrderHistory = () => {
     [currentFilters]
   );
 
+  const handleSetBrand = useCallback((value) => {
+    setCurrentFilters({
+      ...currentFilters,
+      brand: value ? value.id : null,
+    });
+  }, [currentFilters]);
+
   const handleSearch = (sortBy = undefined) => {
     let filterObject;
     if (sortBy.order) {
@@ -251,8 +260,14 @@ const OrderHistory = () => {
         </div>
         <br />
         <div className={classes.queryRow}>
-          <Grid container spacing={2}>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+          <Grid container spacing={2} justify="flex-end">
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   fullWidth
@@ -272,7 +287,13 @@ const OrderHistory = () => {
                 />
               </MuiPickersUtilsProvider>
             </Grid>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   fullWidth
@@ -292,7 +313,22 @@ const OrderHistory = () => {
                 />
               </MuiPickersUtilsProvider>
             </Grid>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
+              <BrandAutoComplete classes={classes} handleChange={handleSetBrand}/>
+            </Grid>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <AutoComplete
                 fullWidth
                 value={distributor}
@@ -315,7 +351,13 @@ const OrderHistory = () => {
                 )}
               />
             </Grid>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <TextField
                 className={classes.queryField}
                 color="secondary"
@@ -329,7 +371,13 @@ const OrderHistory = () => {
                 size="small"
               />
             </Grid>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <TextField
                 className={classes.queryField}
                 color="secondary"
@@ -343,7 +391,13 @@ const OrderHistory = () => {
                 size="small"
               />
             </Grid>
-            <Grid item md={2} sm={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
               <Button
                 fullWidth
                 className={classes.largeButton}
@@ -365,9 +419,7 @@ const OrderHistory = () => {
           scrollRef={scrollRef}
         />
         {isNextLoading && (
-          <div
-            style={{ width: "100%" }}
-          >
+          <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
         )}

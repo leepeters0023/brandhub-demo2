@@ -160,7 +160,7 @@ const RollupPreOrderDetail = ({ orderId }) => {
       />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleImage}>
-          <Tooltip title="Back to Quarterly Rollup" placement="bottom-start">
+          <Tooltip title="Quarterly Rollup Overview" placement="bottom-start">
             <IconButton component={Link} to="/rollup">
               <ArrowBackIcon fontSize="large" color="secondary" />
             </IconButton>
