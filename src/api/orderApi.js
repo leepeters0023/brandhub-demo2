@@ -46,7 +46,7 @@ export const fetchAllPreOrders = async () => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.preOrders = data;
-      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";
       response.data = dataObject;
     })

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { filter } from "../utility/utilityFunctions";
 
-export const useInput = (initialValue, secondaryFunc) => {
+export const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -13,13 +13,27 @@ export const useInput = (initialValue, secondaryFunc) => {
       value,
       onChange: (event) => {
         setValue(event.target.value);
-        if (secondaryFunc) {
-          secondaryFunc(event.target.value);
-        }
       },
     },
   };
 };
+
+export const useDetailedInput = (initialValue, secondaryFunc, type) => {
+  const [value, setValue] = useState(initialValue);
+
+  return {
+    value,
+    setValue,
+    reset: () => setValue(""),
+    bind: {
+      value,
+      onChange: (event) => {
+        setValue(event.target.value);
+        secondaryFunc(event.target.value, type);
+      }
+    }
+  }
+}
 
 export const useProgramSort = (programList, sortOption, filters) => {
   const [sortedList, setSortedList] = useState(programList);
