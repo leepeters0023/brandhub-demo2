@@ -3,48 +3,48 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import {fetchBrands} from "../../redux/slices/brandSlice";
+import {fetchUserDistributors} from "../../redux/slices/distributorSlice";
 
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-const BrandAutoComplete = ({ classes, handleChange, reset, setReset }) => {
+const DistributorAutoComplete = ({ classes, handleChange, reset, setReset }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const [brand, setBrand] = useState("");
+  const [distributor, setDistributor] = useState("");
 
-  const isLoading = useSelector((state) => state.brands.isLoading);
-  const options = useSelector((state) => state.brands.brandList)
+  const isLoading = useSelector((state) => state.distributors.isLoading);
+  const options = useSelector((state) => state.distributors.distributorList)
 
   const loading = open && isLoading
 
   useEffect(()=>{
-    if (brand.length >= 1) {
-      dispatch(fetchBrands(brand))
+    if (distributor.length >= 1) {
+      dispatch(fetchUserDistributors(distributor))
     }
-  }, [brand, dispatch])
+  }, [distributor, dispatch])
 
   useEffect(()=>{
     if (reset) {
-      setBrand("")
+      setDistributor("")
       setReset(false);
     }
-  }, [reset, setBrand, setReset])
+  }, [reset, setDistributor, setReset])
 
   return (
     <>
       <Autocomplete
         fullWidth
         className={classes.queryField}
-        id="brand-auto-complete"
+        id="distributor-auto-complete"
         open={open}
         onOpen={()=>setOpen(true)}
         onClose={()=>setOpen(false)}
-        inputValue={brand}
-        onInputChange={(_evt, value) => setBrand(value)}
-        onChange={(_evt, value) => handleChange(value, "brand")}
+        inputValue={distributor}
+        onInputChange={(_evt, value) => setDistributor(value)}
+        onChange={(_evt, value) => handleChange(value, "distributor")}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option)=>option.name}
         options={options}
@@ -52,7 +52,7 @@ const BrandAutoComplete = ({ classes, handleChange, reset, setReset }) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Brand"
+            label="Distributor"
             variant="outlined"
             size="small"
             InputProps={{
@@ -71,11 +71,11 @@ const BrandAutoComplete = ({ classes, handleChange, reset, setReset }) => {
   )
 }
 
-BrandAutoComplete.propTypes = {
+DistributorAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
 }
 
-export default BrandAutoComplete;
+export default DistributorAutoComplete;

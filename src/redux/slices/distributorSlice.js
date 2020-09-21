@@ -55,10 +55,10 @@ export const {
 
 export default distributorSlice.reducer;
 
-export const fetchUserDistributors = () => async (dispatch) => {
+export const fetchUserDistributors = (name) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let distributors = await fetchDistributors();
+    let distributors = await fetchDistributors(name);
     if (distributors.error) {
       throw distributors.error;
     }

@@ -27,6 +27,7 @@ let initialState = {
   email: "",
   role: "",
   territories: [],
+  managedUsers: [],
   currentTerritory: "",
   logInError: null,
   error: null,
@@ -67,21 +68,14 @@ const userSlice = createSlice({
     },
     getUserSuccess(state, action) {
       const { user } = action.payload;
-      let userTerritories;
-      if (user.included) {
-        userTerritories = user.included.map((data) => {
-          return { name: data.attributes.name, id: data.id };
-        });
-      } else userTerritories = [{name: "National", id: null}];
-      state.firstName = user.data.attributes.name.split(" ")[0];
-      state.lastName = user.data.attributes.name.split(" ")[1];
-      state.initials = `${user.data.attributes.name.split(" ")[0][0]}${
-        user.data.attributes.name.split(" ")[1][0]
-      }`;
-      state.email = user.data.attributes.email;
-      state.role = user.data.attributes.role;
-      state.territories = userTerritories;
-      state.currentTerritory = userTerritories[0].id;
+      state.firstName = user.firstName;
+      state.lastName = user.lastName;
+      state.initials = user.initials;
+      state.email = user.email;
+      state.role = user.role;
+      state.territories = [...user.territories];
+      state.managedUsers = user.managedUsers.length > 0 ? [...user.managedUsers] : [];
+      state.currentTerritory = user.currentTerritory;
       state.isLoading = false;
       state.loggedIn = true;
       state.logInError = null;
@@ -130,11 +124,31 @@ export const fetchUser = () => async (dispatch) => {
     }
     window.localStorage.setItem(
       "brandhub-role",
-      user.data.data.attributes.role
+      user.data.role
     );
-    dispatch(getUserSuccess({ user: user.data }));
+    let currentUser = {
+      firstName: user.data.name.split(" ")[0],
+      lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
+      initials: `${user.data.name.split(" ")[0][0]}${
+        user.data.name.split(" ")[user.data.name.split(" ").length - 1][0]
+      }`,
+      email: user.data.email,
+      role: user.data.role,
+      territories: user.data.territories.map((terr) => ({
+        name: terr.name, id: terr.id
+      })),
+      managedUsers: user.data["managed-users"].length > 0 ? user.data["managed-users"].map((u) => ({
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        id: u.id
+      })) : [],
+      currentTerritory: user.data.territories[0].id
+    };
+    dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));
+    console.log(err)
   }
 };
 

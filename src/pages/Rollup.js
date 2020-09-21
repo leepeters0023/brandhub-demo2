@@ -57,6 +57,7 @@ const Rollup = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [reset, setReset] = useCallback(useState(false));
   const [currentFilters, setCurrentFilters] = useState({
     user: "",
     program: "",
@@ -132,10 +133,11 @@ const Rollup = () => {
     dispatch(fetchFilteredPreOrders(filterObject));
   };
 
-  const handleClearFilters = (filterObject) => {
+  const handleClearFilters = () => {
     resetProgram();
     resetUser();
     resetSequenceNum();
+    setReset(true);
     dispatch(clearBrands());
     dispatch(
       fetchFilteredPreOrders({
@@ -226,6 +228,8 @@ const Rollup = () => {
               <BrandAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
               />
             </Grid>
             <Grid item md={3} sm={4} className={classes.gridItemContainer}>

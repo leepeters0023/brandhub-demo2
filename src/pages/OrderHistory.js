@@ -6,21 +6,21 @@ import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
-import { fetchUserDistributors } from "../redux/slices/distributorSlice";
 import {
   fetchFilteredOrderHistory,
   fetchNextOrderHistory,
 } from "../redux/slices/orderHistorySlice";
+import { clearBrands } from "../redux/slices/brandSlice";
 
 import { useDetailedInput } from "../hooks/UtilityHooks";
 
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
+import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
-import Loading from "../components/Utility/Loading";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import AutoComplete from "@material-ui/lab/Autocomplete";
+//import AutoComplete from "@material-ui/lab/Autocomplete";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
@@ -98,6 +98,7 @@ const OrderHistory = () => {
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
+  const [reset, setReset] = useCallback(useState(false));
   const [currentFilters, setCurrentFilters] = useState({
     fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
     toDate: format(new Date(), "MM/dd/yyyy"),
@@ -108,8 +109,6 @@ const OrderHistory = () => {
     sortOrder: "asc",
     sortOrderBy: "orderDate",
   });
-
-  const [distributor, setDistributor] = useState(null);
 
   const handleFilters = useCallback(
     (value, type) => {
@@ -133,23 +132,19 @@ const OrderHistory = () => {
     [currentFilters]
   );
 
-  const { value: sequenceNumber, bind: bindSequenceNumber } = useDetailedInput(
+  const { value: sequenceNumber, bind: bindSequenceNumber, reset: resetSequenceNumber } = useDetailedInput(
     "",
     handleFilters,
     "sequenceNum"
   );
-  const { value: program, bind: bindProgram } = useDetailedInput(
+  const { value: program, bind: bindProgram, reset: resetProgram } = useDetailedInput(
     "",
     handleFilters,
     "program"
   );
 
-  const isDistLoading = useSelector((state) => state.distributors.isLoading);
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);
-  const currentDistributors = useSelector(
-    (state) => state.distributors.distributorList
-  );
   const currentUserRole = useSelector((state) => state.user.role);
 
   const handleSearch = (sortBy = undefined) => {
@@ -169,6 +164,34 @@ const OrderHistory = () => {
     dispatch(fetchFilteredOrderHistory(filterObject));
   };
 
+  const handleClearFilters = () => {
+    resetProgram();
+    resetSequenceNumber();
+    setReset(true);
+    //setDistributor(null);
+    dispatch(clearBrands());
+    setCurrentFilters({
+      fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+      toDate: format(new Date(), "MM/dd/yyyy"),
+      distributor: null,
+      brand: null,
+      program: "",
+      sequenceNum: "",
+      sortOrder: "asc",
+      sortOrderBy: "orderDate",
+    })
+    dispatch(fetchFilteredOrderHistory({
+      fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+      toDate: format(new Date(), "MM/dd/yyyy"),
+      distributor: null,
+      brand: null,
+      program: "",
+      sequenceNum: "",
+      sortOrder: "asc",
+      sortOrderBy: "orderDate",
+    }))
+  }
+
   const handleSort = (sortObject) => {
     setCurrentFilters({
       ...currentFilters,
@@ -179,21 +202,11 @@ const OrderHistory = () => {
   };
 
   useEffect(() => {
-    if (currentDistributors.length === 0 && currentUserRole.length > 0) {
-      dispatch(fetchUserDistributors());
-    }
-  }, [currentDistributors, dispatch, currentUserRole]);
-
-  useEffect(() => {
     if (currentOrders.length === 0 && currentUserRole.length > 0) {
       dispatch(fetchFilteredOrderHistory(currentFilters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (isDistLoading || currentDistributors.length === 0) {
-    return <Loading />;
-  }
 
   return (
     <>
@@ -286,6 +299,8 @@ const OrderHistory = () => {
               <BrandAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
               />
             </Grid>
             <Grid
@@ -295,26 +310,11 @@ const OrderHistory = () => {
               sm={4}
               className={classes.gridItemContainer}
             >
-              <AutoComplete
-                fullWidth
-                value={distributor}
-                className={classes.queryField}
-                onChange={(_evt, value) => {
-                  setDistributor(value)
-                  handleFilters(value, "distributor");
-                }}
-                id="distributor"
-                options={currentDistributors}
-                getOptionLabel={(dist) => dist.name}
-                renderInput={(params) => (
-                  <TextField
-                    color="secondary"
-                    {...params}
-                    label="Distributor"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
+              <DistributorAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
               />
             </Grid>
             <Grid
@@ -372,6 +372,23 @@ const OrderHistory = () => {
                 onClick={handleSearch}
               >
                 SEARCH
+              </Button>
+            </Grid>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              className={classes.gridItemContainer}
+            >
+              <Button
+                fullWidth
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={handleClearFilters}
+              >
+                CLEAR FILTERS
               </Button>
             </Grid>
           </Grid>

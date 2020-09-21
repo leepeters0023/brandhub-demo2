@@ -1,4 +1,8 @@
 import axios from "axios";
+import Jsona from "jsona";
+
+const dataFormatter = new Jsona();
+
 
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
@@ -24,8 +28,9 @@ export const getUser = async () => {
   await axios
     .get(`/api/current-user`)
     .then((res) => {
+      let data = dataFormatter.deserialize(res.data)
       response.status = "ok";
-      response.data = res.data;
+      response.data = data;
     })
     .catch((err) => {
       response.status = "error";
