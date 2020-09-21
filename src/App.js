@@ -19,6 +19,7 @@ import { clearOnDemandOrder } from "./redux/slices/onDemandOrderSlice";
 import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
+import { resetPreOrderRollup } from "./redux/slices/rollupSlice";
 
 import Approvals from "./pages/Approvals";
 //import Calendar from "./pages/Calendar";
@@ -92,6 +93,7 @@ const App = () => {
     dispatch(resetItems());
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());
+    dispatch(resetPreOrderRollup());
   };
 
   useEffect(() => {

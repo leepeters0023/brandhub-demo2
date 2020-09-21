@@ -3,10 +3,10 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
-export const fetchDistributors = async () => {
+export const fetchDistributors = async (name) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get("/api/distributors")
+    .get(`/api/distributors?filter[name]=${name}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
