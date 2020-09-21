@@ -37,7 +37,7 @@ const BrandAutoComplete = ({ classes, handleChange }) => {
         onClose={()=>setOpen(false)}
         inputValue={brand}
         onInputChange={(_evt, value) => setBrand(value)}
-        onChange={(_evt, value) => handleChange(value)}
+        onChange={(_evt, value) => handleChange(value, "brand")}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option)=>option.name}
         options={options}

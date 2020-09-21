@@ -12,7 +12,7 @@ import {
   fetchNextOrderHistory,
 } from "../redux/slices/orderHistorySlice";
 
-import { useInput } from "../hooks/UtilityHooks";
+import { useDetailedInput } from "../hooks/UtilityHooks";
 
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
@@ -109,37 +109,39 @@ const OrderHistory = () => {
     sortOrderBy: "orderDate",
   });
 
-  const handleProgram = useCallback(
-    (value) => {
-      setCurrentFilters({
-        ...currentFilters,
-        program: value,
-      });
-    },
-    [currentFilters]
-  );
-
-  const handleSequence = useCallback(
-    (value) => {
-      setCurrentFilters({
-        ...currentFilters,
-        sequenceNum: value,
-      });
-    },
-    [currentFilters]
-  );
-
   const [distributor, setDistributor] = useState(null);
-  const { value: sequenceNumber, bind: bindSequenceNumber } = useInput(
+
+  const handleFilters = useCallback(
+    (value, type) => {
+      if (type === "program" || type === "sequenceNum") {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: value,
+        });
+      } else if (type === "fromDate" || type === "toDate") {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: format(value, "MM/dd/yyyy"),
+        });
+      } else if (type === "distributor" || type === "brand") {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: value ? value.id : null,
+        });
+      }
+    },
+    [currentFilters]
+  );
+
+  const { value: sequenceNumber, bind: bindSequenceNumber } = useDetailedInput(
     "",
-    handleSequence
+    handleFilters,
+    "sequenceNum"
   );
-  const { value: program, bind: bindProgram } = useInput("", handleProgram);
-  const [selectedFromDate, setSelectedFromDate] = useState(
-    subDays(new Date(), 7).toLocaleDateString()
-  );
-  const [selectedToDate, setSelectedToDate] = useState(
-    new Date().toLocaleDateString()
+  const { value: program, bind: bindProgram } = useDetailedInput(
+    "",
+    handleFilters,
+    "program"
   );
 
   const isDistLoading = useSelector((state) => state.distributors.isLoading);
@@ -149,45 +151,6 @@ const OrderHistory = () => {
     (state) => state.distributors.distributorList
   );
   const currentUserRole = useSelector((state) => state.user.role);
-
-  const handleFromDateChange = useCallback(
-    (date) => {
-      setSelectedFromDate(date);
-      setCurrentFilters({
-        ...currentFilters,
-        fromDate: format(date, "MM/dd/yyyy"),
-      });
-    },
-    [currentFilters]
-  );
-
-  const handleToDateChange = useCallback(
-    (date) => {
-      setSelectedToDate(date);
-      setCurrentFilters({
-        ...currentFilters,
-        toDate: format(date, "MM/dd/yyyy"),
-      });
-    },
-    [currentFilters]
-  );
-
-  const handleSetDistributor = useCallback(
-    (value) => {
-      setCurrentFilters({
-        ...currentFilters,
-        distributor: value ? value.id : null,
-      });
-    },
-    [currentFilters]
-  );
-
-  const handleSetBrand = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      brand: value ? value.id : null,
-    });
-  }, [currentFilters]);
 
   const handleSearch = (sortBy = undefined) => {
     let filterObject;
@@ -279,8 +242,8 @@ const OrderHistory = () => {
                   margin="normal"
                   id="fromDate"
                   label="Order From Date"
-                  value={selectedFromDate}
-                  onChange={handleFromDateChange}
+                  value={currentFilters.fromDate}
+                  onChange={(value) => handleFilters(value, "fromDate")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -305,8 +268,8 @@ const OrderHistory = () => {
                   margin="normal"
                   id="toDate"
                   label="Order To Date"
-                  value={selectedToDate}
-                  onChange={handleToDateChange}
+                  value={currentFilters.toDate}
+                  onChange={(value) => handleFilters(value, "toDate")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -320,7 +283,10 @@ const OrderHistory = () => {
               sm={4}
               className={classes.gridItemContainer}
             >
-              <BrandAutoComplete classes={classes} handleChange={handleSetBrand}/>
+              <BrandAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+              />
             </Grid>
             <Grid
               item
@@ -333,9 +299,9 @@ const OrderHistory = () => {
                 fullWidth
                 value={distributor}
                 className={classes.queryField}
-                onChange={(event, value) => {
-                  setDistributor(value);
-                  handleSetDistributor(value);
+                onChange={(_evt, value) => {
+                  setDistributor(value)
+                  handleFilters(value, "distributor");
                 }}
                 id="distributor"
                 options={currentDistributors}

@@ -8,9 +8,12 @@ import {
   fetchNextFilteredPreOrders,
 } from "../redux/slices/rollupSlice";
 
-import { useInput } from "../hooks/UtilityHooks";
+import { clearBrands } from "../redux/slices/brandSlice";
+
+import { useDetailedInput } from "../hooks/UtilityHooks";
 
 import RollupOverviewTable from "../components/Reports/RollupOverviewTable";
+import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -57,50 +60,59 @@ const Rollup = () => {
   const [currentFilters, setCurrentFilters] = useState({
     user: "",
     program: "",
+    brand: null,
     sequenceNum: "",
     sortOrder: "asc",
-    sortOrderBy: "user"
-  })
+    sortOrderBy: "user",
+  });
 
-  const handleUser = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      user: value
-    })
-  }, [currentFilters])
+  const handleFilters = useCallback(
+    (value, type) => {
+      if (type === "brand") {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: value ? value.id : null,
+        });
+      } else {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: value,
+        });
+      }
+    },
+    [currentFilters]
+  );
 
-  const handleProgram = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      program: value
-    })
-  }, [currentFilters])
-  
-  const handleSequence = useCallback((value) => {
-    setCurrentFilters({
-      ...currentFilters,
-      sequenceNum: value
-    })
-  }, [currentFilters])
-
-  const { value: user, bind: bindUser } = useInput("", handleUser);
-  const { value: program, bind: bindProgram } = useInput("", handleProgram);
-  const { value: sequenceNum, bind: bindSequenceNum } = useInput("", handleSequence);
+  const { value: user, bind: bindUser, reset: resetUser } = useDetailedInput(
+    "",
+    handleFilters,
+    "user"
+  );
+  const {
+    value: program,
+    bind: bindProgram,
+    reset: resetProgram,
+  } = useDetailedInput("", handleFilters, "program");
+  const {
+    value: sequenceNum,
+    bind: bindSequenceNum,
+    reset: resetSequenceNum,
+  } = useDetailedInput("", handleFilters, "sequenceNum");
 
   const currentPreOrders = useSelector((state) => state.rollup.preOrders);
   const isPreOrdersLoading = useSelector((state) => state.rollup.isLoading);
-  const nextLink = useSelector((state) => state.rollup.nextLink)
+  const nextLink = useSelector((state) => state.rollup.nextLink);
   const isNextPreOrdersLoading = useSelector(
     (state) => state.rollup.isNextLoading
   );
   const currentUserRoll = useSelector((state) => state.user.role);
-  
+
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
       dispatch(fetchNextFilteredPreOrders(nextLink));
     }
   };
-  
+
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const handleSearch = (sortBy = undefined) => {
@@ -118,6 +130,23 @@ const Rollup = () => {
     }
     console.log("searching");
     dispatch(fetchFilteredPreOrders(filterObject));
+  };
+
+  const handleClearFilters = (filterObject) => {
+    resetProgram();
+    resetUser();
+    resetSequenceNum();
+    dispatch(clearBrands());
+    dispatch(
+      fetchFilteredPreOrders({
+        user: "",
+        program: "",
+        brand: null,
+        sequenceNum: "",
+        sortOrder: "asc",
+        sortOrderBy: "user",
+      })
+    );
   };
 
   const handleSort = (sortObject) => {
@@ -166,8 +195,8 @@ const Rollup = () => {
         </div>
         <br />
         <div className={classes.queryRow}>
-          <Grid container spacing={2}>
-            <Grid item md={3} sm={3} className={classes.gridItemContainer}>
+          <Grid container spacing={2} justify="flex-end">
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
               <TextField
                 color="secondary"
                 fullWidth
@@ -180,7 +209,7 @@ const Rollup = () => {
                 {...bindUser}
               />
             </Grid>
-            <Grid item md={3} sm={3} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
               <TextField
                 color="secondary"
                 fullWidth
@@ -193,7 +222,13 @@ const Rollup = () => {
                 {...bindProgram}
               />
             </Grid>
-            <Grid item md={3} sm={3} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+              <BrandAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+              />
+            </Grid>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
               <TextField
                 color="secondary"
                 fullWidth
@@ -206,7 +241,7 @@ const Rollup = () => {
                 {...bindSequenceNum}
               />
             </Grid>
-            <Grid item md={3} sm={3} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
               <Button
                 fullWidth
                 className={classes.largeButton}
@@ -215,6 +250,17 @@ const Rollup = () => {
                 onClick={handleSearch}
               >
                 SEARCH
+              </Button>
+            </Grid>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+              <Button
+                fullWidth
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={handleClearFilters}
+              >
+                CLEAR FILTERS
               </Button>
             </Grid>
           </Grid>
