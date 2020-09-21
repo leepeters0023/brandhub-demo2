@@ -1,7 +1,5 @@
 import React from "react";
 
-import GalloLogo from "../assets/gallologo.png";
-
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -17,25 +15,20 @@ const Help = () => {
   return (
     <>
       <Container className={classes.mainWrapper}>
-        <div className={classes.titleImage}>
-          <img className={classes.logo} src={GalloLogo} alt="Gallo" />
-          <Typography className={classes.titleText} variant="h5">
-            Help
-          </Typography>
-        </div>
-        <br />
-        <br />
+        <div style={{height: "70vh", width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+
         <Grid container>
           <Grid item sm={2} xs={1} />
-          <Grid item sm={8} xs={10}>
+          <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
             <Typography className={classes.titleText} variant="h5">
               Brandhub Help
             </Typography>
-            <br/>
+            <br />
             <Typography className={classes.bodyText}>
-              If you have any immediate questions, please contact Select Design. We are happy to help!
+              If you have any immediate questions, please contact Select Design.
+              We are happy to help!
             </Typography>
-            <br/>
+            <br />
             <Typography className={classes.headerText}>
               General Contact Information
             </Typography>
@@ -51,8 +44,7 @@ const Help = () => {
           </Grid>
           <Grid item sm={2} xs={1} />
         </Grid>
-        <br/>
-        <br/>
+        </div>
       </Container>
     </>
   );
