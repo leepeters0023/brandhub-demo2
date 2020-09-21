@@ -21,7 +21,6 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 
 import Approvals from "./pages/Approvals";
-import Budget from "./pages/Budget";
 //import Calendar from "./pages/Calendar";
 import ContactsByState from "./pages/ContactsByState";
 import Coupons from "./pages/Coupons";
@@ -255,12 +254,6 @@ const App = () => {
             role
           )}
           {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
-          {handleAuth(
-            <Budget path="/budget" />,
-            "/budget",
-            ["field1", "field2", "super"],
-            role
-          )}
           {handleAuth(
             <Approvals path="/approval" />,
             "/approval",

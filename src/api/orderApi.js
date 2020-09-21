@@ -3,14 +3,8 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
-//mock fetch
-const timeout = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 export const fetchOrdersByProgram = async (program) => {
   const response = { status: "", error: null, data: null };
-  //await timeout(1000);
   await axios
     .get(`/api/pre-orders?filter[program_id]=${program}`)
     .then((res) => {
@@ -29,7 +23,6 @@ export const fetchOrdersByProgram = async (program) => {
 
 export const fetchPreOrderById = async (id) => {
   const response = { status: "", error: null, data: null };
-  //await timeout(1000);
   await axios
     .get(`/api/pre-orders/${id}`)
     .then((res) => {
@@ -128,7 +121,6 @@ export const patchOrderItem = async (id, qty) => {
       "Content-Type": "application/vnd.api+json"
     }
   }
-  //await timeout(500)
   await axios
     .patch(`/api/order-items/${id}`, {
       data: {
@@ -158,8 +150,6 @@ export const addOrderItem = async (id, item, qty) => {
   //     "Content-Type": "application/vnd.api+json"
   //   }
   // }
-
-  await timeout(1000)
   response.status = "ok"
   return response;
 }
