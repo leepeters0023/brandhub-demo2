@@ -9,6 +9,7 @@ import onDemandOrderReducer from "./slices/onDemandOrderSlice";
 import patchOrderReducer from "./slices/patchOrderSlice";
 import itemReducer from "./slices/itemSlice";
 import distributorReducer from "./slices/distributorSlice";
+import brandReducer from "./slices/brandSlice";
 import rollupReducer from "./slices/rollupSlice";
 
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   patchOrder: patchOrderReducer,
   items: itemReducer,
   distributors: distributorReducer,
+  brands: brandReducer,
   rollup: rollupReducer,
 })
 
