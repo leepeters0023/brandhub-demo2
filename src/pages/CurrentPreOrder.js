@@ -131,6 +131,7 @@ const CurrentPreOrder = ({ userType }) => {
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
 
+  const currentUserId = useSelector((state) => state.user.id);
   const isLoading = useSelector((state) => state.programTable.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
@@ -173,8 +174,7 @@ const CurrentPreOrder = ({ userType }) => {
     handleConfirmModal(false);
   };
 
-  const handleComplete = () => {
-    dispatch(setProgStatus(program, "complete", preOrderId));
+  const handleSave = () => {
     dispatch(setPreOrderNotes(preOrderId, preOrderNote));
   };
 
@@ -218,8 +218,8 @@ const CurrentPreOrder = ({ userType }) => {
 
   useEffect(() => {
     if (program) {
-      dispatch(fetchProgramOrders(program));
-      dispatch(fetchPreOrders("summary"));
+      dispatch(fetchPreOrders(currentUserId, "summary"));
+      dispatch(fetchProgramOrders(program, currentUserId));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
         setProgramName({
@@ -419,7 +419,7 @@ const CurrentPreOrder = ({ userType }) => {
                 color="secondary"
                 variant="contained"
                 style={{ marginRight: "20px" }}
-                onClick={handleComplete}
+                onClick={handleSave}
               >
                 SAVE ORDER
               </Button>

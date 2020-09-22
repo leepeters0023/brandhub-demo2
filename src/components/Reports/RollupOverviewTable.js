@@ -19,7 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const headCells = [
   { id: "user", disablePadding: false, label: "User", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
-  { id: "state", disablePadding: false, label: "State", sort: true },
+  { id: "state", disablePadding: false, label: "State", sort: false },
   {
     id: "totalItems",
     disablePadding: false,
@@ -42,6 +42,7 @@ const headCells = [
     sort: true,
   },
   { id: "dueDate", disablePadding: false, label: "Order Due", sort: true },
+  { id: "status", disablePadding: false, label: "Status", sort: false }
 ];
 
 const EnhancedTableHead = (props) => {
@@ -132,7 +133,7 @@ const RollupOverViewTable = ({
   const classes = useStyles();
 
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("orderDate");
+  const [orderBy, setOrderBy] = useState("user");
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -141,7 +142,17 @@ const RollupOverViewTable = ({
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
-  //TODO row click to more details
+  const statusConverter = (status) => {
+    if (status === "inactive") {
+      return "Not Started";
+    } else if (status === "in-progress") {
+      return "In Progress";
+    } else if (status === "submitted") {
+      return "Order Submitted";
+    } else {
+      return "Error";
+    }
+  };
 
   return (
     <>
@@ -160,7 +171,7 @@ const RollupOverViewTable = ({
           <TableBody>
             {!isRollupLoading && rollupData.length === 0 && (
               <TableRow>
-                <TableCell align="left" colSpan={11}>
+                <TableCell align="left" colSpan={12}>
                   <Typography className={classes.headerText}>
                     {`There is currently no rollup data to display..`}
                   </Typography>
@@ -186,6 +197,7 @@ const RollupOverViewTable = ({
                   <TableCell align="left">{row.budget}</TableCell>
                   <TableCell align="left">{row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : row.orderDate}</TableCell>
                   <TableCell align="left">{format(new Date(row.dueDate), "MM/dd/yyyy")}</TableCell>
+                  <TableCell align="left">{statusConverter(row.status)}</TableCell>
                 </TableRow>
               ))}
             {isRollupLoading && (

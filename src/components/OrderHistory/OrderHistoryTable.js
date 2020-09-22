@@ -28,7 +28,6 @@ const headCells = [
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
-  { id: "tracking", disablePadding: false, label: "Tracking", sort: false },
   {
     id: "totalItems",
     disablePadding: false,
@@ -193,7 +192,6 @@ const OrderHistoryTable = ({
                     {format(new Date(row.orderDate), "MM/dd/yyyy")}
                   </TableCell>
                   <TableCell align="left">{row.shipDate}</TableCell>
-                  <TableCell align="left">{row.trackingNum}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {row.estTotal !== "---"

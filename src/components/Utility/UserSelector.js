@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 // import PropTypes from "prop-types";
 
 import FormControl from "@material-ui/core/FormControl";
@@ -8,14 +8,28 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
 const UserSelector = () => {
+  const [currentUsers, updateCurrentUsers] = useState([]);
+  const [user, updateUser] = useState("");
 
-  const fieldUsers = ["Field User 1", "Field User 2", "Field User 3"];
-
-  const [user, updateUser] = useState(fieldUsers[0]);
+  const fieldUsers = useSelector((state) => state.user.managedUsers);
+  const currentUser = useSelector((state) => state.user);
 
   const handleChangeSelect = (evt) => {
     updateUser(evt.target.value);
   };
+
+  useEffect(() => {
+    if (currentUsers.length === 0 && fieldUsers && currentUser) {
+      let userArray = fieldUsers.concat([
+        {
+          name: `${currentUser.firstName} ${currentUser.lastName}`,
+          id: currentUser.id,
+        },
+      ]);
+      updateCurrentUsers(userArray);
+      updateUser(userArray[userArray.length - 1].id);
+    }
+  }, [currentUsers, currentUser, fieldUsers]);
 
   return (
     <>
@@ -27,9 +41,9 @@ const UserSelector = () => {
           value={user}
           onChange={handleChangeSelect}
         >
-          {fieldUsers.map((user, index) => (
-            <MenuItem value={user} key={index}>
-              <Typography variant="body2">{user}</Typography>
+          {currentUsers.map((user, index) => (
+            <MenuItem value={user.id} key={index}>
+              <Typography variant="body2">{user.name}</Typography>
             </MenuItem>
           ))}
         </Select>

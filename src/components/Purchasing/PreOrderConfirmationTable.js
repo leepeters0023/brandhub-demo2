@@ -87,6 +87,11 @@ const CollapseRow = ({ classes, rowData, items }) => {
                           Act. Total
                         </Typography>
                       </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Tracking
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -117,6 +122,9 @@ const CollapseRow = ({ classes, rowData, items }) => {
                         </TableCell>
                         <TableCell align="center" >
                           {`${formatMoney(item.estTotal)}`}
+                        </TableCell>
+                        <TableCell align="center" >
+                          ---
                         </TableCell>
                         <TableCell align="center" >
                           ---

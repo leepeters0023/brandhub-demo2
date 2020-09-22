@@ -14,6 +14,8 @@ import { useDetailedInput } from "../hooks/UtilityHooks";
 
 import RollupOverviewTable from "../components/Reports/RollupOverviewTable";
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
+import UserAutoComplete from "../components/Utility/UserAutoComplete";
+import StatusSelector from "../components/Utility/StatusSelector";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -57,19 +59,21 @@ const Rollup = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [status, setStatus] = useCallback(useState("submitted"));
   const [reset, setReset] = useCallback(useState(false));
   const [currentFilters, setCurrentFilters] = useState({
-    user: "",
+    user: null,
     program: "",
     brand: null,
     sequenceNum: "",
+    status: "submitted",
     sortOrder: "asc",
     sortOrderBy: "user",
   });
 
   const handleFilters = useCallback(
     (value, type) => {
-      if (type === "brand") {
+      if (type === "brand" || type === "user") {
         setCurrentFilters({
           ...currentFilters,
           [`${type}`]: value ? value.id : null,
@@ -84,11 +88,6 @@ const Rollup = () => {
     [currentFilters]
   );
 
-  const { value: user, bind: bindUser, reset: resetUser } = useDetailedInput(
-    "",
-    handleFilters,
-    "user"
-  );
   const {
     value: program,
     bind: bindProgram,
@@ -135,9 +134,9 @@ const Rollup = () => {
 
   const handleClearFilters = () => {
     resetProgram();
-    resetUser();
     resetSequenceNum();
     setReset(true);
+    setStatus("submitted");
     dispatch(clearBrands());
     dispatch(
       fetchFilteredPreOrders({
@@ -145,6 +144,7 @@ const Rollup = () => {
         program: "",
         brand: null,
         sequenceNum: "",
+        status: "submitted",
         sortOrder: "asc",
         sortOrderBy: "user",
       })
@@ -162,7 +162,7 @@ const Rollup = () => {
 
   useEffect(() => {
     if (currentPreOrders.length === 0 && currentUserRoll.length > 0) {
-      dispatch(fetchFilteredPreOrders());
+      dispatch(fetchFilteredPreOrders(currentFilters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -199,16 +199,11 @@ const Rollup = () => {
         <div className={classes.queryRow}>
           <Grid container spacing={2} justify="flex-end">
             <Grid item md={3} sm={4} className={classes.gridItemContainer}>
-              <TextField
-                color="secondary"
-                fullWidth
-                name="user"
-                type="text"
-                label="User"
-                variant="outlined"
-                size="small"
-                value={user}
-                {...bindUser}
+              <UserAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
               />
             </Grid>
             <Grid item md={3} sm={4} className={classes.gridItemContainer}>
@@ -243,6 +238,14 @@ const Rollup = () => {
                 size="small"
                 value={sequenceNum}
                 {...bindSequenceNum}
+              />
+            </Grid>
+            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+              <StatusSelector
+                handleStatus={handleFilters}
+                status={status}
+                setStatus={setStatus}
+                classes={classes}
               />
             </Grid>
             <Grid item md={3} sm={4} className={classes.gridItemContainer}>

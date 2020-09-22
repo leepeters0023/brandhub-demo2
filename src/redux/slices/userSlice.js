@@ -21,6 +21,7 @@ let initialState = {
   loginIsLoading: false,
   isLoading: false,
   loggedIn: false,
+  id: "",
   firstName: "",
   lastName: "",
   initials: "",
@@ -68,6 +69,7 @@ const userSlice = createSlice({
     },
     getUserSuccess(state, action) {
       const { user } = action.payload;
+      state.id = user.id;
       state.firstName = user.firstName;
       state.lastName = user.lastName;
       state.initials = user.initials;
@@ -87,12 +89,14 @@ const userSlice = createSlice({
     },
     removeUser: (state) => {
       state.isLoading = false;
+      state.id = "";
       state.firstName = "";
       state.lastName = "";
       state.initials = "";
       state.email = "";
       state.role = "";
       state.territories = [];
+      state.managedUsers = [];
       state.error = null;
       state.logInError = null;
       state.loggedIn = false;
@@ -127,6 +131,7 @@ export const fetchUser = () => async (dispatch) => {
       user.data.role
     );
     let currentUser = {
+      id: user.data.id,
       firstName: user.data.name.split(" ")[0],
       lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
       initials: `${user.data.name.split(" ")[0][0]}${
