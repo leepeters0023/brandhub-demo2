@@ -3,13 +3,12 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
-export const fetchOrdersByProgram = async (program) => {
+export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/pre-orders?filter[program_id]=${program}`)
+    .get(`/api/pre-orders?filter[program_id]=${program}&filter[user-id]=${userId}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -38,10 +37,10 @@ export const fetchPreOrderById = async (id) => {
   return response;
 };
 
-export const fetchAllPreOrders = async () => {
+export const fetchAllPreOrders = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get("/api/pre-orders")
+    .get(`/api/pre-orders?filter[user-id]=${id}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
@@ -58,7 +57,6 @@ export const fetchAllPreOrders = async () => {
   return response;
 };
 
-//TODO switch rollup slice to use filtered pre orders!
 export const fetchAllFilteredPreOrders = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
@@ -68,12 +66,19 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     orderDate: "order-date",
     dueDate: "due-date",
   };
+  let statusString = filterObject.status !== "all"
+    ? `filter[status]=${filterObject.status}`
+    : "filter[status]!=approved";
   let userString = filterObject.user
-    ? `&filter[user-name]=${filterObject.user}`
+    ? `&filter[user-id]=${filterObject.user}`
     : "";
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program}`
+      : "";
+  let brandString =
+    filterObject.brand
+      ? `&filter[brand-id]=${filterObject.brand}`
       : "";
   let seqString =
     filterObject.sequenceNum.length > 0
@@ -83,9 +88,11 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString =
-    "/api/pre-orders?filter[status]=submitted" +
+    "/api/pre-orders?" +
+    statusString +
     userString +
     progString +
+    brandString +
     seqString +
     sortString;
 

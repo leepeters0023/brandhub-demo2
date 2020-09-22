@@ -202,7 +202,6 @@ export const fetchOrder = (id) => async (dispatch) => {
       totalActCost: "---",
       note: order.data.notes
     }
-    //TODO make sure this is all correct when we actually have items!
     let formattedItems = order.data["order-items"].map((item) => ({
       itemNumber: item.item["item-number"],
       imgUrl: item.item["img-url"],

@@ -9,7 +9,7 @@ import OrdersNav from "./OrdersNav";
 import MoreNav from "./MoreNav";
 import PreOrderNav from "./PreOrderNav";
 import RegionSelector from "../Utility/RegionSelector";
-import UserSelector from "../Utility/UserSelector";
+//import UserSelector from "../Utility/UserSelector";
 
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -115,7 +115,7 @@ const ScrollNav = (props) => {
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>
             <div className={classes.navBreak}>
-              {(role === "super" || role === "field2") && <UserSelector />}
+              {/* {(role === "super" || role === "field2") && <UserSelector />} */}
               {territories.length > 1 && <RegionSelector />}
               <UserNav
                 initials={initials}

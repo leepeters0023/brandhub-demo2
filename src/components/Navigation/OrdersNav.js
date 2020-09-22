@@ -28,6 +28,7 @@ const OrdersNav = ({ setSelected, selected }) => {
   const [anchorEl, setAnchorEl] = useCallback(useState(null));
   const [placeOrderOpen, setPlaceOrderOpen] = useCallback(useState(false));
   const [openOrdersOpen, setOpenOrdersOpen] = useCallback(useState(false));
+  const [orderManagementOpen, setOrderManagementOpen] = useCallback(useState(false));
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -44,6 +45,10 @@ const OrdersNav = ({ setSelected, selected }) => {
   const handleOpenOrders = () => {
     setOpenOrdersOpen(!openOrdersOpen);
   };
+
+  const handleOrderManagement = () => {
+    setOrderManagementOpen(!orderManagementOpen);
+  }
 
   return (
     <>
@@ -90,6 +95,9 @@ const OrdersNav = ({ setSelected, selected }) => {
                   if (openOrdersOpen) {
                     handleOpenOrders();
                   }
+                  if (orderManagementOpen) {
+                    handleOrderManagement();
+                  }
                 }}
                 component={Link}
                 to="/orders/items/instock"
@@ -105,6 +113,9 @@ const OrdersNav = ({ setSelected, selected }) => {
                   handlePlaceOrder();
                   if (openOrdersOpen) {
                     handleOpenOrders();
+                  }
+                  if (orderManagementOpen) {
+                    handleOrderManagement();
                   }
                 }}
                 component={Link}
@@ -130,6 +141,9 @@ const OrdersNav = ({ setSelected, selected }) => {
                   if (placeOrderOpen) {
                     handlePlaceOrder();
                   }
+                  if (orderManagementOpen) {
+                    handleOrderManagement();
+                  }
                 }}
                 component={Link}
                 to="/orders/open/instock"
@@ -146,12 +160,61 @@ const OrdersNav = ({ setSelected, selected }) => {
                   if (placeOrderOpen) {
                     handlePlaceOrder();
                   }
+                  if (orderManagementOpen) {
+                    handleOrderManagement();
+                  }
                 }}
                 component={Link}
                 to="/orders/open/ondemand"
                 className={classes.nested}
               >
                 <ListItemText primary="On-Demand" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <ListItem button onClick={handleOrderManagement}>
+            <ListItemText primary="Order Management" />
+            {orderManagementOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={orderManagementOpen} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                onClick={() => {
+                  setSelected("orders");
+                  handleClose();
+                  handleOrderManagement();
+                  if (openOrdersOpen) {
+                    handleOpenOrders();
+                  }
+                  if (placeOrderOpen) {
+                    handlePlaceOrder();
+                  }
+                }}
+                component={Link}
+                to="/rollup"
+                className={classes.nested}
+              >
+                <ListItemText primary="Quarterly Rollup" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={() => {
+                  setSelected("orders");
+                  handleClose();
+                  handleOrderManagement();
+                  if (openOrdersOpen) {
+                    handleOpenOrders();
+                  }
+                  if (placeOrderOpen) {
+                    handlePlaceOrder();
+                  }
+                }}
+                component={Link}
+                to="/orders/approvals"
+                className={classes.nested}
+              >
+                <ListItemText primary="Approvals" />
               </ListItem>
             </List>
           </Collapse>
@@ -165,6 +228,9 @@ const OrdersNav = ({ setSelected, selected }) => {
               }
               if (openOrdersOpen) {
                 handleOpenOrders();
+              }
+              if (orderManagementOpen) {
+                handleOrderManagement();
               }
             }}
             component={Link}

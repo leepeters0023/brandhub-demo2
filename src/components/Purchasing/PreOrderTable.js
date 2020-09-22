@@ -301,7 +301,6 @@ const PreOrderTable = (props) => {
   const [orderNumberModal, setOrderNumber] = useState(false);
 
   const handleKeyDown = useCallback(
-    //TODO add arrow key functionality as well
     (ref, key) => {
       let keys = Object.keys(refTable);
       let currentIndex = keys.indexOf(ref);

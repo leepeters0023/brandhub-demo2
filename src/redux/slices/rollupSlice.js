@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { buildTableFromOrders } from "./programTableSlice";
-import { fetchAllPreOrders, fetchNextPreOrders, fetchPreOrderById } from "../../api/orderApi";
+import {
+  fetchAllFilteredPreOrders,
+  fetchNextPreOrders,
+  fetchPreOrderById,
+} from "../../api/orderApi";
 
 let initialState = {
   isLoading: false,
@@ -71,14 +75,14 @@ export const {
 
 export default rollupSlice.reducer;
 //TODO switch to fetchAllFilteredPreOrders
-export const fetchFilteredPreOrders = () => async (dispatch) => {
+export const fetchFilteredPreOrders = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let preOrders = await fetchAllPreOrders();
+    let preOrders = await fetchAllFilteredPreOrders(filterObject);
     if (preOrders.error) {
       throw preOrders.error;
     }
-    let mappedPreOrders = preOrders.data.preOrders.map((preOrder) => ({
+    let mappedPreOrders = preOrders.data.orders.map((preOrder) => ({
       id: preOrder.id,
       user: preOrder.user.name,
       program: preOrder.program.name,
@@ -92,6 +96,7 @@ export const fetchFilteredPreOrders = () => async (dispatch) => {
         ? preOrder["submission-date"]
         : "---",
       dueDate: preOrder["due-date"],
+      status: preOrder.status,
     }));
     dispatch(
       getPreOrdersSuccess({
@@ -125,17 +130,18 @@ export const fetchNextFilteredPreOrders = (url) => async (dispatch) => {
         ? preOrder["submission-date"]
         : "---",
       dueDate: preOrder["due-date"],
+      status: preOrder.status,
     }));
     dispatch(
       getNextPreOrdersSuccess({
         preOrders: mappedPreOrders,
-        nextLink: preOrders.data.nextLink ? preOrders.data.nextLink : null
+        nextLink: preOrders.data.nextLink ? preOrders.data.nextLink : null,
       })
-    )
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const fetchRollupProgram = (id) => async (dispatch) => {
   try {
@@ -214,7 +220,7 @@ export const fetchRollupProgram = (id) => async (dispatch) => {
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
         : currentOrders.data["territory-names"].split(", ");
-    let note = currentOrders.data.notes ? currentOrders.data.notes : ""
+    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
 
     dispatch(
       buildTableFromOrders({
@@ -224,7 +230,7 @@ export const fetchRollupProgram = (id) => async (dispatch) => {
         preOrderId: preOrderId,
         status: preOrderStatus,
         territories: territories,
-        note: note
+        note: note,
       })
     );
     dispatch(getPreOrderDetailSuccess());

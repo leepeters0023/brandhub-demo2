@@ -285,14 +285,14 @@ export const {
 
 export default programTableSlice.reducer;
 
-export const fetchPreOrders = (type) => async (dispatch) => {
+export const fetchPreOrders = (id, type) => async (dispatch) => {
   try {
     if (type === "initial") {
       dispatch(setInitialPreOrdersLoading());
     } else {
       dispatch(setSummaryLoading());
     }
-    const currentPreOrders = await fetchAllPreOrders();
+    const currentPreOrders = await fetchAllPreOrders(id);
     if (currentPreOrders.error) {
       throw currentPreOrders.error;
     }
@@ -323,10 +323,10 @@ export const fetchPreOrders = (type) => async (dispatch) => {
   }
 };
 
-export const fetchProgramOrders = (program) => async (dispatch) => {
+export const fetchProgramOrders = (program, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const currentOrders = await fetchOrdersByProgram(program);
+    const currentOrders = await fetchOrdersByProgram(program, userId);
     if (currentOrders.error) {
       throw currentOrders.error;
     }

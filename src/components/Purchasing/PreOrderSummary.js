@@ -20,13 +20,18 @@ const useStyles = makeStyles((theme) => ({
 const PreOrderSummary = () => {
   const classes = useStyles();
   const [currentSummary, setCurrentSummary] = useState(null);
+  const [currentOrderId, setCurrentOrderId] = useState(null);
 
   const programs = useSelector((state) => state.programs.programs);
   const preOrders = useSelector((state) => state.programTable.preOrderSummary);
   const currentOrder = useSelector((state) => state.programTable);
+  const summaryLoading = useSelector((state) => state.programTable.preOrderSummaryLoading);
 
   useEffect(() => {
-    if (!currentSummary && preOrders.length > 0) {
+    if (
+      (!currentSummary && preOrders.length > 0 && !summaryLoading) ||
+      (preOrders.length > 0 && currentOrder.preOrderId !== currentOrderId && !summaryLoading)
+    ) {
       let summary = preOrders.map((preOrder) => {
         if (
           programs.filter((prog) => prog.id === preOrder.programId).length > 0
@@ -40,7 +45,7 @@ const PreOrderSummary = () => {
           };
         } else return null;
       });
-      summary = summary.filter((order) => order)
+      summary = summary.filter((order) => order);
       summary.sort((a, b) => {
         return a.name[0].toLowerCase()[0] < b.name[0].toLowerCase()[0]
           ? -1
@@ -48,17 +53,25 @@ const PreOrderSummary = () => {
           ? 1
           : 0;
       });
+      setCurrentOrderId(currentOrder.preOrderId);
       setCurrentSummary(summary);
     }
-  }, [currentSummary, preOrders, programs, programs.length, preOrders.length]);
+  }, [
+    currentSummary,
+    preOrders,
+    programs,
+    programs.length,
+    preOrders.length,
+    currentOrder.preOrderId,
+    currentOrderId,
+    summaryLoading,
+  ]);
 
   const statusConverter = (status) => {
     if (status === "inactive") {
       return "Not Started";
     } else if (status === "in-progress") {
       return "In Progress";
-    } else if (status === "complete") {
-      return "Saved";
     } else if (status === "submitted") {
       return "Order Submitted";
     } else {
@@ -118,7 +131,9 @@ const PreOrderSummary = () => {
                           : formatMoney(currentOrder.programTotal)}
                       </TableCell>
                       <TableCell align="right">
-                        {formatMoney(Math.floor(Math.random()*1000000 + 1000000))}
+                        {formatMoney(
+                          Math.floor(Math.random() * 1000000 + 1000000)
+                        )}
                       </TableCell>
                     </TableRow>
                   );

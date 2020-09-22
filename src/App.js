@@ -68,6 +68,7 @@ const App = () => {
   );
 
   const currentRole = useSelector((state) => state.user.role);
+  const currentUserId = useSelector((state) => state.user.id);
   const userError = useSelector((state) => state.user.error);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
   const isLoading = useSelector((state) => state.user.isLoading);
@@ -106,7 +107,7 @@ const App = () => {
     if (currentUser && currentRole.length > 0) {
       setRole(currentRole);
       dispatch(fetchInitialPrograms(currentTerritory.id));
-      dispatch(fetchPreOrders("initial"));
+      dispatch(fetchPreOrders(currentUserId, "initial"));
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);

@@ -112,8 +112,7 @@ const RollupPreOrderDetail = ({ orderId }) => {
     dispatch(updatePreOrderNote({ value: evt.target.value }));
   };
 
-  const handleComplete = () => {
-    dispatch(setProgStatus(null, "complete", preOrderId));
+  const handleSave = () => {
     dispatch(setPreOrderNotes(preOrderId, preOrderNote));
   };
 
@@ -237,7 +236,7 @@ const RollupPreOrderDetail = ({ orderId }) => {
                     color="secondary"
                     variant="contained"
                     style={{ marginRight: "20px" }}
-                    onClick={handleComplete}
+                    onClick={handleSave}
                   >
                     SAVE ORDER
                   </Button>

@@ -48,6 +48,9 @@ const SingleOrderDetailTable = ({ items }) => {
               <TableCell className={classes.headerText} align="left">
                 Act. Total
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Tracking
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -67,6 +70,7 @@ const SingleOrderDetailTable = ({ items }) => {
                 <TableCell align="left">{`${formatMoney(item.price)}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
                 <TableCell align="left">{`${formatMoney(item.estTotal)}`}</TableCell>
+                <TableCell align="left">---</TableCell>
                 <TableCell align="left">---</TableCell>
               </TableRow>
             ))}
