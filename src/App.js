@@ -34,6 +34,7 @@ import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
 import Loading from "./components/Utility/Loading";
 import LogIn from "./components/Login";
+import OrderApprovals from "./pages/OrderApprovals";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
@@ -230,6 +231,12 @@ const App = () => {
             <OrderHistory path="/orders/history" userType={role} />,
             "/orders/history",
             ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <OrderApprovals path="/orders/approvals" userType={role} />,
+            "/orders/history",
+            ["field2", "super"],
             role
           )}
           {handleAuth(
