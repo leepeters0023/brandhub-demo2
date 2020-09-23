@@ -37,7 +37,7 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
   );
 
   const handleChanges = (note, attn) => {
-    dispatch(setOrderDetails(orderNumber, note, attn));
+    dispatch(setOrderDetails(orderNumber, note, attn, "pre-order"));
     handleClose(false);
   };
 

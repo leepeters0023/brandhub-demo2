@@ -143,7 +143,7 @@ const OrderApprovalTable = ({
   };
 
   const handleRowClick = (orderNum) => {
-    navigate(`/orders/open/instock/${orderNum}`);
+    navigate(`/orders/open/approval#${orderNum}`);
   };
 
   return (

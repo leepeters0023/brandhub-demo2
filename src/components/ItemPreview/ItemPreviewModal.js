@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
 
-import { addStockItem } from "../../redux/slices/inStockOrderSlice";
-import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
+import { addNewOrderItem } from "../../redux/slices/currentOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -137,14 +136,14 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(newItem);
     setItemQty("0");
 
-    if (type === "inStock") {
-      dispatch(addStockItem("1", newItem, newItem.qty));
-    } else if (type === "onDemand") {
-      dispatch(addDemandItem("1", newItem, newItem.qty));
-    }
+    dispatch(addNewOrderItem())
+    // if (type === "inStock") {
+    //   dispatch(addStockItem("1", newItem, newItem.qty));
+    // } else if (type === "onDemand") {
+    //   dispatch(addDemandItem("1", newItem, newItem.qty));
+    // }
   }, [
     dispatch,
-    type,
     setCurrentItem,
     brand,
     qty,

@@ -18,6 +18,7 @@ import { useDetailedInput } from "../hooks/UtilityHooks";
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
+import OrderApprovalTable from "../components/OrderHistory/OrderApprovalTable";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -192,12 +193,12 @@ const OrderApprovals = () => {
     handleSearch(sortObject);
   };
 
-  // useEffect(() => {
-  //   if (currentOrders.length === 0 && currentUserRole.length > 0) {
-  //     dispatch(fetchFilteredOrderHistory(currentFilters));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (currentOrders.length === 0 && currentUserRole.length > 0) {
+      dispatch(fetchFilteredOrderHistory(currentFilters));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -400,12 +401,12 @@ const OrderApprovals = () => {
         </div>
         <br />
         <br />
-        {/* <OrderHistoryTable
+        <OrderApprovalTable
           orders={currentOrders}
           isOrdersLoading={isOrdersLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
-        /> */}
+        />
         {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />
