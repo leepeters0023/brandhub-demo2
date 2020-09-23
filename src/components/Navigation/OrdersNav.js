@@ -146,7 +146,7 @@ const OrdersNav = ({ setSelected, selected }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/open/instock"
+                to="/orders/open/inStock"
                 className={classes.nested}
               >
                 <ListItemText primary="In-Stock" />
@@ -165,7 +165,7 @@ const OrdersNav = ({ setSelected, selected }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/open/ondemand"
+                to="/orders/open/onDemand"
                 className={classes.nested}
               >
                 <ListItemText primary="On-Demand" />

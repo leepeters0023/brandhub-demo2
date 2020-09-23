@@ -14,8 +14,7 @@ import {
 } from "./redux/slices/programsSlice";
 import { fetchPreOrders, resetState } from "./redux/slices/programTableSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
-import { clearInStockOrder } from "./redux/slices/inStockOrderSlice";
-import { clearOnDemandOrder } from "./redux/slices/onDemandOrderSlice";
+import { clearCurrentOrder } from "./redux/slices/currentOrderSlice";
 import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
@@ -25,8 +24,7 @@ import Approvals from "./pages/Approvals";
 //import Calendar from "./pages/Calendar";
 import ContactsByState from "./pages/ContactsByState";
 import Coupons from "./pages/Coupons";
-import CurrentInStockOrder from "./pages/CurrentInStockOrder";
-import CurrentOnDemandOrder from "./pages/CurrentOnDemandOrder";
+import CurrentOrder from "./pages/CurrentOrder";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
 import FourOhFour from "./pages/FourOhFour";
@@ -90,8 +88,7 @@ const App = () => {
     dispatch(clearPrograms());
     dispatch(resetState());
     dispatch(clearDistributors());
-    dispatch(clearInStockOrder());
-    dispatch(clearOnDemandOrder());
+    dispatch(clearCurrentOrder());
     dispatch(resetItems());
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());
@@ -183,17 +180,8 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <CurrentInStockOrder path="/orders/open/instock" userType={role} />,
-            "/orders/open/instock",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <CurrentOnDemandOrder
-              path="/orders/open/ondemand"
-              userType={role}
-            />,
-            "/orders/open/ondemand",
+            <CurrentOrder path="/orders/open/:orderType" userType={role} />,
+            "/orders/open",
             ["field1", "field2", "super"],
             role
           )}
@@ -235,7 +223,7 @@ const App = () => {
           )}
           {handleAuth(
             <OrderApprovals path="/orders/approvals" userType={role} />,
-            "/orders/history",
+            "/orders/approvals",
             ["field2", "super"],
             role
           )}

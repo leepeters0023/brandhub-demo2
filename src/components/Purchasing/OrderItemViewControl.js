@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
 
-import { addStockItem } from "../../redux/slices/inStockOrderSlice";
-import { addDemandItem } from "../../redux/slices/onDemandOrderSlice";
+import { addNewOrderItem } from "../../redux/slices/currentOrderSlice";
 
 import { useItemUpdate } from "../../hooks/UtilityHooks";
 
@@ -41,12 +40,14 @@ const OrderItemViewControl = (props) => {
 
     setCurrentItemAdded(newItem);
 
-    if (type === "inStock") {
-      dispatch(addStockItem("1", newItem, newItem.qty))
-    } else if ( type === "onDemand") {
-      dispatch(addDemandItem("1", newItem, newItem.qty))
-    }
-  }, [dispatch, type, setCurrentItemAdded])
+    dispatch(addNewOrderItem())
+
+    // if (type === "inStock") {
+    //   dispatch(addStockItem("1", newItem, newItem.qty))
+    // } else if ( type === "onDemand") {
+    //   dispatch(addDemandItem("1", newItem, newItem.qty))
+    // }
+  }, [dispatch, setCurrentItemAdded])
 
   return (
     <>

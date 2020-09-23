@@ -1,37 +1,43 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import {fetchUserDistributors} from "../../redux/slices/distributorSlice";
+import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
 
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-
-const DistributorAutoComplete = ({ classes, handleChange, reset, setReset }) => {
+const DistributorAutoComplete = ({
+  classes,
+  handleChange,
+  reset,
+  setReset,
+}) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [distributor, setDistributor] = useState("");
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
-  const options = useSelector((state) => state.distributors.distributorList)
+  const options = useSelector((state) => state.distributors.distributorList);
 
-  const loading = open && isLoading
+  const loading = open && isLoading;
 
-  useEffect(()=>{
+  useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor))
+      dispatch(fetchUserDistributors(distributor));
     }
-  }, [distributor, dispatch])
+  }, [distributor, dispatch]);
 
-  useEffect(()=>{
-    if (reset) {
-      setDistributor("")
-      setReset(false);
+  useEffect(() => {
+    if (reset && setReset) {
+      if (reset) {
+        setDistributor("");
+        setReset(false);
+      }
     }
-  }, [reset, setDistributor, setReset])
+  }, [reset, setDistributor, setReset]);
 
   return (
     <>
@@ -40,13 +46,13 @@ const DistributorAutoComplete = ({ classes, handleChange, reset, setReset }) => 
         className={classes.queryField}
         id="distributor-auto-complete"
         open={open}
-        onOpen={()=>setOpen(true)}
-        onClose={()=>setOpen(false)}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
         inputValue={distributor}
         onInputChange={(_evt, value) => setDistributor(value)}
         onChange={(_evt, value) => handleChange(value, "distributor")}
         getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option)=>option.name}
+        getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
         renderInput={(params) => (
@@ -59,23 +65,25 @@ const DistributorAutoComplete = ({ classes, handleChange, reset, setReset }) => 
               ...params.InputProps,
               endAdornment: (
                 <>
-                  {loading ? <CircularProgress color="inherit" size={15} /> : null}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={15} />
+                  ) : null}
                   {params.InputProps.endAdornment}
                 </>
-              )
+              ),
             }}
           />
         )}
       />
     </>
-  )
-}
+  );
+};
 
 DistributorAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  reset: PropTypes.bool.isRequired,
-  setReset: PropTypes.func.isRequired,
-}
+  reset: PropTypes.bool,
+  setReset: PropTypes.func,
+};
 
 export default DistributorAutoComplete;

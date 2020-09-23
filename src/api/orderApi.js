@@ -3,10 +3,21 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
+const writeHeaders = {
+  headers: {
+    Accept: "application/vnd.api+json",
+    "Content-Type": "application/vnd.api+json",
+  },
+};
+
+// -------------------------- Pre-Order Calls ------------------------- //
+
 export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/pre-orders?filter[program_id]=${program}&filter[user-id]=${userId}`)
+    .get(
+      `/api/pre-orders?filter[program_id]=${program}&filter[user-id]=${userId}`
+    )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -66,9 +77,10 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     orderDate: "order-date",
     dueDate: "due-date",
   };
-  let statusString = filterObject.status !== "all"
-    ? `filter[status]=${filterObject.status}`
-    : "filter[status]!=approved";
+  let statusString =
+    filterObject.status !== "all"
+      ? `filter[status]=${filterObject.status}`
+      : "filter[status]!=approved";
   let userString = filterObject.user
     ? `&filter[user-id]=${filterObject.user}`
     : "";
@@ -76,10 +88,9 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program}`
       : "";
-  let brandString =
-    filterObject.brand
-      ? `&filter[brand-id]=${filterObject.brand}`
-      : "";
+  let brandString = filterObject.brand
+    ? `&filter[brand-id]=${filterObject.brand}`
+    : "";
   let seqString =
     filterObject.sequenceNum.length > 0
       ? `&filter[item-number]=${filterObject.sequenceNum}`
@@ -135,59 +146,8 @@ export const fetchNextPreOrders = async (url) => {
   return response;
 };
 
-export const patchOrderItem = async (id, qty) => {
-  const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  await axios
-    .patch(
-      `/api/order-items/${id}`,
-      {
-        data: {
-          type: "order-item",
-          id: id,
-          attributes: {
-            qty: qty,
-          },
-        },
-      },
-      headers
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-//TODO
-export const addOrderItem = async (id, item, qty) => {
-  const response = { status: "", error: null };
-  // let headers = {
-  //   headers: {
-  //     "Accept": "application/vnd.api+json",
-  //     "Content-Type": "application/vnd.api+json"
-  //   }
-  // }
-  response.status = "ok";
-  return response;
-};
-
 export const setPreOrderNote = async (id, note) => {
   const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
   await axios
     .patch(
       `/api/pre-orders/${id}`,
@@ -200,71 +160,7 @@ export const setPreOrderNote = async (id, note) => {
           },
         },
       },
-      headers
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const setOrderDetail = async (id, note, attn) => {
-  const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  await axios
-    .patch(
-      `/api/orders/${id}`,
-      {
-        data: {
-          type: "pre-order",
-          id: id,
-          attributes: {
-            notes: note,
-            attn: attn,
-          },
-        },
-      },
-      headers
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const deletePreOrderItem = async (id) => {
-  const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  await axios
-    .delete(
-      `/api/pre-order-items/${id}`,
-      {
-        data: {
-          type: "pre-order-item",
-          id: id,
-        },
-      },
-      headers
+      writeHeaders
     )
     .then((res) => {
       response.status = "ok";
@@ -279,14 +175,235 @@ export const deletePreOrderItem = async (id) => {
 
 export const submitPreOrder = async (id) => {
   const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
   await axios
-    .post(`/api/pre-orders/${id}/submit`, null, headers)
+    .post(`/api/pre-orders/${id}/submit`, null, writeHeaders)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const deletePreOrderItem = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .delete(
+      `/api/pre-order-items/${id}`,
+      {
+        data: {
+          type: "pre-order-item",
+          id: id,
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+// -------------------------- Single Order Calls ------------------------- //
+
+export const createOrder = async (type) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(
+      "/api/orders",
+      {
+        data: {
+          type: "order",
+          attributes: {
+            type: type,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const patchOrderItem = async (id, qty) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/order-items/${id}`,
+      {
+        data: {
+          type: "order-item",
+          id: id,
+          attributes: {
+            qty: qty,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const addOrderItem = async (id, item, qty) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(
+      "/api/order-items",
+      {
+        data: {
+          type: "order-item",
+          attributes: {
+            qty: qty,
+          },
+          relationships: {
+            order: {
+              data: {
+                type: "order",
+                id: id,
+              },
+            },
+            item: {
+              data: {
+                type: "item",
+                id: item,
+              },
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const setOrderDetail = async (id, note, attn) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/orders/${id}`,
+      {
+        data: {
+          type: "order",
+          id: id,
+          attributes: {
+            notes: note,
+            attn: attn,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const setOrderShipping = async (orderId, distId) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(`/api/orders/${orderId}`, {
+      data: {
+        type: "order",
+        id: orderId,
+        relationships: {
+          distributor: {
+            type: "distributor",
+            id: distId,
+          },
+        },
+      },
+    })
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const deleteOrder = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .delete(
+      `/api/orders/${id}`,
+      {
+        data: {
+          type: "order",
+          id: id,
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const deleteOrderItem = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .delete(
+      `/api/order-items/${id}`,
+      {
+        data: {
+          type: "order-item",
+          id: id,
+        },
+      },
+      writeHeaders
+    )
     .then((res) => {
       response.status = "ok";
     })
@@ -381,6 +498,27 @@ export const fetchSingleOrder = async (id) => {
     .get(`/api/orders/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchSingleOrderByType = async (type, userId) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(
+      `/api/orders?filter[user-id]=${userId}&filter[type]=${type}&filter[status]=draft`
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
