@@ -129,7 +129,6 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
     if (orders.error) {
       throw orders.error;
     }
-    console.log(orders.data)
     let mappedOrders = orders.data.orders.map((order) => {
       return {
         orderNum: order.id,

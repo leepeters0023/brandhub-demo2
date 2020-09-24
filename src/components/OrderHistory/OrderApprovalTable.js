@@ -23,6 +23,7 @@ import CancelIcon from '@material-ui/icons/Cancel';
 
 const headCells = [
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "type", disablePadding: false, label: "Type", sort: false },
   { id: "user", disablePadding: false, label: "User", sort: true },
   {
     id: "distributor",
@@ -183,6 +184,7 @@ const OrderApprovalTable = ({
                   }}
                 >
                   <TableCell align="left">{row.orderNum}</TableCell>
+                  <TableCell align="left">{row.type}</TableCell>
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">

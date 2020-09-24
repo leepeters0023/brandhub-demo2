@@ -159,7 +159,6 @@ const currentOrderSlice = createSlice({
       state.onDemandOrderItems = onDemandItems.filter((i) => i.id !== id)
     },
     clearCurrentOrder(state) {
-      console.log("clearing")
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.userId = null;
@@ -240,7 +239,6 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.data.length === 0) {
       dispatch(updateSuccess());
     } else {
-      console.log(order.data[0])
       let formattedOrder = {
         userId: order.data[0].user.id,
         userName: order.data[0].user.name,

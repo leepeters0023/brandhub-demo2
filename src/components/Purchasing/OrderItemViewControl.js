@@ -56,11 +56,9 @@ const OrderItemViewControl = (props) => {
       if (!currentOrderId) {
         dispatch(createNewOrder(type, item.id, qty));
       } else {
-        console.log(currentItemsByType)
         let currentItem = currentItemsByType.find(
           (i) => i.itemNumber === item.itemNumber
         );
-        console.log(currentItem)
         if (currentItem) {
           dispatch(
             addNewOrderItem(

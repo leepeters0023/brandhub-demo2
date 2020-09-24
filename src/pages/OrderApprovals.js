@@ -152,10 +152,8 @@ const OrderApprovals = () => {
         sortOrderBy: sortBy.orderBy,
       };
     } else {
-      console.log(currentFilters);
       filterObject = { ...currentFilters };
     }
-    console.log("searching");
     dispatch(fetchFilteredOrderHistory(filterObject));
   };
 

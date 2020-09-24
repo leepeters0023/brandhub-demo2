@@ -242,7 +242,6 @@ export const setShipping = (orderId, distId, distName) => async (dispatch) => {
     if (shipStatus.error) {
       throw shipStatus.error;
     }
-    console.log(distName);
     dispatch(setShippingLocation({ location: { name: distName, id: distId } }));
     dispatch(patchSuccess());
   } catch (err) {
