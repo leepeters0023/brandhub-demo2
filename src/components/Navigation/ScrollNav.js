@@ -111,7 +111,7 @@ const ScrollNav = (props) => {
                 </Link>
               </Tooltip>
               <PreOrderNav setSelected={setSelected} selected={selected} />
-              <OrdersNav setSelected={setSelected} selected={selected} />
+              <OrdersNav setSelected={setSelected} selected={selected} userType={role}/>
               <MoreNav setSelected={setSelected} selected={selected} userType={role} />
             </div>
             <div className={classes.navBreak}>

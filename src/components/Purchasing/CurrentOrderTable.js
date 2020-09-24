@@ -93,8 +93,8 @@ const CurrentOrderTable = ({ handleModalOpen, orderType }) => {
             component={Link}
             to={
               orderType === "inStock"
-                ? "/orders/items/instock"
-                : "/orders/items/ondemand"
+                ? "/orders/items/inStock"
+                : "/orders/items/onDemand"
             }
           >
             {orderType === "inStock"

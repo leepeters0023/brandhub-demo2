@@ -11,6 +11,10 @@ import {
   fetchNextOrderHistory,
 } from "../redux/slices/orderHistorySlice";
 
+import {
+  updateCurrentOrderStatus
+} from "../redux/slices/patchOrderSlice";
+
 import { clearBrands } from "../redux/slices/brandSlice";
 
 import { useDetailedInput } from "../hooks/UtilityHooks";
@@ -19,6 +23,7 @@ import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
 import OrderApprovalTable from "../components/OrderHistory/OrderApprovalTable";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -62,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
 }));
-
+//TODO figure out order denial process / notifications
 const OrderApprovals = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -90,6 +95,8 @@ const OrderApprovals = () => {
     program: "",
     brand: null,
     sequenceNum: "",
+    type: "not-pre-order",
+    status: "submitted",
     sortOrder: "asc",
     sortOrderBy: "user",
   });
@@ -166,6 +173,8 @@ const OrderApprovals = () => {
       program: "",
       brand: null,
       sequenceNum: "",
+      type: "not-pre-order",
+      status: "submitted",
       sortOrder: "asc",
       sortOrderBy: "user",
     });
@@ -178,6 +187,8 @@ const OrderApprovals = () => {
         program: "",
         brand: null,
         sequenceNum: "",
+        type: "not-pre-order",
+        status: "submitted",
         sortOrder: "asc",
         sortOrderBy: "user",
       })
@@ -193,8 +204,12 @@ const OrderApprovals = () => {
     handleSearch(sortObject);
   };
 
+  const handleApproval = (id) => {
+    dispatch(updateCurrentOrderStatus(id, "approved", currentFilters))
+  }
+
   useEffect(() => {
-    if (currentOrders.length === 0 && currentUserRole.length > 0) {
+    if (currentUserRole.length > 0) {
       dispatch(fetchFilteredOrderHistory(currentFilters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,7 +219,7 @@ const OrderApprovals = () => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Order History</Typography>
+          <Typography className={classes.titleText}>Order Approvals</Typography>
           <div
             style={{
               display: "flex",
@@ -406,12 +421,14 @@ const OrderApprovals = () => {
           isOrdersLoading={isOrdersLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
+          handleApproval={handleApproval}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
         )}
+        <OrderPatchLoading />
       </Container>
       <br />
     </>

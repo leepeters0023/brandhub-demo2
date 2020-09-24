@@ -18,6 +18,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "type", disablePadding: false, label: "Type", sort: false},
   {
     id: "distributor",
     disablePadding: false,
@@ -185,6 +186,7 @@ const OrderHistoryTable = ({
                   }}
                 >
                   <TableCell align="left">{row.orderNum}</TableCell>
+                  <TableCell align="left">{row.type}</TableCell>
                   <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>

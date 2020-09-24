@@ -24,18 +24,15 @@ class ErrorBoundary extends Component {
   componentDidUpdate() {
     if (
       this.props.programs ||
-      this.props.inStockOrder ||
-      this.props.onDemandOrder ||
+      this.props.currentOrder ||
       this.props.orderHistory ||
       this.props.items ||
       this.props.programTable
     ) {
       if (this.props.programs) {
         throw this.props.programs
-      } else if (this.props.inStockOrder) {
-        throw this.props.inStockOrder
-      } else if (this.props.onDemandOrder) {
-        throw this.props.onDemandOrder
+      } else if (this.props.currentOrder) {
+        throw this.props.currentOrder
       } else if (this.props.orderHistory) {
         throw this.props.orderHistory
       } else if (this.props.items) {
@@ -67,8 +64,7 @@ ErrorBoundary.propTypes = {
 const mapStateToProps = (state) => {
   const errors = {
     programs: state.programs.error,
-    inStockOrder: state.inStockOrder.error,
-    onDemandOrder: state.onDemandOrder.error,
+    currentOrder: state.currentOrder.error,
     orderHistory: state.orderHistory.error,
     items: state.items.error,
     programTable: state.programTable.error,

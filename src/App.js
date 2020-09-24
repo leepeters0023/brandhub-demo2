@@ -195,17 +195,17 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <PlaceInStockOrder path="/orders/items/instock" userType={role} />,
-            "/orders/items/instock",
+            <PlaceInStockOrder path="/orders/items/inStock" userType={role} />,
+            "/orders/items/inStock",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
             <PlaceOnDemandOrder
-              path="/orders/items/ondemand"
+              path="/orders/items/onDemand"
               userType={role}
             />,
-            "/orders/items/ondemand",
+            "/orders/items/onDemand",
             ["field1", "field2", "super"],
             role
           )}

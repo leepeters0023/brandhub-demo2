@@ -22,13 +22,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrdersNav = ({ setSelected, selected }) => {
+const OrdersNav = ({ setSelected, selected, userType }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useCallback(useState(null));
   const [placeOrderOpen, setPlaceOrderOpen] = useCallback(useState(false));
   const [openOrdersOpen, setOpenOrdersOpen] = useCallback(useState(false));
-  const [orderManagementOpen, setOrderManagementOpen] = useCallback(useState(false));
+  const [orderManagementOpen, setOrderManagementOpen] = useCallback(
+    useState(false)
+  );
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -48,7 +50,7 @@ const OrdersNav = ({ setSelected, selected }) => {
 
   const handleOrderManagement = () => {
     setOrderManagementOpen(!orderManagementOpen);
-  }
+  };
 
   return (
     <>
@@ -100,7 +102,7 @@ const OrdersNav = ({ setSelected, selected }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/items/instock"
+                to="/orders/items/inStock"
                 className={classes.nested}
               >
                 <ListItemText primary="In-Stock" />
@@ -119,7 +121,7 @@ const OrdersNav = ({ setSelected, selected }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/items/ondemand"
+                to="/orders/items/onDemand"
                 className={classes.nested}
               >
                 <ListItemText primary="On-Demand" />
@@ -172,52 +174,56 @@ const OrdersNav = ({ setSelected, selected }) => {
               </ListItem>
             </List>
           </Collapse>
-          <ListItem button onClick={handleOrderManagement}>
-            <ListItemText primary="Order Management" />
-            {orderManagementOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={orderManagementOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem
-                button
-                onClick={() => {
-                  setSelected("orders");
-                  handleClose();
-                  handleOrderManagement();
-                  if (openOrdersOpen) {
-                    handleOpenOrders();
-                  }
-                  if (placeOrderOpen) {
-                    handlePlaceOrder();
-                  }
-                }}
-                component={Link}
-                to="/rollup"
-                className={classes.nested}
-              >
-                <ListItemText primary="Quarterly Rollup" />
+          {userType !== "field1" && (
+            <>
+              <ListItem button onClick={handleOrderManagement}>
+                <ListItemText primary="Order Management" />
+                {orderManagementOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              <ListItem
-                button
-                onClick={() => {
-                  setSelected("orders");
-                  handleClose();
-                  handleOrderManagement();
-                  if (openOrdersOpen) {
-                    handleOpenOrders();
-                  }
-                  if (placeOrderOpen) {
-                    handlePlaceOrder();
-                  }
-                }}
-                component={Link}
-                to="/orders/approvals"
-                className={classes.nested}
-              >
-                <ListItemText primary="Approvals" />
-              </ListItem>
-            </List>
-          </Collapse>
+              <Collapse in={orderManagementOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      setSelected("orders");
+                      handleClose();
+                      handleOrderManagement();
+                      if (openOrdersOpen) {
+                        handleOpenOrders();
+                      }
+                      if (placeOrderOpen) {
+                        handlePlaceOrder();
+                      }
+                    }}
+                    component={Link}
+                    to="/rollup"
+                    className={classes.nested}
+                  >
+                    <ListItemText primary="Quarterly Rollup" />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={() => {
+                      setSelected("orders");
+                      handleClose();
+                      handleOrderManagement();
+                      if (openOrdersOpen) {
+                        handleOpenOrders();
+                      }
+                      if (placeOrderOpen) {
+                        handlePlaceOrder();
+                      }
+                    }}
+                    component={Link}
+                    to="/orders/approvals"
+                    className={classes.nested}
+                  >
+                    <ListItemText primary="Approvals" />
+                  </ListItem>
+                </List>
+              </Collapse>
+            </>
+          )}
           <ListItem
             button
             onClick={() => {

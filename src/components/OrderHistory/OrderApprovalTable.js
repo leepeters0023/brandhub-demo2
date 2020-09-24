@@ -43,7 +43,7 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "actions", disablePadding: false, label: "", sort: false }
+  { id: "actions", disablePadding: false, label: "Approve / Deny", sort: false }
 ]
 
 const EnhancedTableHead = (props) => {
@@ -130,6 +130,7 @@ const OrderApprovalTable = ({
   handleSort,
   isOrdersLoading,
   scrollRef,
+  handleApproval,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -150,7 +151,7 @@ const OrderApprovalTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 300px)" }}
+        style={{ maxHeight: "Calc(100vh - 400px)" }}
         ref={scrollRef}
       >
         <Table stickyHeader className={classes.table}>
@@ -183,7 +184,7 @@ const OrderApprovalTable = ({
                 >
                   <TableCell align="left">{row.orderNum}</TableCell>
                   <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">{row.disributor}</TableCell>
+                  <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">
                     {format(new Date(row.orderDate), "MM/dd/yyyy")}
                   </TableCell>
@@ -196,12 +197,25 @@ const OrderApprovalTable = ({
                   <TableCell align="left">
                     <div style={{display: "flex", alignItems: "center"}}>
                       <Tooltip title="Approve">
-                        <IconButton>
+                        <IconButton
+                          onClick={
+                            (event) => {
+                              event.stopPropagation()
+                              handleApproval(row.orderNum)
+                            }
+                          }
+                        >
                           <ThumbUpIcon color="inherit" />
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Deny">
-                        <IconButton>
+                        <IconButton
+                          onClick={
+                            (event) => {
+                              event.stopPropagation()
+                            }
+                          }
+                        >
                           <CancelIcon color="inherit" />
                         </IconButton>
                       </Tooltip>
@@ -228,6 +242,7 @@ OrderApprovalTable.propTypes = {
   handleSort: PropTypes.func.isRequired,
   isOrdersLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any.isRequired,
+  handleApproval: PropTypes.func.isRequired,
 };
 
 export default OrderApprovalTable;

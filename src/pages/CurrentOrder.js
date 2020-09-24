@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link, navigate } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -8,13 +8,19 @@ import { formatMoney } from "../utility/utilityFunctions";
 
 import { useInput, useLimitedInput } from "../hooks/UtilityHooks";
 
-import { setOrderDetails, setShipping } from "../redux/slices/patchOrderSlice";
-import { deleteCurrentOrder } from "../redux/slices/currentOrderSlice";
+import { setOrderDetails, setShipping, updateCurrentOrderStatus } from "../redux/slices/patchOrderSlice";
+import {
+  deleteCurrentOrder,
+  fetchCurrentOrderById,
+  fetchCurrentOrderByType,
+  clearShippingLocation,
+} from "../redux/slices/currentOrderSlice";
 
 import CurrentOrderTable from "../components/Purchasing/CurrentOrderTable";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import Loading from "../components/Utility/Loading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -30,6 +36,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -51,11 +58,17 @@ const CurrentOrder = ({ orderType }) => {
   const [terms, setTerms] = useCallback(useState(false));
   const [rush, setRush] = useCallback(useState(false));
 
-  const { value: orderNote, bind: bindOrderNote } = useLimitedInput("", 300);
-  const { value: attention, bind: bindAttention } = useInput("");
-
-  const patchLoading = useSelector((state) => state.patchOrder.isLoading);
+  const orderLoading = useSelector((state) => state.currentOrder.isLoading);
   const currentOrder = useSelector((state) => state.currentOrder);
+  const userId = useSelector((state) => state.user.id);
+
+  const { value: orderNote, bind: bindOrderNote } = useLimitedInput(
+    "",
+    300
+  );
+  const { value: attention, bind: bindAttention } = useInput(
+    ""
+  );
 
   const handleModalClose = () => {
     handleModal(false);
@@ -76,7 +89,7 @@ const CurrentOrder = ({ orderType }) => {
 
   const handleShippingLocation = (value, _type) => {
     setShippingSet(true);
-    dispatch(setShipping(value.id));
+    dispatch(setShipping(currentOrder.orderNumber, value.id, value.name));
   };
 
   const handleSave = () => {
@@ -89,20 +102,89 @@ const CurrentOrder = ({ orderType }) => {
     dispatch(
       setOrderDetails(currentOrder.orderNumber, orderNote, attention, orderType)
     );
-    //dispatch submit when available
   };
 
   const handleApprove = () => {
     dispatch(
       setOrderDetails(currentOrder.orderNumber, orderNote, attention, orderType)
     );
-    //dispatch approve when available
+    dispatch(
+      updateCurrentOrderStatus(currentOrder.orderNumber, "approved")
+    )
   };
 
   const handleDeny = () => {
     dispatch(deleteCurrentOrder(currentOrder.orderNumber));
     navigate("/orders/approvals");
   };
+
+  const handleEditShipping = () => {
+    dispatch(clearShippingLocation());
+    setShippingSet(false);
+  };
+
+  useEffect(() => {
+    let formattedType;
+    if (currentOrder.type) {
+      if (currentOrder.type === "in-stock") {
+        formattedType = "inStock";
+      } else if (currentOrder.type === "on-demand") {
+        formattedType = "onDemand";
+      } else formattedType = currentOrder.type;
+    } else {
+      formattedType = null;
+    }
+    console.log(formattedType)
+    if (
+      (formattedType && formattedType !== orderType) ||
+      (formattedType && currentOrder.items.length !== currentOrder[`${formattedType}OrderItems`].length) ||
+      (userId && !currentOrder.type && currentOrder.items.length === 0)
+    ) {
+      if (orderType === "inStock" || orderType === "onDemand") {
+        dispatch(fetchCurrentOrderByType(orderType, userId));
+      } else if (orderType === "approval") {
+        dispatch(fetchCurrentOrderById(window.location.hash.slice(1)));
+      }
+    }
+    //return () => {dispatch(clearCurrentOrder())}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOrder.type, orderType, currentOrder.items.length]);
+
+  useEffect(() => {
+    if (
+      currentOrder.orderNote &&
+      currentOrder.orderNote.length > 0 &&
+      bindOrderNote.value.length === 0
+    ) {
+      bindOrderNote.onChange({ target: { value: currentOrder.orderNote } });
+    }
+    if (
+      currentOrder.attention &&
+      currentOrder.attention.length > 0 &&
+      bindAttention.value.length === 0
+    ) {
+      bindAttention.onChange({ target: { value: currentOrder.attention } });
+    }
+  }, [
+    currentOrder.orderNote,
+    currentOrder.attention,
+    bindOrderNote,
+    bindAttention,
+  ]);
+
+  useEffect(() => {
+    if (
+      currentOrder.distributorName &&
+      currentOrder.distributorName.length > 0 &&
+      !shippingSet
+    ) {
+      setShippingSet(true);
+    }
+  }, [currentOrder.distributorName, shippingSet, setShippingSet]);
+
+  if (orderLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -219,7 +301,7 @@ const CurrentOrder = ({ orderType }) => {
                     className={classes.bodyText}
                     color="textSecondary"
                   >
-                    {`${orderNote.length} / 300`}
+                    {`${(orderNote && orderNote.length) || "0"} / 300`}
                   </Typography>
                 </div>
                 <br />
@@ -234,10 +316,36 @@ const CurrentOrder = ({ orderType }) => {
                 />
               </Grid>
               <Grid item md={5} xs={12}>
-                <DistributorAutoComplete
-                  classes={classes}
-                  handleChange={handleShippingLocation}
-                />
+                {!shippingSet && (
+                  <DistributorAutoComplete
+                    classes={classes}
+                    handleChange={handleShippingLocation}
+                  />
+                )}
+                {currentOrder.distributorName && (
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <Typography className={classes.headerText}>
+                        Shipping Location:
+                      </Typography>
+                      <Typography className={classes.bodyText}>
+                        {`${currentOrder.distributorName}-${currentOrder.distributorId}`}
+                      </Typography>
+                    </div>
+                    <Tooltip title="Edit Shipping Location">
+                      <IconButton onClick={handleEditShipping}>
+                        <EditIcon fontSize="large" color="secondary" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                )}
                 <br />
                 <TextField
                   label="Attention"
@@ -303,7 +411,7 @@ const CurrentOrder = ({ orderType }) => {
                   color="secondary"
                   variant="contained"
                   component={Link}
-                  to={`/orders/confirmation/${orderType}`}
+                  to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
                   onClick={handleApprove}
                   style={{ marginRight: "10px" }}
                 >
@@ -317,7 +425,7 @@ const CurrentOrder = ({ orderType }) => {
                   variant="contained"
                   disabled={!terms || shippingSet === null}
                   component={Link}
-                  to={`/orders/confirmation/${orderType}`}
+                  to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
                   onClick={handleSubmit}
                 >
                   SUBMIT ORDER
@@ -334,7 +442,7 @@ const CurrentOrder = ({ orderType }) => {
                 </Button>
               )}
             </div>
-            {patchLoading && <OrderPatchLoading />}
+            <OrderPatchLoading />
           </>
         )}
       </Container>

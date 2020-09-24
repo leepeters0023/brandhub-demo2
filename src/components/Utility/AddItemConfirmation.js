@@ -27,7 +27,7 @@ const AddItemConfirmation = ({
   const classes = useStyles();
   const [open, setOpen] = useCallback(useState(false))
 
-  const isLoading = useSelector((state) => state[`${type}Order`].orderUpdateLoading);
+  const isLoading = useSelector((state) => state.currentOrder.orderUpdateLoading);
 
   useEffect(() => {
     let timeOut;

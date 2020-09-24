@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
+import { fetchCurrentOrderByType } from "../redux/slices/currentOrderSlice";
+
 import {
   brands,
   itemTypes,
@@ -17,7 +19,7 @@ import {
 import ItemFilter from "../components/Utility/ItemFilter";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
-//import RegionSelector from "../components/Utility/RegionSelector";
+import Loading from "../components/Utility/Loading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -44,6 +46,9 @@ const PlaceInStockOrder = ({ userType }) => {
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
+  const orderLoading = useSelector((state) => state.currentOrder.isLoading);
+  const currentOrder = useSelector((state) => state.currentOrder);
+  const userId = useSelector((state) => state.user.id);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -60,6 +65,18 @@ const PlaceInStockOrder = ({ userType }) => {
       dispatch(fetchFilteredItems("inStock"));
     }
   }, [currentItems, dispatch, userType, currentUserRole]);
+
+  useEffect(()=>{
+    if ((userId && !currentOrder.orderNumber && currentOrder.items.length === 0) || (userId && currentOrder.type !== "in-stock")) {
+      dispatch(fetchCurrentOrderByType("inStock", userId))
+    }
+    // return () => {dispatch(clearCurrentOrder())}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOrder.type, currentOrder.items.length])
+
+  if (orderLoading) {
+    return <Loading />
+  }
 
   return (
     <>
@@ -78,7 +95,7 @@ const PlaceInStockOrder = ({ userType }) => {
 
           <div className={classes.innerConfigDiv}>
             <Tooltip title="View Current Order">
-              <IconButton component={Link} to="/orders/open/instock">
+              <IconButton component={Link} to="/orders/open/inStock">
                 <ExitToAppIcon fontSize="large" color="inherit" />
               </IconButton>
             </Tooltip>

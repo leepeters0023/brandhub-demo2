@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { navigate } from "@reach/router";
 
 import {
   patchOrderItem,
@@ -8,6 +9,8 @@ import {
   setOrderDetail,
   setOrderShipping,
   deleteOrderItem,
+  submitOrder,
+  updateOrderStatus,
 } from "../../api/orderApi";
 
 import { setPreOrderProgramStatus } from "../../api/programApi";
@@ -19,8 +22,10 @@ import {
   updateOrderNote,
   addAttention,
   updateCurrentOrder,
-  removeItem
+  removeItem,
 } from "./currentOrderSlice";
+
+import { fetchFilteredOrderHistory } from "./orderHistorySlice";
 
 /*
 * Data Format:
@@ -134,7 +139,7 @@ export const updateOrderItem = (id, qty, type) => async (dispatch) => {
 
     dispatch(patchSuccess());
     if (type !== "pre-order") {
-      dispatch(updateCurrentOrder({id: id, totalItems: qty}))
+      dispatch(updateCurrentOrder({ id: id, totalItems: qty }));
     }
   } catch (err) {
     dispatch(
@@ -155,7 +160,7 @@ export const deleteOrdItem = (id) => async (dispatch) => {
     }
 
     dispatch(patchSuccess());
-    dispatch(removeItem({id: id}))
+    dispatch(removeItem({ id: id }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -237,8 +242,43 @@ export const setShipping = (orderId, distId, distName) => async (dispatch) => {
     if (shipStatus.error) {
       throw shipStatus.error;
     }
+    console.log(distName);
     dispatch(setShippingLocation({ location: { name: distName, id: distId } }));
     dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const submitCurrentOrder = (orderId) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const submitStatus = await submitOrder(orderId);
+    if (submitStatus.error) {
+      throw submitStatus.error;
+    }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateCurrentOrderStatus = (orderId, status, filters) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    const updateStatus = await updateOrderStatus(orderId, status);
+    if (updateStatus.error) {
+      throw updateStatus.error;
+    }
+    if (filters) {
+      dispatch(fetchFilteredOrderHistory(filters));
+    }
+    dispatch(patchSuccess());
+    if (!filters) {
+      navigate("/orders/approvals")
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

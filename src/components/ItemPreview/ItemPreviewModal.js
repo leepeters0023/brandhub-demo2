@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { addNewOrderItem } from "../../redux/slices/currentOrderSlice";
+import {
+  addNewOrderItem,
+  createNewOrder,
+} from "../../redux/slices/currentOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -87,7 +90,7 @@ const ItemPreviewModal = (props) => {
   const dispatch = useDispatch();
   const {
     type,
-    currentItem: { itemNumber, brand, itemType, price, imgUrl, qty, stock },
+    currentItem: { id, itemNumber, brand, itemType, price, imgUrl, qty, stock },
     handleClose,
     previewModal,
   } = props;
@@ -96,6 +99,11 @@ const ItemPreviewModal = (props) => {
   const [value, setValue] = useState(1);
   const [itemQty, setItemQty] = useState("");
   const [currentItem, setCurrentItem] = useState(null);
+
+  const currentOrderId = useSelector((state) => state.currentOrder.orderNumber);
+  const currentItemsByType = useSelector(
+    (state) => state.currentOrder[`${type}OrderItems`]
+  );
 
   const handleChangeTab = (_evt, newValue) => {
     setValue(newValue);
@@ -136,22 +144,36 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(newItem);
     setItemQty("0");
 
-    dispatch(addNewOrderItem())
-    // if (type === "inStock") {
-    //   dispatch(addStockItem("1", newItem, newItem.qty));
-    // } else if (type === "onDemand") {
-    //   dispatch(addDemandItem("1", newItem, newItem.qty));
-    // }
+    if (!currentOrderId) {
+      dispatch(createNewOrder(type, itemNumber, qty));
+    } else {
+      let currentItem = currentItemsByType.find(
+        (i) => i.itemNumber === itemNumber
+      );
+      if (currentItem) {
+        dispatch(
+          addNewOrderItem(currentOrderId, id, currentItem.id, qty, type)
+        );
+      } else {
+        dispatch(
+          addNewOrderItem(currentOrderId, id, undefined, qty, type)
+        );
+      }
+    }
   }, [
     dispatch,
     setCurrentItem,
     brand,
     qty,
+    id,
     itemNumber,
     itemType,
     price,
     imgUrl,
     itemQty,
+    currentItemsByType,
+    currentOrderId,
+    type,
   ]);
 
   return (
@@ -316,7 +338,9 @@ const ItemPreviewModal = (props) => {
           {value === 2 && <ItemFeedback />}
           {value === 3 && <ItemAssembly />}
           <br />
-          {(type !== "program" && type !== "catalog") && <AddItemConfirmation type={type} item={currentItem} />}
+          {type !== "program" && type !== "catalog" && (
+            <AddItemConfirmation type={type} item={currentItem} />
+          )}
         </DialogContent>
       </Dialog>
     </div>

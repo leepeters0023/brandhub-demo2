@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchOrderHistory, fetchNextHistory, fetchSingleOrder } from "../../api/orderApi";
+import {
+  fetchOrderHistory,
+  fetchNextHistory,
+  fetchSingleOrder,
+} from "../../api/orderApi";
 
 let initialState = {
   isLoading: false,
@@ -20,11 +24,10 @@ let initialState = {
     totalItems: 0,
     totalEstCost: 0,
     totalActCost: 0,
-    note: null
+    note: null,
   },
   error: null,
 };
-
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -68,7 +71,7 @@ const orderHistorySlice = createSlice({
       const { orders, nextLink } = action.payload;
       state.nextPage = nextLink ? true : false;
       state.nextLink = nextLink;
-      state.orders = [...orders]
+      state.orders = [...orders];
       state.isLoading = false;
       state.error = null;
     },
@@ -99,7 +102,7 @@ const orderHistorySlice = createSlice({
         totalItems: 0,
         totalEstCost: 0,
         totalActCost: 0,
-        note: null
+        note: null,
       };
       state.error = null;
     },
@@ -126,19 +129,23 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
     if (orders.error) {
       throw orders.error;
     }
-    let mappedOrders = orders.data.orders.map((order) => ({
-      orderNum: order.id,
-      distributor: order.distributor.name,
-      state: order.distributor.state,
-      program: order.program.name,
-      orderDate: order["order-date"] ? order["order-date"] : "---",
-      shipDate: order["ship-date"] ? order["ship-date"] : "---",
-      trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
-      totalItems: order["total-quantity"],
-      estTotal: order["total-cost"],
-      actTotal: "---",
-      orderStatus: order.status === "submitted" ? "Pending" : order.status,
-    }));
+    console.log(orders.data)
+    let mappedOrders = orders.data.orders.map((order) => {
+      return {
+        orderNum: order.id,
+        user: order.user.name,
+        distributor: order.distributor ? order.distributor.name : "---",
+        state: order.distributor ? order.distributor.state : "---",
+        program: order.program !== null ? order.program.name : "---",
+        orderDate: order["order-date"] ? order["order-date"] : "---",
+        shipDate: order["ship-date"] ? order["ship-date"] : "---",
+        type: order.type,
+        totalItems: order["total-quantity"],
+        estTotal: order["total-cost"],
+        actTotal: "---",
+        orderStatus: order.status === "submitted" ? "Pending" : order.status,
+      };
+    });
     dispatch(
       getOrderHistorySuccess({
         orders: mappedOrders,
@@ -186,7 +193,7 @@ export const fetchOrder = (id) => async (dispatch) => {
     dispatch(setIsLoading());
     let order = await fetchSingleOrder(id);
     if (order.error) {
-      throw order.error
+      throw order.error;
     }
     let formattedOrder = {
       id: order.data.id,
@@ -196,12 +203,14 @@ export const fetchOrder = (id) => async (dispatch) => {
       status: order.data.status === "submitted" ? "Pending" : order.data.status,
       orderDate: order.data["order-date"] ? order.data["order-date"] : "---",
       shipDate: order.data["ship-date"] ? order.data["ship-date"] : "---",
-      trackingNum: order.data["tracking-number"] ? order.data["tracking-number"] : "---",
+      trackingNum: order.data["tracking-number"]
+        ? order.data["tracking-number"]
+        : "---",
       totalItems: order.data["total-quantity"],
       totalEstCost: order.data["total-cost"],
       totalActCost: "---",
-      note: order.data.notes
-    }
+      note: order.data.notes,
+    };
     let formattedItems = order.data["order-items"].map((item) => ({
       itemNumber: item.item["item-number"],
       imgUrl: item.item["img-url"],
@@ -211,10 +220,12 @@ export const fetchOrder = (id) => async (dispatch) => {
       price: item.item.cost,
       totalItems: item.qty,
       estTotal: item["total-cost"],
-      actTotal: "---"
-    }))
-    dispatch(getSingleOrderSuccess({order: formattedOrder, items: formattedItems}))
+      actTotal: "---",
+    }));
+    dispatch(
+      getSingleOrderSuccess({ order: formattedOrder, items: formattedItems })
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
