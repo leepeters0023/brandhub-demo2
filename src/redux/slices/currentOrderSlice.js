@@ -58,6 +58,7 @@ const currentOrderSlice = createSlice({
       const { type, orderId, item } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
+      state.orderNumber = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.error = null;
@@ -66,10 +67,10 @@ const currentOrderSlice = createSlice({
       const { order, orderItems, itemReference } = action.payload;
       if (order.type === "in-stock") {
         state.inStockOrderNumber = order.id;
-        state.inStockOrderItems = [...itemReference];
+        state.inStockOrderItems = itemReference;
       } else if (order.type === "on-demand") {
         state.onDemandOrderNumber = order.id;
-        state.onDemandOrderItems = [...itemReference];
+        state.onDemandOrderItems = itemReference;
       }
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -82,12 +83,12 @@ const currentOrderSlice = createSlice({
       state.type = order.type;
       state.status = order.status;
       state.orderDate = order.orderDate;
-      state.items = [...orderItems];
+      state.items = orderItems;
       state.rushOrder = order.rushOrder;
       state.budget = order.budget;
       state.totalItems = order.totalItems;
-      state.totalCost = order.totalCost;
-      state.orderNote = order.note;
+      state.totalCost = order.totalEstCost;
+      state.orderNote = order.orderNote;
       state.error = null;
     },
     updateCurrentOrder(state, action) {
@@ -109,7 +110,12 @@ const currentOrderSlice = createSlice({
     },
     addNewItem(state, action) {
       const { item, type } = action.payload;
-      let items = [...state[`${type}OrderItems`]];
+      let items;
+      if (type === "inStock") {
+        items = [...state.inStockOrderItems]
+      } else if (type === "onDemand") {
+        items = [...state.onDemandOrderItems]
+      }
       items.push(item);
       state[`${type}OrderItems`] = items;
       state.isLoading = false;
@@ -120,6 +126,10 @@ const currentOrderSlice = createSlice({
       const { location } = action.payload;
       state.distributorName = location.name;
       state.distributorId = location.id;
+    },
+    clearShippingLocation(state) {
+      state.distributorName = null;
+      state.distributorId = null;
     },
     addAttention(state, action) {
       const { attention } = action.payload;
@@ -137,13 +147,19 @@ const currentOrderSlice = createSlice({
     },
     removeItem(state, action) {
       const { id } = action.payload;
+      console.log(id);
       let items = [...state.items];
+      let inStockItems = [...state.inStockOrderItems];
+      let onDemandItems = [...state.onDemandOrderItems];
       let currentItem = items.find((i) => i.id === id);
       state.totalItems -= currentItem.totalItems;
       state.totalCost -= currentItem.estTotal;
-      state.items = items.filter((i) => i.itemNumber !== id);
+      state.items = items.filter((i) => i.id !== id);
+      state.inStockOrderItems = inStockItems.filter((i) => i.id !== id)
+      state.onDemandOrderItems = onDemandItems.filter((i) => i.id !== id)
     },
     clearCurrentOrder(state) {
+      console.log("clearing")
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.userId = null;
@@ -179,6 +195,7 @@ export const {
   updateCurrentOrder,
   addNewItem,
   setShippingLocation,
+  clearShippingLocation,
   addAttention,
   updateOrderNote,
   setRushOrder,
@@ -220,45 +237,55 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    let formattedOrder = {
-      userId: order.data.user.id,
-      userName: order.data.user.name,
-      id: order.data.id,
-      distributorName: order.data.distributor.name,
-      distributorId: order.data.distributor.id,
-      attn: order.data.attn,
-      type: order.data.type,
-      status: order.data.status[0].toUpperCase() + order.data.status.slice(1),
-      orderDate: order.data["order-date"] ? order.data["order-date"] : "---",
-      rushOrder: "---",
-      budget: "---",
-      totalItems: order.data["total-quantity"],
-      totalEstCost: order.data["total-cost"],
-      orderNote: order.data.notes,
-    };
-    let formattedItems = order.data["order-items"].map((item) => ({
-      id: item.id,
-      itemNumber: item.item["item-number"],
-      imgUrl: item.item["img-url"],
-      brand: item.item.brand.name,
-      itemType: item.item.type,
-      qty: item.item["qty-per-pack"],
-      price: item.item.cost,
-      totalItems: item.qty,
-      estTotal: item["total-cost"],
-      actTotal: "---",
-    }));
-    let itemReferenceArray = order.data["order-items"].map((item) => ({
-      id: item.id,
-      itemNumber: item.item["item-number"],
-    }));
-    dispatch(
-      getCurrentOrderSuccess({
-        order: formattedOrder,
-        items: formattedItems,
-        itemReference: itemReferenceArray,
-      })
-    );
+    if (order.data.length === 0) {
+      dispatch(updateSuccess());
+    } else {
+      console.log(order.data[0])
+      let formattedOrder = {
+        userId: order.data[0].user.id,
+        userName: order.data[0].user.name,
+        id: order.data[0].id,
+        distributorName: order.data[0].distributor ? order.data[0].distributor.name : null,
+        distributorId: order.data[0].distributor ? order.data[0].distributor.id : null,
+        attn: order.data[0].attn,
+        type: order.data[0].type,
+        status: order.data[0].status[0].toUpperCase() + order.data[0].status.slice(1),
+        orderDate: order.data[0]["order-date"] ? order.data[0]["order-date"] : "---",
+        rushOrder: "---",
+        budget: "---",
+        totalItems: order.data[0]["total-quantity"],
+        totalEstCost: order.data[0]["total-cost"],
+        orderNote: order.data[0].notes,
+      };
+      let formattedItems;
+      if (order.data[0]["order-items"].length > 0) {
+        formattedItems = order.data[0]["order-items"].map((item) => ({
+          id: item.id,
+          itemNumber: item.item["item-number"],
+          imgUrl: item.item["img-url"],
+          brand: item.item.brand.name,
+          itemType: item.item.type,
+          qty: item.item["qty-per-pack"],
+          price: item.item.cost,
+          totalItems: item.qty,
+          estTotal: item["total-cost"],
+          actTotal: "---",
+        }));
+      } else {
+        formattedItems = [];
+      }
+      let itemReferenceArray = order.data[0]["order-items"].map((item) => ({
+        id: item.id,
+        itemNumber: item.item["item-number"],
+      }));
+      dispatch(
+        getCurrentOrderSuccess({
+          order: formattedOrder,
+          orderItems: formattedItems,
+          itemReference: itemReferenceArray,
+        })
+      );
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -275,8 +302,8 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       userId: order.data.user.id,
       userName: order.data.user.name,
       id: order.data.id,
-      distributorName: order.data.distributor.name,
-      distributorId: order.data.distributor.id,
+      distributorName: order.data.distributor ? order.data.distributor.name : "---",
+      distributorId: order.data.distributor ? order.data.distributor.id : "---",
       attn: order.data.attn,
       type: order.data.type,
       status: order.data.status[0].toUpperCase() + order.data.status.slice(1),
@@ -306,7 +333,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
     dispatch(
       getCurrentOrderSuccess({
         order: formattedOrder,
-        items: formattedItems,
+        orderItems: formattedItems,
         itemReference: itemReferenceArray,
       })
     );
@@ -335,6 +362,7 @@ export const addNewOrderItem = (
   qty,
   type
 ) => async (dispatch) => {
+  console.log(orderItemId)
   try {
     dispatch(setUpdateLoading());
     if (!orderItemId) {
@@ -346,11 +374,12 @@ export const addNewOrderItem = (
         addNewItem(
           {
             item: { id: orderItem.data.id, itemNumber: orderItem.data.item.id },
-          },
-          type
+            type: type
+          }
         )
       );
     } else {
+      console.log('here')
       let patchStatus = await patchOrderItem(orderItemId, qty);
       if (patchStatus.error) {
         throw patchStatus.error;

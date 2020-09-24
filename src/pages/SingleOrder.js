@@ -105,6 +105,9 @@ const SingleOrder = ({ orderId }) => {
               {`Status: ${currentOrder.status}`}
             </Typography>
             <Typography className={classes.headerText}>
+              {`Order Type: ${currentOrder.type}`}
+            </Typography>
+            <Typography className={classes.headerText}>
               {`Shipping Location: ${currentOrder.distributorName} - ${currentOrder.distributorId}`}
             </Typography>
             <Typography className={classes.headerText}>

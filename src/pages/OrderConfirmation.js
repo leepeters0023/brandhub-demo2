@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link, navigate } from "@reach/router";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { submitCurrentOrder } from "../redux/slices/patchOrderSlice";
+
+import { clearCurrentOrder } from "../redux/slices/currentOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -27,33 +31,43 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderConfirmation = ({ userType, orderType }) => {
   const classes = useStyles();
-  const formattedType = `${orderType}Order`;
+  const dispatch = useDispatch();
 
-  const [currentCSV, setCurrentCSV] = useState({data: [], headers: []})
-  const order = useSelector((state) => state[formattedType]);
-  
-  if (order.items.length === 0) {
-    const path = orderType === "inStock" ? "/orders/items/instock" : "/orders/items/ondemand"
-    navigate(path)
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [submitted, setSubmitted] = useState(false);
+  const order = useSelector((state) => state.currentOrder);
+
+  if (order.items.length === 0 && !submitted) {
+    const path =
+      orderType === "inStock"
+        ? "/orders/items/inStock"
+        : "/orders/items/onDemand";
+    navigate(path);
   }
 
-  useEffect(()=>{
+  const handleSubmit = () => {
+    dispatch(submitCurrentOrder(window.location.hash.slice(1)));
+    dispatch(clearCurrentOrder());
+    setSubmitted(true);
+  };
+
+  useEffect(() => {
     if (order && currentCSV.data.length === 0) {
       let headers = [
-        { label: "Item", key: "item"},
-        { label: "Sequence #", key: "itemNumber"},
-        { label: "Qty /Pack", key: "qty"}, 
+        { label: "Item", key: "item" },
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Qty /Pack", key: "qty" },
         { label: "Est. Cost", key: "price" },
-        { label: "Qty", key: "totalItems"},
-        { label: "Est. Total", key: "estTotal"},
-        { label: "", key: "blank"},
-        { label: "Shipping Location", key: "distributor"},
-        { label: "Address", key: "address"},
-        { label: "Attention", key: "attn"},
-        { label: "Rush Order", key: "rush"},
-        { label: "Order Total Items", key: "ordTotalItems"},
-        { label: "Est. Order Total", key: "ordEstTotal"}
-      ]
+        { label: "Qty", key: "totalItems" },
+        { label: "Est. Total", key: "estTotal" },
+        { label: "", key: "blank" },
+        { label: "Shipping Location", key: "distributor" },
+        { label: "Address", key: "address" },
+        { label: "Attention", key: "attn" },
+        { label: "Rush Order", key: "rush" },
+        { label: "Order Total Items", key: "ordTotalItems" },
+        { label: "Est. Order Total", key: "ordEstTotal" },
+      ];
       let csvData = order.items.map((item, index) => {
         if (index === 0) {
           return {
@@ -69,69 +83,83 @@ const OrderConfirmation = ({ userType, orderType }) => {
             attn: order.attention,
             rush: order.rushOrder ? "True" : "False",
             ordTotalItems: order.totalItems,
-            ordEstTotal: formatMoney(order.totalCost)
-          }
-          } else {
-            return {
-              item: `${item.brand} - ${item.itemType}`,
+            ordEstTotal: formatMoney(order.totalCost),
+          };
+        } else {
+          return {
+            item: `${item.brand} - ${item.itemType}`,
             itemNumber: item.itemNumber,
             qty: item.qty,
             price: formatMoney(item.price),
             totalItems: item.totalItems,
             estTotal: item.estTotal,
-            }
-          }
+          };
         }
-      )
-      setCurrentCSV({data: csvData, headers: headers})
+      });
+      setCurrentCSV({ data: csvData, headers: headers });
     }
-  }, [currentCSV.data.length, order])
+  }, [currentCSV.data.length, order]);
 
+  if (!order.orderNumber && submitted) {
+    return (
+      <Container className={classes.mainWrapper}>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <Typography className={classes.titleText}>
+            Thank you for your order!
+          </Typography>
+        </div>
+      </Container>
+    );
+  }
   return (
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-
-        <Typography className={classes.titleText}>
-          {orderType === "inStock"
-            ? "In-Stock Order Confirmation"
-            : "On-Demand Order Confirmation"}
-        </Typography>
-        <div
-              style={{
-                display: "flex",
-                width: "100px",
-                justifyContent: "flex-end",
-              }}
-            >
-              <Tooltip title="Print Order">
-                <IconButton>
-                  <PrintIcon color="secondary" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Export CSV">
+          <Typography className={classes.titleText}>
+            {orderType === "inStock"
+              ? "In-Stock Order Confirmation"
+              : "On-Demand Order Confirmation"}
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              width: "100px",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Tooltip title="Print Order">
+              <IconButton>
+                <PrintIcon color="secondary" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Export CSV">
               <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
                   <GetAppIcon color="secondary" />
                 </IconButton>
               </CSVLink>
             </Tooltip>
-            </div>
-            </div>
+          </div>
+        </div>
         <br />
         <br />
         <Grid container spacing={5}>
           <Grid item lg={9} sm={12} xs={12}>
-            
-        <Typography className={classes.headerText}>Order Items:</Typography>
-        <Divider />
-        <br />
-        <OrderConfirmationTable items={order.items} />
+            <Typography className={classes.headerText}>Order Items:</Typography>
+            <Divider />
+            <br />
+            <OrderConfirmationTable items={order.items} />
           </Grid>
           <Grid item lg={3} sm={12} xs={12}>
-        <Typography className={classes.headerText}>Order Summary:</Typography>
-        <Divider />
-        <br />
+            <Typography className={classes.headerText}>
+              Order Summary:
+            </Typography>
+            <Divider />
+            <br />
             <Typography className={classes.headerText}>
               {`Shipping Location: ${order.distributorName} - ${order.distributorId}`}
             </Typography>
@@ -176,6 +204,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
               variant="contained"
               color="secondary"
               fullWidth
+              onClick={handleSubmit}
             >
               {userType === "field1"
                 ? "CONFIRM SUBMISSION"

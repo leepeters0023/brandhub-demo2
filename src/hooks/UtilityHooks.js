@@ -53,7 +53,7 @@ export const useLimitedInput = (initialValue, max) => {
     bind: {
       value,
       onChange: (event) => {
-        if (event.target.lenght <= max) {
+        if (event.target.value.length <= max) {
           setValue(event.target.value);
         }
       },

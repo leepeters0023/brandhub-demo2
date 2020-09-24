@@ -216,6 +216,7 @@ export const deletePreOrderItem = async (id) => {
 
 export const createOrder = async (type) => {
   const response = { status: "", error: null, data: null };
+  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .post(
       "/api/orders",
@@ -223,7 +224,7 @@ export const createOrder = async (type) => {
         data: {
           type: "order",
           attributes: {
-            type: type,
+            type: formattedType,
           },
         },
       },
@@ -254,6 +255,33 @@ export const patchOrderItem = async (id, qty) => {
           id: id,
           attributes: {
             qty: qty,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const updateOrderStatus = async (id, status) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/orders/${id}`,
+      {
+        data: {
+          type: "order",
+          id: id,
+          attributes: {
+            status: status,
           },
         },
       },
@@ -344,18 +372,24 @@ export const setOrderDetail = async (id, note, attn) => {
 export const setOrderShipping = async (orderId, distId) => {
   const response = { status: "", error: null };
   await axios
-    .patch(`/api/orders/${orderId}`, {
-      data: {
-        type: "order",
-        id: orderId,
-        relationships: {
-          distributor: {
-            type: "distributor",
-            id: distId,
+    .patch(
+      `/api/orders/${orderId}`,
+      {
+        data: {
+          type: "order",
+          id: orderId,
+          relationships: {
+            distributor: {
+              data: {
+                type: "distributor",
+                id: distId,
+              },
+            },
           },
         },
       },
-    })
+      writeHeaders
+    )
     .then((res) => {
       response.status = "ok";
     })
@@ -415,6 +449,21 @@ export const deleteOrderItem = async (id) => {
   return response;
 };
 
+export const submitOrder = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/orders/${id}/submit`, null, writeHeaders)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
 export const fetchOrderHistory = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
@@ -425,7 +474,16 @@ export const fetchOrderHistory = async (filterObject) => {
     orderDate: "order-date",
     shipDate: "ship-date",
     status: "order-status",
+    user: "user",
   };
+  let statusString = filterObject.status
+    ? `filter[status]=${filterObject.status}&`
+    : "filter[status]=not-draft&";
+  let typeString = filterObject.type
+    ? filterObject.type === "not-pre-order"
+      ? `&filter[type]=not-pre-order`
+      : `&filter[type]=${filterObject.type}`
+    : "";
   let dateString = `filter[order-date-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
   let distString = filterObject.distributor
     ? `&filter[distributor-id]=${filterObject.distributor}`
@@ -445,8 +503,10 @@ export const fetchOrderHistory = async (filterObject) => {
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString =
-    "/api/orders?filter[status]=not-draft&" +
+    "/api/orders?" +
+    statusString +
     dateString +
+    typeString +
     distString +
     brandString +
     progString +
@@ -512,9 +572,10 @@ export const fetchSingleOrder = async (id) => {
 
 export const fetchSingleOrderByType = async (type, userId) => {
   const response = { status: "", error: null, data: null };
+  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .get(
-      `/api/orders?filter[user-id]=${userId}&filter[type]=${type}&filter[status]=draft`
+      `/api/orders?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=draft`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);

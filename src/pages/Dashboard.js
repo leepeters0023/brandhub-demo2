@@ -165,7 +165,7 @@ const Dashboard = () => {
             sm={6}
             xs={12}
             component={Link}
-            to="/orders/items/instock"
+            to="/orders/items/inStock"
           >
             <div className={classes.dashboardGridItem}>
               <Paper className={classes.dashPaper}>
@@ -200,7 +200,7 @@ const Dashboard = () => {
             sm={6}
             xs={12}
             component={Link}
-            to="/orders/items/ondemand"
+            to="/orders/items/onDemand"
           >
             <div className={classes.dashboardGridItem}>
               <Paper className={classes.dashPaper}>
