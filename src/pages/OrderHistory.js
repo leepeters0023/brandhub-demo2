@@ -150,17 +150,14 @@ const OrderHistory = () => {
   const handleSearch = (sortBy = undefined) => {
     let filterObject;
     if (sortBy.order) {
-      console.log(sortBy);
       filterObject = {
         ...currentFilters,
         sortOrder: sortBy.order,
         sortOrderBy: sortBy.orderBy,
       };
     } else {
-      console.log(currentFilters);
       filterObject = { ...currentFilters };
     }
-    console.log("searching");
     dispatch(fetchFilteredOrderHistory(filterObject));
   };
 

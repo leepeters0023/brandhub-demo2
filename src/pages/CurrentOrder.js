@@ -8,7 +8,11 @@ import { formatMoney } from "../utility/utilityFunctions";
 
 import { useInput, useLimitedInput } from "../hooks/UtilityHooks";
 
-import { setOrderDetails, setShipping, updateCurrentOrderStatus } from "../redux/slices/patchOrderSlice";
+import {
+  setOrderDetails,
+  setShipping,
+  updateCurrentOrderStatus,
+} from "../redux/slices/patchOrderSlice";
 import {
   deleteCurrentOrder,
   fetchCurrentOrderById,
@@ -62,13 +66,16 @@ const CurrentOrder = ({ orderType }) => {
   const currentOrder = useSelector((state) => state.currentOrder);
   const userId = useSelector((state) => state.user.id);
 
-  const { value: orderNote, bind: bindOrderNote } = useLimitedInput(
-    "",
-    300
-  );
-  const { value: attention, bind: bindAttention } = useInput(
-    ""
-  );
+  const {
+    value: orderNote,
+    bind: bindOrderNote,
+    reset: resetOrderNote,
+  } = useLimitedInput("", 300);
+  const {
+    value: attention,
+    bind: bindAttention,
+    reset: resetAttention,
+  } = useInput("");
 
   const handleModalClose = () => {
     handleModal(false);
@@ -108,9 +115,7 @@ const CurrentOrder = ({ orderType }) => {
     dispatch(
       setOrderDetails(currentOrder.orderNumber, orderNote, attention, orderType)
     );
-    dispatch(
-      updateCurrentOrderStatus(currentOrder.orderNumber, "approved")
-    )
+    dispatch(updateCurrentOrderStatus(currentOrder.orderNumber, "approved"));
   };
 
   const handleDeny = () => {
@@ -134,12 +139,15 @@ const CurrentOrder = ({ orderType }) => {
     } else {
       formattedType = null;
     }
-    console.log(formattedType)
     if (
       (formattedType && formattedType !== orderType) ||
-      (formattedType && currentOrder.items.length !== currentOrder[`${formattedType}OrderItems`].length) ||
+      (formattedType &&
+        currentOrder.items.length !==
+          currentOrder[`${formattedType}OrderItems`].length) ||
       (userId && !currentOrder.type && currentOrder.items.length === 0)
     ) {
+      resetOrderNote();
+      resetAttention();
       if (orderType === "inStock" || orderType === "onDemand") {
         dispatch(fetchCurrentOrderByType(orderType, userId));
       } else if (orderType === "approval") {
@@ -151,18 +159,10 @@ const CurrentOrder = ({ orderType }) => {
   }, [currentOrder.type, orderType, currentOrder.items.length]);
 
   useEffect(() => {
-    if (
-      currentOrder.orderNote &&
-      currentOrder.orderNote.length > 0 &&
-      bindOrderNote.value.length === 0
-    ) {
+    if (currentOrder.orderNote && currentOrder.orderNote.length > 0) {
       bindOrderNote.onChange({ target: { value: currentOrder.orderNote } });
     }
-    if (
-      currentOrder.attention &&
-      currentOrder.attention.length > 0 &&
-      bindAttention.value.length === 0
-    ) {
+    if (currentOrder.attention && currentOrder.attention.length > 0) {
       bindAttention.onChange({ target: { value: currentOrder.attention } });
     }
   }, [
