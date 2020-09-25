@@ -126,6 +126,7 @@ export const fetchUser = () => async (dispatch) => {
     if (user.error) {
       throw user.error;
     }
+    console.log(user.data)
     window.localStorage.setItem(
       "brandhub-role",
       user.data.role
@@ -139,16 +140,16 @@ export const fetchUser = () => async (dispatch) => {
       }`,
       email: user.data.email,
       role: user.data.role,
-      territories: user.data.territories.map((terr) => ({
+      territories: user.data.territories.length > 0 ? user.data.territories.map((terr) => ({
         name: terr.name, id: terr.id
-      })),
+      })) : [],
       managedUsers: user.data["managed-users"].length > 0 ? user.data["managed-users"].map((u) => ({
         name: u.name,
         email: u.email,
         role: u.role,
         id: u.id
       })) : [],
-      currentTerritory: user.data.territories[0].id
+      currentTerritory: user.data.territories.length > 0 ? user.data.territories[0].id : null
     };
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {

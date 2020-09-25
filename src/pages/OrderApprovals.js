@@ -12,7 +12,8 @@ import {
 } from "../redux/slices/orderHistorySlice";
 
 import {
-  updateCurrentOrderStatus
+  updateCurrentOrderStatus,
+  updateMultipleOrderStatus,
 } from "../redux/slices/patchOrderSlice";
 
 import { clearBrands } from "../redux/slices/brandSlice";
@@ -46,19 +47,24 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   queryRow: {
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      paddingLeft: "0%",
+      display: "flex",
+    },
     [theme.breakpoints.down("sm")]: {
       width: "100%",
-      marginLeft: "0%",
+      paddingLeft: "0%",
       display: "flex",
     },
     [theme.breakpoints.up("md")]: {
-      width: "85%",
-      marginLeft: "15%",
+      width: "100%",
+      paddingLeft: "10%",
       display: "flex",
     },
     [theme.breakpoints.up("lg")]: {
-      width: "75%",
-      marginLeft: "25%",
+      width: "100%",
+      paddingLeft: "10%",
       display: "flex",
     },
   },
@@ -206,6 +212,11 @@ const OrderApprovals = () => {
     dispatch(updateCurrentOrderStatus(id, "approved", currentFilters))
   }
 
+  const handleBulkApproval = () => {
+    let idArray = currentOrders.map((order) => order.orderNum)
+    dispatch(updateMultipleOrderStatus(idArray, "approved", currentFilters))
+  }
+
   useEffect(() => {
     if (currentUserRole.length > 0) {
       dispatch(fetchFilteredOrderHistory(currentFilters));
@@ -244,9 +255,10 @@ const OrderApprovals = () => {
           <Grid container spacing={2} justify="flex-end">
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -270,9 +282,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -296,9 +309,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <UserAutoComplete
@@ -310,9 +324,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <BrandAutoComplete
@@ -324,9 +339,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <DistributorAutoComplete
@@ -338,9 +354,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <TextField
@@ -358,9 +375,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <TextField
@@ -378,9 +396,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <Button
@@ -395,9 +414,10 @@ const OrderApprovals = () => {
             </Grid>
             <Grid
               item
-              
+              lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <Button
@@ -409,6 +429,26 @@ const OrderApprovals = () => {
               >
                 CLEAR FILTERS
               </Button>
+              
+            </Grid>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
+              <Button
+                fullWidth
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={handleBulkApproval}
+              >
+                APPROVE ALL
+              </Button>
+              
             </Grid>
           </Grid>
         </div>
