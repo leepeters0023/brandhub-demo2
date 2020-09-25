@@ -210,40 +210,54 @@ const Rollup = () => {
         </div>
         <br />
         <div className={classes.queryRow}>
-          <div
-            style={{
-              position: "absolute",
-              bottom: "0",
-              left: "0",
-            }}
-          >
-            <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
-              <InputLabel
-                htmlFor="program-total"
-                style={{ whiteSpace: "nowrap" }}
-              >
-                Pre-Order Count / Total
-              </InputLabel>
-              <InputBase
-                className={classes.titleText}
-                id="program-total"
-                value={`${orderCount} / ${formatMoney(queryTotal)}`}
-                inputProps={{ "aria-label": "naked", "data-lpignore": "true" }}
-                style={{
-                  marginTop: "10px",
-                  marginBottom: "0px",
-                  width: `Calc(${
-                    (queryTotal && orderCount) ? queryTotal.toString().length + orderCount.toString().length : 0
-                  }*15px + 50px)`,
-                  minWidth: "100px",
-                  readonly: "readonly",
-                  pointerEvents: "none",
-                }}
-              />
-            </FormControl>
-          </div>
+          {queryTotal && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "0",
+                left: "0",
+              }}
+            >
+              <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
+                <InputLabel
+                  htmlFor="program-total"
+                  style={{ whiteSpace: "nowrap" }}
+                >
+                  Pre-Order Count / Total
+                </InputLabel>
+                <InputBase
+                  className={classes.titleText}
+                  id="program-total"
+                  value={`${orderCount} / ${formatMoney(queryTotal)}`}
+                  inputProps={{
+                    "aria-label": "naked",
+                    "data-lpignore": "true",
+                  }}
+                  style={{
+                    marginTop: "10px",
+                    marginBottom: "0px",
+                    width: `Calc(${
+                      queryTotal && orderCount
+                        ? queryTotal.toString().length +
+                          orderCount.toString().length
+                        : 0
+                    }*15px + 50px)`,
+                    minWidth: "100px",
+                    readonly: "readonly",
+                    pointerEvents: "none",
+                  }}
+                />
+              </FormControl>
+            </div>
+          )}
           <Grid container spacing={2} justify="flex-end">
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <UserAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
@@ -251,7 +265,13 @@ const Rollup = () => {
                 setReset={setReset}
               />
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <TextField
                 color="secondary"
                 fullWidth
@@ -264,7 +284,13 @@ const Rollup = () => {
                 {...bindProgram}
               />
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <BrandAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
@@ -272,7 +298,13 @@ const Rollup = () => {
                 setReset={setReset}
               />
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <TextField
                 color="secondary"
                 fullWidth
@@ -285,7 +317,13 @@ const Rollup = () => {
                 {...bindSequenceNum}
               />
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <StatusSelector
                 handleStatus={handleFilters}
                 status={status}
@@ -293,7 +331,13 @@ const Rollup = () => {
                 classes={classes}
               />
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <Button
                 fullWidth
                 className={classes.largeButton}
@@ -304,7 +348,13 @@ const Rollup = () => {
                 SEARCH
               </Button>
             </Grid>
-            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
+            <Grid
+              item
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
               <Button
                 fullWidth
                 className={classes.largeButton}

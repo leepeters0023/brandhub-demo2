@@ -17,8 +17,6 @@ import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl"
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
 import Container from "@material-ui/core/Container";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -60,23 +58,12 @@ const ItemCatalog = ({ userType }) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={previewModal}
-          onClose={handleModalClose}
-          fullWidth
-          maxWidth="lg"
-        >
-          <DialogContent>
-            <ItemPreviewModal
-              type={null}
-              currentItem={currentItem}
-              handleClose={handleModalClose}
-              userType={null}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <ItemPreviewModal
+        type={null}
+        currentItem={currentItem}
+        handleClose={handleModalClose}
+        previewModal={previewModal}
+      />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
