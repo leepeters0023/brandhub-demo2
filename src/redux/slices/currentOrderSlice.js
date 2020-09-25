@@ -355,29 +355,30 @@ export const deleteCurrentOrder = (id) => async (dispatch) => {
 
 export const addNewOrderItem = (
   orderId,
-  itemNumber,
+  itemId,
   orderItemId,
   qty,
   type
 ) => async (dispatch) => {
-  console.log(orderItemId)
   try {
     dispatch(setUpdateLoading());
     if (!orderItemId) {
-      let orderItem = await addOrderItem(orderId, itemNumber, qty);
+      console.log("adding")
+      let orderItem = await addOrderItem(orderId, itemId, qty);
+      console.log(orderItem)
       if (orderItem.error) {
         throw orderItem.error;
       }
       dispatch(
         addNewItem(
           {
-            item: { id: orderItem.data.id, itemNumber: orderItem.data.item.id },
+            item: { id: orderItem.data.id, itemNumber: orderItem.data.item["item-number"] },
             type: type
           }
         )
       );
     } else {
-      console.log('here')
+      console.log('patching')
       let patchStatus = await patchOrderItem(orderItemId, qty);
       if (patchStatus.error) {
         throw patchStatus.error;
