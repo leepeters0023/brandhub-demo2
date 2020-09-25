@@ -17,10 +17,10 @@ import { useDetailedInput } from "../hooks/UtilityHooks";
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
+import UserAutoComplete from "../components/Utility/UserAutoComplete";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-//import AutoComplete from "@material-ui/lab/Autocomplete";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
@@ -54,9 +54,27 @@ const csvHeaders = [
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   queryRow: {
-    display: "flex",
-    width: "90%",
-    marginLeft: "10%",
+    position: "relative",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      paddingLeft: "0%",
+      display: "flex",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      paddingLeft: "0%",
+      display: "flex",
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "100%",
+      paddingLeft: "10%",
+      display: "flex",
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: "100%",
+      paddingLeft: "10%",
+      display: "flex",
+    },
   },
   gridItemContainer: {
     display: "flex",
@@ -102,6 +120,7 @@ const OrderHistory = () => {
   const [currentFilters, setCurrentFilters] = useState({
     fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
     toDate: format(new Date(), "MM/dd/yyyy"),
+    user: null,
     distributor: null,
     brand: null,
     program: "",
@@ -122,7 +141,11 @@ const OrderHistory = () => {
           ...currentFilters,
           [`${type}`]: format(value, "MM/dd/yyyy"),
         });
-      } else if (type === "distributor" || type === "brand") {
+      } else if (
+        type === "distributor" ||
+        type === "brand" ||
+        type === "user"
+      ) {
         setCurrentFilters({
           ...currentFilters,
           [`${type}`]: value ? value.id : null,
@@ -132,16 +155,16 @@ const OrderHistory = () => {
     [currentFilters]
   );
 
-  const { value: sequenceNumber, bind: bindSequenceNumber, reset: resetSequenceNumber } = useDetailedInput(
-    "",
-    handleFilters,
-    "sequenceNum"
-  );
-  const { value: program, bind: bindProgram, reset: resetProgram } = useDetailedInput(
-    "",
-    handleFilters,
-    "program"
-  );
+  const {
+    value: sequenceNumber,
+    bind: bindSequenceNumber,
+    reset: resetSequenceNumber,
+  } = useDetailedInput("", handleFilters, "sequenceNum");
+  const {
+    value: program,
+    bind: bindProgram,
+    reset: resetProgram,
+  } = useDetailedInput("", handleFilters, "program");
 
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);
@@ -170,24 +193,28 @@ const OrderHistory = () => {
     setCurrentFilters({
       fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
       toDate: format(new Date(), "MM/dd/yyyy"),
+      user: null,
       distributor: null,
       brand: null,
       program: "",
       sequenceNum: "",
       sortOrder: "asc",
       sortOrderBy: "orderDate",
-    })
-    dispatch(fetchFilteredOrderHistory({
-      fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-      toDate: format(new Date(), "MM/dd/yyyy"),
-      distributor: null,
-      brand: null,
-      program: "",
-      sequenceNum: "",
-      sortOrder: "asc",
-      sortOrderBy: "orderDate",
-    }))
-  }
+    });
+    dispatch(
+      fetchFilteredOrderHistory({
+        fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+        toDate: format(new Date(), "MM/dd/yyyy"),
+        user: null,
+        distributor: null,
+        brand: null,
+        program: "",
+        sequenceNum: "",
+        sortOrder: "asc",
+        sortOrderBy: "orderDate",
+      })
+    );
+  };
 
   const handleSort = (sortObject) => {
     setCurrentFilters({
@@ -204,6 +231,8 @@ const OrderHistory = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log(currentFilters);
 
   return (
     <>
@@ -239,6 +268,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -265,6 +295,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -291,6 +322,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <BrandAutoComplete
@@ -305,6 +337,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <DistributorAutoComplete
@@ -319,6 +352,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <TextField
@@ -339,6 +373,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <TextField
@@ -354,11 +389,29 @@ const OrderHistory = () => {
                 size="small"
               />
             </Grid>
+            {currentUserRole !== "field1" && (
+              <Grid
+                item
+                lg={2}
+                md={3}
+                sm={4}
+                xs={4}
+                className={classes.gridItemContainer}
+              >
+                <UserAutoComplete
+                  classes={classes}
+                  handleChange={handleFilters}
+                  reset={reset}
+                  setReset={setReset}
+                />
+              </Grid>
+            )}
             <Grid
               item
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <Button
@@ -376,6 +429,7 @@ const OrderHistory = () => {
               lg={2}
               md={3}
               sm={4}
+              xs={4}
               className={classes.gridItemContainer}
             >
               <Button

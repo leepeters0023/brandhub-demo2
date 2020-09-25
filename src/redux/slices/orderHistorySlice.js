@@ -5,6 +5,12 @@ import {
   fetchSingleOrder,
 } from "../../api/orderApi";
 
+const orderTypeMap = {
+  "pre-order": "Pre Order",
+  "in-stock": "In Stock",
+  "on-demand": "On Demand"
+}
+
 let initialState = {
   isLoading: false,
   isNextLoading: false,
@@ -138,7 +144,7 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
         program: order.program !== null ? order.program.name : "---",
         orderDate: order["order-date"] ? order["order-date"] : "---",
         shipDate: order["ship-date"] ? order["ship-date"] : "---",
-        type: order.type,
+        type: orderTypeMap[order.type],
         totalItems: order["total-quantity"],
         estTotal: order["total-cost"],
         actTotal: "---",
@@ -165,16 +171,17 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
     }
     let mappedOrders = orders.data.orders.map((order) => ({
       orderNum: order.id,
-      distributor: order.distributor.name,
-      state: order.distributor.state,
-      program: order.program.name,
-      orderDate: order["order-date"] ? order["order-date"] : "---",
-      shipDate: order["ship-date"] ? order["ship-date"] : "---",
-      trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
-      totalItems: order["total-quantity"],
-      estTotal: order["total-cost"],
-      actTotal: "---",
-      orderStatus: order.status === "submitted" ? "Pending" : order.status,
+        user: order.user.name,
+        distributor: order.distributor ? order.distributor.name : "---",
+        state: order.distributor ? order.distributor.state : "---",
+        program: order.program !== null ? order.program.name : "---",
+        orderDate: order["order-date"] ? order["order-date"] : "---",
+        shipDate: order["ship-date"] ? order["ship-date"] : "---",
+        type: orderTypeMap[order.type],
+        totalItems: order["total-quantity"],
+        estTotal: order["total-cost"],
+        actTotal: "---",
+        orderStatus: order.status === "submitted" ? "Pending" : order.status,
     }));
     dispatch(
       getNextHistorySuccess({
@@ -198,7 +205,7 @@ export const fetchOrder = (id) => async (dispatch) => {
       id: order.data.id,
       distributorName: order.data.distributor.name,
       distributorId: order.data.distributor.id,
-      type: order.data.type,
+      type: orderTypeMap[order.data.type],
       status: order.data.status === "submitted" ? "Pending" : order.data.status,
       orderDate: order.data["order-date"] ? order.data["order-date"] : "---",
       shipDate: order.data["ship-date"] ? order.data["ship-date"] : "---",
