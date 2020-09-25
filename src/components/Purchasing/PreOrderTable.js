@@ -712,7 +712,7 @@ PreOrderTable.propTypes = {
 export default React.memo(PreOrderTable, (prev, next) => {
   return (
     prev.currentProgram === next.currentPrograms &&
-    prev.distributors.length === next.distributors.length &&
+    // prev.distributors.length === next.distributors.length &&
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&
     prev.isLoading === next.isLoading
