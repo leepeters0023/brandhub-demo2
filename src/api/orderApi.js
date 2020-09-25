@@ -110,7 +110,6 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
   await axios
     .get(queryString)
     .then((res) => {
-      console.log(res.data.meta)
       let dataObject = { orders: null, nextLink: null, orderCount: null, queryTotal: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.orders = data;
@@ -237,7 +236,6 @@ export const createOrder = async (type) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.data = data;
       response.status = "ok";
     })
@@ -334,7 +332,6 @@ export const addOrderItem = async (id, item, qty) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.data = data;
       response.status = "ok";
     })
@@ -563,7 +560,6 @@ export const fetchSingleOrder = async (id) => {
     .get(`/api/orders/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })

@@ -55,7 +55,9 @@ const MemoInput = React.memo(({ classes, id, value, orderType }) => {
       id={id}
       {...bindQty}
       onBlur={(evt) => {
-        dispatch(updateOrderItem(id, qty, orderType));
+        if (value !== qty) {
+          dispatch(updateOrderItem(id, qty, orderType));
+        }
       }}
     />
   );
