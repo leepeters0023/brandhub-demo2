@@ -290,11 +290,11 @@ const PreOrderTable = (props) => {
     isLoading,
     preOrderId,
     preOrderStatus,
+    currentItems,
+    orders
   } = props;
   const classes = useStyles();
   const tableRef = useRef(null);
-  const currentItems = useSelector((state) => state.programTable.items);
-  const orders = useSelector((state) => state.programTable.orders);
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);

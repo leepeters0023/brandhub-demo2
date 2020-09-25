@@ -137,6 +137,8 @@ const CurrentPreOrder = ({ userType }) => {
   const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
   const preOrderId = useSelector((state) => state.programTable.preOrderId);
   const preOrderStatus = useSelector((state) => state.programTable.status);
+  const currentItems = useSelector((state) => state.programTable.items);
+  const orders = useSelector((state) => state.programTable.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
   const handleModalClose = () => {
     handleModal(false);
@@ -341,6 +343,8 @@ const CurrentPreOrder = ({ userType }) => {
             isLoading={isLoading}
             preOrderId={preOrderId}
             preOrderStatus={preOrderStatus}
+            currentItems={currentItems}
+            orders={orders}
           />
         )}
         <br />

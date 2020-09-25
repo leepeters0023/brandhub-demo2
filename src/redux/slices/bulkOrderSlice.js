@@ -1,126 +1,41 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-import { fetchOrdersByProgram, fetchAllPreOrders } from "../../api/orderApi";
-
-import { setProgramStatus } from "./programsSlice";
-
-/*
-* Data Format:
-programsTable: {
-  isLoading: bool,
-  programId: string,
-  items: [
-    (array of items sorted by itemNumber)
-    {
-      itemNumber: string,
-      brand: string,
-      itemType: string,
-      price: float,
-      qty: string,
-      imgUrl: string,
-      complianceStatus: string,
-      totalItems: int,
-      estTotal: float,
-    }
-  ]
-  orders: [
-    (array of orders sorted alphabetically by distributor name)
-    {
-      orderNumber: string,
-      distributorId: string,
-      distributorName: string,
-      type: string,
-      program: null || [...string(programIds)],
-      status: string,
-      items: [...{ itemObj } sorted by itemNumber],
-      shipping: { shippingObj },
-      budget: string,
-      totalItems: int,
-      totalEstCost: float,
-    }
-  ],
-  programTotal: float,
-  preOrderTotal: {
-    currentTotal: float (fetched from db for initial total value),
-    actualTotal: float (based on change in the current program)
-  }
-  error: null || string
-}
-*/
+import { fetchBulkOrders } from "../../api/orderApi";
 
 let initialState = {
   isLoading: false,
-  initialPreOrderLoading: false,
-  preOrderSummaryLoading: false,
-  preOrderSummary: [],
+  bulkOrderId: null,
   status: null,
-  preOrderId: null,
-  programId: null,
-  territories: [],
   items: [],
   orders: [],
-  programTotal: 0,
-  preOrderTotal: {
-    initialTotal: 0,
-    updatedTotal: 0,
-  },
-  preOrderNote: "",
+  bulkOrderTotal: 0,
+  bulkOrderNote: "",
   error: null,
-};
+}
 
 const startLoading = (state) => {
   state.isLoading = true;
 };
 
-const startInitialLoading = (state) => {
-  state.initialPreOrderLoading = true;
-};
-
-const startSummaryLoading = (state) => {
-  state.preOrderSummaryLoading = true;
-};
-
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
-  state.initialPreOrderLoading = false;
-  state.preOrderSummaryLoading = false;
   state.error = error;
 };
 
-const programTableSlice = createSlice({
-  name: "programTable",
+const bulkOrderSlice = createSlice({
+  name: "bulkOrder",
   initialState,
   reducers: {
     setIsLoading: startLoading,
-    setInitialPreOrdersLoading: startInitialLoading,
-    setSummaryLoading: startSummaryLoading,
-    setPreOrderSummary(state, action) {
-      const { preOrders, totalCost } = action.payload;
-      state.preOrderSummary = [...preOrders];
-      state.preOrderTotal.initialTotal = totalCost;
-      state.preOrderTotal.updatedTotal = totalCost;
-      state.initialPreOrderLoading = false;
-      state.preOrderSummaryLoading = false;
-      state.error = null;
-    },
     buildTableFromOrders(state, action) {
-      const {
-        programId,
-        orders,
-        items,
-        preOrderId,
-        status,
-        territories,
-        note
-      } = action.payload;
+      const { bulkOrderId, orders, items, status, note } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
-        let progTotal = 0;
+        let ordTotal = 0;
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
           orderItems.forEach((item) => {
-            progTotal += item.estTotal;
+            ordTotal += item.estTotal;
             currentItems.find(
               (cItem) => item.itemNumber === cItem.itemNumber
             ).totalItems += item.totalItems;
@@ -129,19 +44,19 @@ const programTableSlice = createSlice({
             ).estTotal += item.estTotal;
           });
         });
-        state.preOrderId = preOrderId;
-        state.programId = programId;
+        state.bulkOrderId = bulkOrderId;
         state.status = status;
-        state.territories = [...territories];
         state.items = currentItems;
         state.orders = [...orders];
-        state.preOrderNote = note;
-        state.programTotal = progTotal;
+        state.bulkOrderNote = note;
+        state.bulkOrderTotal = ordTotal;
         state.isLoading = false;
+        state.error = null;
       } else {
         state.orders = [];
         state.items = [];
-        state.isLoading = false;
+        state.isLaoding = false;
+        state.error = null;
       }
     },
     setGridItem(state, action) {
@@ -172,29 +87,23 @@ const programTableSlice = createSlice({
       let currentItem = items.find((item) => item.itemNumber === itemNumber);
       let totalItems = 0;
       let totalEstCost = 0;
-      let progTotal = 0;
+      let ordTotal = 0;
       state.orders.forEach((ord) => {
         totalItems += ord.items.find((item) => item.itemNumber === itemNumber)
           .totalItems;
         totalEstCost += ord.items.find((item) => item.itemNumber === itemNumber)
           .estTotal;
-        ord.items.forEach((item) => (progTotal += item.estTotal));
+        ord.items.forEach((item) => (ordTotal += item.estTotal));
       });
       currentItem.totalItems = totalItems;
       currentItem.estTotal = totalEstCost;
       items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = [...items];
-      let initialTotal = state.programTotal;
-      state.programTotal = progTotal;
-      state.preOrderTotal.updatedTotal =
-        progTotal + state.preOrderTotal.updatedTotal - initialTotal;
+      state.bulkOrderTotal = ordTotal;
     },
     removeGridItem(state, action) {
       const { itemNum } = action.payload;
-      state.programTotal -= state.items.find(
-        (item) => item.itemNumber === itemNum
-      ).estTotal;
-      state.preOrderTotal.actualTotal -= state.items.find(
+      state.bulkOrderTotal -= state.items.find(
         (item) => item.itemNumber === itemNum
       ).estTotal;
       let currentItems = state.items.filter(
@@ -231,104 +140,49 @@ const programTableSlice = createSlice({
       })
       state.orders = currentOrders;
     },
-    updatePreOrderNote(state, action) {
+    updateBulkOrderNote(state, action) {
       const { value } = action.payload;
       if (value.length <= 300) {
-        state.preOrderNote = value;
+        state.bulkOrderNote = value;
       }
     },
-    setProgramName(state, action) {
-      const { name } = action.payload;
-      state.name = name;
-    },
-    setPreOrderStatus(state, action) {
+    setBulkOrderStatus(state, action) {
       const { status } = action.payload;
       state.status = status;
     },
     resetState(state) {
       state.isLoading = false;
-      state.initialPreOrderLoading = false;
-      state.preOrderSummaryLoading = false;
-      state.preOrderSummary = [];
+      state.bulkOrderId = null;
       state.status = null;
-      state.preOrderId = null;
-      state.programId = null;
-      state.territories = [];
       state.items = [];
       state.orders = [];
-      state.programTotal = 0;
-      state.preOrderTotal = {
-        initialTotal: 0,
-        updatedTotal: 0,
-      };
-      state.preOrderNote = "";
+      state.bulkOrderTotal = 0;
+      state.bulkOrderNote = "";
       state.error = null;
     },
     setFailure: loadingFailed,
-  },
-});
+  }
+})
 
 export const {
   setIsLoading,
-  setInitialPreOrdersLoading,
-  setSummaryLoading,
-  setPreOrderSummary,
   buildTableFromOrders,
   setGridItem,
   setItemTotal,
   removeGridItem,
-  updatePreOrderNote,
   updateOrderDetails,
-  setProgramName,
-  setPreOrderStatus,
+  updateBulkOrderNote,
+  setBulkOrderStatus,
   resetState,
   setFailure,
-} = programTableSlice.actions;
+} = bulkOrderSlice.actions;
 
-export default programTableSlice.reducer;
+export default bulkOrderSlice.reducer;
 
-export const fetchPreOrders = (id, type) => async (dispatch) => {
-  try {
-    if (type === "initial") {
-      dispatch(setInitialPreOrdersLoading());
-    } else {
-      dispatch(setSummaryLoading());
-    }
-    const currentPreOrders = await fetchAllPreOrders(id);
-    if (currentPreOrders.error) {
-      throw currentPreOrders.error;
-    }
-    let preOrders = currentPreOrders.data.preOrders.map((order) => ({
-      preOrderId: order.id,
-      programId: order.program.id,
-      territories:
-        order["territory-names"].length === 0
-          ? ["National"]
-          : order["territory-names"].split(", "),
-      totalItems: order["total-quantity"],
-      totalEstCost: order["total-cost"],
-      status: order.status,
-    }));
-    let totalCost = preOrders
-      .map((order) => order.totalEstCost)
-      .reduce((a, b) => a + b);
-    preOrders.forEach((order) => {
-      dispatch(
-        setProgramStatus({ program: order.programId, status: order.status })
-      );
-    });
-    dispatch(
-      setPreOrderSummary({ preOrders: preOrders, totalCost: totalCost })
-    );
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const fetchProgramOrders = (program, userId) => async (dispatch) => {
+export const fetchBulkOrdersByType = (type, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const currentOrders = await fetchOrdersByProgram(program, userId);
+    const currentOrders = await fetchBulkOrders(type, userId);
     if (currentOrders.error) {
       throw currentOrders.error;
     }
@@ -396,22 +250,16 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         : 0;
     });
 
-    let preOrderId = currentOrders.data[0].id;
-    let preOrderStatus = currentOrders.data[0].status;
-    let territories =
-      currentOrders.data[0]["territory-names"].length === 0
-        ? ["National"]
-        : currentOrders.data[0]["territory-names"].split(", ");
+    let bulkOrderId = currentOrders.data[0].id;
+    let bulkOrderStatus = currentOrders.data[0].status;
     let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : ""
 
     dispatch(
       buildTableFromOrders({
-        programId: program,
+        bulkOrderId: bulkOrderId,
         orders: orders,
         items: currentItems,
-        preOrderId: preOrderId,
-        status: preOrderStatus,
-        territories: territories,
+        status: bulkOrderStatus,
         note: note
       })
     );
