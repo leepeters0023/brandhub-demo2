@@ -110,10 +110,13 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
   await axios
     .get(queryString)
     .then((res) => {
-      let dataObject = { orders: null, nextLink: null };
+      console.log(res.data.meta)
+      let dataObject = { orders: null, nextLink: null, orderCount: null, queryTotal: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      dataObject.orderCount = res.data.meta["total_entries"] ? res.data.meta["total_entries"] : null;
+      dataObject.queryTotal = res.data.meta["total_cost"] ? res.data.meta["total_cost"] : null; 
       response.status = "ok";
       response.data = dataObject;
     })
@@ -131,10 +134,12 @@ export const fetchNextPreOrders = async (url) => {
   await axios
     .get(url)
     .then((res) => {
-      let dataObject = { preOrders: null, nextLink: null };
+      let dataObject = { orders: null, nextLink: null, orderCount: null, queryTotal: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      dataObject.orderCount = res.data.meta["total_entries"] ? res.data.meta["total_entries"] : null;
+      dataObject.queryTotal = res.data.meta["total_cost"] ? res.data.meta["total_cost"] : null;
       response.status = "ok";
       response.data = dataObject;
     })

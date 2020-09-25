@@ -32,7 +32,7 @@ const UserAutoComplete = ({ classes, handleChange, reset, setReset }) => {
       <Autocomplete
         fullWidth
         className={classes.queryField}
-        id="user-auto-complete"
+        id="field-auto-complete"
         value={user}
         onChange={(_evt, value) => {
           setUser(value)
@@ -42,11 +42,13 @@ const UserAutoComplete = ({ classes, handleChange, reset, setReset }) => {
         getOptionLabel={(user) => user.name}
         renderInput={(params) => (
           <TextField
+            id="user-auto-search"
             color="secondary"
             {...params}
             label="User"
             variant="outlined"
             size="small"
+            type="text"
           />
         )}
       />

@@ -46,7 +46,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
   }
 
   const handleSubmit = () => {
-    dispatch(submitCurrentOrder(window.location.hash.slice(1)));
+    dispatch(submitCurrentOrder(window.location.hash.slice(1), userType));
     dispatch(clearCurrentOrder());
     setSubmitted(true);
   };

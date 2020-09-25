@@ -152,11 +152,11 @@ const ItemPreviewModal = (props) => {
       );
       if (currentItem) {
         dispatch(
-          addNewOrderItem(currentOrderId, id, currentItem.id, qty, type)
+          addNewOrderItem(currentOrderId, id, currentItem.id, itemQty, type)
         );
       } else {
         dispatch(
-          addNewOrderItem(currentOrderId, id, undefined, qty, type)
+          addNewOrderItem(currentOrderId, id, undefined, itemQty, type)
         );
       }
     }

@@ -249,12 +249,18 @@ export const setShipping = (orderId, distId, distName) => async (dispatch) => {
   }
 };
 
-export const submitCurrentOrder = (orderId) => async (dispatch) => {
+export const submitCurrentOrder = (orderId, role) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const submitStatus = await submitOrder(orderId);
     if (submitStatus.error) {
       throw submitStatus.error;
+    }
+    if (role !== "field1") {
+      const updateStatus = await updateOrderStatus(orderId, "approved")
+      if (updateStatus.error) {
+        throw updateStatus.error
+      }
     }
     dispatch(patchSuccess());
   } catch (err) {
