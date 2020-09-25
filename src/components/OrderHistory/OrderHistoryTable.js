@@ -154,10 +154,10 @@ const OrderHistoryTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 300px)" }}
+        style={{ maxHeight: "Calc(100vh - 350px)" }}
         ref={scrollRef}
       >
-        <Table stickyHeader className={classes.table}>
+        <Table stickyHeader className={classes.table} style={{minWidth: "1325px"}}>
           <EnhancedTableHead
             classes={classes}
             order={order}
@@ -205,7 +205,7 @@ const OrderHistoryTable = ({
                       ? formatMoney(row.actTotal)
                       : row.actTotal}
                   </TableCell>
-                  <TableCell align="left">{row.orderStatus}</TableCell>
+                  <TableCell align="left">{row.orderStatus[0].toUpperCase()+row.orderStatus.slice(1)}</TableCell>
                 </TableRow>
               ))}
             {isOrdersLoading && (

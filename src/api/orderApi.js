@@ -486,10 +486,11 @@ export const fetchOrderHistory = async (filterObject) => {
       ? `&filter[type]=not-pre-order`
       : `&filter[type]=${filterObject.type}`
     : "";
-  let dateString = `filter[order-date-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
-  let distString = filterObject.distributor
+    let dateString = `filter[order-date-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
+    let distString = filterObject.distributor
     ? `&filter[distributor-id]=${filterObject.distributor}`
     : "";
+  let userString = filterObject.user ? `&filter[user-id]=${filterObject.user}` : "";
   let brandString = filterObject.brand
     ? `&filter[brand-id]=${filterObject.brand}`
     : "";
@@ -510,6 +511,7 @@ export const fetchOrderHistory = async (filterObject) => {
     dateString +
     typeString +
     distString +
+    userString +
     brandString +
     progString +
     seqString +
