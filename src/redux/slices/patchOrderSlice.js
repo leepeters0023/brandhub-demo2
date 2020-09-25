@@ -288,3 +288,21 @@ export const updateCurrentOrderStatus = (orderId, status, filters) => async (
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const updateMultipleOrderStatus = (orderIdArray, status, filters) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    Promise.all(
+      orderIdArray.map(async(id) => {
+        const updateStatus = await updateOrderStatus(id, status);
+        if (updateStatus.error) {
+          throw updateStatus.error
+        }
+      })
+    )
+    dispatch(fetchFilteredOrderHistory(filters));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
