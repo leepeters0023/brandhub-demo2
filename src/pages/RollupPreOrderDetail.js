@@ -73,6 +73,8 @@ const RollupPreOrderDetail = ({ orderId }) => {
   const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
   const preOrderId = useSelector((state) => state.programTable.preOrderId);
   const preOrderStatus = useSelector((state) => state.programTable.status);
+  const currentItems = useSelector((state) => state.programTable.items);
+  const orders = useSelector((state) => state.programTable.orders);
   const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
@@ -186,6 +188,8 @@ const RollupPreOrderDetail = ({ orderId }) => {
             isLoading={isLoading}
             preOrderId={preOrderId}
             preOrderStatus={preOrderStatus}
+            currentItems={currentItems}
+            orders={orders}
           />
         )}
         <br />
