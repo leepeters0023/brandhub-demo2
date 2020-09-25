@@ -10,6 +10,8 @@ let initialState = {
   isLoading: false,
   isNextLoading: false,
   nextLink: null,
+  orderCount: null,
+  queryTotal: null,
   preOrders: [],
   error: null,
 };
@@ -35,16 +37,24 @@ const rollupSlice = createSlice({
     setIsLoading: startLoading,
     setNextIsLoading: startNextLoading,
     getPreOrdersSuccess(state, action) {
-      const { preOrders, nextLink } = action.payload;
+      const { preOrders, nextLink, orderCount, queryTotal } = action.payload;
       state.nextLink = nextLink;
       state.preOrders = [...preOrders];
+      state.orderCount = orderCount;
+      state.queryTotal = queryTotal;
       state.isLoading = false;
       state.error = null;
     },
     getNextPreOrdersSuccess(state, action) {
-      const { preOrders, nextLink } = action.payload;
+      const { preOrders, nextLink, orderCount, queryTotal } = action.payload;
       state.nextLink = nextLink;
       state.preOrders = state.preOrders.concat(preOrders);
+      if (state.orderCount !== orderCount) {
+        state.orderCount = orderCount;
+      }
+      if (state.queryTotal !== queryTotal) {
+        state.queryTotal = queryTotal;
+      }
       state.isNextLoading = false;
       state.error = null;
     },
@@ -98,10 +108,13 @@ export const fetchFilteredPreOrders = (filterObject) => async (dispatch) => {
       dueDate: preOrder["due-date"],
       status: preOrder.status,
     }));
+    console.log(preOrders.data)
     dispatch(
       getPreOrdersSuccess({
         preOrders: mappedPreOrders,
         nextLink: preOrders.data.nextLink ? preOrders.data.nextLink : null,
+        orderCount: preOrders.data.orderCount ? preOrders.data.orderCount : null,
+        queryTotal: preOrders.data.queryTotal ? preOrders.data.queryTotal : null,
       })
     );
   } catch (err) {
@@ -136,6 +149,8 @@ export const fetchNextFilteredPreOrders = (url) => async (dispatch) => {
       getNextPreOrdersSuccess({
         preOrders: mappedPreOrders,
         nextLink: preOrders.data.nextLink ? preOrders.data.nextLink : null,
+        orderCount: preOrders.data.orderCount ? preOrders.data.orderCount : null,
+        queryTotal: preOrders.data.queryTotal ? preOrders.data.queryTotal : null,
       })
     );
   } catch (err) {

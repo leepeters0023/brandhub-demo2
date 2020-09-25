@@ -445,6 +445,8 @@ const CurrentOrder = ({ orderType }) => {
             <OrderPatchLoading />
           </>
         )}
+        <br />
+        <br />
       </Container>
     </>
   );

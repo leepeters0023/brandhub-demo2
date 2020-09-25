@@ -10,6 +10,8 @@ import {
 
 import { clearBrands } from "../redux/slices/brandSlice";
 
+import { formatMoney } from "../utility/utilityFunctions";
+
 import { useDetailedInput } from "../hooks/UtilityHooks";
 
 import RollupOverviewTable from "../components/Reports/RollupOverviewTable";
@@ -25,6 +27,9 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import FormControl from "@material-ui/core/FormControl";
+import InputBase from "@material-ui/core/InputBase";
+import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
@@ -33,19 +38,25 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   queryRow: {
+    position: "relative",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      paddingLeft: "0%",
+      display: "flex",
+    },
     [theme.breakpoints.down("sm")]: {
       width: "100%",
-      marginLeft: "0%",
+      paddingLeft: "0%",
       display: "flex",
     },
     [theme.breakpoints.up("md")]: {
-      width: "85%",
-      marginLeft: "15%",
+      width: "100%",
+      paddingLeft: "15%",
       display: "flex",
     },
     [theme.breakpoints.up("lg")]: {
-      width: "65%",
-      marginLeft: "35%",
+      width: "100%",
+      paddingLeft: "35%",
       display: "flex",
     },
   },
@@ -100,6 +111,8 @@ const Rollup = () => {
   } = useDetailedInput("", handleFilters, "sequenceNum");
 
   const currentPreOrders = useSelector((state) => state.rollup.preOrders);
+  const orderCount = useSelector((state) => state.rollup.orderCount);
+  const queryTotal = useSelector((state) => state.rollup.queryTotal);
   const isPreOrdersLoading = useSelector((state) => state.rollup.isLoading);
   const nextLink = useSelector((state) => state.rollup.nextLink);
   const isNextPreOrdersLoading = useSelector(
@@ -197,8 +210,40 @@ const Rollup = () => {
         </div>
         <br />
         <div className={classes.queryRow}>
+          <div
+            style={{
+              position: "absolute",
+              bottom: "0",
+              left: "0",
+            }}
+          >
+            <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
+              <InputLabel
+                htmlFor="program-total"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                Pre-Order Count / Total
+              </InputLabel>
+              <InputBase
+                className={classes.titleText}
+                id="program-total"
+                value={`${orderCount} / ${formatMoney(queryTotal)}`}
+                inputProps={{ "aria-label": "naked", "data-lpignore": "true" }}
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "0px",
+                  width: `Calc(${
+                    (queryTotal && orderCount) ? queryTotal.toString().length + orderCount.toString().length : 0
+                  }*15px + 50px)`,
+                  minWidth: "100px",
+                  readonly: "readonly",
+                  pointerEvents: "none",
+                }}
+              />
+            </FormControl>
+          </div>
           <Grid container spacing={2} justify="flex-end">
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <UserAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
@@ -206,7 +251,7 @@ const Rollup = () => {
                 setReset={setReset}
               />
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <TextField
                 color="secondary"
                 fullWidth
@@ -219,7 +264,7 @@ const Rollup = () => {
                 {...bindProgram}
               />
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <BrandAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
@@ -227,7 +272,7 @@ const Rollup = () => {
                 setReset={setReset}
               />
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <TextField
                 color="secondary"
                 fullWidth
@@ -240,7 +285,7 @@ const Rollup = () => {
                 {...bindSequenceNum}
               />
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <StatusSelector
                 handleStatus={handleFilters}
                 status={status}
@@ -248,7 +293,7 @@ const Rollup = () => {
                 classes={classes}
               />
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <Button
                 fullWidth
                 className={classes.largeButton}
@@ -259,7 +304,7 @@ const Rollup = () => {
                 SEARCH
               </Button>
             </Grid>
-            <Grid item md={3} sm={4} className={classes.gridItemContainer}>
+            <Grid item md={3} sm={4} xs={4} className={classes.gridItemContainer}>
               <Button
                 fullWidth
                 className={classes.largeButton}
