@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { buildTableFromOrders } from "./orderSetSlice";
-import { setPreOrderDetails } from "./preOrderDetailSlice";
+
 import {
   fetchAllFilteredPreOrders,
   fetchNextPreOrders,
-  fetchPreOrderById,
 } from "../../api/orderApi";
 
 let initialState = {
@@ -159,100 +157,4 @@ export const fetchNextFilteredPreOrders = (url) => async (dispatch) => {
   }
 };
 
-export const fetchRollupProgram = (id) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const currentOrders = await fetchPreOrderById(id);
-    if (currentOrders.error) {
-      throw currentOrders.error;
-    }
-    let currentItems = currentOrders.data["order-set-items"].map((item) => ({
-      id: item.id,
-      complianceStatus: item.item["compliance-status"],
-      itemNumber: item.item["item-number"],
-      brand: item.item.brand.name,
-      itemType: item.item.type,
-      price: item.item.cost,
-      qty: `${item.item["qty-per-pack"]} / pack`,
-      imgUrl: item.item["img-url"],
-      estTotal: 0,
-      totalItems: 0,
-    }));
 
-    currentItems.sort((a, b) => {
-      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-        ? -1
-        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-        ? 1
-        : 0;
-    });
-
-    let orders = currentOrders.data.orders.map((ord) => ({
-      orderNumber: ord.id,
-      distributorId: ord.distributor.id,
-      distributorName: ord.distributor.name,
-      distributorCity: ord.distributor.city,
-      distributorState: ord.distributor.state,
-      note: ord.notes ? ord.notes : "",
-      attn: ord.attn ? ord.attn : "",
-      type: "program",
-      program: ord.program.id,
-      items: ord["order-items"]
-        .map((item) => ({
-          id: item.id,
-          complianceStatus: item.item["compliance-status"],
-          itemNumber: item.item["item-number"],
-          itemType: item.item.type,
-          price: item.item.cost,
-          estTotal: item.qty * item.item.cost,
-          totalItems: item.qty,
-        }))
-        .sort((a, b) => {
-          return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-            ? -1
-            : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-            ? 1
-            : 0;
-        }),
-      totalItems: ord["order-items"]
-        .map((item) => item.qty)
-        .reduce((a, b) => a + b),
-      estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item.cost)
-        .reduce((a, b) => a + b),
-    }));
-
-    orders.sort((a, b) => {
-      return a.distributorName < b.distributorName
-        ? -1
-        : a.distributorName > b.distributorName
-        ? 1
-        : 0;
-    });
-
-    let orderTotal = currentOrders.data["total-cost"]
-    let orderId = currentOrders.data.id;
-    let orderStatus = currentOrders.data.status;
-    let territories =
-      currentOrders.data["territory-names"].length === 0
-        ? ["National"]
-        : currentOrders.data["territory-names"].split(", ");
-    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
-    dispatch(
-      setPreOrderDetails({ territories: territories, programId: null, orderTotal: orderTotal })
-    );
-
-    dispatch(
-      buildTableFromOrders({
-        orderId: orderId,
-        orders: orders,
-        items: currentItems,
-        status: orderStatus,
-        note: note,
-      })
-    );
-    dispatch(getPreOrderDetailSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};

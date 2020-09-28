@@ -66,16 +66,18 @@ const PlaceOnDemandOrder = ({ userType }) => {
     }
   }, [currentItems, dispatch, userType, currentUserRole]);
 
-  useEffect(()=>{
-    if ((userId && !currentOrder.orderNumber && currentOrder.items.length === 0) || (userId && currentOrder.type !== "on-demand")) {
-      dispatch(fetchCurrentOrderByType("onDemand", userId))
+  useEffect(() => {
+    if (
+      (userId && !currentOrder.orderNumber) ||
+      (userId && currentOrder.type !== "on-demand")
+    ) {
+      dispatch(fetchCurrentOrderByType("onDemand", userId));
     }
-    // return () => {dispatch(clearCurrentOrder())}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentOrder.type])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOrder.type]);
 
   if (orderLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
@@ -95,7 +97,14 @@ const PlaceOnDemandOrder = ({ userType }) => {
 
           <div className={classes.innerConfigDiv}>
             <Tooltip title="View Current Order">
-              <IconButton component={Link} to="/orders/open/onDemand">
+              <IconButton
+                component={Link}
+                to={
+                  currentOrder.onDemandOrderItems.length > 0
+                    ? `/orders/open/${currentOrder.onDemandOrderNumber}`
+                    : "/orders/open/onDemand"
+                }
+              >
                 <ExitToAppIcon fontSize="large" color="inherit" />
               </IconButton>
             </Tooltip>

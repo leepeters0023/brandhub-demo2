@@ -7,8 +7,6 @@ import {
   submitOrderSet,
   setOrderSetNote,
   setOrderDetail,
-  setOrderShipping,
-  deleteOrderItem,
   submitOrder,
   updateOrderStatus,
   setOrderSetStatus,
@@ -16,23 +14,8 @@ import {
 
 import { setProgramStatus } from "./programsSlice";
 import { setOrderStatus, updateOrderDetails } from "./orderSetSlice";
-import {
-  setShippingLocation,
-  updateCurrentOrder,
-  removeItem,
-} from "./currentOrderSlice";
 
 import { fetchFilteredOrderHistory } from "./orderHistorySlice";
-
-/*
-* Data Format:
-patchOrder: {
-  isLoading: bool,
-  cellsLoading: [],
-  cellsError: [],
-  error: string || null
-}
-*/
 
 let initialState = {
   isLoading: false,
@@ -135,9 +118,9 @@ export const updateOrderItem = (id, qty, type) => async (dispatch) => {
     }
 
     dispatch(patchSuccess());
-    if (type !== "pre-order") {
-      dispatch(updateCurrentOrder({ id: id, totalItems: qty }));
-    }
+    // if (type !== "pre-order") {
+    //   dispatch(updateCurrentOrder({ id: id, totalItems: qty }));
+    // }
   } catch (err) {
     dispatch(
       setFailure({
@@ -145,21 +128,6 @@ export const updateOrderItem = (id, qty, type) => async (dispatch) => {
         cell: null,
       })
     );
-  }
-};
-
-export const deleteOrdItem = (id) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const deleteStatus = await deleteOrderItem(id);
-    if (deleteStatus.error) {
-      throw deleteStatus.error;
-    }
-
-    dispatch(patchSuccess());
-    dispatch(removeItem({ id: id }));
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
   }
 };
 
@@ -221,20 +189,6 @@ export const setOrderDetails = (id, note, attn, type) => async (dispatch) => {
       throw noteStatus.error;
     }
     dispatch(updateOrderDetails({ orderNumber: id, note: note, attn: attn }));
-    dispatch(patchSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const setShipping = (orderId, distId, distName) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const shipStatus = await setOrderShipping(orderId, distId);
-    if (shipStatus.error) {
-      throw shipStatus.error;
-    }
-    dispatch(setShippingLocation({ location: { name: distName, id: distId } }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

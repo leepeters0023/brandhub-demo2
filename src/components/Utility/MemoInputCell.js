@@ -51,7 +51,7 @@ const MemoInputCell = React.memo(
         (state) =>
           state.orderSet.orders
             .find((ord) => ord.orderNumber === orderNumber)
-            .items.find((item) => item.itemNumber === itemNumber).totalItems
+            .items.find((item) => item.itemNumber === itemNumber)
       );
       const loading = useSelector((state) =>
         state.patchOrder.cellsLoading.find(
@@ -123,7 +123,7 @@ const MemoInputCell = React.memo(
               fullWidth
               size="small"
               id={`${orderNumber}-${itemNumber}`}
-              value={value}
+              value={value ? value.totalItems : ""}
               onFocus={() => {
                 cellRef.current.firstChild.select();
                 window.addEventListener("keydown", handleKeyEvent);

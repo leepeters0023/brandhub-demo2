@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 //import { fetchOrders } from "../../api/orderApi";
-import { fetchOrdersByProgram } from "../../api/orderApi";
+import { fetchOrdersByProgram, fetchOrderSetById } from "../../api/orderApi";
 
 import { setPreOrderDetails } from "./preOrderDetailSlice";
 
 let initialState = {
   isLoading: false,
   orderId: null,
+  type: null,
   status: null,
   items: [],
   orders: [],
@@ -31,7 +32,7 @@ const orderSetSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, orders, items, status, note } = action.payload;
+      const { orderId, type, orders, items, status, note } = action.payload;
       if (orders.length !== 0) {
         let currentItems = [...items];
         let ordTotal = 0;
@@ -49,6 +50,7 @@ const orderSetSlice = createSlice({
         });
         state.orderId = orderId;
         state.status = status;
+        state.type = type;
         state.items = currentItems;
         state.orders = [...orders];
         state.orderNote = note;
@@ -156,6 +158,7 @@ const orderSetSlice = createSlice({
     resetState(state) {
       state.isLoading = false;
       state.orderId = null;
+      state.type = null;
       state.status = null;
       state.items = [];
       state.orders = [];
@@ -182,94 +185,103 @@ export const {
 
 export default orderSetSlice.reducer;
 
-// export const fetchordersByType = (type, userId) => async (dispatch) => {
-//   try {
-//     dispatch(setIsLoading());
-//     const currentOrders = await fetchorders(type, userId);
-//     if (currentOrders.error) {
-//       throw currentOrders.error;
-//     }
-//     let currentItems = currentOrders.data[0]["pre-order-items"].map((item) => ({
-//       id: item.id,
-//       complianceStatus: item.item["compliance-status"],
-//       itemNumber: item.item["item-number"],
-//       brand: item.item.brand.name,
-//       itemType: item.item.type,
-//       price: item.item.cost,
-//       qty: `${item.item["qty-per-pack"]} / pack`,
-//       imgUrl: item.item["img-url"],
-//       estTotal: 0,
-//       totalItems: 0,
-//     }));
+export const fetchOrderSet = (id) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const currentOrders = await fetchOrderSetById(id);
+    if (currentOrders.error) {
+      throw currentOrders.error;
+    }
+    let currentItems = currentOrders.data["order-set-items"].map((item) => ({
+      id: item.id,
+      complianceStatus: item.item["compliance-status"],
+      itemNumber: item.item["item-number"],
+      brand: item.item.brand.name,
+      itemType: item.item.type,
+      price: item.item.cost,
+      qty: `${item.item["qty-per-pack"]} / pack`,
+      imgUrl: item.item["img-url"],
+      estTotal: 0,
+      totalItems: 0,
+    }));
 
-//     currentItems.sort((a, b) => {
-//       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-//         ? -1
-//         : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-//         ? 1
-//         : 0;
-//     });
+    currentItems.sort((a, b) => {
+      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+        ? -1
+        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+        ? 1
+        : 0;
+    });
+    let orders = currentOrders.data.orders.map((ord) => ({
+      orderNumber: ord.id,
+      distributorId: ord.distributor.id,
+      distributorName: ord.distributor.name,
+      distributorCity: ord.distributor.city,
+      distributorState: ord.distributor.state,
+      note: ord.notes ? ord.notes : "",
+      attn: ord.attn ? ord.attn : "",
+      type: "program",
+      program: ord.program ? ord.program.id : null,
+      items: ord["order-items"]
+        .map((item) => ({
+          id: item.id,
+          complianceStatus: item.item["compliance-status"],
+          itemNumber: item.item["item-number"],
+          itemType: item.item.type,
+          price: item.item.cost,
+          estTotal: item.qty * item.item.cost,
+          totalItems: item.qty,
+        }))
+        .sort((a, b) => {
+          return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+            ? -1
+            : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+            ? 1
+            : 0;
+        }),
+      totalItems: ord["order-items"]
+        .map((item) => item.qty)
+        .reduce((a, b) => a + b),
+      estTotal: ord["order-items"]
+        .map((item) => item.qty * item.item.cost)
+        .reduce((a, b) => a + b),
+    }));
 
-//     let orders = currentOrders.data[0].orders.map((ord) => ({
-//       orderNumber: ord.id,
-//       distributorId: ord.distributor.id,
-//       distributorName: ord.distributor.name,
-//       distributorCity: ord.distributor.city,
-//       distributorState: ord.distributor.state,
-//       note: ord.notes ? ord.notes : "",
-//       attn: ord.attn ? ord.attn : "",
-//       type: "program",
-//       program: ord.program.id,
-//       items: ord["order-items"]
-//         .map((item) => ({
-//           id: item.id,
-//           complianceStatus: item.item["compliance-status"],
-//           itemNumber: item.item["item-number"],
-//           itemType: item.item.type,
-//           price: item.item.cost,
-//           estTotal: item.qty * item.item.cost,
-//           totalItems: item.qty,
-//         }))
-//         .sort((a, b) => {
-//           return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-//             ? -1
-//             : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-//             ? 1
-//             : 0;
-//         }),
-//       totalItems: ord["order-items"]
-//         .map((item) => item.qty)
-//         .reduce((a, b) => a + b),
-//       estTotal: ord["order-items"]
-//         .map((item) => item.qty * item.item.cost)
-//         .reduce((a, b) => a + b),
-//     }));
+    orders.sort((a, b) => {
+      return a.distributorName < b.distributorName
+        ? -1
+        : a.distributorName > b.distributorName
+        ? 1
+        : 0;
+    });
 
-//     orders.sort((a, b) => {
-//       return a.distributorName < b.distributorName
-//         ? -1
-//         : a.distributorName > b.distributorName
-//         ? 1
-//         : 0;
-//     });
+    let orderTotal = currentOrders.data["total-cost"]
+    let type = currentOrders.data.type
+    let orderId = currentOrders.data.id;
+    let orderStatus = currentOrders.data.status;
+    let territories =
+      currentOrders.data["territory-names"].length === 0
+        ? ["National"]
+        : currentOrders.data["territory-names"].split(", ");
+    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
+    dispatch(
+      setPreOrderDetails({ territories: territories, programId: null, orderTotal: orderTotal })
+    );
 
-//     let orderId = currentOrders.data[0].id;
-//     let orderStatus = currentOrders.data[0].status;
-//     let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : ""
-
-//     dispatch(
-//       buildTableFromOrders({
-//         orderId: orderId,
-//         orders: orders,
-//         items: currentItems,
-//         status: orderStatus,
-//         note: note
-//       })
-//     );
-//   } catch (err) {
-//     dispatch(setFailure({ error: err.toString() }));
-//   }
-// };
+    dispatch(
+      buildTableFromOrders({
+        orderId: orderId,
+        type: type,
+        orders: orders,
+        items: currentItems,
+        status: orderStatus,
+        note: note,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
 
 export const fetchProgramOrders = (program, userId) => async (dispatch) => {
   try {
@@ -342,6 +354,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         : 0;
     });
     let orderTotal = currentOrders.data[0]["total-cost"]
+    let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
     let territories =
@@ -355,6 +368,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     dispatch(
       buildTableFromOrders({
         orderId: orderId,
+        type: type,
         orders: orders,
         items: currentItems,
         status: orderStatus,
