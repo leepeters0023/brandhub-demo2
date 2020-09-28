@@ -57,7 +57,7 @@ const AddItemConfirmation = ({
         </Alert>
         ) : (
           <Alert severity="success" classes={{filledSuccess: classes.alertColor}}>
-            {`You have successfully added ${item.totalItems} ${item.brand}-${item.itemType} to your ${
+            {`You have successfully added ${item.brand}-${item.itemType} to your ${
             type === "inStock" ? "In-Stock" : "On-Demand"
           } order!`} 
           </Alert>

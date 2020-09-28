@@ -32,7 +32,7 @@ export const fetchOrdersByProgram = async (program, userId) => {
   return response;
 };
 
-export const fetchPreOrderById = async (id) => {
+export const fetchOrderSetById = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(`/api/order-sets/${id}`)
@@ -220,15 +220,15 @@ export const deleteOrderSetItem = async (id) => {
 
 // -------------------------- Other Order Set Calls ------------------------- //
 
-export const createOrder = async (type) => {
+export const createOrderSet = async (type) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .post(
-      "/api/orders",
+      "/api/order-sets",
       {
         data: {
-          type: "order",
+          type: "order-set",
           attributes: {
             type: formattedType,
           },
@@ -238,6 +238,7 @@ export const createOrder = async (type) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.data = data;
       response.status = "ok";
     })
@@ -336,21 +337,18 @@ export const updateOrderStatus = async (id, status) => {
   return response;
 };
 
-export const addOrderItem = async (id, item, qty) => {
+export const addOrderSetItem = async (id, item, qty) => {
   const response = { status: "", error: null, data: null };
   await axios
     .post(
-      "/api/order-items",
+      "/api/order-set-items",
       {
         data: {
-          type: "order-item",
-          attributes: {
-            qty: qty,
-          },
+          type: "order-set-item",
           relationships: {
-            order: {
+            "order-set": {
               data: {
-                type: "order",
+                type: "order-set",
                 id: id,
               },
             },
@@ -367,6 +365,7 @@ export const addOrderItem = async (id, item, qty) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.data = data;
       response.status = "ok";
     })
@@ -608,15 +607,16 @@ export const fetchSingleOrder = async (id) => {
   return response;
 };
 
-export const fetchSingleOrderByType = async (type, userId) => {
+export const fetchSingleOrderSetByType = async (type, userId) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .get(
-      `/api/orders?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=draft`
+      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })

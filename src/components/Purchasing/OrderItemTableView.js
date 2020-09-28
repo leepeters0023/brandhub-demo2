@@ -11,7 +11,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
+//import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
@@ -33,29 +33,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInputField = React.memo(
-  ({ item, currentItemValues, handleItemUpdate }) => {
-    return (
-      <TextField
-        color="secondary"
-        size="small"
-        style={{ width: "55px" }}
-        id={`${item.id}`}
-        placeholder="Qty"
-        variant="outlined"
-        value={currentItemValues[item.id] || ""}
-        onChange={handleItemUpdate}
-      />
-    );
-  },
-  (prev, next) => {
-    return (
-      prev.item.id === next.item.id &&
-      prev.currentItemValues[`${prev.item.id}`] ===
-        next.currentItemValues[`${next.item.id}`]
-    );
-  }
-);
+// const MemoInputField = React.memo(
+//   ({ item, currentItemValues, handleItemUpdate }) => {
+//     return (
+//       <TextField
+//         color="secondary"
+//         size="small"
+//         style={{ width: "55px" }}
+//         id={`${item.id}`}
+//         placeholder="Qty"
+//         variant="outlined"
+//         value={currentItemValues[item.id] || ""}
+//         onChange={handleItemUpdate}
+//       />
+//     );
+//   },
+//   (prev, next) => {
+//     return (
+//       prev.item.id === next.item.id &&
+//       prev.currentItemValues[`${prev.item.id}`] ===
+//         next.currentItemValues[`${next.item.id}`]
+//     );
+//   }
+// );
 
 const OrderItemTableView = (props) => {
   const {
@@ -63,8 +63,6 @@ const OrderItemTableView = (props) => {
     currentItems,
     handlePreview,
     handleAddItem,
-    currentItemValues,
-    handleItemUpdate,
     setCurrentItemAdded,
   } = props;
   const classes = useStyles();
@@ -98,11 +96,6 @@ const OrderItemTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Cost
               </TableCell>
-              {type !== "program" && (
-                <TableCell className={classes.headerText} align="left">
-                  Qty
-                </TableCell>
-              )}
               <TableCell
                 className={classes.headerText}
                 classes={{ root: classes.root }}
@@ -140,15 +133,6 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.qty}</TableCell>
                 {type === "inStock" && <TableCell>{row.stock}</TableCell>}
                 <TableCell>{`${formatMoney(row.price)}`}</TableCell>
-                {type !== "program" && (
-                  <TableCell>
-                    <MemoInputField
-                      item={row}
-                      currentItemValues={currentItemValues}
-                      handleItemUpdate={handleItemUpdate}
-                    />
-                  </TableCell>
-                )}
                 <TableCell align="center">
                   <div className={classes.tableButtonWrapper}>
                     <IconButton
@@ -162,19 +146,11 @@ const OrderItemTableView = (props) => {
                       <IconButton
                         id={`${row.id}`}
                         style={{ margin: "5px 2.5px" }}
-                        disabled={
-                          currentItemValues[row.id] === "" ||
-                          !currentItemValues[row.id]
-                        }
                         value=""
                         onClick={(evt) => {
                           handleAddItem(
                             row,
-                            parseInt(currentItemValues[row.id])
                           );
-                          handleItemUpdate({
-                            target: { value: "", id: row.id },
-                          });
                         }}
                       >
                         <AddBoxIcon />
@@ -196,8 +172,6 @@ OrderItemTableView.propTypes = {
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
   handleAddItem: PropTypes.func.isRequired,
-  currentItemValues: PropTypes.object.isRequired,
-  handleItemUpdate: PropTypes.func.isRequired,
   setCurrentItemAdded: PropTypes.func.isRequired,
 };
 

@@ -77,7 +77,6 @@ const TotalItemCell = React.memo(({ itemNumber }) => {
   const value = useSelector(
     (state) =>
       state.orderSet.items.find((item) => item.itemNumber === itemNumber)
-        .totalItems
   );
   return (
     <TableCell
@@ -85,7 +84,7 @@ const TotalItemCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{value}</div>
+      <div className={classes.infoCell}>{value ? value.totalItems : "---"}</div>
     </TableCell>
   );
 });
@@ -95,7 +94,6 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
   const value = useSelector(
     (state) =>
       state.orderSet.items.find((item) => item.itemNumber === itemNumber)
-        .estTotal
   );
   return (
     <TableCell
@@ -103,7 +101,7 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{`${formatMoney(value)}`}</div>
+      <div className={classes.infoCell}>{value ? `${formatMoney(value.estTotal)}` : "---"}</div>
     </TableCell>
   );
 });
@@ -118,8 +116,8 @@ const OrderSetTable = (props) => {
     handleModalOpen,
     handleOpenConfirm,
     isLoading,
-    preOrderId,
-    preOrderStatus,
+    orderId,
+    orderStatus,
     currentItems,
     orders,
   } = props;
@@ -162,7 +160,8 @@ const OrderSetTable = (props) => {
   useEffect(() => {
     if (
       (orders && !refTable) ||
-      `${orders[0].orderNumber}` !== Object.keys(refTable)[0].split("-")[0]
+      `${orders[0].orderNumber}` !== Object.keys(refTable)[0].split("-")[0] ||
+      Object.keys(refTable).length !== (orders.length * currentItems.length)
     ) {
       if (orders.length !== 0) {
         console.log(orders);
@@ -178,7 +177,7 @@ const OrderSetTable = (props) => {
         setRefTable(refs);
       }
     }
-  }, [orders, refTable, orders.length]);
+  }, [orders, refTable, orders.length, currentItems.length]);
 
   useEffect(() => {
     if ((currentItems && !itemLength) || (itemLength !== currentItems.length)) {
@@ -502,8 +501,8 @@ const OrderSetTable = (props) => {
                         itemNumber={item.itemNumber}
                         itemId={item.id}
                         index={index}
-                        preOrderStatus={preOrderStatus}
-                        preOrderId={preOrderId}
+                        orderStatus={orderStatus}
+                        orderId={orderId}
                         program={currentProgram}
                         cellRef={
                           refTable[`${ord.orderNumber}-${item.itemNumber}`]
@@ -532,16 +531,17 @@ OrderSetTable.propTypes = {
   handleModalOpen: PropTypes.func.isRequired,
   handleOpenConfirm: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  preOrderId: PropTypes.string,
-  preOrderStatus: PropTypes.string,
+  orderId: PropTypes.string,
+  orderStatus: PropTypes.string,
 };
 
 export default React.memo(OrderSetTable, (prev, next) => {
   return (
-    prev.currentProgram === next.currentPrograms &&
+    prev.currentProgram === next.currentProgram &&
     // prev.distributors.length === next.distributors.length &&
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&
-    prev.isLoading === next.isLoading
+    prev.isLoading === next.isLoading &&
+    prev.currentItems.length === next.currentItems.length
   );
 });

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchSingleOrder,
-  fetchSingleOrderByType,
+  fetchSingleOrderSetByType,
   deleteOrder,
-  addOrderItem,
+  addOrderSetItem,
   patchOrderItem,
-  createOrder,
+  createOrderSet,
 } from "../../api/orderApi";
 
 let initialState = {
@@ -17,19 +17,12 @@ let initialState = {
   onDemandOrderItems: [],
   userId: null,
   userName: null,
-  orderNumber: null,
-  distributorId: null,
-  distributorName: null,
-  attention: "",
+  orderId: null,
   type: null,
   status: null,
   orderDate: null,
-  items: [],
-  rushOrder: false,
-  budget: null,
   totalItems: 0,
   totalCost: 0,
-  orderNote: "",
   error: null,
 };
 
@@ -58,13 +51,13 @@ const currentOrderSlice = createSlice({
       const { type, orderId, item } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
-      state.orderNumber = orderId;
+      state.orderId = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.error = null;
     },
     getCurrentOrderSuccess(state, action) {
-      const { order, orderItems, itemReference } = action.payload;
+      const { order, itemReference } = action.payload;
       if (order.type === "in-stock") {
         state.inStockOrderNumber = order.id;
         state.inStockOrderItems = itemReference;
@@ -76,38 +69,31 @@ const currentOrderSlice = createSlice({
       state.orderUpdateLoading = false;
       state.userId = order.userId;
       state.userName = order.userName;
-      state.orderNumber = order.id;
-      state.distributorId = order.distributorId;
-      state.distributorName = order.distributorName;
-      state.attention = order.attn;
+      state.orderId = order.id;
       state.type = order.type;
       state.status = order.status;
       state.orderDate = order.orderDate;
-      state.items = orderItems;
-      state.rushOrder = order.rushOrder;
-      state.budget = order.budget;
       state.totalItems = order.totalItems;
       state.totalCost = order.totalEstCost;
-      state.orderNote = order.orderNote;
       state.error = null;
     },
-    updateCurrentOrder(state, action) {
-      const { id, totalItems } = action.payload;
-      let items = [...state.items];
-      let currentItem = items.find((i) => i.id === id);
-      let tempOrderTotalItems = state.totalItems - currentItem.totalItems;
-      let tempOrderTotalCost = state.totalCost - currentItem.estTotal;
-      currentItem.totalItems = totalItems;
-      tempOrderTotalItems += totalItems;
-      currentItem.estTotal = totalItems * currentItem.price;
-      tempOrderTotalCost += totalItems * currentItem.price;
-      items.splice(items.indexOf(currentItem), 1, currentItem);
-      state.items = items;
-      state.totalItems = tempOrderTotalItems;
-      state.totalCost = tempOrderTotalCost;
-      state.orderUpdateLoading = false;
-      state.error = null;
-    },
+    // updateCurrentOrder(state, action) {
+    //   const { id, totalItems } = action.payload;
+    //   let items = [...state.items];
+    //   let currentItem = items.find((i) => i.id === id);
+    //   let tempOrderTotalItems = state.totalItems - currentItem.totalItems;
+    //   let tempOrderTotalCost = state.totalCost - currentItem.estTotal;
+    //   currentItem.totalItems = totalItems;
+    //   tempOrderTotalItems += totalItems;
+    //   currentItem.estTotal = totalItems * currentItem.price;
+    //   tempOrderTotalCost += totalItems * currentItem.price;
+    //   items.splice(items.indexOf(currentItem), 1, currentItem);
+    //   state.items = items;
+    //   state.totalItems = tempOrderTotalItems;
+    //   state.totalCost = tempOrderTotalCost;
+    //   state.orderUpdateLoading = false;
+    //   state.error = null;
+    // },
     addNewItem(state, action) {
       const { item, type } = action.payload;
       let items;
@@ -122,59 +108,52 @@ const currentOrderSlice = createSlice({
       state.orderUpdateLoading = false;
       state.error = null;
     },
-    setShippingLocation(state, action) {
-      const { location } = action.payload;
-      state.distributorName = location.name;
-      state.distributorId = location.id;
-    },
-    clearShippingLocation(state) {
-      state.distributorName = null;
-      state.distributorId = null;
-    },
-    addAttention(state, action) {
-      const { attention } = action.payload;
-      state.attention = attention;
-    },
-    updateOrderNote(state, action) {
-      const { value } = action.payload;
-      if (value.length <= 300) {
-        state.orderNote = value;
-      }
-    },
-    setRushOrder(state, action) {
-      const { rush } = action.payload;
-      state.rushOrder = rush;
-    },
-    removeItem(state, action) {
-      const { id } = action.payload;
-      console.log(id);
-      let items = [...state.items];
-      let inStockItems = [...state.inStockOrderItems];
-      let onDemandItems = [...state.onDemandOrderItems];
-      let currentItem = items.find((i) => i.id === id);
-      state.totalItems -= currentItem.totalItems;
-      state.totalCost -= currentItem.estTotal;
-      state.items = items.filter((i) => i.id !== id);
-      state.inStockOrderItems = inStockItems.filter((i) => i.id !== id);
-      state.onDemandOrderItems = onDemandItems.filter((i) => i.id !== id);
-    },
+    // setShippingLocation(state, action) {
+    //   const { location } = action.payload;
+    //   state.distributorName = location.name;
+    //   state.distributorId = location.id;
+    // },
+    // clearShippingLocation(state) {
+    //   state.distributorName = null;
+    //   state.distributorId = null;
+    // },
+    // addAttention(state, action) {
+    //   const { attention } = action.payload;
+    //   state.attention = attention;
+    // },
+    // updateOrderNote(state, action) {
+    //   const { value } = action.payload;
+    //   if (value.length <= 300) {
+    //     state.orderNote = value;
+    //   }
+    // },
+    // setRushOrder(state, action) {
+    //   const { rush } = action.payload;
+    //   state.rushOrder = rush;
+    // },
+    // removeItem(state, action) {
+    //   const { id } = action.payload;
+    //   console.log(id);
+    //   let items = [...state.items];
+    //   let inStockItems = [...state.inStockOrderItems];
+    //   let onDemandItems = [...state.onDemandOrderItems];
+    //   let currentItem = items.find((i) => i.id === id);
+    //   state.totalItems -= currentItem.totalItems;
+    //   state.totalCost -= currentItem.estTotal;
+    //   state.items = items.filter((i) => i.id !== id);
+    //   state.inStockOrderItems = inStockItems.filter((i) => i.id !== id);
+    //   state.onDemandOrderItems = onDemandItems.filter((i) => i.id !== id);
+    // },
     clearCurrentOrder(state) {
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.userId = null;
       state.userName = null;
       state.orderNumber = null;
-      state.distributorId = null;
-      state.distributorName = null;
-      state.attention = "";
       state.type = null;
       state.status = null;
-      state.items = [];
-      state.rushOrder = false;
-      state.budget = null;
       state.totalItems = 0;
       state.totalCost = 0;
-      state.orderNote = "";
       state.error = null;
     },
     updateSuccess(state) {
@@ -191,14 +170,7 @@ export const {
   setUpdateLoading,
   createNewOrderSuccess,
   getCurrentOrderSuccess,
-  updateCurrentOrder,
   addNewItem,
-  setShippingLocation,
-  clearShippingLocation,
-  addAttention,
-  updateOrderNote,
-  setRushOrder,
-  removeItem,
   clearCurrentOrder,
   updateSuccess,
   setFailure,
@@ -206,14 +178,14 @@ export const {
 
 export default currentOrderSlice.reducer;
 
-export const createNewOrder = (type, itemNumber, qty) => async (dispatch) => {
+export const createNewOrder = (type, itemNumber) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    let newOrder = await createOrder(type);
+    let newOrder = await createOrderSet(type);
     if (newOrder.error) {
       throw newOrder.error;
     }
-    let orderItem = await addOrderItem(newOrder.data.id, itemNumber, qty);
+    let orderItem = await addOrderSetItem(newOrder.data.id, itemNumber);
     if (orderItem.error) {
       throw orderItem.error;
     }
@@ -232,73 +204,39 @@ export const createNewOrder = (type, itemNumber, qty) => async (dispatch) => {
 export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let order = await fetchSingleOrderByType(type, userId);
+    let order = await fetchSingleOrderSetByType(type, userId);
     if (order.error) {
       throw order.error;
     }
     let formattedOrder;
-    let formattedItems;
     let itemReferenceArray;
     if (order.data.length === 0) {
       formattedOrder = {
         userId: null,
         userName: null,
         id: null,
-        distributorName: null,
-        distributorId: null,
-        attn: "",
         type: null,
         status: null,
         orderDate: null,
-        rushOrder: null,
-        budget: null,
         totalItems: 0,
         totalEstCost: 0,
-        orderNote: "",
       };
-      formattedItems = [];
       itemReferenceArray = [];
     } else {
       formattedOrder = {
         userId: order.data[0].user.id,
         userName: order.data[0].user.name,
         id: order.data[0].id,
-        distributorName: order.data[0].distributor
-          ? order.data[0].distributor.name
-          : null,
-        distributorId: order.data[0].distributor
-          ? order.data[0].distributor.id
-          : null,
-        attn: order.data[0].attn,
         type: order.data[0].type,
         status:
           order.data[0].status[0].toUpperCase() + order.data[0].status.slice(1),
         orderDate: order.data[0]["order-date"]
           ? order.data[0]["order-date"]
           : "---",
-        rushOrder: "---",
-        budget: "---",
         totalItems: order.data[0]["total-quantity"],
         totalEstCost: order.data[0]["total-cost"],
-        orderNote: order.data[0].notes,
       };
-      if (order.data[0]["order-items"].length > 0) {
-        formattedItems = order.data[0]["order-items"].map((item) => ({
-          id: item.id,
-          itemNumber: item.item["item-number"],
-          imgUrl: item.item["img-url"],
-          brand: item.item.brand.name,
-          itemType: item.item.type,
-          qty: item.item["qty-per-pack"],
-          price: item.item.cost,
-          totalItems: item.qty,
-          estTotal: item["total-cost"],
-          actTotal: "---",
-        }));
-      } else {
-        formattedItems = [];
-      }
-      itemReferenceArray = order.data[0]["order-items"].map((item) => ({
+      itemReferenceArray = order.data[0]["order-set-items"].map((item) => ({
         id: item.id,
         itemNumber: item.item["item-number"],
       }));
@@ -306,7 +244,6 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     dispatch(
       getCurrentOrderSuccess({
         order: formattedOrder,
-        orderItems: formattedItems,
         itemReference: itemReferenceArray,
       })
     );
@@ -385,14 +322,13 @@ export const addNewOrderItem = (
   orderId,
   itemId,
   orderItemId,
-  qty,
   type
 ) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     if (!orderItemId) {
       console.log("adding");
-      let orderItem = await addOrderItem(orderId, itemId, qty);
+      let orderItem = await addOrderSetItem(orderId, itemId);
       console.log(orderItem);
       if (orderItem.error) {
         throw orderItem.error;
@@ -408,7 +344,7 @@ export const addNewOrderItem = (
       );
     } else {
       console.log("patching");
-      let patchStatus = await patchOrderItem(orderItemId, qty);
+      let patchStatus = await patchOrderItem(orderItemId);
       if (patchStatus.error) {
         throw patchStatus.error;
       }

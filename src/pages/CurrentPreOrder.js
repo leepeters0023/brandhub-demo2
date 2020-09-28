@@ -353,8 +353,8 @@ const CurrentPreOrder = ({ userType }) => {
             handleModalOpen={handleModalOpen}
             handleOpenConfirm={handleOpenConfirm}
             isLoading={isLoading}
-            preOrderId={preOrderId}
-            preOrderStatus={preOrderStatus}
+            orderId={preOrderId}
+            orderStatus={preOrderStatus}
             currentItems={currentItems}
             orders={orders}
           />

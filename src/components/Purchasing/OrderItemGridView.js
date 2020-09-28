@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 //import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
+//import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
@@ -68,29 +68,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInput = React.memo(
-  ({ item, currentItemValues, handleItemUpdate }) => {
-    return (
-      <TextField
-        color="secondary"
-        size="small"
-        style={{ width: "55px" }}
-        id={`${item.id}`}
-        placeholder="Qty"
-        variant="outlined"
-        value={currentItemValues[item.id] || ""}
-        onChange={handleItemUpdate}
-      />
-    );
-  },
-  (prev, next) => {
-    return (
-      prev.item.id === next.item.id &&
-      prev.currentItemValues[`${prev.item.id}`] ===
-        next.currentItemValues[`${next.item.id}`]
-    );
-  }
-);
+// const MemoInput = React.memo(
+//   ({ item, currentItemValues, handleItemUpdate }) => {
+//     return (
+//       <TextField
+//         color="secondary"
+//         size="small"
+//         style={{ width: "55px" }}
+//         id={`${item.id}`}
+//         placeholder="Qty"
+//         variant="outlined"
+//         value={currentItemValues[item.id] || ""}
+//         onChange={handleItemUpdate}
+//       />
+//     );
+//   },
+//   (prev, next) => {
+//     return (
+//       prev.item.id === next.item.id &&
+//       prev.currentItemValues[`${prev.item.id}`] ===
+//         next.currentItemValues[`${next.item.id}`]
+//     );
+//   }
+// );
 
 const OrderItemGridView = (props) => {
   const {
@@ -98,8 +98,6 @@ const OrderItemGridView = (props) => {
     currentItems,
     handlePreview,
     handleAddItem,
-    currentItemValues,
-    handleItemUpdate,
     setCurrentItemAdded,
   } = props;
   const classes = useStyles();
@@ -159,26 +157,12 @@ const OrderItemGridView = (props) => {
 
                 {type !== "program" && (
                   <>
-                    <MemoInput
-                      item={item}
-                      currentItemValues={currentItemValues}
-                      handleItemUpdate={handleItemUpdate}
-                    />
                     <IconButton
                       id={`${item.id}`}
-                      disabled={
-                        currentItemValues[item.id] === "" ||
-                        !currentItemValues[item.id]
-                      }
-                      value=""
                       onClick={() => {
                         handleAddItem(
                           item,
-                          parseInt(currentItemValues[item.id])
                         );
-                        handleItemUpdate({
-                          target: { value: "", id: item.id },
-                        });
                       }}
                     >
                       <AddBoxIcon />

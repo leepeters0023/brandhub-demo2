@@ -24,7 +24,8 @@ import Approvals from "./pages/Approvals";
 //import Calendar from "./pages/Calendar";
 import ContactsByState from "./pages/ContactsByState";
 import Coupons from "./pages/Coupons";
-import CurrentOrder from "./pages/CurrentOrder";
+//import CurrentOrder from "./pages/CurrentOrder";
+import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
 import FourOhFour from "./pages/FourOhFour";
@@ -42,7 +43,7 @@ import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
-import RollupPreOrderDetail from "./pages/RollupPreOrderDetail";
+//import RollupPreOrderDetail from "./pages/RollupPreOrderDetail";
 import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
@@ -180,7 +181,7 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <CurrentOrder path="/orders/open/:orderType" userType={role} />,
+            <CurrentOrderDetail path="/orders/open/:orderId" userType={role} />,
             "/orders/open",
             ["field1", "field2", "super"],
             role
@@ -234,7 +235,7 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <RollupPreOrderDetail path="/rollup/detail/:orderId" />,
+            <CurrentOrderDetail path="/rollup/detail/:orderId" />,
             "/rollup/detail",
             ["field2", "super"],
             role
