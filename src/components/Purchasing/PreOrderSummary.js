@@ -23,14 +23,14 @@ const PreOrderSummary = () => {
   const [currentOrderId, setCurrentOrderId] = useState(null);
 
   const programs = useSelector((state) => state.programs.programs);
-  const preOrders = useSelector((state) => state.programTable.preOrderSummary);
-  const currentOrder = useSelector((state) => state.programTable);
-  const summaryLoading = useSelector((state) => state.programTable.preOrderSummaryLoading);
+  const preOrders = useSelector((state) => state.preOrderDetails.preOrderSummary);
+  const currentOrder = useSelector((state) => state.orderSet);
+  const summaryLoading = useSelector((state) => state.preOrderDetails.preOrderSummaryLoading);
 
   useEffect(() => {
     if (
       (!currentSummary && preOrders.length > 0 && !summaryLoading) ||
-      (preOrders.length > 0 && currentOrder.preOrderId !== currentOrderId && !summaryLoading)
+      (preOrders.length > 0 && currentOrder.orderId !== currentOrderId && !summaryLoading)
     ) {
       let summary = preOrders.map((preOrder) => {
         if (
@@ -53,7 +53,7 @@ const PreOrderSummary = () => {
           ? 1
           : 0;
       });
-      setCurrentOrderId(currentOrder.preOrderId);
+      setCurrentOrderId(currentOrder.orderId);
       setCurrentSummary(summary);
     }
   }, [
@@ -62,7 +62,7 @@ const PreOrderSummary = () => {
     programs,
     programs.length,
     preOrders.length,
-    currentOrder.preOrderId,
+    currentOrder.orderId,
     currentOrderId,
     summaryLoading,
   ]);
@@ -114,21 +114,21 @@ const PreOrderSummary = () => {
                     <TableRow key={preOrder.preOrderId}>
                       <TableCell align="left">{preOrder.name}</TableCell>
                       <TableCell align="center">
-                        {preOrder.preOrderId !== currentOrder.preOrderId
+                        {preOrder.preOrderId !== currentOrder.orderId
                           ? statusConverter(preOrder.status)
                           : statusConverter(currentOrder.status)}
                       </TableCell>
                       <TableCell align="center">
-                        {preOrder.preOrderId !== currentOrder.preOrderId
+                        {preOrder.preOrderId !== currentOrder.orderId
                           ? preOrder.totalItems
                           : currentOrder.items
                               .map((item) => item.totalItems)
                               .reduce((a, b) => a + b)}
                       </TableCell>
                       <TableCell align="center">
-                        {preOrder.preOrderId !== currentOrder.preOrderId
+                        {preOrder.preOrderId !== currentOrder.orderId
                           ? formatMoney(preOrder.totalEstCost)
-                          : formatMoney(currentOrder.programTotal)}
+                          : formatMoney(currentOrder.orderTotal)}
                       </TableCell>
                       <TableCell align="right">
                         {formatMoney(

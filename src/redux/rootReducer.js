@@ -1,7 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit'
  
 import userReducer from "./slices/userSlice";
-import programTableReducer from "./slices/programTableSlice";
+import preOrderDetailReducer from "./slices/preOrderDetailSlice";
+import orderSetReducer from "./slices/orderSetSlice";
 import programsReducer from "./slices/programsSlice";
 import orderHistoryReducer from "./slices/orderHistorySlice";
 import currentOrderReducer from "./slices/currentOrderSlice";
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   orderHistory: orderHistoryReducer,
   currentOrder: currentOrderReducer,
-  programTable: programTableReducer,
+  preOrderDetails: preOrderDetailReducer,
+  orderSet: orderSetReducer,
   programs: programsReducer,
   patchOrder: patchOrderReducer,
   items: itemReducer,

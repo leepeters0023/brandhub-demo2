@@ -6,19 +6,19 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   removeGridItem,
-  updatePreOrderNote,
-} from "../redux/slices/programTableSlice";
+  updateOrderNote,
+} from "../redux/slices/orderSetSlice";
 
 import {
-  deletePreOrdItem,
-  setPreOrderNotes,
+  deleteSetItem,
+  setOrderSetNotes,
 } from "../redux/slices/patchOrderSlice";
 
 import { fetchRollupProgram } from "../redux/slices/rollupSlice";
 
 import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
-import PreOrderTable from "../components/Purchasing/PreOrderTable";
+import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import PreOrderOverview from "../components/Purchasing/PreOrderOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
@@ -70,11 +70,11 @@ const RollupPreOrderDetail = ({ orderId }) => {
   const [modal, handleModal] = useState(false);
 
   const isLoading = useSelector((state) => state.rollup.isLoading);
-  const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
-  const preOrderId = useSelector((state) => state.programTable.preOrderId);
-  const preOrderStatus = useSelector((state) => state.programTable.status);
-  const currentItems = useSelector((state) => state.programTable.items);
-  const orders = useSelector((state) => state.programTable.orders);
+  const preOrderNote = useSelector((state) => state.orderSet.orderNote);
+  const preOrderId = useSelector((state) => state.orderSet.orderId);
+  const preOrderStatus = useSelector((state) => state.orderSet.status);
+  const currentItems = useSelector((state) => state.orderSet.items);
+  const orders = useSelector((state) => state.orderSet.orders);
   const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
@@ -106,21 +106,21 @@ const RollupPreOrderDetail = ({ orderId }) => {
 
   const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
-    dispatch(deletePreOrdItem(currentItemId));
+    dispatch(deleteSetItem(currentItemId));
     handleConfirmModal(false);
   };
 
   const handlePreOrderNote = (evt) => {
-    dispatch(updatePreOrderNote({ value: evt.target.value }));
+    dispatch(updateOrderNote({ value: evt.target.value }));
   };
 
   const handleSave = () => {
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
   };
 
   const handleSubmit = () => {
     dispatch(setProgStatus(null, "submitted", preOrderId));
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
   };
 
   useEffect(() => {
@@ -177,7 +177,7 @@ const RollupPreOrderDetail = ({ orderId }) => {
         {preOrderStatus === "complete" || preOrderStatus === "submitted" ? (
           <PreOrderOverview />
         ) : (
-          <PreOrderTable
+          <OrderSetTable
             currentProgram={undefined}
             open={open}
             setOpen={setOpen}
@@ -190,6 +190,7 @@ const RollupPreOrderDetail = ({ orderId }) => {
             preOrderStatus={preOrderStatus}
             currentItems={currentItems}
             orders={orders}
+            orderType="preOrder"
           />
         )}
         <br />

@@ -12,7 +12,7 @@ import {
   setIsLoading,
   clearPrograms,
 } from "./redux/slices/programsSlice";
-import { fetchPreOrders, resetState } from "./redux/slices/programTableSlice";
+import { fetchPreOrders, resetState } from "./redux/slices/preOrderDetailSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
 import { clearCurrentOrder } from "./redux/slices/currentOrderSlice";
 import { resetItems } from "./redux/slices/itemSlice";
@@ -72,7 +72,7 @@ const App = () => {
   const currentTerritory = useSelector((state) => state.user.territories[0]);
   const isLoading = useSelector((state) => state.user.isLoading);
   const isPreOrdersLoading = useSelector(
-    (state) => state.programTable.isPreOrdersLoading
+    (state) => state.preOrderDetails.isPreOrdersLoading
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
