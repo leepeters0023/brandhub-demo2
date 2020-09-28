@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { buildTableFromOrders } from "./programTableSlice";
+import { buildTableFromOrders } from "./orderSetSlice";
+import { setPreOrderDetails } from "./preOrderDetailSlice";
 import {
   fetchAllFilteredPreOrders,
   fetchNextPreOrders,
@@ -165,7 +166,7 @@ export const fetchRollupProgram = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = currentOrders.data["pre-order-items"].map((item) => ({
+    let currentItems = currentOrders.data["order-set-items"].map((item) => ({
       id: item.id,
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
@@ -229,22 +230,24 @@ export const fetchRollupProgram = (id) => async (dispatch) => {
         : 0;
     });
 
-    let preOrderId = currentOrders.data.id;
-    let preOrderStatus = currentOrders.data.status;
+    let orderTotal = currentOrders.data["total-cost"]
+    let orderId = currentOrders.data.id;
+    let orderStatus = currentOrders.data.status;
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
         : currentOrders.data["territory-names"].split(", ");
     let note = currentOrders.data.notes ? currentOrders.data.notes : "";
+    dispatch(
+      setPreOrderDetails({ territories: territories, programId: null, orderTotal: orderTotal })
+    );
 
     dispatch(
       buildTableFromOrders({
-        programId: null,
+        orderId: orderId,
         orders: orders,
         items: currentItems,
-        preOrderId: preOrderId,
-        status: preOrderStatus,
-        territories: territories,
+        status: orderStatus,
         note: note,
       })
     );

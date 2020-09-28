@@ -3,24 +3,21 @@ import { navigate } from "@reach/router";
 
 import {
   patchOrderItem,
-  deletePreOrderItem,
-  submitPreOrder,
-  setPreOrderNote,
+  deleteOrderSetItem,
+  submitOrderSet,
+  setOrderSetNote,
   setOrderDetail,
   setOrderShipping,
   deleteOrderItem,
   submitOrder,
   updateOrderStatus,
+  setOrderSetStatus,
 } from "../../api/orderApi";
 
-import { setPreOrderProgramStatus } from "../../api/programApi";
-
 import { setProgramStatus } from "./programsSlice";
-import { setPreOrderStatus, updateOrderDetails } from "./programTableSlice";
+import { setOrderStatus, updateOrderDetails } from "./orderSetSlice";
 import {
   setShippingLocation,
-  updateOrderNote,
-  addAttention,
   updateCurrentOrder,
   removeItem,
 } from "./currentOrderSlice";
@@ -166,10 +163,10 @@ export const deleteOrdItem = (id) => async (dispatch) => {
   }
 };
 
-export const deletePreOrdItem = (id) => async (dispatch) => {
+export const deleteSetItem = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const deleteStatus = await deletePreOrderItem(id);
+    const deleteStatus = await deleteOrderSetItem(id);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
@@ -183,17 +180,17 @@ export const deletePreOrdItem = (id) => async (dispatch) => {
 export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const compStatus = await setPreOrderProgramStatus(preOrderId, value);
+    const compStatus = await setOrderSetStatus(preOrderId, value);
     if (compStatus.error) {
       throw compStatus.error;
     }
     if (id) {
       dispatch(setProgramStatus({ program: id, status: value }));
     }
-    dispatch(setPreOrderStatus({ status: value }));
+    dispatch(setOrderStatus({ status: value }));
     dispatch(patchSuccess());
     if (value === "submitted") {
-      const submitStatus = await submitPreOrder(preOrderId);
+      const submitStatus = await submitOrderSet(preOrderId);
       if (submitStatus.error) {
         throw submitStatus.error;
       }
@@ -203,10 +200,10 @@ export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
   }
 };
 
-export const setPreOrderNotes = (id, note) => async (dispatch) => {
+export const setOrderSetNotes = (id, note) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const noteStatus = await setPreOrderNote(id, note);
+    const noteStatus = await setOrderSetNote(id, note);
     if (noteStatus.error) {
       throw noteStatus.error;
     }
@@ -223,12 +220,7 @@ export const setOrderDetails = (id, note, attn, type) => async (dispatch) => {
     if (noteStatus.error) {
       throw noteStatus.error;
     }
-    if (type === "pre-order") {
-      dispatch(updateOrderDetails({ orderNumber: id, note: note, attn: attn }));
-    } else {
-      dispatch(updateOrderNote({ value: note }));
-      dispatch(addAttention({ attention: attn }));
-    }
+    dispatch(updateOrderDetails({ orderNumber: id, note: note, attn: attn }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
@@ -257,9 +249,9 @@ export const submitCurrentOrder = (orderId, role) => async (dispatch) => {
       throw submitStatus.error;
     }
     if (role !== "field1") {
-      const updateStatus = await updateOrderStatus(orderId, "approved")
+      const updateStatus = await updateOrderStatus(orderId, "approved");
       if (updateStatus.error) {
-        throw updateStatus.error
+        throw updateStatus.error;
       }
     }
     dispatch(patchSuccess());
@@ -282,27 +274,31 @@ export const updateCurrentOrderStatus = (orderId, status, filters) => async (
     }
     dispatch(patchSuccess());
     if (!filters) {
-      navigate("/orders/approvals")
+      navigate("/orders/approvals");
     }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
 
-export const updateMultipleOrderStatus = (orderIdArray, status, filters) => async (dispatch) => {
+export const updateMultipleOrderStatus = (
+  orderIdArray,
+  status,
+  filters
+) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     Promise.all(
-      orderIdArray.map(async(id) => {
+      orderIdArray.map(async (id) => {
         const updateStatus = await updateOrderStatus(id, status);
         if (updateStatus.error) {
-          throw updateStatus.error
+          throw updateStatus.error;
         }
       })
-    )
+    );
     dispatch(fetchFilteredOrderHistory(filters));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};

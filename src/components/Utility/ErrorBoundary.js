@@ -27,7 +27,7 @@ class ErrorBoundary extends Component {
       this.props.currentOrder ||
       this.props.orderHistory ||
       this.props.items ||
-      this.props.programTable
+      this.props.preOrderDetails
     ) {
       if (this.props.programs) {
         throw this.props.programs
@@ -37,8 +37,8 @@ class ErrorBoundary extends Component {
         throw this.props.orderHistory
       } else if (this.props.items) {
         throw this.props.items
-      } else if (this.props.programTable) {
-        throw this.props.programTable
+      } else if (this.props.preOrderDetails) {
+        throw this.props.preOrderDetails
       }
     }
   }
@@ -67,7 +67,7 @@ const mapStateToProps = (state) => {
     currentOrder: state.currentOrder.error,
     orderHistory: state.orderHistory.error,
     items: state.items.error,
-    programTable: state.programTable.error,
+    preOrderDetails: state.preOrderDetails.error,
 
   };
   return errors;

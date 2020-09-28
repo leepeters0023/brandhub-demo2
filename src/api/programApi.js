@@ -50,36 +50,3 @@ export const fetchProgramItems = async (id) => {
     });
   return response;
 };
-
-export const setPreOrderProgramStatus = async (id, value) => {
-  const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  await axios
-    .patch(
-      `/api/pre-orders/${id}`,
-      {
-        data: {
-          type: "pre-order",
-          id: id,
-          attributes: {
-            "status": value,
-          },
-        },
-      },
-      headers
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};

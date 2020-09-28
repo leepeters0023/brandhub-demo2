@@ -16,10 +16,11 @@ export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(
-      `/api/pre-orders?filter[program_id]=${program}&filter[user-id]=${userId}`
+      `/api/order-sets?filter[type]=pre-order&filter[program_id]=${program}&filter[user-id]=${userId}`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })
@@ -34,7 +35,7 @@ export const fetchOrdersByProgram = async (program, userId) => {
 export const fetchPreOrderById = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/pre-orders/${id}`)
+    .get(`/api/order-sets/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -51,10 +52,11 @@ export const fetchPreOrderById = async (id) => {
 export const fetchAllPreOrders = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/pre-orders?filter[user-id]=${id}`)
+    .get(`/api/order-sets?filter[type]=pre-order&filter[user-id]=${id}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";
@@ -79,8 +81,8 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
   };
   let statusString =
     filterObject.status !== "all"
-      ? `filter[status]=${filterObject.status}`
-      : "filter[status]!=approved";
+      ? `&filter[status]=${filterObject.status}`
+      : "&filter[status]!=approved";
   let userString = filterObject.user
     ? `&filter[user-id]=${filterObject.user}`
     : "";
@@ -99,7 +101,7 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString =
-    "/api/pre-orders?" +
+    "/api/order-sets?filter[type]=pre-order" +
     statusString +
     userString +
     progString +
@@ -150,14 +152,14 @@ export const fetchNextPreOrders = async (url) => {
   return response;
 };
 
-export const setPreOrderNote = async (id, note) => {
+export const setOrderSetNote = async (id, note) => {
   const response = { status: "", error: null };
   await axios
     .patch(
-      `/api/pre-orders/${id}`,
+      `/api/order-sets/${id}`,
       {
         data: {
-          type: "pre-order",
+          type: "order-set",
           id: id,
           attributes: {
             notes: note,
@@ -177,10 +179,10 @@ export const setPreOrderNote = async (id, note) => {
   return response;
 };
 
-export const submitPreOrder = async (id) => {
+export const submitOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
-    .post(`/api/pre-orders/${id}/submit`, null, writeHeaders)
+    .post(`/api/order-sets/${id}/submit`, null, writeHeaders)
     .then((res) => {
       response.status = "ok";
     })
@@ -192,14 +194,14 @@ export const submitPreOrder = async (id) => {
   return response;
 };
 
-export const deletePreOrderItem = async (id) => {
+export const deleteOrderSetItem = async (id) => {
   const response = { status: "", error: null };
   await axios
     .delete(
-      `/api/pre-order-items/${id}`,
+      `/api/order-set-items/${id}`,
       {
         data: {
-          type: "pre-order-item",
+          type: "order-set-item",
           id: id,
         },
       },
@@ -216,7 +218,7 @@ export const deletePreOrderItem = async (id) => {
   return response;
 };
 
-// -------------------------- Single Order Calls ------------------------- //
+// -------------------------- Other Order Set Calls ------------------------- //
 
 export const createOrder = async (type) => {
   const response = { status: "", error: null, data: null };
@@ -262,6 +264,39 @@ export const patchOrderItem = async (id, qty) => {
         },
       },
       writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const setOrderSetStatus = async (id, value) => {
+  const response = { status: "", error: null };
+  let headers = {
+    headers: {
+      Accept: "application/vnd.api+json",
+      "Content-Type": "application/vnd.api+json",
+    },
+  };
+  await axios
+    .patch(
+      `/api/order-sets/${id}`,
+      {
+        data: {
+          type: "order-set",
+          id: id,
+          attributes: {
+            "status": value,
+          },
+        },
+      },
+      headers
     )
     .then((res) => {
       response.status = "ok";

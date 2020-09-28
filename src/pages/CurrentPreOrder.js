@@ -3,23 +3,26 @@ import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
-  removeGridItem,
-  fetchProgramOrders,
   setProgramName,
-  updatePreOrderNote,
   fetchPreOrders,
-} from "../redux/slices/programTableSlice";
+} from "../redux/slices/preOrderDetailSlice";
 
 import {
-  deletePreOrdItem,
-  setPreOrderNotes,
+  removeGridItem,
+  fetchProgramOrders,
+  updateOrderNote,
+} from "../redux/slices/orderSetSlice";
+
+import {
+  deleteSetItem,
+  setOrderSetNotes,
 } from "../redux/slices/patchOrderSlice";
 
 import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
-import PreOrderTable from "../components/Purchasing/PreOrderTable";
+import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import PreOrderOverview from "../components/Purchasing/PreOrderOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
@@ -69,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalsDiv = React.memo(() => {
   const classes = useStyles();
-  const programTotal = useSelector((state) => state.programTable.programTotal);
+  const programTotal = useSelector((state) => state.orderSet.orderTotal);
 
   return (
     <>
@@ -132,20 +135,21 @@ const CurrentPreOrder = ({ userType }) => {
   const [currentItem, setCurrentItem] = useState({});
 
   const currentUserId = useSelector((state) => state.user.id);
-  const isLoading = useSelector((state) => state.programTable.isLoading);
+  const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
-  const preOrderNote = useSelector((state) => state.programTable.preOrderNote);
-  const preOrderId = useSelector((state) => state.programTable.preOrderId);
-  const preOrderStatus = useSelector((state) => state.programTable.status);
-  const currentItems = useSelector((state) => state.programTable.items);
-  const orders = useSelector((state) => state.programTable.orders);
+  const preOrderNote = useSelector((state) => state.orderSet.orderNote);
+  const preOrderId = useSelector((state) => state.orderSet.orderId);
+  const preOrderStatus = useSelector((state) => state.orderSet.status);
+  const currentItems = useSelector((state) => state.orderSet.items);
+  const orders = useSelector((state) => state.orderSet.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
   const handleModalClose = () => {
     handleModal(false);
   };
-  const grandTotal = useSelector(
-    (state) => state.programTable.preOrderTotal.updatedTotal
+  const grandTotalMod = useSelector(
+    (state) => state.preOrderDetails.preOrderTotalMod
   );
+  const setTotal = useSelector((state) => state.orderSet.orderTotal);
 
   const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
     setCurrentItem({
@@ -172,17 +176,17 @@ const CurrentPreOrder = ({ userType }) => {
 
   const handleRemove = (itemNum) => {
     dispatch(removeGridItem({ itemNum }));
-    dispatch(deletePreOrdItem(currentItemId));
+    dispatch(deleteSetItem(currentItemId));
     handleConfirmModal(false);
   };
 
   const handleSave = () => {
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
   };
 
   const handleSubmit = () => {
     dispatch(setProgStatus(program, "submitted", preOrderId));
-    dispatch(setPreOrderNotes(preOrderId, preOrderNote));
+    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
     setTermsChecked(false);
   };
 
@@ -196,7 +200,7 @@ const CurrentPreOrder = ({ userType }) => {
   }, []);
 
   const handlePreOrderNote = (evt) => {
-    dispatch(updatePreOrderNote({ value: evt.target.value }));
+    dispatch(updateOrderNote({ value: evt.target.value }));
   };
 
   useEffect(() => {
@@ -284,7 +288,13 @@ const CurrentPreOrder = ({ userType }) => {
             </div>
           </AccordianSummary>
           <AccordianDetails>
-            <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+              }}
+            >
               <PreOrderSummary />
               <br />
               <div
@@ -310,12 +320,14 @@ const CurrentPreOrder = ({ userType }) => {
                   <InputBase
                     className={classes.titleText}
                     id="grand-total"
-                    value={`${formatMoney(grandTotal)}`}
+                    value={`${formatMoney(grandTotalMod + setTotal)}`}
                     inputProps={{ "aria-label": "naked" }}
                     style={{
                       marginTop: "10px",
                       marginBottom: "0px",
-                      width: `Calc(${grandTotal.toString().length}*15px + 20px)`,
+                      width: `Calc(${
+                        (grandTotalMod + setTotal).toString().length
+                      }*15px + 20px)`,
                       minWidth: "100px",
                       readonly: "readonly",
                       pointerEvents: "none",
@@ -332,7 +344,7 @@ const CurrentPreOrder = ({ userType }) => {
         ) : preOrderStatus === "complete" || preOrderStatus === "submitted" ? (
           <PreOrderOverview />
         ) : (
-          <PreOrderTable
+          <OrderSetTable
             currentProgram={program}
             open={open}
             setOpen={setOpen}

@@ -30,12 +30,13 @@ const PreOrderOverview = () => {
 
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
-  const preOrder = useSelector((state) => state.programTable);
+  const preOrder = useSelector((state) => state.orderSet);
+  const programId = useSelector((state) => state.preOrderDetails.programId);
   const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleEditOrder = () => {
     dispatch(
-      setProgStatus(preOrder.programId, "in-progress", preOrder.preOrderId)
+      setProgStatus(programId, "in-progress", preOrder.orderId)
     );
   };
 
@@ -114,11 +115,11 @@ const PreOrderOverview = () => {
               .reduce((a, b) => a + b)}`}
           </Typography>
           <Typography className={classes.headerText}>
-            {`Total Cost: ${formatMoney(preOrder.programTotal)}`}
+            {`Total Cost: ${formatMoney(preOrder.orderTotal)}`}
           </Typography>
           <br />
           <Typography className={classes.headerText}>
-            {`Order Notes: ${preOrder.preOrderNote}`}
+            {`Order Notes: ${preOrder.orderNote}`}
           </Typography>
           <br />
           {(currentUserRoll === "super" || currentUserRoll === "field2" || preOrder.status !== "submitted") && (
