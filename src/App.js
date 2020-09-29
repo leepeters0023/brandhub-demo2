@@ -14,17 +14,16 @@ import {
 } from "./redux/slices/programsSlice";
 import { fetchPreOrders, resetState } from "./redux/slices/preOrderDetailSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
-import { clearCurrentOrder } from "./redux/slices/currentOrderSlice";
+import {
+  clearCurrentOrder,
+  fetchCurrentOrderByType,
+} from "./redux/slices/currentOrderSlice";
 import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
-import { resetPreOrderRollup } from "./redux/slices/rollupSlice";
+import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
-import Approvals from "./pages/Approvals";
-//import Calendar from "./pages/Calendar";
-import ContactsByState from "./pages/ContactsByState";
 import Coupons from "./pages/Coupons";
-//import CurrentOrder from "./pages/CurrentOrder";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
@@ -38,13 +37,10 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
-import POSClassifications from "./pages/POSClassifications";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
-//import RollupPreOrderDetail from "./pages/RollupPreOrderDetail";
-import RulesByState from "./pages/RulesByState";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 import SingleOrder from "./pages/SingleOrder";
@@ -93,7 +89,7 @@ const App = () => {
     dispatch(resetItems());
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());
-    dispatch(resetPreOrderRollup());
+    dispatch(resetOrderSetHistory());
   };
 
   useEffect(() => {
@@ -107,6 +103,8 @@ const App = () => {
       setRole(currentRole);
       dispatch(fetchInitialPrograms(currentTerritory.id));
       dispatch(fetchPreOrders(currentUserId, "initial"));
+      dispatch(fetchCurrentOrderByType("inStock", currentUserId));
+      dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);
@@ -253,30 +251,6 @@ const App = () => {
             role
           )}
           {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
-          {handleAuth(
-            <Approvals path="/approval" />,
-            "/approval",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <RulesByState path="/rules" />,
-            "/rules",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <ContactsByState path="/compliance-contacts" />,
-            "/compliance-contacts",
-            ["compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <POSClassifications path="/classifications" />,
-            "/classifications",
-            ["compliance", "super"],
-            role
-          )}
           {handleAuth(
             <Settings path="/settings" userType={role} />,
             "/settings",

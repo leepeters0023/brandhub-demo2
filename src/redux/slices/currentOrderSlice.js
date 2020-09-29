@@ -77,23 +77,6 @@ const currentOrderSlice = createSlice({
       state.totalCost = order.totalEstCost;
       state.error = null;
     },
-    // updateCurrentOrder(state, action) {
-    //   const { id, totalItems } = action.payload;
-    //   let items = [...state.items];
-    //   let currentItem = items.find((i) => i.id === id);
-    //   let tempOrderTotalItems = state.totalItems - currentItem.totalItems;
-    //   let tempOrderTotalCost = state.totalCost - currentItem.estTotal;
-    //   currentItem.totalItems = totalItems;
-    //   tempOrderTotalItems += totalItems;
-    //   currentItem.estTotal = totalItems * currentItem.price;
-    //   tempOrderTotalCost += totalItems * currentItem.price;
-    //   items.splice(items.indexOf(currentItem), 1, currentItem);
-    //   state.items = items;
-    //   state.totalItems = tempOrderTotalItems;
-    //   state.totalCost = tempOrderTotalCost;
-    //   state.orderUpdateLoading = false;
-    //   state.error = null;
-    // },
     addNewItem(state, action) {
       const { item, type } = action.payload;
       let items;
@@ -108,42 +91,6 @@ const currentOrderSlice = createSlice({
       state.orderUpdateLoading = false;
       state.error = null;
     },
-    // setShippingLocation(state, action) {
-    //   const { location } = action.payload;
-    //   state.distributorName = location.name;
-    //   state.distributorId = location.id;
-    // },
-    // clearShippingLocation(state) {
-    //   state.distributorName = null;
-    //   state.distributorId = null;
-    // },
-    // addAttention(state, action) {
-    //   const { attention } = action.payload;
-    //   state.attention = attention;
-    // },
-    // updateOrderNote(state, action) {
-    //   const { value } = action.payload;
-    //   if (value.length <= 300) {
-    //     state.orderNote = value;
-    //   }
-    // },
-    // setRushOrder(state, action) {
-    //   const { rush } = action.payload;
-    //   state.rushOrder = rush;
-    // },
-    // removeItem(state, action) {
-    //   const { id } = action.payload;
-    //   console.log(id);
-    //   let items = [...state.items];
-    //   let inStockItems = [...state.inStockOrderItems];
-    //   let onDemandItems = [...state.onDemandOrderItems];
-    //   let currentItem = items.find((i) => i.id === id);
-    //   state.totalItems -= currentItem.totalItems;
-    //   state.totalCost -= currentItem.estTotal;
-    //   state.items = items.filter((i) => i.id !== id);
-    //   state.inStockOrderItems = inStockItems.filter((i) => i.id !== id);
-    //   state.onDemandOrderItems = onDemandItems.filter((i) => i.id !== id);
-    // },
     clearCurrentOrder(state) {
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -230,8 +177,8 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         type: order.data[0].type,
         status:
           order.data[0].status[0].toUpperCase() + order.data[0].status.slice(1),
-        orderDate: order.data[0]["order-date"]
-          ? order.data[0]["order-date"]
+        orderDate: order.data[0]["submitted-at"]
+          ? order.data[0]["submitted-at"]
           : "---",
         totalItems: order.data[0]["total-quantity"],
         totalEstCost: order.data[0]["total-cost"],
@@ -270,7 +217,9 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       attn: order.data.attn,
       type: order.data.type,
       status: order.data.status[0].toUpperCase() + order.data.status.slice(1),
-      orderDate: order.data["order-date"] ? order.data["order-date"] : "---",
+      orderDate: order.data["submitted-at"]
+        ? order.data["submitted-at"]
+        : "---",
       rushOrder: "---",
       budget: "---",
       totalItems: order.data["total-quantity"],
@@ -318,16 +267,12 @@ export const deleteCurrentOrder = (id) => async (dispatch) => {
   }
 };
 
-export const addNewOrderItem = (
-  orderId,
-  itemId,
-  orderItemId,
-  type
-) => async (dispatch) => {
+export const addNewOrderItem = (orderId, itemId, orderItemId, type) => async (
+  dispatch
+) => {
   try {
     dispatch(setUpdateLoading());
     if (!orderItemId) {
-      console.log("adding");
       let orderItem = await addOrderSetItem(orderId, itemId);
       console.log(orderItem);
       if (orderItem.error) {

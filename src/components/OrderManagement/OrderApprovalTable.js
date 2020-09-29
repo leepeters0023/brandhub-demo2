@@ -22,15 +22,9 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 const headCells = [
-  { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "id", disablePadding: false, label: "Order #", sort: true },
   { id: "type", disablePadding: false, label: "Type", sort: false },
   { id: "user", disablePadding: false, label: "User", sort: true },
-  {
-    id: "distributor",
-    disablePadding: false,
-    label: "Distributor",
-    sort: true,
-  },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   {
     id: "totalItems",
@@ -144,8 +138,8 @@ const OrderApprovalTable = ({
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
-  const handleRowClick = (orderNum) => {
-    navigate(`/orders/open/approval#${orderNum}`);
+  const handleRowClick = (id) => {
+    navigate(`/orders/open/${id}#approval`);
   };
 
   return (
@@ -176,25 +170,24 @@ const OrderApprovalTable = ({
               orders.length > 0 &&
               orders.map((row) => (
                 <TableRow
-                  key={row.orderNum}
+                  key={row.id}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
-                    handleRowClick(row.orderNum);
+                    handleRowClick(row.id);
                   }}
                 >
-                  <TableCell align="left">{row.orderNum}</TableCell>
+                  <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
                   <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">
                     {format(new Date(row.orderDate), "MM/dd/yyyy")}
                   </TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
-                    {row.estTotal !== "---"
-                      ? formatMoney(row.estTotal)
-                      : row.estTotal}
+                    {row.totalEstCost !== "---"
+                      ? formatMoney(row.totalEstCost)
+                      : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">
                     <div style={{display: "flex", alignItems: "center"}}>
@@ -203,7 +196,7 @@ const OrderApprovalTable = ({
                           onClick={
                             (event) => {
                               event.stopPropagation()
-                              handleApproval(row.orderNum)
+                              handleApproval(row.id)
                             }
                           }
                         >

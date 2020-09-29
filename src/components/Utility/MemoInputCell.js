@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { setGridItem, setItemTotal } from "../../redux/slices/orderSetSlice";
 
-import { setProgStatus } from "../../redux/slices/patchOrderSlice";
+import { startOrdSet } from "../../redux/slices/patchOrderSlice";
 
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
@@ -35,8 +35,8 @@ const MemoInputCell = React.memo(
         itemNumber,
         itemId,
         index,
-        preOrderId,
-        preOrderStatus,
+        orderId,
+        orderStatus,
         program,
         cellRef,
         handleKeyDown,
@@ -146,10 +146,10 @@ const MemoInputCell = React.memo(
                     dispatch(patchItem(itemId, evt.target.value, orderNumber));
                   }
                   setChange(false);
-                  if (preOrderStatus === "inactive") {
+                  if (orderStatus === "inactive") {
                     if (program) {
                       dispatch(
-                        setProgStatus(program, "in-progress", preOrderId)
+                        startOrdSet(program, "in-progress", orderId)
                       );
                     }
                   }
@@ -189,8 +189,8 @@ MemoInputCell.propTypes = {
   itemNumber: PropTypes.string.isRequired,
   itemId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  preOrderId: PropTypes.string,
-  preOrderStatus: PropTypes.string,
+  orderId: PropTypes.string,
+  orderStatus: PropTypes.string,
   program: PropTypes.string,
   cellRef: PropTypes.any,
   handleKeyDown: PropTypes.func.isRequired,

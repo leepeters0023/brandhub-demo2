@@ -3,11 +3,11 @@ import { CSVLink } from "react-csv";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { setProgStatus } from "../../redux/slices/patchOrderSlice";
+import { restartOrdSet } from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
-import PreOrderConfirmationTable from "./PreOrderConfirmationTable";
+import OrderSetConfirmationTable from "./OrderSetConfirmationTable";
 
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
@@ -24,36 +24,35 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PreOrderOverview = () => {
+const OrderSetOverview = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [orderType, setOrderType] = useState("");
 
-  const preOrder = useSelector((state) => state.orderSet);
+  const orderSet = useSelector((state) => state.orderSet);
   const programId = useSelector((state) => state.preOrderDetails.programId);
   const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleEditOrder = () => {
-    dispatch(
-      setProgStatus(programId, "in-progress", preOrder.orderId)
-    );
+    dispatch(restartOrdSet(programId, "in-progress", orderSet.orderId));
   };
 
   useEffect(() => {
-    if (preOrder && currentCSV.data.length === 0) {
+    if (orderSet && currentCSV.data.length === 0) {
       let orderHeaders = [
         { label: "Order Number", key: "orderNum" },
         { label: "Distributor", key: "distributorName" },
         { label: "Total Items", key: "totalItems" },
         { label: "Est. Cost", key: "estTotal" },
       ];
-      let itemHeaders = preOrder.items.map((item) => ({
+      let itemHeaders = orderSet.items.map((item) => ({
         label: item.itemNumber,
         key: item.itemNumber,
       }));
       let headers = orderHeaders.concat(itemHeaders);
-      let orderData = preOrder.orders.map((order) => {
+      let orderData = orderSet.orders.map((order) => {
         let dataObject = {};
         dataObject.orderNum = order.orderNumber;
         dataObject.distributorName = order.distributorName;
@@ -66,25 +65,36 @@ const PreOrderOverview = () => {
       });
       setCurrentCSV({ data: orderData, headers: headers });
     }
-  }, [currentCSV.data, preOrder]);
+  }, [currentCSV.data, orderSet]);
+
+  useEffect(() => {
+    if (orderType.length === 0 && orderSet.type) {
+      let typeArray = orderSet.type.split("-");
+      console.log(typeArray);
+      let typeString = `${typeArray[0][0].toUpperCase()}${typeArray[0].slice(
+        1
+      )}-${typeArray[1][0].toUpperCase()}${typeArray[1].slice(1)}`;
+      setOrderType(typeString);
+    }
+  }, [orderType, orderSet, setOrderType]);
 
   return (
     <>
       <Grid container spacing={5}>
         <Grid item lg={9} sm={12} xs={12}>
           <Typography className={classes.headerText}>
-            Pre-Order Overview:
+            {`${orderType} Overview:`}
           </Typography>
           <Divider />
           <br />
-          <PreOrderConfirmationTable
-            orders={preOrder.orders}
-            items={preOrder.items}
+          <OrderSetConfirmationTable
+            orders={orderSet.orders}
+            items={orderSet.items}
           />
         </Grid>
         <Grid item lg={3} sm={12} xs={12}>
           <Typography className={classes.headerText}>
-            Pre-Order Summary:
+            {`${orderType} Summary:`}
           </Typography>
           <Divider />
           <br />
@@ -110,19 +120,22 @@ const PreOrderOverview = () => {
           </div>
           <br />
           <Typography className={classes.headerText}>
-            {`Total Items: ${preOrder.items
+            {`Total Items: ${orderSet.items
               .map((item) => item.totalItems)
               .reduce((a, b) => a + b)}`}
           </Typography>
           <Typography className={classes.headerText}>
-            {`Total Cost: ${formatMoney(preOrder.orderTotal)}`}
+            {`Total Cost: ${formatMoney(orderSet.orderTotal)}`}
           </Typography>
           <br />
           <Typography className={classes.headerText}>
-            {`Order Notes: ${preOrder.orderNote}`}
+            {`Order Notes: ${orderSet.orderNote}`}
           </Typography>
           <br />
-          {(currentUserRoll === "super" || currentUserRoll === "field2" || preOrder.status !== "submitted") && (
+          {((currentUserRoll === "super" && orderSet.status !== "approved") ||
+            (currentUserRoll === "field2" && orderSet.status !== "approved") ||
+            (orderSet.status !== "submitted" &&
+              orderSet.status !== "approved")) && (
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -133,11 +146,14 @@ const PreOrderOverview = () => {
               EDIT ORDER
             </Button>
           )}
-          {(preOrder.status === "submitted" && currentUserRoll !== "super" && currentUserRoll !== "field2") && (
-            <Typography className={classes.headerText}>
-              Thank you for your Submission!
-            </Typography>
-          )}
+          {((orderSet.status === "submitted" &&
+            currentUserRoll !== "super" &&
+            currentUserRoll !== "field2") ||
+            orderSet.status === "approved") && (
+              <Typography className={classes.headerText}>
+                Thank you for your Submission!
+              </Typography>
+            )}
           <br />
         </Grid>
       </Grid>
@@ -145,4 +161,4 @@ const PreOrderOverview = () => {
   );
 };
 
-export default React.memo(PreOrderOverview);
+export default React.memo(OrderSetOverview);

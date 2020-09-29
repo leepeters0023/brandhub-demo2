@@ -1,5 +1,5 @@
-import { combineReducers } from '@reduxjs/toolkit'
- 
+import { combineReducers } from "@reduxjs/toolkit";
+
 import userReducer from "./slices/userSlice";
 import preOrderDetailReducer from "./slices/preOrderDetailSlice";
 import orderSetReducer from "./slices/orderSetSlice";
@@ -10,7 +10,7 @@ import patchOrderReducer from "./slices/patchOrderSlice";
 import itemReducer from "./slices/itemSlice";
 import distributorReducer from "./slices/distributorSlice";
 import brandReducer from "./slices/brandSlice";
-import rollupReducer from "./slices/rollupSlice";
+import orderSetHistoryReducer from "./slices/orderSetHistorySlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   items: itemReducer,
   distributors: distributorReducer,
   brands: brandReducer,
-  rollup: rollupReducer,
-})
+  orderSetHistory: orderSetHistoryReducer,
+});
 
-export default rootReducer
+export default rootReducer;
