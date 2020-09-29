@@ -15,12 +15,12 @@ import {
   setOrderSetNotes,
 } from "../redux/slices/patchOrderSlice";
 
-import { setProgStatus } from "../redux/slices/patchOrderSlice";
+import { submitOrdSet } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
 import OrderSetTable from "../components/Purchasing/OrderSetTable";
-import PreOrderOverview from "../components/Purchasing/PreOrderOverview";
+import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
@@ -82,7 +82,7 @@ const CurrentOrderDetail = ({ orderId }) => {
   const currentItems = useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);
   const currentTotal = useSelector((state) => state.orderSet.orderTotal);
-  const currentUserRoll = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
   const inStockItems = useSelector(
     (state) => state.currentOrder.inStockOrderItems
   );
@@ -133,15 +133,16 @@ const CurrentOrderDetail = ({ orderId }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(setProgStatus(null, "submitted", currentOrderId));
+    dispatch(submitOrdSet(null, "submitted", currentOrderId, currentUserRole));
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
+    setTerms(false);
   };
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
       if (
-        (currentUserRoll.length > 0 && !currentOrderId) ||
-        (currentUserRoll.length > 0 && currentOrderId !== orderId) ||
+        (currentUserRole.length > 0 && !currentOrderId) ||
+        (currentUserRole.length > 0 && currentOrderId !== orderId) ||
         (orderStatus === "in-progress" &&
           currentOrderType === "in-stock" &&
           currentItems.length !== inStockItems.length) ||
@@ -149,11 +150,10 @@ const CurrentOrderDetail = ({ orderId }) => {
           currentOrderType === "on-demand" &&
           currentItems.length !== onDemandItems.length)
       ) {
-        console.log(orderId);
         dispatch(fetchOrderSet(orderId));
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   if (isLoading) {
@@ -277,23 +277,27 @@ const CurrentOrderDetail = ({ orderId }) => {
             currentOrderType === "on-demand") &&
             orderStatus === "submitted" && (
               <div style={{ display: "flex", alignItems: "center" }}>
-                <Tooltip title="Back to Approvals" placement="bottom-start">
-                  <IconButton component={Link} to="/orders/approvals">
-                    <ArrowBackIcon fontSize="large" color="secondary" />
-                  </IconButton>
-                </Tooltip>
+                {decodeURIComponent(window.location.hash.slice(1)).includes(
+                  "approval"
+                ) && (
+                  <Tooltip title="Back to Approvals" placement="bottom-start">
+                    <IconButton component={Link} to="/orders/approvals">
+                      <ArrowBackIcon fontSize="large" color="secondary" />
+                    </IconButton>
+                  </Tooltip>
+                )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
                 >
-                  {`Order Number: ${window.location.hash.slice(1)}`}
+                  {`Order Number: ${orderId}`}
                 </Typography>
               </div>
             )}
         </div>
         <br />
-        {orderStatus === "complete" || orderStatus === "submitted" ? (
-          <PreOrderOverview />
+        {orderStatus === "approved" || orderStatus === "submitted" ? (
+          <OrderSetOverview />
         ) : (
           <OrderSetTable
             currentProgram={undefined}
@@ -312,7 +316,7 @@ const CurrentOrderDetail = ({ orderId }) => {
         )}
         <br />
         <br />
-        {orderStatus !== "submitted" && (
+        {(orderStatus !== "submitted" && orderStatus !== "approved") && (
           <>
             <Grid container spacing={5}>
               <Grid item md={7} xs={12}>
@@ -352,7 +356,8 @@ const CurrentOrderDetail = ({ orderId }) => {
                       <br />
                     </>
                   )}
-
+              </Grid>
+              <Grid item md={5} xs={12}>
                 <div
                   style={{
                     display: "flex",
@@ -382,8 +387,7 @@ const CurrentOrderDetail = ({ orderId }) => {
                   value={orderNote}
                   onChange={handleOrderNote}
                 />
-              </Grid>
-              <Grid item md={5} xs={12}>
+                <br />
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
@@ -407,7 +411,7 @@ const CurrentOrderDetail = ({ orderId }) => {
                   SAVE ORDER
                 </Button>
               )}
-              {orderStatus !== "in-progress" &&
+              {orderStatus === "submitted" &&
                 currentOrderType !== "pre-order" && (
                   <Button
                     className={classes.largeButton}
@@ -426,7 +430,7 @@ const CurrentOrderDetail = ({ orderId }) => {
                   className={classes.largeButton}
                   color="secondary"
                   variant="contained"
-                  // disabled={!terms || shippingSet === null}
+                  disabled={!terms && currentUserRole === "field1"}
                   // component={Link}
                   // to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
                   onClick={handleSubmit}
@@ -434,7 +438,7 @@ const CurrentOrderDetail = ({ orderId }) => {
                   SUBMIT ORDER
                 </Button>
               )}
-              {orderStatus !== "in-progress" &&
+              {orderStatus === "submitted" &&
                 currentOrderType !== "pre-order" && (
                   <Button
                     className={classes.largeButton}

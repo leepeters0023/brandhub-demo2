@@ -142,7 +142,7 @@ const CollapseRow = ({ classes, rowData, items }) => {
   );
 };
 
-const PreOrderConfirmationTable = ({ orders, items }) => {
+const OrderSetConfirmationTable = ({ orders, items }) => {
   const classes = useStyles();
 
   return (
@@ -191,9 +191,9 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
   );
 };
 
-PreOrderConfirmationTable.propTypes = {
+OrderSetConfirmationTable.propTypes = {
   orders: PropTypes.array,
   items: PropTypes.array,
 };
 
-export default PreOrderConfirmationTable;
+export default OrderSetConfirmationTable;

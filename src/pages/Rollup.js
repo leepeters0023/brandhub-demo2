@@ -4,9 +4,9 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  fetchFilteredPreOrders,
-  fetchNextFilteredPreOrders,
-} from "../redux/slices/rollupSlice";
+  fetchFilteredOrderSets,
+  fetchNextFilteredOrderSets,
+} from "../redux/slices/orderSetHistorySlice";
 
 import { clearBrands } from "../redux/slices/brandSlice";
 
@@ -14,7 +14,7 @@ import { formatMoney } from "../utility/utilityFunctions";
 
 import { useDetailedInput } from "../hooks/UtilityHooks";
 
-import RollupOverviewTable from "../components/Reports/RollupOverviewTable";
+import RollupOverviewTable from "../components/OrderManagement/RollupOverviewTable";
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
 import StatusSelector from "../components/Utility/StatusSelector";
@@ -73,6 +73,7 @@ const Rollup = () => {
   const [status, setStatus] = useCallback(useState("submitted"));
   const [reset, setReset] = useCallback(useState(false));
   const [currentFilters, setCurrentFilters] = useState({
+    type: "pre-order",
     user: null,
     program: "",
     brand: null,
@@ -110,19 +111,19 @@ const Rollup = () => {
     reset: resetSequenceNum,
   } = useDetailedInput("", handleFilters, "sequenceNum");
 
-  const currentPreOrders = useSelector((state) => state.rollup.preOrders);
-  const orderCount = useSelector((state) => state.rollup.orderCount);
-  const queryTotal = useSelector((state) => state.rollup.queryTotal);
-  const isPreOrdersLoading = useSelector((state) => state.rollup.isLoading);
-  const nextLink = useSelector((state) => state.rollup.nextLink);
+  const currentPreOrders = useSelector((state) => state.orderSetHistory.orderSets);
+  const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
+  const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
+  const isPreOrdersLoading = useSelector((state) => state.orderSetHistory.isLoading);
+  const nextLink = useSelector((state) => state.orderSetHistory.nextLink);
   const isNextPreOrdersLoading = useSelector(
-    (state) => state.rollup.isNextLoading
+    (state) => state.orderSetHistory.isNextLoading
   );
   const currentUserRoll = useSelector((state) => state.user.role);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
-      dispatch(fetchNextFilteredPreOrders(nextLink));
+      dispatch(fetchNextFilteredOrderSets(nextLink));
     }
   };
 
@@ -142,7 +143,7 @@ const Rollup = () => {
       filterObject = { ...currentFilters };
     }
     console.log("searching");
-    dispatch(fetchFilteredPreOrders(filterObject));
+    dispatch(fetchFilteredOrderSets(filterObject));
   };
 
   const handleClearFilters = () => {
@@ -152,7 +153,7 @@ const Rollup = () => {
     setStatus("submitted");
     dispatch(clearBrands());
     dispatch(
-      fetchFilteredPreOrders({
+      fetchFilteredOrderSets({
         user: "",
         program: "",
         brand: null,
@@ -175,7 +176,7 @@ const Rollup = () => {
 
   useEffect(() => {
     if (currentPreOrders.length === 0 && currentUserRoll.length > 0) {
-      dispatch(fetchFilteredPreOrders(currentFilters));
+      dispatch(fetchFilteredOrderSets(currentFilters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

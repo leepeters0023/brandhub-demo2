@@ -164,7 +164,6 @@ const OrderSetTable = (props) => {
       Object.keys(refTable).length !== (orders.length * currentItems.length)
     ) {
       if (orders.length !== 0) {
-        console.log(orders);
         let refs = {};
         orders.forEach((order) => {
           order.items.forEach((item) => {
@@ -173,7 +172,6 @@ const OrderSetTable = (props) => {
             );
           });
         });
-        console.log(refs);
         setRefTable(refs);
       }
     }
@@ -181,7 +179,6 @@ const OrderSetTable = (props) => {
 
   useEffect(() => {
     if ((currentItems && !itemLength) || (itemLength !== currentItems.length)) {
-      console.log(currentItems.length)
       setItemLength(currentItems.length);
     }
   }, [itemLength, currentItems, currentItems.length]);

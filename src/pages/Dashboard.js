@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
-//import DashboardFieldOne from "../components/Dashboard/DashboardFieldOne";
-//import DashboardCompliance from "../components/Dashboard/DashboardCompliance";
-
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";

@@ -8,8 +8,8 @@ import {
 const orderTypeMap = {
   "pre-order": "Pre Order",
   "in-stock": "In Stock",
-  "on-demand": "On Demand"
-}
+  "on-demand": "On Demand",
+};
 
 let initialState = {
   isLoading: false,
@@ -142,7 +142,7 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
         distributor: order.distributor ? order.distributor.name : "---",
         state: order.distributor ? order.distributor.state : "---",
         program: order.program !== null ? order.program.name : "---",
-        orderDate: order["order-date"] ? order["order-date"] : "---",
+        orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
         shipDate: order["ship-date"] ? order["ship-date"] : "---",
         type: orderTypeMap[order.type],
         totalItems: order["total-quantity"],
@@ -171,17 +171,17 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
     }
     let mappedOrders = orders.data.orders.map((order) => ({
       orderNum: order.id,
-        user: order.user.name,
-        distributor: order.distributor ? order.distributor.name : "---",
-        state: order.distributor ? order.distributor.state : "---",
-        program: order.program !== null ? order.program.name : "---",
-        orderDate: order["order-date"] ? order["order-date"] : "---",
-        shipDate: order["ship-date"] ? order["ship-date"] : "---",
-        type: orderTypeMap[order.type],
-        totalItems: order["total-quantity"],
-        estTotal: order["total-cost"],
-        actTotal: "---",
-        orderStatus: order.status === "submitted" ? "Pending" : order.status,
+      user: order.user.name,
+      distributor: order.distributor ? order.distributor.name : "---",
+      state: order.distributor ? order.distributor.state : "---",
+      program: order.program !== null ? order.program.name : "---",
+      orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
+      shipDate: order["ship-date"] ? order["ship-date"] : "---",
+      type: orderTypeMap[order.type],
+      totalItems: order["total-quantity"],
+      estTotal: order["total-cost"],
+      actTotal: "---",
+      orderStatus: order.status === "submitted" ? "Pending" : order.status,
     }));
     dispatch(
       getNextHistorySuccess({
@@ -207,7 +207,9 @@ export const fetchOrder = (id) => async (dispatch) => {
       distributorId: order.data.distributor.id,
       type: orderTypeMap[order.data.type],
       status: order.data.status === "submitted" ? "Pending" : order.data.status,
-      orderDate: order.data["order-date"] ? order.data["order-date"] : "---",
+      orderDate: order.data["submitted-at"]
+        ? order.data["submitted-at"]
+        : "---",
       shipDate: order.data["ship-date"] ? order.data["ship-date"] : "---",
       trackingNum: order.data["tracking-number"]
         ? order.data["tracking-number"]

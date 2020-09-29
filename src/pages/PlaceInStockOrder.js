@@ -71,8 +71,6 @@ const PlaceInStockOrder = ({ userType }) => {
       (userId && !currentOrder.orderNumber) ||
       (userId && currentOrder.type !== "in-stock")
     ) {
-      console.log(currentOrder)
-      console.log("fetching!")
       dispatch(fetchCurrentOrderByType("inStock", userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

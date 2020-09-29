@@ -43,7 +43,6 @@ const OrderItemViewControl = (props) => {
       };
 
       setCurrentItemAdded(newItem);
-      console.log(currentOrderId);
       if (!currentOrderId) {
         dispatch(createNewOrder(type, item.id));
       } else {

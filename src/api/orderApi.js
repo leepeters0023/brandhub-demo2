@@ -10,7 +10,8 @@ const writeHeaders = {
   },
 };
 
-// -------------------------- Pre-Order Calls ------------------------- //
+
+// ------------ Order Set Calls ------------ //
 
 export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
@@ -20,7 +21,7 @@ export const fetchOrdersByProgram = async (program, userId) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -56,7 +57,6 @@ export const fetchAllPreOrders = async (id) => {
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";
@@ -70,15 +70,20 @@ export const fetchAllPreOrders = async (id) => {
   return response;
 };
 
-export const fetchAllFilteredPreOrders = async (filterObject) => {
+export const fetchAllFilteredOrderSets = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
     user: "user-name",
     state: "distributor-state",
     program: "program-name",
-    orderDate: "order-date",
+    orderDate: "submitted-at",
     dueDate: "due-date",
   };
+  let typeString = `?filter[type]=${filterObject.type}`;
+  let dateString =
+    filterObject.fromDate && filterObject.toDate
+      ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
+      : "";
   let statusString =
     filterObject.status !== "all"
       ? `&filter[status]=${filterObject.status}`
@@ -101,7 +106,9 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString =
-    "/api/order-sets?filter[type]=pre-order" +
+    "/api/order-sets" +
+    typeString +
+    dateString +
     statusString +
     userString +
     progString +
@@ -112,12 +119,21 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
   await axios
     .get(queryString)
     .then((res) => {
-      let dataObject = { orders: null, nextLink: null, orderCount: null, queryTotal: null };
+      let dataObject = {
+        orders: null,
+        nextLink: null,
+        orderCount: null,
+        queryTotal: null,
+      };
       let data = dataFormatter.deserialize(res.data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      dataObject.orderCount = res.data.meta["total_entries"] ? res.data.meta["total_entries"] : null;
-      dataObject.queryTotal = res.data.meta["total_cost"] ? res.data.meta["total_cost"] : null; 
+      dataObject.orderCount = res.data.meta["total_entries"]
+        ? res.data.meta["total_entries"]
+        : null;
+      dataObject.queryTotal = res.data.meta["total_cost"]
+        ? res.data.meta["total_cost"]
+        : null;
       response.status = "ok";
       response.data = dataObject;
     })
@@ -129,18 +145,27 @@ export const fetchAllFilteredPreOrders = async (filterObject) => {
   return response;
 };
 
-export const fetchNextPreOrders = async (url) => {
+export const fetchNextOrderSets = async (url) => {
   const response = { status: "", error: null, data: null };
   // let queryString = decodeURIComponent(url).split("+").join(" ")
   await axios
     .get(url)
     .then((res) => {
-      let dataObject = { orders: null, nextLink: null, orderCount: null, queryTotal: null };
+      let dataObject = {
+        orders: null,
+        nextLink: null,
+        orderCount: null,
+        queryTotal: null,
+      };
       let data = dataFormatter.deserialize(res.data);
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      dataObject.orderCount = res.data.meta["total_entries"] ? res.data.meta["total_entries"] : null;
-      dataObject.queryTotal = res.data.meta["total_cost"] ? res.data.meta["total_cost"] : null;
+      dataObject.orderCount = res.data.meta["total_entries"]
+        ? res.data.meta["total_entries"]
+        : null;
+      dataObject.queryTotal = res.data.meta["total_cost"]
+        ? res.data.meta["total_cost"]
+        : null;
       response.status = "ok";
       response.data = dataObject;
     })
@@ -179,10 +204,55 @@ export const setOrderSetNote = async (id, note) => {
   return response;
 };
 
+export const startOrderSet = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/order-sets/${id}/start`, null, writeHeaders)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const restartOrderSet = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/order-sets/${id}/restart`, null, writeHeaders)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
 export const submitOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
     .post(`/api/order-sets/${id}/submit`, null, writeHeaders)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const approveOrderSet = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/order-sets/${id}/approve`, null, writeHeaders)
     .then((res) => {
       response.status = "ok";
     })
@@ -218,8 +288,6 @@ export const deleteOrderSetItem = async (id) => {
   return response;
 };
 
-// -------------------------- Other Order Set Calls ------------------------- //
-
 export const createOrderSet = async (type) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
@@ -238,95 +306,7 @@ export const createOrderSet = async (type) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       response.data = data;
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const patchOrderItem = async (id, qty) => {
-  const response = { status: "", error: null };
-  await axios
-    .patch(
-      `/api/order-items/${id}`,
-      {
-        data: {
-          type: "order-item",
-          id: id,
-          attributes: {
-            qty: qty,
-          },
-        },
-      },
-      writeHeaders
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const setOrderSetStatus = async (id, value) => {
-  const response = { status: "", error: null };
-  let headers = {
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
-  await axios
-    .patch(
-      `/api/order-sets/${id}`,
-      {
-        data: {
-          type: "order-set",
-          id: id,
-          attributes: {
-            "status": value,
-          },
-        },
-      },
-      headers
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const updateOrderStatus = async (id, status) => {
-  const response = { status: "", error: null };
-  await axios
-    .patch(
-      `/api/orders/${id}`,
-      {
-        data: {
-          type: "order",
-          id: id,
-          attributes: {
-            status: status,
-          },
-        },
-      },
-      writeHeaders
-    )
-    .then((res) => {
       response.status = "ok";
     })
     .catch((err) => {
@@ -365,8 +345,166 @@ export const addOrderSetItem = async (id, item, qty) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+// ------------ Single Order Calls ------------ //
+
+export const fetchOrderHistory = async (filterObject) => {
+  const response = { status: "", error: null, data: null };
+  const sortMap = {
+    orderNum: "id",
+    distributor: "distributor-name",
+    state: "distributor-state",
+    program: "program-name",
+    orderDate: "submitted-at",
+    shipDate: "ship-date",
+    status: "order-status",
+    user: "user",
+  };
+  let statusString = filterObject.status
+    ? `filter[status]=${filterObject.status}&`
+    : "filter[status]=not-draft&";
+  let typeString = filterObject.type
+    ? filterObject.type === "not-pre-order"
+      ? `&filter[type]=not-pre-order`
+      : `&filter[type]=${filterObject.type}`
+    : "";
+  let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
+  let distString = filterObject.distributor
+    ? `&filter[distributor-id]=${filterObject.distributor}`
+    : "";
+  let userString = filterObject.user
+    ? `&filter[user-id]=${filterObject.user}`
+    : "";
+  let brandString = filterObject.brand
+    ? `&filter[brand-id]=${filterObject.brand}`
+    : "";
+  let progString =
+    filterObject.program.length > 0
+      ? `&filter[program-name]=${filterObject.program}`
+      : "";
+  let seqString =
+    filterObject.sequenceNum.length > 0
+      ? `&filter[item-number]=${filterObject.sequenceNum}`
+      : "";
+  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryString =
+    "/api/orders?" +
+    statusString +
+    dateString +
+    typeString +
+    distString +
+    userString +
+    brandString +
+    progString +
+    seqString +
+    sortString;
+
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = { orders: null, nextLink: null };
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data)
+      dataObject.orders = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchNextHistory = async (url) => {
+  const response = { status: "", error: null, data: null };
+  let queryString = decodeURIComponent(url).split("+").join(" ");
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = { orders: null, nextLink: null };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.orders = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchSingleOrder = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/orders/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchSingleOrderSetByType = async (type, userId) => {
+  const response = { status: "", error: null, data: null };
+  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
+  await axios
+    .get(
+      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const patchOrderItem = async (id, qty) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/order-items/${id}`,
+      {
+        data: {
+          type: "order-item",
+          id: id,
+          attributes: {
+            qty: qty,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
       response.status = "ok";
     })
     .catch((err) => {
@@ -496,134 +634,6 @@ export const submitOrder = async (id) => {
       console.log(err.toString());
       response.status = "error";
       response.err = err.toString();
-    });
-  return response;
-};
-
-export const fetchOrderHistory = async (filterObject) => {
-  const response = { status: "", error: null, data: null };
-  const sortMap = {
-    orderNum: "id",
-    distributor: "distributor-name",
-    state: "distributor-state",
-    program: "program-name",
-    orderDate: "order-date",
-    shipDate: "ship-date",
-    status: "order-status",
-    user: "user",
-  };
-  let statusString = filterObject.status
-    ? `filter[status]=${filterObject.status}&`
-    : "filter[status]=not-draft&";
-  let typeString = filterObject.type
-    ? filterObject.type === "not-pre-order"
-      ? `&filter[type]=not-pre-order`
-      : `&filter[type]=${filterObject.type}`
-    : "";
-    let dateString = `filter[order-date-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
-    let distString = filterObject.distributor
-    ? `&filter[distributor-id]=${filterObject.distributor}`
-    : "";
-  let userString = filterObject.user ? `&filter[user-id]=${filterObject.user}` : "";
-  let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand}`
-    : "";
-  let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program}`
-      : "";
-  let seqString =
-    filterObject.sequenceNum.length > 0
-      ? `&filter[item-number]=${filterObject.sequenceNum}`
-      : "";
-  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
-    sortMap[filterObject.sortOrderBy]
-  }`;
-  let queryString =
-    "/api/orders?" +
-    statusString +
-    dateString +
-    typeString +
-    distString +
-    userString +
-    brandString +
-    progString +
-    seqString +
-    sortString;
-
-  await axios
-    .get(queryString)
-    .then((res) => {
-      let dataObject = { orders: null, nextLink: null };
-      let data = dataFormatter.deserialize(res.data);
-      dataObject.orders = data;
-      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      response.status = "ok";
-      response.data = dataObject;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
-export const fetchNextHistory = async (url) => {
-  const response = { status: "", error: null, data: null };
-  let queryString = decodeURIComponent(url).split("+").join(" ");
-  await axios
-    .get(queryString)
-    .then((res) => {
-      let dataObject = { orders: null, nextLink: null };
-      let data = dataFormatter.deserialize(res.data);
-      dataObject.orders = data;
-      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      response.status = "ok";
-      response.data = dataObject;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
-export const fetchSingleOrder = async (id) => {
-  const response = { status: "", error: null, data: null };
-  await axios
-    .get(`/api/orders/${id}`)
-    .then((res) => {
-      let data = dataFormatter.deserialize(res.data);
-      response.status = "ok";
-      response.data = data;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
-export const fetchSingleOrderSetByType = async (type, userId) => {
-  const response = { status: "", error: null, data: null };
-  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
-  await axios
-    .get(
-      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
-    )
-    .then((res) => {
-      let data = dataFormatter.deserialize(res.data);
-      console.log(data)
-      response.status = "ok";
-      response.data = data;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
     });
   return response;
 };

@@ -16,14 +16,13 @@ import {
 import {
   deleteSetItem,
   setOrderSetNotes,
+  submitOrdSet
 } from "../redux/slices/patchOrderSlice";
-
-import { setProgStatus } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
 import OrderSetTable from "../components/Purchasing/OrderSetTable";
-import PreOrderOverview from "../components/Purchasing/PreOrderOverview";
+import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import ProgramSelector from "../components/Utility/ProgramSelector";
@@ -185,7 +184,7 @@ const CurrentPreOrder = ({ userType }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(setProgStatus(program, "submitted", preOrderId));
+    dispatch(submitOrdSet(program, "submitted", preOrderId));
     dispatch(setOrderSetNotes(preOrderId, preOrderNote));
     setTermsChecked(false);
   };
@@ -342,7 +341,7 @@ const CurrentPreOrder = ({ userType }) => {
         {userPrograms.length === 0 || !program || programsLoading ? (
           <CircularProgress color="inherit" />
         ) : preOrderStatus === "complete" || preOrderStatus === "submitted" ? (
-          <PreOrderOverview />
+          <OrderSetOverview />
         ) : (
           <OrderSetTable
             currentProgram={program}
