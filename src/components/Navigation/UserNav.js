@@ -48,6 +48,7 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
         </IconButton>
       </Tooltip>
       <Menu
+        disableScrollLock
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: "bottom",
