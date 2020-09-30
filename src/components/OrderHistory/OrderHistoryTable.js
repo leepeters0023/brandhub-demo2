@@ -191,7 +191,7 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">
-                    {format(new Date(row.orderDate), "MM/dd/yyyy")}
+                    {row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : row.orderDate}
                   </TableCell>
                   <TableCell align="left">{row.shipDate}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>

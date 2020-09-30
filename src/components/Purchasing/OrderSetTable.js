@@ -1,20 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import { useSelector, useDispatch } from "react-redux";
-import {
-  setGridItem,
-  setItemTotal,
-} from "../../redux/slices/programTableSlice";
-
-import { setProgStatus } from "../../redux/slices/patchOrderSlice";
-
-import { patchItem } from "../../redux/slices/patchOrderSlice";
+import { useSelector } from "react-redux";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import EditOrderDetailModal from "./EditOrderDetailModal";
+import MemoInputCell from "../Utility/MemoInputCell";
 
 import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -27,9 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -82,172 +72,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MemoInputCell = React.memo(
-  React.forwardRef(
-    (
-      {
-        orderNumber,
-        compliance,
-        itemNumber,
-        itemId,
-        index,
-        preOrderId,
-        preOrderStatus,
-        program,
-        cellRef,
-        handleKeyDown,
-      },
-      ref
-    ) => {
-      const classes = useStyles();
-      const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-      const dispatch = useDispatch();
-      const [change, setChange] = useState(false);
-      const value = useSelector(
-        (state) =>
-          state.programTable.orders
-            .find((ord) => ord.orderNumber === orderNumber)
-            .items.find((item) => item.itemNumber === itemNumber).totalItems
-      );
-      const loading = useSelector((state) =>
-        state.patchOrder.cellsLoading.find(
-          (cell) => cell.id === itemId && cell.orderNumber === orderNumber
-        )
-      );
-
-      const handleScrollLeft = () => {
-        ref.current.scrollLeft = 0;
-      };
-
-      const handleKeyEvent = (evt) => {
-        if (
-          evt.key === "Enter" ||
-          evt.key === "ArrowUp" ||
-          evt.key === "ArrowDown" ||
-          evt.key === "ArrowLeft" ||
-          evt.key === "ArrowRight"
-        ) {
-          evt.preventDefault();
-          handleKeyDown(`${orderNumber}-${itemNumber}`, evt.key);
-          window.removeEventListener("keydown", handleKeyEvent);
-        }
-        if (evt.key === "Tab") {
-          window.removeEventListener("keydown", handleKeyEvent);
-        }
-      };
-
-      // useEffect(()=> {
-      //   return () => window.removeEventListener("keydown", handleKeyEvent)
-      // })
-
-      if (compliance !== "compliant") {
-        return (
-          <TableCell
-            ref={cellRef}
-            align="center"
-            classes={{ root: classes.root }}
-            className={classes.borderRight}
-            style={{ zIndex: "-100", backgroundColor: "#999999" }}
-            onFocus={() => {
-              window.addEventListener("keydown", handleKeyEvent);
-              return index === 0 ? handleScrollLeft() : null;
-            }}
-            onBlur={() => window.removeEventListener("keydown", handleKeyEvent)}
-          >
-            <Typography className={classes.headerText}>
-              NOT COMPLIANT
-            </Typography>
-          </TableCell>
-        );
-      }
-
-      return (
-        <TableCell
-          classes={{ root: classes.root }}
-          className={classes.borderRight}
-          style={{ zIndex: "-100" }}
-          onFocus={() => {
-            return index === 0 ? handleScrollLeft() : null;
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <InputBase
-              ref={cellRef}
-              style={{ textAlign: "center", zIndex: "0" }}
-              fullWidth
-              size="small"
-              id={`${orderNumber}-${itemNumber}`}
-              value={value}
-              onFocus={() => {
-                cellRef.current.firstChild.select();
-                window.addEventListener("keydown", handleKeyEvent);
-              }}
-              onBlur={(evt) => {
-                window.removeEventListener("keydown", handleKeyEvent);
-                if (change) {
-                  if (evt.target.value === "") {
-                    dispatch(
-                      setGridItem({
-                        itemNumber: `${itemNumber}`,
-                        orderNumber: orderNumber,
-                        value: 0,
-                      })
-                    );
-                    dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-
-                    dispatch(patchItem(itemId, 0, orderNumber));
-                  } else {
-                    dispatch(patchItem(itemId, evt.target.value, orderNumber));
-                  }
-                  setChange(false);
-                  if (preOrderStatus === "inactive") {
-                    if (program) {
-                      dispatch(
-                        setProgStatus(program, "in-progress", preOrderId)
-                      );
-                    }
-                  }
-                }
-              }}
-              onChange={(evt) => {
-                if (
-                  numArray.includes(
-                    evt.target.value[evt.target.value.length - 1]
-                  ) ||
-                  evt.target.value === ""
-                ) {
-                  dispatch(
-                    setGridItem({
-                      itemNumber: `${itemNumber}`,
-                      orderNumber: orderNumber,
-                      value: evt.target.value,
-                    })
-                  );
-                  dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
-                  setChange(true);
-                }
-              }}
-            />
-            {loading && <CircularProgress size={20} />}
-          </div>
-        </TableCell>
-      );
-    }
-  )
-);
-
 const TotalItemCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector(
-    (state) =>
-      state.programTable.items.find((item) => item.itemNumber === itemNumber)
-        .totalItems
+  const value = useSelector((state) =>
+    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
   );
   return (
     <TableCell
@@ -255,17 +83,15 @@ const TotalItemCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{value}</div>
+      <div className={classes.infoCell}>{value ? value.totalItems : "---"}</div>
     </TableCell>
   );
 });
 
 const TotalEstCostCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector(
-    (state) =>
-      state.programTable.items.find((item) => item.itemNumber === itemNumber)
-        .estTotal
+  const value = useSelector((state) =>
+    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
   );
   return (
     <TableCell
@@ -273,12 +99,14 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{`${formatMoney(value)}`}</div>
+      <div className={classes.infoCell}>
+        {value ? `${formatMoney(value.estTotal)}` : "---"}
+      </div>
     </TableCell>
   );
 });
 
-const PreOrderTable = (props) => {
+const OrderSetTable = (props) => {
   const {
     currentProgram,
     open,
@@ -287,11 +115,12 @@ const PreOrderTable = (props) => {
     setTableStyle,
     handleModalOpen,
     handleOpenConfirm,
+    handleRemoveOrder,
     isLoading,
-    preOrderId,
-    preOrderStatus,
+    orderId,
+    orderStatus,
     currentItems,
-    orders
+    orders,
   } = props;
   const classes = useStyles();
   const tableRef = useRef(null);
@@ -330,7 +159,11 @@ const PreOrderTable = (props) => {
   );
 
   useEffect(() => {
-    if (orders && !refTable) {
+    if (
+      (orders && !refTable) ||
+      `${orders[0].orderNumber}` !== Object.keys(refTable)[0].split("-")[0] ||
+      Object.keys(refTable).length !== orders.length * currentItems.length
+    ) {
       if (orders.length !== 0) {
         let refs = {};
         orders.forEach((order) => {
@@ -343,13 +176,13 @@ const PreOrderTable = (props) => {
         setRefTable(refs);
       }
     }
-  }, [orders, refTable, orders.length]);
+  }, [orders, refTable, orders.length, currentItems.length]);
 
   useEffect(() => {
-    if (currentItems && !itemLength) {
+    if ((currentItems && !itemLength) || itemLength !== currentItems.length) {
       setItemLength(currentItems.length);
     }
-  }, [itemLength, currentItems]);
+  }, [itemLength, currentItems, currentItems.length]);
 
   if (isLoading || !refTable || !itemLength) {
     return <CircularProgress color="inherit" />;
@@ -386,17 +219,8 @@ const PreOrderTable = (props) => {
                       className={classes.bodyText}
                       style={{ marginRight: "10px" }}
                     >
-                      There are no items currently in this program...
+                      There are no items currently in this order...
                     </Typography>
-                    <Button
-                      className={classes.largeButton}
-                      component={Link}
-                      to={`/program/${currentProgram}`}
-                      variant="contained"
-                      color="secondary"
-                    >
-                      View Program
-                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -657,14 +481,23 @@ const PreOrderTable = (props) => {
                             {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
                           </Typography>
                         </Tooltip>
+                        <div style={{display: "flex"}}>
+                          <Tooltip title="Delete Order">
+                            <IconButton
+                            onClick={() => handleRemoveOrder(ord.orderNumber)}
+                            >
+                              <CancelIcon fontSize="small" color="inherit" />
+                            </IconButton>
+                          </Tooltip>
 
-                        <Tooltip title="Edit Details">
-                          <IconButton
-                            onClick={() => setOrderNumber(ord.orderNumber)}
-                          >
-                            <EditIcon fontSize="small" color="inherit" />
-                          </IconButton>
-                        </Tooltip>
+                          <Tooltip title="Edit Details">
+                            <IconButton
+                              onClick={() => setOrderNumber(ord.orderNumber)}
+                            >
+                              <EditIcon fontSize="small" color="inherit" />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
                       </div>
                     </TableCell>
                     {ord.items.map((item, index) => (
@@ -675,8 +508,8 @@ const PreOrderTable = (props) => {
                         itemNumber={item.itemNumber}
                         itemId={item.id}
                         index={index}
-                        preOrderStatus={preOrderStatus}
-                        preOrderId={preOrderId}
+                        orderStatus={orderStatus}
+                        orderId={orderId}
                         program={currentProgram}
                         cellRef={
                           refTable[`${ord.orderNumber}-${item.itemNumber}`]
@@ -696,7 +529,7 @@ const PreOrderTable = (props) => {
   );
 };
 
-PreOrderTable.propTypes = {
+OrderSetTable.propTypes = {
   currentProgram: PropTypes.string,
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
@@ -704,17 +537,19 @@ PreOrderTable.propTypes = {
   setTableStyle: PropTypes.func.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
   handleOpenConfirm: PropTypes.func.isRequired,
+  handleRemoveOrder: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  preOrderId: PropTypes.string,
-  preOrderStatus: PropTypes.string,
+  orderId: PropTypes.string,
+  orderStatus: PropTypes.string,
 };
 
-export default React.memo(PreOrderTable, (prev, next) => {
+export default React.memo(OrderSetTable, (prev, next) => {
   return (
-    prev.currentProgram === next.currentPrograms &&
-    // prev.distributors.length === next.distributors.length &&
+    prev.currentProgram === next.currentProgram &&
+    prev.orders.length === next.orders.length &&
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&
-    prev.isLoading === next.isLoading
+    prev.isLoading === next.isLoading &&
+    prev.currentItems.length === next.currentItems.length
   );
 });
