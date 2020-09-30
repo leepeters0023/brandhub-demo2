@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { restartOrdSet } from "../../redux/slices/patchOrderSlice";
+import {
+  restartOrdSet,
+  approveOrdSet,
+} from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -39,6 +43,10 @@ const OrderSetOverview = () => {
     dispatch(restartOrdSet(programId, "in-progress", orderSet.orderId));
   };
 
+  const handleApproval = () => {
+    dispatch(approveOrdSet(orderSet.orderId, "approved", null));
+  };
+
   useEffect(() => {
     if (orderSet && currentCSV.data.length === 0) {
       let orderHeaders = [
@@ -70,7 +78,6 @@ const OrderSetOverview = () => {
   useEffect(() => {
     if (orderType.length === 0 && orderSet.type) {
       let typeArray = orderSet.type.split("-");
-      console.log(typeArray);
       let typeString = `${typeArray[0][0].toUpperCase()}${typeArray[0].slice(
         1
       )}-${typeArray[1][0].toUpperCase()}${typeArray[1].slice(1)}`;
@@ -146,14 +153,108 @@ const OrderSetOverview = () => {
               EDIT ORDER
             </Button>
           )}
+          {orderSet.status === "submitted" &&
+            window.location.href.includes("approval") && (
+              <>
+                <br />
+                <br />
+                <Button
+                  fullWidth
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleApproval}
+                  style={{ marginRight: "10px" }}
+                >
+                  APPROVE
+                </Button>
+                <br />
+                <br />
+                <Button
+                  fullWidth
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  //onClick={handleDeny}
+                >
+                  DENY
+                </Button>
+              </>
+            )}
           {((orderSet.status === "submitted" &&
             currentUserRoll !== "super" &&
             currentUserRoll !== "field2") ||
             orderSet.status === "approved") && (
+            <>
               <Typography className={classes.headerText}>
                 Thank you for your Submission!
               </Typography>
-            )}
+              <br />
+              <br />
+              {!window.location.href.includes("preorder") && (
+                <>
+                  <Button
+                    fullWidth
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    component={Link}
+                    to="/"
+                  >
+                    DASHBOARD
+                  </Button>
+                  <br />
+                  <br />
+                  <Button
+                    fullWidth
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    component={Link}
+                    to="/orders/open/preorder"
+                  >
+                    PLACE QUARTERLY ORDER
+                  </Button>
+                  <br />
+                  <br />
+                  <Button
+                    fullWidth
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    component={Link}
+                    to="/orders/items/inStock"
+                  >
+                    PLACE IN-STOCK ORDER
+                  </Button>
+                  <br />
+                  <br />
+                  <Button
+                    fullWidth
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    component={Link}
+                    to="/orders/items/onDemand"
+                  >
+                    PLACE ON-DEMAND ORDER
+                  </Button>
+                  <br />
+                  <br />
+                  <Button
+                    fullWidth
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    component={Link}
+                    to="/orders/history"
+                  >
+                    ORDER HISTORY
+                  </Button>
+                </>
+              )}
+            </>
+          )}
           <br />
         </Grid>
       </Grid>

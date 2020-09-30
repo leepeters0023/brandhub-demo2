@@ -4,7 +4,6 @@ import {
   fetchSingleOrderSetByType,
   deleteOrder,
   addOrderSetItem,
-  patchOrderItem,
   createOrderSet,
 } from "../../api/orderApi";
 
@@ -267,14 +266,12 @@ export const deleteCurrentOrder = (id) => async (dispatch) => {
   }
 };
 
-export const addNewOrderItem = (orderId, itemId, orderItemId, type) => async (
+export const addNewOrderItem = (orderId, itemId, type) => async (
   dispatch
 ) => {
   try {
     dispatch(setUpdateLoading());
-    if (!orderItemId) {
       let orderItem = await addOrderSetItem(orderId, itemId);
-      console.log(orderItem);
       if (orderItem.error) {
         throw orderItem.error;
       }
@@ -287,14 +284,6 @@ export const addNewOrderItem = (orderId, itemId, orderItemId, type) => async (
           type: type,
         })
       );
-    } else {
-      console.log("patching");
-      let patchStatus = await patchOrderItem(orderItemId);
-      if (patchStatus.error) {
-        throw patchStatus.error;
-      }
-      dispatch(updateSuccess());
-    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

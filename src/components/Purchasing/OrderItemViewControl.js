@@ -8,21 +8,11 @@ import {
   createNewOrder,
 } from "../../redux/slices/currentOrderSlice";
 
-//import { useItemUpdate } from "../../hooks/UtilityHooks";
-
 import OrderItemTableView from "./OrderItemTableView";
 import OrderPreGridView from "./OrderItemGridView";
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
 import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
-
-// //mockdata
-// import items from "../../assets/mockdata/Items";
-
-// let currentItems = items.map((item) => ({
-//   ...item,
-//   stock: Math.floor(Math.random() * 10 + 1) * 5,
-// }));
 
 const OrderItemViewControl = (props) => {
   const { type, currentView, handlePreview, items } = props;
@@ -31,9 +21,6 @@ const OrderItemViewControl = (props) => {
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
-  const currentItemsByType = useSelector(
-    (state) => state.currentOrder[`${type}OrderItems`]
-  );
 
   const handleAddItem = useCallback(
     (item) => {
@@ -46,31 +33,10 @@ const OrderItemViewControl = (props) => {
       if (!currentOrderId) {
         dispatch(createNewOrder(type, item.id));
       } else {
-        let currentItem = currentItemsByType.find(
-          (i) => i.itemNumber === item.itemNumber
-        );
-        if (currentItem) {
-          dispatch(
-            addNewOrderItem(
-              currentOrderId,
-              item.id,
-              currentItem.id,
-              type
-            )
-          );
-        } else {
-          dispatch(
-            addNewOrderItem(
-              currentOrderId,
-              item.id,
-              undefined,
-              type
-            )
-          );
-        }
+        dispatch(addNewOrderItem(currentOrderId, item.id, type))
       }
     },
-    [dispatch, setCurrentItemAdded, currentItemsByType, currentOrderId, type]
+    [dispatch, setCurrentItemAdded, currentOrderId, type]
   );
 
   return (

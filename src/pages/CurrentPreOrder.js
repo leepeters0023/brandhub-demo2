@@ -8,15 +8,16 @@ import {
 } from "../redux/slices/preOrderDetailSlice";
 
 import {
-  removeGridItem,
   fetchProgramOrders,
   updateOrderNote,
 } from "../redux/slices/orderSetSlice";
 
 import {
   deleteSetItem,
+  deleteSetOrder,
   setOrderSetNotes,
-  submitOrdSet
+  submitOrdSet,
+  startOrdSet
 } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -173,11 +174,14 @@ const CurrentPreOrder = ({ userType }) => {
     [setCurrentItemNum, setCurrentItemId, handleConfirmModal]
   );
 
-  const handleRemove = (itemNum) => {
-    dispatch(removeGridItem({ itemNum }));
-    dispatch(deleteSetItem(currentItemId));
+  const handleRemoveItem = (itemNum) => {
+    dispatch(deleteSetItem(currentItemId, itemNum));
     handleConfirmModal(false);
   };
+
+  const handleRemoveOrder = (id) => {
+    dispatch(deleteSetOrder(id))
+  }
 
   const handleSave = () => {
     dispatch(setOrderSetNotes(preOrderId, preOrderNote));
@@ -251,7 +255,7 @@ const CurrentPreOrder = ({ userType }) => {
         >
           <DialogContent>
             <AreYouSure
-              handleRemove={handleRemove}
+              handleRemove={handleRemoveItem}
               handleModalClose={handleCloseConfirm}
               itemNumber={currentItemNum}
             />
@@ -351,6 +355,7 @@ const CurrentPreOrder = ({ userType }) => {
             setTableStyle={setTableStyle}
             handleModalOpen={handleModalOpen}
             handleOpenConfirm={handleOpenConfirm}
+            handleRemoveOrder={handleRemoveOrder}
             isLoading={isLoading}
             orderId={preOrderId}
             orderStatus={preOrderStatus}
@@ -384,7 +389,12 @@ const CurrentPreOrder = ({ userType }) => {
                   control={
                     <Checkbox
                       checked={terms}
-                      onChange={() => setTermsChecked(!terms)}
+                      onChange={() => {
+                        setTermsChecked(!terms)
+                        if (preOrderStatus === "inactive") {
+                          dispatch(startOrdSet(program, "in-progress", preOrderId))
+                        }
+                      }}
                       name="Terms"
                       color="primary"
                     />

@@ -4,18 +4,14 @@ import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  removeGridItem,
-  updateOrderNote,
-  fetchOrderSet,
-} from "../redux/slices/orderSetSlice";
+import { updateOrderNote, fetchOrderSet } from "../redux/slices/orderSetSlice";
 
 import {
   deleteSetItem,
+  deleteSetOrder,
   setOrderSetNotes,
+  submitOrdSet,
 } from "../redux/slices/patchOrderSlice";
-
-import { submitOrdSet } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -118,10 +114,13 @@ const CurrentOrderDetail = ({ orderId }) => {
     handleConfirmModal(false);
   }, [handleConfirmModal]);
 
-  const handleRemove = (itemNum) => {
-    dispatch(removeGridItem({ itemNum }));
-    dispatch(deleteSetItem(currentItemId));
+  const handleRemoveItem = (itemNum) => {
+    dispatch(deleteSetItem(currentItemId, itemNum));
     handleConfirmModal(false);
+  };
+
+  const handleRemoveOrder = (id) => {
+    dispatch(deleteSetOrder(id));
   };
 
   const handleOrderNote = (evt) => {
@@ -133,7 +132,14 @@ const CurrentOrderDetail = ({ orderId }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(submitOrdSet(null, "submitted", currentOrderId, currentUserRole));
+    let role = currentUserRole;
+    if (
+      window.location.href.includes("rollup") ||
+      window.location.hash.includes("approval")
+    ) {
+      role = null;
+    }
+    dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
     setTerms(false);
   };
@@ -201,7 +207,7 @@ const CurrentOrderDetail = ({ orderId }) => {
         >
           <DialogContent>
             <AreYouSure
-              handleRemove={handleRemove}
+              handleRemove={handleRemoveItem}
               handleModalClose={handleCloseConfirm}
               itemNumber={currentItemNum}
             />
@@ -255,7 +261,7 @@ const CurrentOrderDetail = ({ orderId }) => {
               </div>
             </>
           )}
-          {currentOrderType === "pre-order" && orderStatus === "submitted" && (
+          {window.location.href.includes("rollup") && (
             <div className={classes.titleImage}>
               <Tooltip
                 title="Quarterly Rollup Overview"
@@ -273,27 +279,25 @@ const CurrentOrderDetail = ({ orderId }) => {
               </Typography>
             </div>
           )}
-          {(currentOrderType === "in-stock" ||
-            currentOrderType === "on-demand") &&
-            orderStatus === "submitted" && (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                {decodeURIComponent(window.location.hash.slice(1)).includes(
-                  "approval"
-                ) && (
-                  <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton component={Link} to="/orders/approvals">
-                      <ArrowBackIcon fontSize="large" color="secondary" />
-                    </IconButton>
-                  </Tooltip>
-                )}
-                <Typography
-                  className={classes.titleText}
-                  style={{ marginTop: "5px" }}
-                >
-                  {`Order Number: ${orderId}`}
-                </Typography>
-              </div>
-            )}
+          {window.location.hash.includes("approval") && (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {decodeURIComponent(window.location.hash.slice(1)).includes(
+                "approval"
+              ) && (
+                <Tooltip title="Back to Approvals" placement="bottom-start">
+                  <IconButton component={Link} to="/orders/approvals">
+                    <ArrowBackIcon fontSize="large" color="secondary" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Typography
+                className={classes.titleText}
+                style={{ marginTop: "5px" }}
+              >
+                {`Order Number: ${orderId}`}
+              </Typography>
+            </div>
+          )}
         </div>
         <br />
         {orderStatus === "approved" || orderStatus === "submitted" ? (
@@ -307,6 +311,7 @@ const CurrentOrderDetail = ({ orderId }) => {
             setTableStyle={setTableStyle}
             handleModalOpen={handleModalOpen}
             handleOpenConfirm={handleOpenConfirm}
+            handleRemoveOrder={handleRemoveOrder}
             isLoading={isLoading}
             orderId={currentOrderId}
             orderStatus={orderStatus}
@@ -316,11 +321,11 @@ const CurrentOrderDetail = ({ orderId }) => {
         )}
         <br />
         <br />
-        {(orderStatus !== "submitted" && orderStatus !== "approved") && (
+        {orderStatus !== "submitted" && orderStatus !== "approved" && (
           <>
             <Grid container spacing={5}>
               <Grid item md={7} xs={12}>
-                {currentOrderType !== "pre-order" &&
+                {currentUserRole === "field1" &&
                   orderStatus === "in-progress" && (
                     <>
                       <Typography className={classes.headerText}>
@@ -398,60 +403,37 @@ const CurrentOrderDetail = ({ orderId }) => {
                 </div>
               </Grid>
             </Grid>
-            <br />
-            <div className={classes.orderControl}>
-              {orderStatus === "in-progress" && (
-                <Button
-                  className={classes.largeButton}
-                  color="secondary"
-                  variant="contained"
-                  onClick={handleSave}
-                  style={{ marginRight: "10px" }}
-                >
-                  SAVE ORDER
-                </Button>
-              )}
-              {orderStatus === "submitted" &&
-                currentOrderType !== "pre-order" && (
-                  <Button
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    // component={Link}
-                    // to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
-                    // onClick={handleApprove}
-                    style={{ marginRight: "10px" }}
-                  >
-                    APPROVE
-                  </Button>
-                )}
-              {orderStatus === "in-progress" && (
-                <Button
-                  className={classes.largeButton}
-                  color="secondary"
-                  variant="contained"
-                  disabled={!terms && currentUserRole === "field1"}
-                  // component={Link}
-                  // to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
-                  onClick={handleSubmit}
-                >
-                  SUBMIT ORDER
-                </Button>
-              )}
-              {orderStatus === "submitted" &&
-                currentOrderType !== "pre-order" && (
-                  <Button
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    //onClick={handleDeny}
-                  >
-                    DENY
-                  </Button>
-                )}
-            </div>
           </>
         )}
+        <>
+          <br />
+          <div className={classes.orderControl}>
+            {orderStatus === "in-progress" && (
+              <Button
+                className={classes.largeButton}
+                color="secondary"
+                variant="contained"
+                onClick={handleSave}
+                style={{ marginRight: "10px" }}
+              >
+                SAVE ORDER
+              </Button>
+            )}
+            {orderStatus === "in-progress" && (
+              <Button
+                className={classes.largeButton}
+                color="secondary"
+                variant="contained"
+                disabled={!terms && currentUserRole === "field1"}
+                // component={Link}
+                // to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
+                onClick={handleSubmit}
+              >
+                SUBMIT ORDER
+              </Button>
+            )}
+          </div>
+        </>
         <br />
         <br />
       </Container>

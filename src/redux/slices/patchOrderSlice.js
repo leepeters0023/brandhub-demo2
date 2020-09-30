@@ -4,6 +4,7 @@ import { navigate } from "@reach/router";
 import {
   patchOrderItem,
   deleteOrderSetItem,
+  deleteOrder,
   startOrderSet,
   restartOrderSet,
   submitOrderSet,
@@ -13,7 +14,7 @@ import {
 } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
-import { setOrderStatus, updateOrderDetails } from "./orderSetSlice";
+import { setOrderStatus, updateOrderDetails, removeGridItem, removeGridOrder } from "./orderSetSlice";
 
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
 
@@ -109,19 +110,33 @@ export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
   }
 };
 
-export const deleteSetItem = (id) => async (dispatch) => {
+export const deleteSetItem = (id, itemNum) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const deleteStatus = await deleteOrderSetItem(id);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
-
+    dispatch(removeGridItem({ itemNum }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const deleteSetOrder = (id) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const deleteStatus = await deleteOrder(id);
+    if (deleteStatus.error) {
+      throw deleteStatus.error;
+    }
+    dispatch(removeGridOrder({ orderId: id }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 export const startOrdSet = (programId, value, orderSetId) => async (
   dispatch

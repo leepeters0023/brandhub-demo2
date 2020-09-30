@@ -132,6 +132,27 @@ const orderSetSlice = createSlice({
       });
       state.orders = currentOrders;
     },
+    removeGridOrder(state, action) {
+      const { orderId } = action.payload;
+      let deleteOrder = state.orders.find(
+        (order) => order.orderNumber === orderId
+      );
+      state.orderTotal -= deleteOrder.estTotal;
+      let currentOrders = state.orders.filter(
+        (order) => order.orderNumber !== orderId
+      );
+      state.orders = currentOrders;
+      let currentItems = [...state.items];
+      currentItems = currentItems.map((item) => {
+        let editItem = deleteOrder.items.find((i) => i.itemNumber === item.itemNumber)
+        return {
+          ...item,
+          estTotal: item.estTotal - editItem.estTotal,
+          totalItems: item.totalItems - editItem.totalItems,
+        }
+      })
+      state.items = currentItems;
+    },
     updateOrderDetails(state, action) {
       const { orderNumber, note, attn } = action.payload;
       let currentOrders = state.orders.map((order) => {
@@ -176,6 +197,7 @@ export const {
   setGridItem,
   setItemTotal,
   removeGridItem,
+  removeGridOrder,
   updateOrderDetails,
   updateOrderNote,
   setOrderStatus,
@@ -255,8 +277,8 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : 0;
     });
 
-    let orderTotal = currentOrders.data["total-cost"]
-    let type = currentOrders.data.type
+    let orderTotal = currentOrders.data["total-cost"];
+    let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
     let territories =
@@ -265,7 +287,11 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : currentOrders.data["territory-names"].split(", ");
     let note = currentOrders.data.notes ? currentOrders.data.notes : "";
     dispatch(
-      setPreOrderDetails({ territories: territories, programId: null, orderTotal: orderTotal })
+      setPreOrderDetails({
+        territories: territories,
+        programId: null,
+        orderTotal: orderTotal,
+      })
     );
 
     dispatch(
@@ -353,7 +379,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         ? 1
         : 0;
     });
-    let orderTotal = currentOrders.data[0]["total-cost"]
+    let orderTotal = currentOrders.data[0]["total-cost"];
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
@@ -363,7 +389,11 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         : currentOrders.data[0]["territory-names"].split(", ");
     let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : "";
     dispatch(
-      setPreOrderDetails({ territories: territories, programId: program, orderTotal: orderTotal })
+      setPreOrderDetails({
+        territories: territories,
+        programId: program,
+        orderTotal: orderTotal,
+      })
     );
     dispatch(
       buildTableFromOrders({

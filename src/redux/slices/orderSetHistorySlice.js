@@ -83,7 +83,7 @@ export const {
 } = orderSetHistorySlice.actions;
 
 export default orderSetHistorySlice.reducer;
-//TODO switch to fetchAllFilteredOrderSets
+
 export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -108,7 +108,6 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
       dueDate: orderSet["due-date"],
       status: orderSet.status,
     }));
-    console.log(orderSets.data);
     dispatch(
       getOrderSetsSuccess({
         orderSets: mappedOrderSets,
