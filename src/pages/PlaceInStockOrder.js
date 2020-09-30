@@ -66,16 +66,18 @@ const PlaceInStockOrder = ({ userType }) => {
     }
   }, [currentItems, dispatch, userType, currentUserRole]);
 
-  useEffect(()=>{
-    if ((userId && !currentOrder.orderNumber && currentOrder.items.length === 0) || (userId && currentOrder.type !== "in-stock")) {
-      dispatch(fetchCurrentOrderByType("inStock", userId))
+  useEffect(() => {
+    if (
+      (userId && !currentOrder.orderNumber) ||
+      (userId && currentOrder.type !== "in-stock")
+    ) {
+      dispatch(fetchCurrentOrderByType("inStock", userId));
     }
-    // return () => {dispatch(clearCurrentOrder())}
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentOrder.type, currentOrder.items.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (orderLoading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
@@ -95,7 +97,14 @@ const PlaceInStockOrder = ({ userType }) => {
 
           <div className={classes.innerConfigDiv}>
             <Tooltip title="View Current Order">
-              <IconButton component={Link} to="/orders/open/inStock">
+              <IconButton
+                component={Link}
+                to={
+                  currentOrder.inStockOrderItems.length > 0
+                    ? `/orders/open/${currentOrder.inStockOrderNumber}`
+                    : "/orders/open/inStock"
+                }
+              >
                 <ExitToAppIcon fontSize="large" color="inherit" />
               </IconButton>
             </Tooltip>

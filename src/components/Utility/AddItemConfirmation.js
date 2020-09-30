@@ -28,6 +28,7 @@ const AddItemConfirmation = ({
   const [open, setOpen] = useCallback(useState(false))
 
   const isLoading = useSelector((state) => state.currentOrder.orderUpdateLoading);
+  const error = useSelector((state) => state.currentOrder.error);
 
   useEffect(() => {
     let timeOut;
@@ -35,7 +36,7 @@ const AddItemConfirmation = ({
       setOpen(true)
     }
     if (!isLoading) {
-      timeOut = setTimeout(()=>{setOpen(false)}, 1000)
+      timeOut = setTimeout(()=>{setOpen(false)}, 1500)
     }
     return ()=>{clearTimeout(timeOut)}
   }, [setOpen, isLoading])
@@ -55,11 +56,15 @@ const AddItemConfirmation = ({
         <Alert severity="info" classes={{filledInfo: classes.alertColor}}>
           ...Updating Order...
         </Alert>
-        ) : (
+        ) : !error ? (
           <Alert severity="success" classes={{filledSuccess: classes.alertColor}}>
-            {`You have successfully added ${item.totalItems} ${item.brand}-${item.itemType} to your ${
+            {`You have successfully added ${item.brand}-${item.itemType} to your ${
             type === "inStock" ? "In-Stock" : "On-Demand"
           } order!`} 
+          </Alert>
+        ) : (
+          <Alert severity="error" classes={{filledError: classes.alertColor}}>
+            {error.includes("422") ? "You've already added this item" : error}
           </Alert>
         )}
       </Snackbar>

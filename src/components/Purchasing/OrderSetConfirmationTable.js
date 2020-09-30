@@ -142,14 +142,14 @@ const CollapseRow = ({ classes, rowData, items }) => {
   );
 };
 
-const PreOrderConfirmationTable = ({ orders, items }) => {
+const OrderSetConfirmationTable = ({ orders, items }) => {
   const classes = useStyles();
 
   return (
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "600px" }}
+        style={{ maxHeight: "Calc(100vh - 300px)" }}
       >
         <Table>
           <TableHead>
@@ -191,9 +191,9 @@ const PreOrderConfirmationTable = ({ orders, items }) => {
   );
 };
 
-PreOrderConfirmationTable.propTypes = {
+OrderSetConfirmationTable.propTypes = {
   orders: PropTypes.array,
   items: PropTypes.array,
 };
 
-export default PreOrderConfirmationTable;
+export default OrderSetConfirmationTable;

@@ -126,7 +126,6 @@ export const fetchUser = () => async (dispatch) => {
     if (user.error) {
       throw user.error;
     }
-    console.log(user.data)
     window.localStorage.setItem(
       "brandhub-role",
       user.data.role

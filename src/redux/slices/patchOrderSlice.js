@@ -3,39 +3,20 @@ import { navigate } from "@reach/router";
 
 import {
   patchOrderItem,
-  deletePreOrderItem,
-  submitPreOrder,
-  setPreOrderNote,
+  deleteOrderSetItem,
+  deleteOrder,
+  startOrderSet,
+  restartOrderSet,
+  submitOrderSet,
+  approveOrderSet,
+  setOrderSetNote,
   setOrderDetail,
-  setOrderShipping,
-  deleteOrderItem,
-  submitOrder,
-  updateOrderStatus,
 } from "../../api/orderApi";
 
-import { setPreOrderProgramStatus } from "../../api/programApi";
-
 import { setProgramStatus } from "./programsSlice";
-import { setPreOrderStatus, updateOrderDetails } from "./programTableSlice";
-import {
-  setShippingLocation,
-  updateOrderNote,
-  addAttention,
-  updateCurrentOrder,
-  removeItem,
-} from "./currentOrderSlice";
+import { setOrderStatus, updateOrderDetails, removeGridItem, removeGridOrder } from "./orderSetSlice";
 
-import { fetchFilteredOrderHistory } from "./orderHistorySlice";
-
-/*
-* Data Format:
-patchOrder: {
-  isLoading: bool,
-  cellsLoading: [],
-  cellsError: [],
-  error: string || null
-}
-*/
+import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
 
 let initialState = {
   isLoading: false,
@@ -129,84 +110,145 @@ export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
   }
 };
 
-export const updateOrderItem = (id, qty, type) => async (dispatch) => {
+export const deleteSetItem = (id, itemNum) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const patchStatus = await patchOrderItem(id, qty);
-    if (patchStatus.error) {
-      throw patchStatus.error;
+    const deleteStatus = await deleteOrderSetItem(id);
+    if (deleteStatus.error) {
+      throw deleteStatus.error;
     }
-
+    dispatch(removeGridItem({ itemNum }));
     dispatch(patchSuccess());
-    if (type !== "pre-order") {
-      dispatch(updateCurrentOrder({ id: id, totalItems: qty }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const deleteSetOrder = (id) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const deleteStatus = await deleteOrder(id);
+    if (deleteStatus.error) {
+      throw deleteStatus.error;
+    }
+    dispatch(removeGridOrder({ orderId: id }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const startOrdSet = (programId, value, orderSetId) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    if (programId) {
+      dispatch(setProgramStatus({ program: programId, status: value }));
+    }
+    const startStatus = await startOrderSet(orderSetId);
+    console.log(startStatus);
+    if (startStatus.error) {
+      throw startStatus.error;
+    }
+    dispatch(setOrderStatus({ status: value }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const restartOrdSet = (programId, value, orderSetId) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    if (programId) {
+      dispatch(setProgramStatus({ program: programId, status: value }));
+    }
+    const restartStatus = await restartOrderSet(orderSetId);
+    if (restartStatus.error) {
+      throw restartStatus.error;
+    }
+    dispatch(setOrderStatus({ status: value }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const submitOrdSet = (programId, value, orderSetId, role) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    if (programId) {
+      dispatch(setProgramStatus({ program: programId, status: value }));
+    }
+    const submitStatus = await submitOrderSet(orderSetId);
+    if (submitStatus.error) {
+      throw submitStatus.error;
+    }
+    dispatch(setOrderStatus({ status: value }));
+    if (role && role !== "field1") {
+      const approveStatus = await approveOrderSet(orderSetId);
+      if (approveStatus.error) {
+        throw approveStatus.error;
+      }
+      dispatch(setOrderStatus({ status: "approved" }));
+    }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const approveOrdSet = (orderSetId, value, filters) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    const approveStatus = await approveOrderSet(orderSetId);
+    if (approveStatus.error) {
+      throw approveStatus.error;
+    }
+    if (filters) {
+      dispatch(fetchFilteredOrderSets(filters));
+    }
+    dispatch(setOrderStatus({ status: value }));
+    dispatch(patchSuccess());
+    if (!filters) {
+      navigate("/orders/approvals");
     }
   } catch (err) {
-    dispatch(
-      setFailure({
-        error: err.toString(),
-        cell: null,
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const approveMultipleOrderSets = (orderSetArray, filters) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    Promise.all(
+      orderSetArray.map(async (id) => {
+        const approveStatus = await approveOrderSet(id);
+        if (approveStatus.error) {
+          throw approveStatus.error;
+        }
       })
     );
-  }
-};
-
-export const deleteOrdItem = (id) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const deleteStatus = await deleteOrderItem(id);
-    if (deleteStatus.error) {
-      throw deleteStatus.error;
-    }
-
-    dispatch(patchSuccess());
-    dispatch(removeItem({ id: id }));
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const deletePreOrdItem = (id) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const deleteStatus = await deletePreOrderItem(id);
-    if (deleteStatus.error) {
-      throw deleteStatus.error;
-    }
-
+    dispatch(fetchFilteredOrderSets(filters));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
 
-export const setProgStatus = (id, value, preOrderId) => async (dispatch) => {
+export const setOrderSetNotes = (id, note) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const compStatus = await setPreOrderProgramStatus(preOrderId, value);
-    if (compStatus.error) {
-      throw compStatus.error;
-    }
-    if (id) {
-      dispatch(setProgramStatus({ program: id, status: value }));
-    }
-    dispatch(setPreOrderStatus({ status: value }));
-    dispatch(patchSuccess());
-    if (value === "submitted") {
-      const submitStatus = await submitPreOrder(preOrderId);
-      if (submitStatus.error) {
-        throw submitStatus.error;
-      }
-    }
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const setPreOrderNotes = (id, note) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const noteStatus = await setPreOrderNote(id, note);
+    const noteStatus = await setOrderSetNote(id, note);
     if (noteStatus.error) {
       throw noteStatus.error;
     }
@@ -223,86 +265,9 @@ export const setOrderDetails = (id, note, attn, type) => async (dispatch) => {
     if (noteStatus.error) {
       throw noteStatus.error;
     }
-    if (type === "pre-order") {
-      dispatch(updateOrderDetails({ orderNumber: id, note: note, attn: attn }));
-    } else {
-      dispatch(updateOrderNote({ value: note }));
-      dispatch(addAttention({ attention: attn }));
-    }
+    dispatch(updateOrderDetails({ orderNumber: id, note: note, attn: attn }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
-
-export const setShipping = (orderId, distId, distName) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const shipStatus = await setOrderShipping(orderId, distId);
-    if (shipStatus.error) {
-      throw shipStatus.error;
-    }
-    dispatch(setShippingLocation({ location: { name: distName, id: distId } }));
-    dispatch(patchSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const submitCurrentOrder = (orderId, role) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const submitStatus = await submitOrder(orderId);
-    if (submitStatus.error) {
-      throw submitStatus.error;
-    }
-    if (role !== "field1") {
-      const updateStatus = await updateOrderStatus(orderId, "approved")
-      if (updateStatus.error) {
-        throw updateStatus.error
-      }
-    }
-    dispatch(patchSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const updateCurrentOrderStatus = (orderId, status, filters) => async (
-  dispatch
-) => {
-  try {
-    dispatch(setIsLoading());
-    const updateStatus = await updateOrderStatus(orderId, status);
-    if (updateStatus.error) {
-      throw updateStatus.error;
-    }
-    if (filters) {
-      dispatch(fetchFilteredOrderHistory(filters));
-    }
-    dispatch(patchSuccess());
-    if (!filters) {
-      navigate("/orders/approvals")
-    }
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const updateMultipleOrderStatus = (orderIdArray, status, filters) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    Promise.all(
-      orderIdArray.map(async(id) => {
-        const updateStatus = await updateOrderStatus(id, status);
-        if (updateStatus.error) {
-          throw updateStatus.error
-        }
-      })
-    )
-    dispatch(fetchFilteredOrderHistory(filters));
-    dispatch(patchSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-}

@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
+import { useSelector } from "react-redux";
+
 import Menu from "@material-ui/core/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,6 +33,9 @@ const OrdersNav = ({ setSelected, selected, userType }) => {
   const [orderManagementOpen, setOrderManagementOpen] = useCallback(
     useState(false)
   );
+
+  const inStockOrderId = useSelector((state) => state.currentOrder.inStockOrderNumber);
+  const onDemandOrderId = useSelector((state) => state.currentOrder.onDemandOrderNumber);
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -148,7 +153,7 @@ const OrdersNav = ({ setSelected, selected, userType }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/open/inStock"
+                to={inStockOrderId ? `/orders/open/${inStockOrderId}` : "/orders/open/inStock"}
                 className={classes.nested}
               >
                 <ListItemText primary="In-Stock" />
@@ -167,7 +172,7 @@ const OrdersNav = ({ setSelected, selected, userType }) => {
                   }
                 }}
                 component={Link}
-                to="/orders/open/onDemand"
+                to={onDemandOrderId ? `/orders/open/${onDemandOrderId}` : "/orders/open/onDemand"}
                 className={classes.nested}
               >
                 <ListItemText primary="On-Demand" />

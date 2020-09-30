@@ -5,7 +5,7 @@ import { CSVLink } from "react-csv";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { submitCurrentOrder } from "../redux/slices/patchOrderSlice";
+//import { submitCurrentOrder } from "../redux/slices/patchOrderSlice";
 
 import { clearCurrentOrder } from "../redux/slices/currentOrderSlice";
 
@@ -46,7 +46,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
   }
 
   const handleSubmit = () => {
-    dispatch(submitCurrentOrder(window.location.hash.slice(1), userType));
+    //dispatch(submitCurrentOrder(window.location.hash.slice(1), userType));
     dispatch(clearCurrentOrder());
     setSubmitted(true);
   };

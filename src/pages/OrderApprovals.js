@@ -7,13 +7,13 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
-  fetchFilteredOrderHistory,
-  fetchNextOrderHistory,
-} from "../redux/slices/orderHistorySlice";
+  fetchFilteredOrderSets,
+  fetchNextFilteredOrderSets,
+} from "../redux/slices/orderSetHistorySlice";
 
 import {
-  updateCurrentOrderStatus,
-  updateMultipleOrderStatus,
+  approveOrdSet,
+  approveMultipleOrderSets,
 } from "../redux/slices/patchOrderSlice";
 
 import { clearBrands } from "../redux/slices/brandSlice";
@@ -23,7 +23,7 @@ import { useDetailedInput } from "../hooks/UtilityHooks";
 import BrandAutoComplete from "../components/Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../components/Utility/DistributorAutoComplete";
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
-import OrderApprovalTable from "../components/OrderHistory/OrderApprovalTable";
+import OrderApprovalTable from "../components/OrderManagement/OrderApprovalTable";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
@@ -85,7 +85,7 @@ const OrderApprovals = () => {
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
-      dispatch(fetchNextOrderHistory(nextLink));
+      dispatch(fetchNextFilteredOrderSets(nextLink));
     }
   };
 
@@ -94,8 +94,8 @@ const OrderApprovals = () => {
   const [reset, setReset] = useCallback(useState(false));
 
   const [currentFilters, setCurrentFilters] = useState({
-    fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-    toDate: format(new Date(), "MM/dd/yyyy"),
+    // fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+    // toDate: format(new Date(), "MM/dd/yyyy"),
     user: null,
     distributor: null,
     program: "",
@@ -144,8 +144,10 @@ const OrderApprovals = () => {
     reset: resetProgram,
   } = useDetailedInput("", handleFilters, "program");
 
-  const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
-  const currentOrders = useSelector((state) => state.orderHistory.orders);
+  const isOrdersLoading = useSelector(
+    (state) => state.orderSetHistory.isLoading
+  );
+  const currentOrders = useSelector((state) => state.orderSetHistory.orderSets);
   const currentUserRole = useSelector((state) => state.user.role);
 
   const handleSearch = (sortBy = undefined) => {
@@ -160,14 +162,13 @@ const OrderApprovals = () => {
     } else {
       filterObject = { ...currentFilters };
     }
-    dispatch(fetchFilteredOrderHistory(filterObject));
+    dispatch(fetchFilteredOrderSets(filterObject));
   };
 
   const handleClearFilters = () => {
     resetProgram();
     resetSequenceNumber();
     setReset(true);
-    //setDistributor(null);
     dispatch(clearBrands());
     setCurrentFilters({
       fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -183,7 +184,7 @@ const OrderApprovals = () => {
       sortOrderBy: "user",
     });
     dispatch(
-      fetchFilteredOrderHistory({
+      fetchFilteredOrderSets({
         fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
         toDate: format(new Date(), "MM/dd/yyyy"),
         user: null,
@@ -209,17 +210,17 @@ const OrderApprovals = () => {
   };
 
   const handleApproval = (id) => {
-    dispatch(updateCurrentOrderStatus(id, "approved", currentFilters))
-  }
+    dispatch(approveOrdSet(id, "approved", currentFilters))
+  };
 
   const handleBulkApproval = () => {
-    let idArray = currentOrders.map((order) => order.orderNum)
-    dispatch(updateMultipleOrderStatus(idArray, "approved", currentFilters))
-  }
+    let idArray = currentOrders.map((order) => order.id)
+    dispatch(approveMultipleOrderSets(idArray, currentFilters))
+  };
 
   useEffect(() => {
     if (currentUserRole.length > 0) {
-      dispatch(fetchFilteredOrderHistory(currentFilters));
+      dispatch(fetchFilteredOrderSets(currentFilters));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -429,7 +430,6 @@ const OrderApprovals = () => {
               >
                 CLEAR FILTERS
               </Button>
-              
             </Grid>
             <Grid
               item
@@ -448,7 +448,6 @@ const OrderApprovals = () => {
               >
                 APPROVE ALL
               </Button>
-              
             </Grid>
           </Grid>
         </div>

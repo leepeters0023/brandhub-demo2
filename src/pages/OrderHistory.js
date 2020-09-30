@@ -232,8 +232,6 @@ const OrderHistory = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(currentFilters);
-
   return (
     <>
       <Container className={classes.mainWrapper}>
