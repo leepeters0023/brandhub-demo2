@@ -14,7 +14,12 @@ import {
 } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
-import { setOrderStatus, updateOrderDetails, removeGridItem, removeGridOrder } from "./orderSetSlice";
+import {
+  setOrderStatus,
+  updateOrderDetails,
+  removeGridItem,
+  removeGridOrder,
+} from "./orderSetSlice";
 
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
 
@@ -136,7 +141,7 @@ export const deleteSetOrder = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const startOrdSet = (programId, value, orderSetId) => async (
   dispatch
