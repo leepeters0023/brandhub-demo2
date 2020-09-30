@@ -74,9 +74,8 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector(
-    (state) =>
-      state.orderSet.items.find((item) => item.itemNumber === itemNumber)
+  const value = useSelector((state) =>
+    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
   );
   return (
     <TableCell
@@ -91,9 +90,8 @@ const TotalItemCell = React.memo(({ itemNumber }) => {
 
 const TotalEstCostCell = React.memo(({ itemNumber }) => {
   const classes = useStyles();
-  const value = useSelector(
-    (state) =>
-      state.orderSet.items.find((item) => item.itemNumber === itemNumber)
+  const value = useSelector((state) =>
+    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
   );
   return (
     <TableCell
@@ -101,7 +99,9 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
       style={{ textAlign: "center" }}
       className={classes.borderRightLight}
     >
-      <div className={classes.infoCell}>{value ? `${formatMoney(value.estTotal)}` : "---"}</div>
+      <div className={classes.infoCell}>
+        {value ? `${formatMoney(value.estTotal)}` : "---"}
+      </div>
     </TableCell>
   );
 });
@@ -115,6 +115,7 @@ const OrderSetTable = (props) => {
     setTableStyle,
     handleModalOpen,
     handleOpenConfirm,
+    handleRemoveOrder,
     isLoading,
     orderId,
     orderStatus,
@@ -161,7 +162,7 @@ const OrderSetTable = (props) => {
     if (
       (orders && !refTable) ||
       `${orders[0].orderNumber}` !== Object.keys(refTable)[0].split("-")[0] ||
-      Object.keys(refTable).length !== (orders.length * currentItems.length)
+      Object.keys(refTable).length !== orders.length * currentItems.length
     ) {
       if (orders.length !== 0) {
         let refs = {};
@@ -178,7 +179,7 @@ const OrderSetTable = (props) => {
   }, [orders, refTable, orders.length, currentItems.length]);
 
   useEffect(() => {
-    if ((currentItems && !itemLength) || (itemLength !== currentItems.length)) {
+    if ((currentItems && !itemLength) || itemLength !== currentItems.length) {
       setItemLength(currentItems.length);
     }
   }, [itemLength, currentItems, currentItems.length]);
@@ -480,14 +481,23 @@ const OrderSetTable = (props) => {
                             {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
                           </Typography>
                         </Tooltip>
+                        <div style={{display: "flex"}}>
+                          <Tooltip title="Delete Order">
+                            <IconButton
+                            onClick={() => handleRemoveOrder(ord.orderNumber)}
+                            >
+                              <CancelIcon fontSize="small" color="inherit" />
+                            </IconButton>
+                          </Tooltip>
 
-                        <Tooltip title="Edit Details">
-                          <IconButton
-                            onClick={() => setOrderNumber(ord.orderNumber)}
-                          >
-                            <EditIcon fontSize="small" color="inherit" />
-                          </IconButton>
-                        </Tooltip>
+                          <Tooltip title="Edit Details">
+                            <IconButton
+                              onClick={() => setOrderNumber(ord.orderNumber)}
+                            >
+                              <EditIcon fontSize="small" color="inherit" />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
                       </div>
                     </TableCell>
                     {ord.items.map((item, index) => (
@@ -527,6 +537,7 @@ OrderSetTable.propTypes = {
   setTableStyle: PropTypes.func.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
   handleOpenConfirm: PropTypes.func.isRequired,
+  handleRemoveOrder: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   orderId: PropTypes.string,
   orderStatus: PropTypes.string,
@@ -535,7 +546,7 @@ OrderSetTable.propTypes = {
 export default React.memo(OrderSetTable, (prev, next) => {
   return (
     prev.currentProgram === next.currentProgram &&
-    // prev.distributors.length === next.distributors.length &&
+    prev.orders.length === next.orders.length &&
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&
     prev.isLoading === next.isLoading &&

@@ -21,7 +21,6 @@ export const fetchOrdersByProgram = async (program, userId) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -81,7 +80,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
   };
   let typeString = `?filter[type]=${filterObject.type}`;
   let dateString =
-    filterObject.fromDate && filterObject.toDate
+    filterObject.fromDate && filterObject.toDate && filterObject.status === "submitted"
       ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let statusString =
@@ -351,7 +350,7 @@ export const addOrderSetItem = async (id, item, qty) => {
     .catch((err) => {
       console.log(err.toString());
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.toString();
     });
   return response;
 };
@@ -416,7 +415,6 @@ export const fetchOrderHistory = async (filterObject) => {
     .then((res) => {
       let dataObject = { orders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -438,6 +436,7 @@ export const fetchNextHistory = async (url) => {
     .then((res) => {
       let dataObject = { orders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";

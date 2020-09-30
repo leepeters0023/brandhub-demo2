@@ -94,8 +94,8 @@ const OrderApprovals = () => {
   const [reset, setReset] = useCallback(useState(false));
 
   const [currentFilters, setCurrentFilters] = useState({
-    fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-    toDate: format(new Date(), "MM/dd/yyyy"),
+    // fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+    // toDate: format(new Date(), "MM/dd/yyyy"),
     user: null,
     distributor: null,
     program: "",

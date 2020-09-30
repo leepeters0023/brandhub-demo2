@@ -149,7 +149,7 @@ const OrderSetConfirmationTable = ({ orders, items }) => {
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "600px" }}
+        style={{ maxHeight: "Calc(100vh - 300px)" }}
       >
         <Table>
           <TableHead>

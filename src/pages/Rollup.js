@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
+import "date-fns";
+import subDays from "date-fns/subDays";
+import format from "date-fns/format";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -30,6 +33,11 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import FormControl from "@material-ui/core/FormControl";
 import InputBase from "@material-ui/core/InputBase";
 import InputLabel from "@material-ui/core/InputLabel";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
@@ -38,7 +46,6 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   queryRow: {
-    position: "relative",
     [theme.breakpoints.down("xs")]: {
       width: "100%",
       paddingLeft: "0%",
@@ -51,12 +58,12 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up("md")]: {
       width: "100%",
-      paddingLeft: "15%",
+      paddingLeft: "10%",
       display: "flex",
     },
     [theme.breakpoints.up("lg")]: {
       width: "100%",
-      paddingLeft: "35%",
+      paddingLeft: "10%",
       display: "flex",
     },
   },
@@ -73,6 +80,8 @@ const Rollup = () => {
   const [status, setStatus] = useCallback(useState("submitted"));
   const [reset, setReset] = useCallback(useState(false));
   const [currentFilters, setCurrentFilters] = useState({
+    fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+    toDate: format(new Date(), "MM/dd/yyyy"),
     type: "pre-order",
     user: null,
     program: "",
@@ -85,15 +94,24 @@ const Rollup = () => {
 
   const handleFilters = useCallback(
     (value, type) => {
-      if (type === "brand" || type === "user") {
-        setCurrentFilters({
-          ...currentFilters,
-          [`${type}`]: value ? value.id : null,
-        });
-      } else {
+      if (type === "program" || type === "sequenceNum" || type === "status") {
         setCurrentFilters({
           ...currentFilters,
           [`${type}`]: value,
+        });
+      } else if (type === "fromDate" || type === "toDate") {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: format(value, "MM/dd/yyyy"),
+        });
+      } else if (
+        type === "distributor" ||
+        type === "brand" ||
+        type === "user"
+      ) {
+        setCurrentFilters({
+          ...currentFilters,
+          [`${type}`]: value ? value.id : null,
         });
       }
     },
@@ -111,10 +129,14 @@ const Rollup = () => {
     reset: resetSequenceNum,
   } = useDetailedInput("", handleFilters, "sequenceNum");
 
-  const currentPreOrders = useSelector((state) => state.orderSetHistory.orderSets);
+  const currentPreOrders = useSelector(
+    (state) => state.orderSetHistory.orderSets
+  );
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
-  const isPreOrdersLoading = useSelector((state) => state.orderSetHistory.isLoading);
+  const isPreOrdersLoading = useSelector(
+    (state) => state.orderSetHistory.isLoading
+  );
   const nextLink = useSelector((state) => state.orderSetHistory.nextLink);
   const isNextPreOrdersLoading = useSelector(
     (state) => state.orderSetHistory.isNextLoading
@@ -139,10 +161,8 @@ const Rollup = () => {
         sortOrderBy: sortBy.orderBy,
       };
     } else {
-      console.log(currentFilters);
       filterObject = { ...currentFilters };
     }
-    console.log("searching");
     dispatch(fetchFilteredOrderSets(filterObject));
   };
 
@@ -152,9 +172,24 @@ const Rollup = () => {
     setReset(true);
     setStatus("submitted");
     dispatch(clearBrands());
+    setCurrentFilters({
+      fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+      toDate: format(new Date(), "MM/dd/yyyy"),
+      type: "pre-order",
+      user: null,
+      program: "",
+      brand: null,
+      sequenceNum: "",
+      status: "submitted",
+      sortOrder: "asc",
+      sortOrderBy: "user",
+    });
     dispatch(
       fetchFilteredOrderSets({
-        user: "",
+        fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+        toDate: format(new Date(), "MM/dd/yyyy"),
+        type: "pre-order",
+        user: null,
         program: "",
         brand: null,
         sequenceNum: "",
@@ -195,31 +230,8 @@ const Rollup = () => {
               justifyContent: "flex-end",
             }}
           >
-            <Tooltip title="Print Order History">
-              <IconButton>
-                <PrintIcon color="secondary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
-            </Tooltip>
-          </div>
-        </div>
-        <br />
-        <div className={classes.queryRow}>
-          {queryTotal && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "0",
-                left: "0",
-              }}
-            >
-              <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
+            {queryTotal && (
+              <FormControl style={{ pointerEvents: "none", minWidth: "100px", marginRight:"30px" }}>
                 <InputLabel
                   htmlFor="program-total"
                   style={{ whiteSpace: "nowrap" }}
@@ -249,11 +261,83 @@ const Rollup = () => {
                   }}
                 />
               </FormControl>
-            </div>
-          )}
+            )}
+            <Tooltip title="Print Order History">
+              <IconButton>
+                <PrintIcon color="secondary" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Export CSV">
+              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
+              <IconButton>
+                <GetAppIcon color="secondary" />
+              </IconButton>
+              {/* </CSVLink> */}
+            </Tooltip>
+          </div>
+        </div>
+        <br />
+        <div className={classes.queryRow}>
           <Grid container spacing={2} justify="flex-end">
             <Grid
               item
+              lg={2}
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  fullWidth
+                  disabled={currentFilters.status !== "submitted"}
+                  color="secondary"
+                  className={classes.dateField}
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="normal"
+                  id="fromDate"
+                  label="Order From Date"
+                  value={currentFilters.fromDate}
+                  onChange={(value) => handleFilters(value, "fromDate")}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              sm={4}
+              xs={4}
+              className={classes.gridItemContainer}
+            >
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  fullWidth
+                  disabled={currentFilters.status !== "submitted"}
+                  color="secondary"
+                  className={classes.dateField}
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="normal"
+                  id="toDate"
+                  label="Order To Date"
+                  value={currentFilters.toDate}
+                  onChange={(value) => handleFilters(value, "toDate")}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid
+              item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -268,6 +352,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -287,6 +372,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -301,6 +387,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -320,6 +407,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -334,6 +422,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
@@ -351,6 +440,7 @@ const Rollup = () => {
             </Grid>
             <Grid
               item
+              lg={2}
               md={3}
               sm={4}
               xs={4}
