@@ -44,6 +44,7 @@ import Rollup from "./pages/Rollup";
 import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 import SingleOrder from "./pages/SingleOrder";
+import TopDrawerNav from "./components/Navigation/TopDrawerNav";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -154,7 +155,7 @@ const App = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}
+      {loggedIn && <TopDrawerNav userType={role} handleLogout={handleLogout} />}
       <div id="main-container">
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
