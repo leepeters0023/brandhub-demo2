@@ -24,7 +24,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -97,30 +96,12 @@ const ItemPreviewModal = (props) => {
 
   const [currentImage, setImage] = useState(imgUrl);
   const [value, setValue] = useState(1);
-  const [itemQty, setItemQty] = useState("");
   const [currentItem, setCurrentItem] = useState(null);
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderNumber);
-  const currentItemsByType = useSelector(
-    (state) => state.currentOrder[`${type}OrderItems`]
-  );
 
   const handleChangeTab = (_evt, newValue) => {
     setValue(newValue);
-  };
-
-  const handleItemQty = (evt) => {
-    const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-    let total;
-    if (
-      numArray.includes(evt.target.value[evt.target.value.length - 1]) ||
-      evt.target.value === ""
-    ) {
-      if (evt.target.value === "") {
-        total = 0;
-      } else total = parseInt(evt.target.value);
-      setItemQty(total);
-    }
   };
 
   const handleModalClose = () => {
@@ -130,51 +111,18 @@ const ItemPreviewModal = (props) => {
 
   const handleAddItem = useCallback(() => {
     let newItem = {
-      itemNumber: itemNumber,
       brand: brand,
       itemType: itemType,
-      price: price,
-      qty: qty,
-      imgUrl: imgUrl,
-      complianceStatus: "pending",
-      totalItems: parseInt(itemQty),
-      estTotal: parseInt(itemQty) * price,
     };
 
     setCurrentItem(newItem);
-    setItemQty("0");
 
     if (!currentOrderId) {
-      dispatch(createNewOrder(type, itemNumber, qty));
+      dispatch(createNewOrder(type, id));
     } else {
-      let currentItem = currentItemsByType.find(
-        (i) => i.itemNumber === itemNumber
-      );
-      if (currentItem) {
-        dispatch(
-          addNewOrderItem(currentOrderId, id, currentItem.id, itemQty, type)
-        );
-      } else {
-        dispatch(
-          addNewOrderItem(currentOrderId, id, undefined, itemQty, type)
-        );
-      }
+      dispatch(addNewOrderItem(currentOrderId, id, type));
     }
-  }, [
-    dispatch,
-    setCurrentItem,
-    brand,
-    qty,
-    id,
-    itemNumber,
-    itemType,
-    price,
-    imgUrl,
-    itemQty,
-    currentItemsByType,
-    currentOrderId,
-    type,
-  ]);
+  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type]);
 
   return (
     <div className={classes.relativeContainer}>
@@ -285,20 +233,6 @@ const ItemPreviewModal = (props) => {
               )}
               {type && type !== "program" && (
                 <>
-                  <TextField
-                    color="secondary"
-                    style={{
-                      width: "150px",
-                      marginLeft: "5px",
-                      marginTop: "10px",
-                    }}
-                    id={`${itemNumber}`}
-                    placeholder="Qty"
-                    variant="outlined"
-                    value={itemQty}
-                    onChange={handleItemQty}
-                  />
-                  <br />
                   <Button
                     variant="contained"
                     color="secondary"
