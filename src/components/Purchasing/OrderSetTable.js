@@ -550,6 +550,7 @@ export default React.memo(OrderSetTable, (prev, next) => {
     prev.open === next.open &&
     prev.tableStyle === next.tableStyle &&
     prev.isLoading === next.isLoading &&
-    prev.currentItems.length === next.currentItems.length
+    prev.currentItems.length === next.currentItems.length &&
+    prev.orderStatus === next.orderStatus
   );
 });
