@@ -436,7 +436,6 @@ export const fetchNextHistory = async (url) => {
     .then((res) => {
       let dataObject = { orders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";

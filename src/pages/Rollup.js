@@ -145,7 +145,9 @@ const Rollup = () => {
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
-      dispatch(fetchNextFilteredOrderSets(nextLink));
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredOrderSets(nextLink));
+      }
     }
   };
 
@@ -201,6 +203,7 @@ const Rollup = () => {
   };
 
   const handleSort = (sortObject) => {
+    scrollRef.current.scrollTop = 0;
     setCurrentFilters({
       ...currentFilters,
       sortOrder: sortObject.order,
@@ -470,6 +473,9 @@ const Rollup = () => {
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
+        )}
+        {!isNextPreOrdersLoading && (
+          <div style={{ width: "100%", height: "4px" }}></div>
         )}
       </Container>
     </>

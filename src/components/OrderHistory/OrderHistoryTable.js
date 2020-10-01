@@ -154,7 +154,7 @@ const OrderHistoryTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 350px)" }}
+        style={{ maxHeight: "Calc(100vh - 375px)" }}
         ref={scrollRef}
       >
         <Table stickyHeader className={classes.table} style={{minWidth: "1325px"}}>
