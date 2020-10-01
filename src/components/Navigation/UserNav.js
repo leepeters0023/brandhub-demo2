@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ initials, handleLogout }) => {
+const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,7 +42,10 @@ const UserNavMenu = ({ initials, handleLogout }) => {
         <IconButton
           aria-owns={anchorEl ? "notifications" : undefined}
           aria-haspopup="true"
-          onClick={handleOpen}
+          onClick={(evt)=>{
+            handleOpen(evt)
+            handleDrawerClose()
+          }}
         >
           <Avatar className={classes.avatar}>{initials}</Avatar>
         </IconButton>

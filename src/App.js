@@ -41,7 +41,7 @@ import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
-import ScrollNav from "./components/Navigation/ScrollNav";
+// import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 import SingleOrder from "./pages/SingleOrder";
 import TopDrawerNav from "./components/Navigation/TopDrawerNav";
@@ -147,7 +147,7 @@ const App = () => {
   if (programsIsLoading) {
     return (
       <MuiThemeProvider theme={theme}>
-        <ScrollNav userType={role} handleLogout={handleLogout} />
+        <TopDrawerNav userType={role} handleLogout={handleLogout} />
         <Loading partial={true} />
       </MuiThemeProvider>
     );

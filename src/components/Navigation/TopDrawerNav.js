@@ -5,16 +5,14 @@ import { useSelector } from "react-redux";
 
 import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
+import DrawerAssetsNav from "./DrawerAssetsNav";
+import DrawerOrdersNav from "./DrawerOrdersNav";
+import DrawerFulfillmentNav from "./DrawerFulfillmentNav";
 
 import Drawer from "@material-ui/core/Drawer";
 import Tooltip from "@material-ui/core/Tooltip";
 import Backdrop from "@material-ui/core/Backdrop";
 import Typography from "@material-ui/core/Typography";
-
-import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -138,6 +136,7 @@ const TopDrawerNav = ({ handleLogout }) => {
                   alt="Logo"
                   className={classes.logoLink}
                   style={{ filter: "brightness(0%)" }}
+                  onClick={handleDrawerClose}
                 />
               </Link>
             </Tooltip>
@@ -179,116 +178,32 @@ const TopDrawerNav = ({ handleLogout }) => {
             )}
           </div>
           <div className={classes.navBreak}>
-            {/* {(role === "super" || role === "field2") && <UserSelector />} */}
             {territories.length > 1 && <RegionSelector />}
-            <UserNav initials={initials} handleLogout={handleLogout} />
+            <UserNav initials={initials} handleLogout={handleLogout} handleDrawerClose={handleDrawerClose}/>
           </div>
         </div>
         <br />
         <div className={classes.drawerContent}>
+          {drawerContent === "assets" && (
+            <DrawerAssetsNav
+              handleDrawerClose={handleDrawerClose}
+              classes={classes}
+            />
+          )}
           {drawerContent === "orders" && (
-            <Grid container spacing={2}>
-              <Grid
-                item
-                sm={3}
-                xs={12}
-                style={{ borderRight: "1px solid #737373" }}
-              >
-                <List>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to="/orders/open/preorder"
-                  >
-                    <ListItemText primary="Quarterly Pre-Order" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to="/orders/items/inStock"
-                  >
-                    <ListItemText primary="In-Stock" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to="/orders/items/onDemand"
-                  >
-                    <ListItemText primary="On-Demand" />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item sm={1} xs={12} />
-              <Grid item sm={4} xs={12}>
-                <List>
-                  <ListItem>
-                    <ListItemText
-                      primaryTypographyProps={{ className: classes.headerText }}
-                      primary="Open Orders:"
-                    />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to={
-                      inStockOrderId
-                        ? `/orders/open/${inStockOrderId}`
-                        : "/orders/open/inStock"
-                    }
-                  >
-                    <ListItemText primary="In-Stock" />
-                  </ListItem>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to={
-                      onDemandOrderId
-                        ? `/orders/open/${onDemandOrderId}`
-                        : "/orders/open/onDemand"
-                    }
-                  >
-                    <ListItemText primary="On-Demand" />
-                  </ListItem>
-                </List>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <List>
-                  <ListItem
-                    button
-                    onClick={handleDrawerClose}
-                    component={Link}
-                    to="/orders/history"
-                  >
-                    <ListItemText primary="Order History" />
-                  </ListItem>
-                  {role !== "field1" && (
-                    <>
-                      <ListItem
-                        button
-                        onClick={handleDrawerClose}
-                        component={Link}
-                        to="/rollup"
-                      >
-                        <ListItemText primary="Quarterly Rollup" />
-                      </ListItem>
-                      <ListItem
-                        button
-                        onClick={handleDrawerClose}
-                        component={Link}
-                        to="/orders/approvals"
-                      >
-                        <ListItemText primary="Approvals" />
-                      </ListItem>
-                    </>
-                  )}
-                </List>
-              </Grid>
-            </Grid>
+            <DrawerOrdersNav
+              handleDrawerClose={handleDrawerClose}
+              classes={classes}
+              inStockOrderId={inStockOrderId}
+              onDemandOrderId={onDemandOrderId}
+              role={role}
+            />
+          )}
+          {drawerContent === "fulfillment" && (
+            <DrawerFulfillmentNav
+              handleDrawerClose={handleDrawerClose}
+              classes={classes}
+            />
           )}
         </div>
       </Drawer>
