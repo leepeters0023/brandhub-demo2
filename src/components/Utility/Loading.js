@@ -16,7 +16,7 @@ const Loading = ({ partial }) => {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: partial ? "rgb(0,0,0,0)" : "white",
-        zIndex: "10000",
+        zIndex: "9998",
       }}
     >
       <br />
