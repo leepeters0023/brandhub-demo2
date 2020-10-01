@@ -57,12 +57,12 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
     },
     [theme.breakpoints.up("md")]: {
-      width: "100%",
+      width: "90%",
       paddingLeft: "10%",
       display: "flex",
     },
     [theme.breakpoints.up("lg")]: {
-      width: "100%",
+      width: "90%",
       paddingLeft: "10%",
       display: "flex",
     },
@@ -226,12 +226,12 @@ const Rollup = () => {
           <div
             style={{
               display: "flex",
-              width: "150px",
+              minWidth: "150px",
               justifyContent: "flex-end",
             }}
           >
             {queryTotal && (
-              <FormControl style={{ pointerEvents: "none", minWidth: "100px", marginRight:"30px" }}>
+              <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
                 <InputLabel
                   htmlFor="program-total"
                   style={{ whiteSpace: "nowrap" }}
