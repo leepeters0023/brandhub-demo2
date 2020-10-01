@@ -235,7 +235,7 @@ export const approveMultipleOrderSets = (orderSetArray, filters) => async (
 ) => {
   try {
     dispatch(setIsLoading());
-    Promise.all(
+    await Promise.all(
       orderSetArray.map(async (id) => {
         const approveStatus = await approveOrderSet(id);
         if (approveStatus.error) {

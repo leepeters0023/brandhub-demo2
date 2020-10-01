@@ -7,7 +7,7 @@ import { useInput } from "../hooks/UtilityHooks";
 
 import { logIn } from "../redux/slices/userSlice";
 
-import BrandHubLogo from "../assets/brandhub.svg";
+import Logo from "../assets/RTA_Logo_Stacked.png";
 
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -44,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     top: "20px",
     left: "20px",
+    width: "150px",
+    height: "auto",
     filter: "brightness(0%)",
   },
   paper: {
@@ -85,7 +87,7 @@ const Login = () => {
 
   return (
     <div className={classes.welcomContainer}>
-      <img src={BrandHubLogo} className={classes.logo} alt="Logo" />
+      <img src={Logo} className={classes.logo} alt="Logo" />
       <Container
         className={classes.loginContainer}
         component="main"
