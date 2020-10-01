@@ -27,6 +27,7 @@ import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
+import FilterDrawer from "./components/Utility/FilterDrawer";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
@@ -156,7 +157,8 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       {loggedIn && <TopDrawerNav userType={role} handleLogout={handleLogout} />}
-      <div id="main-container">
+      <FilterDrawer open={true} />
+      <div id="main-container" style={{marginLeft: "300px"}}>
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
