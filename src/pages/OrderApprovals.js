@@ -85,7 +85,9 @@ const OrderApprovals = () => {
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
-      dispatch(fetchNextFilteredOrderSets(nextLink));
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredOrderSets(nextLink));
+      }
     }
   };
 
@@ -201,6 +203,7 @@ const OrderApprovals = () => {
   };
 
   const handleSort = (sortObject) => {
+    scrollRef.current.scrollTop = 0;
     setCurrentFilters({
       ...currentFilters,
       sortOrder: sortObject.order,
@@ -210,12 +213,12 @@ const OrderApprovals = () => {
   };
 
   const handleApproval = (id) => {
-    dispatch(approveOrdSet(id, "approved", currentFilters))
+    dispatch(approveOrdSet(id, "approved", currentFilters));
   };
 
   const handleBulkApproval = () => {
-    let idArray = currentOrders.map((order) => order.id)
-    dispatch(approveMultipleOrderSets(idArray, currentFilters))
+    let idArray = currentOrders.map((order) => order.id);
+    dispatch(approveMultipleOrderSets(idArray, currentFilters));
   };
 
   useEffect(() => {
@@ -465,6 +468,7 @@ const OrderApprovals = () => {
             <LinearProgress />
           </div>
         )}
+        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
         <OrderPatchLoading />
       </Container>
       <br />

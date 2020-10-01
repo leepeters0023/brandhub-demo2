@@ -102,7 +102,6 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
@@ -110,7 +109,9 @@ const OrderHistory = () => {
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
-      dispatch(fetchNextOrderHistory(nextLink));
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextOrderHistory(nextLink));
+      }
     }
   };
 
@@ -217,6 +218,7 @@ const OrderHistory = () => {
   };
 
   const handleSort = (sortObject) => {
+    scrollRef.current.scrollTop=0
     setCurrentFilters({
       ...currentFilters,
       sortOrder: sortObject.order,
@@ -454,6 +456,9 @@ const OrderHistory = () => {
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
+        )}
+        {!isNextLoading && (
+          <div style={{width: "100%", height: "4px"}}></div>
         )}
       </Container>
       <br />

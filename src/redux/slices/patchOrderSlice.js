@@ -195,13 +195,13 @@ export const submitOrdSet = (programId, value, orderSetId, role) => async (
       throw submitStatus.error;
     }
     dispatch(setOrderStatus({ status: value }));
-    if (role && role !== "field1") {
-      const approveStatus = await approveOrderSet(orderSetId);
-      if (approveStatus.error) {
-        throw approveStatus.error;
-      }
-      dispatch(setOrderStatus({ status: "approved" }));
-    }
+    // if (role && role !== "field1") {
+    //   const approveStatus = await approveOrderSet(orderSetId);
+    //   if (approveStatus.error) {
+    //     throw approveStatus.error;
+    //   }
+    //   dispatch(setOrderStatus({ status: "approved" }));
+    // }
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
