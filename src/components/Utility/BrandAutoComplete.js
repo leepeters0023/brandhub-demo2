@@ -10,7 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-const BrandAutoComplete = ({ classes, handleChange, reset, setReset }) => {
+const BrandAutoComplete = ({ classes, handleChange, reset, setReset, filterType }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [brand, setBrand] = useState("");
@@ -44,7 +44,9 @@ const BrandAutoComplete = ({ classes, handleChange, reset, setReset }) => {
         onClose={()=>setOpen(false)}
         inputValue={brand}
         onInputChange={(_evt, value) => setBrand(value)}
-        onChange={(_evt, value) => handleChange(value, "brand")}
+        onChange={(evt, value) => {
+          handleChange(value, "brand", filterType)
+        }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option)=>option.name}
         options={options}

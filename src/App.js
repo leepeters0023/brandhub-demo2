@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Router, Redirect } from "@reach/router";
 import axios from "axios";
 
@@ -64,7 +64,7 @@ const App = () => {
   const [role, setRole] = useState(
     window.localStorage.getItem("brandhub-role")
   );
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -79,10 +79,6 @@ const App = () => {
 
   const handleLogIn = (user) => {
     setRole(user);
-  };
-
-  const handleFiltersOpen = () => {
-    setFiltersOpen(true);
   };
 
   const handleFiltersClosed = () => {
@@ -212,7 +208,12 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <PlaceInStockOrder path="/orders/items/inStock" userType={role} />,
+            <PlaceInStockOrder
+              path="/orders/items/inStock"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/items/inStock",
             ["field1", "field2", "super"],
             role
@@ -221,6 +222,8 @@ const App = () => {
             <PlaceOnDemandOrder
               path="/orders/items/onDemand"
               userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "super"],
@@ -233,19 +236,33 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <OrderHistory path="/orders/history" userType={role} />,
+            <OrderHistory
+              path="/orders/history"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/history",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <OrderApprovals path="/orders/approvals" userType={role} />,
+            <OrderApprovals
+              path="/orders/approvals"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/approvals",
             ["field2", "super"],
             role
           )}
           {handleAuth(
-            <Rollup path="/rollup" />,
+            <Rollup
+              path="/rollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/rollup",
             ["field2", "super"],
             role
@@ -263,7 +280,12 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <ItemCatalog path="/items" userType={role} />,
+            <ItemCatalog
+              path="/items"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/items",
             ["field1", "field2", "compliance", "super"],
             role

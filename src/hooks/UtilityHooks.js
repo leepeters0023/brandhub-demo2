@@ -61,7 +61,7 @@ export const useLimitedInput = (initialValue, max) => {
   };
 }
 
-export const useDetailedInput = (initialValue, secondaryFunc, type) => {
+export const useDetailedInput = (initialValue, secondaryFunc, type, filterType) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -72,7 +72,7 @@ export const useDetailedInput = (initialValue, secondaryFunc, type) => {
       value,
       onChange: (event) => {
         setValue(event.target.value);
-        secondaryFunc(event.target.value, type);
+        secondaryFunc(event.target.value, type, filterType);
       }
     }
   }

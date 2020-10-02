@@ -132,7 +132,8 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    let mappedOrderSets = orderSets.data.orderSets.map((orderSet) => ({
+    console.log(orderSets);
+    let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
       id: orderSet.id,
       type: orderSet.type,
       user: orderSet.user.name,

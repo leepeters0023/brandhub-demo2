@@ -74,6 +74,11 @@ export default {
       fontWeight: "600",
       color: "#FFFFFF",
     },
+    hoverText: {
+      "&:hover": {
+        cursor: "pointer",
+      },
+    },
     titleText: {
       fontWeight: "600",
       fontSize: "1.5rem",
