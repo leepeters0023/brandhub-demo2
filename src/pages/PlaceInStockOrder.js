@@ -135,16 +135,18 @@ const PlaceInStockOrder = ({ userType }) => {
             {/* <RegionSelector /> */}
           </div>
         </div>
-
+        <Typography variant="body2" color="textSecondary">
+          Filters
+          </Typography>          
         <br />
         <>
-          <ItemFilter
+          {/* <ItemFilter
             brands={brands}
             itemTypes={itemTypes}
             families={families}
             units={units}
             others={others}
-          />
+          /> */}
           {itemsLoading ? (
             <CircularProgress />
           ) : (
