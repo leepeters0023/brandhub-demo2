@@ -64,6 +64,7 @@ const App = () => {
   const [role, setRole] = useState(
     window.localStorage.getItem("brandhub-role")
   );
+  const [filtersOpen, setFiltersOpen] = useState(true);
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -78,6 +79,14 @@ const App = () => {
 
   const handleLogIn = (user) => {
     setRole(user);
+  };
+
+  const handleFiltersOpen = () => {
+    setFiltersOpen(true);
+  };
+
+  const handleFiltersClosed = () => {
+    setFiltersOpen(false);
   };
 
   const handleLogout = () => {
@@ -157,8 +166,14 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       {loggedIn && <TopDrawerNav userType={role} handleLogout={handleLogout} />}
-      <FilterDrawer open={true} />
-      <div id="main-container" style={{marginLeft: "300px"}}>
+      <FilterDrawer
+        open={filtersOpen}
+        handleDrawerClose={handleFiltersClosed}
+      />
+      <div
+        id="main-container"
+        style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
+      >
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
