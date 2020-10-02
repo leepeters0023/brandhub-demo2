@@ -1,27 +1,66 @@
 import React from "react";
-import PropTypes from "prop-types";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  updateSingleFilter,
+  setClear,
+  setChips,
+} from "../../redux/slices/filterSlice";
 
 import Chip from "@material-ui/core/Chip";
+import Typography from "@material-ui/core/Typography";
 
-const FilterChipList = ({ filters, handleChipClick }) => {
+const FilterChipList = ({ classes }) => {
+  const dispatch = useDispatch();
+
+  const filterState = useSelector((state) => state.filters);
+
+  const handleChipClick = (type, value) => {
+    let dispatchObject = { filter: type, value: null };
+    if (type === "itemType" || type === "bu") {
+      let currentFilterArray = filterState[type].filter((f) => f !== value);
+      dispatchObject.value = currentFilterArray;
+    }
+    dispatch(updateSingleFilter(dispatchObject));
+    dispatch(setChips({ filterType: "item" }));
+  };
+
   return (
-    <>
-      {filters.map((filter) => (
-        <Chip
-          style={{ margin: "auto 2.5px" }}
-          color="primary"
-          key={`${filter.type}-${filter.value}`}
-          label={filter.value}
-          onDelete={() => handleChipClick(filter.type, filter.value)}
-        />
-      ))}
-    </>
+    <div style={{ display: "flex", alignItems: "center" }}>
+      {filterState.chipList.map((filter) =>
+        filterState.filterType === "item" ? (
+          <Chip
+            style={{ margin: "auto 2.5px" }}
+            color="primary"
+            key={`${filter.type}-${filter.value}`}
+            label={filter.value}
+            onDelete={() => handleChipClick(filter.type, filter.value)}
+          />
+        ) : (
+          <Chip
+            style={{ margin: "auto 2.5px" }}
+            color="primary"
+            key={`${filter.type}-${filter.value}`}
+            label={filter.value}
+          />
+        )
+      )}
+      {filterState.chipList.length > 0 && (
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          className={classes.hoverText}
+          style={{ marginLeft: "20px" }}
+          onClick={() => {
+            dispatch(setClear());
+          }}
+        >
+          Clear Filters
+        </Typography>
+      )}
+    </div>
   );
-};
-
-FilterChipList.propTypes = {
-  filters: PropTypes.array.isRequired,
-  handleChipClick: PropTypes.func.isRequired,
 };
 
 export default FilterChipList;

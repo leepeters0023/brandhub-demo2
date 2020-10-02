@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { updateSingleFilter, setChips } from "../../redux/slices/filterSlice";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -31,7 +34,12 @@ const ItemTypesList = React.memo(
               dense
               button
               onClick={() => {
-                handleCheckToggle(item, itemTypesChecked, setItemTypesChecked);
+                handleCheckToggle(
+                  item,
+                  itemTypesChecked,
+                  setItemTypesChecked,
+                  "itemType"
+                );
               }}
             >
               <ListItemIcon>
@@ -66,7 +74,7 @@ const UnitsList = React.memo(
               dense
               button
               onClick={() => {
-                handleCheckToggle(item, unitsChecked, setUnitsChecked);
+                handleCheckToggle(item, unitsChecked, setUnitsChecked, "bu");
               }}
             >
               <ListItemIcon>
@@ -97,42 +105,89 @@ const FiltersItems = ({
   sequenceNum,
   bindSequenceNum,
 }) => {
+  const dispatch = useDispatch();
   const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
   const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
   const [unitsOpen, setUnitsOpen] = useCallback(useState(false));
   const [unitsChecked, setUnitsChecked] = useCallback(useState([]));
 
   const currentBuFilter = useSelector((state) => state.filters.bu);
-  const currentItemTypeFilter = useSelector((state) => state.filters.itemType)
+  const currentItemTypeFilter = useSelector((state) => state.filters.itemType);
 
-  const handleCheckToggle = useCallback((value, array, func) => {
-    const currentIndex = array.indexOf(value);
-    const newChecked = [...array];
+  const handleCheckToggle = useCallback(
+    (value, array, func, type, deleting) => {
+      const currentIndex = array.indexOf(value);
+      const newChecked = [...array];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
 
-    func(newChecked);
-  }, []);
+      func(newChecked);
+      if (!deleting) {
+      dispatch(updateSingleFilter({ filter: type, value: newChecked }));
+
+        dispatch(setChips({filterType: "item"}));
+      }
+    },
+    [dispatch]
+  );
 
   const handleListToggle = (open, func) => {
     func(!open);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (currentBuFilter.length !== unitsChecked.length) {
-      handleFilters(unitsChecked, "bu")
+      if (unitsChecked.length > currentBuFilter.length) {
+        let missingFilter;
+        unitsChecked.forEach((unit) => {
+          if (currentBuFilter.filter((u) => u === unit).length === 0) {
+            missingFilter = unit;
+          }
+        });
+        handleCheckToggle(
+          missingFilter,
+          unitsChecked,
+          setUnitsChecked,
+          "bu",
+          true
+        );
+      }
     }
-  }, [currentBuFilter, handleFilters, unitsChecked])
+  }, [
+    currentBuFilter,
+    unitsChecked,
+    setUnitsChecked,
+    handleCheckToggle,
+  ]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (currentItemTypeFilter.length !== itemTypesChecked.length) {
-      handleFilters(itemTypesChecked, "itemType")
+      if (itemTypesChecked.length > currentItemTypeFilter.length) {
+        let missingFilter;
+        itemTypesChecked.forEach((unit) => {
+          if (currentItemTypeFilter.filter((u) => u === unit).length === 0) {
+            missingFilter = unit;
+          }
+        });
+        handleCheckToggle(
+          missingFilter,
+          itemTypesChecked,
+          setItemTypesChecked,
+          "itemType",
+          true
+        );
+      }
     }
-  }, [currentItemTypeFilter, handleFilters, itemTypesChecked])
+  }, [
+    currentItemTypeFilter,
+    itemTypesChecked,
+    setItemTypesChecked,
+    handleCheckToggle,
+  ]);
 
   return (
     <>
@@ -151,11 +206,25 @@ const FiltersItems = ({
           />
         </ListItem>
         <ListItem>
+          <Button
+            fullWidth
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+          >
+            SEARCH
+          </Button>
+        </ListItem>
+        <Divider />
+        <ListItem />
+        <ListItem />
+        <ListItem>
           <BrandAutoComplete
             classes={classes}
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
+            filterType={"item"}
           />
         </ListItem>
         <ListItem
@@ -179,21 +248,37 @@ const FiltersItems = ({
           />
         </Collapse>
         <Divider />
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(unitsOpen, setUnitsOpen);
-              }}
-            >
-              <ListItemText primary="Business Unit" />
-              {unitsOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={unitsOpen} timeout={{appear: 250, enter: 250, exit: 0}} >
-              <UnitsList listItems={units} handleCheckToggle={handleCheckToggle} unitsChecked={unitsChecked} setUnitsChecked={setUnitsChecked} />
-            </Collapse>
+        <ListItem
+          button
+          onClick={() => {
+            handleListToggle(unitsOpen, setUnitsOpen);
+          }}
+        >
+          <ListItemText primary="Business Unit" />
+          {unitsOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={unitsOpen} timeout={{ appear: 250, enter: 250, exit: 0 }}>
+          <UnitsList
+            listItems={units}
+            handleCheckToggle={handleCheckToggle}
+            unitsChecked={unitsChecked}
+            setUnitsChecked={setUnitsChecked}
+          />
+        </Collapse>
       </List>
     </>
   );
 };
+
+FiltersItems.propTypes = {
+  itemTypes: PropTypes.array.isRequired,
+  units: PropTypes.array.isRequired,
+  reset: PropTypes.bool.isRequired,
+  setReset: PropTypes.func.isRequired,
+  handleFilters: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  sequenceNum: PropTypes.string.isRequired,
+  bindSequenceNum: PropTypes.object.isRequired,
+}
 
 export default FiltersItems;

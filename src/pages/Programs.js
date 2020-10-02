@@ -109,7 +109,7 @@ const Programs = ({ userType }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText} variant="h5">
+          <Typography className={classes.titleText}>
             Pre-Orders
           </Typography>
 

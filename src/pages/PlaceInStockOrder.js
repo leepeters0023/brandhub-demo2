@@ -8,15 +8,9 @@ import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
 import { fetchCurrentOrderByType } from "../redux/slices/currentOrderSlice";
 
-import {
-  brands,
-  itemTypes,
-  families,
-  units,
-  others,
-} from "../utility/constants";
+import { setFilterType } from "../redux/slices/filterSlice";
 
-import ItemFilter from "../components/Utility/ItemFilter";
+import FilterChipList from "../components/Utility/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import Loading from "../components/Utility/Loading";
@@ -36,13 +30,12 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PlaceInStockOrder = ({ userType }) => {
+const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
-  //const [itemFilters, setItemFilters] = useState([]);
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
@@ -59,6 +52,11 @@ const PlaceInStockOrder = ({ userType }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    dispatch(setFilterType({ type: "item" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
@@ -132,21 +130,24 @@ const PlaceInStockOrder = ({ userType }) => {
                 />
               </IconButton>
             </Tooltip>
-            {/* <RegionSelector /> */}
           </div>
         </div>
-        <Typography variant="body2" color="textSecondary">
-          Filters
-          </Typography>          
+        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            className={classes.hoverText}
+            style={{ marginRight: "20px" }}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
+          >
+            Filters
+          </Typography>
+          <FilterChipList classes={classes} />
+        </div>
         <br />
         <>
-          {/* <ItemFilter
-            brands={brands}
-            itemTypes={itemTypes}
-            families={families}
-            units={units}
-            others={others}
-          /> */}
           {itemsLoading ? (
             <CircularProgress />
           ) : (
@@ -166,6 +167,8 @@ const PlaceInStockOrder = ({ userType }) => {
 
 PlaceInStockOrder.propTypes = {
   userType: PropTypes.string,
+  handleFilterDrawer: PropTypes.func.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default PlaceInStockOrder;
