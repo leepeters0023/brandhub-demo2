@@ -16,10 +16,11 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CheckBox from "@material-ui/core/CheckBox";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import CancelIcon from '@material-ui/icons/Cancel';
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: true },
@@ -38,11 +39,24 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "actions", disablePadding: false, label: "Approve / Deny", sort: false }
-]
+  {
+    id: "actions",
+    disablePadding: false,
+    label: "Approve / Deny",
+    sort: false,
+  },
+];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const {
+    classes,
+    rowCount,
+    order,
+    orderBy,
+    onRequestSort,
+    onSelectAllClick,
+    numSelected,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -50,6 +64,14 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
+        <TableCell padding="checkbox">
+          <CheckBox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ "aria-label": "select all items" }}
+          />
+        </TableCell>
         {headCells.map((headCell) => {
           if (!headCell.sort) {
             return (
@@ -130,6 +152,7 @@ const OrderApprovalTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
+  const [selected, setSelected] = useState([]);
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -137,6 +160,37 @@ const OrderApprovalTable = ({
     setOrderBy(property);
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = orders.map((order) => order.id);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (_event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const handleRowClick = (id) => {
     navigate(`/orders/open/${id}#approval`);
@@ -152,9 +206,12 @@ const OrderApprovalTable = ({
         <Table stickyHeader className={classes.table}>
           <EnhancedTableHead
             classes={classes}
+            numSelected={selected.length}
             order={order}
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
+            onSelectAllClick={handleSelectAllClick}
+            rowCount={orders.length}
           />
           <TableBody>
             {!isOrdersLoading && orders.length === 0 && (
@@ -168,56 +225,66 @@ const OrderApprovalTable = ({
             )}
             {!isOrdersLoading &&
               orders.length > 0 &&
-              orders.map((row) => (
-                <TableRow
-                  key={row.id}
-                  hover
-                  className={classes.orderHistoryRow}
-                  onClick={() => {
-                    handleRowClick(row.id);
-                  }}
-                >
-                  <TableCell align="left">{row.id}</TableCell>
-                  <TableCell align="left">{row.type}</TableCell>
-                  <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">
-                    {format(new Date(row.orderDate), "MM/dd/yyyy")}
-                  </TableCell>
-                  <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">
-                    {row.totalEstCost !== "---"
-                      ? formatMoney(row.totalEstCost)
-                      : row.totalEstCost}
-                  </TableCell>
-                  <TableCell align="left">
-                    <div style={{display: "flex", alignItems: "center"}}>
-                      <Tooltip title="Approve">
-                        <IconButton
-                          onClick={
-                            (event) => {
-                              event.stopPropagation()
-                              handleApproval(row.id)
-                            }
-                          }
-                        >
-                          <ThumbUpIcon color="inherit" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Deny">
-                        <IconButton
-                          onClick={
-                            (event) => {
-                              event.stopPropagation()
-                            }
-                          }
-                        >
-                          <CancelIcon color="inherit" />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              orders.map((row, index) => {
+                const isOrderSelected = isSelected(row.id);
+                const labelId = `approvals-checkbox-${index}`;
+                return (
+                  <TableRow
+                    key={row.id}
+                    hover
+                    className={classes.orderHistoryRow}
+                    onClick={() => {
+                      handleRowClick(row.id);
+                    }}
+                  >
+                    <TableCell padding="checkbox">
+                      <CheckBox
+                        checked={isOrderSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onChange={(event) => {
+                          event.stopPropagation();
+                          handleClick(event, row.id);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="left">{row.id}</TableCell>
+                    <TableCell align="left">{row.type}</TableCell>
+                    <TableCell align="left">{row.user}</TableCell>
+                    <TableCell align="left">
+                      {format(new Date(row.orderDate), "MM/dd/yyyy")}
+                    </TableCell>
+                    <TableCell align="left">{row.totalItems}</TableCell>
+                    <TableCell align="left">
+                      {row.totalEstCost !== "---"
+                        ? formatMoney(row.totalEstCost)
+                        : row.totalEstCost}
+                    </TableCell>
+                    <TableCell align="left">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Tooltip title="Approve">
+                          <IconButton
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleApproval(row.id);
+                            }}
+                          >
+                            <ThumbUpIcon color="inherit" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Deny">
+                          <IconButton
+                            onClick={(event) => {
+                              event.stopPropagation();
+                            }}
+                          >
+                            <CancelIcon color="inherit" />
+                          </IconButton>
+                        </Tooltip>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             {isOrdersLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={7}>
