@@ -18,7 +18,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
-  { id: "type", disablePadding: false, label: "Type", sort: false},
+  { id: "type", disablePadding: false, label: "Type", sort: false },
   {
     id: "distributor",
     disablePadding: false,
@@ -157,7 +157,11 @@ const OrderHistoryTable = ({
         style={{ maxHeight: "Calc(100vh - 375px)" }}
         ref={scrollRef}
       >
-        <Table stickyHeader className={classes.table} style={{minWidth: "1325px"}}>
+        <Table
+          stickyHeader
+          className={classes.table}
+          style={{ minWidth: "1325px" }}
+        >
           <EnhancedTableHead
             classes={classes}
             order={order}
@@ -191,7 +195,9 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">
-                    {row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : row.orderDate}
+                    {row.orderDate !== "---"
+                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      : row.orderDate}
                   </TableCell>
                   <TableCell align="left">{row.shipDate}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
@@ -205,7 +211,10 @@ const OrderHistoryTable = ({
                       ? formatMoney(row.actTotal)
                       : row.actTotal}
                   </TableCell>
-                  <TableCell align="left">{row.orderStatus[0].toUpperCase()+row.orderStatus.slice(1)}</TableCell>
+                  <TableCell align="left">
+                    {row.orderStatus[0].toUpperCase() +
+                      row.orderStatus.slice(1)}
+                  </TableCell>
                 </TableRow>
               ))}
             {isOrdersLoading && (

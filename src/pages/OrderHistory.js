@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import "date-fns";
 import subDays from "date-fns/subDays";
@@ -6,16 +7,14 @@ import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
-import {
-  fetchNextOrderHistory,
-} from "../redux/slices/orderHistorySlice";
+import { fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
 
 import {
   setFilterType,
   setDefaultFilters,
   updateMultipleFilters,
   setSorted,
-  setClear
+  setClear,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Utility/FilterChipList";
@@ -113,7 +112,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     if (currentUserRole.length > 0) {
-      dispatch(setClear());;
+      dispatch(setClear());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -175,6 +174,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
       <br />
     </>
   );
+};
+
+OrderHistory.propTypes = {
+  handleFilterDrawer: PropTypes.func.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default OrderHistory;

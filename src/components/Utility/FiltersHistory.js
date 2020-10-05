@@ -197,6 +197,7 @@ FiltersHistory.propTypes = {
   bindSequenceNum: PropTypes.object.isRequired,
   program: PropTypes.string.isRequired,
   bindProgram: PropTypes.object.isRequired,
+  handleSearch: PropTypes.func.isRequired
 };
 
 export default FiltersHistory;

@@ -20,6 +20,7 @@ import { useDetailedInput } from "../../hooks/UtilityHooks";
 import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
+import FiltersPORollup from "./FiltersPORollup";
 
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -88,7 +89,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "sortProgramsBy"
       ) {
         dispatch(updateSingleFilter({ filter: type, value: value }));
-        if (filterType !== "history") {
+        if (filterType !== "history" && filterType !== "itemRollup") {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (type === "fromDate" || type === "toDate") {
@@ -98,7 +99,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: format(value, "MM/dd/yyyy"),
           })
         );
-        if (filterType !== "history") {
+        if (filterType !== "history" && filterType !== "itemRollup") {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (
@@ -112,7 +113,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: value ? { id: value.id, name: value.name } : null,
           })
         );
-        if (filterType !== "history") {
+        if (filterType !== "history" && filterType !== "itemRollup") {
           dispatch(setChips({ filterType: filterType }));
         }
       }
@@ -137,6 +138,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     resetProgram();
     dispatch(clearBrands());
     dispatch(resetFilters());
+    //TODO handle po fetch here as well
     if (defaultFilters) {
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
@@ -158,6 +160,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     filterType,
   ]);
 
+  //TODO write PO search when available
+
   const handleOrderHistoryFetch = () => {
     dispatch(setChips({ filterType: "history" }));
     dispatch(fetchFilteredOrderHistory(allFilters));
@@ -176,6 +180,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   useEffect(() => {
     if (sorted) {
+      //TODO handle po sorting here as well
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(allFilters));
       }
@@ -213,10 +218,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               onClick={handleDrawerClose}
               style={{ position: "absolute", top: "10px", right: "0" }}
             >
-              <ChevronLeftIcon
-                fontSize="large"
-                color="inherit"
-              />
+              <ChevronLeftIcon fontSize="large" color="inherit" />
             </IconButton>
           </Tooltip>
           <Typography className={classes.titleText}>Filters:</Typography>
@@ -259,6 +261,22 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
+            />
+          )}
+          {filterType === "itemRollup" && (
+            <FiltersPORollup
+              reset={reset}
+              setReset={setReset}
+              handleFilters={handleFilters}
+              classes={classes}
+              sequenceNum={sequenceNum}
+              bindSequenceNum={bindSequenceNum}
+              program={program}
+              bindProgram={bindProgram}
+              handleSearch={
+                // TODO add search for po when api is there
+                () => console.log("Searching!")
+              }
             />
           )}
         </div>

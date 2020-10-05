@@ -23,6 +23,7 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
+import BidRollup from "./pages/BidRollup";
 import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
@@ -38,6 +39,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
+import PORollup from "./pages/PORollup";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
@@ -247,6 +249,26 @@ const App = () => {
             role
           )}
           {handleAuth(
+            <BidRollup
+              path="/purchasing/bidRollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PORollup
+              path="/purchasing/PORollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
             <SingleOrder
               path="/orders/history/:orderId"
               handleFiltersClosed={handleFiltersClosed}
@@ -341,11 +363,7 @@ const App = () => {
             [],
             role
           )}
-          <FourOhFour
-            default
-            path="/whoops"
-            handleFiltersClosed={handleFiltersClosed}
-          />
+          <FourOhFour default path="/whoops" />
         </Router>
       </div>
     </MuiThemeProvider>

@@ -75,7 +75,7 @@ const filterSlice = createSlice({
       state.brand = null;
       state.distributor = null;
       state.itemType = [];
-      state.month= [];
+      state.month = [];
       state.orderType = null;
       state.program = null;
       state.sequenceNum = null;
@@ -91,11 +91,7 @@ const filterSlice = createSlice({
       const { filterType } = action.payload;
       let chippable;
       if (filterType === "item") {
-        chippable = [
-          "bu",
-          "brand",
-          "itemType",
-        ];
+        chippable = ["bu", "brand", "itemType"];
       }
       if (filterType === "history") {
         chippable = [
@@ -113,11 +109,10 @@ const filterSlice = createSlice({
         ];
       }
       if (filterType === "program") {
-        chippable = [
-          "month",
-          "brand",
-          "bu"
-        ]
+        chippable = ["month", "brand", "bu"];
+      }
+      if (filterType === "itemRollup") {
+        chippable = ["brand", "program", "sequenceNum", "orderType"];
       }
       let filters = [];
       let stateObject = { ...state };

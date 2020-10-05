@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const FourOhFour = ({handleFiltersClosed}) => {
+const FourOhFour = () => {
   const classes = useStyles();
   let redirectTime;
 
@@ -28,11 +28,6 @@ const FourOhFour = ({handleFiltersClosed}) => {
       clearTimeout(redirectTime)
     }
   }, []);
-
-  useEffect(() => {
-    handleFiltersClosed()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <>
@@ -78,7 +73,7 @@ const FourOhFour = ({handleFiltersClosed}) => {
 };
 
 FourOhFour.propTypes = {
-  handleFiltersClosed: PropTypes.func.isRequired
+  handleFiltersClosed: PropTypes.func
 }
 
 export default FourOhFour;

@@ -52,14 +52,6 @@ export default {
       maxWidth: "2000px",
       paddingTop: "24px",
     },
-    navList: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "space-between",
-      height: "Calc(100% - 64px)",
-      marginTop: "64px",
-    },
     navItem: {
       display: "flex",
       flexDirection: "column",
