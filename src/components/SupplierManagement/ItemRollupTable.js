@@ -258,6 +258,7 @@ const PORollupTable = ({
                       <CheckBox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
                         onChange={(event) => {
                           handleClick(event, row.id);
                           event.stopPropagation();

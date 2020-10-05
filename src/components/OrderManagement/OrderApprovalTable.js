@@ -170,7 +170,7 @@ const OrderApprovalTable = ({
     setSelected([]);
   };
 
-  const handleClick = (_event, id) => {
+  const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -241,6 +241,7 @@ const OrderApprovalTable = ({
                       <CheckBox
                         checked={isOrderSelected}
                         inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
                         onChange={(event) => {
                           event.stopPropagation();
                           handleClick(event, row.id);
