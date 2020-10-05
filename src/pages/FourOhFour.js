@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
 import Container from "@material-ui/core/Container";
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const FourOhFour = () => {
+const FourOhFour = ({handleFiltersClosed}) => {
   const classes = useStyles();
   let redirectTime;
 
@@ -27,6 +28,11 @@ const FourOhFour = () => {
       clearTimeout(redirectTime)
     }
   }, []);
+
+  useEffect(() => {
+    handleFiltersClosed()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -70,5 +76,9 @@ const FourOhFour = () => {
     </>
   );
 };
+
+FourOhFour.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired
+}
 
 export default FourOhFour;

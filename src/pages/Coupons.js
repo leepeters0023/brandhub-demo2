@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-
-import GalloLogo from "../assets/gallologo.png";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import Container from "@material-ui/core/Container";
 import Stepper from "@material-ui/core/Stepper";
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Coupons = () => {
+const Coupons = ({ handleFiltersClosed }) => {
   const classes = useStyles();
 
   const steps = [
@@ -44,11 +43,15 @@ const Coupons = () => {
     setActiveStep(0);
   };
 
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleImage}>
-          <img className={classes.logo} src={GalloLogo} alt="Gallo" />
           <Typography className={classes.titleText} variant="h5">
             Coupons
           </Typography>
@@ -72,7 +75,7 @@ const Coupons = () => {
             variant="contained"
             onClick={handleBack}
             disabled={activeStep === 0}
-            style={{marginLeft: "24px"}}
+            style={{ marginLeft: "24px" }}
           >
             PREVIOUS STEP
           </Button>
@@ -82,7 +85,7 @@ const Coupons = () => {
               color="secondary"
               variant="contained"
               onClick={handleNext}
-              style={{marginRight: "24px"}}
+              style={{ marginRight: "24px" }}
             >
               NEXT STEP
             </Button>
@@ -92,7 +95,7 @@ const Coupons = () => {
               color="secondary"
               variant="contained"
               onClick={handleNext}
-              style={{marginRight: "24px"}}
+              style={{ marginRight: "24px" }}
             >
               SUBMIT COUPON
             </Button>
@@ -102,7 +105,7 @@ const Coupons = () => {
               color="secondary"
               variant="contained"
               onClick={handleReset}
-              style={{marginRight: "24px"}}
+              style={{ marginRight: "24px" }}
             >
               NEW COUPON
             </Button>
@@ -112,6 +115,10 @@ const Coupons = () => {
       <br />
     </>
   );
+};
+
+Coupons.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
 };
 
 export default Coupons;

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const OrderConfirmation = ({ userType, orderType }) => {
+const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -99,6 +99,11 @@ const OrderConfirmation = ({ userType, orderType }) => {
       setCurrentCSV({ data: csvData, headers: headers });
     }
   }, [currentCSV.data.length, order]);
+
+  useEffect(() => {
+    handleFiltersClosed()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!order.orderNumber && submitted) {
     return (
@@ -220,6 +225,7 @@ const OrderConfirmation = ({ userType, orderType }) => {
 
 OrderConfirmation.propTypes = {
   userType: PropTypes.string,
+  handleFiltersClosed: PropTypes.func.isRequired,
   orderType: PropTypes.string,
 };
 

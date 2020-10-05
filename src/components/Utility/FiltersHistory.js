@@ -94,6 +94,7 @@ const FiltersHistory = ({
               handleChange={handleFilters}
               reset={reset}
               setReset={setReset}
+              filterType={"history"}
             />
           </ListItem>
         )}
@@ -113,6 +114,7 @@ const FiltersHistory = ({
               handleChange={handleFilters}
               reset={reset}
               setReset={setReset}
+              filterType={"history"}
             />
           </ListItem>
         )}
@@ -123,6 +125,7 @@ const FiltersHistory = ({
               status={status}
               setStatus={setStatus}
               classes={classes}
+              filterType={"history"}
             />
           </ListItem>
         )}
