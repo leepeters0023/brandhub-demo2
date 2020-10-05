@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Router, Redirect } from "@reach/router";
 import axios from "axios";
 
@@ -23,10 +23,12 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
+import BidRollup from "./pages/BidRollup";
 import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
+import FilterDrawer from "./components/Utility/FilterDrawer";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
@@ -37,13 +39,15 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
+import PORollup from "./pages/PORollup";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
-import ScrollNav from "./components/Navigation/ScrollNav";
+// import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 import SingleOrder from "./pages/SingleOrder";
+import TopDrawerNav from "./components/Navigation/TopDrawerNav";
 
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -62,6 +66,7 @@ const App = () => {
   const [role, setRole] = useState(
     window.localStorage.getItem("brandhub-role")
   );
+  const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -76,6 +81,10 @@ const App = () => {
 
   const handleLogIn = (user) => {
     setRole(user);
+  };
+
+  const handleFiltersClosed = () => {
+    setFiltersOpen(false);
   };
 
   const handleLogout = () => {
@@ -146,7 +155,7 @@ const App = () => {
   if (programsIsLoading) {
     return (
       <MuiThemeProvider theme={theme}>
-        <ScrollNav userType={role} handleLogout={handleLogout} />
+        <TopDrawerNav userType={role} handleLogout={handleLogout} />
         <Loading partial={true} />
       </MuiThemeProvider>
     );
@@ -154,32 +163,55 @@ const App = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      {loggedIn && <ScrollNav userType={role} handleLogout={handleLogout} />}
-      <div id="main-container">
+      {loggedIn && <TopDrawerNav userType={role} handleLogout={handleLogout} />}
+      <FilterDrawer
+        open={filtersOpen}
+        handleDrawerClose={handleFiltersClosed}
+      />
+      <div
+        id="main-container"
+        style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
+      >
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
           <Dashboard path="/" />
           {handleAuth(
-            <Programs path="/programs" userType={role} />,
+            <Programs
+              path="/programs"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/programs",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <Program path="/program/:programId" userType={role} />,
+            <Program
+              path="/program/:programId"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/program",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
+            <CurrentPreOrder
+              path="/orders/open/preorder"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/open/preorder",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <CurrentOrderDetail path="/orders/open/:orderId" userType={role} />,
+            <CurrentOrderDetail
+              path="/orders/open/:orderId"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/open",
             ["field1", "field2", "super"],
             role
@@ -188,13 +220,19 @@ const App = () => {
             <OrderConfirmation
               path="/orders/confirmation/:orderType"
               userType={role}
+              handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/confirmation",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <PlaceInStockOrder path="/orders/items/inStock" userType={role} />,
+            <PlaceInStockOrder
+              path="/orders/items/inStock"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/items/inStock",
             ["field1", "field2", "super"],
             role
@@ -203,62 +241,128 @@ const App = () => {
             <PlaceOnDemandOrder
               path="/orders/items/onDemand"
               userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <SingleOrder path="/orders/history/:orderId" />,
+            <BidRollup
+              path="/purchasing/bidRollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PORollup
+              path="/purchasing/PORollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <SingleOrder
+              path="/orders/history/:orderId"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/history",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <OrderHistory path="/orders/history" userType={role} />,
+            <OrderHistory
+              path="/orders/history"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/history",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <OrderApprovals path="/orders/approvals" userType={role} />,
+            <OrderApprovals
+              path="/orders/approvals"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/orders/approvals",
             ["field2", "super"],
             role
           )}
           {handleAuth(
-            <Rollup path="/rollup" />,
+            <Rollup
+              path="/rollup"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/rollup",
             ["field2", "super"],
             role
           )}
           {handleAuth(
-            <CurrentOrderDetail path="/rollup/detail/:orderId" />,
+            <CurrentOrderDetail
+              path="/rollup/detail/:orderId"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/rollup/detail",
             ["field2", "super"],
             role
           )}
           {handleAuth(
-            <Coupons path="/coupons" />,
+            <Coupons
+              path="/coupons"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/coupons",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <ItemCatalog path="/items" userType={role} />,
+            <ItemCatalog
+              path="/items"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/items",
             ["field1", "field2", "compliance", "super"],
             role
           )}
-          {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
           {handleAuth(
-            <Settings path="/settings" userType={role} />,
+            <Reports
+              path="/reports"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/reports",
+            ["super"],
+            role
+          )}
+          {handleAuth(
+            <Settings
+              path="/settings"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/settings",
             ["field1", "field2", "compliance", "super"],
             role
           )}
-          {/* <Calendar path="/calendar" /> */}
-          {handleAuth(<Help path="/help" />, "/help", [], role)}
+          {handleAuth(
+            <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
+            "/help",
+            [],
+            role
+          )}
           <FourOhFour default path="/whoops" />
         </Router>
       </div>

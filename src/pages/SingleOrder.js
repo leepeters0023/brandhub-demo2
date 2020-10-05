@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const SingleOrder = ({ orderId }) => {
+const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -43,6 +43,11 @@ const SingleOrder = ({ orderId }) => {
     ) {
       dispatch(fetchOrder(orderId));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -142,6 +147,7 @@ const SingleOrder = ({ orderId }) => {
 };
 
 SingleOrder.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
   order: PropTypes.string,
 };
 

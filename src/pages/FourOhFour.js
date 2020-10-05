@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
 import Container from "@material-ui/core/Container";
@@ -70,5 +71,9 @@ const FourOhFour = () => {
     </>
   );
 };
+
+FourOhFour.propTypes = {
+  handleFiltersClosed: PropTypes.func
+}
 
 export default FourOhFour;

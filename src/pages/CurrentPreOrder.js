@@ -120,7 +120,7 @@ const TotalsDiv = React.memo(() => {
   );
 });
 
-const CurrentPreOrder = ({ userType }) => {
+const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -243,6 +243,11 @@ const CurrentPreOrder = ({ userType }) => {
     window.addEventListener("popstate", handleProgramIdHash);
     return () => window.removeEventListener("popstate", handleProgramIdHash);
   }, [handleProgramIdHash]);
+
+  useEffect(() => {
+    handleFiltersClosed()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -470,7 +475,7 @@ const CurrentPreOrder = ({ userType }) => {
 };
 
 CurrentPreOrder.propTypes = {
-  userType: PropTypes.string,
+  handleFiltersClosed: PropTypes.func.isRequired,
 };
 
 export default CurrentPreOrder;

@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
   },
   innerPaper: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
+    width: "Calc(100% - 50px)",
+    height: "Calc(100% - 50px)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
