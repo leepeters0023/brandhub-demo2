@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
+const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,12 +42,16 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
         <IconButton
           aria-owns={anchorEl ? "notifications" : undefined}
           aria-haspopup="true"
-          onClick={handleOpen}
+          onClick={(evt)=>{
+            handleOpen(evt)
+            handleDrawerClose()
+          }}
         >
           <Avatar className={classes.avatar}>{initials}</Avatar>
         </IconButton>
       </Tooltip>
       <Menu
+        disableScrollLock
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: "bottom",
@@ -57,7 +61,7 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
           vertical: "top",
           horizontal: "right",
         }}
-        style={{ marginTop: "10px" }}
+        style={{ marginTop: "10px", zIndex: "10001" }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
@@ -65,7 +69,6 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
         <MenuItem
           onClick={() => {
             handleClose();
-            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -79,7 +82,6 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
           to="/settings#general"
           onClick={() => {
             handleClose();
-            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -93,7 +95,6 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
           to="/help"
           onClick={() => {
             handleClose();
-            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -108,7 +109,6 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
           onClick={() => {
             handleLogout();
             handleClose();
-            setSelected("user-navigation")
           }}
         >
           <ListItemIcon>
@@ -124,7 +124,6 @@ const UserNavMenu = ({ initials, handleLogout, setSelected }) => {
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
-  setSelected: PropTypes.func.isRequired
 };
 
 export default UserNavMenu;

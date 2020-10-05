@@ -7,8 +7,13 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-const StatusSelector = ({ handleStatus, status, setStatus, classes }) => {
-
+const StatusSelector = ({
+  handleStatus,
+  status,
+  setStatus,
+  classes,
+  filterType,
+}) => {
   const statusList = [
     { status: "inactive", label: "Not Started" },
     { status: "in-progress", label: "In Progress" },
@@ -16,14 +21,19 @@ const StatusSelector = ({ handleStatus, status, setStatus, classes }) => {
     { status: "all", label: "All Orders" },
   ];
 
-  const  handleChangeSelect = (evt) => {
+  const handleChangeSelect = (evt) => {
     setStatus(evt.target.value);
-    handleStatus(evt.target.value, "status");
-  }
+    handleStatus(evt.target.value, "status", filterType);
+  };
 
   return (
     <>
-      <FormControl fullWidth variant="outlined" size="small" className={classes.queryField}>
+      <FormControl
+        fullWidth
+        variant="outlined"
+        size="small"
+        className={classes.queryField}
+      >
         <InputLabel id="status-select">Order Status</InputLabel>
         <Select
           label="Order Status"
@@ -41,7 +51,7 @@ const StatusSelector = ({ handleStatus, status, setStatus, classes }) => {
         </Select>
       </FormControl>
     </>
-  )
+  );
 };
 
 StatusSelector.propTypes = {
@@ -49,6 +59,6 @@ StatusSelector.propTypes = {
   status: PropTypes.string.isRequired,
   setStatus: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-}
+};
 
 export default StatusSelector;

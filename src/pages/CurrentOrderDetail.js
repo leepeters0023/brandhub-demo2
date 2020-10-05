@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentOrderDetail = ({ orderId }) => {
+const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -161,6 +161,11 @@ const CurrentOrderDetail = ({ orderId }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+
+  useEffect(() => {
+    handleFiltersClosed()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isLoading) {
     return <Loading />;
@@ -443,6 +448,7 @@ const CurrentOrderDetail = ({ orderId }) => {
 };
 
 CurrentOrderDetail.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
   orderId: PropTypes.string,
 };
 

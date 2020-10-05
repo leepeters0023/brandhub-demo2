@@ -88,14 +88,14 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       ? `&filter[status]=${filterObject.status}`
       : "&filter[status]!=approved";
   let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user}`
+    ? `&filter[user-id]=${filterObject.user.id}`
     : "";
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program}`
       : "";
   let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand}`
+    ? `&filter[brand-id]=${filterObject.brand.id}`
     : "";
   let seqString =
     filterObject.sequenceNum.length > 0
@@ -157,7 +157,7 @@ export const fetchNextOrderSets = async (url) => {
         queryTotal: null,
       };
       let data = dataFormatter.deserialize(res.data);
-      dataObject.preOrders = data;
+      dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       dataObject.orderCount = res.data.meta["total_entries"]
         ? res.data.meta["total_entries"]
@@ -379,13 +379,13 @@ export const fetchOrderHistory = async (filterObject) => {
     : "";
   let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
   let distString = filterObject.distributor
-    ? `&filter[distributor-id]=${filterObject.distributor}`
+    ? `&filter[distributor-id]=${filterObject.distributor.id}`
     : "";
   let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user}`
+    ? `&filter[user-id]=${filterObject.user.id}`
     : "";
   let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand}`
+    ? `&filter[brand-id]=${filterObject.brand.id}`
     : "";
   let progString =
     filterObject.program.length > 0

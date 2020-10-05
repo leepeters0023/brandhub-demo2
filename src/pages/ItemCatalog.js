@@ -1,18 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
+import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  brands,
-  itemTypes,
-  families,
-  units,
-  others,
-} from "../utility/constants";
-
 import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
-import ItemFilter from "../components/Utility/ItemFilter";
+import { setFilterType } from "../redux/slices/filterSlice";
+
+import FilterChipList from "../components/Utility/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
@@ -30,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalog = ({ userType }) => {
+const ItemCatalog = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
@@ -49,6 +44,11 @@ const ItemCatalog = ({ userType }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    dispatch(setFilterType({ type: "item" }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
@@ -97,16 +97,23 @@ const ItemCatalog = ({ userType }) => {
             </Tooltip>
           </div>
         </div>
-
-        <br />
         <>
-          <ItemFilter
-            brands={brands}
-            itemTypes={itemTypes}
-            families={families}
-            units={units}
-            others={others}
-          />
+          <div
+            style={{ display: "flex", alignItems: "center", height: "32px" }}
+          >
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              className={classes.hoverText}
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                handleFilterDrawer(!filtersOpen);
+              }}
+            >
+              Filters
+            </Typography>
+            <FilterChipList classes={classes} />
+          </div>
           {itemsLoading ? (
             <CircularProgress />
           ) : (
@@ -122,6 +129,12 @@ const ItemCatalog = ({ userType }) => {
       <br />
     </>
   );
+};
+
+ItemCatalog.propTypes = {
+  userType: PropTypes.string,
+  handleFilterDrawer: PropTypes.func.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default ItemCatalog;

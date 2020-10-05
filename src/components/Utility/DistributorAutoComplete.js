@@ -14,6 +14,7 @@ const DistributorAutoComplete = ({
   handleChange,
   reset,
   setReset,
+  filterType
 }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -50,7 +51,7 @@ const DistributorAutoComplete = ({
         onClose={() => setOpen(false)}
         inputValue={distributor}
         onInputChange={(_evt, value) => setDistributor(value)}
-        onChange={(_evt, value) => handleChange(value, "distributor")}
+        onChange={(_evt, value) => handleChange(value, "distributor", filterType)}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}

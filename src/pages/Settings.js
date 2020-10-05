@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = ({ userType }) => {
+const Settings = ({ userType, handleFiltersClosed }) => {
   const classes = useStyles();
 
   const [setting, setSetting] = useState("general");
@@ -41,7 +41,7 @@ const Settings = ({ userType }) => {
     if (window.location.hash === "#general") {
       setSetting("general");
       setSelectedIndex(0);
-    } else if (window.location.hash ==="#addressBook") {
+    } else if (window.location.hash === "#addressBook") {
       setSetting("addressBook");
       setSelectedIndex(1);
     } else if (window.location.hash === "#billing") {
@@ -57,6 +57,11 @@ const Settings = ({ userType }) => {
       setSetting("programs");
       setSelectedIndex(5);
     }
+  }, []);
+
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -98,7 +103,7 @@ const Settings = ({ userType }) => {
               <Divider />
               {userType === "super" && (
                 <>
-                <ListItem
+                  <ListItem
                     button
                     selected={selectedIndex === 3}
                     onClick={() => {
@@ -149,7 +154,8 @@ const Settings = ({ userType }) => {
 };
 
 Settings.propTypes = {
-  userType: PropTypes.string
-}
+  userType: PropTypes.string,
+  handleFiltersClosed: PropTypes.func.isRequired,
+};
 
 export default Settings;
