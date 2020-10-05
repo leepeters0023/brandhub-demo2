@@ -35,7 +35,12 @@ const MonthsList = React.memo(
               dense
               button
               onClick={() => {
-                handleCheckToggle(item, monthsChecked, setMonthsChecked, "month");
+                handleCheckToggle(
+                  item,
+                  monthsChecked,
+                  setMonthsChecked,
+                  "month"
+                );
               }}
             >
               <ListItemIcon>
@@ -100,7 +105,7 @@ const FiltersPrograms = ({
   classes,
 }) => {
   const dispatch = useDispatch();
-  const [value, setValue] = useCallback(useState("brand"))
+  const [value, setValue] = useCallback(useState("brand"));
   const [monthsOpen, setMonthsOpen] = useCallback(useState(false));
   const [monthsChecked, setMonthsChecked] = useCallback(useState([]));
   const [unitsOpen, setUnitsOpen] = useCallback(useState(false));
@@ -177,7 +182,7 @@ const FiltersPrograms = ({
   return (
     <>
       <List>
-      <ListItem>
+        <ListItem>
           <BrandAutoComplete
             classes={classes}
             handleChange={handleFilters}
@@ -237,45 +242,45 @@ const FiltersPrograms = ({
         color="secondary"
         aria-label="program-sort"
       >
-          <Button
-            className={
-              value === "brand" ? classes.largeButton : classes.selectedButton
-            }
-            variant={value === "brand" ? "contained" : "outlined"}
-            onClick={() => {
-              setValue("brand");
-              handleFilters("brand", "sortProgramsBy", "program");
-            }}
-          >
-            BRAND
-          </Button>
-          <Button
-            className={
-              value === "month" ? classes.largeButton : classes.selectedButton
-            }
-            variant={value === "month" ? "contained" : "outlined"}
-            onClick={() => {
-              setValue("month");
-              handleFilters("month", "sortProgramsBy", "program");
-            }}
-          >
-            FOCUS MONTH
-          </Button>
-          <Button
-            className={
-              value === "unit" ? classes.largeButton : classes.selectedButton
-            }
-            variant={value === "unit" ? "contained" : "outlined"}
-            onClick={() => {
-              setValue("unit");
-              handleFilters("unit", "sortProgramsBy", "program");
-            }}
-          >
-            BUSINESS UNIT
-          </Button>
+        <Button
+          className={
+            value === "brand" ? classes.largeButton : classes.selectedButton
+          }
+          variant={value === "brand" ? "contained" : "outlined"}
+          onClick={() => {
+            setValue("brand");
+            handleFilters("brand", "sortProgramsBy", "program");
+          }}
+        >
+          BRAND
+        </Button>
+        <Button
+          className={
+            value === "month" ? classes.largeButton : classes.selectedButton
+          }
+          variant={value === "month" ? "contained" : "outlined"}
+          onClick={() => {
+            setValue("month");
+            handleFilters("month", "sortProgramsBy", "program");
+          }}
+        >
+          FOCUS MONTH
+        </Button>
+        <Button
+          className={
+            value === "unit" ? classes.largeButton : classes.selectedButton
+          }
+          variant={value === "unit" ? "contained" : "outlined"}
+          onClick={() => {
+            setValue("unit");
+            handleFilters("unit", "sortProgramsBy", "program");
+          }}
+        >
+          BUSINESS UNIT
+        </Button>
       </ButtonGroup>
     </>
-  )
+  );
 };
 
 FiltersPrograms.propTypes = {
@@ -285,6 +290,6 @@ FiltersPrograms.propTypes = {
   setReset: PropTypes.func.isRequired,
   handleFilters: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-}
+};
 
 export default FiltersPrograms;

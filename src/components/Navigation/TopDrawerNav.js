@@ -76,7 +76,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "0",
   },
   navList: {
-    paddingLeft: "20px"
+    paddingLeft: "20px",
+    marginTop: "-20px"
   }
 }));
 
