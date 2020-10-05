@@ -29,17 +29,18 @@ const headCells = [
   {
     id: "totalNotCompliant",
     disablePadding: false,
-    label: "Total Not Compliant",
+    label: "Not Compliant",
     sort: false,
   },
   {
     id: "totalDistributors",
     disablePadding: false,
-    label: "Total Distributors",
+    label: "Total Dist.",
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true }
 ];
 
 const EnhancedTableHead = (props) => {
@@ -275,6 +276,7 @@ const PORollupTable = ({
                     <TableCell align="left">
                       {formatMoney(row.estTotal)}
                     </TableCell>
+                    <TableCell align="left">{row.dueDate}</TableCell>
                   </TableRow>
                 );
               })}
