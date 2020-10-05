@@ -43,7 +43,7 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
           <ListItem button onClick={handleDrawerClose} component={Link} to="/">
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="Current PDF"
+              primary="* Current PDF"
             />
           </ListItem>
         </List>

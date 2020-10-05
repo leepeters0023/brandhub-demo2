@@ -22,7 +22,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           color="secondary"
           style={{ fontStyle: "italic" }}
         >
-          CREATE PO
+          * CREATE PO
         </Button>
         <br />
         <br />
@@ -36,7 +36,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           color="secondary"
           style={{ fontStyle: "italic" }}
         >
-          COMPLIANCE
+          * COMPLIANCE
         </Button>
       </Grid>
       <Grid item sm={1} xs={12} />
@@ -45,7 +45,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           <ListItem button onClick={handleDrawerClose} component={Link} to="/">
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="Open POs"
+              primary="* Open POs"
             />
           </ListItem>
         </List>

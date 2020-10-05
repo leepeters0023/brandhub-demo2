@@ -7,7 +7,7 @@ import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
 import DrawerAssetsNav from "./DrawerAssetsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
-import DrawerFulfillmentNav from "./DrawerFulfillmentNav";
+import DrawerAdministrationNav from "./DrawerAdministrationNav";
 
 import Drawer from "@material-ui/core/Drawer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   navigationText: {
+    fontWeight: 500,
     margin: "0 20px",
     "&&:hover": {
       cursor: "pointer",
@@ -74,6 +75,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     margin: "0",
   },
+  navList: {
+    paddingLeft: "20px"
+  }
 }));
 
 const TopDrawerNav = ({ handleLogout }) => {
@@ -141,6 +145,7 @@ const TopDrawerNav = ({ handleLogout }) => {
               </Link>
             </Tooltip>
             <Typography
+              variant="h5"
               className={clsx(classes.titleText, classes.navigationText, {
                 [classes.selectedNavigationText]: drawerContent === "assets",
               })}
@@ -152,6 +157,7 @@ const TopDrawerNav = ({ handleLogout }) => {
               Assets
             </Typography>
             <Typography
+              variant="h5"
               className={clsx(classes.titleText, classes.navigationText, {
                 [classes.selectedNavigationText]: drawerContent === "orders",
               })}
@@ -164,16 +170,17 @@ const TopDrawerNav = ({ handleLogout }) => {
             </Typography>
             {role !== "field1" && (
               <Typography
+                variant="h5"
                 className={clsx(classes.titleText, classes.navigationText, {
                   [classes.selectedNavigationText]:
-                    drawerContent === "fulfillment",
+                    drawerContent === "administration",
                 })}
                 onMouseEnter={() => {
                   handleDrawerOpen();
-                  setDrawerContent("fulfillment");
+                  setDrawerContent("administration");
                 }}
               >
-                Fulfillment
+                Administration
               </Typography>
             )}
           </div>
@@ -199,8 +206,8 @@ const TopDrawerNav = ({ handleLogout }) => {
               role={role}
             />
           )}
-          {drawerContent === "fulfillment" && (
-            <DrawerFulfillmentNav
+          {drawerContent === "administration" && (
+            <DrawerAdministrationNav
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />

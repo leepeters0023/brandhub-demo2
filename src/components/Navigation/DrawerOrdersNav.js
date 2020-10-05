@@ -18,19 +18,23 @@ const DrawerOrdersNav = ({
   return (
     <Grid container spacing={2}>
       <Grid item sm={3} xs={12}>
-        <Button
-          fullWidth
-          onClick={handleDrawerClose}
-          component={Link}
-          to="/orders/open/preorder"
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-        >
-          QUARTERLY PRE-ORDER
-        </Button>
-        <br />
-        <br />
+        {role === "field1" && (
+          <>
+            <Button
+              fullWidth
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/orders/open/preorder"
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+            >
+              QUARTERLY PRE-ORDER
+            </Button>
+            <br />
+            <br />
+          </>
+        )}
         <Button
           fullWidth
           onClick={handleDrawerClose}
@@ -55,10 +59,28 @@ const DrawerOrdersNav = ({
         >
           ON-DEMAND
         </Button>
+        {role !== "field1" && (
+          <>
+            <br />
+            <br />
+            <Button
+              fullWidth
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/coupons"
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              style={{ fontStyle: "italic" }}
+            >
+              * COUPONS
+            </Button>
+          </>
+        )}
       </Grid>
       {role === "field1" && <Grid item sm={1} xs={12} />}
       <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
-        <List>
+        <List className={classes.navList}>
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
@@ -92,37 +114,62 @@ const DrawerOrdersNav = ({
         </List>
       </Grid>
       <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
-        <List>
+        <List className={classes.navList}>
+          <ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerText }}
+              primary="Order History:"
+            />
+          </ListItem>
           <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/orders/history"
           >
-            <ListItemText primary="Order History" />
+            <ListItemText primary="By Order" />
           </ListItem>
-          {role !== "field1" && (
-            <>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/rollup"
-              >
-                <ListItemText primary="Quarterly Rollup" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/orders/approvals"
-              >
-                <ListItemText primary="Approvals" />
-              </ListItem>
-            </>
-          )}
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/orders/history"
+          >
+            <ListItemText
+              primary="* By Item"
+              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
+            />
+          </ListItem>
         </List>
       </Grid>
+      {role !== "field1" && (
+        <Grid item sm={3} xs={12}>
+          <List className={classes.navList}>
+            <ListItem>
+              <ListItemText
+                primaryTypographyProps={{ className: classes.headerText }}
+                primary="Order Management:"
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/rollup"
+            >
+              <ListItemText primary="Quarterly Rollup" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/orders/approvals"
+            >
+              <ListItemText primary="Approvals" />
+            </ListItem>
+          </List>
+        </Grid>
+      )}
     </Grid>
   );
 };
