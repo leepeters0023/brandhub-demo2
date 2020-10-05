@@ -175,25 +175,41 @@ const App = () => {
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
           <Dashboard path="/" />
           {handleAuth(
-            <Programs path="/programs" userType={role} />,
+            <Programs
+              path="/programs"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
             "/programs",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <Program path="/program/:programId" userType={role} />,
+            <Program
+              path="/program/:programId"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/program",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <CurrentPreOrder path="/orders/open/preorder" userType={role} />,
+            <CurrentPreOrder
+              path="/orders/open/preorder"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/open/preorder",
             ["field1", "field2", "super"],
             role
           )}
           {handleAuth(
-            <CurrentOrderDetail path="/orders/open/:orderId" userType={role} />,
+            <CurrentOrderDetail
+              path="/orders/open/:orderId"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/open",
             ["field1", "field2", "super"],
             role
@@ -202,6 +218,7 @@ const App = () => {
             <OrderConfirmation
               path="/orders/confirmation/:orderType"
               userType={role}
+              handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/confirmation",
             ["field1", "field2", "super"],
@@ -230,7 +247,10 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <SingleOrder path="/orders/history/:orderId" />,
+            <SingleOrder
+              path="/orders/history/:orderId"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/orders/history",
             ["field1", "field2", "super"],
             role
@@ -268,13 +288,19 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <CurrentOrderDetail path="/rollup/detail/:orderId" />,
+            <CurrentOrderDetail
+              path="/rollup/detail/:orderId"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/rollup/detail",
             ["field2", "super"],
             role
           )}
           {handleAuth(
-            <Coupons path="/coupons" />,
+            <Coupons
+              path="/coupons"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/coupons",
             ["field1", "field2", "super"],
             role
@@ -290,16 +316,36 @@ const App = () => {
             ["field1", "field2", "compliance", "super"],
             role
           )}
-          {handleAuth(<Reports path="/reports" />, "/reports", ["super"], role)}
           {handleAuth(
-            <Settings path="/settings" userType={role} />,
+            <Reports
+              path="/reports"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/reports",
+            ["super"],
+            role
+          )}
+          {handleAuth(
+            <Settings
+              path="/settings"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
             "/settings",
             ["field1", "field2", "compliance", "super"],
             role
           )}
-          {/* <Calendar path="/calendar" /> */}
-          {handleAuth(<Help path="/help" />, "/help", [], role)}
-          <FourOhFour default path="/whoops" />
+          {handleAuth(
+            <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
+            "/help",
+            [],
+            role
+          )}
+          <FourOhFour
+            default
+            path="/whoops"
+            handleFiltersClosed={handleFiltersClosed}
+          />
         </Router>
       </div>
     </MuiThemeProvider>

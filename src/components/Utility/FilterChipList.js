@@ -10,9 +10,15 @@ import {
 
 import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
-const FilterChipList = ({ classes }) => {
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+}));
+
+const FilterChipList = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const filterState = useSelector((state) => state.filters);
 

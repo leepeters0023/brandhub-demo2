@@ -56,8 +56,8 @@ const DrawerOrdersNav = ({
           ON-DEMAND
         </Button>
       </Grid>
-      <Grid item sm={1} xs={12} />
-      <Grid item sm={4} xs={12}>
+      {role === "field1" && <Grid item sm={1} xs={12} />}
+      <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
         <List>
           <ListItem>
             <ListItemText
@@ -91,7 +91,7 @@ const DrawerOrdersNav = ({
           </ListItem>
         </List>
       </Grid>
-      <Grid item sm={4} xs={12}>
+      <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
         <List>
           <ListItem
             button

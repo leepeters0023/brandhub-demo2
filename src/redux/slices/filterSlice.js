@@ -7,6 +7,7 @@ let initialState = {
   brand: null,
   distributor: null,
   itemType: [],
+  month: [],
   orderType: null,
   program: null,
   sequenceNum: null,
@@ -14,6 +15,7 @@ let initialState = {
   user: null,
   sortOrder: null,
   sortOrderBy: null,
+  sortProgramsBy: null,
   chipList: [],
   defaultFilters: null,
   clearFilters: false,
@@ -37,6 +39,7 @@ const filterSlice = createSlice({
       state.brand = null;
       state.distributor = null;
       state.itemType = [];
+      state.month = [];
       state.orderType = null;
       state.program = null;
       state.sequenceNum = null;
@@ -44,6 +47,7 @@ const filterSlice = createSlice({
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
+      state.sortProgramsBy = null;
       state.chipList = [];
       state.clearFilters = false;
       state.defaultFilters = { ...filterObject };
@@ -71,6 +75,7 @@ const filterSlice = createSlice({
       state.brand = null;
       state.distributor = null;
       state.itemType = [];
+      state.month= [];
       state.orderType = null;
       state.program = null;
       state.sequenceNum = null;
@@ -78,6 +83,7 @@ const filterSlice = createSlice({
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
+      state.sortProgramsBy = null;
       state.chipList = [];
       state.clearFilters = false;
     },
@@ -106,11 +112,18 @@ const filterSlice = createSlice({
           "user",
         ];
       }
+      if (filterType === "program") {
+        chippable = [
+          "month",
+          "brand",
+          "bu"
+        ]
+      }
       let filters = [];
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (filter === "bu" || filter === "itemType") {
+          if (filter === "bu" || filter === "itemType" || filter === "month") {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );

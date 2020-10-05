@@ -19,6 +19,7 @@ import { useDetailedInput } from "../../hooks/UtilityHooks";
 
 import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
+import FiltersPrograms from "./FiltersPrograms";
 
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -31,6 +32,21 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import { itemTypes, units } from "../../utility/constants";
 
+const focusMonths = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   drawer: {
@@ -39,6 +55,12 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: "300px",
+  },
+  selectedButton: {
+    fontWeight: "600",
+    fontSize: "1rem",
+    textAlign: "center",
+    color: "#737373",
   },
 }));
 
@@ -61,10 +83,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "sequenceNum" ||
         type === "status" ||
         type === "bu" ||
-        type === "itemType"
+        type === "itemType" ||
+        type === "month" ||
+        type === "sortProgramsBy"
       ) {
         dispatch(updateSingleFilter({ filter: type, value: value }));
-        if (filterType === "item") {
+        if (filterType !== "history") {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (type === "fromDate" || type === "toDate") {
@@ -74,7 +98,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: format(value, "MM/dd/yyyy"),
           })
         );
-        if (filterType === "item") {
+        if (filterType !== "history") {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (
@@ -88,7 +112,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: value ? { id: value.id, name: value.name } : null,
           })
         );
-        if (filterType === "item") {
+        if (filterType !== "history") {
           dispatch(setChips({ filterType: filterType }));
         }
       }
@@ -225,6 +249,16 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
                   : handleOrderSetFetch
               }
               historyType={filterType.split("-")[1]}
+            />
+          )}
+          {filterType === "program" && (
+            <FiltersPrograms
+              units={units}
+              months={focusMonths}
+              reset={reset}
+              setReset={setReset}
+              handleFilters={handleFilters}
+              classes={classes}
             />
           )}
         </div>

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Program = ({ userType, programId }) => {
+const Program = ({ handleFiltersClosed, programId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [value, updateValue] = useCallback(useState(1));
@@ -76,6 +76,11 @@ const Program = ({ userType, programId }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    handleFiltersClosed()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!currentProgram) {
     return <CircularProgress />;
@@ -176,7 +181,7 @@ const Program = ({ userType, programId }) => {
 };
 
 Program.propTypes = {
-  userType: PropTypes.string,
+  handleFiltersClosed: PropTypes.func.isRequired,
   programId: PropTypes.string,
 };
 

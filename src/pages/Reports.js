@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import "date-fns";
 
 import GalloLogo from "../assets/gallologo.png";
@@ -20,20 +21,25 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Reports = () => {
+const Reports = ({ handleFiltersClosed }) => {
   const classes = useStyles();
 
   const [reportModal, setReportModal] = useState(false);
   const [reportType, setReportType] = useState("Order History Details");
 
   const handleReportSubmit = (type) => {
-    setReportType(type)
-    setReportModal(true)
-  }
+    setReportType(type);
+    setReportModal(true);
+  };
 
   const handleModalClose = () => {
     setReportModal(false);
   };
+
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -71,11 +77,15 @@ const Reports = () => {
         <br />
         <Typography className={classes.headerText}>Order History:</Typography>
         <br />
-        <ReportHistoryForm handleReportSubmit={handleReportSubmit}/>
+        <ReportHistoryForm handleReportSubmit={handleReportSubmit} />
       </Container>
       <br />
     </>
   );
+};
+
+Reports.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
 };
 
 export default Reports;
