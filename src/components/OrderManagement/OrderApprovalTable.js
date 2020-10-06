@@ -19,7 +19,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import CheckBox from "@material-ui/core/CheckBox";
 import { makeStyles } from "@material-ui/core/styles";
 
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const headCells = [
@@ -42,7 +41,7 @@ const headCells = [
   {
     id: "actions",
     disablePadding: false,
-    label: "Approve / Deny",
+    label: "Deny",
     sort: false,
   },
 ];
@@ -148,11 +147,12 @@ const OrderApprovalTable = ({
   isOrdersLoading,
   scrollRef,
   handleApproval,
+  selected,
+  setSelected
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-  const [selected, setSelected] = useState([]);
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -260,18 +260,8 @@ const OrderApprovalTable = ({
                         ? formatMoney(row.totalEstCost)
                         : row.totalEstCost}
                     </TableCell>
-                    <TableCell align="left">
+                    <TableCell align="right">
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <Tooltip title="Approve">
-                          <IconButton
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleApproval(row.id);
-                            }}
-                          >
-                            <ThumbUpIcon color="inherit" />
-                          </IconButton>
-                        </Tooltip>
                         <Tooltip title="Deny">
                           <IconButton
                             onClick={(event) => {

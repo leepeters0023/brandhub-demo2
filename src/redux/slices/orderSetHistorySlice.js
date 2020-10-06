@@ -15,6 +15,12 @@ let initialState = {
   error: null,
 };
 
+const orderTypeMap = {
+  "pre-order": "Pre Order",
+  "in-stock": "In Stock",
+  "on-demand": "On Demand",
+};
+
 const startLoading = (state) => {
   state.isLoading = true;
 };
@@ -93,7 +99,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     }
     let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
       id: orderSet.id,
-      type: orderSet.type,
+      type: orderTypeMap[orderSet.type],
       user: orderSet.user.name,
       program: orderSet.program ? orderSet.program.name : null,
       state: orderSet["random-order-state"],
@@ -135,7 +141,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     console.log(orderSets);
     let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
       id: orderSet.id,
-      type: orderSet.type,
+      type: orderTypeMap[orderSet.type],
       user: orderSet.user.name,
       program: orderSet.program ? orderSet.program.name : null,
       state: orderSet["random-order-state"],
