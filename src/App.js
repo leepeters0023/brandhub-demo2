@@ -42,6 +42,7 @@ import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import PORollup from "./pages/PORollup";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
+import PurchaseOrder from "./pages/PurchaseOrder";
 import Reports from "./pages/Reports";
 import Rollup from "./pages/Rollup";
 // import ScrollNav from "./components/Navigation/ScrollNav";
@@ -263,6 +264,15 @@ const App = () => {
               path="/purchasing/PORollup"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PurchaseOrder
+              path="/purchasing/purchaseOrder"
+              handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/items/onDemand",
             ["field2", "super"],
