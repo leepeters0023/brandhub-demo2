@@ -465,12 +465,12 @@ const OrderSetTable = (props) => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          width: "100%",
+                          width: "Calc(100% - 8px)",
                           position: "absolute",
                           top: "0",
                           left: "0",
                           height: "100%",
-                          padding: "6px 0px 6px 6px",
+                          padding: "0px 2px 0px 6px",
                         }}
                       >
                         <Tooltip

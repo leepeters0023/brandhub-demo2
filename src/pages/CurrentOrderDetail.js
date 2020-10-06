@@ -11,6 +11,7 @@ import {
   deleteSetOrder,
   setOrderSetNotes,
   submitOrdSet,
+  approveOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -144,6 +145,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     setTerms(false);
   };
 
+  const handleApproval = () => {
+    dispatch(approveOrdSet(orderId, "approved"));
+  };
+
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
       if (
@@ -163,9 +168,9 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   }, [orderId]);
 
   useEffect(() => {
-    handleFiltersClosed()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isLoading) {
     return <Loading />;
@@ -267,45 +272,63 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             </>
           )}
           {window.location.href.includes("rollup") && (
-            <div className={classes.titleImage}>
-              <Tooltip
-                title="Quarterly Rollup Overview"
-                placement="bottom-start"
-              >
-                <IconButton component={Link} to="/rollup">
-                  <ArrowBackIcon fontSize="large" color="secondary" />
-                </IconButton>
-              </Tooltip>
-              <Typography
-                className={classes.titleText}
-                style={{ marginLeft: "5px", marginTop: "5px" }}
-              >
-                {decodeURIComponent(window.location.hash.slice(1))}
-              </Typography>
-            </div>
-          )}
-          {window.location.hash.includes("approval") && (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {decodeURIComponent(window.location.hash.slice(1)).includes(
-                "approval"
-              ) && (
-                <Tooltip title="Back to Approvals" placement="bottom-start">
-                  <IconButton component={Link} to="/orders/approvals">
+            <>
+              <div className={classes.titleImage}>
+                <Tooltip
+                  title="Quarterly Rollup Overview"
+                  placement="bottom-start"
+                >
+                  <IconButton component={Link} to="/rollup">
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
                 </Tooltip>
-              )}
-              <Typography
-                className={classes.titleText}
-                style={{ marginTop: "5px" }}
-              >
-                {`Order Number: ${orderId}`}
-              </Typography>
-            </div>
+                <Typography
+                  className={classes.titleText}
+                  style={{ marginLeft: "5px", marginTop: "5px" }}
+                >
+                  {decodeURIComponent(window.location.hash.slice(1))}
+                </Typography>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography className={classes.titleText}>Total:</Typography>
+                <Typography className={classes.titleText}>{`${formatMoney(
+                  currentTotal
+                )}`}</Typography>
+              </div>
+            </>
+          )}
+          {window.location.hash.includes("approval") && (
+            <>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {decodeURIComponent(window.location.hash.slice(1)).includes(
+                  "approval"
+                ) && (
+                  <Tooltip title="Back to Approvals" placement="bottom-start">
+                    <IconButton component={Link} to="/orders/approvals">
+                      <ArrowBackIcon fontSize="large" color="secondary" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                <Typography
+                  className={classes.titleText}
+                  style={{ marginTop: "5px" }}
+                >
+                  {`Order Number: ${orderId}`}
+                </Typography>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography className={classes.titleText}>Total:</Typography>
+                <Typography className={classes.titleText}>{`${formatMoney(
+                  currentTotal
+                )}`}</Typography>
+              </div>
+            </>
           )}
         </div>
         <br />
-        {orderStatus === "approved" || orderStatus === "submitted" ? (
+        {(orderStatus === "approved" || orderStatus === "submitted") &&
+        currentUserRole === "field1" ? (
           <OrderSetOverview />
         ) : (
           <OrderSetTable
@@ -326,46 +349,48 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         )}
         <br />
         <br />
-        {orderStatus !== "submitted" && orderStatus !== "approved" && (
+        {((orderStatus !== "submitted" &&
+          orderStatus !== "approved" &&
+          currentUserRole === "field1") ||
+          currentUserRole !== "field1") && (
           <>
             <Grid container spacing={5}>
               <Grid item md={7} xs={12}>
-                {currentUserRole === "field1" &&
-                  orderStatus === "in-progress" && (
-                    <>
-                      <Typography className={classes.headerText}>
-                        TERMS AND CONDITIONS
-                      </Typography>
-                      <br />
-                      <Typography className={classes.bodyText}>
-                        Use of this site is subject to all Gallo use policies.
-                        By using this site, you warrant that you are a Gallo or
-                        Gallo Sales employee and that you have reviewed, read,
-                        and understand the Compliance rules below associated
-                        with this site and with your intended order. You further
-                        warrant that you will not, under any circumstances,
-                        order items for use in stated where prohibited or use
-                        items in a prohibited manner. If you have any questions,
-                        please contact your Compliance representative.
-                      </Typography>
-                      <br />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={terms}
-                            onChange={() => {
-                              setTerms(!terms);
-                            }}
-                            name="Terms"
-                            color="primary"
-                          />
-                        }
-                        label=" I have read and accept the Terms and Conditions"
-                      />
-                      <br />
-                      <br />
-                    </>
-                  )}
+                {currentUserRole === "field1" && orderStatus === "in-progress" && (
+                  <>
+                    <Typography className={classes.headerText}>
+                      TERMS AND CONDITIONS
+                    </Typography>
+                    <br />
+                    <Typography className={classes.bodyText}>
+                      Use of this site is subject to all Gallo use policies. By
+                      using this site, you warrant that you are a Gallo or Gallo
+                      Sales employee and that you have reviewed, read, and
+                      understand the Compliance rules below associated with this
+                      site and with your intended order. You further warrant
+                      that you will not, under any circumstances, order items
+                      for use in stated where prohibited or use items in a
+                      prohibited manner. If you have any questions, please
+                      contact your Compliance representative.
+                    </Typography>
+                    <br />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={terms}
+                          onChange={() => {
+                            setTerms(!terms);
+                          }}
+                          name="Terms"
+                          color="primary"
+                        />
+                      }
+                      label=" I have read and accept the Terms and Conditions"
+                    />
+                    <br />
+                    <br />
+                  </>
+                )}
               </Grid>
               <Grid item md={5} xs={12}>
                 <div
@@ -398,14 +423,18 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   onChange={handleOrderNote}
                 />
                 <br />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Typography className={classes.titleText}>Total:</Typography>
-                  <Typography className={classes.titleText}>{`${formatMoney(
-                    currentTotal
-                  )}`}</Typography>
-                </div>
+                {currentUserRole === "field1" && (
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography className={classes.titleText}>
+                      Total:
+                    </Typography>
+                    <Typography className={classes.titleText}>{`${formatMoney(
+                      currentTotal
+                    )}`}</Typography>
+                  </div>
+                )}
               </Grid>
             </Grid>
           </>
@@ -413,7 +442,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <>
           <br />
           <div className={classes.orderControl}>
-            {orderStatus === "in-progress" && (
+            {((orderStatus === "in-progress" && currentUserRole === "field1") ||
+              currentUserRole !== "field1") && (
               <Button
                 className={classes.largeButton}
                 color="secondary"
@@ -430,12 +460,33 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 color="secondary"
                 variant="contained"
                 disabled={!terms && currentUserRole === "field1"}
-                // component={Link}
-                // to={`/orders/confirmation/${orderType}#${currentOrder.orderNumber}`}
                 onClick={handleSubmit}
               >
                 SUBMIT ORDER
               </Button>
+            )}
+            {window.location.hash.includes("approval") && (
+              <>
+                <Button
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  disabled={!terms && currentUserRole === "field1"}
+                  onClick={handleApproval}
+                  style={{ marginRight: "10px" }}
+                >
+                  APPROVE
+                </Button>
+                <Button
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  disabled={!terms && currentUserRole === "field1"}
+                  onClick={() => console.log("denied!")}
+                >
+                  DENY
+                </Button>
+              </>
             )}
           </div>
         </>

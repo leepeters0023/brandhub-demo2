@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
@@ -12,7 +12,7 @@ import {
 
 import {
   approveOrdSet,
-  //approveMultipleOrderSets,
+  approveMultipleOrderSets,
 } from "../redux/slices/patchOrderSlice";
 
 import {
@@ -32,6 +32,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
@@ -58,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
 const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [selected, setSelected] = useCallback(useState([]));
 
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
@@ -98,10 +101,10 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(approveOrdSet(id, "approved", allFilters));
   };
 
-  // const handleBulkApproval = () => {
-  //   let idArray = currentOrders.map((order) => order.id);
-  //   dispatch(approveMultipleOrderSets(idArray, allFilters));
-  // };
+  const handleBulkApproval = () => {
+    dispatch(approveMultipleOrderSets(selected, allFilters));
+    setSelected([]);
+  };
 
   useEffect(() => {
     dispatch(setFilterType({ type: "history-approvals" }));
@@ -133,10 +136,20 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "150px",
+              width: "250px",
               justifyContent: "flex-end",
             }}
           >
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={selected.length === 0}
+              style={{ marginRight: "20px" }}
+              onClick={handleBulkApproval}
+            >
+              APPROVE
+            </Button>
             <Tooltip title="Print Order History">
               <IconButton>
                 <PrintIcon color="secondary" />
@@ -172,6 +185,8 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
           handleSort={handleSort}
           scrollRef={scrollRef}
           handleApproval={handleApproval}
+          selected={selected}
+          setSelected={setSelected}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>
