@@ -135,7 +135,7 @@ const DrawerOrdersNav = ({
             <ListItem>
               <ListItemText
                 primaryTypographyProps={{ className: classes.headerText }}
-                primary="Order Management:"
+                primary="Order Review:"
               />
             </ListItem>
             <ListItem
