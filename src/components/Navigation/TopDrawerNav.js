@@ -20,7 +20,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   drawer: {
-    height: "300px",
+    height: "310px",
     flexShrink: 0,
     whiteSpace: "nowrap",
     position: "fixed",

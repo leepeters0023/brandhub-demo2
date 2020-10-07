@@ -3,7 +3,6 @@ import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -18,65 +17,53 @@ const DrawerOrdersNav = ({
   return (
     <Grid container spacing={2}>
       <Grid item sm={3} xs={12}>
-        {role === "field1" && (
-          <>
-            <Button
-              fullWidth
+        <List className={classes.navList}>
+          <ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerText }}
+              primary="Place an Order:"
+            />
+          </ListItem>
+          {role === "field1" && (
+            <ListItem
+              button
               onClick={handleDrawerClose}
               component={Link}
               to="/orders/open/preorder"
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
             >
-              QUARTERLY PRE-ORDER
-            </Button>
-            <br />
-            <br />
-          </>
-        )}
-        <Button
-          fullWidth
-          onClick={handleDrawerClose}
-          component={Link}
-          to="/orders/items/inStock"
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-        >
-          IN-STOCK
-        </Button>
-        <br />
-        <br />
-        <Button
-          fullWidth
-          onClick={handleDrawerClose}
-          component={Link}
-          to="/orders/items/onDemand"
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-        >
-          ON-DEMAND
-        </Button>
-        {role !== "field1" && (
-          <>
-            <br />
-            <br />
-            <Button
-              fullWidth
+              <ListItemText primary="Quarterly Pre-Order" />
+            </ListItem>
+          )}
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/orders/items/inStock"
+          >
+            <ListItemText primary="In-Stock Order" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/orders/items/onDemand"
+          >
+            <ListItemText primary="On-Demand Order" />
+          </ListItem>
+          {role !== "field1" && (
+            <ListItem
+              button
               onClick={handleDrawerClose}
               component={Link}
               to="/coupons"
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ fontStyle: "italic" }}
             >
-              * COUPONS
-            </Button>
-          </>
-        )}
+              <ListItemText
+                primaryTypographyProps={{ style: { fontStyle: "italic" } }}
+                primary="* Create Coupons"
+              />
+            </ListItem>
+          )}
+        </List>
       </Grid>
       {role === "field1" && <Grid item sm={1} xs={12} />}
       <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
