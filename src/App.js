@@ -38,16 +38,15 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
-import PORollup from "./pages/PORollup";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import PurchaseOrder from "./pages/PurchaseOrder";
-import Reports from "./pages/Reports";
-import RFQCreation from "./pages/RFQCreation";
+import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
+import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
+import RFQ from "./pages/RFQ";
 import RFQHistory from "./pages/RFQHistory";
 import RFQRollup from "./pages/RFQRollup";
 import Rollup from "./pages/Rollup";
-// import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
 import SingleOrder from "./pages/SingleOrder";
 import TopDrawerNav from "./components/Navigation/TopDrawerNav";
@@ -262,7 +261,7 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <RFQCreation
+            <RFQ
               path="/purchasing/rfq"
               handleFiltersClosed={handleFiltersClosed}
             />,
@@ -281,7 +280,7 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <PORollup
+            <PurchaseOrderRollup
               path="/purchasing/poRollup"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
@@ -294,6 +293,16 @@ const App = () => {
             <PurchaseOrder
               path="/purchasing/purchaseOrder"
               handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <PurchaseOrderHistory
+              path="/purchasing/poHistory"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
             ["field2", "super"],
@@ -367,15 +376,6 @@ const App = () => {
             />,
             "/items",
             ["field1", "field2", "compliance", "super"],
-            role
-          )}
-          {handleAuth(
-            <Reports
-              path="/reports"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/reports",
-            ["super"],
             role
           )}
           {handleAuth(

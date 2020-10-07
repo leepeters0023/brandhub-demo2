@@ -26,7 +26,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { currentBidItems } from "../assets/mockdata/poItems";
+import { currentBidItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",

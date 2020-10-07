@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { /*useSelector,*/ useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { navigate } from "@reach/router";
 
 import {
   setFilterType,
@@ -12,19 +13,20 @@ import {
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Utility/FilterChipList";
-import RFQHistoryTable from "../components/SupplierManagement/RFQHistoryTable";
+import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 //import LinearProgress from "@material-ui/core/LinearProgress";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { rfqCurrent, rfqAll } from "../assets/mockdata/dataGenerator.js";
+import { currentPOItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -39,9 +41,11 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
+const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [itemSelected, setItemSelected] = useCallback(useState(false));
 
   //const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
@@ -60,14 +64,13 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "rfqHistory" }));
+    dispatch(setFilterType({ type: "itemRollup" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,
       })
     );
     dispatch(
-      //TODO filters based off of window hash
       updateMultipleFilters({
         filterObject: defaultFilters,
       })
@@ -87,7 +90,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>RFQ History</Typography>
+          <Typography className={classes.titleText}>
+            Purchase Order Rollup
+          </Typography>
           <div
             style={{
               display: "flex",
@@ -95,7 +100,20 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Tooltip title="Print RFQs">
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={!itemSelected}
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                //TODO create po function
+                navigate("/purchasing/purchaseOrder#new");
+              }}
+            >
+              CREATE PO
+            </Button>
+            <Tooltip title="Print Purchase Order Items">
               <IconButton>
                 <PrintIcon color="secondary" />
               </IconButton>
@@ -124,11 +142,13 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <RFQHistoryTable
-          rfqs={window.location.hash.includes("current") ? rfqCurrent : rfqAll}
-          rfqsLoading={false}
+        <ItemRollupTable
+          items={currentPOItems}
+          isItemsLoading={false}
           handleSort={handleSort}
           // scrollRef={scrollRef}
+          itemSelected={itemSelected}
+          setItemSelected={setItemSelected}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>
@@ -142,9 +162,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   );
 };
 
-RFQHistory.propTypes = {
+PurchaseOrderRollup.propTypes = {
   handleFilterDrawer: PropTypes.func.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };
 
-export default RFQHistory;
+export default PurchaseOrderRollup;

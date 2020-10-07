@@ -28,7 +28,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 //mock data
-import { singlePO } from "../../assets/mockdata/poItems";
+import { singlePO } from "../../assets/mockdata/dataGenerator";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,

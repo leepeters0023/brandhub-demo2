@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { /*useSelector,*/ useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import { navigate } from "@reach/router";
 
 import {
   setFilterType,
@@ -13,20 +12,19 @@ import {
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Utility/FilterChipList";
-import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
+import PurchaseOrderHistoryTable from "../components/SupplierManagement/PurchaseOrderHistoryTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 //import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { currentPOItems } from "../assets/mockdata/poItems";
+import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -41,11 +39,9 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
+const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const [itemSelected, setItemSelected] = useCallback(useState(false));
 
   //const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
@@ -64,18 +60,19 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup" }));
+    dispatch(setFilterType({ type: "purchaseOrderHistory" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,
       })
     );
     dispatch(
+      //TODO filters based off of window hash
       updateMultipleFilters({
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,7 +87,7 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Purchase Order Rollup</Typography>
+          <Typography className={classes.titleText}>Purchase Order History</Typography>
           <div
             style={{
               display: "flex",
@@ -98,20 +95,7 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={!itemSelected}
-              style={{ marginRight: "20px" }}
-              onClick={()=>{
-                //TODO create po function
-                navigate("/purchasing/purchaseOrder")
-              }}
-            >
-              CREATE PO
-            </Button>
-            <Tooltip title="Print Purchase Order Items">
+            <Tooltip title="Print POs">
               <IconButton>
                 <PrintIcon color="secondary" />
               </IconButton>
@@ -140,13 +124,11 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <ItemRollupTable
-          items={currentPOItems}
-          isItemsLoading={false}
+        <PurchaseOrderHistoryTable
+          pos={window.location.hash.includes("current") ? poCurrent : poAll}
+          posLoading={false}
           handleSort={handleSort}
           // scrollRef={scrollRef}
-          itemSelected={itemSelected}
-          setItemSelected={setItemSelected}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>
@@ -160,9 +142,9 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
   );
 };
 
-PORollup.propTypes = {
+PurchaseOrderHistory.propTypes = {
   handleFilterDrawer: PropTypes.func.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };
 
-export default PORollup;
+export default PurchaseOrderHistory;
