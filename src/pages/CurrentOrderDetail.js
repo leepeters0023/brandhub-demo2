@@ -181,9 +181,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       <>
         <Container style={{ textAlign: "center" }}>
           <br />
-          <Typography className={classes.headerText}>
-            You currently do not have an active In-Stock order.
-          </Typography>
+          {orderId === "inStock" && (
+            <Typography className={classes.headerText}>
+              You currently do not have an active In-Stock order.
+            </Typography>
+          )}
+          {orderId === "onDemand" && (
+            <Typography className={classes.headerText}>
+              You currently do not have an active On-Demand order.
+            </Typography>
+          )}
           <br />
           <br />
           <Button

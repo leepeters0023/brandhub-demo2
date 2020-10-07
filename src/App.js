@@ -23,6 +23,7 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
+import BidCreation from "./pages/BidCreation";
 import BidRollup from "./pages/BidRollup";
 import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
@@ -176,7 +177,7 @@ const App = () => {
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
-          <Dashboard path="/" />
+          <Dashboard path="/" handleFiltersClosed={handleFiltersClosed}/>
           {handleAuth(
             <Programs
               path="/programs"
@@ -254,6 +255,15 @@ const App = () => {
               path="/purchasing/bidRollup"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <BidCreation
+              path="/purchasing/newBid"
+              handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/items/onDemand",
             ["field2", "super"],

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "@reach/router";
 
@@ -79,7 +79,7 @@ const InfoPopover = ({
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({handleFiltersClosed}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -107,6 +107,11 @@ const Dashboard = () => {
   //     setCurrentRole(role)
   //   }
   // }, [role])
+  
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

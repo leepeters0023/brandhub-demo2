@@ -65,6 +65,9 @@ const RegionSelector = () => {
             id="regions"
             value={region}
             onChange={handleChangeSelect}
+            MenuProps={{
+              style: {zIndex: "10001"}
+            }}
           >
             {regions.map((region, index) => (
               <MenuItem value={region.name} key={index}>

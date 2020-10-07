@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { /*useSelector,*/ useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { navigate } from "@reach/router";
 
 import {
   setFilterType,
@@ -102,6 +103,10 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
               color="secondary"
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
+              onClick={()=>{
+                //TODO create bid function
+                navigate("/purchasing/newBid")
+              }}
             >
               CREATE BID
             </Button>
