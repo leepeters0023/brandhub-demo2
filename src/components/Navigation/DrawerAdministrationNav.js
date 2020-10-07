@@ -33,10 +33,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             component={Link}
             to="/purchasing/poHistory#current"
           >
-            <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Current POs"
-            />
+            <ListItemText primary="Current POs" />
           </ListItem>
           <ListItem
             button
@@ -44,10 +41,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             component={Link}
             to="/purchasing/poHistory#all"
           >
-            <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* PO History"
-            />
+            <ListItemText primary="PO History" />
           </ListItem>
         </List>
       </Grid>
@@ -73,9 +67,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             component={Link}
             to="/purchasing/rfqHistory#current"
           >
-            <ListItemText
-              primary="Current RFQ"
-            />
+            <ListItemText primary="Current RFQ" />
           </ListItem>
           <ListItem
             button
@@ -83,9 +75,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             component={Link}
             to="/purchasing/rfqHistory#all"
           >
-            <ListItemText
-              primary="RFQ History"
-            />
+            <ListItemText primary="RFQ History" />
           </ListItem>
         </List>
       </Grid>
@@ -97,13 +87,23 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
               primary="Compliance:"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/compliance/items">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/items"
+          >
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
               primary="* Item Compliance"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/compliance/rules">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/rules"
+          >
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
               primary="* Rules"

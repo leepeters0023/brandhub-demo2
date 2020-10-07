@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import CurrentBid from "../components/SupplierManagement/CurrentBid";
+import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -107,7 +107,7 @@ const BidCreation = ({ handleFiltersClosed }) => {
           alignItems: "center",
         }}
       >
-        <CurrentBid />
+        <CurrentRFQ />
         <br />
         <br />
         <Divider style={{ width: "75%", minWidth: "600px" }} />

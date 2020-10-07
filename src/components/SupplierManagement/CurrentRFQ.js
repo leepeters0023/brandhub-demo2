@@ -17,7 +17,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 //mock data
-import { singlePO } from "../../assets/mockdata/poItems";
+import { singlePO } from "../../assets/mockdata/dataGenerator";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentBid = () => {
+const CurrentRFQ = () => {
   const classes = useStyles();
   return (
     <>
@@ -370,4 +370,4 @@ const CurrentBid = () => {
   );
 };
 
-export default CurrentBid;
+export default CurrentRFQ;

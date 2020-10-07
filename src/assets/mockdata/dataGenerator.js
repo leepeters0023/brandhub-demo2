@@ -82,9 +82,44 @@ const generateRFQs = (dataPoints, stat) => {
   return data;
 };
 
+const generatePOs = (dataPoints, stat) => {
+  let statusAll = [
+    "In Progress",
+    "Complete",
+    "Canceled"
+  ];
+  let suppliers = ["Imperial", "Curtis", "Sterling"]
+
+  let data = [];
+  for (let i = 0; i < dataPoints; i++) {
+    let poNumber = (543000120 + i).toString();
+    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)]
+    let totalItems = Math.floor(Math.random() * 1000) + 500;
+    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
+    let estTotal = totalItems * estCost;
+    let status =
+      stat === "all"
+        ? statusAll[Math.floor(Math.random() * statusAll.length)]
+        : "In Progress";
+    data.push({
+      id: (i + 1).toString(),
+      poNum: poNumber,
+      supplier: supplier,
+      totalItems: totalItems,
+      estTotal: estTotal,
+      actTotal: estTotal,
+      status: status,
+      shipDate: new Date().toLocaleDateString()
+    });
+  }
+  return data;
+}
+
 export const currentPOItems = generateData(20);
 export const currentBidItems = generateData(20);
 export const singlePO = generateData(3);
 export const bidItem = generateData(1);
 export const rfqCurrent = generateRFQs(20, "current");
 export const rfqAll = generateRFQs(20, "all");
+export const poCurrent = generatePOs(20, "current");
+export const poAll = generatePOs(20, "all");

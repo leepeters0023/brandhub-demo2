@@ -46,24 +46,26 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         >
           <CurrentPO />
           <br />
-          <div>
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "10px" }}
-            >
-              SUBMIT
-            </Button>
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "10px" }}
-            >
-              VOID
-            </Button>
-          </div>
+          {window.location.hash.includes("new") && (
+            <div>
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                style={{ marginRight: "10px" }}
+              >
+                SUBMIT
+              </Button>
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                style={{ marginRight: "10px" }}
+              >
+                VOID
+              </Button>
+            </div>
+          )}
         </div>
         <br />
         <br />
