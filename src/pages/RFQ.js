@@ -236,8 +236,16 @@ const BidCreation = ({ handleFiltersClosed }) => {
                         className={classes.largeButton}
                         variant="contained"
                         color="secondary"
+                        style={{marginRight: "20px"}}
                       >
                         AWARD
+                      </Button>
+                      <Button
+                        className={classes.largeButton}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        PO
                       </Button>
                     </TableCell>
                   </TableRow>

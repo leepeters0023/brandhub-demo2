@@ -94,8 +94,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             to="/compliance/items"
           >
             <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Item Compliance"
+              primary="Item Compliance"
             />
           </ListItem>
           <ListItem
@@ -105,8 +104,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             to="/compliance/rules"
           >
             <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Rules"
+              primary="Rules"
             />
           </ListItem>
         </List>

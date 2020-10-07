@@ -14,8 +14,21 @@ let itemTypes = [
   "Necker",
   "Glorifier",
 ];
+let ruleTypes = ["Prior Approval", "Item Type", "Material", "Pricing"];
+let tags = [
+  "VT",
+  "UT",
+  "MA",
+  "MN",
+  "Necker",
+  "Glorifier",
+  "Mass Display",
+  "Wood",
+  "Plastic",
+  "Cardboard",
+];
 
-const generateData = (dataPoints) => {
+const generatePOItems = (dataPoints) => {
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
     let currentProgram = programs[Math.floor(Math.random() * programs.length)];
@@ -83,17 +96,13 @@ const generateRFQs = (dataPoints, stat) => {
 };
 
 const generatePOs = (dataPoints, stat) => {
-  let statusAll = [
-    "In Progress",
-    "Complete",
-    "Canceled"
-  ];
-  let suppliers = ["Imperial", "Curtis", "Sterling"]
+  let statusAll = ["In Progress", "Complete", "Canceled"];
+  let suppliers = ["Imperial", "Curtis", "Sterling"];
 
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
     let poNumber = (543000120 + i).toString();
-    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)]
+    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
     let totalItems = Math.floor(Math.random() * 1000) + 500;
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
     let estTotal = totalItems * estCost;
@@ -109,17 +118,73 @@ const generatePOs = (dataPoints, stat) => {
       estTotal: estTotal,
       actTotal: estTotal,
       status: status,
-      shipDate: new Date().toLocaleDateString()
+      shipDate: new Date().toLocaleDateString(),
     });
   }
   return data;
-}
+};
 
-export const currentPOItems = generateData(20);
-export const currentBidItems = generateData(20);
-export const singlePO = generateData(3);
-export const bidItem = generateData(1);
+const generateComplianceRules = (dataPoints) => {
+  let data = [];
+  for (let i = 0; i < dataPoints; i++) {
+    let ranNum = Math.floor(Math.random() * 3 + 1)
+    let ruleType = ruleTypes[Math.floor(Math.random() * ruleTypes.length)];
+    let ruleTags = [];
+    for (let j = 0; j < ranNum; j++) {
+      console.log("generating")
+      ruleTags.push(tags[Math.floor(Math.random() * tags.length)]);
+    }
+    let description =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.";
+    data.push({
+      ruleType: ruleType,
+      tags: ruleTags,
+      desc: description,
+    });
+  }
+  return data;
+};
+
+const generateComplianceItems = (dataPoints) => {
+  let stats = ["Approved", "Denied", "Pending"];
+  let data = [];
+
+  for (let i = 0; i < dataPoints; i++) {
+    let ranNum = Math.floor(Math.random() * 3 + 1)
+    let sequenceNumber = (1110000010 + i).toString();
+    let currentItemType =
+      itemTypes[Math.floor(Math.random() * itemTypes.length)];
+    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
+    let ruleType = ruleTypes[Math.floor(Math.random() * ruleTypes.length)];
+    let ruleTags = [];
+    for (let j = 0; j < ranNum; j++) {
+      ruleTags.push(tags[Math.floor(Math.random() * tags.length)]);
+    }
+    let status = stats[Math.floor(Math.random() * stats.length)];
+    let emailSent = ruleType === "Prior Approval" ? new Date().toLocaleDateString() : "N/A";
+    let note =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.";
+    data.push({
+      sequenceNum: sequenceNumber,
+      itemType: currentItemType,
+      program: currentProgram,
+      ruleType: ruleType,
+      tags: ruleTags,
+      status: status,
+      emailSent: emailSent,
+      note: note
+    })
+  }
+  return data;
+};
+
+export const currentPOItems = generatePOItems(20);
+export const currentBidItems = generatePOItems(20);
+export const singlePO = generatePOItems(3);
+export const bidItem = generatePOItems(1);
 export const rfqCurrent = generateRFQs(20, "current");
 export const rfqAll = generateRFQs(20, "all");
 export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
+export const rules = generateComplianceRules(20);
+export const complianceItems = generateComplianceItems(20);

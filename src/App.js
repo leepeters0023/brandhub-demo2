@@ -23,6 +23,8 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
+import ComplianceItems from "./pages/ComplianceItems";
+import ComplianceRules from "./pages/ComplianceRules";
 import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
@@ -376,6 +378,26 @@ const App = () => {
             />,
             "/items",
             ["field1", "field2", "compliance", "super"],
+            role
+          )}
+          {handleAuth(
+            <ComplianceItems
+              path="/compliance/items"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <ComplianceRules
+              path="/compliance/rules"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
             role
           )}
           {handleAuth(
