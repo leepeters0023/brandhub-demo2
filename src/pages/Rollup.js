@@ -106,6 +106,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
+    handleFilterDrawer(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -23,8 +23,6 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
-import BidCreation from "./pages/BidCreation";
-import BidRollup from "./pages/BidRollup";
 import Coupons from "./pages/Coupons";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
@@ -45,6 +43,9 @@ import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import Reports from "./pages/Reports";
+import RFQCreation from "./pages/RFQCreation";
+import RFQHistory from "./pages/RFQHistory";
+import RFQRollup from "./pages/RFQRollup";
 import Rollup from "./pages/Rollup";
 // import ScrollNav from "./components/Navigation/ScrollNav";
 import Settings from "./pages/Settings";
@@ -177,7 +178,7 @@ const App = () => {
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
-          <Dashboard path="/" handleFiltersClosed={handleFiltersClosed}/>
+          <Dashboard path="/" handleFiltersClosed={handleFiltersClosed} />
           {handleAuth(
             <Programs
               path="/programs"
@@ -251,8 +252,8 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <BidRollup
-              path="/purchasing/bidRollup"
+            <RFQRollup
+              path="/purchasing/rfqRollup"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
@@ -261,8 +262,8 @@ const App = () => {
             role
           )}
           {handleAuth(
-            <BidCreation
-              path="/purchasing/newBid"
+            <RFQCreation
+              path="/purchasing/rfq"
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/items/onDemand",
@@ -270,8 +271,18 @@ const App = () => {
             role
           )}
           {handleAuth(
+            <RFQHistory
+              path="/purchasing/rfqHistory"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
             <PORollup
-              path="/purchasing/PORollup"
+              path="/purchasing/poRollup"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,

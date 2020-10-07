@@ -10,6 +10,7 @@ let initialState = {
   month: [],
   orderType: null,
   program: null,
+  rfqNum: null,
   sequenceNum: null,
   status: null,
   user: null,
@@ -43,6 +44,7 @@ const filterSlice = createSlice({
       state.orderType = null;
       state.program = null;
       state.sequenceNum = null;
+      state.rfqNum = null;
       state.status = null;
       state.user = null;
       state.sortOrder = null;
@@ -79,6 +81,7 @@ const filterSlice = createSlice({
       state.orderType = null;
       state.program = null;
       state.sequenceNum = null;
+      state.rfqNum = null;
       state.status = null;
       state.user = null;
       state.sortOrder = null;
@@ -112,7 +115,7 @@ const filterSlice = createSlice({
         chippable = ["month", "brand", "bu"];
       }
       if (filterType === "itemRollup") {
-        chippable = ["brand", "program", "sequenceNum", "orderType"];
+        chippable = ["brand", "program", "itemType", "sequenceNum", "orderType"];
       }
       let filters = [];
       let stateObject = { ...state };

@@ -75,6 +75,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
+    handleFilterDrawer(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -142,7 +143,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         {isLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-          <CurrentPrograms currentPrograms={currentPrograms} />
+          <CurrentPrograms currentPrograms={currentPrograms} filtersOpen={filtersOpen}/>
         )}
       </Container>
     </>

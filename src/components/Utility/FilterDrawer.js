@@ -20,7 +20,7 @@ import { useDetailedInput } from "../../hooks/UtilityHooks";
 import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
-import FiltersPORollup from "./FiltersPORollup";
+import FiltersItemRollup from "./FiltersItemRollup";
 
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -264,7 +264,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             />
           )}
           {filterType === "itemRollup" && (
-            <FiltersPORollup
+            <FiltersItemRollup
               reset={reset}
               setReset={setReset}
               handleFilters={handleFilters}
@@ -273,6 +273,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindSequenceNum={bindSequenceNum}
               program={program}
               bindProgram={bindProgram}
+              itemTypes={itemTypes}
               handleSearch={
                 // TODO add search for po when api is there
                 () => console.log("Searching!")

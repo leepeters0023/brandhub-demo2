@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { /*useSelector,*/ useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import { navigate } from "@reach/router";
 
 import {
   setFilterType,
@@ -13,20 +12,19 @@ import {
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Utility/FilterChipList";
-import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
+import RFQHistoryTable from "../components/SupplierManagement/RFQHistoryTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 //import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { currentBidItems } from "../assets/mockdata/poItems";
+import { rfqCurrent, rfqAll } from "../assets/mockdata/poItems"
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -41,11 +39,9 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
+const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const [itemSelected, setItemSelected] = useCallback(useState(false));
 
   //const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
@@ -64,7 +60,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup" }));
+    dispatch(setFilterType({ type: "rfqHistory" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,
@@ -75,6 +71,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
+    handleFilterDrawer(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,7 +86,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Bids</Typography>
+          <Typography className={classes.titleText}>RFQ History</Typography>
           <div
             style={{
               display: "flex",
@@ -97,20 +94,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={!itemSelected}
-              style={{ marginRight: "20px" }}
-              onClick={()=>{
-                //TODO create bid function
-                navigate("/purchasing/newBid")
-              }}
-            >
-              CREATE BID
-            </Button>
-            <Tooltip title="Print Purchase Order Items">
+            <Tooltip title="Print RFQs">
               <IconButton>
                 <PrintIcon color="secondary" />
               </IconButton>
@@ -139,13 +123,11 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <ItemRollupTable
-          items={currentBidItems}
-          isItemsLoading={false}
+        <RFQHistoryTable
+          rfqs={window.location.hash.includes("current") ? rfqCurrent : rfqAll}
+          rfqsLoading={false}
           handleSort={handleSort}
           // scrollRef={scrollRef}
-          itemSelected={itemSelected}
-          setItemSelected={setItemSelected}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>
@@ -159,9 +141,9 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
   );
 };
 
-BidRollup.propTypes = {
+RFQHistory.propTypes = {
   handleFilterDrawer: PropTypes.func.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };
 
-export default BidRollup;
+export default RFQHistory;

@@ -52,11 +52,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     display: "flex",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
   },
 }));
 
-const CurrentPrograms = ({ currentPrograms }) => {
+const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
   const classes = useStyles();
 
   return (
@@ -76,9 +76,16 @@ const CurrentPrograms = ({ currentPrograms }) => {
         </div>
         <br />
         <br />
-        <Grid container className={classes.itemGridContainer} spacing={2}>
+        <Grid container spacing={2} justify="center" alignItems="stretch">
           {currentPrograms.map((prog) => (
-            <Grid item lg={2} md={3} key={prog.id}>
+            <Grid
+              item
+              lg={filtersOpen ? 3 : 2}
+              md={filtersOpen ? 4 : 3}
+              sm={filtersOpen ? 6 : 4}
+              xs={filtersOpen ? 12 : 6}
+              key={prog.id}
+            >
               <Paper className={classes.singleItem}>
                 <Link to={`/program/${prog.id}#details`}>
                   <Tooltip title="Program Details" placement="top">
@@ -98,7 +105,9 @@ const CurrentPrograms = ({ currentPrograms }) => {
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    {`Budget: ${formatMoney(Math.floor(Math.random()*1000000 + 1000000))}`}
+                    {`Budget: ${formatMoney(
+                      Math.floor(Math.random() * 1000000 + 1000000)
+                    )}`}
                   </Typography>
                 </div>
                 <div className={classes.itemControl}>
@@ -131,6 +140,7 @@ const CurrentPrograms = ({ currentPrograms }) => {
 
 CurrentPrograms.propTypes = {
   currentPrograms: PropTypes.array.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default CurrentPrograms;
