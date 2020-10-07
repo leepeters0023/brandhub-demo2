@@ -23,17 +23,27 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/PORollup"
+            to="/purchasing/poRollup"
           >
             <ListItemText primary="Create PO" />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/purchasing/poHistory#current"
+          >
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
               primary="* Current POs"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/purchasing/poHistory#all"
+          >
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
               primary="* PO History"
@@ -46,58 +56,63 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
-              primary="Bids:"
+              primary="RFQs:"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/purchasing/bidRollup">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/purchasing/rfqRollup"
+          >
+            <ListItemText primary="Create RFQ" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/purchasing/rfqHistory#current"
+          >
             <ListItemText
-              primary="Create Bid"
+              primary="Current RFQ"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/purchasing/rfqHistory#all"
+          >
             <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Current Bids"
-            />
-          </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
-            <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Bid History"
+              primary="RFQ History"
             />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-      <List className={classes.navList}>
+        <List className={classes.navList}>
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
               primary="Compliance:"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem button onClick={handleDrawerClose} component={Link} to="/compliance/items">
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Dashboard"
+              primary="* Item Compliance"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem button onClick={handleDrawerClose} component={Link} to="/compliance/rules">
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Compliance View"
-            />
-          </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
-            <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Compliance View"
+              primary="* Rules"
             />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-      <List className={classes.navList}>
+        <List className={classes.navList}>
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}

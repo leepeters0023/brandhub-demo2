@@ -55,6 +55,7 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     dispatch(setFilterType({ type: "item" }));
+    handleFilterDrawer(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

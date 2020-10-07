@@ -26,7 +26,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { currentPOItems } from "../assets/mockdata/poItems";
+import { currentBidItems } from "../assets/mockdata/poItems";
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
+const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -75,7 +75,7 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,7 +90,7 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Purchase Order Rollup</Typography>
+          <Typography className={classes.titleText}>RFQ Rollup</Typography>
           <div
             style={{
               display: "flex",
@@ -104,12 +104,12 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
               color="secondary"
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
-              onClick={()=>{
-                //TODO create po function
-                navigate("/purchasing/purchaseOrder")
+              onClick={() => {
+                //TODO create bid function
+                navigate("/purchasing/rfq#new");
               }}
             >
-              CREATE PO
+              CREATE BID
             </Button>
             <Tooltip title="Print Purchase Order Items">
               <IconButton>
@@ -141,7 +141,7 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
         </div>
         <br />
         <ItemRollupTable
-          items={currentPOItems}
+          items={currentBidItems}
           isItemsLoading={false}
           handleSort={handleSort}
           // scrollRef={scrollRef}
@@ -160,9 +160,9 @@ const PORollup = ({ handleFilterDrawer, filtersOpen }) => {
   );
 };
 
-PORollup.propTypes = {
+BidRollup.propTypes = {
   handleFilterDrawer: PropTypes.func.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };
 
-export default PORollup;
+export default BidRollup;
