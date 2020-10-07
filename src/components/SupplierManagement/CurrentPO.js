@@ -164,7 +164,10 @@ const CurrentPO = () => {
         className={classes.tableContainer}
         style={{ width: "75%", minWidth: "1000px" }}
       >
-        <Typography className={classes.titleText} style={{marginLeft: "20px"}}>
+        <Typography
+          className={classes.titleText}
+          style={{ marginLeft: "20px" }}
+        >
           Purchase Order Items:
         </Typography>
         <br />
@@ -234,12 +237,36 @@ const CurrentPO = () => {
                 </TableCell>
               </TableRow>
             ))}
+            <TableRow>
+              <TableCell colSpan={8} className={classes.headerText}>
+                Set Up Fee:
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className={classes.headerText}>Description:</TableCell>
+              <TableCell colSpan={4}>
+                <TextField variant="outlined" size="small" fullWidth />
+              </TableCell>
+              <TableCell className={classes.headerText} align="right">
+                Cost:
+              </TableCell>
+              <TableCell colSpan={2}>
+                <TextField variant="outlined" size="small" fullWidth />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
       <br />
       <br />
+      <div style={{width: "75%", minWidth: "1000px", display: "flex", justifyContent: "flex-end"}}>
+        <Typography className={classes.titleText} style={{marginRight: "20px"}}>
+          Total: $25,000.00
+        </Typography>
+      </div>
       <br />
+      <br />
+      {/* This will be mapped over all shipping locations */}
       <Grid
         container
         spacing={5}

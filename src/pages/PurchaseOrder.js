@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-
-import PrintIcon from "@material-ui/icons/Print";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -37,19 +34,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           <Typography className={classes.titleText}>
             Purchase Order #110012
           </Typography>
-          <div
-            style={{
-              display: "flex",
-              width: "250px",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Tooltip title="Print Purchase Order">
-              <IconButton>
-                <PrintIcon color="secondary" />
-              </IconButton>
-            </Tooltip>
-          </div>
         </div>
         <br />
         <div
@@ -81,9 +65,15 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </Button>
           </div>
         </div>
+        <br />
+        <br />
       </Container>
     </>
   );
+};
+
+PurchaseOrder.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
 };
 
 export default PurchaseOrder;

@@ -140,7 +140,7 @@ const programsSlice = createSlice({
         id: item.id,
         itemNumber: item["item-number"],
         brand: item.brand.name,
-        itemType: item.name,
+        itemType: item.type,
         price: item.cost,
         qty: `${item["qty-per-pack"]} / pack`,
         imgUrl: item["img-url"],
