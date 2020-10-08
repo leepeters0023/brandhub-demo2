@@ -55,17 +55,31 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
+      <List className={classes.navList}>
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
-              primary="PDF Creation:"
+              primary="Compliance:"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/items"
+          >
             <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Current PDF"
+              primary="Item Compliance"
+            />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/rules"
+          >
+            <ListItemText
+              primary="Rules"
             />
           </ListItem>
         </List>
