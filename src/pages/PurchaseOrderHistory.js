@@ -60,7 +60,7 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "purchaseOrderHistory" }));
+    dispatch(setFilterType({ type: "history-po" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,

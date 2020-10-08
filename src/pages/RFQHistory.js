@@ -60,7 +60,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "rfqHistory" }));
+    dispatch(setFilterType({ type: "history-rfq" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,

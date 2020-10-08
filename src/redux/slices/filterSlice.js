@@ -9,10 +9,14 @@ let initialState = {
   itemType: [],
   month: [],
   orderType: null,
+  poNum: null,
   program: null,
   rfqNum: null,
+  ruleType: [],
   sequenceNum: null,
   status: null,
+  supplier: [],
+  tag: null,
   user: null,
   sortOrder: null,
   sortOrderBy: null,
@@ -42,10 +46,14 @@ const filterSlice = createSlice({
       state.itemType = [];
       state.month = [];
       state.orderType = null;
+      state.poNum = null;
       state.program = null;
       state.sequenceNum = null;
       state.rfqNum = null;
+      state.ruleType = [];
       state.status = null;
+      state.supplier = [];
+      state.tag = null;
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -79,10 +87,14 @@ const filterSlice = createSlice({
       state.itemType = [];
       state.month = [];
       state.orderType = null;
+      state.poNum = null;
       state.program = null;
       state.sequenceNum = null;
+      state.supplier = [];
       state.rfqNum = null;
+      state.ruleType = [];
       state.status = null;
+      state.tag = null;
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -96,7 +108,7 @@ const filterSlice = createSlice({
       if (filterType === "item") {
         chippable = ["bu", "brand", "itemType"];
       }
-      if (filterType === "history") {
+      if (filterType.includes("history")) {
         chippable = [
           "fromDate",
           "toDate",
@@ -109,6 +121,8 @@ const filterSlice = createSlice({
           "sequenceNum",
           "status",
           "user",
+          "rfqNum",
+          "poNum"
         ];
       }
       if (filterType === "program") {
@@ -117,11 +131,14 @@ const filterSlice = createSlice({
       if (filterType === "itemRollup") {
         chippable = ["brand", "program", "itemType", "sequenceNum", "orderType"];
       }
+      if (filterType.includes("compliance")) {
+        chippable = ["brand", "program", "itemyType", "tag", "ruleType", "sequenceNum", "status"]
+      }
       let filters = [];
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (filter === "bu" || filter === "itemType" || filter === "month") {
+          if (filter === "bu" || filter === "itemType" || filter === "month" || filter === "ruleType" || filter === "supplier") {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );
