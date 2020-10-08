@@ -88,7 +88,7 @@ const OrderItemTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Qty / Pack
               </TableCell>
-              {type === "inStock" && (
+              {(type === "inStock") && (
                 <TableCell className={classes.headerText} align="left">
                   Stock
                 </TableCell>
@@ -131,7 +131,9 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
-                {type === "inStock" && <TableCell>{row.stock}</TableCell>}
+                {(type === "inStock") && (
+                  <TableCell>{row.stock}</TableCell>
+                )}
                 <TableCell>{`${formatMoney(row.price)}`}</TableCell>
                 <TableCell align="center">
                   <div className={classes.tableButtonWrapper}>
@@ -148,9 +150,7 @@ const OrderItemTableView = (props) => {
                         style={{ margin: "5px 2.5px" }}
                         value=""
                         onClick={(evt) => {
-                          handleAddItem(
-                            row,
-                          );
+                          handleAddItem(row);
                         }}
                       >
                         <AddBoxIcon />
