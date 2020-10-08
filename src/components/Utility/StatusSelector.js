@@ -14,12 +14,30 @@ const StatusSelector = ({
   classes,
   filterType,
 }) => {
-  const statusList = [
+  const historyStatusList = [
     { status: "inactive", label: "Not Started" },
     { status: "in-progress", label: "In Progress" },
     { status: "submitted", label: "Submitted" },
     { status: "all", label: "All Orders" },
   ];
+  const complianceStatusList = [
+    { status: "approved", label: "Approved" },
+    { status: "denied", label: "Denied" },
+    { status: "pending", label: "Pending" },
+    { status: "all", label: "All Status" },
+  ];
+  const rfqStatusList = [
+    { status: "awarded", label: "Awarded" },
+    { status: "ready", label: "Ready for Review" },
+    { status: "pending", label: "Waiting for Resp."},
+    { status: "all", label: "All Status"}
+  ]
+  const poStatusList = [
+    { status: "in-progress", label: "In Progress" },
+    { status: "complete", label: "Complete" },
+    { status: "canceled", label: "Canceled" },
+    { status: "all", label: "All Status"}
+  ]
 
   const handleChangeSelect = (evt) => {
     setStatus(evt.target.value);
@@ -43,7 +61,22 @@ const StatusSelector = ({
           value={status}
           onChange={handleChangeSelect}
         >
-          {statusList.map((status, index) => (
+          {filterType === "history" && historyStatusList.map((status, index) => (
+            <MenuItem value={status.status} key={index}>
+              <Typography variant="body2">{status.label}</Typography>
+            </MenuItem>
+          ))}
+          {filterType === "compliance" && complianceStatusList.map((status, index) => (
+            <MenuItem value={status.status} key={index}>
+              <Typography variant="body2">{status.label}</Typography>
+            </MenuItem>
+          ))}
+          {filterType === "rfq" && rfqStatusList.map((status, index) => (
+            <MenuItem value={status.status} key={index}>
+              <Typography variant="body2">{status.label}</Typography>
+            </MenuItem>
+          ))}
+          {filterType === "po" && poStatusList.map((status, index) => (
             <MenuItem value={status.status} key={index}>
               <Typography variant="body2">{status.label}</Typography>
             </MenuItem>

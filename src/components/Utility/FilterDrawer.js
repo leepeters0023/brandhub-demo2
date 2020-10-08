@@ -21,6 +21,7 @@ import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
 import FiltersItemRollup from "./FiltersItemRollup";
+import FiltersCompliance from "./FiltersCompliance";
 
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -31,7 +32,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import { itemTypes, units } from "../../utility/constants";
+import { itemTypes, units, ruleTypes, suppliers } from "../../utility/constants";
 
 const focusMonths = [
   "January",
@@ -79,9 +80,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const handleFilters = useCallback(
     (value, type, filterType) => {
+      console.log(filterType)
       if (
         type === "program" ||
         type === "sequenceNum" ||
+        type === "rfqNum" ||
+        type === "poNum" ||
+        type === "tag" ||
+        type === "ruleType" ||
         type === "status" ||
         type === "bu" ||
         type === "itemType" ||
@@ -89,7 +95,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "sortProgramsBy"
       ) {
         dispatch(updateSingleFilter({ filter: type, value: value }));
-        if (filterType !== "history" && filterType !== "itemRollup") {
+        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (type === "fromDate" || type === "toDate") {
@@ -99,7 +105,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: format(value, "MM/dd/yyyy"),
           })
         );
-        if (filterType !== "history" && filterType !== "itemRollup") {
+        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (
@@ -113,7 +119,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: value ? { id: value.id, name: value.name } : null,
           })
         );
-        if (filterType !== "history" && filterType !== "itemRollup") {
+        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
           dispatch(setChips({ filterType: filterType }));
         }
       }
@@ -130,15 +136,27 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     value: program,
     bind: bindProgram,
     reset: resetProgram,
-  } = useDetailedInput("", handleFilters, "program");
+  } = useDetailedInput("", handleFilters, "program", filterType);
+  const {
+    value: poNum,
+    bind: bindPoNum,
+    reset: resetPoNum,
+  } = useDetailedInput("", handleFilters, "poNum", filterType)
+  const {
+    value: rfqNum,
+    bind: bindRfqNum,
+    reset: resetRfqNum,
+  } = useDetailedInput("", handleFilters, "rfqNum", filterType)
 
   const resetAllFilters = useCallback(() => {
     setReset(true);
     resetSequenceNum();
     resetProgram();
+    resetPoNum();
+    resetRfqNum();
     dispatch(clearBrands());
     dispatch(resetFilters());
-    //TODO handle po fetch here as well
+    //TODO handle po, compliance (rules / items), rfq fetch here as well
     if (defaultFilters) {
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
@@ -155,12 +173,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch,
     resetProgram,
     resetSequenceNum,
+    resetPoNum,
+    resetRfqNum,
     setReset,
     defaultFilters,
     filterType,
   ]);
 
-  //TODO write PO search when available
+  //TODO write PO, rfq, compliance (rules / items), items search when available
 
   const handleOrderHistoryFetch = () => {
     dispatch(setChips({ filterType: "history" }));
@@ -180,7 +200,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   useEffect(() => {
     if (sorted) {
-      //TODO handle po sorting here as well
+      //TODO handle po, rfq, compliance (rules / items) sorting here as well
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(allFilters));
       }
@@ -245,12 +265,37 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindSequenceNum={bindSequenceNum}
               program={program}
               bindProgram={bindProgram}
+              rfqNum={rfqNum}
+              bindRfqNum={bindRfqNum}
+              poNum={poNum}
+              bindPoNum={bindPoNum}
+              itemTypes={itemTypes}
+              suppliers={suppliers}
               handleSearch={
                 filterType.includes("orders")
                   ? handleOrderHistoryFetch
                   : handleOrderSetFetch
               }
               historyType={filterType.split("-")[1]}
+            />
+          )}
+          {filterType && filterType.includes("compliance") && (
+            <FiltersCompliance
+              reset={reset}
+              setReset={setReset}
+              handleFilters={handleFilters}
+              classes={classes}
+              sequenceNum={sequenceNum}
+              bindSequenceNum={bindSequenceNum}
+              program={program}
+              bindProgram={bindProgram}
+              itemTypes={itemTypes}
+              ruleTypes={ruleTypes}
+              handleSearch={
+                // TODO add search for po when api is there
+                () => console.log("Searching!")
+              }
+              complianceType={filterType.split("-")[1]}
             />
           )}
           {filterType === "program" && (

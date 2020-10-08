@@ -48,6 +48,19 @@ export const itemTypes = [
   "Winemaker Note/Tasting Card",
 ];
 
+export const ruleTypes = [
+  "Prior Approval",
+  "Item Type",
+  "Material",
+  "Pricing"
+]
+
+export const suppliers = [
+  "Sterling",
+  "Imperial",
+  "Curtis",
+]
+
 export const brands = [
   "Abandon",
   "Alamos",
