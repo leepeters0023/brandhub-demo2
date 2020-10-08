@@ -84,49 +84,21 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
-              primary="Compliance:"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/items"
-          >
-            <ListItemText
-              primary="Item Compliance"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/rules"
-          >
-            <ListItemText
-              primary="Rules"
-            />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerText }}
               primary="Budgets:"
             />
           </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="/">
-            <ListItemText
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Budget View"
-            />
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/budgets/ytod"
+          >
+            <ListItemText primary="Budget vs. Spend (YtoD)" />
           </ListItem>
           <ListItem button onClick={handleDrawerClose} component={Link} to="/">
             <ListItemText
               primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-              primary="* Budget View"
+              primary="* Spend Report"
             />
           </ListItem>
           <ListItem button onClick={handleDrawerClose} component={Link} to="/">
@@ -137,6 +109,7 @@ const DrawerFulfillmentNav = ({ handleDrawerClose, classes }) => {
           </ListItem>
         </List>
       </Grid>
+      <Grid item sm={3} xs={12}></Grid>
     </Grid>
   );
 };

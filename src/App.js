@@ -23,6 +23,7 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
+import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceItems from "./pages/ComplianceItems";
 import ComplianceRules from "./pages/ComplianceRules";
 import Coupons from "./pages/Coupons";
@@ -397,6 +398,16 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
+            ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <BudgetVsSpend
+              path="/budgets/ytod"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/budgets/ytod",
             ["field2", "super"],
             role
           )}

@@ -177,6 +177,37 @@ const generateComplianceItems = (dataPoints) => {
   return data;
 };
 
+const generateYearToDateBudgets = (dataPoints) => {
+  let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"]
+  let brands = ["Apothic", "Orin Swift", "Barefoot", "E & J", "New Amsterdam", "High Noon", "La Marca"];
+  let territories = ["Western", "Southern", "North East", "Walmart", "Kroger"]
+  let data = []
+
+  for (let i = 0; i < dataPoints; i ++) {
+    let user = people[Math.floor(Math.random()*people.length)];
+    let brand = brands[Math.floor(Math.random()*brands.length)];
+    let territory = territories[Math.floor(Math.random()*territories.length)]
+    let budget = Math.floor(Math.random() * 1000000 + 1000000)
+    let onHold = Math.floor(budget * ((Math.floor(Math.random() * 10 + 5)) / 100))
+    let committed = Math.floor(budget * ((Math.floor(Math.random() * 15 + 5)) / 100))
+    let spent = Math.floor(budget * ((Math.floor(Math.random() * 20 + 5)) / 100))
+    let remaining = budget - committed - spent;
+
+    data.push({
+      user: user,
+      brand: brand,
+      territory: territory,
+      budget: budget,
+      onHold: onHold,
+      committed: committed,
+      spent: spent,
+      remaining: remaining
+    })
+  }
+
+  return data;
+}
+
 export const currentPOItems = generatePOItems(20);
 export const currentBidItems = generatePOItems(20);
 export const singlePO = generatePOItems(3);
@@ -187,3 +218,4 @@ export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
 export const rules = generateComplianceRules(20);
 export const complianceItems = generateComplianceItems(20);
+export const yearToDateBudgets = generateYearToDateBudgets(20);
