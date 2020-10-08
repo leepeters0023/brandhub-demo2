@@ -335,7 +335,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {(orderStatus === "approved" || orderStatus === "submitted") &&
-        currentUserRole === "field1" ? (
+        (currentUserRole === "field1" ||
+          !window.location.hash.includes("approval")) ? (
           <OrderSetOverview />
         ) : (
           <OrderSetTable
@@ -359,7 +360,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         {((orderStatus !== "submitted" &&
           orderStatus !== "approved" &&
           currentUserRole === "field1") ||
-          currentUserRole !== "field1") && (
+          (currentUserRole !== "field1" &&
+            window.location.hash.includes("approval")) ||
+          (currentUserRole !== "field1" &&
+            orderStatus !== "submitted" &&
+            orderStatus !== "approved" &&
+            !window.location.hash.includes("approval"))) && (
           <>
             <Grid container spacing={5}>
               <Grid item md={7} xs={12}>
@@ -450,7 +456,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           <br />
           <div className={classes.orderControl}>
             {((orderStatus === "in-progress" && currentUserRole === "field1") ||
-              currentUserRole !== "field1") && (
+              (currentUserRole !== "field1" &&
+                window.location.hash.includes("approval"))) && (
               <Button
                 className={classes.largeButton}
                 color="secondary"

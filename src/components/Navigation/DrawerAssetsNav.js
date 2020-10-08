@@ -22,7 +22,7 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items#inStock"
+            to="/items/inStock"
           >
             <ListItemText primary="In-Stock" />
           </ListItem>
@@ -30,7 +30,7 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items#onDemand"
+            to="/items/onDemand"
           >
             <ListItemText primary="On-Demand" />
           </ListItem>

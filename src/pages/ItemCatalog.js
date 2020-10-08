@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalog = ({ userType, handleFilterDrawer, filtersOpen }) => {
+const ItemCatalog = ({ catalogType, userType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
@@ -123,6 +123,7 @@ const ItemCatalog = ({ userType, handleFilterDrawer, filtersOpen }) => {
               currentView={currentView}
               handlePreview={handlePreview}
               items={currentItems}
+              catalogType={catalogType}
             />
           )}
         </>

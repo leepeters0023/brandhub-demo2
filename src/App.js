@@ -371,7 +371,7 @@ const App = () => {
           )}
           {handleAuth(
             <ItemCatalog
-              path="/items"
+              path="/items/:catalogType"
               userType={role}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}

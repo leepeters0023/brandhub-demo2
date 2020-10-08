@@ -11,12 +11,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { makeStyles } from "@material-ui/core/styles";
 
-
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalogTable = ({ currentItems, handlePreview }) => {
+const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
   const classes = useStyles();
 
   return (
@@ -40,6 +39,11 @@ const ItemCatalogTable = ({ currentItems, handlePreview }) => {
               <TableCell className={classes.headerText} align="left">
                 Qty / Pack
               </TableCell>
+              {catalogType === "inStock" && (
+                <TableCell className={classes.headerText} align="left">
+                  Stock
+                </TableCell>
+              )}
               <TableCell className={classes.headerText} align="left">
                 Cost
               </TableCell>
@@ -61,6 +65,9 @@ const ItemCatalogTable = ({ currentItems, handlePreview }) => {
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.brand}</TableCell>
                 <TableCell align="left">{item.qty}</TableCell>
+                {catalogType === "inStock" && (
+                  <TableCell>{item.stock}</TableCell>
+                )}
                 <TableCell>{`${formatMoney(item.price)}`}</TableCell>
               </TableRow>
             ))}

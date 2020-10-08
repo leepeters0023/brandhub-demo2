@@ -15,7 +15,7 @@ import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, items } = props;
+  const { type, currentView, handlePreview, items, catalogType } = props;
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
@@ -45,12 +45,14 @@ const OrderItemViewControl = (props) => {
         <ItemCatalogTable
           currentItems={items}
           handlePreview={handlePreview}
+          catalogType={catalogType}
         />
       )}
       {currentView === "grid" && type === "catalog" && (
         <ItemCatalogGrid
           currentItems={items}
           handlePreview={handlePreview}
+          catalogType={catalogType}
         />
       )}
       {currentView === "list" && type !== "catalog" && (

@@ -54,6 +54,7 @@ const OrderItemGridView = (props) => {
   const {
     currentItems,
     handlePreview,
+    catalogType
   } = props;
   const classes = useStyles();
 
@@ -88,6 +89,11 @@ const OrderItemGridView = (props) => {
               <Typography variant="body1" color="textSecondary">
                 {`#${item.itemNumber} | ${item.qty}`}
               </Typography>
+              {catalogType === "inStock" && (
+                <Typography variant="body1" color="textSecondary">
+                  {`Available: ${item.stock}`}
+                </Typography>
+              )}
               <br />
               <Typography className={classes.headerText}>
                 {`${formatMoney(item.price)}`}

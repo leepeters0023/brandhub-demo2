@@ -131,7 +131,6 @@ const generateComplianceRules = (dataPoints) => {
     let ruleType = ruleTypes[Math.floor(Math.random() * ruleTypes.length)];
     let ruleTags = [];
     for (let j = 0; j < ranNum; j++) {
-      console.log("generating")
       ruleTags.push(tags[Math.floor(Math.random() * tags.length)]);
     }
     let description =
