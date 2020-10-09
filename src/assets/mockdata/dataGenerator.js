@@ -190,8 +190,8 @@ const generateYearToDateBudgets = (dataPoints) => {
     let budget = Math.floor(Math.random() * 1000000 + 1000000)
     let onHold = Math.floor(budget * ((Math.floor(Math.random() * 10 + 5)) / 100))
     let committed = Math.floor(budget * ((Math.floor(Math.random() * 15 + 5)) / 100))
-    let spent = Math.floor(budget * ((Math.floor(Math.random() * 20 + 5)) / 100))
-    let remaining = budget - committed - spent;
+    let spent = Math.floor(budget * ((Math.floor(Math.random() * 60 + 5)) / 100))
+    let remaining = budget - committed - onHold - spent;
 
     data.push({
       user: user,

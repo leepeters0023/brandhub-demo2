@@ -8,6 +8,8 @@ import { startOrdSet } from "../../redux/slices/patchOrderSlice";
 
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
+import {roundUp} from "../../utility/utilityFunctions";
+
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
@@ -40,6 +42,7 @@ const MemoInputCell = React.memo(
         program,
         cellRef,
         handleKeyDown,
+        packSize
       },
       ref
     ) => {
@@ -143,7 +146,20 @@ const MemoInputCell = React.memo(
 
                     dispatch(patchItem(itemId, 0, orderNumber));
                   } else {
-                    dispatch(patchItem(itemId, evt.target.value, orderNumber));
+                    if (parseInt(evt.target.value)%packSize === 0) {
+                      dispatch(patchItem(itemId, evt.target.value, orderNumber));
+                    } else {
+                      let rounded = roundUp(parseInt(evt.target.value), packSize)
+                      dispatch(
+                        setGridItem({
+                          itemNumber: `${itemNumber}`,
+                          orderNumber: orderNumber,
+                          value: rounded
+                        })
+                      )
+                      dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
+                      dispatch(patchItem(itemId, rounded, orderNumber));
+                    }
                   }
                   setChange(false);
                   if (orderStatus === "inactive") {

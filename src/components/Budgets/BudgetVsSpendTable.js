@@ -19,9 +19,9 @@ const headCells = [
   { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: true },
   { id: "budget", disablePadding: false, label: "Budget", sort: false },
-  { id: "onHold", disablePadding: false, label: "On Hold", sort: false },
+  { id: "onHold", disablePadding: false, label: "Pending", sort: false },
   { id: "committed", disablePadding: false, label: "Committed", sort: false },
-  { id: "spent", disablePadding: false, label: "Spent", sort: false },
+  { id: "spent", disablePadding: false, label: "Paid", sort: false },
   { id: "remaining", disablePadding: false, label: "Remaining", sort: false },
 ];
 
@@ -149,6 +149,26 @@ const BudgetVsSpendTable = ({
                 </TableCell>
               </TableRow>
             )}
+            <TableRow>
+              <TableCell align="left" className={classes.headerText} colSpan={3}>
+                Totals:
+              </TableCell>
+              <TableCell align="left">
+                $155,000.00
+              </TableCell>
+              <TableCell align="left">
+              $155,000.00
+              </TableCell>
+              <TableCell align="left">
+              $155,000.00
+              </TableCell>
+              <TableCell align="left">
+              $155,000.00
+              </TableCell>
+              <TableCell align="left">
+              $155,000.00
+              </TableCell>
+            </TableRow>
             {!budgetsLoading &&
               budgets.length > 0 &&
               budgets.map((row, index) => (

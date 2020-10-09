@@ -234,6 +234,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         ? 1
         : 0;
     });
+    console.log(currentOrders.data.orders)
     let orders = currentOrders.data.orders.map((ord) => ({
       orderNumber: ord.id,
       distributorId: ord.distributor.id,
@@ -251,6 +252,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
           price: item.item.cost,
+          packSize: item.item["qty-per-pack"],
           estTotal: item.qty * item.item.cost,
           totalItems: item.qty,
         }))
