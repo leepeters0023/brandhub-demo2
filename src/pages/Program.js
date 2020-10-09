@@ -30,18 +30,6 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  orderGrid: {
-    display: "flex",
-    justifyContent: "space-around",
-  },
-  filterDiv: {
-    borderRight: "1px solid #4c4c4c",
-    paddingRight: "15px",
-    height: "100%",
-    [theme.breakpoints.down("sm")]: {
-      borderRight: "0px solid rgb(0,0,0,0)",
-    },
-  },
 }));
 
 const Program = ({ handleFiltersClosed, programId }) => {

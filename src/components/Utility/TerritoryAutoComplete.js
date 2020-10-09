@@ -17,7 +17,8 @@ const TerritoryAutoComplete = ({
   handleChange,
   reset,
   setReset,
-  filterType
+  filterType,
+  multiSelect = false,
 }) => {
   //const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ const TerritoryAutoComplete = ({
   return (
     <>
       <Autocomplete
+        multiple={multiSelect}
         fullWidth
         className={classes.queryField}
         id="territory-auto-complete"
@@ -55,7 +57,10 @@ const TerritoryAutoComplete = ({
         onClose={() => setOpen(false)}
         inputValue={territory}
         onInputChange={(_evt, value) => setTerritory(value)}
-        onChange={(_evt, value) => handleChange(value, "territory", filterType)}
+        onChange={(_evt, value) => {
+          console.log(value)
+          handleChange(value, "territory", filterType)}
+        }
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}

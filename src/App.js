@@ -43,6 +43,7 @@ import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
+import ProgramNew from "./pages/ProgramNew";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
@@ -184,6 +185,17 @@ const App = () => {
           {handleAuth(
             <Programs
               path="/programs"
+              userType={role}
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />,
+            "/programs",
+            ["field1", "field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <ProgramNew
+              path="/programs/new"
               userType={role}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}

@@ -131,6 +131,7 @@ const ItemPreviewModal = (props) => {
         onClose={handleModalClose}
         fullWidth
         maxWidth="lg"
+        style={{zIndex: "15000"}}
       >
         <DialogContent>
           <Grid container spacing={5} className={classes.dialogGrid}>
