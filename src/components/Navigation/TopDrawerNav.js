@@ -7,7 +7,7 @@ import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
 import DrawerAssetsNav from "./DrawerAssetsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
-import DrawerAdministrationNav from "./DrawerAdministrationNav";
+import DrawerPurchasingNav from "./DrawerPurchasingNav";
 
 import Drawer from "@material-ui/core/Drawer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -77,8 +77,8 @@ const useStyles = makeStyles((theme) => ({
   },
   navList: {
     paddingLeft: "20px",
-    marginTop: "-20px"
-  }
+    marginTop: "-20px",
+  },
 }));
 
 const TopDrawerNav = ({ handleLogout }) => {
@@ -174,20 +174,24 @@ const TopDrawerNav = ({ handleLogout }) => {
                 variant="h5"
                 className={clsx(classes.titleText, classes.navigationText, {
                   [classes.selectedNavigationText]:
-                    drawerContent === "administration",
+                    drawerContent === "purchasing",
                 })}
                 onMouseEnter={() => {
                   handleDrawerOpen();
-                  setDrawerContent("administration");
+                  setDrawerContent("purchasing");
                 }}
               >
-                Administration
+                Purchasing
               </Typography>
             )}
           </div>
           <div className={classes.navBreak}>
             {territories.length > 1 && <RegionSelector />}
-            <UserNav initials={initials} handleLogout={handleLogout} handleDrawerClose={handleDrawerClose}/>
+            <UserNav
+              initials={initials}
+              handleLogout={handleLogout}
+              handleDrawerClose={handleDrawerClose}
+            />
           </div>
         </div>
         <br />
@@ -207,8 +211,8 @@ const TopDrawerNav = ({ handleLogout }) => {
               role={role}
             />
           )}
-          {drawerContent === "administration" && (
-            <DrawerAdministrationNav
+          {drawerContent === "purchasing" && (
+            <DrawerPurchasingNav
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />
