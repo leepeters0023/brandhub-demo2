@@ -28,7 +28,10 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
                 Preview
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item Name
+                Program
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Item Type
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Item #
@@ -61,7 +64,8 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
                     onClick={() => handlePreview(item.itemNumber)}
                   />
                 </TableCell>
-                <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>
+                <TableCell align="left">{item.brand}</TableCell>
+                <TableCell align="left">{item.itemType}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.brand}</TableCell>
                 <TableCell align="left">{item.qty}</TableCell>
