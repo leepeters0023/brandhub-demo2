@@ -336,7 +336,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         {(orderStatus === "approved" || orderStatus === "submitted") &&
         (currentUserRole === "field1" ||
-          !window.location.hash.includes("approval")) ? (
+          (!window.location.hash.includes("approval") &&
+          !window.location.href.includes("rollup"))) ? (
           <OrderSetOverview />
         ) : (
           <OrderSetTable
@@ -457,7 +458,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           <div className={classes.orderControl}>
             {((orderStatus === "in-progress" && currentUserRole === "field1") ||
               (currentUserRole !== "field1" &&
-                window.location.hash.includes("approval"))) && (
+                window.location.hash.includes("approval")) ||
+              window.location.href.includes("rollup")) && (
               <Button
                 className={classes.largeButton}
                 color="secondary"

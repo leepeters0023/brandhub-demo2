@@ -17,23 +17,21 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "user", disablePadding: false, label: "User", sort: true },
+  { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "state", disablePadding: false, label: "State", sort: false },
   {
-    id: "totalItems",
+    id: "totalEstCost",
     disablePadding: false,
-    label: "Total Items",
+    label: "Est. Cost",
     sort: false,
   },
   {
-    id: "totalOrders",
+    id: "totalActCost",
     disablePadding: false,
-    label: "Total Orders",
+    label: "Act. Cost",
     sort: false,
   },
-  { id: "totalEstCost", disablePadding: false, label: "Est. Cost", sort: false},
-  { id: "totalActCost", disablePadding: false, label: "Act. Cost", sort: false},
   { id: "budget", disablePadding: false, label: "Rem. Budget", sort: false },
   {
     id: "orderDate",
@@ -42,7 +40,13 @@ const headCells = [
     sort: true,
   },
   { id: "dueDate", disablePadding: false, label: "Order Due", sort: true },
-  { id: "status", disablePadding: false, label: "Status", sort: false }
+  {
+    id: "inMarketDate",
+    disablePadding: false,
+    label: "In Market",
+    sort: true,
+  },
+  { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -185,19 +189,34 @@ const RollupOverViewTable = ({
                   key={row.id}
                   hover
                   className={classes.orderHistoryRow}
-                  onClick={()=>{navigate(`/rollup/detail/${row.id}#${row.user} - ${row.program}`)}}
+                  onClick={() => {
+                    navigate(
+                      `/rollup/detail/${row.id}#${row.user} - ${row.program}`
+                    );
+                  }}
                 >
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
-                  <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">{row.totalOrders}</TableCell>
-                  <TableCell align="left">{formatMoney(row.totalEstCost)}</TableCell>
+                  <TableCell align="left">
+                    {formatMoney(row.totalEstCost)}
+                  </TableCell>
                   <TableCell align="left">{row.totalActCost}</TableCell>
                   <TableCell align="left">{row.budget}</TableCell>
-                  <TableCell align="left">{row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : row.orderDate}</TableCell>
-                  <TableCell align="left">{format(new Date(row.dueDate), "MM/dd/yyyy")}</TableCell>
-                  <TableCell align="left">{statusConverter(row.status)}</TableCell>
+                  <TableCell align="left">
+                    {row.orderDate !== "---"
+                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      : row.orderDate}
+                  </TableCell>
+                  <TableCell align="left">
+                    {format(new Date(row.dueDate), "MM/dd/yyyy")}
+                  </TableCell>
+                  <TableCell align="left">
+                    {format(new Date(row.dueDate), "MM/dd/yyyy")}
+                  </TableCell>
+                  <TableCell align="left">
+                    {statusConverter(row.status)}
+                  </TableCell>
                 </TableRow>
               ))}
             {isRollupLoading && (

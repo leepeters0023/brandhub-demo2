@@ -78,7 +78,10 @@ const OrderItemTableView = (props) => {
                 Preview
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item Name
+                Program
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Item Type
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Item #
@@ -128,7 +131,8 @@ const OrderItemTableView = (props) => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="left">{`${row.brand} ${row.itemType}`}</TableCell>
+                <TableCell align="left">{row.brand}</TableCell>
+                <TableCell align="left">{row.itemType}</TableCell>
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
