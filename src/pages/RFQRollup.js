@@ -12,7 +12,7 @@ import {
   //setClear
 } from "../redux/slices/filterSlice";
 
-import FilterChipList from "../components/Utility/FilterChipList";
+import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
 
 import Typography from "@material-ui/core/Typography";

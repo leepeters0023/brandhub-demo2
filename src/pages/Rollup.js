@@ -20,7 +20,7 @@ import {
 
 import { formatMoney } from "../utility/utilityFunctions";
 
-import FilterChipList from "../components/Utility/FilterChipList";
+import FilterChipList from "../components/Filtering/FilterChipList";
 import RollupOverviewTable from "../components/OrderManagement/RollupOverviewTable";
 
 import Container from "@material-ui/core/Container";

@@ -192,50 +192,62 @@ export const others = ["Growth Engines", "Key Brands", "High Potential"];
 
 export const regions = [
   {
+    id: "1",
     code: "ALL",
     name: "National",
   },
   {
+    id: "2",
     code: "ATL",
     name: "Atlantic",
   },
   {
+    id: "3",
     code: "CAL",
     name: "California",
   },
   {
+    id: "4",
     code: "CEN",
     name: "Central",
   },
   {
+    id: "5",
     code: "CON",
     name: "Control",
   },
   {
+    id: "6",
     code: "EAS",
     name: "East",
   },
   {
+    id: "7",
     code: "MEG",
     name: "Mega",
   },
   {
+    id: "8",
     code: "MIW",
     name: "Midwest",
   },
   {
+    id: "9",
     code: "NOE",
     name: "Northeast",
   },
   {
+    id: "10",
     code: "SOE",
     name: "Southeast",
   },
   {
+    id: "11",
     code: "SOU",
     name: "Southern",
   },
   {
+    id: "12",
     code: "WES",
     name: "Western",
   },

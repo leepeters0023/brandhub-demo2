@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setClear, updateSingleFilter } from "../../redux/slices/filterSlice";
 
-import BrandAutoComplete from "./BrandAutoComplete";
+import BrandAutoComplete from "../Utility/BrandAutoComplete";
 
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";

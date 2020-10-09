@@ -7,7 +7,7 @@ import { fetchFilteredItems } from "../redux/slices/itemSlice";
 
 import { setFilterType } from "../redux/slices/filterSlice";
 
-import FilterChipList from "../components/Utility/FilterChipList";
+import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
