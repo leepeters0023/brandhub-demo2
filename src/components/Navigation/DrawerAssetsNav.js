@@ -48,6 +48,14 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
+            to="/programs/new"
+          >
+            <ListItemText primary="+ New Ad Hoc Program" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
             to="/programs"
           >
             <ListItemText primary="Pre-Order Programs" />

@@ -40,7 +40,7 @@ const DrawerOrdersNav = ({
             component={Link}
             to="/orders/items/inStock"
           >
-            <ListItemText primary="In-Stock Order" />
+            <ListItemText primary="+ New In-Stock Order" />
           </ListItem>
           <ListItem
             button
@@ -48,7 +48,7 @@ const DrawerOrdersNav = ({
             component={Link}
             to="/orders/items/onDemand"
           >
-            <ListItemText primary="On-Demand Order" />
+            <ListItemText primary="+ New On-Demand Order" />
           </ListItem>
           {role !== "field1" && (
             <ListItem
@@ -58,8 +58,7 @@ const DrawerOrdersNav = ({
               to="/coupons"
             >
               <ListItemText
-                primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-                primary="* Create Coupons"
+                primary="+ New Coupon"
               />
             </ListItem>
           )}
@@ -71,7 +70,7 @@ const DrawerOrdersNav = ({
           <ListItem>
             <ListItemText
               primaryTypographyProps={{ className: classes.headerText }}
-              primary="Open Orders:"
+              primary="Draft Orders:"
             />
           </ListItem>
           <ListItem
@@ -98,35 +97,19 @@ const DrawerOrdersNav = ({
           >
             <ListItemText primary="On-Demand" />
           </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerText }}
-              primary="Order History:"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/orders/history"
-          >
-            <ListItemText primary="By Order" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/orders/history"
-          >
-            <ListItemText
-              primary="* By Item"
-              primaryTypographyProps={{ style: { fontStyle: "italic" } }}
-            />
-          </ListItem>
+          {role !== "field1" && (
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/coupons"
+            >
+              <ListItemText
+                style={{fontStyle: "italic"}}
+                primary="* Coupon"
+              />
+            </ListItem>
+          )}
         </List>
       </Grid>
       {role !== "field1" && (
@@ -157,6 +140,43 @@ const DrawerOrdersNav = ({
           </List>
         </Grid>
       )}
+      <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
+        <List className={classes.navList}>
+          <ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerText }}
+              primary="Reporting:"
+            />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/orders/history"
+          >
+            <ListItemText primary="Order History" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/budgets/ytod"
+          >
+            <ListItemText primary="Budget vs. Spend (YtoD)" />
+          </ListItem>
+          <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/"
+            >
+              <ListItemText
+                style={{fontStyle: "italic"}}
+                primary="* Inventory"
+              />
+            </ListItem>
+        </List>
+      </Grid>
     </Grid>
   );
 };
