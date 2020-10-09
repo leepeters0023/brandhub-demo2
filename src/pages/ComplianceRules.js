@@ -11,7 +11,7 @@ import {
   //setClear
 } from "../redux/slices/filterSlice";
 
-import FilterChipList from "../components/Utility/FilterChipList";
+import FilterChipList from "../components/Filtering/FilterChipList";
 import ComplianceRulesTable from "../components/Compliance/ComplianceRulesTable";
 
 import Typography from "@material-ui/core/Typography";

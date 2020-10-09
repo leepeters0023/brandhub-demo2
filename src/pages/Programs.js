@@ -13,7 +13,7 @@ import {
 
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
 
-import FilterChipList from "../components/Utility/FilterChipList";
+import FilterChipList from "../components/Filtering/FilterChipList";
 
 import { useProgramSort } from "../hooks/UtilityHooks";
 

@@ -1,15 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchDistributors } from "../../api/distributorApi";
 
-/*
-* Data Format:
-distributors: {
-  isLoading: bool,
-  distributorList: array,
-  error: null || string
-}
-*/
-
 let initialState = {
   isLoading: false,
   distributorList: [],

@@ -17,11 +17,12 @@ import { clearBrands } from "../../redux/slices/brandSlice";
 
 import { useDetailedInput } from "../../hooks/UtilityHooks";
 
-import FiltersItems from "./FiltersItems";
+import FiltersItems from "../Utility/FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
 import FiltersItemRollup from "./FiltersItemRollup";
 import FiltersCompliance from "./FiltersCompliance";
+import FiltersBudget from "./FiltersBudget";
 
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
@@ -32,7 +33,12 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import { itemTypes, units, ruleTypes, suppliers } from "../../utility/constants";
+import {
+  itemTypes,
+  units,
+  ruleTypes,
+  suppliers,
+} from "../../utility/constants";
 
 const focusMonths = [
   "January",
@@ -80,7 +86,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const handleFilters = useCallback(
     (value, type, filterType) => {
-      console.log(filterType)
+      console.log(filterType);
       if (
         type === "program" ||
         type === "sequenceNum" ||
@@ -95,7 +101,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "sortProgramsBy"
       ) {
         dispatch(updateSingleFilter({ filter: type, value: value }));
-        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
+        if (
+          !filterType.includes("history") &&
+          filterType !== "itemRollup" &&
+          !filterType.includes("compliance") &&
+          !filterType.includes("budget")
+        ) {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (type === "fromDate" || type === "toDate") {
@@ -105,13 +116,19 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: format(value, "MM/dd/yyyy"),
           })
         );
-        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
+        if (
+          !filterType.includes("history") &&
+          filterType !== "itemRollup" &&
+          !filterType.includes("compliance") &&
+          !filterType.includes("budget")
+        ) {
           dispatch(setChips({ filterType: filterType }));
         }
       } else if (
         type === "distributor" ||
         type === "brand" ||
-        type === "user"
+        type === "user" ||
+        type === "territory"
       ) {
         dispatch(
           updateSingleFilter({
@@ -119,7 +136,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             value: value ? { id: value.id, name: value.name } : null,
           })
         );
-        if (!filterType.includes("history") && filterType !== "itemRollup" && !filterType.includes("compliance")) {
+        if (
+          !filterType.includes("history") &&
+          filterType !== "itemRollup" &&
+          !filterType.includes("compliance") &&
+          !filterType.includes("budget")
+        ) {
           dispatch(setChips({ filterType: filterType }));
         }
       }
@@ -137,16 +159,17 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     bind: bindProgram,
     reset: resetProgram,
   } = useDetailedInput("", handleFilters, "program", filterType);
-  const {
-    value: poNum,
-    bind: bindPoNum,
-    reset: resetPoNum,
-  } = useDetailedInput("", handleFilters, "poNum", filterType)
+  const { value: poNum, bind: bindPoNum, reset: resetPoNum } = useDetailedInput(
+    "",
+    handleFilters,
+    "poNum",
+    filterType
+  );
   const {
     value: rfqNum,
     bind: bindRfqNum,
     reset: resetRfqNum,
-  } = useDetailedInput("", handleFilters, "rfqNum", filterType)
+  } = useDetailedInput("", handleFilters, "rfqNum", filterType);
 
   const resetAllFilters = useCallback(() => {
     setReset(true);
@@ -180,7 +203,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     filterType,
   ]);
 
-  //TODO write PO, rfq, compliance (rules / items), items search when available
+  //TODO write PO, rfq, compliance (rules / items), items, budget search when available
 
   const handleOrderHistoryFetch = () => {
     dispatch(setChips({ filterType: "history" }));
@@ -200,7 +223,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   useEffect(() => {
     if (sorted) {
-      //TODO handle po, rfq, compliance (rules / items) sorting here as well
+      //TODO handle po, rfq, compliance (rules / items), budget sorting here as well
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(allFilters));
       }
@@ -323,6 +346,19 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
                 // TODO add search for po when api is there
                 () => console.log("Searching!")
               }
+            />
+          )}
+          {filterType && filterType.includes("budget") && (
+            <FiltersBudget
+              reset={reset}
+              setReset={setReset}
+              handleFilters={handleFilters}
+              classes={classes}
+              handleSearch={
+                // TODO add search for po when api is there
+                () => console.log("Searching!")
+              }
+              budgetType={filterType.split("-")[1]}
             />
           )}
         </div>

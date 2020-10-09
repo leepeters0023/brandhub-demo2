@@ -17,6 +17,7 @@ let initialState = {
   status: null,
   supplier: [],
   tag: null,
+  territory: null,
   user: null,
   sortOrder: null,
   sortOrderBy: null,
@@ -54,6 +55,7 @@ const filterSlice = createSlice({
       state.status = null;
       state.supplier = [];
       state.tag = null;
+      state.territory = null;
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -95,6 +97,7 @@ const filterSlice = createSlice({
       state.ruleType = [];
       state.status = null;
       state.tag = null;
+      state.territory = null;
       state.user = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -133,6 +136,9 @@ const filterSlice = createSlice({
       }
       if (filterType.includes("compliance")) {
         chippable = ["brand", "program", "itemyType", "tag", "ruleType", "sequenceNum", "status"]
+      }
+      if (filterType.includes("budget")) {
+        chippable = ["brand", "user", "territory"]
       }
       let filters = [];
       let stateObject = { ...state };
