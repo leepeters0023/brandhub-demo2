@@ -52,6 +52,7 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
         onClose={() => handleClose(false)}
         fullWidth
         maxWidth="md"
+        style={{zIndex: "15000"}}
       >
         <DialogContent>
           <IconButton className={classes.closeButton} onClick={handleClose}>

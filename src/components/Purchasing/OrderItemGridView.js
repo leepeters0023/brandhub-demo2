@@ -15,6 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -151,22 +152,35 @@ const OrderItemGridView = (props) => {
               </Typography>
               <br />
               <div className={classes.itemControl}>
-                <IconButton id={`${item.itemNumber}`}>
-                  <PictureAsPdfIcon />
-                </IconButton>
+                {type !== "new-program" && type !== "new-program-current" && (
+                  <IconButton id={`${item.itemNumber}`}>
+                    <PictureAsPdfIcon />
+                  </IconButton>
+                )}
 
-                {type !== "program" && (
+                {type !== "program" && type !== "new-program-current" && (
                   <>
                     <IconButton
                       id={`${item.id}`}
                       onClick={() => {
-                        handleAddItem(
-                          item,
-                        );
+                        handleAddItem(item);
                       }}
                     >
                       <AddBoxIcon />
                     </IconButton>
+                  </>
+                )}
+                {type === "new-program-current" && (
+                  <>
+                    <IconButton
+                    id={`${item.id}`}
+                    onClick={() => {
+                      handleAddItem(item, true);
+                    }}
+                    >
+                      <CancelIcon />
+                    </IconButton>
+
                   </>
                 )}
               </div>

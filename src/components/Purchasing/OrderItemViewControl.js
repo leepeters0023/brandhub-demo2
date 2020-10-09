@@ -15,7 +15,7 @@ import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, items, catalogType } = props;
+  const { type, currentView, handlePreview, items, catalogType, secondaryAddFunction } = props;
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
@@ -23,20 +23,24 @@ const OrderItemViewControl = (props) => {
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
 
   const handleAddItem = useCallback(
-    (item) => {
+    (item, remove) => {
       let newItem = {
         brand: item.brand,
         itemType: item.itemType,
       };
 
-      setCurrentItemAdded(newItem);
-      if (!currentOrderId) {
-        dispatch(createNewOrder(type, item.id));
+      if (secondaryAddFunction) {
+        secondaryAddFunction(item, remove)
       } else {
-        dispatch(addNewOrderItem(currentOrderId, item.id, type))
+        setCurrentItemAdded(newItem);
+        if (!currentOrderId) {
+          dispatch(createNewOrder(type, item.id));
+        } else {
+          dispatch(addNewOrderItem(currentOrderId, item.id, type))
+        }
       }
     },
-    [dispatch, setCurrentItemAdded, currentOrderId, type]
+    [dispatch, secondaryAddFunction, setCurrentItemAdded, currentOrderId, type]
   );
 
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setClear } from "../../redux/slices/filterSlice";
 
@@ -23,18 +23,22 @@ const FiltersBudget = ({
 }) => {
   const dispatch = useDispatch();
 
+  const currentUserRole = useSelector((state) => state.user.role);
+
   return (
     <>
       <List>
-        <ListItem>
-          <UserAutoComplete
-            classes={classes}
-            handleChange={handleFilters}
-            reset={reset}
-            setReset={setReset}
-            filterType={"budget"}
-          />
-        </ListItem>
+        {currentUserRole !== "field1" && (
+          <ListItem>
+            <UserAutoComplete
+              classes={classes}
+              handleChange={handleFilters}
+              reset={reset}
+              setReset={setReset}
+              filterType={"budget"}
+            />
+          </ListItem>
+        )}
         <ListItem>
           <TerritoryAutoComplete
             classes={classes}

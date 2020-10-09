@@ -17,6 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -88,7 +89,7 @@ const OrderItemTableView = (props) => {
               <TableCell className={classes.headerText} align="left">
                 Qty / Pack
               </TableCell>
-              {(type === "inStock") && (
+              {type === "inStock" && (
                 <TableCell className={classes.headerText} align="left">
                   Stock
                 </TableCell>
@@ -131,20 +132,20 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.qty}</TableCell>
-                {(type === "inStock") && (
-                  <TableCell>{row.stock}</TableCell>
-                )}
+                {type === "inStock" && <TableCell>{row.stock}</TableCell>}
                 <TableCell>{`${formatMoney(row.price)}`}</TableCell>
                 <TableCell align="center">
                   <div className={classes.tableButtonWrapper}>
-                    <IconButton
-                      id={`${row.id}`}
-                      style={{ margin: "5px 2.5px" }}
-                    >
-                      <PictureAsPdfIcon />
-                    </IconButton>
+                    {type !== "new-program" && type !== "new-program-current" && (
+                      <IconButton
+                        id={`${row.id}`}
+                        style={{ margin: "5px 2.5px" }}
+                      >
+                        <PictureAsPdfIcon />
+                      </IconButton>
+                    )}
 
-                    {type !== "program" && (
+                    {type !== "program" && type !== "new-program-current" && (
                       <IconButton
                         id={`${row.id}`}
                         style={{ margin: "5px 2.5px" }}
@@ -155,6 +156,19 @@ const OrderItemTableView = (props) => {
                       >
                         <AddBoxIcon />
                       </IconButton>
+                    )}
+                    {type === "new-program-current" && (
+                      <>
+                        <IconButton
+                          id={`${row.id}`}
+                          style={{ margin: "5px 2.5px" }}
+                          onClick={() => {
+                            handleAddItem(row, true);
+                          }}
+                        >
+                          <CancelIcon />
+                        </IconButton>
+                      </>
                     )}
                   </div>
                 </TableCell>
