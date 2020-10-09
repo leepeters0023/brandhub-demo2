@@ -68,7 +68,7 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const [endDate, setEndDate] = useCallback(
     useState(format(addDays(new Date(), 30), "MM/dd/yyyy"))
   );
-  const { value: name, bind: bindName } = useInput("");
+  const { value: name, bind: bindName } = useCallback(useInput(""));
 
   const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
   const currentUserRole = useSelector((state) => state.user.role);

@@ -100,3 +100,15 @@ export const formatMoney = (value) => {
     return "$" + moneyAr[0] + "." + moneyAr[1];
   }
 };
+
+export const roundUp = (value, rounder) => {
+  if (value % rounder === 0) {
+    return value;
+  }
+  let multiplier = Math.floor(value / rounder);
+  if (multiplier === 0) {
+    return rounder;
+  }
+  let roundedUp = multiplier * rounder + rounder;
+  return roundedUp;
+};

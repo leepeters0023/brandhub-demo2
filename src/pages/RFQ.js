@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
+import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
 
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -59,35 +53,8 @@ const BidCreation = ({ handleFiltersClosed }) => {
       * Loading state (<Loading /> component)
       * Editable fields will update bid state
   */
-
-  const [checked, setChecked] = useState({
-    imperial: false,
-    sterling: false,
-    curtis: false,
-  });
-
-  const handleSupplierCheck = (event) => {
-    if (event.target.name !== "all") {
-      setChecked({ ...checked, [event.target.name]: event.target.checked });
-    } else {
-      if (imperial && sterling && curtis) {
-        setChecked({
-          imperial: false,
-          sterling: false,
-          curtis: false,
-        });
-      } else {
-        setChecked({
-          imperial: true,
-          sterling: true,
-          curtis: true,
-        });
-      }
-    }
-  };
-
-  const { imperial, sterling, curtis } = checked;
-
+  const [suppliersSelected, setSuppliersSelected] = useCallback(useState([]));
+  
   useEffect(() => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,90 +80,22 @@ const BidCreation = ({ handleFiltersClosed }) => {
         <Divider style={{ width: "75%", minWidth: "600px" }} />
         <br />
         {window.location.hash.includes("new") && (
-          <Grid
-            container
-            spacing={5}
-            style={{ width: "75%", minWidth: "600px" }}
-            alignItems="flex-end"
-          >
-            <Grid item sm={4} className={classes.controlGrid}>
-              <FormControl component="fieldset">
-                <FormLabel compent="legend" className={classes.headerText}>
-                  Select Suppliers:
-                </FormLabel>
-                <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={imperial}
-                        onChange={handleSupplierCheck}
-                        name="imperial"
-                      />
-                    }
-                    label="Imperial"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={sterling}
-                        onChange={handleSupplierCheck}
-                        name="sterling"
-                      />
-                    }
-                    label="Sterling"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={curtis}
-                        onChange={handleSupplierCheck}
-                        name="curtis"
-                      />
-                    }
-                    label="Curtis"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={curtis && sterling && imperial}
-                        onChange={handleSupplierCheck}
-                        name="all"
-                      />
-                    }
-                    label="All"
-                  />
-                </FormGroup>
-              </FormControl>
-            </Grid>
-            <Grid
-              item
-              sm={4}
-              className={classes.controlGrid}
-              style={{ justifyContent: "center" }}
+          <>
+            <RFQSupplierSentTable
+              suppliersSelected={suppliersSelected}
+              setSuppliersSelected={setSuppliersSelected}
+            />
+            <br />
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              style={{ marginRight: "10px" }}
+              disabled={suppliersSelected.length === 0}
             >
-              <TextField
-                size="small"
-                variant="outlined"
-                label="Price"
-                style={{ width: "150px" }}
-              />
-            </Grid>
-            <Grid
-              item
-              sm={4}
-              className={classes.controlGrid}
-              style={{ justifyContent: "flex-end" }}
-            >
-              <Button
-                className={classes.largeButton}
-                variant="contained"
-                color="secondary"
-                style={{ marginRight: "10px" }}
-              >
-                SEND RFQ
-              </Button>
-            </Grid>
-          </Grid>
+              SEND RFQ
+            </Button>
+          </>
         )}
         {!window.location.hash.includes("new") && (
           <TableContainer
@@ -236,7 +135,7 @@ const BidCreation = ({ handleFiltersClosed }) => {
                         className={classes.largeButton}
                         variant="contained"
                         color="secondary"
-                        style={{marginRight: "20px"}}
+                        style={{ marginRight: "20px" }}
                       >
                         AWARD
                       </Button>

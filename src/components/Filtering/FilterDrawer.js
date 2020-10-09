@@ -261,10 +261,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               onClick={handleDrawerClose}
               style={{ position: "absolute", top: "10px", right: "0" }}
             >
-              <ChevronLeftIcon fontSize="large" color="inherit" />
+              <ChevronLeftIcon color="inherit" />
             </IconButton>
           </Tooltip>
-          <Typography className={classes.titleText}>Filters:</Typography>
+          <Typography className={classes.titleText} style={{fontWeight: "500"}}>Filters:</Typography>
           <Divider />
           {filterType === "item" && (
             <FiltersItems

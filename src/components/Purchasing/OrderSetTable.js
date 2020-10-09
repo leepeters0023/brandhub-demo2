@@ -515,6 +515,7 @@ const OrderSetTable = (props) => {
                           refTable[`${ord.orderNumber}-${item.itemNumber}`]
                         }
                         handleKeyDown={handleKeyDown}
+                        packSize={item.packSize}
                         ref={tableRef}
                       />
                     ))}
