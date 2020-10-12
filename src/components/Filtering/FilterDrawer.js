@@ -9,6 +9,7 @@ import {
   updateSingleFilter,
   setChips,
   resetFilters,
+  setSorted,
 } from "../../redux/slices/filterSlice";
 
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
@@ -17,7 +18,7 @@ import { clearBrands } from "../../redux/slices/brandSlice";
 
 import { useDetailedInput } from "../../hooks/UtilityHooks";
 
-import FiltersItems from "../Utility/FiltersItems";
+import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
 import FiltersItemRollup from "./FiltersItemRollup";
@@ -85,68 +86,89 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const [reset, setReset] = useCallback(useState(false));
 
   const handleFilters = useCallback(
-    (value, type, filterType) => {
+    (value, filter, type) => {
+      let currentFilters = { ...allFilters };
       if (
-        type === "sequenceNum" ||
-        type === "rfqNum" ||
-        type === "poNum" ||
-        type === "tag" ||
-        type === "ruleType" ||
-        type === "status" ||
-        type === "bu" ||
-        type === "itemType" ||
-        type === "month" ||
-        type === "sortProgramsBy" ||
-        type === "groupBy"
+        filter === "sequenceNum" ||
+        filter === "rfqNum" ||
+        filter === "poNum" ||
+        filter === "tag" ||
+        filter === "ruleType" ||
+        filter === "status" ||
+        filter === "bu" ||
+        filter === "itemType" ||
+        filter === "month" ||
+        filter === "sortProgramsBy" ||
+        filter === "groupBy" ||
+        filter === "program"
       ) {
-        dispatch(updateSingleFilter({ filter: type, value: value }));
+        dispatch(updateSingleFilter({ filter: filter, value: value }));
+        currentFilters[filter] = value;
         if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
+          filter !== "sequenceNum" &&
+          filter !== "rfqNum" &&
+          filter !== "poNum"
         ) {
-          dispatch(setChips({ filterType: filterType }));
+          dispatch(setChips({ filterType: type }));
         }
-      } else if (type === "fromDate" || type === "toDate") {
+      } else if (filter === "fromDate" || filter === "toDate") {
+        console.log(type);
         dispatch(
           updateSingleFilter({
-            filter: type,
+            filter: filter,
             value: format(value, "MM/dd/yyyy"),
           })
         );
+        currentFilters[filter] = format(value, "MM/dd/yyyy");
         if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
+          filter !== "sequenceNum" &&
+          filter !== "rfqNum" &&
+          filter !== "poNum"
         ) {
-          dispatch(setChips({ filterType: filterType }));
+          dispatch(setChips({ filterType: type }));
         }
       } else if (
-        type === "distributor" ||
-        type === "brand" ||
-        type === "user" ||
-        type === "territory" ||
-        type === "program"
+        filter === "distributor" ||
+        filter === "brand" ||
+        filter === "user" ||
+        filter === "territory"
       ) {
         dispatch(
           updateSingleFilter({
-            filter: type,
+            filter: filter,
             value: value ? { id: value.id, name: value.name } : null,
           })
         );
+        currentFilters[filter] = value
+          ? { id: value.id, name: value.name }
+          : null;
         if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
+          filter !== "sequenceNum" &&
+          filter !== "rfqNum" &&
+          filter !== "poNum"
         ) {
-          dispatch(setChips({ filterType: filterType }));
+          dispatch(setChips({ filterType: type }));
         }
       }
+      if (
+        filterType === "history-orders" &&
+        filter !== "sequenceNum" &&
+        filter !== "rfqNum" &&
+        filter !== "poNum"
+      ) {
+        dispatch(fetchFilteredOrderHistory(currentFilters));
+      }
+      if (
+        (filterType === "history-rollup" ||
+          filterType === "history-approvals") &&
+        filter !== "sequenceNum" &&
+        filter !== "rfqNum" &&
+        filter !== "poNum"
+      ) {
+        dispatch(fetchFilteredOrderSets(currentFilters));
+      }
     },
-    [dispatch]
+    [dispatch, allFilters, filterType]
   );
 
   const {
@@ -226,6 +248,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
       }
+      dispatch(setSorted());
     }
   }, [sorted, dispatch, filterType, allFilters]);
 
@@ -257,7 +280,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               <ChevronLeftIcon color="inherit" />
             </IconButton>
           </Tooltip>
-          <Typography className={classes.titleText} style={{fontWeight: "500"}}>Filters:</Typography>
+          <Typography
+            className={classes.titleText}
+            style={{ fontWeight: "500" }}
+          >
+            Filters:
+          </Typography>
           <Divider />
           {filterType === "item" && (
             <FiltersItems

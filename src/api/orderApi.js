@@ -84,15 +84,18 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let statusString =
+    filterObject.status ?
     filterObject.status !== "all"
       ? `&filter[status]=${filterObject.status}`
-      : "&filter[status]!=approved";
+      : "&filter[status]!=approved"
+    : "";
   let userString = filterObject.user
     ? `&filter[user-id]=${filterObject.user.id}`
     : "";
+  //TODO fix this
   let progString =
-    filterObject.program
-      ? `&filter[program-name]=${filterObject.program.name}`
+    filterObject.program.length > 0
+      ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
   let brandString = filterObject.brand
     ? `&filter[brand-id]=${filterObject.brand.id}`
@@ -387,12 +390,13 @@ export const fetchOrderHistory = async (filterObject) => {
   let brandString = filterObject.brand
     ? `&filter[brand-id]=${filterObject.brand.id}`
     : "";
+  //TODO fix this
   let progString =
-    filterObject.program
-      ? `&filter[program-name]=${filterObject.program.name}`
+    (filterObject.program && filterObject.program.length > 0)
+      ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
   let seqString =
-    filterObject.sequenceNum.length > 0
+    (filterObject.sequenceNum && filterObject.sequenceNum.length > 0)
       ? `&filter[item-number]=${filterObject.sequenceNum}`
       : "";
   let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
