@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
+import { useSelector } from "react-redux";
+
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
@@ -139,6 +141,8 @@ const OrderHistoryTable = ({
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
 
+  const grouping = useSelector((state) => state.filters.groupBy);
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -147,7 +151,9 @@ const OrderHistoryTable = ({
   };
 
   const handleRowClick = (orderNum) => {
-    navigate(`/orders/history/${orderNum}`);
+    if (grouping === "order") {
+      navigate(`/orders/history/${orderNum}`);
+    }
   };
 
   return (

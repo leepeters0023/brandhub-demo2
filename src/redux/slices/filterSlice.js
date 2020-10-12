@@ -6,6 +6,7 @@ let initialState = {
   bu: [],
   brand: null,
   distributor: null,
+  groupBy: null,
   itemType: [],
   month: [],
   orderType: null,
@@ -45,6 +46,7 @@ const filterSlice = createSlice({
       state.brand = null;
       state.distributor = null;
       state.itemType = [];
+      state.groupBy = null;
       state.month = [];
       state.orderType = null;
       state.poNum = null;
@@ -86,6 +88,7 @@ const filterSlice = createSlice({
       state.bu = [];
       state.brand = null;
       state.distributor = null;
+      state.groupBy = null;
       state.itemType = [];
       state.month = [];
       state.orderType = null;
@@ -125,7 +128,8 @@ const filterSlice = createSlice({
           "status",
           "user",
           "rfqNum",
-          "poNum"
+          "poNum", 
+          "groupBy"
         ];
       }
       if (filterType === "program") {
