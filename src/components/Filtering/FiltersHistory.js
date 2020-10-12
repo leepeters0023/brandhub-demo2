@@ -11,6 +11,7 @@ import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../Utility/DistributorAutoComplete";
 import UserAutoComplete from "../Utility/UserAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
+import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 
 import { useSelector } from "react-redux";
 
@@ -121,8 +122,6 @@ const FiltersHistory = ({
   classes,
   sequenceNum,
   bindSequenceNum,
-  program,
-  bindProgram,
   rfqNum,
   bindRfqNum,
   poNum,
@@ -223,53 +222,55 @@ const FiltersHistory = ({
   ]);
 
   //TODO need to add group by in API calls
-  
+
   return (
     <>
-      {historyType !== "rfq" && historyType !== "po" && historyType !== "approvals" && (
-        <>
-          <br />
-          <Typography className={classes.headerText}>
-            Group By:
-          </Typography>
-          <br />
-          <ButtonGroup
-            orientation="vertical"
-            fullWidth
-            color="secondary"
-            aria-label="order-item-type"
-          >
-            <Button
-              className={
-                value === "order" ? classes.largeButton : classes.selectedButton
-              }
-              variant={value === "order" ? "contained" : "outlined"}
-              onClick={() => {
-                setValue("order");
-                handleFilters("order", "groupBy", "history");
-              }}
+      {historyType !== "rfq" &&
+        historyType !== "po" &&
+        historyType !== "approvals" && (
+          <>
+            <br />
+            <Typography className={classes.headerText}>Group By:</Typography>
+            <br />
+            <ButtonGroup
+              orientation="vertical"
+              fullWidth
+              color="secondary"
+              aria-label="order-item-type"
             >
-              ORDER
-            </Button>
-            <Button
-              className={
-                value === "itemType"
-                  ? classes.largeButton
-                  : classes.selectedButton
-              }
-              variant={value === "itemType" ? "contained" : "outlined"}
-              onClick={() => {
-                setValue("itemType");
-                handleFilters("itemType", "groupBy", "history");
-              }}
-            >
-              ITEM TYPE
-            </Button>
-          </ButtonGroup>
-          <br />
-          <br />
-        </>
-      )}
+              <Button
+                className={
+                  value === "order"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={value === "order" ? "contained" : "outlined"}
+                onClick={() => {
+                  setValue("order");
+                  handleFilters("order", "groupBy", "history");
+                }}
+              >
+                ORDER
+              </Button>
+              <Button
+                className={
+                  value === "itemType"
+                    ? classes.largeButton
+                    : classes.selectedButton
+                }
+                variant={value === "itemType" ? "contained" : "outlined"}
+                onClick={() => {
+                  setValue("itemType");
+                  handleFilters("itemType", "groupBy", "history");
+                }}
+              >
+                ITEM TYPE
+              </Button>
+            </ButtonGroup>
+            <br />
+            <br />
+          </>
+        )}
       <List>
         {historyType === "rfq" && (
           <ListItem>
@@ -400,19 +401,15 @@ const FiltersHistory = ({
             </ListItem>
           )}
         <ListItem>
-          <TextField
-            className={classes.queryField}
-            color="secondary"
-            fullWidth
-            name="program"
-            type="text"
-            label="Program"
-            value={program}
-            {...bindProgram}
-            variant="outlined"
-            size="small"
+          <ProgramAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"history"}
           />
         </ListItem>
+
         {(historyType === "rollup" ||
           historyType === "rfq" ||
           historyType === "po") && (
@@ -511,8 +508,6 @@ FiltersHistory.propTypes = {
   classes: PropTypes.object.isRequired,
   sequenceNum: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
-  program: PropTypes.string.isRequired,
-  bindProgram: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };
 

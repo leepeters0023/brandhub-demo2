@@ -155,7 +155,8 @@ const filterSlice = createSlice({
           } else if (
             filter === "brand" ||
             filter === "user" ||
-            filter === "distributor"
+            filter === "distributor" ||
+            filter === "program"
           ) {
             if (stateObject[filter]) {
               filters.push({ type: filter, value: stateObject[filter].name });

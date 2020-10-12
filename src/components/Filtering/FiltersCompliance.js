@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setClear, updateSingleFilter } from "../../redux/slices/filterSlice";
 
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
+import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
 
 import { useSelector } from "react-redux";
@@ -109,8 +110,6 @@ const FiltersCompliance = ({
   classes,
   sequenceNum,
   bindSequenceNum,
-  program,
-  bindProgram,
   handleSearch,
   itemTypes,
   ruleTypes,
@@ -232,17 +231,12 @@ const FiltersCompliance = ({
               />
             </ListItem>
             <ListItem>
-              <TextField
-                className={classes.queryField}
-                color="secondary"
-                fullWidth
-                name="program"
-                type="text"
-                label="Program"
-                value={program}
-                {...bindProgram}
-                variant="outlined"
-                size="small"
+              <ProgramAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"compliance"}
               />
             </ListItem>
             <ListItem>
@@ -345,8 +339,6 @@ FiltersCompliance.propTypes = {
   classes: PropTypes.object.isRequired,
   sequenceNum: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
-  program: PropTypes.string.isRequired,
-  bindProgram: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };
 
