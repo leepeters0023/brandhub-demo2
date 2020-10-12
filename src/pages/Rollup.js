@@ -43,6 +43,7 @@ const defaultFilters = {
   user: null,
   program: "",
   brand: null,
+  groupBy: "order",
   sequenceNum: "",
   status: "submitted",
   sortOrder: "asc",

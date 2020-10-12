@@ -97,6 +97,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
+    console.log(orderSets);
     let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
       id: orderSet.id,
       type: orderTypeMap[orderSet.type],

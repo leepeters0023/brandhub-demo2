@@ -24,18 +24,26 @@ import CancelIcon from "@material-ui/icons/Cancel";
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: true },
   { id: "type", disablePadding: false, label: "Type", sort: false },
-  { id: "user", disablePadding: false, label: "User", sort: true },
+  { id: "user", disablePadding: false, label: "Person", sort: true },
+  { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
-  {
-    id: "totalItems",
-    disablePadding: false,
-    label: "Total Items",
-    sort: false,
-  },
   {
     id: "estTotal",
     disablePadding: false,
     label: "Est. Total",
+    sort: false,
+  },
+  {
+    id: "paidBudget",
+    disablePadding: false,
+    label: "Budget Paid",
+    sort: false,
+  },
+  {
+    id: "remainingBudget",
+    disablePadding: false,
+    label: "Budget Rem.",
     sort: false,
   },
   {
@@ -148,7 +156,7 @@ const OrderApprovalTable = ({
   scrollRef,
   handleApproval,
   selected,
-  setSelected
+  setSelected,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -252,14 +260,19 @@ const OrderApprovalTable = ({
                     <TableCell align="left">{row.type}</TableCell>
                     <TableCell align="left">{row.user}</TableCell>
                     <TableCell align="left">
+                      {row.program ? row.program : "---"}
+                    </TableCell>
+                    <TableCell>{row.state}</TableCell>
+                    <TableCell align="left">
                       {format(new Date(row.orderDate), "MM/dd/yyyy")}
                     </TableCell>
-                    <TableCell align="left">{row.totalItems}</TableCell>
                     <TableCell align="left">
                       {row.totalEstCost !== "---"
                         ? formatMoney(row.totalEstCost)
                         : row.totalEstCost}
                     </TableCell>
+                    <TableCell>$5,000.00</TableCell>
+                    <TableCell>$25,000.00</TableCell>
                     <TableCell align="right">
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <Tooltip title="Deny">

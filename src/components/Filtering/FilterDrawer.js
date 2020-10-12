@@ -86,7 +86,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const handleFilters = useCallback(
     (value, type, filterType) => {
-      console.log(filterType);
       if (
         type === "program" ||
         type === "sequenceNum" ||
@@ -98,7 +97,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "bu" ||
         type === "itemType" ||
         type === "month" ||
-        type === "sortProgramsBy"
+        type === "sortProgramsBy" ||
+        type === "groupBy"
       ) {
         dispatch(updateSingleFilter({ filter: type, value: value }));
         if (

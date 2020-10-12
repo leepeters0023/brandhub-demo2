@@ -15,9 +15,11 @@ import StatusSelector from "../Utility/StatusSelector";
 import { useSelector } from "react-redux";
 
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import DateFnsUtils from "@date-io/date-fns";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -138,6 +140,7 @@ const FiltersHistory = ({
   const currentUserRole = useSelector((state) => state.user.role);
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
+  const [value, setValue] = useCallback(useState("order"));
   const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
   const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
   const [suppliersOpen, setSuppliersOpen] = useCallback(useState(false));
@@ -219,8 +222,54 @@ const FiltersHistory = ({
     handleCheckToggle,
   ]);
 
+  //TODO need to add group by in API calls
+  
   return (
     <>
+      {historyType !== "rfq" && historyType !== "po" && historyType !== "approvals" && (
+        <>
+          <br />
+          <Typography className={classes.headerText}>
+            Group By:
+          </Typography>
+          <br />
+          <ButtonGroup
+            orientation="vertical"
+            fullWidth
+            color="secondary"
+            aria-label="order-item-type"
+          >
+            <Button
+              className={
+                value === "order" ? classes.largeButton : classes.selectedButton
+              }
+              variant={value === "order" ? "contained" : "outlined"}
+              onClick={() => {
+                setValue("order");
+                handleFilters("order", "groupBy", "history");
+              }}
+            >
+              ORDER
+            </Button>
+            <Button
+              className={
+                value === "itemType"
+                  ? classes.largeButton
+                  : classes.selectedButton
+              }
+              variant={value === "itemType" ? "contained" : "outlined"}
+              onClick={() => {
+                setValue("itemType");
+                handleFilters("itemType", "groupBy", "history");
+              }}
+            >
+              ITEM TYPE
+            </Button>
+          </ButtonGroup>
+          <br />
+          <br />
+        </>
+      )}
       <List>
         {historyType === "rfq" && (
           <ListItem>
