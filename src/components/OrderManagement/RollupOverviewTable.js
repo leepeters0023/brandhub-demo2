@@ -27,12 +27,17 @@ const headCells = [
     sort: false,
   },
   {
-    id: "totalActCost",
+    id: "paidBudget",
     disablePadding: false,
-    label: "Act. Cost",
+    label: "Budget Paid",
     sort: false,
   },
-  { id: "budget", disablePadding: false, label: "Rem. Budget", sort: false },
+  {
+    id: "remainingBudget",
+    disablePadding: false,
+    label: "Budget Rem.",
+    sort: false,
+  },
   {
     id: "orderDate",
     disablePadding: false,
@@ -201,7 +206,7 @@ const RollupOverViewTable = ({
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost)}
                   </TableCell>
-                  <TableCell align="left">{row.totalActCost}</TableCell>
+                  <TableCell align="left">$5,000.00</TableCell>
                   <TableCell align="left">{row.budget}</TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
