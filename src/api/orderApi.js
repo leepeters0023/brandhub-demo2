@@ -91,8 +91,8 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     ? `&filter[user-id]=${filterObject.user.id}`
     : "";
   let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program}`
+    filterObject.program
+      ? `&filter[program-name]=${filterObject.program.name}`
       : "";
   let brandString = filterObject.brand
     ? `&filter[brand-id]=${filterObject.brand.id}`
@@ -388,8 +388,8 @@ export const fetchOrderHistory = async (filterObject) => {
     ? `&filter[brand-id]=${filterObject.brand.id}`
     : "";
   let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program}`
+    filterObject.program
+      ? `&filter[program-name]=${filterObject.program.name}`
       : "";
   let seqString =
     filterObject.sequenceNum.length > 0

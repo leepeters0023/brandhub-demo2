@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setClear, updateSingleFilter } from "../../redux/slices/filterSlice";
 
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
+import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
@@ -94,7 +95,7 @@ const FiltersItemRollup = ({
 
       func(newChecked);
       if (!deleting) {
-      dispatch(updateSingleFilter({ filter: type, value: newChecked }));
+        dispatch(updateSingleFilter({ filter: type, value: newChecked }));
       }
     },
     [dispatch]
@@ -179,17 +180,12 @@ const FiltersItemRollup = ({
           />
         </ListItem>
         <ListItem>
-          <TextField
-            className={classes.queryField}
-            color="secondary"
-            fullWidth
-            name="program"
-            type="text"
-            label="Program"
-            value={program}
-            {...bindProgram}
-            variant="outlined"
-            size="small"
+          <ProgramAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"itemRollup"}
           />
         </ListItem>
         <ListItem>
@@ -265,8 +261,6 @@ FiltersItemRollup.propTypes = {
   classes: PropTypes.object.isRequired,
   sequenceNum: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
-  program: PropTypes.string.isRequired,
-  bindProgram: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };
 

@@ -87,7 +87,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const handleFilters = useCallback(
     (value, type, filterType) => {
       if (
-        type === "program" ||
         type === "sequenceNum" ||
         type === "rfqNum" ||
         type === "poNum" ||
@@ -128,7 +127,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         type === "distributor" ||
         type === "brand" ||
         type === "user" ||
-        type === "territory"
+        type === "territory" ||
+        type === "program"
       ) {
         dispatch(
           updateSingleFilter({
@@ -154,11 +154,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     bind: bindSequenceNum,
     reset: resetSequenceNum,
   } = useDetailedInput("", handleFilters, "sequenceNum", filterType);
-  const {
-    value: program,
-    bind: bindProgram,
-    reset: resetProgram,
-  } = useDetailedInput("", handleFilters, "program", filterType);
   const { value: poNum, bind: bindPoNum, reset: resetPoNum } = useDetailedInput(
     "",
     handleFilters,
@@ -174,7 +169,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const resetAllFilters = useCallback(() => {
     setReset(true);
     resetSequenceNum();
-    resetProgram();
     resetPoNum();
     resetRfqNum();
     dispatch(clearBrands());
@@ -194,7 +188,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     }
   }, [
     dispatch,
-    resetProgram,
     resetSequenceNum,
     resetPoNum,
     resetRfqNum,
@@ -286,8 +279,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
               rfqNum={rfqNum}
               bindRfqNum={bindRfqNum}
               poNum={poNum}
@@ -310,8 +301,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
               itemTypes={itemTypes}
               ruleTypes={ruleTypes}
               handleSearch={
@@ -339,8 +328,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
               itemTypes={itemTypes}
               handleSearch={
                 // TODO add search for po when api is there

@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchBrands } from "../../redux/slices/brandSlice";
+import { fetchProgramList } from "../../redux/slices/programsSlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const BrandAutoComplete = ({
+const ProgramAutoComplete = ({
   classes,
   handleChange,
   reset,
@@ -18,39 +18,39 @@ const BrandAutoComplete = ({
 }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const [brand, setBrand] = useState("");
+  const [program, setProgram] = useState("");
 
-  const isLoading = useSelector((state) => state.brands.isLoading);
-  const options = useSelector((state) => state.brands.brandList);
+  const isLoading = useSelector((state) => state.programs.listIsLoading);
+  const options = useSelector((state) => state.programs.programList);
 
   const loading = open && isLoading;
 
   useEffect(() => {
-    if (brand.length >= 1) {
-      dispatch(fetchBrands(brand));
+    if (program.length >= 1) {
+      dispatch(fetchProgramList(program));
     }
-  }, [brand, dispatch]);
+  }, [program, dispatch]);
 
   useEffect(() => {
     if (reset) {
-      setBrand("");
+      setProgram("");
       setReset(false);
     }
-  }, [reset, setBrand, setReset]);
+  }, [reset, setProgram, setReset]);
 
   return (
     <>
       <Autocomplete
         fullWidth
         className={classes.queryField}
-        id="brand-auto-complete"
+        id="program-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
-        inputValue={brand}
-        onInputChange={(_evt, value) => setBrand(value)}
+        inputValue={program}
+        onInputChange={(_evt, value) => setProgram(value)}
         onChange={(evt, value) => {
-          handleChange(value, "brand", filterType);
+          handleChange(value, "program", filterType);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
@@ -59,7 +59,7 @@ const BrandAutoComplete = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Brand"
+            label="Program"
             variant="outlined"
             size="small"
             InputProps={{
@@ -80,11 +80,11 @@ const BrandAutoComplete = ({
   );
 };
 
-BrandAutoComplete.propTypes = {
+ProgramAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
 };
 
-export default BrandAutoComplete;
+export default ProgramAutoComplete;
