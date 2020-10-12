@@ -29,7 +29,7 @@ import { rules } from "../assets/mockdata/dataGenerator.js";
 const defaultFilters = {
   orderType: "on-demand",
   brand: null,
-  program: "",
+  program: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",

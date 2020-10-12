@@ -51,7 +51,7 @@ const defaultFilters = {
   distributor: null,
   groupBy: "order",
   brand: null,
-  program: "",
+  program: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "orderDate",

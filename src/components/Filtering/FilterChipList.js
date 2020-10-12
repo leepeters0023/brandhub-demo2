@@ -6,6 +6,7 @@ import {
   updateSingleFilter,
   setClear,
   setChips,
+  setSorted,
 } from "../../redux/slices/filterSlice";
 
 import Chip from "@material-ui/core/Chip";
@@ -21,6 +22,7 @@ const FilterChipList = () => {
   const classes = useStyles();
 
   const filterState = useSelector((state) => state.filters);
+  const filterType = useSelector((state) => state.filters.filterType)
 
   const handleChipClick = (type, value) => {
     let dispatchObject = { filter: type, value: null };
@@ -28,30 +30,27 @@ const FilterChipList = () => {
       let currentFilterArray = filterState[type].filter((f) => f !== value);
       dispatchObject.value = currentFilterArray;
     }
+    if (type === "program") {
+      console.log(type, value)
+      let currentFilterArray = filterState[type].filter((f) => f.name !== value)
+      dispatchObject.value = currentFilterArray;
+    }
     dispatch(updateSingleFilter(dispatchObject));
-    dispatch(setChips({ filterType: "item" }));
+    dispatch(setChips({ filterType: filterType }));
+    dispatch(setSorted());
   };
 
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      {filterState.chipList.map((filter) =>
-        filterState.filterType === "item" ? (
-          <Chip
-            style={{ margin: "auto 2.5px" }}
-            color="primary"
-            key={`${filter.type}-${filter.value}`}
-            label={filter.value}
-            onDelete={() => handleChipClick(filter.type, filter.value)}
-          />
-        ) : (
-          <Chip
-            style={{ margin: "auto 2.5px" }}
-            color="primary"
-            key={`${filter.type}-${filter.value}`}
-            label={filter.value}
-          />
-        )
-      )}
+      {filterState.chipList.map((filter) => (
+        <Chip
+          style={{ margin: "auto 2.5px" }}
+          color="primary"
+          key={`${filter.type}-${filter.value}`}
+          label={filter.value}
+          onDelete={() => handleChipClick(filter.type, filter.value)}
+        />
+      ))}
       {filterState.chipList.length > 0 && (
         <Typography
           variant="body2"

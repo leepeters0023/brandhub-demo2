@@ -19,11 +19,17 @@ const ProgramAutoComplete = ({
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [program, setProgram] = useState("");
+  const [currentPrograms, setCurrentPrograms] = useState([]);
 
   const isLoading = useSelector((state) => state.programs.listIsLoading);
   const options = useSelector((state) => state.programs.programList);
+  const currentFilterPrograms = useSelector((state) => state.filters.program);
 
   const loading = open && isLoading;
+
+  const handlePrograms = (value) => {
+    setCurrentPrograms(value);
+  };
 
   useEffect(() => {
     if (program.length >= 1) {
@@ -32,8 +38,15 @@ const ProgramAutoComplete = ({
   }, [program, dispatch]);
 
   useEffect(() => {
+    if (currentFilterPrograms.length !== currentPrograms.length) {
+      setCurrentPrograms(currentFilterPrograms);
+    }
+  }, [currentFilterPrograms, currentPrograms.length])
+
+  useEffect(() => {
     if (reset) {
       setProgram("");
+      setCurrentPrograms([]);
       setReset(false);
     }
   }, [reset, setProgram, setReset]);
@@ -41,6 +54,9 @@ const ProgramAutoComplete = ({
   return (
     <>
       <Autocomplete
+        multiple
+        freeSolo
+        renderTags={() => null}
         fullWidth
         className={classes.queryField}
         id="program-auto-complete"
@@ -50,12 +66,17 @@ const ProgramAutoComplete = ({
         inputValue={program}
         onInputChange={(_evt, value) => setProgram(value)}
         onChange={(evt, value) => {
+          console.log(value)
           handleChange(value, "program", filterType);
+          handlePrograms(value);
         }}
-        getOptionSelected={(option, value) => option.name === value.name}
+        getOptionSelected={(option, value) => {
+          return option.name === value.name
+        }}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
+        value={currentPrograms}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -64,6 +85,7 @@ const ProgramAutoComplete = ({
             size="small"
             InputProps={{
               ...params.InputProps,
+              autoComplete: "new-password",
               endAdornment: (
                 <>
                   {loading ? (

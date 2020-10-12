@@ -43,7 +43,7 @@ const defaultFilters = {
   toDate: format(new Date(), "MM/dd/yyyy"),
   user: null,
   distributor: null,
-  program: "",
+  program: [],
   brand: null,
   sequenceNum: "",
   type: "not-pre-order",

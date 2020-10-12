@@ -11,7 +11,7 @@ let initialState = {
   month: [],
   orderType: null,
   poNum: null,
-  program: null,
+  program: [],
   rfqNum: null,
   ruleType: [],
   sequenceNum: null,
@@ -80,7 +80,7 @@ const filterSlice = createSlice({
       state.clearFilters = true;
     },
     setSorted(state) {
-      state.sorted = true;
+      state.sorted = !state.sorted;
     },
     resetFilters(state) {
       state.fromDate = null;
@@ -122,21 +122,19 @@ const filterSlice = createSlice({
           "brand",
           "distributor",
           "itemType",
-          "orderType",
           "program",
           "sequenceNum",
           "status",
           "user",
           "rfqNum",
           "poNum", 
-          "groupBy"
         ];
       }
       if (filterType === "program") {
         chippable = ["month", "brand", "bu"];
       }
       if (filterType === "itemRollup") {
-        chippable = ["brand", "program", "itemType", "sequenceNum", "orderType"];
+        chippable = ["brand", "program", "itemType", "sequenceNum"];
       }
       if (filterType.includes("compliance")) {
         chippable = ["brand", "program", "itemyType", "tag", "ruleType", "sequenceNum", "status"]
@@ -153,10 +151,15 @@ const filterSlice = createSlice({
               filters.push({ type: filter, value: f })
             );
           } else if (
+            filter === "program"
+          ) {
+            stateObject[filter].forEach((f) => {
+              filters.push({type: filter, value: f.name})
+            })
+          } else if (
             filter === "brand" ||
             filter === "user" ||
-            filter === "distributor" ||
-            filter === "program"
+            filter === "distributor"
           ) {
             if (stateObject[filter]) {
               filters.push({ type: filter, value: stateObject[filter].name });

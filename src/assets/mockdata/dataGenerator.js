@@ -28,7 +28,7 @@ let tags = [
   "Cardboard",
 ];
 let suppliers = ["Imperial", "Curtis", "Sterling", "Willey"];
-let territories = ["Western", "Southern", "North East", "Walmart", "Kroger", "Multi Territory"]
+let territories = ["Western", "Southern", "North East", "Mega", "California", "Walmart", "Kroger", "Multi Territory"]
 
 const generatePOItems = (dataPoints) => {
   let data = [];
@@ -189,7 +189,7 @@ const generateYearToDateBudgets = (dataPoints) => {
   for (let i = 0; i < dataPoints; i ++) {
     let user = people[Math.floor(Math.random()*people.length)];
     let brand = brands[Math.floor(Math.random()*brands.length)];
-    let territory = territories[Math.floor(Math.random()*territories.length)]
+    let territory = territories[Math.floor(Math.random()*(territories.length - 1))]
     let budget = Math.floor(Math.random() * 1000000 + 1000000)
     let onHold = Math.floor(budget * ((Math.floor(Math.random() * 10 + 5)) / 100))
     let committed = Math.floor(budget * ((Math.floor(Math.random() * 15 + 5)) / 100))

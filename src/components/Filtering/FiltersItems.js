@@ -215,8 +215,8 @@ const FiltersItems = ({
             SEARCH
           </Button>
         </ListItem>
-        <Divider />
         <ListItem />
+        <Divider />
         <ListItem />
         <ListItem>
           <BrandAutoComplete

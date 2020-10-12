@@ -93,7 +93,7 @@ const SupplierList = React.memo(
                   item,
                   suppliersChecked,
                   setSuppliersChecked,
-                  "itemType"
+                  "supplier"
                 );
               }}
             >
@@ -209,7 +209,7 @@ const FiltersHistory = ({
           missingFilter,
           suppliersChecked,
           setSuppliersChecked,
-          "itemType",
+          "supplier",
           true
         );
       }
@@ -225,53 +225,78 @@ const FiltersHistory = ({
 
   return (
     <>
-      {historyType !== "rfq" &&
-        historyType !== "po" &&
-        historyType !== "approvals" && (
-          <>
-            <br />
-            <Typography className={classes.headerText}>Group By:</Typography>
-            <br />
-            <ButtonGroup
-              orientation="vertical"
-              fullWidth
-              color="secondary"
-              aria-label="order-item-type"
-            >
-              <Button
-                className={
-                  value === "order"
-                    ? classes.largeButton
-                    : classes.selectedButton
-                }
-                variant={value === "order" ? "contained" : "outlined"}
-                onClick={() => {
-                  setValue("order");
-                  handleFilters("order", "groupBy", "history");
-                }}
-              >
-                ORDER
-              </Button>
-              <Button
-                className={
-                  value === "itemType"
-                    ? classes.largeButton
-                    : classes.selectedButton
-                }
-                variant={value === "itemType" ? "contained" : "outlined"}
-                onClick={() => {
-                  setValue("itemType");
-                  handleFilters("itemType", "groupBy", "history");
-                }}
-              >
-                ITEM TYPE
-              </Button>
-            </ButtonGroup>
-            <br />
-            <br />
-          </>
-        )}
       <List>
+        {historyType !== "rfq" &&
+          historyType !== "po" &&
+          historyType !== "approvals" && (
+            <>
+              <ListItem
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography className={classes.headerText}>
+                  Group By:
+                </Typography>
+                <ButtonGroup
+                  orientation="vertical"
+                  fullWidth
+                  color="secondary"
+                  aria-label="order-group"
+                  style={{ width: "60%" }}
+                >
+                  <Button
+                    className={
+                      value === "order"
+                        ? classes.largeButton
+                        : classes.selectedButton
+                    }
+                    variant={value === "order" ? "contained" : "outlined"}
+                    onClick={() => {
+                      setValue("order");
+                      handleFilters("order", "groupBy", "history");
+                    }}
+                  >
+                    ORDER
+                  </Button>
+                  <Button
+                    className={
+                      value === "item"
+                        ? classes.largeButton
+                        : classes.selectedButton
+                    }
+                    variant={value === "item" ? "contained" : "outlined"}
+                    onClick={() => {
+                      setValue("item");
+                      handleFilters("item", "groupBy", "history");
+                    }}
+                  >
+                    ITEM
+                  </Button>
+                </ButtonGroup>
+              </ListItem>
+              <ListItem />
+              <Divider />
+              <ListItem />
+            </>
+          )}
+
+        <ListItem>
+          <TextField
+            className={classes.queryField}
+            color="secondary"
+            fullWidth
+            name="sequenceNumber"
+            type="text"
+            label="Sequence #"
+            value={sequenceNum}
+            {...bindSequenceNum}
+            variant="outlined"
+            size="small"
+          />
+        </ListItem>
         {historyType === "rfq" && (
           <ListItem>
             <TextField
@@ -304,6 +329,20 @@ const FiltersHistory = ({
             />
           </ListItem>
         )}
+        <ListItem>
+          <Button
+            fullWidth
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+            onClick={handleSearch}
+          >
+            SEARCH
+          </Button>
+        </ListItem>
+        <ListItem />
+        <Divider />
+        <ListItem />
         {historyType !== "rfq" && historyType !== "po" && (
           <>
             <ListItem>
@@ -321,7 +360,7 @@ const FiltersHistory = ({
                   value={
                     fromDate || format(subDays(new Date(), 7), "MM/dd/yyyy")
                   }
-                  onChange={(value) => handleFilters(value, "fromDate")}
+                  onChange={(value) => handleFilters(value, "fromDate", "history")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -341,7 +380,7 @@ const FiltersHistory = ({
                   id="toDate"
                   label="Order To Date"
                   value={toDate || format(new Date(), "MM/dd/yyyy")}
-                  onChange={(value) => handleFilters(value, "toDate")}
+                  onChange={(value) => handleFilters(value, "toDate", "history")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -364,20 +403,6 @@ const FiltersHistory = ({
               />
             </ListItem>
           )}
-        <ListItem>
-          <TextField
-            className={classes.queryField}
-            color="secondary"
-            fullWidth
-            name="sequenceNumber"
-            type="text"
-            label="Sequence #"
-            value={sequenceNum}
-            {...bindSequenceNum}
-            variant="outlined"
-            size="small"
-          />
-        </ListItem>
         <ListItem>
           <BrandAutoComplete
             classes={classes}
@@ -472,17 +497,6 @@ const FiltersHistory = ({
         </Collapse>
         <Divider />
         <ListItem />
-        <ListItem>
-          <Button
-            fullWidth
-            className={classes.largeButton}
-            variant="contained"
-            color="secondary"
-            onClick={handleSearch}
-          >
-            SEARCH
-          </Button>
-        </ListItem>
         <ListItem>
           <Button
             fullWidth
