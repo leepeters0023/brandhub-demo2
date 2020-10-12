@@ -27,7 +27,7 @@ const headCells = [
   { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true}
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true}
 ];
 
 const EnhancedTableHead = (props) => {
@@ -184,7 +184,7 @@ const PurchaseOrderHistoryTable = ({
                       {formatMoney(row.actTotal)}
                     </TableCell>
                     <TableCell align="left">{row.status}</TableCell>
-                    <TableCell align="left">{row.shipDate}</TableCell>
+                    <TableCell align="left">{row.dueDate}</TableCell>
                   </TableRow>
                 )
               )}

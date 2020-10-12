@@ -27,6 +27,8 @@ let tags = [
   "Plastic",
   "Cardboard",
 ];
+let suppliers = ["Imperial", "Curtis", "Sterling", "Willey"];
+let territories = ["Western", "Southern", "North East", "Walmart", "Kroger", "Multi Territory"]
 
 const generatePOItems = (dataPoints) => {
   let data = [];
@@ -39,20 +41,23 @@ const generatePOItems = (dataPoints) => {
     let totalNotCompliant = Math.floor(
       totalItems / 12 - Math.floor(Math.random() * (totalItems / 12))
     );
-    let totalDistributors = Math.floor(Math.random() * 25) + 20;
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
     let estTotal = totalItems * estCost;
+    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
+    let territory = territories[Math.floor(Math.random()*territories.length)];
+    
     data.push({
       id: (i + 1).toString(),
       sequenceNum: sequenceNumber,
+      territory: territory,
       program: currentProgram,
       itemType: currentItemType,
       totalItems: totalItems,
       totalNotCompliant: totalNotCompliant,
-      totalDistributors: totalDistributors,
       estCost: estCost,
       estTotal: estTotal,
       dueDate: "10/30/2020",
+      supplier: supplier,
     });
   }
   return data;
@@ -97,7 +102,6 @@ const generateRFQs = (dataPoints, stat) => {
 
 const generatePOs = (dataPoints, stat) => {
   let statusAll = ["In Progress", "Complete", "Canceled"];
-  let suppliers = ["Imperial", "Curtis", "Sterling"];
 
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
@@ -118,7 +122,7 @@ const generatePOs = (dataPoints, stat) => {
       estTotal: estTotal,
       actTotal: estTotal,
       status: status,
-      shipDate: new Date().toLocaleDateString(),
+      dueDate: new Date().toLocaleDateString(),
     });
   }
   return data;
@@ -180,7 +184,6 @@ const generateComplianceItems = (dataPoints) => {
 const generateYearToDateBudgets = (dataPoints) => {
   let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"]
   let brands = ["Apothic", "Orin Swift", "Barefoot", "E & J", "New Amsterdam", "High Noon", "La Marca"];
-  let territories = ["Western", "Southern", "North East", "Walmart", "Kroger"]
   let data = []
 
   for (let i = 0; i < dataPoints; i ++) {

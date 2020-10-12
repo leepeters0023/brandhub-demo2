@@ -18,6 +18,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "territory", disablePadding: false, label: "Territory", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
@@ -32,15 +33,10 @@ const headCells = [
     label: "Not Compliant",
     sort: false,
   },
-  {
-    id: "totalDistributors",
-    disablePadding: false,
-    label: "Total Dist.",
-    sort: false,
-  },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true }
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -52,10 +48,13 @@ const EnhancedTableHead = (props) => {
     onRequestSort,
     onSelectAllClick,
     numSelected,
+    type
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+
+  const currentHeader = type === "po" ? headCells : headCells.filter(cell => cell.id !== "supplier")
 
   return (
     <TableHead>
@@ -68,7 +67,7 @@ const EnhancedTableHead = (props) => {
             inputProps={{ "aria-label": "select all items" }}
           />
         </TableCell>
-        {headCells.map((headCell) => {
+        {currentHeader.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -141,13 +140,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PORollupTable = ({
+const ItemRollupTable = ({
   items,
   handleSort,
   isItemsLoading,
   scrollRef,
   itemSelected,
   setItemSelected,
+  type
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -228,6 +228,7 @@ const PORollupTable = ({
             order={order}
             orderBy={orderBy}
             rowCount={items.length}
+            type={type}
           />
           <TableBody>
             {!isItemsLoading && items.length === 0 && (
@@ -266,11 +267,11 @@ const PORollupTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
+                    <TableCell align="left">{row.territory}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
                     <TableCell align="left">{row.totalNotCompliant}</TableCell>
-                    <TableCell align="left">{row.totalDistributors}</TableCell>
                     <TableCell align="left">
                       {formatMoney(row.estCost)}
                     </TableCell>
@@ -278,6 +279,7 @@ const PORollupTable = ({
                       {formatMoney(row.estTotal)}
                     </TableCell>
                     <TableCell align="left">{row.dueDate}</TableCell>
+                    {type === "po" && <TableCell align="left">{row.supplier}</TableCell>}
                   </TableRow>
                 );
               })}
@@ -295,13 +297,14 @@ const PORollupTable = ({
   );
 };
 
-PORollupTable.propTypes = {
+ItemRollupTable.propTypes = {
   items: PropTypes.array,
   handleSort: PropTypes.func.isRequired,
   isItemsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
   itemSelected: PropTypes.bool.isRequired,
   setItemSelected: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired
 };
 
-export default PORollupTable;
+export default ItemRollupTable;

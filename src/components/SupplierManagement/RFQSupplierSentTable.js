@@ -62,7 +62,7 @@ const RFQSupplierSentTable = ({ suppliersSelected, setSuppliersSelected }) => {
     },
     {
       id: "4",
-      name: "Willie",
+      name: "Willey",
     },
   ];
 

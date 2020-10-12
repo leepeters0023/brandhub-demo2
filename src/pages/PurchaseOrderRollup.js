@@ -149,6 +149,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
           // scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
+          type={"po"}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>
