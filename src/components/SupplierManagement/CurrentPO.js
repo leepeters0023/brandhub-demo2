@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 // import { navigate } from "@reach/router";
 import format from "date-fns/format";
 import clsx from "clsx";
 
 import { formatMoney } from "../../utility/utilityFunctions";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  addCost,
+  updateCost,
+  // updateSupplierNotes,
+  // updateLabel,
+} from "../../redux/slices/purchaseOrderSlice";
 
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -26,6 +35,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 //mock data
 import { singlePO } from "../../assets/mockdata/dataGenerator";
@@ -46,6 +56,21 @@ const useStyles = makeStyles((theme) => ({
 
 const CurrentPO = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const additionalCosts = useSelector(
+    (state) => state.purchaseOrder.additionalCosts
+  );
+
+  const addNewCost = () => {
+    dispatch(addCost({ description: "", cost: "" }));
+  };
+
+  useEffect(() => {
+    if (additionalCosts.length === 0) {
+      dispatch(addCost({ description: "", cost: "" }));
+    }
+  }, [additionalCosts.length, dispatch]);
 
   return (
     <>
@@ -85,8 +110,8 @@ const CurrentPO = () => {
                 variant="inline"
                 format="MM/dd/yyyy"
                 margin="normal"
-                id="expectedArrival"
-                label="Expected Arrival"
+                id="dueDate"
+                label="Due Date"
                 value={format(new Date(), "MM/dd/yyyy")}
                 //onChange={(value) => handleFilters(value, "toDate")}
                 KeyboardButtonProps={{
@@ -225,7 +250,7 @@ const CurrentPO = () => {
                 </TableCell>
                 <TableCell align="left">{formatMoney(row.estTotal)}</TableCell>
                 <TableCell align="right">
-                  <Tooltip title="Deny">
+                  <Tooltip title="Remove">
                     <IconButton
                       onClick={(event) => {
                         event.stopPropagation();
@@ -238,29 +263,81 @@ const CurrentPO = () => {
               </TableRow>
             ))}
             <TableRow>
-              <TableCell colSpan={8} className={classes.headerText}>
-                Set Up Fee:
+              <TableCell className={classes.headerText}>Set Up Fee:</TableCell>
+              <TableCell colSpan={7} align="left">
+                <Tooltip title="Add Another Cost">
+                  <IconButton
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      addNewCost();
+                    }}
+                  >
+                    <AddCircleIcon color="inherit" />
+                  </IconButton>
+                </Tooltip>
               </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell className={classes.headerText}>Description:</TableCell>
-              <TableCell colSpan={4}>
-                <TextField variant="outlined" size="small" fullWidth />
-              </TableCell>
-              <TableCell className={classes.headerText} align="right">
-                Cost:
-              </TableCell>
-              <TableCell colSpan={2}>
-                <TextField variant="outlined" size="small" fullWidth />
-              </TableCell>
-            </TableRow>
+            {additionalCosts.map((cost, index) => (
+              <TableRow key={index}>
+                <TableCell className={classes.headerText}>
+                  Description:
+                </TableCell>
+                <TableCell colSpan={4}>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={cost.description}
+                    onChange={(evt) => {
+                      dispatch(
+                        updateCost({
+                          key: "description",
+                          value: evt.target.value,
+                          index: index,
+                        })
+                      );
+                    }}
+                  />
+                </TableCell>
+                <TableCell className={classes.headerText} align="right">
+                  Cost:
+                </TableCell>
+                <TableCell colSpan={2}>
+                  <TextField
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    value={cost.cost}
+                    onChange={(evt) => {
+                      dispatch(
+                        updateCost({
+                          key: "cost",
+                          value: evt.target.value,
+                          index: index,
+                        })
+                      );
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
       <br />
       <br />
-      <div style={{width: "75%", minWidth: "1000px", display: "flex", justifyContent: "flex-end"}}>
-        <Typography className={classes.titleText} style={{marginRight: "20px"}}>
+      <div
+        style={{
+          width: "75%",
+          minWidth: "1000px",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Typography
+          className={classes.titleText}
+          style={{ marginRight: "20px" }}
+        >
           Total: $25,000.00
         </Typography>
       </div>

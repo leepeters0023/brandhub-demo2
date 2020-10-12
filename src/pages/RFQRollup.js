@@ -147,6 +147,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
           // scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
+          type={"rfq"}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>

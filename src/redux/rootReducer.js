@@ -11,6 +11,7 @@ import orderSetReducer from "./slices/orderSetSlice";
 import patchOrderReducer from "./slices/patchOrderSlice";
 import preOrderDetailReducer from "./slices/preOrderDetailSlice";
 import programsReducer from "./slices/programsSlice";
+import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import territoryReducer from "./slices/territorySlice";
 import userReducer from "./slices/userSlice";
 
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   patchOrder: patchOrderReducer,
   preOrderDetails: preOrderDetailReducer,
   programs: programsReducer,
+  purchaseOrder: purchaseOrderReducer,
   territories: territoryReducer,
   user: userReducer,
 });
