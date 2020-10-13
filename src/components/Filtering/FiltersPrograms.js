@@ -182,6 +182,63 @@ const FiltersPrograms = ({
   return (
     <>
       <List>
+        <ListItem
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography className={classes.headerText}>
+            Sort Pre-Order Programs By:
+          </Typography>
+          <br />
+          <ButtonGroup
+            orientation="vertical"
+            fullWidth
+            color="secondary"
+            aria-label="program-sort"
+          >
+            <Button
+              className={
+                value === "brand" ? classes.largeButton : classes.selectedButton
+              }
+              variant={value === "brand" ? "contained" : "outlined"}
+              onClick={() => {
+                setValue("brand");
+                handleFilters("brand", "sortProgramsBy", "program");
+              }}
+            >
+              BRAND
+            </Button>
+            <Button
+              className={
+                value === "month" ? classes.largeButton : classes.selectedButton
+              }
+              variant={value === "month" ? "contained" : "outlined"}
+              onClick={() => {
+                setValue("month");
+                handleFilters("month", "sortProgramsBy", "program");
+              }}
+            >
+              FOCUS MONTH
+            </Button>
+            <Button
+              className={
+                value === "unit" ? classes.largeButton : classes.selectedButton
+              }
+              variant={value === "unit" ? "contained" : "outlined"}
+              onClick={() => {
+                setValue("unit");
+                handleFilters("unit", "sortProgramsBy", "program");
+              }}
+            >
+              BUSINESS UNIT
+            </Button>
+          </ButtonGroup>
+        </ListItem>
+        <ListItem />
+        <Divider />
+        <ListItem />
         <ListItem>
           <BrandAutoComplete
             classes={classes}
@@ -232,53 +289,6 @@ const FiltersPrograms = ({
       </List>
       <br />
       <br />
-      <Typography className={classes.headerText}>
-        Sort Pre-Order Programs By:
-      </Typography>
-      <br />
-      <ButtonGroup
-        orientation="vertical"
-        fullWidth
-        color="secondary"
-        aria-label="program-sort"
-      >
-        <Button
-          className={
-            value === "brand" ? classes.largeButton : classes.selectedButton
-          }
-          variant={value === "brand" ? "contained" : "outlined"}
-          onClick={() => {
-            setValue("brand");
-            handleFilters("brand", "sortProgramsBy", "program");
-          }}
-        >
-          BRAND
-        </Button>
-        <Button
-          className={
-            value === "month" ? classes.largeButton : classes.selectedButton
-          }
-          variant={value === "month" ? "contained" : "outlined"}
-          onClick={() => {
-            setValue("month");
-            handleFilters("month", "sortProgramsBy", "program");
-          }}
-        >
-          FOCUS MONTH
-        </Button>
-        <Button
-          className={
-            value === "unit" ? classes.largeButton : classes.selectedButton
-          }
-          variant={value === "unit" ? "contained" : "outlined"}
-          onClick={() => {
-            setValue("unit");
-            handleFilters("unit", "sortProgramsBy", "program");
-          }}
-        >
-          BUSINESS UNIT
-        </Button>
-      </ButtonGroup>
     </>
   );
 };

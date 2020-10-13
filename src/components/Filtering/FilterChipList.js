@@ -22,7 +22,7 @@ const FilterChipList = () => {
   const classes = useStyles();
 
   const filterState = useSelector((state) => state.filters);
-  const filterType = useSelector((state) => state.filters.filterType)
+  const filterType = useSelector((state) => state.filters.filterType);
 
   const handleChipClick = (type, value) => {
     let dispatchObject = { filter: type, value: null };
@@ -30,8 +30,16 @@ const FilterChipList = () => {
       let currentFilterArray = filterState[type].filter((f) => f !== value);
       dispatchObject.value = currentFilterArray;
     }
-    if (type === "program" || type === "itemType" || type === "brand" || type === "user") {
-      let currentFilterArray = filterState[type].filter((f) => f.name !== value)
+    if (
+      type === "program" ||
+      type === "itemType" ||
+      type === "brand" ||
+      type === "user" ||
+      type === "distributor"
+    ) {
+      let currentFilterArray = filterState[type].filter(
+        (f) => f.name !== value
+      );
       dispatchObject.value = currentFilterArray;
     }
     dispatch(updateSingleFilter(dispatchObject));

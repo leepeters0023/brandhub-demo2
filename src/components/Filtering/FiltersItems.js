@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import BrandAutoComplete from "../Utility/BrandAutoComplete";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import { updateSingleFilter, setChips } from "../../redux/slices/filterSlice";
+
+import BrandAutoComplete from "../Utility/BrandAutoComplete";
+import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
+import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -19,46 +21,6 @@ import TextField from "@material-ui/core/TextField";
 
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-
-const ItemTypesList = React.memo(
-  ({ listItems, handleCheckToggle, itemTypesChecked, setItemTypesChecked }) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(
-                  item,
-                  itemTypesChecked,
-                  setItemTypesChecked,
-                  "itemType"
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={itemTypesChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  }
-);
 
 const UnitsList = React.memo(
   ({ listItems, handleCheckToggle, unitsChecked, setUnitsChecked }) => {
@@ -96,7 +58,6 @@ const UnitsList = React.memo(
 );
 
 const FiltersItems = ({
-  itemTypes,
   units,
   reset,
   setReset,
@@ -106,13 +67,10 @@ const FiltersItems = ({
   bindSequenceNum,
 }) => {
   const dispatch = useDispatch();
-  const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
-  const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
   const [unitsOpen, setUnitsOpen] = useCallback(useState(false));
   const [unitsChecked, setUnitsChecked] = useCallback(useState([]));
 
   const currentBuFilter = useSelector((state) => state.filters.bu);
-  const currentItemTypeFilter = useSelector((state) => state.filters.itemType);
 
   const handleCheckToggle = useCallback(
     (value, array, func, type, deleting) => {
@@ -127,9 +85,9 @@ const FiltersItems = ({
 
       func(newChecked);
       if (!deleting) {
-      dispatch(updateSingleFilter({ filter: type, value: newChecked }));
+        dispatch(updateSingleFilter({ filter: type, value: newChecked }));
 
-        dispatch(setChips({filterType: "item"}));
+        dispatch(setChips({ filterType: "item" }));
       }
     },
     [dispatch]
@@ -157,37 +115,7 @@ const FiltersItems = ({
         );
       }
     }
-  }, [
-    currentBuFilter,
-    unitsChecked,
-    setUnitsChecked,
-    handleCheckToggle,
-  ]);
-
-  useEffect(() => {
-    if (currentItemTypeFilter.length !== itemTypesChecked.length) {
-      if (itemTypesChecked.length > currentItemTypeFilter.length) {
-        let missingFilter;
-        itemTypesChecked.forEach((unit) => {
-          if (currentItemTypeFilter.filter((u) => u === unit).length === 0) {
-            missingFilter = unit;
-          }
-        });
-        handleCheckToggle(
-          missingFilter,
-          itemTypesChecked,
-          setItemTypesChecked,
-          "itemType",
-          true
-        );
-      }
-    }
-  }, [
-    currentItemTypeFilter,
-    itemTypesChecked,
-    setItemTypesChecked,
-    handleCheckToggle,
-  ]);
+  }, [currentBuFilter, unitsChecked, setUnitsChecked, handleCheckToggle]);
 
   return (
     <>
@@ -227,27 +155,24 @@ const FiltersItems = ({
             filterType={"item"}
           />
         </ListItem>
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(itemTypesOpen, setItemTypesOpen);
-          }}
-        >
-          <ListItemText primary="Item Type" />
-          {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse
-          in={itemTypesOpen}
-          timeout={{ appear: 400, enter: 400, exit: 0 }}
-        >
-          <ItemTypesList
-            listItems={itemTypes}
-            handleCheckToggle={handleCheckToggle}
-            itemTypesChecked={itemTypesChecked}
-            setItemTypesChecked={setItemTypesChecked}
+        <ListItem>
+          <ProgramAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"item"}
           />
-        </Collapse>
-        <Divider />
+        </ListItem>
+        <ListItem>
+          <ItemTypeAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"item"}
+          />
+        </ListItem>
         <ListItem
           button
           onClick={() => {
@@ -271,7 +196,6 @@ const FiltersItems = ({
 };
 
 FiltersItems.propTypes = {
-  itemTypes: PropTypes.array.isRequired,
   units: PropTypes.array.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
@@ -279,6 +203,6 @@ FiltersItems.propTypes = {
   classes: PropTypes.object.isRequired,
   sequenceNum: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
-}
+};
 
 export default FiltersItems;

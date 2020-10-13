@@ -4,11 +4,15 @@ import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchFilteredItems } from "../redux/slices/itemSlice";
-
 import { fetchCurrentOrderByType } from "../redux/slices/currentOrderSlice";
 
-import { setFilterType } from "../redux/slices/filterSlice";
+import {
+  setFilterType,
+  setDefaultFilters,
+  updateMultipleFilters,
+  //setSorted,
+  setClear,
+} from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -26,6 +30,14 @@ import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
+const defaultFilters = {
+  brand: [],
+  itemType: [],
+  bu: [],
+  program: [],
+  sequenceNum: "",
+};
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
@@ -38,10 +50,10 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
-  const currentUserRole = useSelector((state) => state.user.role);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);
   const currentOrder = useSelector((state) => state.currentOrder);
   const userId = useSelector((state) => state.user.id);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -54,16 +66,20 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "item" }));
-    handleFilterDrawer(true)
+    dispatch(setFilterType({ type: "item-inStock" }));
+    dispatch(
+      setDefaultFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    dispatch(
+      updateMultipleFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
-      dispatch(fetchFilteredItems("inStock"));
-    }
-  }, [currentItems, dispatch, userType, currentUserRole]);
 
   useEffect(() => {
     if (
@@ -71,6 +87,13 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
       (userId && currentOrder.type !== "in-stock")
     ) {
       dispatch(fetchCurrentOrderByType("inStock", userId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

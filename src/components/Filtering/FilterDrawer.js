@@ -15,6 +15,7 @@ import {
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
 import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
+import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 
 import { useDetailedInput } from "../../hooks/UtilityHooks";
 
@@ -35,7 +36,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {
-  itemTypes,
   units,
   ruleTypes,
   suppliers,
@@ -102,7 +102,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "groupBy" ||
         filter === "program" ||
         filter === "brand" ||
-        filter === "user"
+        filter === "user" ||
+        filter === "distributor"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
@@ -130,7 +131,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           dispatch(setChips({ filterType: type }));
         }
       } else if (
-        filter === "distributor" ||
         filter === "territory"
       ) {
         dispatch(
@@ -207,6 +207,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(defaultFilters));
       }
+      if (filterType === "item-inStock") {
+        dispatch(fetchFilteredItems("inStock"))
+      }
+      if (filterType === "item-onDemand") {
+        dispatch(fetchFilteredItems("onDemand"))
+      }
     }
   }, [
     dispatch,
@@ -247,6 +253,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-approvals"
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
+      } 
+      if (filterType === "item-inStock") {
+        dispatch(fetchFilteredItems("inStock"))
+      }
+      if (filterType === "item-onDemand") {
+        dispatch(fetchFilteredItems("onDemand"))
       }
       dispatch(setSorted());
     }
@@ -287,9 +299,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             Filters:
           </Typography>
           <Divider />
-          {filterType === "item" && (
+          {filterType && filterType.includes("item") && (
             <FiltersItems
-              itemTypes={itemTypes}
               units={units}
               reset={reset}
               setReset={setReset}
@@ -311,7 +322,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindRfqNum={bindRfqNum}
               poNum={poNum}
               bindPoNum={bindPoNum}
-              itemTypes={itemTypes}
               suppliers={suppliers}
               handleSearch={
                 filterType.includes("orders")
@@ -329,7 +339,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              itemTypes={itemTypes}
               ruleTypes={ruleTypes}
               handleSearch={
                 // TODO add search for po when api is there
@@ -356,7 +365,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              itemTypes={itemTypes}
               handleSearch={
                 // TODO add search for po when api is there
                 () => console.log("Searching!")
