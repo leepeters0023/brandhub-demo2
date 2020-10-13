@@ -12,13 +12,13 @@ import UserAutoComplete from "../Utility/UserAutoComplete";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 
 const FiltersBudget = ({
   reset,
   setReset,
   handleFilters,
   classes,
-  handleSearch,
   budgetType,
 }) => {
   const dispatch = useDispatch();
@@ -57,18 +57,8 @@ const FiltersBudget = ({
             filterType={"budget"}
           />
         </ListItem>
+        <Divider />
         <ListItem />
-        <ListItem>
-          <Button
-            fullWidth
-            className={classes.largeButton}
-            variant="contained"
-            color="secondary"
-            onClick={handleSearch}
-          >
-            SEARCH
-          </Button>
-        </ListItem>
         <ListItem>
           <Button
             fullWidth
@@ -92,7 +82,6 @@ FiltersBudget.propTypes = {
   setReset: PropTypes.func.isRequired,
   handleFilters: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   budgetType: PropTypes.string.isRequired,
 };
 

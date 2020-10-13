@@ -29,15 +29,22 @@ const StatusSelector = ({
   const rfqStatusList = [
     { status: "awarded", label: "Awarded" },
     { status: "ready", label: "Ready for Review" },
-    { status: "pending", label: "Waiting for Resp."},
-    { status: "all", label: "All Status"}
-  ]
+    { status: "pending", label: "Waiting for Resp." },
+    { status: "all", label: "All Status" },
+  ];
   const poStatusList = [
     { status: "in-progress", label: "In Progress" },
     { status: "complete", label: "Complete" },
     { status: "canceled", label: "Canceled" },
-    { status: "all", label: "All Status"}
-  ]
+    { status: "all", label: "All Status" },
+  ];
+
+  const lableMap = {
+    history: "Order Status",
+    compliance: "Item Status",
+    rfq: "RFQ Status",
+    po: "PO Status",
+  };
 
   const handleChangeSelect = (evt) => {
     setStatus(evt.target.value);
@@ -52,35 +59,50 @@ const StatusSelector = ({
         size="small"
         className={classes.queryField}
       >
-        <InputLabel id="status-select">Order Status</InputLabel>
+        <InputLabel id="status-select">{lableMap[filterType]}</InputLabel>
         <Select
-          label="Order Status"
+          label={lableMap[filterType]}
           name="status"
           labelId="status-select"
           id="status"
           value={status}
           onChange={handleChangeSelect}
+          MenuProps={{
+            getContentAnchorEl: null,
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left",
+            },
+          }}
         >
-          {filterType === "history" && historyStatusList.map((status, index) => (
-            <MenuItem value={status.status} key={index}>
-              <Typography variant="body2">{status.label}</Typography>
-            </MenuItem>
-          ))}
-          {filterType === "compliance" && complianceStatusList.map((status, index) => (
-            <MenuItem value={status.status} key={index}>
-              <Typography variant="body2">{status.label}</Typography>
-            </MenuItem>
-          ))}
-          {filterType === "rfq" && rfqStatusList.map((status, index) => (
-            <MenuItem value={status.status} key={index}>
-              <Typography variant="body2">{status.label}</Typography>
-            </MenuItem>
-          ))}
-          {filterType === "po" && poStatusList.map((status, index) => (
-            <MenuItem value={status.status} key={index}>
-              <Typography variant="body2">{status.label}</Typography>
-            </MenuItem>
-          ))}
+          {filterType === "history" &&
+            historyStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
+          {filterType === "compliance" &&
+            complianceStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
+          {filterType === "rfq" &&
+            rfqStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
+          {filterType === "po" &&
+            poStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </>

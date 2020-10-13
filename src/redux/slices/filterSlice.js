@@ -4,22 +4,22 @@ let initialState = {
   fromDate: null,
   toDate: null,
   bu: [],
-  brand: null,
-  distributor: null,
+  brand: [],
+  distributor: [],
   groupBy: null,
   itemType: [],
   month: [],
   orderType: null,
   poNum: null,
-  program: null,
+  program: [],
   rfqNum: null,
   ruleType: [],
   sequenceNum: null,
   status: null,
   supplier: [],
-  tag: null,
-  territory: null,
-  user: null,
+  tag: [],
+  territory: [],
+  user: [],
   sortOrder: null,
   sortOrderBy: null,
   sortProgramsBy: null,
@@ -43,8 +43,8 @@ const filterSlice = createSlice({
       state.fromDate = null;
       state.toDate = null;
       state.bu = [];
-      state.brand = null;
-      state.distributor = null;
+      state.brand = [];
+      state.distributor = [];
       state.itemType = [];
       state.groupBy = null;
       state.month = [];
@@ -56,9 +56,9 @@ const filterSlice = createSlice({
       state.ruleType = [];
       state.status = null;
       state.supplier = [];
-      state.tag = null;
-      state.territory = null;
-      state.user = null;
+      state.tag = [];
+      state.territory = [];
+      state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;
       state.sortProgramsBy = null;
@@ -80,14 +80,14 @@ const filterSlice = createSlice({
       state.clearFilters = true;
     },
     setSorted(state) {
-      state.sorted = true;
+      state.sorted = !state.sorted;
     },
     resetFilters(state) {
       state.fromDate = null;
       state.toDate = null;
       state.bu = [];
-      state.brand = null;
-      state.distributor = null;
+      state.brand = [];
+      state.distributor = [];
       state.groupBy = null;
       state.itemType = [];
       state.month = [];
@@ -99,9 +99,9 @@ const filterSlice = createSlice({
       state.rfqNum = null;
       state.ruleType = [];
       state.status = null;
-      state.tag = null;
-      state.territory = null;
-      state.user = null;
+      state.tag = [];
+      state.territory = [];
+      state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;
       state.sortProgramsBy = null;
@@ -114,29 +114,26 @@ const filterSlice = createSlice({
       if (filterType === "item") {
         chippable = ["bu", "brand", "itemType"];
       }
-      if (filterType.includes("history")) {
+      if (filterType.includes("history") || filterType === "rfq" || filterType === "po") {
         chippable = [
-          "fromDate",
-          "toDate",
           "bu",
           "brand",
           "distributor",
           "itemType",
-          "orderType",
           "program",
           "sequenceNum",
           "status",
           "user",
           "rfqNum",
-          "poNum", 
-          "groupBy"
+          "poNum",
+          "supplier",
         ];
       }
       if (filterType === "program") {
         chippable = ["month", "brand", "bu"];
       }
       if (filterType === "itemRollup") {
-        chippable = ["brand", "program", "itemType", "sequenceNum", "orderType"];
+        chippable = ["brand", "program", "itemType", "sequenceNum"];
       }
       if (filterType.includes("compliance")) {
         chippable = ["brand", "program", "itemyType", "tag", "ruleType", "sequenceNum", "status"]
@@ -148,18 +145,21 @@ const filterSlice = createSlice({
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (filter === "bu" || filter === "itemType" || filter === "month" || filter === "ruleType" || filter === "supplier") {
+          if (filter === "bu" || filter === "month" || filter === "ruleType" || filter === "supplier") {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );
           } else if (
+            filter === "program" ||
+            filter === "itemType" ||
             filter === "brand" ||
             filter === "user" ||
-            filter === "distributor"
+            filter === "distributor" ||
+            filter === "territory"
           ) {
-            if (stateObject[filter]) {
-              filters.push({ type: filter, value: stateObject[filter].name });
-            }
+            stateObject[filter].forEach((f) => {
+              filters.push({type: filter, value: f.name})
+            })
           } else if (stateObject[filter]) {
             filters.push({ type: filter, value: stateObject[filter] });
           }

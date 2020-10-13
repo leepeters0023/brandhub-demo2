@@ -33,6 +33,15 @@ const itemSlice = createSlice({
     },
     getItemsSuccess(state, action) {
       const { orderType, items, nextLink } = action.payload;
+      state.orderType = orderType;
+      state.pagesLoaded += 1;
+      state.nextLink = nextLink;
+      state.items = [...items];
+      state.isLoading = false;
+      state.error = null;
+    },
+    getNextItemsSuccess(state, action) {
+      const { orderType, items, nextLink } = action.payload;
       let currentItems = [...state.items];
       let updatedItems = currentItems.concat(items);
       state.orderType = orderType;

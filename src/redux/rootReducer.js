@@ -12,6 +12,7 @@ import patchOrderReducer from "./slices/patchOrderSlice";
 import preOrderDetailReducer from "./slices/preOrderDetailSlice";
 import programsReducer from "./slices/programsSlice";
 import purchaseOrderReducer from "./slices/purchaseOrderSlice";
+import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
 import userReducer from "./slices/userSlice";
 
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   preOrderDetails: preOrderDetailReducer,
   programs: programsReducer,
   purchaseOrder: purchaseOrderReducer,
+  tags: tagReducer,
   territories: territoryReducer,
   user: userReducer,
 });

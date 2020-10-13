@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
+import { fetchProgramList } from "../../redux/slices/programsSlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const DistributorAutoComplete = ({
+const ProgramAutoComplete = ({
   classes,
   handleChange,
   reset,
@@ -18,42 +18,38 @@ const DistributorAutoComplete = ({
 }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const [distributor, setDistributor] = useState("");
-  const [currentDistributors, setCurrentDistributors] = useState([]);
+  const [program, setProgram] = useState("");
+  const [currentPrograms, setCurrentPrograms] = useState([]);
 
-  const isLoading = useSelector((state) => state.distributors.isLoading);
-  const options = useSelector((state) => state.distributors.distributorList);
-  const currentFiltersDistributor = useSelector(
-    (state) => state.filters.distributor
-  );
+  const isLoading = useSelector((state) => state.programs.listIsLoading);
+  const options = useSelector((state) => state.programs.programList);
+  const currentFilterPrograms = useSelector((state) => state.filters.program);
 
   const loading = open && isLoading;
 
-  const handleDistributors = (value) => {
-    setCurrentDistributors(value);
+  const handlePrograms = (value) => {
+    setCurrentPrograms(value);
   };
 
   useEffect(() => {
-    if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor));
+    if (program.length >= 1) {
+      dispatch(fetchProgramList(program));
     }
-  }, [distributor, dispatch]);
+  }, [program, dispatch]);
 
   useEffect(() => {
-    if (currentFiltersDistributor.length !== currentDistributors.length) {
-      setCurrentDistributors(currentFiltersDistributor);
+    if (currentFilterPrograms.length !== currentPrograms.length) {
+      setCurrentPrograms(currentFilterPrograms);
     }
-  }, [currentFiltersDistributor, currentDistributors.length]);
+  }, [currentFilterPrograms, currentPrograms.length])
 
   useEffect(() => {
-    if (reset && setReset) {
-      if (reset) {
-        setDistributor("");
-        setCurrentDistributors([]);
-        setReset(false);
-      }
+    if (reset) {
+      setProgram("");
+      setCurrentPrograms([]);
+      setReset(false);
     }
-  }, [reset, setDistributor, setReset]);
+  }, [reset, setProgram, setReset]);
 
   return (
     <>
@@ -63,29 +59,31 @@ const DistributorAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
-        id="distributor-auto-complete"
+        id="program-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
-        inputValue={distributor}
-        onInputChange={(_evt, value) => setDistributor(value)}
-        onChange={(_evt, value) => {
-          handleChange(value, "distributor", filterType);
-          handleDistributors(value);
+        inputValue={program}
+        onInputChange={(_evt, value) => setProgram(value)}
+        onChange={(evt, value) => {
+          console.log(value)
+          handleChange(value, "program", filterType);
+          handlePrograms(value);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
-        value={currentDistributors}
+        value={currentPrograms}
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Distributor"
+            label="Program"
             variant="outlined"
             size="small"
             InputProps={{
               ...params.InputProps,
+              autoComplete: "new-password",
               endAdornment: (
                 <>
                   {loading ? (
@@ -102,12 +100,11 @@ const DistributorAutoComplete = ({
   );
 };
 
-DistributorAutoComplete.propTypes = {
+ProgramAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
-  filterType: PropTypes.string.isRequired,
 };
 
-export default DistributorAutoComplete;
+export default ProgramAutoComplete;

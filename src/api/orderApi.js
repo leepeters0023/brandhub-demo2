@@ -84,18 +84,21 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let statusString =
+    filterObject.status ?
     filterObject.status !== "all"
       ? `&filter[status]=${filterObject.status}`
-      : "&filter[status]!=approved";
-  let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user.id}`
+      : "&filter[status]!=approved"
     : "";
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${filterObject.user[0].id}`
+    : "";
+  //TODO fix this (program, brand, user)
   let progString =
     filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program}`
+      ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
-  let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand.id}`
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
   let seqString =
     filterObject.sequenceNum.length > 0
@@ -378,21 +381,22 @@ export const fetchOrderHistory = async (filterObject) => {
       : `&filter[type]=${filterObject.type}`
     : "";
   let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
-  let distString = filterObject.distributor
-    ? `&filter[distributor-id]=${filterObject.distributor.id}`
+  let distString = filterObject.distributor.length > 0
+    ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
     : "";
-  let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user.id}`
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${filterObject.user[0].id}`
     : "";
-  let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand.id}`
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
+  //TODO fix this (program, brand, user, distributor)
   let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program}`
+    (filterObject.program && filterObject.program.length > 0)
+      ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
   let seqString =
-    filterObject.sequenceNum.length > 0
+    (filterObject.sequenceNum && filterObject.sequenceNum.length > 0)
       ? `&filter[item-number]=${filterObject.sequenceNum}`
       : "";
   let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${

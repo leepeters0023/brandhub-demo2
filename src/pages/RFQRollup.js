@@ -30,8 +30,8 @@ import { currentBidItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
-  brand: null,
-  program: "",
+  brand: [],
+  program: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",

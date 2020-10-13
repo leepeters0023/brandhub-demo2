@@ -9,15 +9,17 @@ import {
   updateSingleFilter,
   setChips,
   resetFilters,
+  setSorted,
 } from "../../redux/slices/filterSlice";
 
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
 import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
+import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 
 import { useDetailedInput } from "../../hooks/UtilityHooks";
 
-import FiltersItems from "../Utility/FiltersItems";
+import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";
 import FiltersPrograms from "./FiltersPrograms";
 import FiltersItemRollup from "./FiltersItemRollup";
@@ -34,26 +36,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {
-  itemTypes,
-  units,
-  ruleTypes,
   suppliers,
 } from "../../utility/constants";
-
-const focusMonths = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -85,68 +69,65 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const [reset, setReset] = useCallback(useState(false));
 
   const handleFilters = useCallback(
-    (value, type, filterType) => {
+    (value, filter, type) => {
+      let currentFilters = { ...allFilters };
       if (
-        type === "program" ||
-        type === "sequenceNum" ||
-        type === "rfqNum" ||
-        type === "poNum" ||
-        type === "tag" ||
-        type === "ruleType" ||
-        type === "status" ||
-        type === "bu" ||
-        type === "itemType" ||
-        type === "month" ||
-        type === "sortProgramsBy" ||
-        type === "groupBy"
+        filter === "sequenceNum" ||
+        filter === "rfqNum" ||
+        filter === "poNum" ||
+        filter === "tag" ||
+        filter === "ruleType" ||
+        filter === "status" ||
+        filter === "bu" ||
+        filter === "itemType" ||
+        filter === "month" ||
+        filter === "sortProgramsBy" ||
+        filter === "groupBy" ||
+        filter === "program" ||
+        filter === "brand" ||
+        filter === "user" ||
+        filter === "distributor" ||
+        filter === "orderType" ||
+        filter === "territory" ||
+        filter === "supplier"
       ) {
-        dispatch(updateSingleFilter({ filter: type, value: value }));
+        dispatch(updateSingleFilter({ filter: filter, value: value }));
+        currentFilters[filter] = value;
         if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
+          filter !== "sequenceNum" &&
+          filter !== "rfqNum" &&
+          filter !== "poNum"
         ) {
-          dispatch(setChips({ filterType: filterType }));
+          dispatch(setChips({ filterType: type }));
         }
-      } else if (type === "fromDate" || type === "toDate") {
+      } else if (filter === "fromDate" || filter === "toDate") {
         dispatch(
           updateSingleFilter({
-            filter: type,
+            filter: filter,
             value: format(value, "MM/dd/yyyy"),
           })
         );
-        if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
-        ) {
-          dispatch(setChips({ filterType: filterType }));
-        }
-      } else if (
-        type === "distributor" ||
-        type === "brand" ||
-        type === "user" ||
-        type === "territory"
+        currentFilters[filter] = format(value, "MM/dd/yyyy");
+      }
+      if (
+        filterType === "history-orders" &&
+        filter !== "sequenceNum" &&
+        filter !== "rfqNum" &&
+        filter !== "poNum"
       ) {
-        dispatch(
-          updateSingleFilter({
-            filter: type,
-            value: value ? { id: value.id, name: value.name } : null,
-          })
-        );
-        if (
-          !filterType.includes("history") &&
-          filterType !== "itemRollup" &&
-          !filterType.includes("compliance") &&
-          !filterType.includes("budget")
-        ) {
-          dispatch(setChips({ filterType: filterType }));
-        }
+        dispatch(fetchFilteredOrderHistory(currentFilters));
+      }
+      if (
+        (filterType === "history-rollup" ||
+          filterType === "history-approvals") &&
+        filter !== "sequenceNum" &&
+        filter !== "rfqNum" &&
+        filter !== "poNum"
+      ) {
+        dispatch(fetchFilteredOrderSets(currentFilters));
       }
     },
-    [dispatch]
+    [dispatch, allFilters, filterType]
   );
 
   const {
@@ -154,11 +135,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     bind: bindSequenceNum,
     reset: resetSequenceNum,
   } = useDetailedInput("", handleFilters, "sequenceNum", filterType);
-  const {
-    value: program,
-    bind: bindProgram,
-    reset: resetProgram,
-  } = useDetailedInput("", handleFilters, "program", filterType);
   const { value: poNum, bind: bindPoNum, reset: resetPoNum } = useDetailedInput(
     "",
     handleFilters,
@@ -174,7 +150,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const resetAllFilters = useCallback(() => {
     setReset(true);
     resetSequenceNum();
-    resetProgram();
     resetPoNum();
     resetRfqNum();
     dispatch(clearBrands());
@@ -191,10 +166,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(defaultFilters));
       }
+      if (filterType === "item-inStock") {
+        dispatch(fetchFilteredItems("inStock"))
+      }
+      if (filterType === "item-onDemand") {
+        dispatch(fetchFilteredItems("onDemand"))
+      }
     }
   }, [
     dispatch,
-    resetProgram,
     resetSequenceNum,
     resetPoNum,
     resetRfqNum,
@@ -232,7 +212,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-approvals"
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
+      } 
+      if (filterType === "item-inStock") {
+        dispatch(fetchFilteredItems("inStock"))
       }
+      if (filterType === "item-onDemand") {
+        dispatch(fetchFilteredItems("onDemand"))
+      }
+      dispatch(setSorted());
     }
   }, [sorted, dispatch, filterType, allFilters]);
 
@@ -264,12 +251,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               <ChevronLeftIcon color="inherit" />
             </IconButton>
           </Tooltip>
-          <Typography className={classes.titleText} style={{fontWeight: "500"}}>Filters:</Typography>
+          <Typography
+            className={classes.titleText}
+            style={{ fontWeight: "500" }}
+          >
+            Filters:
+          </Typography>
           <Divider />
-          {filterType === "item" && (
+          {filterType && filterType.includes("item-") && (
             <FiltersItems
-              itemTypes={itemTypes}
-              units={units}
               reset={reset}
               setReset={setReset}
               handleFilters={handleFilters}
@@ -286,13 +276,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
               rfqNum={rfqNum}
               bindRfqNum={bindRfqNum}
               poNum={poNum}
               bindPoNum={bindPoNum}
-              itemTypes={itemTypes}
               suppliers={suppliers}
               handleSearch={
                 filterType.includes("orders")
@@ -310,10 +297,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
-              itemTypes={itemTypes}
-              ruleTypes={ruleTypes}
               handleSearch={
                 // TODO add search for po when api is there
                 () => console.log("Searching!")
@@ -323,8 +306,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           )}
           {filterType === "program" && (
             <FiltersPrograms
-              units={units}
-              months={focusMonths}
               reset={reset}
               setReset={setReset}
               handleFilters={handleFilters}
@@ -339,9 +320,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              program={program}
-              bindProgram={bindProgram}
-              itemTypes={itemTypes}
               handleSearch={
                 // TODO add search for po when api is there
                 () => console.log("Searching!")
@@ -354,10 +332,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              handleSearch={
-                // TODO add search for po when api is there
-                () => console.log("Searching!")
-              }
               budgetType={filterType.split("-")[1]}
             />
           )}

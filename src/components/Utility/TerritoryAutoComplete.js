@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-//import { useSelector, useDispatch } from "react-redux";
+import { useSelector, /*useDispatch*/} from "react-redux";
 
 //import { fetchTerritories } from "../../redux/slices/territorySlice";
 
@@ -18,17 +18,24 @@ const TerritoryAutoComplete = ({
   reset,
   setReset,
   filterType,
-  multiSelect = false,
 }) => {
   //const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [territory, setTerritory] = useState("");
+  const [currentTerritories, setCurrentTerritories] = useState([]);
 
   //const isLoading = useSelector((state) => state.territories.isLoading);
-  const options = regions
+  const options = regions;
+  const currentFiltersTerritory = useSelector(
+    (state) => state.filters.territory
+  );
 
   //const loading = open && isLoading;
-  const loading = false
+  const loading = false;
+
+  const handleTerritories = (value) => {
+    setCurrentTerritories(value);
+  };
 
   // useEffect(() => {
   //   if (territory.length >= 1) {
@@ -37,9 +44,16 @@ const TerritoryAutoComplete = ({
   // }, [territory, dispatch]);
 
   useEffect(() => {
+    if (currentFiltersTerritory.length !== currentTerritories.length) {
+      setCurrentTerritories(currentFiltersTerritory);
+    }
+  }, [currentFiltersTerritory, currentTerritories.length]);
+
+  useEffect(() => {
     if (reset && setReset) {
       if (reset) {
         setTerritory("");
+        setCurrentTerritories([]);
         setReset(false);
       }
     }
@@ -48,7 +62,9 @@ const TerritoryAutoComplete = ({
   return (
     <>
       <Autocomplete
-        multiple={multiSelect}
+        multiple
+        freeSolo
+        renderTags={() => null}
         fullWidth
         className={classes.queryField}
         id="territory-auto-complete"
@@ -58,13 +74,14 @@ const TerritoryAutoComplete = ({
         inputValue={territory}
         onInputChange={(_evt, value) => setTerritory(value)}
         onChange={(_evt, value) => {
-          console.log(value)
-          handleChange(value, "territory", filterType)}
-        }
+          handleChange(value, "territory", filterType);
+          handleTerritories(value);
+        }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
+        value={currentTerritories}
         renderInput={(params) => (
           <TextField
             {...params}
