@@ -28,7 +28,7 @@ let tags = [
   "Cardboard",
 ];
 let suppliers = ["Imperial", "Curtis", "Sterling", "Willey"];
-let territories = ["Western", "Southern", "North East", "Walmart", "Kroger", "Multi Territory"]
+let territories = ["Western", "Southern", "North East", "Mega", "California", "Walmart", "Kroger", "Multi Territory"]
 
 const generatePOItems = (dataPoints) => {
   let data = [];
@@ -128,26 +128,6 @@ const generatePOs = (dataPoints, stat) => {
   return data;
 };
 
-const generateComplianceRules = (dataPoints) => {
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let ranNum = Math.floor(Math.random() * 3 + 1)
-    let ruleType = ruleTypes[Math.floor(Math.random() * ruleTypes.length)];
-    let ruleTags = [];
-    for (let j = 0; j < ranNum; j++) {
-      ruleTags.push(tags[Math.floor(Math.random() * tags.length)]);
-    }
-    let description =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.";
-    data.push({
-      ruleType: ruleType,
-      tags: ruleTags,
-      desc: description,
-    });
-  }
-  return data;
-};
-
 const generateComplianceItems = (dataPoints) => {
   let stats = ["Approved", "Denied", "Pending"];
   let data = [];
@@ -189,7 +169,7 @@ const generateYearToDateBudgets = (dataPoints) => {
   for (let i = 0; i < dataPoints; i ++) {
     let user = people[Math.floor(Math.random()*people.length)];
     let brand = brands[Math.floor(Math.random()*brands.length)];
-    let territory = territories[Math.floor(Math.random()*territories.length)]
+    let territory = territories[Math.floor(Math.random()*(territories.length - 1))]
     let budget = Math.floor(Math.random() * 1000000 + 1000000)
     let onHold = Math.floor(budget * ((Math.floor(Math.random() * 10 + 5)) / 100))
     let committed = Math.floor(budget * ((Math.floor(Math.random() * 15 + 5)) / 100))
@@ -211,6 +191,59 @@ const generateYearToDateBudgets = (dataPoints) => {
   return data;
 }
 
+export const rules = [
+  {
+    ruleType: "Item Type",
+    tags: ["Wine", "Spirit", "Malt", "UT"],
+    desc: "No Neckers Allowed for Wine, Spirits or Malt product",
+  },
+  {
+    ruleType: "Item Type",
+    tags: ["Wine", "Spirit", "Malt", "VA"],
+    desc: "No Floor Decals Allowed for Wine, Spirit or Malt"
+  },
+  {
+    ruleType: "Pricing",
+    tags: ["Structure", "Wine", "Spirit", "Malt", ">", "150", "MD"],
+    desc: "If Product = Structure, and Brand = Wine Spirit or Malt, Price cannot be greater than $150"
+  },
+  {
+    ruleType: "Pricing",
+    tags: ["Structure", "Spirit", ">", "25", "WV"],
+    desc: "Structure cannot exceed $25 if Spirit"
+  },
+  {
+    ruleType: "Pricing",
+    tags: ["Structure", "Wine", "Spirit", "Malt", ">", "250", "SD"],
+    desc: "Structure cannot exceed $250 if Wine, Spirit or Malt,"
+  },
+  {
+    ruleType: "Pricing",
+    tags: ["Structure", "Wine", "Spirit", "Malt", ">", "40", "VA"],
+    desc: "Structure cannot Exceed $40 if Wine, Spirit or Malt"
+  },
+  {
+    ruleType: "Prior Approval",
+    tags: ["POS", "Wine", "Malt", "IN", "ME", "VT", "WV"],
+    desc: "Prior Approval Required if Product is POS, Wine, and Malt"
+  },
+  {
+    ruleType: "Prior Approval",
+    tags: ["Structure", "Wine", "Malt", "IN", "ME", "MN", "VT", "WV"],
+    desc: "Prior Approval Required if Product is Structure Wine and Malt"
+  },
+  {
+    ruleType: "Prior Approval",
+    tags: ["POS", "Spirit", "IN", "NC", "VA", "WV"],
+    desc: "Prior Approval Required if Product is POS, Spirits"
+  },
+  {
+    ruleType: "Prior Approval",
+    tags: ["Structure", "Spirit", "IN", "MN", "WV"],
+    desc: "Prior Approval Required if Product is Structure, Spirits"
+  }
+]
+
 export const currentPOItems = generatePOItems(20);
 export const currentBidItems = generatePOItems(20);
 export const singlePO = generatePOItems(3);
@@ -219,6 +252,5 @@ export const rfqCurrent = generateRFQs(20, "current");
 export const rfqAll = generateRFQs(20, "all");
 export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
-export const rules = generateComplianceRules(20);
 export const complianceItems = generateComplianceItems(20);
 export const yearToDateBudgets = generateYearToDateBudgets(20);

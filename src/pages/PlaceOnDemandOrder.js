@@ -4,11 +4,15 @@ import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchFilteredItems } from "../redux/slices/itemSlice";
-
 import { fetchCurrentOrderByType } from "../redux/slices/currentOrderSlice";
 
-import { setFilterType } from "../redux/slices/filterSlice";
+import {
+  setFilterType,
+  setDefaultFilters,
+  updateMultipleFilters,
+  //setSorted,
+  setClear,
+} from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -25,6 +29,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
+const defaultFilters = {
+  brand: [],
+  itemType: [],
+  bu: [],
+  program: [],
+  sequenceNum: "",
+}
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -54,16 +66,20 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "item" }));
-    handleFilterDrawer(true)
+    dispatch(setFilterType({ type: "item-onDemand" }));
+    dispatch(
+      setDefaultFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    dispatch(
+      updateMultipleFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
-      dispatch(fetchFilteredItems("onDemand"));
-    }
-  }, [currentItems, dispatch, userType, currentUserRole]);
 
   useEffect(() => {
     if (
@@ -74,6 +90,13 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOrder.type]);
+
+  useEffect(() => {
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (orderLoading) {
     return <Loading />;

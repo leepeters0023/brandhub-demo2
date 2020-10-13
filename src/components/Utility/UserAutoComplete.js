@@ -13,27 +13,41 @@ const UserAutoComplete = ({
   setReset,
   filterType,
 }) => {
-  const [user, setUser] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState("");
   const [currentUsers, setCurrentUsers] = useState([]);
+  const [currentUserList, setCurrentUserList] = useState([]);
 
   const fieldUsers = useSelector((state) => state.user.managedUsers);
   const currentUser = useSelector((state) => state.user);
+  const currentFiltersUser = useSelector((state) => state.filters.user);
+
+  const handleUsers = (value) => {
+    setCurrentUsers(value);
+  };
 
   useEffect(() => {
-    if (currentUsers.length === 0 && fieldUsers && currentUser) {
+    if (currentUserList.length === 0 && fieldUsers && currentUser) {
       let userArray = fieldUsers.concat([
         {
           name: `${currentUser.firstName} ${currentUser.lastName}`,
           id: currentUser.id,
         },
       ]);
-      setCurrentUsers(userArray);
+      setCurrentUserList(userArray);
     }
-  }, [currentUsers, currentUser, fieldUsers]);
+  }, [currentUserList, currentUser, fieldUsers]);
+
+  useEffect(() => {
+    if (currentFiltersUser.length !== currentUsers.length) {
+      setCurrentUsers(currentFiltersUser);
+    }
+  }, [currentFiltersUser, currentUsers.length]);
 
   useEffect(() => {
     if (reset) {
-      setUser(null);
+      setUser("");
+      setCurrentUsers([]);
       setReset(false);
     }
   }, [reset, setUser, setReset]);
@@ -41,25 +55,37 @@ const UserAutoComplete = ({
   return (
     <>
       <Autocomplete
+        multiple
+        freeSolo
+        renderTags={() => null}
         fullWidth
         className={classes.queryField}
         id="field-auto-complete"
-        value={user}
+        open={open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
+        inputValue={user}
+        onInputChange={(_evt, value) => setUser(value)}
         onChange={(_evt, value) => {
-          setUser(value);
           handleChange(value, "user", filterType);
+          handleUsers(value);
         }}
-        options={currentUsers}
+        getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(user) => user.name}
+        options={currentUserList}
+        value={currentUsers}
         renderInput={(params) => (
           <TextField
-            id="user-auto-search"
-            color="secondary"
             {...params}
             label="User"
+            id="user-auto-search"
             variant="outlined"
             size="small"
-            type="text"
+            InputProps={{
+              ...params.InputProps,
+              autoComplete: "new-password",
+              endAdornment: <>{params.InputProps.endAdornment}</>,
+            }}
           />
         )}
       />
@@ -72,6 +98,7 @@ UserAutoComplete.propTypes = {
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired,
 };
 
 export default UserAutoComplete;

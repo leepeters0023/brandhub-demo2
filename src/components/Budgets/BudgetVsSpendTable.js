@@ -17,7 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: true },
-  { id: "territory", disablePadding: false, label: "Territory", sort: true },
+  { id: "territory", disablePadding: false, label: "Region / Key Acct.", sort: true },
   { id: "budget", disablePadding: false, label: "Budget", sort: false },
   { id: "onHold", disablePadding: false, label: "Pending", sort: false },
   { id: "committed", disablePadding: false, label: "Committed", sort: false },
