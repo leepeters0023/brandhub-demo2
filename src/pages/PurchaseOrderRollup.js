@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { navigate } from "@reach/router";
 
@@ -9,7 +9,7 @@ import {
   setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
+  setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -47,7 +47,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -79,12 +79,12 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

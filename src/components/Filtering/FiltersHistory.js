@@ -166,19 +166,18 @@ const FiltersHistory = ({
               <ListItem
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: "column"
                 }}
               >
                 <Typography className={classes.headerText}>
                   Group By:
                 </Typography>
+                <br />
                 <ButtonGroup
                   orientation="vertical"
                   fullWidth
                   color="secondary"
                   aria-label="order-group"
-                  style={{ width: "60%" }}
                 >
                   <Button
                     className={
