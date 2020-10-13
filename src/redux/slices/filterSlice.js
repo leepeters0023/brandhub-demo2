@@ -17,8 +17,8 @@ let initialState = {
   sequenceNum: null,
   status: null,
   supplier: [],
-  tag: null,
-  territory: null,
+  tag: [],
+  territory: [],
   user: [],
   sortOrder: null,
   sortOrderBy: null,
@@ -56,8 +56,8 @@ const filterSlice = createSlice({
       state.ruleType = [];
       state.status = null;
       state.supplier = [];
-      state.tag = null;
-      state.territory = null;
+      state.tag = [];
+      state.territory = [];
       state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -99,8 +99,8 @@ const filterSlice = createSlice({
       state.rfqNum = null;
       state.ruleType = [];
       state.status = null;
-      state.tag = null;
-      state.territory = null;
+      state.tag = [];
+      state.territory = [];
       state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -110,7 +110,6 @@ const filterSlice = createSlice({
     },
     setChips(state, action) {
       const { filterType } = action.payload;
-      console.log(filterType)
       let chippable;
       if (filterType === "item") {
         chippable = ["bu", "brand", "itemType"];
@@ -155,7 +154,8 @@ const filterSlice = createSlice({
             filter === "itemType" ||
             filter === "brand" ||
             filter === "user" ||
-            filter === "distributor"
+            filter === "distributor" ||
+            filter === "territory"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({type: filter, value: f.name})

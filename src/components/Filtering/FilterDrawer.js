@@ -332,10 +332,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              handleSearch={
-                // TODO add search for po when api is there
-                () => console.log("Searching!")
-              }
               budgetType={filterType.split("-")[1]}
             />
           )}
