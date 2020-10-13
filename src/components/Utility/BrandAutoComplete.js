@@ -65,7 +65,7 @@ const BrandAutoComplete = ({
         onClose={() => setOpen(false)}
         inputValue={brand}
         onInputChange={(_evt, value) => setBrand(value)}
-        onChange={(evt, value) => {
+        onChange={(_evt, value) => {
           handleChange(value, "brand", filterType);
           handleBrands(value);
         }}
