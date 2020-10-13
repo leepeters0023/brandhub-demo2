@@ -36,25 +36,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {
-  units,
   ruleTypes,
   suppliers,
 } from "../../utility/constants";
-
-const focusMonths = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -103,7 +87,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "program" ||
         filter === "brand" ||
         filter === "user" ||
-        filter === "distributor"
+        filter === "distributor" ||
+        filter === "orderType"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
@@ -115,7 +100,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           dispatch(setChips({ filterType: type }));
         }
       } else if (filter === "fromDate" || filter === "toDate") {
-        console.log(type);
         dispatch(
           updateSingleFilter({
             filter: filter,
@@ -299,9 +283,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             Filters:
           </Typography>
           <Divider />
-          {filterType && filterType.includes("item") && (
+          {filterType && filterType.includes("item-") && (
             <FiltersItems
-              units={units}
               reset={reset}
               setReset={setReset}
               handleFilters={handleFilters}
@@ -349,8 +332,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           )}
           {filterType === "program" && (
             <FiltersPrograms
-              units={units}
-              months={focusMonths}
               reset={reset}
               setReset={setReset}
               handleFilters={handleFilters}

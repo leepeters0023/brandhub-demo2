@@ -36,11 +36,9 @@ const FiltersItemRollup = ({
         <ListItem
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            flexDirection: "column"
           }}
         >
-          <br />
           <Typography className={classes.headerText}>Order Type:</Typography>
           <br />
           <ButtonGroup
@@ -48,7 +46,6 @@ const FiltersItemRollup = ({
             fullWidth
             color="secondary"
             aria-label="order-item-type"
-            style={{ width: "60%" }}
           >
             <Button
               className={
@@ -59,7 +56,7 @@ const FiltersItemRollup = ({
               variant={value === "on-demand" ? "contained" : "outlined"}
               onClick={() => {
                 setValue("on-demand");
-                handleFilters("on-demand", "sortProgramsBy", "program");
+                handleFilters("on-demand", "orderType", "itemRollup");
               }}
             >
               ON-DEMAND
@@ -73,7 +70,7 @@ const FiltersItemRollup = ({
               variant={value === "pre-order" ? "contained" : "outlined"}
               onClick={() => {
                 setValue("pre-order");
-                handleFilters("pre-order", "sortProgramsBy", "program");
+                handleFilters("pre-order", "orderType", "itemRollup");
               }}
             >
               PRE-ORDER
