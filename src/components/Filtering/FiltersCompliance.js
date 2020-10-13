@@ -8,6 +8,7 @@ import { setClear, updateSingleFilter } from "../../redux/slices/filterSlice";
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
+import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
 
 import { useSelector } from "react-redux";
 
@@ -24,45 +25,6 @@ import Button from "@material-ui/core/Button";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
-const ItemTypesList = React.memo(
-  ({ listItems, handleCheckToggle, itemTypesChecked, setItemTypesChecked }) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(
-                  item,
-                  itemTypesChecked,
-                  setItemTypesChecked,
-                  "itemType"
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={itemTypesChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  }
-);
 const RuleTypesList = React.memo(
   ({ listItems, handleCheckToggle, ruleTypesChecked, setRuleTypesChecked }) => {
     return (
@@ -111,18 +73,14 @@ const FiltersCompliance = ({
   sequenceNum,
   bindSequenceNum,
   handleSearch,
-  itemTypes,
   ruleTypes,
   complianceType,
 }) => {
   const dispatch = useDispatch();
   const [status, setStatus] = useCallback(useState("all"));
-  const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
-  const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
   const [ruleTypesOpen, setRuleTypesOpen] = useCallback(useState(false));
   const [ruleTypesChecked, setRuleTypesChecked] = useCallback(useState([]));
 
-  const currentItemTypeFilter = useSelector((state) => state.filters.itemType);
   const currentRuleTypeFilter = useSelector((state) => state.filters.ruleType);
 
   const handleCheckToggle = useCallback(
@@ -147,31 +105,6 @@ const FiltersCompliance = ({
   const handleListToggle = (open, func) => {
     func(!open);
   };
-
-  useEffect(() => {
-    if (currentItemTypeFilter.length !== itemTypesChecked.length) {
-      if (itemTypesChecked.length > currentItemTypeFilter.length) {
-        let missingFilter;
-        itemTypesChecked.forEach((unit) => {
-          if (currentItemTypeFilter.filter((u) => u === unit).length === 0) {
-            missingFilter = unit;
-          }
-        });
-        handleCheckToggle(
-          missingFilter,
-          itemTypesChecked,
-          setItemTypesChecked,
-          "itemType",
-          true
-        );
-      }
-    }
-  }, [
-    currentItemTypeFilter,
-    itemTypesChecked,
-    setItemTypesChecked,
-    handleCheckToggle,
-  ]);
 
   useEffect(() => {
     if (currentRuleTypeFilter.length !== ruleTypesChecked.length) {
@@ -257,28 +190,15 @@ const FiltersCompliance = ({
                 filterType={"compliance"}
               />
             </ListItem>
-            <ListItem />
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(itemTypesOpen, setItemTypesOpen);
-              }}
-            >
-              <ListItemText primary="Item Type" />
-              {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse
-              in={itemTypesOpen}
-              timeout={{ appear: 400, enter: 400, exit: 0 }}
-            >
-              <ItemTypesList
-                listItems={itemTypes}
-                handleCheckToggle={handleCheckToggle}
-                itemTypesChecked={itemTypesChecked}
-                setItemTypesChecked={setItemTypesChecked}
+            <ListItem>
+              <ItemTypeAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"compliance"}
               />
-            </Collapse>
-            <Divider />
+            </ListItem>
           </>
         )}
         <ListItem

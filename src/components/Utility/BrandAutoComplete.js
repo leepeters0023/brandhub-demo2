@@ -103,6 +103,7 @@ BrandAutoComplete.propTypes = {
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired,
 };
 
 export default BrandAutoComplete;

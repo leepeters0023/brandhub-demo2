@@ -40,7 +40,7 @@ const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
   user: [],
-  distributor: null,
+  distributor: [],
   program: [],
   brand: [],
   sequenceNum: "",

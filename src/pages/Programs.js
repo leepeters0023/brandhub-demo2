@@ -87,21 +87,19 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   }, []);
 
   useEffect(() => {
-    if (!brandFilter && buFilters.length === 0 && monthFilters.length === 0) {
+    if (
+      brandFilter.length === 0 &&
+      buFilters.length === 0 &&
+      monthFilters.length === 0
+    ) {
       setProgramFilters([]);
     } else {
       setProgramFilters(
         brandFilter
-          ? [{ type: "brand", value: brandFilter.name }]
-              .concat(buFilters.map((a) => ({ type: "unit", value: a })))
-              .concat(
-                monthFilters.map((b) => ({ type: "focusMonth", value: b }))
-              )
-          : buFilters
-              .map((a) => ({ type: "unit", value: a }))
-              .concat(
-                monthFilters.map((a) => ({ type: "focusMonth", value: a }))
-              )
+          .map((a) => ({ type: "brand", value: a.name }))
+
+          .concat(buFilters.map((b) => ({ type: "unit", value: b })))
+          .concat(monthFilters.map((c) => ({ type: "focusMonth", value: c })))
       );
     }
   }, [brandFilter, buFilters, monthFilters, setProgramFilters]);

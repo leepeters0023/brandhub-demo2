@@ -5,7 +5,7 @@ let initialState = {
   toDate: null,
   bu: [],
   brand: [],
-  distributor: null,
+  distributor: [],
   groupBy: null,
   itemType: [],
   month: [],
@@ -44,7 +44,7 @@ const filterSlice = createSlice({
       state.toDate = null;
       state.bu = [];
       state.brand = [];
-      state.distributor = null;
+      state.distributor = [];
       state.itemType = [];
       state.groupBy = null;
       state.month = [];
@@ -87,7 +87,7 @@ const filterSlice = createSlice({
       state.toDate = null;
       state.bu = [];
       state.brand = [];
-      state.distributor = null;
+      state.distributor = [];
       state.groupBy = null;
       state.itemType = [];
       state.month = [];
@@ -154,17 +154,12 @@ const filterSlice = createSlice({
             filter === "program" ||
             filter === "itemType" ||
             filter === "brand" ||
-            filter === "user"
+            filter === "user" ||
+            filter === "distributor"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({type: filter, value: f.name})
             })
-          } else if (
-            filter === "distributor"
-          ) {
-            if (stateObject[filter]) {
-              filters.push({ type: filter, value: stateObject[filter].name });
-            }
           } else if (stateObject[filter]) {
             filters.push({ type: filter, value: stateObject[filter] });
           }

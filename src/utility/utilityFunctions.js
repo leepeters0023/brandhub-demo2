@@ -66,12 +66,7 @@ export const filter = (array, filters) => {
     array.forEach((item) => {
       let filtered = true;
       for (let i = 0; i < filters.length; i++) {
-        if (filters[i].type !== "brand") {
-          if (item[filters[i].type] !== filters[i].value) {
-            filtered = false;
-            break;
-          }
-        } else if (!item.brand.includes(filters[i].value)) {
+        if (!item.brand.includes(filters[i].value)) {
           filtered = false;
           break;
         }

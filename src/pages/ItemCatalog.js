@@ -3,9 +3,13 @@ import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchFilteredItems } from "../redux/slices/itemSlice";
-
-import { setFilterType } from "../redux/slices/filterSlice";
+import {
+  setFilterType,
+  setDefaultFilters,
+  updateMultipleFilters,
+  //setSorted,
+  setClear,
+} from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -21,11 +25,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 
+const defaultFilters = {
+  brand: [],
+  itemType: [],
+  bu: [],
+  program: [],
+  sequenceNum: "",
+};
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalog = ({ catalogType, userType, handleFilterDrawer, filtersOpen }) => {
+const ItemCatalog = ({
+  catalogType,
+  userType,
+  handleFilterDrawer,
+  filtersOpen,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
@@ -46,16 +63,27 @@ const ItemCatalog = ({ catalogType, userType, handleFilterDrawer, filtersOpen })
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "item" }));
-    handleFilterDrawer(true)
+    dispatch(setFilterType({ type: `item-${catalogType}` }));
+    dispatch(
+      setDefaultFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    dispatch(
+      updateMultipleFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
-      dispatch(fetchFilteredItems("catalog"));
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());
     }
-  }, [currentItems, dispatch, userType, currentUserRole]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

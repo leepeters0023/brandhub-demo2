@@ -14,16 +14,24 @@ const DistributorAutoComplete = ({
   handleChange,
   reset,
   setReset,
-  filterType
+  filterType,
 }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [distributor, setDistributor] = useState("");
+  const [currentDistributors, setCurrentDistributors] = useState([]);
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
+  const currentFiltersDistributor = useSelector(
+    (state) => state.filters.distributor
+  );
 
   const loading = open && isLoading;
+
+  const handleDistributors = (value) => {
+    setCurrentDistributors(value);
+  };
 
   useEffect(() => {
     if (distributor.length >= 1) {
@@ -32,9 +40,16 @@ const DistributorAutoComplete = ({
   }, [distributor, dispatch]);
 
   useEffect(() => {
+    if (currentFiltersDistributor.length !== currentDistributors.length) {
+      setCurrentDistributors(currentFiltersDistributor);
+    }
+  }, [currentFiltersDistributor, currentDistributors.length]);
+
+  useEffect(() => {
     if (reset && setReset) {
       if (reset) {
         setDistributor("");
+        setCurrentDistributors([]);
         setReset(false);
       }
     }
@@ -43,6 +58,9 @@ const DistributorAutoComplete = ({
   return (
     <>
       <Autocomplete
+        multiple
+        freeSolo
+        renderTags={() => null}
         fullWidth
         className={classes.queryField}
         id="distributor-auto-complete"
@@ -51,11 +69,15 @@ const DistributorAutoComplete = ({
         onClose={() => setOpen(false)}
         inputValue={distributor}
         onInputChange={(_evt, value) => setDistributor(value)}
-        onChange={(_evt, value) => handleChange(value, "distributor", filterType)}
+        onChange={(_evt, value) => {
+          handleChange(value, "distributor", filterType);
+          handleDistributors(value);
+        }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
+        value={currentDistributors}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -83,8 +105,9 @@ const DistributorAutoComplete = ({
 DistributorAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  reset: PropTypes.bool,
-  setReset: PropTypes.func,
+  reset: PropTypes.bool.isRequired,
+  setReset: PropTypes.func.isRequired,
+  filterType: PropTypes.string.isRequired,
 };
 
 export default DistributorAutoComplete;

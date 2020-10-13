@@ -381,8 +381,8 @@ export const fetchOrderHistory = async (filterObject) => {
       : `&filter[type]=${filterObject.type}`
     : "";
   let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
-  let distString = filterObject.distributor
-    ? `&filter[distributor-id]=${filterObject.distributor.id}`
+  let distString = filterObject.distributor.length > 0
+    ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
     : "";
   let userString = filterObject.user.length > 0
     ? `&filter[user-id]=${filterObject.user[0].id}`
@@ -390,7 +390,7 @@ export const fetchOrderHistory = async (filterObject) => {
   let brandString = filterObject.brand.length > 0
     ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
-  //TODO fix this (program, brand, user)
+  //TODO fix this (program, brand, user, distributor)
   let progString =
     (filterObject.program && filterObject.program.length > 0)
       ? `&filter[program-name]=${filterObject.program[0].name}`
