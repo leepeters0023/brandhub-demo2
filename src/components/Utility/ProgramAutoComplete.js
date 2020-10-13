@@ -70,9 +70,7 @@ const ProgramAutoComplete = ({
           handleChange(value, "program", filterType);
           handlePrograms(value);
         }}
-        getOptionSelected={(option, value) => {
-          return option.name === value.name
-        }}
+        getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}

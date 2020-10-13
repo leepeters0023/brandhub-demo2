@@ -12,6 +12,7 @@ import DistributorAutoComplete from "../Utility/DistributorAutoComplete";
 import UserAutoComplete from "../Utility/UserAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
+import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
 
 import { useSelector } from "react-redux";
 
@@ -35,45 +36,6 @@ import {
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 
-const ItemTypesList = React.memo(
-  ({ listItems, handleCheckToggle, itemTypesChecked, setItemTypesChecked }) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(
-                  item,
-                  itemTypesChecked,
-                  setItemTypesChecked,
-                  "itemType"
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={itemTypesChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  }
-);
 
 const SupplierList = React.memo(
   ({ listItems, handleCheckToggle, suppliersChecked, setSuppliersChecked }) => {
@@ -126,7 +88,6 @@ const FiltersHistory = ({
   bindRfqNum,
   poNum,
   bindPoNum,
-  itemTypes,
   suppliers,
   handleSearch,
   historyType,
@@ -140,12 +101,9 @@ const FiltersHistory = ({
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
   const [value, setValue] = useCallback(useState("order"));
-  const [itemTypesOpen, setItemTypesOpen] = useCallback(useState(false));
-  const [itemTypesChecked, setItemTypesChecked] = useCallback(useState([]));
   const [suppliersOpen, setSuppliersOpen] = useCallback(useState(false));
   const [suppliersChecked, setSuppliersChecked] = useCallback(useState([]));
 
-  const currentItemTypeFilter = useSelector((state) => state.filters.itemType);
   const currentSupplierFilter = useSelector((state) => state.filters.supplier);
 
   const handleCheckToggle = useCallback(
@@ -170,31 +128,6 @@ const FiltersHistory = ({
   const handleListToggle = (open, func) => {
     func(!open);
   };
-
-  useEffect(() => {
-    if (currentItemTypeFilter.length !== itemTypesChecked.length) {
-      if (itemTypesChecked.length > currentItemTypeFilter.length) {
-        let missingFilter;
-        itemTypesChecked.forEach((unit) => {
-          if (currentItemTypeFilter.filter((u) => u === unit).length === 0) {
-            missingFilter = unit;
-          }
-        });
-        handleCheckToggle(
-          missingFilter,
-          itemTypesChecked,
-          setItemTypesChecked,
-          "itemType",
-          true
-        );
-      }
-    }
-  }, [
-    currentItemTypeFilter,
-    itemTypesChecked,
-    setItemTypesChecked,
-    handleCheckToggle,
-  ]);
 
   useEffect(() => {
     if (currentSupplierFilter.length !== suppliersChecked.length) {
@@ -360,7 +293,9 @@ const FiltersHistory = ({
                   value={
                     fromDate || format(subDays(new Date(), 7), "MM/dd/yyyy")
                   }
-                  onChange={(value) => handleFilters(value, "fromDate", "history")}
+                  onChange={(value) =>
+                    handleFilters(value, "fromDate", "history")
+                  }
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -380,7 +315,9 @@ const FiltersHistory = ({
                   id="toDate"
                   label="Order To Date"
                   value={toDate || format(new Date(), "MM/dd/yyyy")}
-                  onChange={(value) => handleFilters(value, "toDate", "history")}
+                  onChange={(value) =>
+                    handleFilters(value, "toDate", "history")
+                  }
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -389,7 +326,19 @@ const FiltersHistory = ({
             </ListItem>
           </>
         )}
-        <ListItem />
+        {(historyType === "rollup" ||
+          historyType === "rfq" ||
+          historyType === "po") && (
+          <ListItem>
+            <StatusSelector
+              handleStatus={handleFilters}
+              status={status}
+              setStatus={setStatus}
+              classes={classes}
+              filterType={historyType === "rollup" ? "history" : historyType}
+            />
+          </ListItem>
+        )}
         {currentUserRole !== "field1" &&
           historyType !== "rfq" &&
           historyType !== "po" && (
@@ -434,21 +383,6 @@ const FiltersHistory = ({
             filterType={"history"}
           />
         </ListItem>
-
-        {(historyType === "rollup" ||
-          historyType === "rfq" ||
-          historyType === "po") && (
-          <ListItem>
-            <StatusSelector
-              handleStatus={handleFilters}
-              status={status}
-              setStatus={setStatus}
-              classes={classes}
-              filterType={historyType === "rollup" ? "history" : historyType}
-            />
-          </ListItem>
-        )}
-        <ListItem />
         {historyType === "po" && (
           <>
             <ListItem
@@ -475,26 +409,15 @@ const FiltersHistory = ({
             <ListItem />
           </>
         )}
-        <ListItem
-          button
-          onClick={() => {
-            handleListToggle(itemTypesOpen, setItemTypesOpen);
-          }}
-        >
-          <ListItemText primary="Item Type" />
-          {itemTypesOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse
-          in={itemTypesOpen}
-          timeout={{ appear: 400, enter: 400, exit: 0 }}
-        >
-          <ItemTypesList
-            listItems={itemTypes}
-            handleCheckToggle={handleCheckToggle}
-            itemTypesChecked={itemTypesChecked}
-            setItemTypesChecked={setItemTypesChecked}
+        <ListItem>
+          <ItemTypeAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"history"}
           />
-        </Collapse>
+        </ListItem>
         <Divider />
         <ListItem />
         <ListItem>

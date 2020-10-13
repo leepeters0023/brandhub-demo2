@@ -28,7 +28,7 @@ import { rules } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
-  brand: null,
+  brand: [],
   program: [],
   sequenceNum: "",
   sortOrder: "asc",
@@ -86,7 +86,9 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Compliance Rules</Typography>
+          <Typography className={classes.titleText}>
+            Compliance Rules
+          </Typography>
           <div
             style={{
               display: "flex",

@@ -100,7 +100,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "month" ||
         filter === "sortProgramsBy" ||
         filter === "groupBy" ||
-        filter === "program"
+        filter === "program" ||
+        filter === "brand" ||
+        filter === "user"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
@@ -129,8 +131,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         }
       } else if (
         filter === "distributor" ||
-        filter === "brand" ||
-        filter === "user" ||
         filter === "territory"
       ) {
         dispatch(

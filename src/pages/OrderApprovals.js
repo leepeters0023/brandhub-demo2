@@ -6,9 +6,7 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  fetchNextFilteredOrderSets,
-} from "../redux/slices/orderSetHistorySlice";
+import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
 
 import {
   approveOrdSet,
@@ -41,16 +39,16 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
-  user: null,
+  user: [],
   distributor: null,
   program: [],
-  brand: null,
+  brand: [],
   sequenceNum: "",
   type: "not-pre-order",
   status: "submitted",
   sortOrder: "asc",
   sortOrderBy: "user",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -118,7 +116,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
