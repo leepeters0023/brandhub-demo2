@@ -19,11 +19,17 @@ const BrandAutoComplete = ({
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [brand, setBrand] = useState("");
+  const [currentBrands, setCurrentBrands] = useState([]);
 
   const isLoading = useSelector((state) => state.brands.isLoading);
   const options = useSelector((state) => state.brands.brandList);
+  const currentFiltersBrand = useSelector((state) => state.filters.brand);
 
   const loading = open && isLoading;
+
+  const handleBrands = (value) => {
+    setCurrentBrands(value);
+  }
 
   useEffect(() => {
     if (brand.length >= 1) {
@@ -32,8 +38,15 @@ const BrandAutoComplete = ({
   }, [brand, dispatch]);
 
   useEffect(() => {
+    if (currentFiltersBrand.length !== currentBrands.length) {
+      setCurrentBrands(currentFiltersBrand);
+    }
+  }, [currentFiltersBrand, currentBrands.length]);
+
+  useEffect(() => {
     if (reset) {
       setBrand("");
+      setCurrentBrands([]);
       setReset(false);
     }
   }, [reset, setBrand, setReset]);
@@ -41,6 +54,9 @@ const BrandAutoComplete = ({
   return (
     <>
       <Autocomplete
+        multiple
+        freeSolo
+        renderTags={() => null}
         fullWidth
         className={classes.queryField}
         id="brand-auto-complete"
@@ -51,11 +67,13 @@ const BrandAutoComplete = ({
         onInputChange={(_evt, value) => setBrand(value)}
         onChange={(evt, value) => {
           handleChange(value, "brand", filterType);
+          handleBrands(value);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
         options={options}
         loading={loading}
+        value={currentBrands}
         renderInput={(params) => (
           <TextField
             {...params}

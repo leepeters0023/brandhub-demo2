@@ -89,16 +89,16 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       ? `&filter[status]=${filterObject.status}`
       : "&filter[status]!=approved"
     : "";
-  let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user.id}`
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${filterObject.user[0].id}`
     : "";
-  //TODO fix this
+  //TODO fix this (program, brand, user)
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
-  let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand.id}`
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
   let seqString =
     filterObject.sequenceNum.length > 0
@@ -384,13 +384,13 @@ export const fetchOrderHistory = async (filterObject) => {
   let distString = filterObject.distributor
     ? `&filter[distributor-id]=${filterObject.distributor.id}`
     : "";
-  let userString = filterObject.user
-    ? `&filter[user-id]=${filterObject.user.id}`
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${filterObject.user[0].id}`
     : "";
-  let brandString = filterObject.brand
-    ? `&filter[brand-id]=${filterObject.brand.id}`
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
-  //TODO fix this
+  //TODO fix this (program, brand, user)
   let progString =
     (filterObject.program && filterObject.program.length > 0)
       ? `&filter[program-name]=${filterObject.program[0].name}`

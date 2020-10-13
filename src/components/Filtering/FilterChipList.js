@@ -26,12 +26,11 @@ const FilterChipList = () => {
 
   const handleChipClick = (type, value) => {
     let dispatchObject = { filter: type, value: null };
-    if (type === "itemType" || type === "bu") {
+    if (type === "bu") {
       let currentFilterArray = filterState[type].filter((f) => f !== value);
       dispatchObject.value = currentFilterArray;
     }
-    if (type === "program") {
-      console.log(type, value)
+    if (type === "program" || type === "itemType" || type === "brand" || type === "user") {
       let currentFilterArray = filterState[type].filter((f) => f.name !== value)
       dispatchObject.value = currentFilterArray;
     }

@@ -30,7 +30,7 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 const defaultFilters = {
   bu: [],
   month: [],
-  brand: null,
+  brand: [],
   sortProgramsBy: "brand",
 };
 
@@ -75,7 +75,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,10 +94,14 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         brandFilter
           ? [{ type: "brand", value: brandFilter.name }]
               .concat(buFilters.map((a) => ({ type: "unit", value: a })))
-              .concat(monthFilters.map((b) => ({ type: "focusMonth", value: b })))
+              .concat(
+                monthFilters.map((b) => ({ type: "focusMonth", value: b }))
+              )
           : buFilters
               .map((a) => ({ type: "unit", value: a }))
-              .concat(monthFilters.map((a) => ({ type: "focusMonth", value: a })))
+              .concat(
+                monthFilters.map((a) => ({ type: "focusMonth", value: a }))
+              )
       );
     }
   }, [brandFilter, buFilters, monthFilters, setProgramFilters]);
@@ -143,7 +147,10 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         {isLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-          <CurrentPrograms currentPrograms={currentPrograms} filtersOpen={filtersOpen}/>
+          <CurrentPrograms
+            currentPrograms={currentPrograms}
+            filtersOpen={filtersOpen}
+          />
         )}
       </Container>
     </>

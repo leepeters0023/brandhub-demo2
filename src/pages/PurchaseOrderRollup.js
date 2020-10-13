@@ -30,7 +30,7 @@ import { currentPOItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
-  brand: null,
+  brand: [],
   program: [],
   sequenceNum: "",
   sortOrder: "asc",

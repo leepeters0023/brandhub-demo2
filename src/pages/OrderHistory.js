@@ -47,10 +47,10 @@ const csvHeaders = [
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
-  user: null,
+  user: [],
   distributor: null,
   groupBy: "order",
-  brand: null,
+  brand: [],
   program: [],
   sequenceNum: "",
   sortOrder: "asc",
@@ -108,7 +108,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

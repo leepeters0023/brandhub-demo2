@@ -28,7 +28,7 @@ import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
-  brand: null,
+  brand: [],
   program: [],
   sequenceNum: "",
   sortOrder: "asc",
@@ -87,7 +87,9 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Purchase Order History</Typography>
+          <Typography className={classes.titleText}>
+            Purchase Order History
+          </Typography>
           <div
             style={{
               display: "flex",

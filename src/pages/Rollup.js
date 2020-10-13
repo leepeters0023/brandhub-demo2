@@ -6,16 +6,14 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  fetchNextFilteredOrderSets,
-} from "../redux/slices/orderSetHistorySlice";
+import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
 
 import {
   setFilterType,
   setDefaultFilters,
   updateMultipleFilters,
   setSorted,
-  setClear
+  setClear,
 } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -40,15 +38,15 @@ const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
   type: "pre-order",
-  user: null,
+  user: [],
   program: [],
-  brand: null,
+  brand: [],
   groupBy: "order",
   sequenceNum: "",
   status: "submitted",
   sortOrder: "asc",
   sortOrderBy: "user",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -107,7 +105,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
         filterObject: defaultFilters,
       })
     );
-    handleFilterDrawer(true)
+    handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
