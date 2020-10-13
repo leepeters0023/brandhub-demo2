@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
 
 import { useDispatch } from "react-redux";
 
-import { setClear, updateSingleFilter } from "../../redux/slices/filterSlice";
+import { setClear } from "../../redux/slices/filterSlice";
 
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../Utility/DistributorAutoComplete";
@@ -13,6 +13,7 @@ import UserAutoComplete from "../Utility/UserAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
+import SupplierAutoComplete from "../Utility/SupplierAutoComplete";
 
 import { useSelector } from "react-redux";
 
@@ -23,59 +24,11 @@ import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import DateFnsUtils from "@date-io/date-fns";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import Collapse from "@material-ui/core/Collapse";
 import Divider from "@material-ui/core/Divider";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-
-
-const SupplierList = React.memo(
-  ({ listItems, handleCheckToggle, suppliersChecked, setSuppliersChecked }) => {
-    return (
-      <List component="div" disablePadding>
-        {listItems.map((item) => {
-          const labelId = `checkbox-list-label-${item}`;
-
-          return (
-            <ListItem
-              key={item}
-              role={undefined}
-              dense
-              button
-              onClick={() => {
-                handleCheckToggle(
-                  item,
-                  suppliersChecked,
-                  setSuppliersChecked,
-                  "supplier"
-                );
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  color="secondary"
-                  edge="start"
-                  checked={suppliersChecked.indexOf(item) !== -1}
-                  disableRipple
-                  inputProps={{ "aria-labelledby": labelId }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`${item}`} />
-            </ListItem>
-          );
-        })}
-      </List>
-    );
-  }
-);
 
 const FiltersHistory = ({
   reset,
@@ -88,7 +41,6 @@ const FiltersHistory = ({
   bindRfqNum,
   poNum,
   bindPoNum,
-  suppliers,
   handleSearch,
   historyType,
 }) => {
@@ -101,58 +53,6 @@ const FiltersHistory = ({
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
   const [value, setValue] = useCallback(useState("order"));
-  const [suppliersOpen, setSuppliersOpen] = useCallback(useState(false));
-  const [suppliersChecked, setSuppliersChecked] = useCallback(useState([]));
-
-  const currentSupplierFilter = useSelector((state) => state.filters.supplier);
-
-  const handleCheckToggle = useCallback(
-    (value, array, func, type, deleting) => {
-      const currentIndex = array.indexOf(value);
-      const newChecked = [...array];
-
-      if (currentIndex === -1) {
-        newChecked.push(value);
-      } else {
-        newChecked.splice(currentIndex, 1);
-      }
-
-      func(newChecked);
-      if (!deleting) {
-        dispatch(updateSingleFilter({ filter: type, value: newChecked }));
-      }
-    },
-    [dispatch]
-  );
-
-  const handleListToggle = (open, func) => {
-    func(!open);
-  };
-
-  useEffect(() => {
-    if (currentSupplierFilter.length !== suppliersChecked.length) {
-      if (suppliersChecked.length > currentSupplierFilter.length) {
-        let missingFilter;
-        suppliersChecked.forEach((unit) => {
-          if (currentSupplierFilter.filter((u) => u === unit).length === 0) {
-            missingFilter = unit;
-          }
-        });
-        handleCheckToggle(
-          missingFilter,
-          suppliersChecked,
-          setSuppliersChecked,
-          "supplier",
-          true
-        );
-      }
-    }
-  }, [
-    currentSupplierFilter,
-    suppliersChecked,
-    setSuppliersChecked,
-    handleCheckToggle,
-  ]);
 
   //TODO need to add group by in API calls
 
@@ -166,7 +66,7 @@ const FiltersHistory = ({
               <ListItem
                 style={{
                   display: "flex",
-                  flexDirection: "column"
+                  flexDirection: "column",
                 }}
               >
                 <Typography className={classes.headerText}>
@@ -384,28 +284,15 @@ const FiltersHistory = ({
         </ListItem>
         {historyType === "po" && (
           <>
-            <ListItem
-              button
-              onClick={() => {
-                handleListToggle(suppliersOpen, setSuppliersOpen);
-              }}
-            >
-              <ListItemText primary="Supplier" />
-              {suppliersOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse
-              in={suppliersOpen}
-              timeout={{ appear: 400, enter: 400, exit: 0 }}
-            >
-              <SupplierList
-                listItems={suppliers}
-                handleCheckToggle={handleCheckToggle}
-                suppliersChecked={suppliersChecked}
-                setSuppliersChecked={setSuppliersChecked}
+            <ListItem>
+              <SupplierAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"history"}
               />
-            </Collapse>
-            <Divider />
-            <ListItem />
+            </ListItem>
           </>
         )}
         <ListItem>

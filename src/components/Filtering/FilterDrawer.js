@@ -36,7 +36,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 import {
-  ruleTypes,
   suppliers,
 } from "../../utility/constants";
 
@@ -88,7 +87,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "brand" ||
         filter === "user" ||
         filter === "distributor" ||
-        filter === "orderType"
+        filter === "orderType" ||
+        filter === "territory" ||
+        filter === "supplier"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
@@ -107,32 +108,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           })
         );
         currentFilters[filter] = format(value, "MM/dd/yyyy");
-        if (
-          filter !== "sequenceNum" &&
-          filter !== "rfqNum" &&
-          filter !== "poNum"
-        ) {
-          dispatch(setChips({ filterType: type }));
-        }
-      } else if (
-        filter === "territory"
-      ) {
-        dispatch(
-          updateSingleFilter({
-            filter: filter,
-            value: value ? { id: value.id, name: value.name } : null,
-          })
-        );
-        currentFilters[filter] = value
-          ? { id: value.id, name: value.name }
-          : null;
-        if (
-          filter !== "sequenceNum" &&
-          filter !== "rfqNum" &&
-          filter !== "poNum"
-        ) {
-          dispatch(setChips({ filterType: type }));
-        }
       }
       if (
         filterType === "history-orders" &&
@@ -322,7 +297,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              ruleTypes={ruleTypes}
               handleSearch={
                 // TODO add search for po when api is there
                 () => console.log("Searching!")

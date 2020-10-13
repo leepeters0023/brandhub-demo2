@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { useDispatch } from "react-redux";
+
+import { setClear } from "../../redux/slices/filterSlice";
+
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
@@ -20,6 +24,7 @@ const FiltersItems = ({
   sequenceNum,
   bindSequenceNum,
 }) => {
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -85,6 +90,21 @@ const FiltersItems = ({
             setReset={setReset}
             filterType={"item"}
           />
+        </ListItem>
+        <Divider />
+        <ListItem />
+        <ListItem>
+          <Button
+            fullWidth
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              dispatch(setClear());
+            }}
+          >
+            CLEAR FILTERS
+          </Button>
         </ListItem>
       </List>
     </>

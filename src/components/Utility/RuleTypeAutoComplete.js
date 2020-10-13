@@ -6,20 +6,7 @@ import { useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-const focusMonths = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { ruleTypes } from "../../utility/constants";
 
 const FocusMonthAutoComplete = ({
   classes,
@@ -29,28 +16,28 @@ const FocusMonthAutoComplete = ({
   filterType,
 }) => {
   const [open, setOpen] = useState(false);
-  const [month, setMonth] = useState("");
-  const [currentMonths, setCurrentMonths] = useState([]);
+  const [ruleType, setRuleType] = useState("");
+  const [currentRuleTypes, setCurrentRuleTypes] = useState([]);
 
-  const currentFiltersMonth = useSelector((state) => state.filters.month);
+  const currentFiltersRuleType = useSelector((state) => state.filters.ruleType);
 
-  const handleMonths = (value) => {
-    setCurrentMonths(value);
+  const handleRuleTypes = (value) => {
+    setCurrentRuleTypes(value);
   };
 
   useEffect(() => {
-    if (currentFiltersMonth.length !== currentMonths.length) {
-      setCurrentMonths(currentFiltersMonth);
+    if (currentFiltersRuleType.length !== currentRuleTypes.length) {
+      setCurrentRuleTypes(currentFiltersRuleType);
     }
-  }, [currentFiltersMonth, currentMonths.length]);
+  }, [currentFiltersRuleType, currentRuleTypes.length]);
 
   useEffect(() => {
     if (reset) {
-      setMonth("");
-      setCurrentMonths([]);
+      setRuleType("");
+      setCurrentRuleTypes([]);
       setReset(false);
     }
-  }, [reset, setMonth, setReset]);
+  }, [reset, setRuleType, setReset]);
 
   return (
     <>
@@ -60,25 +47,25 @@ const FocusMonthAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
-        id="month-auto-complete"
+        id="ruleType-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
-        inputValue={month}
-        onInputChange={(_evt, value) => setMonth(value)}
+        inputValue={ruleType}
+        onInputChange={(_evt, value) => setRuleType(value)}
         onChange={(_evt, value) => {
-          handleChange(value, "month", filterType);
-          handleMonths(value);
+          handleChange(value, "ruleType", filterType);
+          handleRuleTypes(value);
         }}
         getOptionSelected={(option, value) => option === value}
-        getOptionLabel={(month) => month}
-        options={focusMonths}
-        value={currentMonths}
+        getOptionLabel={(ruleType) => ruleType}
+        options={ruleTypes}
+        value={currentRuleTypes}
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Focus Month"
-            id="month-auto-search"
+            label="Rule Type"
+            id="ruleType-auto-search"
             variant="outlined"
             size="small"
             InputProps={{

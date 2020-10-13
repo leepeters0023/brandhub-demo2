@@ -110,14 +110,13 @@ const filterSlice = createSlice({
     },
     setChips(state, action) {
       const { filterType } = action.payload;
+      console.log(filterType)
       let chippable;
       if (filterType === "item") {
         chippable = ["bu", "brand", "itemType"];
       }
-      if (filterType.includes("history")) {
+      if (filterType.includes("history") || filterType === "rfq" || filterType === "po") {
         chippable = [
-          "fromDate",
-          "toDate",
           "bu",
           "brand",
           "distributor",
@@ -127,7 +126,8 @@ const filterSlice = createSlice({
           "status",
           "user",
           "rfqNum",
-          "poNum", 
+          "poNum",
+          "supplier",
         ];
       }
       if (filterType === "program") {
