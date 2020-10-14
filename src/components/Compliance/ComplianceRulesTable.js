@@ -148,7 +148,16 @@ const ComplianceRulesTable = ({
                 <TableRow key={index} hover className={classes.clickableRow}>
                   <TableCell align="left">{row.ruleType}</TableCell>
                   <TableCell align="left">{row.tags.join(", ")}</TableCell>
-                  <TableCell align="left">{row.desc}</TableCell>
+                  {row.contact ? (
+                    <TableCell align="left">
+                      <div>
+                        <Typography variant="body2">{row.desc}</Typography>
+                        <Typography variant="body2">{`${row.contact} - ${row.email}`}</Typography>
+                      </div>
+                    </TableCell>
+                  ) : (
+                    <TableCell align="left">{row.desc}</TableCell>
+                  )}
                 </TableRow>
               ))}
             {rulesLoading && (

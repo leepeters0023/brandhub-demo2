@@ -196,51 +196,71 @@ export const rules = [
     ruleType: "Item Type",
     tags: ["Wine", "Spirit", "Malt", "UT"],
     desc: "No Neckers Allowed for Wine, Spirits or Malt product",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Item Type",
     tags: ["Wine", "Spirit", "Malt", "VA"],
-    desc: "No Floor Decals Allowed for Wine, Spirit or Malt"
+    desc: "No Floor Decals Allowed for Wine, Spirit or Malt",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Pricing",
     tags: ["Structure", "Wine", "Spirit", "Malt", ">", "150", "MD"],
-    desc: "If Product = Structure, and Brand = Wine Spirit or Malt, Price cannot be greater than $150"
+    desc: "If Product = Structure, and Brand = Wine Spirit or Malt, Price cannot be greater than $150",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Pricing",
     tags: ["Structure", "Spirit", ">", "25", "WV"],
-    desc: "Structure cannot exceed $25 if Spirit"
+    desc: "Structure cannot exceed $25 if Spirit",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Pricing",
     tags: ["Structure", "Wine", "Spirit", "Malt", ">", "250", "SD"],
-    desc: "Structure cannot exceed $250 if Wine, Spirit or Malt,"
+    desc: "Structure cannot exceed $250 if Wine, Spirit or Malt,",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Pricing",
     tags: ["Structure", "Wine", "Spirit", "Malt", ">", "40", "VA"],
-    desc: "Structure cannot Exceed $40 if Wine, Spirit or Malt"
+    desc: "Structure cannot Exceed $40 if Wine, Spirit or Malt",
+    contact: null,
+    email: null,
   },
   {
     ruleType: "Prior Approval",
     tags: ["POS", "Wine", "Malt", "IN", "ME", "VT", "WV"],
-    desc: "Prior Approval Required if Product is POS, Wine, and Malt"
+    desc: "Prior Approval Required if Product is POS, Wine, and Malt",
+    contact: "John Doe",
+    email: "email@email.com",
   },
   {
     ruleType: "Prior Approval",
     tags: ["Structure", "Wine", "Malt", "IN", "ME", "MN", "VT", "WV"],
-    desc: "Prior Approval Required if Product is Structure Wine and Malt"
+    desc: "Prior Approval Required if Product is Structure Wine and Malt",
+    contact: "John Doe",
+    email: "email@email.com",
   },
   {
     ruleType: "Prior Approval",
     tags: ["POS", "Spirit", "IN", "NC", "VA", "WV"],
-    desc: "Prior Approval Required if Product is POS, Spirits"
+    desc: "Prior Approval Required if Product is POS, Spirits",
+    contact: "John Doe",
+    email: "email@email.com",
   },
   {
     ruleType: "Prior Approval",
     tags: ["Structure", "Spirit", "IN", "MN", "WV"],
-    desc: "Prior Approval Required if Product is Structure, Spirits"
+    desc: "Prior Approval Required if Product is Structure, Spirits",
+    contact: "John Doe",
+    email: "email@email.com",
   }
 ]
 
