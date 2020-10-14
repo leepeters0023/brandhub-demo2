@@ -43,6 +43,7 @@ const defaultFilters = {
   distributor: [],
   program: [],
   brand: [],
+  itemType: [],
   sequenceNum: "",
   type: "not-pre-order",
   status: "submitted",

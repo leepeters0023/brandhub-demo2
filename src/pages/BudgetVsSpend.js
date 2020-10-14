@@ -30,6 +30,7 @@ const defaultFilters = {
   orderType: "on-demand",
   brand: [],
   program: [],
+  territory: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "user",

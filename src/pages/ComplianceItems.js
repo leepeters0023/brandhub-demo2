@@ -27,9 +27,12 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { complianceItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
-  orderType: "on-demand",
   brand: [],
   program: [],
+  itemType: [],
+  tag: [],
+  ruleType: [],
+  status: "all",
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",

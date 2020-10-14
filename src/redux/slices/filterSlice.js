@@ -19,6 +19,7 @@ let initialState = {
   supplier: [],
   tag: [],
   territory: [],
+  type: null,
   user: [],
   sortOrder: null,
   sortOrderBy: null,
@@ -58,6 +59,7 @@ const filterSlice = createSlice({
       state.supplier = [];
       state.tag = [];
       state.territory = [];
+      state.type = null;
       state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -101,6 +103,7 @@ const filterSlice = createSlice({
       state.status = null;
       state.tag = [];
       state.territory = [];
+      state.type = null;
       state.user = [];
       state.sortOrder = null;
       state.sortOrderBy = null;

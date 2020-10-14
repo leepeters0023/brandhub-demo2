@@ -32,6 +32,7 @@ const defaultFilters = {
   orderType: "on-demand",
   brand: [],
   program: [],
+  itemType: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",
