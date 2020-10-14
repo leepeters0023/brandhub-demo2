@@ -100,8 +100,8 @@ const CurrentRFQ = () => {
                   variant="inline"
                   format="MM/dd/yyyy"
                   margin="normal"
-                  id="reqShipDate"
-                  label="Required Ship"
+                  id="dueDate"
+                  label="Due Date"
                   value={format(new Date(), "MM/dd/yyyy")}
                   //onChange={(value) => handleFilters(value, "toDate")}
                   KeyboardButtonProps={{

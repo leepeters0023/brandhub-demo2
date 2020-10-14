@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -28,6 +29,7 @@ const headCells = [
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true }
 ];
 
@@ -185,6 +187,9 @@ const RFQHistoryTable = ({
                     </TableCell>
                     <TableCell align="left">
                       {formatMoney(row.estTotal)}
+                    </TableCell>
+                    <TableCell>
+                      {format(new Date(), "MM/dd/yyyy")}
                     </TableCell>
                     <TableCell align="left">{row.status}</TableCell>
                   </TableRow>

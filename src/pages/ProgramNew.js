@@ -104,7 +104,7 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "item" }));
+    dispatch(setFilterType({ type: "item-all" }));
     handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchAllFilteredOrderSets,
   fetchNextOrderSets,
+  // fetchOrderSetItems,
+  // fetchNextOrderSetItems,
 } from "../../api/orderApi";
 
 let initialState = {
@@ -12,6 +14,7 @@ let initialState = {
   orderCount: null,
   queryTotal: null,
   orderSets: [],
+  itemGroups: [],
   error: null,
 };
 
@@ -63,11 +66,26 @@ const orderSetHistorySlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    getOrderSetItemsSuccess(state, action) {
+      const { itemGroups, nextLink } = action.payload;
+      state.nextLink = nextLink;
+      state.itemGroups = [...itemGroups];
+      state.isLoading = false;
+      state.error = null;
+    },
+    getNextOrderSetItemsSuccess(state, action) {
+      const { itemGroups, nextLink } = action.payload;
+      state.nextLink = nextLink;
+      state.itemGroups = state.itemGroups.concat(itemGroups);
+      state.isNextLoading = false;
+      state.error = null;
+    },
     resetOrderSetHistory(state) {
       state.isLoading = false;
       state.isNextLoading = false;
       state.nextLink = null;
       state.orderSets = [];
+      state.itemGroups = [];
       state.error = null;
     },
     getOrderSetDetailSuccess(state) {
@@ -83,6 +101,8 @@ export const {
   setNextIsLoading,
   getOrderSetsSuccess,
   getNextOrderSetsSuccess,
+  getOrderSetItemsSuccess,
+  getNextOrderSetItemsSuccess,
   resetOrderSetHistory,
   getOrderSetDetailSuccess,
   setFailure,
@@ -109,9 +129,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
       totalEstCost: orderSet["total-cost"],
       totalActCost: "---",
       budget: "$25,000.00",
-      orderDate: orderSet["submitted-at"]
-        ? orderSet["submitted-at"]
-        : "---",
+      orderDate: orderSet["submitted-at"] ? orderSet["submitted-at"] : "---",
       dueDate: orderSet["due-date"],
       status: orderSet.status,
     }));
@@ -151,9 +169,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
       totalEstCost: orderSet["total-cost"],
       totalActCost: "---",
       budget: "$25,000.00",
-      orderDate: orderSet["submitted-at"]
-        ? orderSet["submitted-at"]
-        : "---",
+      orderDate: orderSet["submitted-at"] ? orderSet["submitted-at"] : "---",
       dueDate: orderSet["due-date"],
       status: orderSet.status,
     }));
@@ -173,3 +189,77 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+// export const fetchFilteredOrderSetItems = (filterObject) => async (
+//   dispatch
+// ) => {
+//   try {
+//     dispatch(setIsLoading());
+//     let orderSetItems = await fetchOrderSetItems(filterObject);
+//     if (orderSetItems.error) {
+//       throw orderSetItems.error;
+//     }
+//     console.log(orderSetItems);
+//     let mappedItems = orderSetItems.data.items.map((item) => ({
+//       user: orderSetItems.data.user.name,
+//       sequenceNum: item["item-number"],
+//       program: item.program,
+//       itemType: item["item-type"],
+//       state: item.state ? item.state : "---",
+//       packSize: item["qty-per-pack"],
+//       totalItems: item.qty,
+//       estCost: item["est-cost"],
+//       estTotal: item["est-total"],
+//       orderDate: item["submitted-at"],
+//       orderDue: item["due-date"] ? item["due-date"] : "---",
+//       status: item.status,
+//     }));
+//     dispatch(
+//       getOrderSetItemsSuccess({
+//         itemGroups: mappedItems,
+//         nextLink: orderSetItems.data.nextLink
+//           ? orderSetItems.data.nextLink
+//           : null,
+//       })
+//     );
+//   } catch (err) {
+//     dispatch(setFailure({ error: err.toString() }));
+//   }
+// };
+
+// export const fetchNextFilteredOrderSetItems = (url) => async (
+//   dispatch
+// ) => {
+//   try {
+//     dispatch(setIsLoading());
+//     let orderSetItems = await fetchNextOrderSetItems(url);
+//     if (orderSetItems.error) {
+//       throw orderSetItems.error;
+//     }
+//     console.log(orderSetItems);
+//     let mappedItems = orderSetItems.data.items.map((item) => ({
+//       user: orderSetItems.data.user.name,
+//       sequenceNum: item["item-number"],
+//       program: item.program,
+//       itemType: item["item-type"],
+//       state: item.state ? item.state : "---",
+//       packSize: item["qty-per-pack"],
+//       totalItems: item.qty,
+//       estCost: item["est-cost"],
+//       estTotal: item["est-total"],
+//       orderDate: item["submitted-at"],
+//       orderDue: item["due-date"] ? item["due-date"] : "---",
+//       status: item.status,
+//     }));
+//     dispatch(
+//       getNextOrderSetItemsSuccess({
+//         itemGroups: mappedItems,
+//         nextLink: orderSetItems.data.nextLink
+//           ? orderSetItems.data.nextLink
+//           : null,
+//       })
+//     );
+//   } catch (err) {
+//     dispatch(setFailure({ error: err.toString() }));
+//   }
+// };

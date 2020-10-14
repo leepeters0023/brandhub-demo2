@@ -30,8 +30,10 @@ export const useNumberOnlyInput = (initialValue) => {
       value,
       onChange: (event) => {
         if (
-          numArray.includes(event.target.value[event.target.value.length - 1]) ||
-      event.target.value === ""
+          numArray.includes(
+            event.target.value[event.target.value.length - 1]
+          ) ||
+          event.target.value === ""
         ) {
           if (event.target.value === "") {
             setValue(0);
@@ -41,7 +43,7 @@ export const useNumberOnlyInput = (initialValue) => {
       },
     },
   };
-}
+};
 
 export const useLimitedInput = (initialValue, max) => {
   const [value, setValue] = useState(initialValue);
@@ -59,9 +61,14 @@ export const useLimitedInput = (initialValue, max) => {
       },
     },
   };
-}
+};
 
-export const useDetailedInput = (initialValue, secondaryFunc, type, filterType) => {
+export const useDetailedInput = (
+  initialValue,
+  secondaryFunc,
+  type,
+  filterType
+) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -73,10 +80,10 @@ export const useDetailedInput = (initialValue, secondaryFunc, type, filterType) 
       onChange: (event) => {
         setValue(event.target.value);
         secondaryFunc(event.target.value, type, filterType);
-      }
-    }
-  }
-}
+      },
+    },
+  };
+};
 
 export const useProgramSort = (programList, sortOption, filters) => {
   const [sortedList, setSortedList] = useState(programList);
@@ -132,7 +139,7 @@ export const useProgramSort = (programList, sortOption, filters) => {
         setSortedList(monthList);
       }
     }
-  
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortOption, programList, filters, filters.length]);
   return sortedList;
@@ -175,8 +182,10 @@ export const useWindowHash = (
 };
 
 export const useItemUpdate = (items) => {
-  const [currentItemValues, updateCurrentItemValues] = useCallback(useState({}));
-  
+  const [currentItemValues, updateCurrentItemValues] = useCallback(
+    useState({})
+  );
+
   const handleItemUpdate = useCallback(
     (evt) => {
       const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -206,5 +215,5 @@ export const useItemUpdate = (items) => {
     }
   }, [items, currentItemValues, updateCurrentItemValues]);
 
-  return {itemValues: currentItemValues, handleItemUpdate}
-}
+  return { itemValues: currentItemValues, handleItemUpdate };
+};
