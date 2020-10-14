@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "@reach/router";
 //import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
+import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -35,6 +36,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
+  console.log(currentOrder);
 
   useEffect(() => {
     if (
@@ -107,10 +109,26 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Divider />
             <br />
             <Typography className={classes.headerText}>
-              {`Status: ${currentOrder.status}`}
+              {`Status: ${
+                currentOrder.status[0].toUpperCase() +
+                currentOrder.status.slice(1)
+              }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Order Type: ${currentOrder.type}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Order Date: ${format(
+                new Date(currentOrder.orderDate),
+                "MM/dd/yyyy"
+              )}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Ship Date: ${
+                currentOrder.shipDate !== "---"
+                  ? format(new Date(currentOrder.shipDate))
+                  : currentOrder.shipDate
+              }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Shipping Location: ${currentOrder.distributorName} - ${currentOrder.distributorId}`}

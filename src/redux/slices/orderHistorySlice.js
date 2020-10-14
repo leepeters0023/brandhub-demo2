@@ -3,6 +3,8 @@ import {
   fetchOrderHistory,
   fetchNextHistory,
   fetchSingleOrder,
+  // fetchOrderItemsHistory,
+  // fetchNextOrderItemsHistory,
 } from "../../api/orderApi";
 
 const orderTypeMap = {
@@ -18,6 +20,7 @@ let initialState = {
   nextPage: null,
   nextLink: null,
   orders: [],
+  items: [],
   singleOrder: {
     orderNumber: null,
     distributorName: null,
@@ -89,6 +92,22 @@ const orderHistorySlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    getOrderItemsSuccess(state, action) {
+      const { items, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
+      state.nextLink = nextLink;
+      state.items = [...items];
+      state.isLoading = false;
+      state.error = null;
+    },
+    getNextItemsSuccess(state, action) {
+      const { items, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
+      state.nextLink = nextLink;
+      state.items = state.items.concat(items);
+      state.isNextLoading = false;
+      state.error = null;
+    },
     resetOrderHistory(state) {
       state.isLoading = false;
       state.isNextLoading = false;
@@ -96,6 +115,7 @@ const orderHistorySlice = createSlice({
       state.nextPage = null;
       state.nextLink = null;
       state.orders = [];
+      state.items = [];
       state.singleOrder = {
         orderNumber: null,
         distributorName: null,
@@ -121,6 +141,8 @@ export const {
   setNextIsLoading,
   getSingleOrderSuccess,
   getOrderHistorySuccess,
+  getOrderItemsSuccess,
+  getNextItemsSuccess,
   getNextHistorySuccess,
   resetOrderHistory,
   setFailure,
@@ -237,3 +259,79 @@ export const fetchOrder = (id) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+// export const fetchFilterdOrderItemsHistory = (filterObject) => async (
+//   dispatch
+// ) => {
+//   try {
+//     dispatch(setIsLoading());
+//     let items = await fetchOrderItemsHistory(filterObject);
+//     console.log(items);
+//     if (items.error) {
+//       throw items.error;
+//     }
+//     let mappedItems = items.data.items.map((item) => ({
+//       sequenceNum: item["item-number"],
+//       program: item.program,
+//       itemType: item["item-type"],
+//       distributor: item.distributor,
+//       state: item.state ? item.state : "---",
+//       packSize: item["qty-per-pack"],
+//       totalItems: item.qty,
+//       estCost: item["est-cost"],
+//       estTotal: item["est-total"],
+//       actCost: item["act-cost"] ? item["act-cost"] : "---",
+//       actTotal: item["act-total"] ? item["act-total"] : "---",
+//       orderDate: item["submitted-at"],
+//       shipDate: item["ship-date"] ? item["ship-date"] : "---",
+//       tracking: item["tracking-number"] ? item["tracking-number"] : "---",
+//       status: item.status,
+//     }));
+//     dispatch(
+//       getOrderItemsSuccess({
+//         items: mappedItems,
+//         nextLink: items.data.nextLink ? items.data.nextLink : null,
+//       })
+//     );
+//   } catch (err) {
+//     dispatch(setFailure({ error: err.toString() }));
+//   }
+// };
+
+// export const fetchNextFilterdOrderItemsHistory = (url) => async (
+//   dispatch
+// ) => {
+//   try {
+//     dispatch(setNextIsLoading());
+//     let items = await fetchNextOrderItemsHistory(url);
+//     console.log(items);
+//     if (items.error) {
+//       throw items.error;
+//     }
+//     let mappedItems = items.data.items.map((item) => ({
+//       sequenceNum: item["item-number"],
+//       program: item.program,
+//       itemType: item["item-type"],
+//       distributor: item.distributor,
+//       state: item.state ? item.state : "---",
+//       packSize: item["qty-per-pack"],
+//       totalItems: item.qty,
+//       estCost: item["est-cost"],
+//       estTotal: item["est-total"],
+//       actCost: item["act-cost"] ? item["act-cost"] : "---",
+//       actTotal: item["act-total"] ? item["act-total"] : "---",
+//       orderDate: item["submitted-at"],
+//       shipDate: item["ship-date"] ? item["ship-date"] : "---",
+//       tracking: item["tracking-number"] ? item["tracking-number"] : "---",
+//       status: item.status,
+//     }));
+//     dispatch(
+//       getOrderItemsSuccess({
+//         items: mappedItems,
+//         nextLink: items.data.nextLink ? items.data.nextLink : null,
+//       })
+//     );
+//   } catch (err) {
+//     dispatch(setFailure({ error: err.toString() }));
+//   }
+// };

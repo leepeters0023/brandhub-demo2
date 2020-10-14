@@ -45,12 +45,6 @@ const headCells = [
     sort: true,
   },
   { id: "dueDate", disablePadding: false, label: "Order Due", sort: true },
-  {
-    id: "inMarketDate",
-    disablePadding: false,
-    label: "In Market",
-    sort: true,
-  },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -212,9 +206,6 @@ const RollupOverViewTable = ({
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
                       : row.orderDate}
-                  </TableCell>
-                  <TableCell align="left">
-                    {format(new Date(row.dueDate), "MM/dd/yyyy")}
                   </TableCell>
                   <TableCell align="left">
                     {format(new Date(row.dueDate), "MM/dd/yyyy")}

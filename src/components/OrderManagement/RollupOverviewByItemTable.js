@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { useSelector } from "react-redux";
-
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
@@ -19,36 +17,22 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
-  { id: "type", disablePadding: false, label: "Type", sort: false },
-  {
-    id: "distributor",
-    disablePadding: false,
-    label: "Distributor",
-    sort: true,
-  },
-  { id: "state", disablePadding: false, label: "State", sort: true },
+  { id: "user", disablePadding: false, label: "Person", sort: true},
+  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
-  { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
-  { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
+  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "state", disablePadding: false, label: "State", sort: false },
+  { id: "packSize", disablePadding: false, label: "Qty / Pack", sort: false },
   {
     id: "totalItems",
     disablePadding: false,
     label: "Total Items",
     sort: false,
   },
-  {
-    id: "estTotal",
-    disablePadding: false,
-    label: "Est. Total",
-    sort: false,
-  },
-  {
-    id: "actTotal",
-    disablePadding: false,
-    label: "Act. Total",
-    sort: false,
-  },
+  { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
+  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
@@ -131,8 +115,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderHistoryTable = ({
-  orders,
+const RollupOverviewByItemTable = ({
+  items,
   handleSort,
   isOrdersLoading,
   scrollRef,
@@ -140,8 +124,6 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
-  const grouping = useSelector((state) => state.filters.groupBy);
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -151,9 +133,7 @@ const OrderHistoryTable = ({
   };
 
   const handleRowClick = (orderNum) => {
-    if (grouping === "order") {
-      navigate(`/orders/history/${orderNum}`);
-    }
+    navigate(`/orders/history/${orderNum}`);
   };
 
   return (
@@ -175,18 +155,18 @@ const OrderHistoryTable = ({
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {!isOrdersLoading && orders.length === 0 && (
+            {!isOrdersLoading && items.length === 0 && (
               <TableRow>
                 <TableCell align="left" colSpan={11}>
                   <Typography className={classes.headerText}>
-                    {`You currently don't have any orders on record that match this search criteria..`}
+                    {`You currently don't have any items on record that match this search criteria..`}
                   </Typography>
                 </TableCell>
               </TableRow>
             )}
             {!isOrdersLoading &&
-              orders.length > 0 &&
-              orders.map((row) => (
+              items.length > 0 &&
+              items.map((row) => (
                 <TableRow
                   key={row.orderNum}
                   hover
@@ -195,27 +175,32 @@ const OrderHistoryTable = ({
                     handleRowClick(row.orderNum);
                   }}
                 >
-                  <TableCell align="left">{row.orderNum}</TableCell>
-                  <TableCell align="left">{row.type}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
-                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left">{row.user}</TableCell>
+                  <TableCell align="left">{row.sequenceNum}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">
-                    {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
-                      : row.orderDate}
-                  </TableCell>
-                  <TableCell align="left">{row.shipDate}</TableCell>
+                  <TableCell align="left">{row.itemType}</TableCell>
+                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
+                  <TableCell align="left">
+                    {row.estCost !== "---"
+                      ? formatMoney(row.estCost)
+                      : row.estCost}
+                  </TableCell>
                   <TableCell align="left">
                     {row.estTotal !== "---"
                       ? formatMoney(row.estTotal)
                       : row.estTotal}
                   </TableCell>
                   <TableCell align="left">
-                    {row.actTotal !== "---"
-                      ? formatMoney(row.actTotal)
-                      : row.actTotal}
+                    {row.orderDate !== "---"
+                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      : row.orderDate}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.dueDate !== "---"
+                      ? format(new Date(row.dueDate), "MM/dd/yyyy")
+                      : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.orderStatus[0].toUpperCase() +
@@ -237,11 +222,11 @@ const OrderHistoryTable = ({
   );
 };
 
-OrderHistoryTable.propTypes = {
-  orders: PropTypes.array,
+RollupOverviewByItemTable.propTypes = {
+  items: PropTypes.array,
   handleSort: PropTypes.func.isRequired,
   isOrdersLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any.isRequired,
 };
 
-export default OrderHistoryTable;
+export default RollupOverviewByItemTable;
