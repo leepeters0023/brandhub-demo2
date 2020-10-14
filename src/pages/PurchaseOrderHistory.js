@@ -27,12 +27,15 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
-  orderType: "on-demand",
+  supplier: [],
   brand: [],
   program: [],
+  itemType: [],
+  status: "all",
+  poNum: "",
   sequenceNum: "",
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "poNum",
 };
 
 const useStyles = makeStyles((theme) => ({

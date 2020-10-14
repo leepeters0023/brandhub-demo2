@@ -27,12 +27,14 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { rfqCurrent, rfqAll } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
-  orderType: "on-demand",
   brand: [],
   program: [],
+  itemType: [],
+  status: "all",
+  rfqNum: "",
   sequenceNum: "",
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "rfqNum",
 };
 
 const useStyles = makeStyles((theme) => ({

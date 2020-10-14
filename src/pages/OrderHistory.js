@@ -52,6 +52,7 @@ const defaultFilters = {
   groupBy: "order",
   brand: [],
   program: [],
+  itemType: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "orderDate",

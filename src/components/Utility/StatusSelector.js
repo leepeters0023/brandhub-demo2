@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import PropTypes from "prop-types";
+
+import { useSelector } from "react-redux";
 
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -46,10 +48,18 @@ const StatusSelector = ({
     po: "PO Status",
   };
 
+  const currentStatus = useSelector((state) => state.filters.status);
+
   const handleChangeSelect = (evt) => {
     setStatus(evt.target.value);
     handleStatus(evt.target.value, "status", filterType);
   };
+
+  useEffect(() => {
+    if (currentStatus !== status) {
+      setStatus(currentStatus);
+    }
+  })
 
   return (
     <>

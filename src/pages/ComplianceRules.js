@@ -27,12 +27,10 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { rules } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
-  orderType: "on-demand",
-  brand: [],
-  program: [],
-  sequenceNum: "",
+  ruleType: [],
+  tag: [],
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "ruleType",
 };
 
 const useStyles = makeStyles((theme) => ({

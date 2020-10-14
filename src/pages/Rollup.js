@@ -41,6 +41,7 @@ const defaultFilters = {
   user: [],
   program: [],
   brand: [],
+  itemType: [],
   groupBy: "order",
   sequenceNum: "",
   status: "submitted",
