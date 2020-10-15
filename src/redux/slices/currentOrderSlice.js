@@ -180,7 +180,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
           ? order.data[0]["submitted-at"]
           : "---",
         totalItems: order.data[0]["total-quantity"],
-        totalEstCost: order.data[0]["total-cost"],
+        totalEstCost: order.data[0]["total-estimated-cost"],
       };
       itemReferenceArray = order.data[0]["order-set-items"].map((item) => ({
         id: item.id,
@@ -222,7 +222,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       rushOrder: "---",
       budget: "---",
       totalItems: order.data["total-quantity"],
-      totalEstCost: order.data["total-cost"],
+      totalEstCost: order.data["total-estimated-cost"],
       orderNote: order.data.notes,
     };
     let formattedItems = order.data["order-items"].map((item) => ({
@@ -232,9 +232,9 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       brand: item.item.brand.name,
       itemType: item.item.type,
       qty: item.item["qty-per-pack"],
-      price: item.item.cost,
+      price: item.item["estimated-cost"],
       totalItems: item.qty,
-      estTotal: item["total-cost"],
+      estTotal: item["total-estimated-cost"],
       actTotal: "---",
     }));
     let itemReferenceArray = order.data["order-items"].map((item) => ({
@@ -266,24 +266,22 @@ export const deleteCurrentOrder = (id) => async (dispatch) => {
   }
 };
 
-export const addNewOrderItem = (orderId, itemId, type) => async (
-  dispatch
-) => {
+export const addNewOrderItem = (orderId, itemId, type) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-      let orderItem = await addOrderSetItem(orderId, itemId);
-      if (orderItem.error) {
-        throw orderItem.error;
-      }
-      dispatch(
-        addNewItem({
-          item: {
-            id: orderItem.data.id,
-            itemNumber: orderItem.data.item["item-number"],
-          },
-          type: type,
-        })
-      );
+    let orderItem = await addOrderSetItem(orderId, itemId);
+    if (orderItem.error) {
+      throw orderItem.error;
+    }
+    dispatch(
+      addNewItem({
+        item: {
+          id: orderItem.data.id,
+          itemNumber: orderItem.data.item["item-number"],
+        },
+        type: type,
+      })
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
