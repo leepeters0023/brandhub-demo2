@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import {
@@ -8,7 +8,7 @@ import {
   setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
+  setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -18,6 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 //import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -46,7 +47,9 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const [itemSelected, setItemSelected] = useCallback(useState(false));
+
+  const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -78,12 +81,13 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   return (
     <>
@@ -93,10 +97,23 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "250px",
+              width: "300px",
               justifyContent: "flex-end",
             }}
           >
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={!itemSelected}
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                //TODO create override function
+                //navigate("/purchasing/purchaseOrder#new");
+              }}
+            >
+              OVERRIDE RULE
+            </Button>
             <Tooltip title="Print Items">
               <IconButton>
                 <PrintIcon color="secondary" />
@@ -131,6 +148,8 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           itemsLoading={false}
           handleSort={handleSort}
           // scrollRef={scrollRef}
+          itemSelected={itemSelected}
+          setItemSelected={setItemSelected}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>
