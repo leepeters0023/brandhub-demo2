@@ -14,7 +14,6 @@ import { useInput } from "../hooks/UtilityHooks";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import FilterChipList from "../components/Filtering/FilterChipList";
-import TerritoryAutoComplete from "../components/Utility/TerritoryAutoComplete";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -22,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
@@ -35,6 +35,33 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
+
+import { regions } from "../utility/constants";
+
+const TerritorySelector = React.memo(({ classes, handleTerritories }) => (
+  <div className={classes.inputRow}>
+    <Autocomplete
+      multiple
+      fullWidth
+      id="tags-standard"
+      options={regions}
+      getOptionLabel={(option) => option.name}
+      onChange={(_evt, value) => handleTerritories(value)}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="outlined"
+          label="Territory"
+          size="small"
+        />
+      )}
+    />
+  </div>
+), (prev, next) => {
+  return (
+    Object.keys(prev.classes).length === Object.keys(next.classes).length
+  )
+});
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -99,9 +126,9 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
     [currentProgramItems, setCurrentProgramItems]
   );
 
-  const handleTerritories = (value, _type, _filter) => {
+  const handleTerritories = useCallback((value, _type, _filter) => {
     setCurrentTerritories(value);
-  };
+  }, [setCurrentTerritories]);
 
   useEffect(() => {
     dispatch(setFilterType({ type: "item-all" }));
@@ -114,8 +141,6 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
       dispatch(fetchFilteredItems("inStock"));
     }
   }, [currentItems, dispatch, userType, currentUserRole]);
-
-  console.log(currentTerritories);
 
   return (
     <>
@@ -165,91 +190,100 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
           </div>
         </div>
         <br />
-        
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}}>
 
-        <Typography className={classes.headerText}>Program Details</Typography>
-
-        <div className={classes.inputRow}>
-          <TextField
-            className={classes.inputField}
-            style={{ marginBottom: "7px" }}
-            color="secondary"
-            name="programName"
-            type="text"
-            label="Program Name"
-            value={name}
-            {...bindName}
-            variant="outlined"
-            size="small"
-            />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              color="secondary"
-              className={classes.inputField}
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="startDate"
-              label="Program Start Date"
-              value={startDate}
-              onChange={(value) => setStartDate(value)}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-              />
-          </MuiPickersUtilsProvider>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              color="secondary"
-              className={classes.inputField}
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id="endDate"
-              label="Program End Date"
-              value={endDate}
-              onChange={(value) => setEndDate(value)}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-              />
-          </MuiPickersUtilsProvider>
-        </div>
-        <br />
-        <FormControlLabel
-          control={
-            <Switch
-            checked={allTerritories}
-            onChange={() => {
-              setAllTerritories(!allTerritories);
-            }}
-            name="allTerritoryToggle"
-            />
-          }
-          label="All Territories"
-          />
-        <br />
-        {!allTerritories && (
-          <div className={classes.inputRow}>
-            <TerritoryAutoComplete
-              classes={classes}
-              handleChange={handleTerritories}
-              multiSelect={true}
-              />
-          </div>
-        )}
-        <br />
-        <Button
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          disabled={currentProgramItems.length === 0 || name.length === 0 || (!allTerritories && currentTerritories.length === 0)}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+          }}
         >
-          CREATE PROGRAM
-        </Button>
+          <Typography className={classes.headerText}>
+            Program Details
+          </Typography>
+
+          <div className={classes.inputRow}>
+            <TextField
+              className={classes.inputField}
+              style={{ marginBottom: "7px" }}
+              color="secondary"
+              name="programName"
+              type="text"
+              label="Program Name"
+              value={name}
+              {...bindName}
+              variant="outlined"
+              size="small"
+            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                color="secondary"
+                className={classes.inputField}
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="startDate"
+                label="Program Start Date"
+                value={startDate}
+                onChange={(value) => setStartDate(value)}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                color="secondary"
+                className={classes.inputField}
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="endDate"
+                label="Program End Date"
+                value={endDate}
+                onChange={(value) => setEndDate(value)}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          </div>
+          <br />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={allTerritories}
+                onChange={() => {
+                  setAllTerritories(!allTerritories);
+                }}
+                name="allTerritoryToggle"
+              />
+            }
+            label="All Territories"
+          />
+          <br />
+          {!allTerritories && (
+            <TerritorySelector
+              classes={classes}
+              handleTerritories={handleTerritories}
+            />
+          )}
+          <br />
+          <Button
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+            disabled={
+              currentProgramItems.length === 0 ||
+              name.length === 0 ||
+              (!allTerritories && currentTerritories.length === 0)
+            }
+          >
+            CREATE PROGRAM
+          </Button>
         </div>
         <br />
         <Divider />
@@ -317,4 +351,4 @@ ProgramNew.propTypes = {
   programId: PropTypes.string,
 };
 
-export default ProgramNew;
+export default React.memo(ProgramNew);

@@ -236,7 +236,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         ? 1
         : 0;
     });
-    console.log(currentOrders.data.orders);
     let orders = currentOrders.data.orders.map((ord) => ({
       orderNumber: ord.id,
       distributorId: ord.distributor.id,

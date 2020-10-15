@@ -12,8 +12,6 @@ export const filter = (array, filters) => {
           filtered = false;
           break;
         }
-        // if (!item.brand.includes(filters[i].value)) {
-        // }
       }
       if (filtered) {
         filteredArray.push(item);
@@ -51,3 +49,11 @@ export const roundUp = (value, rounder) => {
   let roundedUp = multiplier * rounder + rounder;
   return roundedUp;
 };
+
+export const separateByComma = (array, key) => {
+  if (key) {
+    return array.map((index) => index[key]).join(",");
+  } else {
+    return array.join(",");
+  }
+}

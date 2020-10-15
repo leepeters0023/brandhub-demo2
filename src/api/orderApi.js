@@ -1,6 +1,8 @@
 import axios from "axios";
 import Jsona from "jsona";
 
+//import { separateByComma } from "../utility/utilityFunctions";
+
 const dataFormatter = new Jsona();
 
 const writeHeaders = {
@@ -89,10 +91,24 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       ? `&filter[status]=${filterObject.status}`
       : "&filter[status]!=approved"
     : "";
+  //TODO fix this (program, brand, user, itemType)
+  /* 
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
+    : "";
+  let progString = filterObject.program.length > 0
+    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
+    : "";
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
+    : "",
+  let itemTypeString = filterObject.itemType.length > 0
+    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
+    : "",
+  */
   let userString = filterObject.user.length > 0
     ? `&filter[user-id]=${filterObject.user[0].id}`
     : "";
-  //TODO fix this (program, brand, user)
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program[0].name}`
@@ -149,7 +165,6 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
 
 export const fetchNextOrderSets = async (url) => {
   const response = { status: "", error: null, data: null };
-  // let queryString = decodeURIComponent(url).split("+").join(" ")
   await axios
     .get(url)
     .then((res) => {
@@ -370,7 +385,6 @@ export const fetchOrderHistory = async (filterObject) => {
     orderDate: "submitted-at",
     shipDate: "ship-date",
     status: "order-status",
-    user: "user",
   };
   let statusString = filterObject.status
     ? `filter[status]=${filterObject.status}&`
@@ -381,6 +395,24 @@ export const fetchOrderHistory = async (filterObject) => {
       : `&filter[type]=${filterObject.type}`
     : "";
   let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
+  //TODO fix this (program, brand, user, distributor)
+  /* 
+  let distString = filterObject.distributor.length > 0
+    ? `&filter[distributor-id]=${separateByComma(filterObject.distributor, "id")}`
+    : "";
+  let userString = filterObject.user.length > 0
+    ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
+    : "";
+  let progString = filterObject.program.length > 0
+    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
+    : "";
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
+    : "",
+  let itemTypeString = filterObject.itemType.length > 0
+    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
+    : "",
+  */
   let distString = filterObject.distributor.length > 0
     ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
     : "";
@@ -390,7 +422,6 @@ export const fetchOrderHistory = async (filterObject) => {
   let brandString = filterObject.brand.length > 0
     ? `&filter[brand-id]=${filterObject.brand[0].id}`
     : "";
-  //TODO fix this (program, brand, user, distributor)
   let progString =
     (filterObject.program && filterObject.program.length > 0)
       ? `&filter[program-name]=${filterObject.program[0].name}`

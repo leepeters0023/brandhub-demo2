@@ -477,6 +477,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           </>
         )}
         <>
+        <br />
           <div className={classes.orderControl}>
             {((orderStatus === "in-progress" && currentUserRole === "field1") ||
               (currentUserRole !== "field1" &&
