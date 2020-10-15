@@ -144,13 +144,15 @@ const orderSetSlice = createSlice({
       state.orders = currentOrders;
       let currentItems = [...state.items];
       currentItems = currentItems.map((item) => {
-        let editItem = deleteOrder.items.find((i) => i.itemNumber === item.itemNumber)
+        let editItem = deleteOrder.items.find(
+          (i) => i.itemNumber === item.itemNumber
+        );
         return {
           ...item,
           estTotal: item.estTotal - editItem.estTotal,
           totalItems: item.totalItems - editItem.totalItems,
-        }
-      })
+        };
+      });
       state.items = currentItems;
     },
     updateOrderDetails(state, action) {
@@ -220,7 +222,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.type,
-      price: item.item.cost,
+      price: item.item["estimated-cost"],
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
@@ -234,7 +236,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         ? 1
         : 0;
     });
-    console.log(currentOrders.data.orders)
+    console.log(currentOrders.data.orders);
     let orders = currentOrders.data.orders.map((ord) => ({
       orderNumber: ord.id,
       distributorId: ord.distributor.id,
@@ -251,9 +253,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item.cost,
+          price: item.item["estimated-cost"],
           packSize: item.item["qty-per-pack"],
-          estTotal: item.qty * item.item.cost,
+          estTotal: item.qty * item.item["estimated-cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {
@@ -267,7 +269,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         .map((item) => item.qty)
         .reduce((a, b) => a + b),
       estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item.cost)
+        .map((item) => item.qty * item.item["estimated-cost"])
         .reduce((a, b) => a + b),
     }));
 
@@ -279,7 +281,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : 0;
     });
 
-    let orderTotal = currentOrders.data["total-cost"];
+    let orderTotal = currentOrders.data["total-estimated-cost"];
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
@@ -324,7 +326,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.type,
-      price: item.item.cost,
+      price: item.item["estimated-cost"],
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
@@ -355,8 +357,8 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item.cost,
-          estTotal: item.qty * item.item.cost,
+          price: item.item["estimated-cost"],
+          estTotal: item.qty * item.item["estimated-cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {
@@ -370,7 +372,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         .map((item) => item.qty)
         .reduce((a, b) => a + b),
       estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item.cost)
+        .map((item) => item.qty * item.item["estimated-cost"])
         .reduce((a, b) => a + b),
     }));
 
@@ -381,7 +383,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         ? 1
         : 0;
     });
-    let orderTotal = currentOrders.data[0]["total-cost"];
+    let orderTotal = currentOrders.data[0]["total-estimated-cost"];
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;

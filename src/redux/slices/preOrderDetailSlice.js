@@ -4,7 +4,6 @@ import { fetchAllPreOrders } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
 
-
 let initialState = {
   isLoading: false,
   initialPreOrderLoading: false,
@@ -52,10 +51,10 @@ const preOrderDetailSlice = createSlice({
       state.error = null;
     },
     setPreOrderDetails(state, action) {
-      const {territories, programId, orderTotal} = action.payload;
+      const { territories, programId, orderTotal } = action.payload;
       state.programId = programId;
-      state.territories = [...territories]
-      state.preOrderTotalMod = state.preOrderTotal - orderTotal
+      state.territories = [...territories];
+      state.preOrderTotalMod = state.preOrderTotal - orderTotal;
     },
     setProgramName(state, action) {
       const { name } = action.payload;
@@ -107,7 +106,7 @@ export const fetchPreOrders = (id, type) => async (dispatch) => {
           ? ["National"]
           : order["territory-names"].split(", "),
       totalItems: order["total-quantity"],
-      totalEstCost: order["total-cost"],
+      totalEstCost: order["total-estimated-cost"],
       status: order.status,
     }));
     let totalCost = preOrders

@@ -245,6 +245,19 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               </Typography>
               <div className={classes.configButtons}>
                 <div className={classes.innerConfigDiv}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      className={classes.titleText}
+                      style={{ marginRight: "10px" }}
+                    >
+                      Total:
+                    </Typography>
+                    <Typography className={classes.titleText}>{`${formatMoney(
+                      currentTotal
+                    )}`}</Typography>
+                  </div>
                   <Tooltip title="Add Items to Order">
                     <IconButton component={Link} to={`/orders/items/inStock`}>
                       <ExitToAppIcon
@@ -265,6 +278,19 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               </Typography>
               <div className={classes.configButtons}>
                 <div className={classes.innerConfigDiv}>
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography
+                      className={classes.titleText}
+                      style={{ marginRight: "10px" }}
+                    >
+                      Total:
+                    </Typography>
+                    <Typography className={classes.titleText}>{`${formatMoney(
+                      currentTotal
+                    )}`}</Typography>
+                  </div>
                   <Tooltip title="Add Items to Order">
                     <IconButton component={Link} to={`/orders/items/onDemand`}>
                       <ExitToAppIcon
@@ -298,7 +324,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               </div>
 
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography className={classes.titleText}>Total:</Typography>
+                <Typography
+                  className={classes.titleText}
+                  style={{ marginRight: "10px" }}
+                >
+                  Total:
+                </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
                   currentTotal
                 )}`}</Typography>
@@ -325,7 +356,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 </Typography>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography className={classes.titleText}>Total:</Typography>
+                <Typography
+                  className={classes.titleText}
+                  style={{ marginRight: "10px" }}
+                >
+                  Total:
+                </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
                   currentTotal
                 )}`}</Typography>
@@ -337,7 +373,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         {(orderStatus === "approved" || orderStatus === "submitted") &&
         (currentUserRole === "field1" ||
           (!window.location.hash.includes("approval") &&
-          !window.location.href.includes("rollup"))) ? (
+            !window.location.href.includes("rollup"))) ? (
           <OrderSetOverview />
         ) : (
           <OrderSetTable
@@ -436,25 +472,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   value={orderNote}
                   onChange={handleOrderNote}
                 />
-                <br />
-                {currentUserRole === "field1" && (
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Typography className={classes.titleText}>
-                      Total:
-                    </Typography>
-                    <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal
-                    )}`}</Typography>
-                  </div>
-                )}
               </Grid>
             </Grid>
           </>
         )}
         <>
-          <br />
           <div className={classes.orderControl}>
             {((orderStatus === "in-progress" && currentUserRole === "field1") ||
               (currentUserRole !== "field1" &&
