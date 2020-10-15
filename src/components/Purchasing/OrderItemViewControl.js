@@ -91,4 +91,10 @@ OrderItemViewControl.propTypes = {
   items: PropTypes.array,
 };
 
-export default OrderItemViewControl;
+export default React.memo(OrderItemViewControl, (prev, next) => {
+  return (
+    prev.type === next.type &&
+    prev.currentView === next.currentView &&
+    prev.items.length === next.items.length
+  )
+});

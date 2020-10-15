@@ -115,9 +115,13 @@ const filterSlice = createSlice({
       const { filterType } = action.payload;
       let chippable;
       if (filterType === "item") {
-        chippable = ["bu", "brand", "itemType"];
+        chippable = ["bu", "brand", "itemType", "program"];
       }
-      if (filterType.includes("history") || filterType === "rfq" || filterType === "po") {
+      if (
+        filterType.includes("history") ||
+        filterType === "rfq" ||
+        filterType === "po"
+      ) {
         chippable = [
           "bu",
           "brand",
@@ -139,16 +143,29 @@ const filterSlice = createSlice({
         chippable = ["brand", "program", "itemType", "sequenceNum"];
       }
       if (filterType.includes("compliance")) {
-        chippable = ["brand", "program", "itemyType", "tag", "ruleType", "sequenceNum", "status"]
+        chippable = [
+          "brand",
+          "program",
+          "itemyType",
+          "tag",
+          "ruleType",
+          "sequenceNum",
+          "status",
+        ];
       }
       if (filterType.includes("budget")) {
-        chippable = ["brand", "user", "territory"]
+        chippable = ["brand", "user", "territory"];
       }
       let filters = [];
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (filter === "bu" || filter === "month" || filter === "ruleType" || filter === "supplier") {
+          if (
+            filter === "bu" ||
+            filter === "month" ||
+            filter === "ruleType" ||
+            filter === "supplier"
+          ) {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );
@@ -161,8 +178,8 @@ const filterSlice = createSlice({
             filter === "territory"
           ) {
             stateObject[filter].forEach((f) => {
-              filters.push({type: filter, value: f.name})
-            })
+              filters.push({ type: filter, value: f.name });
+            });
           } else if (stateObject[filter]) {
             filters.push({ type: filter, value: stateObject[filter] });
           }

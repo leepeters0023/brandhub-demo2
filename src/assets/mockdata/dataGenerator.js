@@ -194,14 +194,14 @@ const generateYearToDateBudgets = (dataPoints) => {
 export const rules = [
   {
     ruleType: "Item Type",
-    tags: ["Wine", "Spirit", "Malt", "UT"],
+    tags: ["Wine", "Spirit", "Malt", "Necker", "UT"],
     desc: "No Neckers Allowed for Wine, Spirits or Malt product",
     contact: null,
     email: null,
   },
   {
     ruleType: "Item Type",
-    tags: ["Wine", "Spirit", "Malt", "VA"],
+    tags: ["Wine", "Spirit", "Malt", "Floor Decal", "VA"],
     desc: "No Floor Decals Allowed for Wine, Spirit or Malt",
     contact: null,
     email: null,

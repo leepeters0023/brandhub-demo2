@@ -13,6 +13,19 @@ const dataFormatter = new Jsona();
 
 export const fetchItems = async () => {
   const response = { status: "", error: null, data: null };
+  /*
+  let progString = filterObject.program.length > 0
+    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
+    : "";
+  let brandString = filterObject.brand.length > 0
+    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
+    : "",
+  let itemTypeString = filterObject.itemType.length > 0
+    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
+    : "",
+
+    bu ? id or string...
+  */
   await axios
     .get(`/api/items`)
     .then((res) => {
