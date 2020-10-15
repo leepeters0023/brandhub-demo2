@@ -194,6 +194,26 @@ export const fetchNextOrderSets = async (url) => {
   return response;
 };
 
+export const fetchSingleOrderSetByType = async (type, userId) => {
+  const response = { status: "", error: null, data: null };
+  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
+  await axios
+    .get(
+      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 export const setOrderSetNote = async (id, note) => {
   const response = { status: "", error: null };
   await axios
@@ -488,26 +508,6 @@ export const fetchSingleOrder = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(`/api/orders/${id}`)
-    .then((res) => {
-      let data = dataFormatter.deserialize(res.data);
-      response.status = "ok";
-      response.data = data;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
-export const fetchSingleOrderSetByType = async (type, userId) => {
-  const response = { status: "", error: null, data: null };
-  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
-  await axios
-    .get(
-      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
-    )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
