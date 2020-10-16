@@ -1,6 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchDistributors } from "../../api/distributorApi";
 
+/*
+* Distributor Model
+notes: notes: This slice is users soley to build the distributor auto complete fields
+
+{
+  type: string (read),
+  id: string (read),
+  state: string (read),
+  name: string (read),
+  city: string (read),
+  links: object (read),
+}
+
+*/
+
 let initialState = {
   isLoading: false,
   distributorList: [],

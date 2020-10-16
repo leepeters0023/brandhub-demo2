@@ -1,5 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/*
+* Contact Model
+notes: This slice is used to build the ComplianceContactTable, name and email
+fields are read and write, everything else is read only.
+{
+  id: string (read),
+  state: string (read),
+  brandGroup: string (read),
+  name: string (read, write),
+  email: string (read, write),
+}
+
+*/
+
 let mockContacts = [
   {
     id: "11",

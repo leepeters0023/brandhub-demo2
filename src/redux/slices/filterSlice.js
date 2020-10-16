@@ -1,5 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+/*
+* Filter Model
+notes: filters are determined soley from the client logic and have nothing
+to do with calls to the api for their creation.  They are used within api
+calls to determine query strings that will be sent to the api.  All arrays
+will include objects with an id key, and a name key ({id: string, name: string})
+or just a single string represting the name and filter.  Every other field
+is a string.
+*/
+
 let initialState = {
   fromDate: null,
   toDate: null,

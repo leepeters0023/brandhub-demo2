@@ -7,6 +7,36 @@ import {
   createOrderSet,
 } from "../../api/orderApi";
 
+/*
+* Current Order Model
+
+notes: inStockOrderNumber, inStockOrderItems, onDemandOrderNumber,
+and onDemandOrderNumber are used as reference points when adding
+items to orders to ensure they are being added to the correct order.
+
+userId, userName, orderId, type, status, orderDate, totalItems,
+and total cost are all read only fields
+
+order-items and order-sets are both read/write items in the api
+
+{
+  inStockOrderNumber / onDemandOrderNumber: string (read),
+  inStockOrderItems / onDemandOrderItems: {
+    id: string (read),
+    itemNumber: string (read) (also known as sequence number),
+  },
+  userId: string (read),
+  userName: string (read),
+  orderId: string (read),
+  type: string (read),
+  status: string (read, write)
+  orderDate: string (read, gets updated automatically in api)
+  totalItems: int (read, write)
+  totalCost: int (read, updated in api)
+}
+
+*/
+
 let initialState = {
   isLoading: false,
   orderUpdateLoading: false,

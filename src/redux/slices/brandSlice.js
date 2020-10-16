@@ -1,6 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchBrandsByName } from "../../api/brandApi";
 
+/*
+* Brand Model
+notes: This slice is users soley to build the brand auto complete fields
+
+{
+  id: string (read),
+  type: string (read),
+  name: string (read),
+}
+
+*/
+
 let initialState = {
   isLoading: false,
   brandList: [],
