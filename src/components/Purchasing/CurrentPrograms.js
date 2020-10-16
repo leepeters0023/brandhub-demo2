@@ -12,8 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import ShareIcon from "@material-ui/icons/Share";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
+const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
   const classes = useStyles();
 
   return (
@@ -111,20 +111,22 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                   </Typography>
                 </div>
                 <div className={classes.itemControl}>
-                  <Tooltip title="Place Pre-Order">
-                    <span>
-                      <IconButton
-                        component={Link}
-                        to={`/orders/open/preorder#${prog.id}`}
-                      >
-                        <ExitToAppIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                  <Tooltip title="Add All Items to PDF">
+                  {userType === "field1" && (
+                    <Tooltip title="Place Pre-Order">
+                      <span>
+                        <IconButton
+                          component={Link}
+                          to={`/orders/open/preorder#${prog.id}`}
+                        >
+                          <ExitToAppIcon />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  )}
+                  <Tooltip title="Share all Items">
                     <span>
                       <IconButton id={`${prog.id}`}>
-                        <PictureAsPdfIcon />
+                        <ShareIcon />
                       </IconButton>
                     </span>
                   </Tooltip>
@@ -139,6 +141,7 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
 };
 
 CurrentPrograms.propTypes = {
+  userType: PropTypes.string.isRequired,
   currentPrograms: PropTypes.array.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };

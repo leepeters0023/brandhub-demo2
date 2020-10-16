@@ -90,6 +90,16 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
               primary="Rules"
             />
           </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/contacts"
+          >
+            <ListItemText
+              primary="Contacts"
+            />
+          </ListItem>
         </List>
       </Grid>
     </Grid>
