@@ -24,6 +24,7 @@ import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
+import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
 import ComplianceRules from "./pages/ComplianceRules";
 import Coupons from "./pages/Coupons";
@@ -391,6 +392,16 @@ const App = () => {
             />,
             "/items",
             ["field1", "field2", "compliance", "super"],
+            role
+          )}
+          {handleAuth(
+            <ComplianceContacts
+              path="/compliance/contacts"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/compliance/contacts",
+            ["field2", "compliance", "super"],
             role
           )}
           {handleAuth(

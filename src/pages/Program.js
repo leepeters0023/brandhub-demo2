@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Program = ({ handleFiltersClosed, programId }) => {
+const Program = ({ userType, handleFiltersClosed, programId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [value, updateValue] = useCallback(useState(1));
@@ -66,9 +66,9 @@ const Program = ({ handleFiltersClosed, programId }) => {
   };
 
   useEffect(() => {
-    handleFiltersClosed()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!currentProgram) {
     return <CircularProgress />;
@@ -100,14 +100,16 @@ const Program = ({ handleFiltersClosed, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              <Tooltip title="Place Program Pre-Order">
-                <IconButton
-                  component={Link}
-                  to={`/orders/open/preorder#${programId}`}
-                >
-                  <ExitToAppIcon fontSize="large" color="inherit" />
-                </IconButton>
-              </Tooltip>
+              {userType === "field1" && (
+                <Tooltip title="Place Program Pre-Order">
+                  <IconButton
+                    component={Link}
+                    to={`/orders/open/preorder#${programId}`}
+                  >
+                    <ExitToAppIcon fontSize="large" color="inherit" />
+                  </IconButton>
+                </Tooltip>
+              )}
               {value !== 1 && (
                 <>
                   <Tooltip title="View List">
@@ -169,6 +171,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
 };
 
 Program.propTypes = {
+  userType: PropTypes.string.isRequired,
   handleFiltersClosed: PropTypes.func.isRequired,
   programId: PropTypes.string,
 };

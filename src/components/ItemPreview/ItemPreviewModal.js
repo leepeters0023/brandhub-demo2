@@ -129,6 +129,7 @@ const ItemPreviewModal = (props) => {
       <Dialog
         open={previewModal}
         onClose={handleModalClose}
+        disableScrollLock
         fullWidth
         maxWidth="lg"
         style={{zIndex: "15000"}}

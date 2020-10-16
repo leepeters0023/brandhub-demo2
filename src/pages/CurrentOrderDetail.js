@@ -219,8 +219,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <Dialog
           open={confirmModal}
           onClose={handleCloseConfirm}
+          disableScrollLock
           fullWidth
           maxWidth="sm"
+          style={{zIndex: "15000"}}
         >
           <DialogContent>
             <AreYouSure

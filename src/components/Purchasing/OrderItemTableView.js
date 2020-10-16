@@ -16,8 +16,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 //import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import CancelIcon from "@material-ui/icons/Cancel";
+import ShareIcon from "@material-ui/icons/Share";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -145,7 +145,7 @@ const OrderItemTableView = (props) => {
                         id={`${row.id}`}
                         style={{ margin: "5px 2.5px" }}
                       >
-                        <PictureAsPdfIcon />
+                        <ShareIcon />
                       </IconButton>
                     )}
 

@@ -5,9 +5,13 @@ import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchFilteredItems } from "../redux/slices/itemSlice";
-
-import { setFilterType } from "../redux/slices/filterSlice";
+import {
+  setFilterType,
+  setDefaultFilters,
+  updateMultipleFilters,
+  //setSorted,
+  setClear,
+} from "../redux/slices/filterSlice";
 
 import { useInput } from "../hooks/UtilityHooks";
 
@@ -62,6 +66,14 @@ const TerritorySelector = React.memo(({ classes, handleTerritories }) => (
     Object.keys(prev.classes).length === Object.keys(next.classes).length
   )
 });
+
+const defaultFilters = {
+  brand: [],
+  itemType: [],
+  bu: [],
+  program: [],
+  sequenceNum: "",
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -132,15 +144,26 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     dispatch(setFilterType({ type: "item-all" }));
+    dispatch(
+      setDefaultFilters({
+        filterObject: defaultFilters,
+      })
+    );
+    dispatch(
+      updateMultipleFilters({
+        filterObject: defaultFilters,
+      })
+    );
     handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currentItems.length === 0 && userType && currentUserRole.length > 0) {
-      dispatch(fetchFilteredItems("inStock"));
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());
     }
-  }, [currentItems, dispatch, userType, currentUserRole]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

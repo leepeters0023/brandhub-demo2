@@ -25,7 +25,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 const defaultFilters = {
   bu: [],
@@ -110,22 +109,17 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>
 
-          <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv}>
-              <Tooltip title="Place Pre-Orders">
-                <IconButton component={Link} to={`/orders/open/preorder`}>
-                  <ExitToAppIcon fontSize="large" color="inherit" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Add All Items to PDF">
-                <span>
-                  <IconButton>
-                    <PictureAsPdfIcon fontSize="large" color="inherit" />
+          {userType === "field1" && (
+            <div className={classes.configButtons}>
+              <div className={classes.innerConfigDiv}>
+                <Tooltip title="Place Pre-Orders">
+                  <IconButton component={Link} to={`/orders/open/preorder`}>
+                    <ExitToAppIcon fontSize="large" color="inherit" />
                   </IconButton>
-                </span>
-              </Tooltip>
+                </Tooltip>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
           <Typography
@@ -146,6 +140,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
           <CircularProgress color="inherit" />
         ) : (
           <CurrentPrograms
+            userType={userType}
             currentPrograms={currentPrograms}
             filtersOpen={filtersOpen}
           />

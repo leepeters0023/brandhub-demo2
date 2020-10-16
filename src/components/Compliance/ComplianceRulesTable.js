@@ -118,7 +118,7 @@ const ComplianceRulesTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 375px)" }}
+        style={{ maxHeight: "Calc(100vh - 275px)" }}
         ref={scrollRef}
       >
         <Table

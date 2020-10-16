@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import brandReducer from "./slices/brandSlice";
+import complianceContactReducer from "./slices/complianceContactSlice";
 import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
 import filterReducer from "./slices/filterSlice";
@@ -21,6 +22,7 @@ import userReducer from "./slices/userSlice";
 
 const rootReducer = combineReducers({
   brands: brandReducer,
+  complianceContacts: complianceContactReducer,
   currentOrder: currentOrderReducer,
   distributors: distributorReducer,
   filters: filterReducer,

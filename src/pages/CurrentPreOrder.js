@@ -254,9 +254,11 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
       <div className={classes.relativeContainer}>
         <Dialog
           open={confirmModal}
+          disableScrollLock
           onClose={handleCloseConfirm}
           fullWidth
           maxWidth="sm"
+          style={{zIndex: "15000"}}
         >
           <DialogContent>
             <AreYouSure

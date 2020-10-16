@@ -172,6 +172,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "item-onDemand") {
         dispatch(fetchFilteredItems("onDemand"))
       }
+      if (filterType === "item-all") {
+        dispatch(fetchFilteredItems("all"))
+      }
     }
   }, [
     dispatch,
@@ -218,6 +221,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "item-onDemand") {
         dispatch(fetchFilteredItems("onDemand"))
+      }
+      if (filterType === "item-all") {
+        dispatch(fetchFilteredItems("all"))
       }
       dispatch(setSorted());
     }
