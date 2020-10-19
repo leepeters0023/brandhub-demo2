@@ -17,7 +17,7 @@ import {
   deleteSetOrder,
   setOrderSetNotes,
   submitOrdSet,
-  startOrdSet
+  startOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -180,8 +180,8 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleRemoveOrder = (id) => {
-    dispatch(deleteSetOrder(id))
-  }
+    dispatch(deleteSetOrder(id));
+  };
 
   const handleSave = () => {
     dispatch(setOrderSetNotes(preOrderId, preOrderNote));
@@ -245,9 +245,9 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   }, [handleProgramIdHash]);
 
   useEffect(() => {
-    handleFiltersClosed()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -258,7 +258,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           onClose={handleCloseConfirm}
           fullWidth
           maxWidth="sm"
-          style={{zIndex: "15000"}}
+          style={{ zIndex: "15000" }}
         >
           <DialogContent>
             <AreYouSure
@@ -397,9 +397,11 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                     <Checkbox
                       checked={terms}
                       onChange={() => {
-                        setTermsChecked(!terms)
+                        setTermsChecked(!terms);
                         if (preOrderStatus === "inactive") {
-                          dispatch(startOrdSet(program, "in-progress", preOrderId))
+                          dispatch(
+                            startOrdSet(program, "in-progress", preOrderId)
+                          );
                         }
                       }}
                       name="Terms"

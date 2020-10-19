@@ -9,13 +9,13 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import CheckBox from "@material-ui/core/CheckBox";
+import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import AutorenewIcon from "@material-ui/icons/Autorenew";
 
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
@@ -44,7 +44,7 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <CheckBox
+          <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -106,8 +106,8 @@ const useStyles = makeStyles((theme) => ({
   emailButton: {
     color: "#920000",
     "&:hover": {
-      cursor: "pointer"
-    }
+      cursor: "pointer",
+    },
   },
   visuallyHidden: {
     border: 0,
@@ -220,20 +220,22 @@ const ComplianceItemsTable = ({
               items.length > 0 &&
               items.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
-                const labelId = `compliance-checkbox-${index}`;
+                const labelId = `compliance-Checkbox-${index}`;
                 return (
-                  <TableRow key={index} hover >
-                    {row.active ? (<TableCell padding="checkbox">
-                      <CheckBox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => {
-                          handleClick(event, row.id);
-                          event.stopPropagation();
-                        }}
-                      />
-                    </TableCell>) : (
+                  <TableRow key={index} hover>
+                    {row.active ? (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                          onClick={(event) => event.stopPropagation()}
+                          onChange={(event) => {
+                            handleClick(event, row.id);
+                            event.stopPropagation();
+                          }}
+                        />
+                      </TableCell>
+                    ) : (
                       <TableCell padding="checkbox">
                         <Tooltip title="Activate Rule">
                           <IconButton>
@@ -263,7 +265,10 @@ const ComplianceItemsTable = ({
                             >
                               {`Email sent on ${row.emailSent}`}
                             </Typography>
-                            <Typography variant="body2" className={classes.emailButton}>
+                            <Typography
+                              variant="body2"
+                              className={classes.emailButton}
+                            >
                               {"(resend)"}
                             </Typography>
                           </div>
