@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
+import addDays from "date-fns/addDays";
+import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -34,6 +36,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -67,9 +74,13 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
-  const [currentItem, setCurrentItem] = useState({});
-  const [modal, handleModal] = useState(false);
-  const [terms, setTerms] = useState(false);
+  const [currentItem, setCurrentItem] = useCallback(useState({}));
+  const [modal, handleModal] = useCallback(useState(false));
+  const [terms, setTerms] = useCallback(useState(false));
+  const [rush, setRush] = useCallback(useState(false));
+  const [dueDate, setDueDate] = useCallback(
+    useState(format(addDays(new Date(), 28), "MM/dd/yyyy"))
+  );
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const orderNote = useSelector((state) => state.orderSet.orderNote);
@@ -95,7 +106,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       itemNumber: itemNumber,
     });
     handleModal(true);
-  }, []);
+  }, [handleModal, setCurrentItem]);
 
   const handleModalClose = () => {
     handleModal(false);
@@ -132,6 +143,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
   };
 
+  const handleDate = (date) => {
+    console.log(date);
+    console.log(format(date, "MM/dd/yyyy"));
+    setDueDate(format(date, "MM/dd/yyyy"))
+  };
+
   const handleSubmit = () => {
     let role = currentUserRole;
     if (
@@ -140,6 +157,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     ) {
       role = null;
     }
+    //TODO send due date and rush status as well when available on api
     dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
     setTerms(false);
@@ -222,7 +240,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           disableScrollLock
           fullWidth
           maxWidth="sm"
-          style={{zIndex: "15000"}}
+          style={{ zIndex: "15000" }}
         >
           <DialogContent>
             <AreYouSure
@@ -409,7 +427,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           <>
             <Grid container spacing={5}>
               <Grid item md={7} xs={12}>
-                {currentUserRole === "field1" && orderStatus === "in-progress" && (
+                {orderStatus === "in-progress" && (
                   <>
                     <Typography className={classes.headerText}>
                       TERMS AND CONDITIONS
@@ -475,12 +493,50 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   value={orderNote}
                   onChange={handleOrderNote}
                 />
+                <div
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={rush}
+                        onChange={() => {
+                          setRush(!rush);
+                        }}
+                        name="Rush Order"
+                        color="primary"
+                      />
+                    }
+                    label=" Set Rush Order"
+                  />
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                      color="secondary"
+                      disableToolbar
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="dueDate"
+                      label="Due Date"
+                      value={dueDate}
+                      onChange={(value) => handleDate(value)}
+                      KeyboardButtonProps={{
+                        "aria-label": "change date",
+                      }}
+                    />
+                  </MuiPickersUtilsProvider>
+                </div>
               </Grid>
             </Grid>
           </>
         )}
         <>
-        <br />
+          <br />
           <div className={classes.orderControl}>
             {((orderStatus === "in-progress" && currentUserRole === "field1") ||
               (currentUserRole !== "field1" &&
@@ -501,7 +557,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                disabled={!terms && currentUserRole === "field1"}
+                disabled={!terms}
                 onClick={handleSubmit}
               >
                 SUBMIT ORDER
