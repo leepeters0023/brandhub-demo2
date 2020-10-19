@@ -222,7 +222,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.type,
-      price: item.item["estimated-cost"],
+      price: item.item["cost"],
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
@@ -252,9 +252,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item["estimated-cost"],
+          price: item.item["cost"],
           packSize: item.item["qty-per-pack"],
-          estTotal: item.qty * item.item["estimated-cost"],
+          estTotal: item.qty * item.item["cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {
@@ -268,7 +268,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         .map((item) => item.qty)
         .reduce((a, b) => a + b),
       estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item["estimated-cost"])
+        .map((item) => item.qty * item.item["cost"])
         .reduce((a, b) => a + b),
     }));
 
@@ -280,7 +280,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : 0;
     });
 
-    let orderTotal = currentOrders.data["total-estimated-cost"];
+    let orderTotal = currentOrders.data["total-cost"];
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
@@ -325,7 +325,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
       itemNumber: item.item["item-number"],
       brand: item.item.brand.name,
       itemType: item.item.type,
-      price: item.item["estimated-cost"],
+      price: item.item["cost"],
       qty: `${item.item["qty-per-pack"]} / pack`,
       imgUrl: item.item["img-url"],
       estTotal: 0,
@@ -356,8 +356,8 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item["estimated-cost"],
-          estTotal: item.qty * item.item["estimated-cost"],
+          price: item.item["cost"],
+          estTotal: item.qty * item.item["cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {
@@ -371,7 +371,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         .map((item) => item.qty)
         .reduce((a, b) => a + b),
       estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item["estimated-cost"])
+        .map((item) => item.qty * item.item["cost"])
         .reduce((a, b) => a + b),
     }));
 
@@ -382,7 +382,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         ? 1
         : 0;
     });
-    let orderTotal = currentOrders.data[0]["total-estimated-cost"];
+    let orderTotal = currentOrders.data[0]["total-cost"];
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
