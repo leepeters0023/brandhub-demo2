@@ -168,7 +168,7 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
         shipDate: order["ship-date"] ? order["ship-date"] : "---",
         type: orderTypeMap[order.type],
         totalItems: order["total-quantity"],
-        estTotal: order["total-estimated-cost"],
+        estTotal: order["total-cost"],
         actTotal: "---",
         orderStatus: order.status === "submitted" ? "Pending" : order.status,
       };
@@ -201,7 +201,7 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
       shipDate: order["ship-date"] ? order["ship-date"] : "---",
       type: orderTypeMap[order.type],
       totalItems: order["total-quantity"],
-      estTotal: order["total-estimated-cost"],
+      estTotal: order["total-cost"],
       actTotal: "---",
       orderStatus: order.status === "submitted" ? "Pending" : order.status,
     }));
@@ -238,7 +238,7 @@ export const fetchOrder = (id) => async (dispatch) => {
         ? order.data["tracking-number"]
         : "---",
       totalItems: order.data["total-quantity"],
-      totalEstCost: order.data["total-estimated-cost"],
+      totalEstCost: order.data["total-cost"],
       totalActCost: "---",
       note: order.data.notes,
     };
@@ -248,9 +248,9 @@ export const fetchOrder = (id) => async (dispatch) => {
       brand: item.item.brand.name,
       itemType: item.item.type,
       qty: item.item["qty-per-pack"],
-      price: item.item["estimated-cost"],
+      price: item.item["cost"],
       totalItems: item.qty,
-      estTotal: item["total-estimated-cost"],
+      estTotal: item["total-cost"],
       actTotal: "---",
     }));
     dispatch(
