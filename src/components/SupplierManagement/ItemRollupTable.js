@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
-import CheckBox from "@material-ui/core/Checkbox";
+import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -48,19 +48,22 @@ const EnhancedTableHead = (props) => {
     onRequestSort,
     onSelectAllClick,
     numSelected,
-    type
+    type,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
-  const currentHeader = type === "po" ? headCells : headCells.filter(cell => cell.id !== "supplier")
+  const currentHeader =
+    type === "po"
+      ? headCells
+      : headCells.filter((cell) => cell.id !== "supplier");
 
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <CheckBox
+          <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -147,7 +150,7 @@ const ItemRollupTable = ({
   scrollRef,
   itemSelected,
   setItemSelected,
-  type
+  type,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -244,7 +247,7 @@ const ItemRollupTable = ({
               items.length > 0 &&
               items.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
-                const labelId = `po-rollup-checkbox-${index}`;
+                const labelId = `po-rollup-Checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -256,7 +259,7 @@ const ItemRollupTable = ({
                     }}
                   >
                     <TableCell padding="checkbox">
-                      <CheckBox
+                      <Checkbox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
@@ -279,7 +282,9 @@ const ItemRollupTable = ({
                       {formatMoney(row.estTotal)}
                     </TableCell>
                     <TableCell align="left">{row.dueDate}</TableCell>
-                    {type === "po" && <TableCell align="left">{row.supplier}</TableCell>}
+                    {type === "po" && (
+                      <TableCell align="left">{row.supplier}</TableCell>
+                    )}
                   </TableRow>
                 );
               })}
@@ -304,7 +309,7 @@ ItemRollupTable.propTypes = {
   scrollRef: PropTypes.any,
   itemSelected: PropTypes.bool.isRequired,
   setItemSelected: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 export default ItemRollupTable;

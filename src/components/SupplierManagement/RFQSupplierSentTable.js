@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import CheckBox from "@material-ui/core/Checkbox";
+import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -21,7 +21,7 @@ const EnhancedTableHead = (props) => {
           Supplier
         </TableCell>
         <TableCell padding="checkbox" align="right">
-          <CheckBox
+          <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -118,7 +118,7 @@ const RFQSupplierSentTable = ({ suppliersSelected, setSuppliersSelected }) => {
                 <TableRow key={sup.id}>
                   <TableCell align="left">{sup.name}</TableCell>
                   <TableCell align="right" padding="checkbox">
-                    <CheckBox
+                    <Checkbox
                       checked={isSupplierSelected}
                       inputProps={{ "aria-labelledby": labelId }}
                       onClick={(event) => event.stopPropagation()}
