@@ -198,6 +198,7 @@ const TopDrawerNav = ({ handleLogout }) => {
         <div className={classes.drawerContent}>
           {drawerContent === "assets" && (
             <DrawerAssetsNav
+              userType={role}
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />

@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
+const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
   return (
     <Grid container spacing={2}>
       <Grid item sm={3} xs={12}>
@@ -44,14 +44,16 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
               primary="Programs:"
             />
           </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/programs/new"
-          >
-            <ListItemText primary="+ New Ad Hoc Program" />
-          </ListItem>
+          {userType !== "field1" && (
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/programs/new"
+            >
+              <ListItemText primary="+ New Ad Hoc Program" />
+            </ListItem>
+          )}
           <ListItem
             button
             onClick={handleDrawerClose}
@@ -63,44 +65,40 @@ const DrawerAssetsNav = ({ handleDrawerClose, classes }) => {
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-      <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerText }}
-              primary="Compliance:"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/items"
-          >
-            <ListItemText
-              primary="Item Compliance"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/rules"
-          >
-            <ListItemText
-              primary="Rules"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/contacts"
-          >
-            <ListItemText
-              primary="Contacts"
-            />
-          </ListItem>
-        </List>
+        {userType !== "field1" && (
+          <List className={classes.navList}>
+            <ListItem>
+              <ListItemText
+                primaryTypographyProps={{ className: classes.headerText }}
+                primary="Compliance:"
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/compliance/items"
+            >
+              <ListItemText primary="Item Compliance" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/compliance/rules"
+            >
+              <ListItemText primary="Rules" />
+            </ListItem>
+            <ListItem
+              button
+              onClick={handleDrawerClose}
+              component={Link}
+              to="/compliance/contacts"
+            >
+              <ListItemText primary="Contacts" />
+            </ListItem>
+          </List>
+        )}
       </Grid>
     </Grid>
   );
