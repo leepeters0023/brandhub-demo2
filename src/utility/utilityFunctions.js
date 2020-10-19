@@ -1,3 +1,20 @@
+import { brandBULookup } from "./constants";
+
+const monthMap = {
+  "01": "January",
+  "02": "February",
+  "03": "March",
+  "04": "April",
+  "05": "May",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December",
+}
+
 export const filter = (array, filters) => {
   let filteredArray = [];
   if (filters.length !== 0) {
@@ -5,9 +22,15 @@ export const filter = (array, filters) => {
       let filtered = true;
       for (let i = 0; i < filters.length; i++) {
         if (
-          (filters[i].type === "brand" &&
-            !item.brand.includes(filters[i].value)) ||
-          item[filters[i].type] !== filters[i].value
+          filters[i].type === "brand" &&
+          !item.brand.includes(filters[i].value)
+        ) {
+          filtered = false;
+          break;
+        }
+        if (
+          item[filters[i].type] !== filters[i].value &&
+          filters[i].type !== "brand"
         ) {
           filtered = false;
           break;
@@ -39,6 +62,10 @@ export const formatMoney = (value) => {
 };
 
 export const roundUp = (value, rounder) => {
+  console.log(value, rounder)
+  if (rounder === 1) {
+    return value
+  }
   if (value % rounder === 0) {
     return value;
   }
@@ -56,4 +83,35 @@ export const separateByComma = (array, key) => {
   } else {
     return array.join(",");
   }
+};
+
+export const mapPrograms = (programs) => {
+  const programArray = programs.map((prog) => ({
+    id: prog.id,
+    type: prog.type,
+    name: prog.name,
+    brand:
+      prog.brands.length > 0
+        ? prog.brands.map((brand) => brand.name)
+        : ["BRAND"],
+    unit: brandBULookup[prog.brands[0].name] || "UNIT",
+    desc:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
+    goals: prog.goals,
+    strategies: prog.strategies,
+    startDate: prog["start-date"],
+    endDate: prog["end-date"],
+    focusMonth: monthMap[prog["start-date"].split("-")[1]],
+    imgUrl: prog["img-url"],
+    items: [],
+    status: false,
+  }));
+  programArray.sort((a, b) => {
+    return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
+      ? -1
+      : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+      ? 1
+      : 0;
+  });
+  return programArray;
 }

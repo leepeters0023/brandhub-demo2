@@ -6,13 +6,10 @@ import { formatMoney } from "../../utility/utilityFunctions";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-//import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
-//import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
-//import StarBorderIcon from "@material-ui/icons/StarBorder";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import CancelIcon from "@material-ui/icons/Cancel";
 import ShareIcon from "@material-ui/icons/Share";
@@ -69,30 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const MemoInput = React.memo(
-//   ({ item, currentItemValues, handleItemUpdate }) => {
-//     return (
-//       <TextField
-//         color="secondary"
-//         size="small"
-//         style={{ width: "55px" }}
-//         id={`${item.id}`}
-//         placeholder="Qty"
-//         variant="outlined"
-//         value={currentItemValues[item.id] || ""}
-//         onChange={handleItemUpdate}
-//       />
-//     );
-//   },
-//   (prev, next) => {
-//     return (
-//       prev.item.id === next.item.id &&
-//       prev.currentItemValues[`${prev.item.id}`] ===
-//         next.currentItemValues[`${next.item.id}`]
-//     );
-//   }
-// );
-
 const OrderItemGridView = (props) => {
   const {
     type,
@@ -119,11 +92,6 @@ const OrderItemGridView = (props) => {
           >
             <Paper className={classes.paperWrapper}>
               <div className={classes.singleItemWrapper}>
-                {/* <Tooltip placement="top-start" title="Favorite">
-                <IconButton className={classes.favorite}>
-                <StarBorderIcon />
-                </IconButton>
-              </Tooltip> */}
                 <img
                   id={item.itemNumber}
                   className={classes.previewImg}
@@ -140,7 +108,7 @@ const OrderItemGridView = (props) => {
                 {`${item.brand} ${item.itemType}`}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                {`#${item.itemNumber} | ${item.qty}`}
+                {`#${item.itemNumber} | ${item.packSize}`}
               </Typography>
               {type === "inStock" && (
                 <Typography variant="body1" color="textSecondary">

@@ -79,16 +79,17 @@ export const fetchFilteredItems = (orderType) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const items = await fetchItems();
+    console.log(items);
     if (items.error) {
       throw items.error;
     }
     let newItems = items.data.map((item) => ({
       id: item.id,
       itemNumber: item["item-number"],
-      brand: item.brand.name,
+      brand: item.brands.map((brand) => brand.name).join(", "),
       itemType: item.type,
       price: item["estimated-cost"],
-      qty: `${item["qty-per-pack"]} / Pack`,
+      packSize: item["qty-per-pack"],
       stock: Math.floor(Math.random() * 25 + 26),
       imgUrl: item["img-url"],
     }));

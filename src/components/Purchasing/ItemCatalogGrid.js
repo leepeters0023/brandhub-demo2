@@ -51,11 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemGridView = (props) => {
-  const {
-    currentItems,
-    handlePreview,
-    catalogType
-  } = props;
+  const { currentItems, handlePreview, catalogType } = props;
   const classes = useStyles();
 
   return (
@@ -87,7 +83,7 @@ const OrderItemGridView = (props) => {
                 {`${item.brand} ${item.itemType}`}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                {`#${item.itemNumber} | ${item.qty}`}
+                {`#${item.itemNumber} | ${item.packSize}`}
               </Typography>
               {catalogType === "inStock" && (
                 <Typography variant="body1" color="textSecondary">

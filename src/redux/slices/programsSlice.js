@@ -5,7 +5,7 @@ import {
   fetchProgramItems,
   fetchProgramsByName,
 } from "../../api/programApi";
-import { brandBULookup } from "../../utility/constants";
+import { mapPrograms } from "../../utility/utilityFunctions";
 
 let initialState = {
   isLoading: false,
@@ -44,57 +44,14 @@ const programsSlice = createSlice({
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
       if (state.programs.length === 0) {
-        const programArray = programs.map((prog) => ({
-          id: prog.id,
-          type: prog.type,
-          name: prog.name,
-          brand:
-            prog.brands.length > 0
-              ? prog.brands.map((brand) => brand.name)
-              : ["BRAND"],
-          unit: brandBULookup[prog.brands[0].name] || "UNIT",
-          desc:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
-          goals: prog.goals,
-          strategies: prog.strategies,
-          focusMonth: prog["focus-month"],
-          imgUrl: prog["img-url"],
-          items: [],
-          status: false,
-        }));
-        programArray.sort((a, b) => {
-          return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
-            ? -1
-            : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-            ? 1
-            : 0;
-        });
-        state.programs = [...programArray];
+        state.programs = [...programs];
         state.initialLoading = false;
       } else {
         const currentPrograms = [...state.programs];
         const natPrograms = currentPrograms.filter(
           (prog) => prog.type === "national"
         );
-        const programArray = programs.map((prog) => ({
-          id: prog.id,
-          type: prog.type,
-          name: prog.name,
-          brand:
-            prog.brands.length > 0
-              ? prog.brands.map((brand) => brand.name)
-              : ["BRAND"],
-          unit: brandBULookup[prog.brands[0].name] || "UNIT",
-          desc:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
-          goals: prog.goals,
-          strategies: prog.strategies,
-          focusMonth: prog["focus-month"],
-          imgUrl: prog["img-url"],
-          items: [],
-          status: false,
-        }));
-        const newProgramArray = programArray.concat(natPrograms);
+        const newProgramArray = programs.concat(natPrograms);
         newProgramArray.sort((a, b) => {
           return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
             ? -1
@@ -112,10 +69,10 @@ const programsSlice = createSlice({
       let progItems = items.map((item) => ({
         id: item.id,
         itemNumber: item["item-number"],
-        brand: item.brand.name,
+        brand: item.brands.map((brand) => brand.name).join(", "),
         itemType: item.type,
         price: item["estimated-cost"],
-        qty: `${item["qty-per-pack"]} / pack`,
+        packSize: item["qty-per-pack"],
         imgUrl: item["img-url"],
       }));
 
@@ -199,7 +156,8 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
       throw natPrograms.error;
     }
     const programs = terrPrograms.data.concat(natPrograms.data);
-    dispatch(getProgramsSuccess({ programs: programs }));
+    const programArray = mapPrograms(programs);
+    dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -215,7 +173,8 @@ export const fetchPrograms = (id) => async (dispatch) => {
     if (programs.length === 0) {
       dispatch(getProgramsSuccess({ programs: [] }));
     }
-    dispatch(getProgramsSuccess({ programs: programs.data }));
+    const programArray = mapPrograms(programs.data);
+    dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

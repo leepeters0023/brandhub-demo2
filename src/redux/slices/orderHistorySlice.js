@@ -245,9 +245,9 @@ export const fetchOrder = (id) => async (dispatch) => {
     let formattedItems = order.data["order-items"].map((item) => ({
       itemNumber: item.item["item-number"],
       imgUrl: item.item["img-url"],
-      brand: item.item.brand.name,
+      brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
-      qty: item.item["qty-per-pack"],
+      packSize: item.item["qty-per-pack"],
       price: item.item["estimated-cost"],
       totalItems: item.qty,
       estTotal: item["total-estimated-cost"],
