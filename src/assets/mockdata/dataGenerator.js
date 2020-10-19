@@ -134,6 +134,7 @@ const generateComplianceItems = (dataPoints) => {
 
   for (let i = 0; i < dataPoints; i++) {
     let id = i + 1;
+    let active = (Math.random()*10) < 1;
     let ranNum = Math.floor(Math.random() * 3 + 1)
     let sequenceNumber = (1110000010 + i).toString();
     let currentItemType =
@@ -150,6 +151,7 @@ const generateComplianceItems = (dataPoints) => {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.";
     data.push({
       id: id,
+      active: !active,
       sequenceNum: sequenceNumber,
       itemType: currentItemType,
       program: currentProgram,

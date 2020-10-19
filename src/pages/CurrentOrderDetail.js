@@ -392,6 +392,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             orderStatus={orderStatus}
             currentItems={currentItems}
             orders={orders}
+            orderType={currentOrderType}
           />
         )}
         <br />

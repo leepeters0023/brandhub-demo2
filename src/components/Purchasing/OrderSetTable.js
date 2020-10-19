@@ -121,6 +121,7 @@ const OrderSetTable = (props) => {
     orderStatus,
     currentItems,
     orders,
+    orderType,
   } = props;
   const classes = useStyles();
   const tableRef = useRef(null);
@@ -332,6 +333,38 @@ const OrderSetTable = (props) => {
                           <TableBody
                             style={{ position: "relative", zIndex: "10" }}
                           >
+                            {orderType !== "pre-order" && (
+                              <TableRow className={classes.infoRow}>
+                              <TableCell
+                                classes={{ root: classes.root }}
+                                style={{
+                                  position: "sticky",
+                                  left: 0,
+                                  backgroundColor: "white",
+                                  zIndex: "100",
+                                }}
+                                className={classes.borderRight}
+                              >
+                                <div style={{ zIndex: "100" }}>
+                                  <Typography className={classes.headerText}>
+                                    Lead Time
+                                  </Typography>
+                                </div>
+                              </TableCell>
+                              {currentItems.map((item) => (
+                                <TableCell
+                                  classes={{ root: classes.root }}
+                                  align="center"
+                                  key={item.id}
+                                  className={classes.borderRightLight}
+                                >
+                                  <div className={classes.infoCell}>
+                                    {item.leadTime ? item.leadTime : "---"}
+                                  </div>
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                            )}
                             <TableRow className={classes.infoRow}>
                               <TableCell
                                 classes={{ root: classes.root }}
@@ -542,6 +575,7 @@ OrderSetTable.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   orderId: PropTypes.string,
   orderStatus: PropTypes.string,
+  orderType: PropTypes.string,
 };
 
 export default React.memo(OrderSetTable, (prev, next) => {
