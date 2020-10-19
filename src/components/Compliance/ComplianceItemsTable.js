@@ -10,12 +10,8 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CheckBox from "@material-ui/core/CheckBox";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
-
-import SendIcon from '@material-ui/icons/Send';
 
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
@@ -24,7 +20,6 @@ const headCells = [
   { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
   { id: "tags", disablePadding: false, label: "Rule Tags", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: false },
-  { id: "emailSent", disablePadding: false, label: "Email Sent", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -104,10 +99,11 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  clickableRow: {
-    "&&:hover": {
-      cursor: "pointer",
-    },
+  emailButton: {
+    color: "#920000",
+    "&:hover": {
+      cursor: "pointer"
+    }
   },
   visuallyHidden: {
     border: 0,
@@ -128,7 +124,7 @@ const ComplianceItemsTable = ({
   handleSort,
   scrollRef,
   itemSelected,
-  setItemSelected
+  setItemSelected,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -222,8 +218,8 @@ const ComplianceItemsTable = ({
                 const isItemSelected = isSelected(row.id);
                 const labelId = `compliance-checkbox-${index}`;
                 return (
-                <TableRow key={index} hover className={classes.clickableRow}>
-                  <TableCell padding="checkbox">
+                  <TableRow key={index} hover >
+                    <TableCell padding="checkbox">
                       <CheckBox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
@@ -234,28 +230,39 @@ const ComplianceItemsTable = ({
                         }}
                       />
                     </TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">{row.itemType}</TableCell>
-                  <TableCell align="left">{row.ruleType}</TableCell>
-                  <TableCell align="left">{row.tags.join(", ")}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
-                  <TableCell align="left">{
-                  row.emailSent === "N/A"
-                    ? row.emailSent
-                    : (
-                      <div style={{display: "flex", alignItems: "center"}}>
-                        <Typography variant="body2" style={{marginRight: "10px"}}>{row.emailSent}</Typography>
-                        <Tooltip title="Resend Email">
-                          <IconButton size="small">
-                            <SendIcon color="inherit" fontSize="small"/>
-                          </IconButton>
-                        </Tooltip>
-                      </div>
-                    )
-                  }</TableCell>
-                </TableRow>
-              )})}
+                    <TableCell align="left">{row.sequenceNum}</TableCell>
+                    <TableCell align="left">{row.program}</TableCell>
+                    <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.ruleType}</TableCell>
+                    <TableCell align="left">{row.tags.join(", ")}</TableCell>
+                    <TableCell align="left">
+                      {row.status === "Pending" &&
+                      row.ruleType === "Prior Approval" ? (
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography variant="body2">{row.status}</Typography>
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography
+                              variant="body2"
+                              style={{ marginRight: "10px" }}
+                            >
+                              {`Email sent on ${row.emailSent}`}
+                            </Typography>
+                            <Typography variant="body2" className={classes.emailButton}>
+                              {"(resend)"}
+                            </Typography>
+                          </div>
+                        </div>
+                      ) : (
+                        <Typography variant="body2">{row.status}</Typography>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             {itemsLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={9}>
