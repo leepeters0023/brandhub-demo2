@@ -220,10 +220,10 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       id: item.id,
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
-      brand: item.item.brand.name,
+      brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
       price: item.item["estimated-cost"],
-      qty: `${item.item["qty-per-pack"]} / pack`,
+      packSize: item.item["qty-per-pack"],
       imgUrl: item.item["img-url"],
       estTotal: 0,
       totalItems: 0,
@@ -319,14 +319,15 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders.data[0]["order-set-items"])
     let currentItems = currentOrders.data[0]["order-set-items"].map((item) => ({
       id: item.id,
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
-      brand: item.item.brand.name,
+      brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
       price: item.item["estimated-cost"],
-      qty: `${item.item["qty-per-pack"]} / pack`,
+      packSize: item.item["qty-per-pack"],
       imgUrl: item.item["img-url"],
       estTotal: 0,
       totalItems: 0,
@@ -357,6 +358,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
           price: item.item["estimated-cost"],
+          packSize: item.item["qty-per-pack"],
           estTotal: item.qty * item.item["estimated-cost"],
           totalItems: item.qty,
         }))

@@ -390,9 +390,7 @@ const OrderSetTable = (props) => {
                                   className={classes.borderRightLight}
                                 >
                                   <div className={classes.infoCell}>
-                                    {item.qty !== "Single Unit"
-                                      ? parseInt(item.qty.split(" ")[0])
-                                      : 1}
+                                    {item.packSize}
                                   </div>
                                 </TableCell>
                               ))}

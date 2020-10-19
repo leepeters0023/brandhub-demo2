@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
-import CheckBox from "@material-ui/core/CheckBox";
+import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -44,7 +44,7 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <CheckBox
+          <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -224,7 +224,7 @@ const ComplianceItemsTable = ({
                 return (
                   <TableRow key={index} hover >
                     {row.active ? (<TableCell padding="checkbox">
-                      <CheckBox
+                      <Checkbox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}

@@ -56,7 +56,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
       let headers = [
         { label: "Item", key: "item" },
         { label: "Sequence #", key: "itemNumber" },
-        { label: "Qty /Pack", key: "qty" },
+        { label: "Qty /Pack", key: "packSize" },
         { label: "Est. Cost", key: "price" },
         { label: "Qty", key: "totalItems" },
         { label: "Est. Total", key: "estTotal" },
@@ -73,7 +73,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
           return {
             item: `${item.brand} - ${item.itemType}`,
             itemNumber: item.itemNumber,
-            qty: item.qty,
+            packSize: item.packSize,
             price: formatMoney(item.price),
             totalItems: item.totalItems,
             estTotal: item.estTotal,
@@ -89,7 +89,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
           return {
             item: `${item.brand} - ${item.itemType}`,
             itemNumber: item.itemNumber,
-            qty: item.qty,
+            packSize: item.packSize,
             price: formatMoney(item.price),
             totalItems: item.totalItems,
             estTotal: item.estTotal,
