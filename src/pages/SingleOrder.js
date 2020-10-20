@@ -134,11 +134,11 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               {`Shipping Location: ${currentOrder.distributorName} - ${currentOrder.distributorId}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Address: 123 Address Rd., Burlington VT 05401`}
+              {`Address: ${currentOrder.distributorAddress}`}
             </Typography>
-            {/* <Typography className={classes.headerText}>
-              {`Attention:`}
-            </Typography> */}
+            <Typography className={classes.headerText}>
+              {`Attention: ${currentOrder.attn}`}
+            </Typography>
             {/* {order.rushOrder && (
               <Typography className={classes.headerText}>Rush Order</Typography>
             )} */}

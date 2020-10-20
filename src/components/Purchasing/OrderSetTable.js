@@ -335,35 +335,35 @@ const OrderSetTable = (props) => {
                           >
                             {orderType !== "pre-order" && (
                               <TableRow className={classes.infoRow}>
-                              <TableCell
-                                classes={{ root: classes.root }}
-                                style={{
-                                  position: "sticky",
-                                  left: 0,
-                                  backgroundColor: "white",
-                                  zIndex: "100",
-                                }}
-                                className={classes.borderRight}
-                              >
-                                <div style={{ zIndex: "100" }}>
-                                  <Typography className={classes.headerText}>
-                                    Lead Time
-                                  </Typography>
-                                </div>
-                              </TableCell>
-                              {currentItems.map((item) => (
                                 <TableCell
                                   classes={{ root: classes.root }}
-                                  align="center"
-                                  key={item.id}
-                                  className={classes.borderRightLight}
+                                  style={{
+                                    position: "sticky",
+                                    left: 0,
+                                    backgroundColor: "white",
+                                    zIndex: "100",
+                                  }}
+                                  className={classes.borderRight}
                                 >
-                                  <div className={classes.infoCell}>
-                                    {item.leadTime ? item.leadTime : "---"}
+                                  <div style={{ zIndex: "100" }}>
+                                    <Typography className={classes.headerText}>
+                                      Lead Time
+                                    </Typography>
                                   </div>
                                 </TableCell>
-                              ))}
-                            </TableRow>
+                                {currentItems.map((item) => (
+                                  <TableCell
+                                    classes={{ root: classes.root }}
+                                    align="center"
+                                    key={item.id}
+                                    className={classes.borderRightLight}
+                                  >
+                                    <div className={classes.infoCell}>
+                                      {item.leadTime ? item.leadTime : "---"}
+                                    </div>
+                                  </TableCell>
+                                ))}
+                              </TableRow>
                             )}
                             <TableRow className={classes.infoRow}>
                               <TableCell
@@ -390,9 +390,7 @@ const OrderSetTable = (props) => {
                                   className={classes.borderRightLight}
                                 >
                                   <div className={classes.infoCell}>
-                                    {item.qty !== "Single Unit"
-                                      ? parseInt(item.qty.split(" ")[0])
-                                      : 1}
+                                    {item.packSize}
                                   </div>
                                 </TableCell>
                               ))}
@@ -445,7 +443,7 @@ const OrderSetTable = (props) => {
                                   key={item.id}
                                   className={classes.borderRightLight}
                                 >
-                                  {`${formatMoney(item.price)}`}
+                                  {`${formatMoney(item.estCost)}`}
                                 </TableCell>
                               ))}
                             </TableRow>
@@ -514,10 +512,10 @@ const OrderSetTable = (props) => {
                             {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
                           </Typography>
                         </Tooltip>
-                        <div style={{display: "flex"}}>
+                        <div style={{ display: "flex" }}>
                           <Tooltip title="Delete Order">
                             <IconButton
-                            onClick={() => handleRemoveOrder(ord.orderNumber)}
+                              onClick={() => handleRemoveOrder(ord.orderNumber)}
                             >
                               <CancelIcon fontSize="small" color="inherit" />
                             </IconButton>

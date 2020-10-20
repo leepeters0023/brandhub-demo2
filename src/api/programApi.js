@@ -22,7 +22,7 @@ export const fetchProgramsByTerritory = async (id) => {
 export const fetchNationalPrograms = async () => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/programs?filter[type]=national`)
+    .get(`/api/programs?filter[type]=National`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
