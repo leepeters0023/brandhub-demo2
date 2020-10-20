@@ -36,7 +36,6 @@ export const mapOrderHistoryOrders = (orders) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
   });
-  console.log(mappedOrders);
   return mappedOrders;
 };
 
@@ -58,3 +57,12 @@ export const mapOrderItems = (items) => {
   }));
   return mappedItems;
 };
+
+// export const mapOrderSet = (order) => {
+//   let formattedOrder = {
+//     id: order.id,
+//     userId: order.user.id,
+//     userName: order.user.name,
+
+//   }
+// }
