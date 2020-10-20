@@ -184,6 +184,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
+    console.log(order);
     let formattedOrder;
     let itemReferenceArray;
     if (order.data.length === 0) {
@@ -264,7 +265,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       packSize: item.item["qty-per-pack"],
       estCost: item.item["estimated-cost"],
       totalItems: item.qty,
-      estTotal: item["total-cost"],
+      estTotal: item["total-estimated-cost"],
       actTotal: "---",
     }));
     let itemReferenceArray = order.data["order-items"].map((item) => ({

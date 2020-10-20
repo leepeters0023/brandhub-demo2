@@ -258,7 +258,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
           itemType: item.item.type,
           estCost: item.item["estimated-cost"],
           packSize: item.item["qty-per-pack"],
-          estTotal: item.qty * item.item["cost"],
+          estTotal: item.qty * item.item["estimated-cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {

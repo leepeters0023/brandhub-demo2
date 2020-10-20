@@ -79,7 +79,6 @@ export const fetchFilteredItems = (orderType) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const items = await fetchItems();
-    console.log(items);
     if (items.error) {
       throw items.error;
     }
