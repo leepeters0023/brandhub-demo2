@@ -15,7 +15,7 @@ export const mapSingleOrder = (order) => {
     distributorAddressOne: order.distributor["street-address-1"],
     distributorAddressTwo: order.distributor["street-address-2"],
     distributorZip: order.distributor.zip,
-    program: order.program ? order.program : "---",
+    program: order.program ? order.program.name : "---",
     type: orderTypeMap[order.type],
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
