@@ -162,10 +162,12 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     let orders = await fetchOrderHistory(filterObject);
+    console.log(orders);
     if (orders.error) {
       throw orders.error;
     }
     let mappedOrders = mapOrderHistoryOrders(orders.data.orders);
+    console.log(mappedOrders);
     dispatch(
       getOrderHistorySuccess({
         orders: mappedOrders,

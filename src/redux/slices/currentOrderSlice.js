@@ -184,7 +184,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
+    // console.log(order);
     let formattedOrder;
     let itemReferenceArray;
     if (order.data.length === 0) {
