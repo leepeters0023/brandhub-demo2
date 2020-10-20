@@ -185,6 +185,7 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
     if (orders.error) {
       throw orders.error;
     }
+
     let mappedOrders = mapOrderHistoryOrders(orders.data.orders);
     dispatch(
       getNextHistorySuccess({
@@ -207,7 +208,6 @@ export const fetchOrder = (id) => async (dispatch) => {
     console.log(order);
     let formattedOrder = mapSingleOrder(order.data);
     let formattedItems = mapOrderItems(order.data["order-items"]);
-
     dispatch(
       getSingleOrderSuccess({ order: formattedOrder, items: formattedItems })
     );

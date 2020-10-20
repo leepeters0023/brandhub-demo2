@@ -210,7 +210,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
           ? order.data[0]["submitted-at"]
           : "---",
         totalItems: order.data[0]["total-quantity"],
-        totalEstCost: order.data[0]["total-estimated-cost"],
+        totalEstCost: order.data[0]["total-cost"],
       };
       itemReferenceArray = order.data[0]["order-set-items"].map((item) => ({
         id: item.id,
@@ -252,7 +252,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       rushOrder: "---",
       budget: "---",
       totalItems: order.data["total-quantity"],
-      totalEstCost: order.data["total-estimated-cost"],
+      totalEstCost: order.data["total-cost"],
       orderNote: order.data.notes,
     };
     let formattedItems = order.data["order-items"].map((item) => ({
@@ -264,7 +264,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       packSize: item.item["qty-per-pack"],
       estCost: item.item["estimated-cost"],
       totalItems: item.qty,
-      estTotal: item["total-estimated-cost"],
+      estTotal: item["total-cost"],
       actTotal: "---",
     }));
     let itemReferenceArray = order.data["order-items"].map((item) => ({

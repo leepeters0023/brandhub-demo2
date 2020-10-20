@@ -98,15 +98,18 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
 
-  const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
-    setCurrentItem({
-      imgUrl: img,
-      brand: brand,
-      itemType: itemType,
-      itemNumber: itemNumber,
-    });
-    handleModal(true);
-  }, [handleModal, setCurrentItem]);
+  const handleModalOpen = useCallback(
+    (img, brand, itemType, itemNumber) => {
+      setCurrentItem({
+        imgUrl: img,
+        brand: brand,
+        itemType: itemType,
+        itemNumber: itemNumber,
+      });
+      handleModal(true);
+    },
+    [handleModal, setCurrentItem]
+  );
 
   const handleModalClose = () => {
     handleModal(false);
@@ -146,7 +149,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const handleDate = (date) => {
     console.log(date);
     console.log(format(date, "MM/dd/yyyy"));
-    setDueDate(format(date, "MM/dd/yyyy"))
+    setDueDate(format(date, "MM/dd/yyyy"));
   };
 
   const handleSubmit = () => {
