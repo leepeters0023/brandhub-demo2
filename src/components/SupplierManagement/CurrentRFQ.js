@@ -83,7 +83,7 @@ const CurrentRFQ = () => {
                   variant="inline"
                   format="MM/dd/yyyy"
                   margin="normal"
-                  id="dueDate"
+                  id="quoteDue"
                   label="Quote Due"
                   value={format(new Date(), "MM/dd/yyyy")}
                   //onChange={(value) => handleFilters(value, "toDate")}

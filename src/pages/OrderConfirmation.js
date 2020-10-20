@@ -57,7 +57,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
         { label: "Item", key: "item" },
         { label: "Sequence #", key: "itemNumber" },
         { label: "Qty /Pack", key: "packSize" },
-        { label: "Est. Cost", key: "price" },
+        { label: "Est. Cost", key: "estCost" },
         { label: "Qty", key: "totalItems" },
         { label: "Est. Total", key: "estTotal" },
         { label: "", key: "blank" },
@@ -74,7 +74,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
             item: `${item.brand} - ${item.itemType}`,
             itemNumber: item.itemNumber,
             packSize: item.packSize,
-            price: formatMoney(item.price),
+            estCost: formatMoney(item.estCost),
             totalItems: item.totalItems,
             estTotal: item.estTotal,
             blank: "",
@@ -90,7 +90,7 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
             item: `${item.brand} - ${item.itemType}`,
             itemNumber: item.itemNumber,
             packSize: item.packSize,
-            price: formatMoney(item.price),
+            estCost: formatMoney(item.estCost),
             totalItems: item.totalItems,
             estTotal: item.estTotal,
           };
@@ -101,9 +101,9 @@ const OrderConfirmation = ({ userType, handleFiltersClosed, orderType }) => {
   }, [currentCSV.data.length, order]);
 
   useEffect(() => {
-    handleFiltersClosed()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!order.orderNumber && submitted) {
     return (

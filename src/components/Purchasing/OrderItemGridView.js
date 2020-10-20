@@ -116,7 +116,7 @@ const OrderItemGridView = (props) => {
                 </Typography>
               )}
               <Typography variant="body1" color="textSecondary">
-                {`${formatMoney(item.price)}`}
+                {`${formatMoney(item.estCost)}`}
               </Typography>
               <br />
               <div className={classes.itemControl}>
@@ -141,14 +141,13 @@ const OrderItemGridView = (props) => {
                 {type === "new-program-current" && (
                   <>
                     <IconButton
-                    id={`${item.id}`}
-                    onClick={() => {
-                      handleAddItem(item, true);
-                    }}
+                      id={`${item.id}`}
+                      onClick={() => {
+                        handleAddItem(item, true);
+                      }}
                     >
                       <CancelIcon />
                     </IconButton>
-
                   </>
                 )}
               </div>

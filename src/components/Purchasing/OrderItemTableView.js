@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const OrderItemTableView = (props) => {
   const {
     type,
@@ -111,7 +110,7 @@ const OrderItemTableView = (props) => {
                 <TableCell align="left">{row.brand}</TableCell>
                 <TableCell align="left">{row.packSize}</TableCell>
                 {type === "inStock" && <TableCell>{row.stock}</TableCell>}
-                <TableCell>{`${formatMoney(row.price)}`}</TableCell>
+                <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
                 <TableCell align="center">
                   <div className={classes.tableButtonWrapper}>
                     {type !== "new-program" && type !== "new-program-current" && (
