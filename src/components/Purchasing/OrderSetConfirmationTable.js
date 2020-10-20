@@ -42,13 +42,13 @@ const CollapseRow = ({ classes, rowData, items }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{rowData.orderNumber}</TableCell>
+        <TableCell align="left">{rowData.id}</TableCell>
         <TableCell align="left">{rowData.distributorName}</TableCell>
         <TableCell align="left">
           {`123 Road St., Burlington VT 05401`}
         </TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
-        <TableCell align="left">{`${formatMoney(rowData.estTotal)}`}</TableCell>
+        <TableCell align="left">{`${formatMoney(rowData.totalEstCost)}`}</TableCell>
         <TableCell align="left">---</TableCell>
       </TableRow>
       <TableRow>
@@ -96,7 +96,7 @@ const CollapseRow = ({ classes, rowData, items }) => {
                   </TableHead>
                   <TableBody>
                     {rowData.items.map((item, index) => (
-                      <TableRow key={`${rowData.orderNumber}-${item.id}`}>
+                      <TableRow key={`${rowData.id}-${item.id}`}>
                         <TableCell align="center">
                           <div
                             style={{
@@ -172,7 +172,7 @@ const OrderSetConfirmationTable = ({ orders, items }) => {
           <TableBody>
             {orders.map((order) => (
               <CollapseRow
-                key={order.orderNumber}
+                key={order.id}
                 classes={classes}
                 rowData={order}
                 items={items}

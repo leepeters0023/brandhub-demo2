@@ -17,6 +17,7 @@ export const mapSingleOrder = (order) => {
     distributorZip: order.distributor.zip,
     program: order.program ? order.program.name : "---",
     type: orderTypeMap[order.type],
+    items: mapOrderItems(order["order-items"], "history"),
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
@@ -39,7 +40,7 @@ export const mapOrderHistoryOrders = (orders) => {
   return mappedOrders;
 };
 
-export const mapOrderItems = (items) => {
+export const mapOrderItems = (items, type) => {
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -49,20 +50,37 @@ export const mapOrderItems = (items) => {
     itemType: item.item.type,
     packSize: item.item["qty-per-pack"],
     estCost: item.item["estimated-cost"],
-    totalItems: item.qty,
-    estTotal: item["total-estimated-cost"],
+    totalItems: type === "order-set-item" ? 0 : item.qty,
+    estTotal: type === "order-set-item" ? 0 : item["total-estimated-cost"],
     actTotal: "---",
     complianceStatus: item.item["compliance-status"],
     tracking: item.tracking ? item.tracking : "---",
-  }));
+  })).sort((a, b) => {
+    return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+      ? -1
+      : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+      ? 1
+      : 0;
+  });
   return mappedItems;
 };
 
-// export const mapOrderSet = (order) => {
-//   let formattedOrder = {
-//     id: order.id,
-//     userId: order.user.id,
-//     userName: order.user.name,
-
-//   }
-// }
+export const mapOrderSet = (order) => {
+  let formattedOrder = {
+    id: order.id,
+    userId: order.user.id,
+    userName: order.user.name,
+    orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
+    approvedDate: order["approved-at"] ? order["approved-at"] : "---",
+    dueDate: order["due-date"] ? order["due-date"] : "---",
+    type: order.type,
+    program: order.program ? order.program.name : "---",
+    territories: order["territory-names"] ? order["territory-names"] : "---",
+    state: order["random-order-state"] ? order["random-order-state"] : "---",
+    status: order.status,
+    orderCount: order["order-count"],
+    totalItems: order["total-quantity"],
+    totalEstCost: order["total-estimated-cost"],
+  }
+  return formattedOrder
+}

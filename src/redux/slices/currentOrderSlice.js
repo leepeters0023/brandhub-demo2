@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  fetchSingleOrder,
   fetchSingleOrderSetByType,
-  deleteOrder,
   addOrderSetItem,
   createOrderSet,
 } from "../../api/orderApi";
+
+import {
+  mapOrderSet
+} from "../apiMaps";
 
 /*
 * Current Order Model
@@ -184,7 +186,6 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    // console.log(order);
     let formattedOrder;
     let itemReferenceArray;
     if (order.data.length === 0) {
@@ -200,19 +201,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
       };
       itemReferenceArray = [];
     } else {
-      formattedOrder = {
-        userId: order.data[0].user.id,
-        userName: order.data[0].user.name,
-        id: order.data[0].id,
-        type: order.data[0].type,
-        status:
-          order.data[0].status[0].toUpperCase() + order.data[0].status.slice(1),
-        orderDate: order.data[0]["submitted-at"]
-          ? order.data[0]["submitted-at"]
-          : "---",
-        totalItems: order.data[0]["total-quantity"],
-        totalEstCost: order.data[0]["total-cost"],
-      };
+      formattedOrder = mapOrderSet(order.data[0]);
       itemReferenceArray = order.data[0]["order-set-items"].map((item) => ({
         id: item.id,
         itemNumber: item.item["item-number"],
@@ -224,74 +213,6 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         itemReference: itemReferenceArray,
       })
     );
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const fetchCurrentOrderById = (id) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    let order = await fetchSingleOrder(id);
-    if (order.error) {
-      throw order.error;
-    }
-    let formattedOrder = {
-      userId: order.data.user.id,
-      userName: order.data.user.name,
-      id: order.data.id,
-      distributorName: order.data.distributor
-        ? order.data.distributor.name
-        : "---",
-      distributorId: order.data.distributor ? order.data.distributor.id : "---",
-      attn: order.data.attn,
-      type: order.data.type,
-      status: order.data.status[0].toUpperCase() + order.data.status.slice(1),
-      orderDate: order.data["submitted-at"]
-        ? order.data["submitted-at"]
-        : "---",
-      rushOrder: "---",
-      budget: "---",
-      totalItems: order.data["total-quantity"],
-      totalEstCost: order.data["total-cost"],
-      orderNote: order.data.notes,
-    };
-    let formattedItems = order.data["order-items"].map((item) => ({
-      id: item.id,
-      itemNumber: item.item["item-number"],
-      imgUrl: item.item["img-url"],
-      brand: item.item.brands.map((brand) => brand.name).join(", "),
-      itemType: item.item.type,
-      packSize: item.item["qty-per-pack"],
-      estCost: item.item["estimated-cost"],
-      totalItems: item.qty,
-      estTotal: item["total-estimated-cost"],
-      actTotal: "---",
-    }));
-    let itemReferenceArray = order.data["order-items"].map((item) => ({
-      id: item.id,
-      itemNumber: item.item["item-number"],
-    }));
-    dispatch(
-      getCurrentOrderSuccess({
-        order: formattedOrder,
-        orderItems: formattedItems,
-        itemReference: itemReferenceArray,
-      })
-    );
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
-export const deleteCurrentOrder = (id) => async (dispatch) => {
-  try {
-    dispatch(setUpdateLoading());
-    const deleteStatus = await deleteOrder(id);
-    if (deleteStatus.error) {
-      throw deleteStatus.error;
-    }
-    dispatch(clearCurrentOrder());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
