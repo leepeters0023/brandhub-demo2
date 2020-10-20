@@ -53,7 +53,7 @@ const MemoInputCell = React.memo(
       const value = useSelector(
         (state) =>
           state.orderSet.orders
-            .find((ord) => ord.orderNumber === orderNumber)
+            .find((ord) => ord.id === orderNumber)
             .items.find((item) => item.itemNumber === itemNumber)
       );
       const loading = useSelector((state) =>

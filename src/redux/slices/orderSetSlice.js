@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-//import { fetchOrders } from "../../api/orderApi";
 import { fetchOrdersByProgram, fetchOrderSetById } from "../../api/orderApi";
 
 import { setPreOrderDetails } from "./preOrderDetailSlice";
+
+import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
@@ -67,7 +68,7 @@ const orderSetSlice = createSlice({
     setGridItem(state, action) {
       const { itemNumber, orderNumber, value } = action.payload;
       let orders = [...state.orders];
-      let currentOrder = orders.find((ord) => ord.orderNumber === orderNumber);
+      let currentOrder = orders.find((ord) => ord.id === orderNumber);
       let newItems = currentOrder.items.map((item) => {
         if (item.itemNumber === itemNumber) {
           let numVal = value === "" ? 0 : parseInt(value);
@@ -139,11 +140,11 @@ const orderSetSlice = createSlice({
     removeGridOrder(state, action) {
       const { orderId } = action.payload;
       let deleteOrder = state.orders.find(
-        (order) => order.orderNumber === orderId
+        (order) => order.id === orderId
       );
       state.orderTotal -= deleteOrder.estTotal;
       let currentOrders = state.orders.filter(
-        (order) => order.orderNumber !== orderId
+        (order) => order.id !== orderId
       );
       state.orders = currentOrders;
       let currentItems = [...state.items];
@@ -162,7 +163,7 @@ const orderSetSlice = createSlice({
     updateOrderDetails(state, action) {
       const { orderNumber, note, attn } = action.payload;
       let currentOrders = state.orders.map((order) => {
-        if (order.orderNumber === orderNumber) {
+        if (order.id === orderNumber) {
           return {
             ...order,
             note: note ? note : "",
@@ -220,62 +221,8 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = currentOrders.data["order-set-items"].map((item) => ({
-      id: item.id,
-      complianceStatus: item.item["compliance-status"],
-      itemNumber: item.item["item-number"],
-      brand: item.item.brands.map((brand) => brand.name).join(", "),
-      itemType: item.item.type,
-      estCost: item.item["estimated-cost"],
-      packSize: item.item["qty-per-pack"],
-      imgUrl: item.item["img-url"],
-      estTotal: 0,
-      totalItems: 0,
-    }));
-
-    currentItems.sort((a, b) => {
-      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-        ? -1
-        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-        ? 1
-        : 0;
-    });
-    let orders = currentOrders.data.orders.map((ord) => ({
-      orderNumber: ord.id,
-      distributorId: ord.distributor.id,
-      distributorName: ord.distributor.name,
-      distributorCity: ord.distributor.city,
-      distributorState: ord.distributor.state,
-      note: ord.notes ? ord.notes : "",
-      attn: ord.attn ? ord.attn : "",
-      type: "program",
-      program: ord.program ? ord.program.id : null,
-      items: ord["order-items"]
-        .map((item) => ({
-          id: item.id,
-          complianceStatus: item.item["compliance-status"],
-          itemNumber: item.item["item-number"],
-          itemType: item.item.type,
-          estCost: item.item["estimated-cost"],
-          packSize: item.item["qty-per-pack"],
-          estTotal: item.qty * item.item["estimated-cost"],
-          totalItems: item.qty,
-        }))
-        .sort((a, b) => {
-          return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-            ? -1
-            : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-            ? 1
-            : 0;
-        }),
-      totalItems: ord["order-items"]
-        .map((item) => item.qty)
-        .reduce((a, b) => a + b),
-      estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item["cost"])
-        .reduce((a, b) => a + b),
-    }));
-
+    let currentItems = mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
+    let orders = mapOrderHistoryOrders(currentOrders.data.orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
         ? -1
@@ -323,64 +270,8 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders.data[0]["order-set-items"]);
-    let currentItems = currentOrders.data[0]["order-set-items"].map((item) => ({
-      id: item.id,
-      complianceStatus: item.item["compliance-status"],
-      itemNumber: item.item["item-number"],
-      brand: item.item.brands.map((brand) => brand.name).join(", "),
-      itemType: item.item.type,
-      estCost: item.item["estimated-cost"],
-      packSize: item.item["qty-per-pack"],
-      imgUrl: item.item["img-url"],
-      estTotal: 0,
-      totalItems: 0,
-    }));
-
-    currentItems.sort((a, b) => {
-      return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-        ? -1
-        : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-        ? 1
-        : 0;
-    });
-
-    let orders = currentOrders.data[0].orders.map((ord) => ({
-      orderNumber: ord.id,
-      distributorId: ord.distributor.id,
-      distributorName: ord.distributor.name,
-      distributorCity: ord.distributor.city,
-      distributorState: ord.distributor.state,
-      note: ord.notes ? ord.notes : "",
-      attn: ord.attn ? ord.attn : "",
-      type: "program",
-      program: ord.program.id,
-      items: ord["order-items"]
-        .map((item) => ({
-          id: item.id,
-          complianceStatus: item.item["compliance-status"],
-          itemNumber: item.item["item-number"],
-          itemType: item.item.type,
-          estCost: item.item["estimated-cost"],
-          packSize: item.item["qty-per-pack"],
-          estTotal: item.qty * item.item["estimated-cost"],
-          totalItems: item.qty,
-        }))
-        .sort((a, b) => {
-          return parseInt(a.itemNumber) < parseInt(b.itemNumber)
-            ? -1
-            : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-            ? 1
-            : 0;
-        }),
-      totalItems: ord["order-items"]
-        .map((item) => item.qty)
-        .reduce((a, b) => a + b),
-      estTotal: ord["order-items"]
-        .map((item) => item.qty * item.item["cost"])
-        .reduce((a, b) => a + b),
-    }));
-
+    let currentItems = mapOrderItems(currentOrders.data[0]["order-set-items"], "order-set-item")
+    let orders = mapOrderHistoryOrders(currentOrders.data[0].orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
         ? -1

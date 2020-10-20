@@ -162,14 +162,14 @@ const OrderSetTable = (props) => {
   useEffect(() => {
     if (
       (orders && !refTable) ||
-      `${orders[0].orderNumber}` !== Object.keys(refTable)[0].split("-")[0] ||
+      `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0] ||
       Object.keys(refTable).length !== orders.length * currentItems.length
     ) {
       if (orders.length !== 0) {
         let refs = {};
         orders.forEach((order) => {
           order.items.forEach((item) => {
-            refs[`${order.orderNumber}-${item.itemNumber}`] = React.createRef(
+            refs[`${order.id}-${item.itemNumber}`] = React.createRef(
               null
             );
           });
@@ -480,7 +480,7 @@ const OrderSetTable = (props) => {
               </TableHead>
               <TableBody style={{ position: "relative" }}>
                 {orders.map((ord) => (
-                  <TableRow key={ord.orderNumber}>
+                  <TableRow key={ord.id}>
                     <TableCell
                       classes={{ root: classes.root }}
                       className={classes.borderRight}
@@ -515,7 +515,7 @@ const OrderSetTable = (props) => {
                         <div style={{ display: "flex" }}>
                           <Tooltip title="Delete Order">
                             <IconButton
-                              onClick={() => handleRemoveOrder(ord.orderNumber)}
+                              onClick={() => handleRemoveOrder(ord.id)}
                             >
                               <CancelIcon fontSize="small" color="inherit" />
                             </IconButton>
@@ -523,7 +523,7 @@ const OrderSetTable = (props) => {
 
                           <Tooltip title="Edit Details">
                             <IconButton
-                              onClick={() => setOrderNumber(ord.orderNumber)}
+                              onClick={() => setOrderNumber(ord.id)}
                             >
                               <EditIcon fontSize="small" color="inherit" />
                             </IconButton>
@@ -535,7 +535,7 @@ const OrderSetTable = (props) => {
                       <MemoInputCell
                         key={item.id}
                         compliance={item.complianceStatus}
-                        orderNumber={ord.orderNumber}
+                        orderNumber={ord.id}
                         itemNumber={item.itemNumber}
                         itemId={item.id}
                         index={index}
@@ -543,7 +543,7 @@ const OrderSetTable = (props) => {
                         orderId={orderId}
                         program={currentProgram}
                         cellRef={
-                          refTable[`${ord.orderNumber}-${item.itemNumber}`]
+                          refTable[`${ord.id}-${item.itemNumber}`]
                         }
                         handleKeyDown={handleKeyDown}
                         packSize={item.packSize}
