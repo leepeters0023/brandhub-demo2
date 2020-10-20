@@ -15,7 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import AutorenewIcon from "@material-ui/icons/Autorenew";
 
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
@@ -106,8 +106,8 @@ const useStyles = makeStyles((theme) => ({
   emailButton: {
     color: "#920000",
     "&:hover": {
-      cursor: "pointer"
-    }
+      cursor: "pointer",
+    },
   },
   visuallyHidden: {
     border: 0,
@@ -220,7 +220,7 @@ const ComplianceItemsTable = ({
               items.length > 0 &&
               items.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
-                const labelId = `compliance-checkbox-${index}`;
+                const labelId = `compliance-Checkbox-${index}`;
                 return (
                   <TableRow key={index} hover >
                     {row.active ? (<TableCell padding="checkbox">
@@ -233,7 +233,8 @@ const ComplianceItemsTable = ({
                           event.stopPropagation();
                         }}
                       />
-                    </TableCell>) : (
+                    </TableCell>
+                    ) : (
                       <TableCell padding="checkbox">
                         <Tooltip title="Activate Rule">
                           <IconButton>
@@ -263,7 +264,10 @@ const ComplianceItemsTable = ({
                             >
                               {`Email sent on ${row.emailSent}`}
                             </Typography>
-                            <Typography variant="body2" className={classes.emailButton}>
+                            <Typography
+                              variant="body2"
+                              className={classes.emailButton}
+                            >
                               {"(resend)"}
                             </Typography>
                           </div>

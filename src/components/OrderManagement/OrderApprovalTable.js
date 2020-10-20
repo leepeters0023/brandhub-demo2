@@ -235,7 +235,7 @@ const OrderApprovalTable = ({
               orders.length > 0 &&
               orders.map((row, index) => {
                 const isOrderSelected = isSelected(row.id);
-                const labelId = `approvals-checkbox-${index}`;
+                const labelId = `approvals-Checkbox-${index}`;
                 return (
                   <TableRow
                     key={row.id}
