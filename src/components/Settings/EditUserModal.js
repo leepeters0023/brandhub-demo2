@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { useInput } from "../../hooks/UtilityHooks";
+import { useInput } from "../../hooks/InputHooks";
 
 import UserRoleSelect from "./UserRoleSelect";
 import UserTerritoryTable from "./UserTerritoryTable";

@@ -17,7 +17,7 @@ import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice"
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 
-import { useDetailedInput } from "../../hooks/UtilityHooks";
+import { useDetailedInput } from "../../hooks/InputHooks";
 
 import FiltersItems from "./FiltersItems";
 import FiltersHistory from "./FiltersHistory";

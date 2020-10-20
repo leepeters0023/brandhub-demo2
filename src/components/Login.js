@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { useInput } from "../hooks/UtilityHooks";
+import { useInput } from "../hooks/InputHooks";
 
 import { logIn } from "../redux/slices/userSlice";
 
