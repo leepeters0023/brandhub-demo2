@@ -258,7 +258,7 @@ const EditProgramModal = ({ handleClose, currentProgram }) => {
             { title: "Brand", field: "brand" },
             { title: "Item Type", field: "itemType" },
             { title: "Qty/pk", field: "qty" },
-            { title: "Price", field: "price" },
+            { title: "Est. Cost", field: "estCost" },
           ]}
           data={currentItems}
           editable={{

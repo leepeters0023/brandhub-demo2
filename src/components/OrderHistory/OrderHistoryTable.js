@@ -19,7 +19,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "id", disablePadding: false, label: "Order #", sort: true },
   { id: "type", disablePadding: false, label: "Type", sort: false },
   {
     id: "distributor",
@@ -150,9 +150,9 @@ const OrderHistoryTable = ({
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
-  const handleRowClick = (orderNum) => {
+  const handleRowClick = (id) => {
     if (grouping === "order") {
-      navigate(`/orders/history/${orderNum}`);
+      navigate(`/orders/history/${id}`);
     }
   };
 
@@ -188,17 +188,17 @@ const OrderHistoryTable = ({
               orders.length > 0 &&
               orders.map((row) => (
                 <TableRow
-                  key={row.orderNum}
+                  key={row.id}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
-                    handleRowClick(row.orderNum);
+                    handleRowClick(row.id);
                   }}
                 >
-                  <TableCell align="left">{row.orderNum}</TableCell>
+                  <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
-                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left">{row.distributorName}</TableCell>
+                  <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
@@ -208,18 +208,18 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.shipDate}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
-                    {row.estTotal !== "---"
-                      ? formatMoney(row.estTotal)
-                      : row.estTotal}
+                    {row.totalEstCost !== "---"
+                      ? formatMoney(row.totalEstCost)
+                      : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">
-                    {row.actTotal !== "---"
-                      ? formatMoney(row.actTotal)
-                      : row.actTotal}
+                    {row.totalActCost !== "---"
+                      ? formatMoney(row.totalActCost)
+                      : row.totalActCost}
                   </TableCell>
                   <TableCell align="left">
-                    {row.orderStatus[0].toUpperCase() +
-                      row.orderStatus.slice(1)}
+                    {row.status[0].toUpperCase() +
+                      row.status.slice(1)}
                   </TableCell>
                 </TableRow>
               ))}

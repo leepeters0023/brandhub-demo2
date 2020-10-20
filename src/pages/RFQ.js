@@ -19,19 +19,19 @@ import { makeStyles } from "@material-ui/core/styles";
 const mockSupplierData = [
   {
     name: "Imperial",
-    price: "$5.99",
+    quotedCost: "$5.99",
     note:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
   },
   {
     name: "Sterling",
-    price: "6.99",
+    quotedCost: "6.99",
     note:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
   },
   {
     name: "Curtis",
-    price: "5.50",
+    quotedCost: "5.50",
     note:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
   },
@@ -116,7 +116,7 @@ const BidCreation = ({ handleFiltersClosed }) => {
                     Supplier
                   </TableCell>
                   <TableCell className={classes.headerText} align="left">
-                    Price
+                    Quoted Cost
                   </TableCell>
                   <TableCell className={classes.headerText} align="left">
                     Note
@@ -128,7 +128,7 @@ const BidCreation = ({ handleFiltersClosed }) => {
                 {mockSupplierData.map((sup) => (
                   <TableRow key={sup.name}>
                     <TableCell align="left">{sup.name}</TableCell>
-                    <TableCell align="left">{sup.price}</TableCell>
+                    <TableCell align="left">{sup.quotedCost}</TableCell>
                     <TableCell align="left">{sup.note}</TableCell>
                     <TableCell align="right">
                       <Button

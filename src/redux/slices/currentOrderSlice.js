@@ -262,7 +262,7 @@ export const fetchCurrentOrderById = (id) => async (dispatch) => {
       brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
       packSize: item.item["qty-per-pack"],
-      price: item.item["estimated-cost"],
+      estCost: item.item["estimated-cost"],
       totalItems: item.qty,
       estTotal: item["total-estimated-cost"],
       actTotal: "---",

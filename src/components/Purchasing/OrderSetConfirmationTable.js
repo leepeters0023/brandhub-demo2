@@ -114,21 +114,15 @@ const CollapseRow = ({ classes, rowData, items }) => {
                             </Typography>
                           </div>
                         </TableCell>
-                        <TableCell align="center" >
-                          {`${formatMoney(item.price)}`}
+                        <TableCell align="center">
+                          {`${formatMoney(item.estCost)}`}
                         </TableCell>
-                        <TableCell align="center" >
-                          {item.totalItems}
-                        </TableCell>
-                        <TableCell align="center" >
+                        <TableCell align="center">{item.totalItems}</TableCell>
+                        <TableCell align="center">
                           {`${formatMoney(item.estTotal)}`}
                         </TableCell>
-                        <TableCell align="center" >
-                          ---
-                        </TableCell>
-                        <TableCell align="center" >
-                          ---
-                        </TableCell>
+                        <TableCell align="center">---</TableCell>
+                        <TableCell align="center">---</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

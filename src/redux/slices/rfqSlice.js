@@ -34,7 +34,7 @@ import { createSlice } from "@reduxjs/toolkit";
         sent: bool (read, write)
         awarded: bool (read, write)
         quote: {
-          price: int (read),
+          quoteCost: int (read),
           note: string (read),
         } 
       },
@@ -42,7 +42,7 @@ import { createSlice } from "@reduxjs/toolkit";
         sent: bool (read, write)
         awarded: bool (read, write)
         quote: {
-          price: int (read),
+          quoteCost: int (read),
           note: string (read),
         } 
       },
@@ -50,7 +50,7 @@ import { createSlice } from "@reduxjs/toolkit";
         sent: bool (read, write)
         awarded: bool (read, write)
         quote: {
-          price: int (read),
+          quoteCost: int (read),
           note: string (read),
         } 
       },
@@ -58,7 +58,7 @@ import { createSlice } from "@reduxjs/toolkit";
         sent: bool (read, write)
         awarded: bool (read, write)
         quote: {
-          price: int (read),
+          quoteCost: int (read),
           note: string (read),
         } 
       }

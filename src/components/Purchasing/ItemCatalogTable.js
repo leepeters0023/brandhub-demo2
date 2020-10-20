@@ -72,7 +72,7 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
                 {catalogType === "inStock" && (
                   <TableCell>{item.stock}</TableCell>
                 )}
-                <TableCell>{`${formatMoney(item.price)}`}</TableCell>
+                <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

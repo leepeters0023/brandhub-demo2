@@ -71,7 +71,7 @@ const programsSlice = createSlice({
         itemNumber: item["item-number"],
         brand: item.brands.map((brand) => brand.name).join(", "),
         itemType: item.type,
-        price: item["estimated-cost"],
+        estCost: item["estimated-cost"],
         packSize: item["qty-per-pack"],
         imgUrl: item["img-url"],
       }));
