@@ -13,7 +13,7 @@ import {
   setClear,
 } from "../redux/slices/filterSlice";
 
-import { useInput } from "../hooks/UtilityHooks";
+import { useInput } from "../hooks/InputHooks";
 
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";

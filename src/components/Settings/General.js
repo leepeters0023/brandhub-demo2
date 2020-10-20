@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useSelector } from "react-redux";
 
-import { useInput } from "../../hooks/UtilityHooks";
+import { useInput } from "../../hooks/InputHooks";
 
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";

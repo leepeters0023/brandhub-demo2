@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setOrderDetails } from "../../redux/slices/patchOrderSlice";
 
-import { useInput } from "../../hooks/UtilityHooks";
+import { useInput } from "../../hooks/InputHooks";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";

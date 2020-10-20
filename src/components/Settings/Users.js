@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useInput } from "../../hooks/UtilityHooks";
+import { useInput } from "../../hooks/InputHooks";
 
 import UserTable from "./UserTable";
 import EditUserModal from "./EditUserModal";
