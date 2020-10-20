@@ -97,10 +97,23 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "300px",
+              width: "500px",
               justifyContent: "flex-end",
             }}
           >
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={!itemSelected}
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                //TODO create manual approval function
+                //navigate("/purchasing/purchaseOrder#new");
+              }}
+            >
+              APPROVE RULE
+            </Button>
             <Button
               className={classes.largeButton}
               variant="contained"

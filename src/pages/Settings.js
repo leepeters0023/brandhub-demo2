@@ -5,7 +5,6 @@ import General from "../components/Settings/General";
 import Users from "../components/Settings/Users";
 import Billing from "../components/Settings/Billing";
 import Budgets from "../components/Settings/Budgets";
-import Programs from "../components/Settings/Programs";
 import AddressBook from "../components/User/AddressBook";
 
 import Container from "@material-ui/core/Container";
@@ -143,7 +142,6 @@ const Settings = ({ userType, handleFiltersClosed }) => {
             {setting === "billing" && <Billing />}
             {setting === "budgets" && <Budgets />}
             {setting === "users" && <Users />}
-            {setting === "programs" && <Programs />}
           </Grid>
           <Grid item md={1} xs={false} />
         </Grid>

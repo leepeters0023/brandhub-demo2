@@ -14,19 +14,6 @@ let itemTypes = [
   "Necker",
   "Glorifier",
 ];
-let ruleTypes = ["Prior Approval", "Item Type", "Material", "Pricing"];
-let tags = [
-  "VT",
-  "UT",
-  "MA",
-  "MN",
-  "Necker",
-  "Glorifier",
-  "Mass Display",
-  "Wood",
-  "Plastic",
-  "Cardboard",
-];
 let suppliers = ["Imperial", "Curtis", "Sterling", "Willey"];
 let territories = [
   "Western",
@@ -132,44 +119,6 @@ const generatePOs = (dataPoints, stat) => {
       actTotal: estTotal,
       status: status,
       dueDate: new Date().toLocaleDateString(),
-    });
-  }
-  return data;
-};
-
-const generateComplianceItems = (dataPoints) => {
-  let stats = ["Approved", "Denied", "Pending"];
-  let data = [];
-
-  for (let i = 0; i < dataPoints; i++) {
-    let id = i + 1;
-    let active = Math.random() * 10 < 1;
-    let ranNum = Math.floor(Math.random() * 3 + 1);
-    let sequenceNumber = (1110000010 + i).toString();
-    let currentItemType =
-      itemTypes[Math.floor(Math.random() * itemTypes.length)];
-    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
-    let ruleType = ruleTypes[Math.floor(Math.random() * ruleTypes.length)];
-    let ruleTags = [];
-    for (let j = 0; j < ranNum; j++) {
-      ruleTags.push(tags[Math.floor(Math.random() * tags.length)]);
-    }
-    let status = stats[Math.floor(Math.random() * stats.length)];
-    let emailSent =
-      ruleType === "Prior Approval" ? new Date().toLocaleDateString() : "N/A";
-    let note =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.";
-    data.push({
-      id: id,
-      active: !active,
-      sequenceNum: sequenceNumber,
-      itemType: currentItemType,
-      program: currentProgram,
-      ruleType: ruleType,
-      tags: ruleTags,
-      status: status,
-      emailSent: emailSent,
-      note: note,
     });
   }
   return data;
@@ -689,6 +638,97 @@ export const rules = [
   }
 ];
 
+export const complianceItems = [
+  {
+    id: "1",
+    active: false,
+    sequenceNum: "110000010",
+    itemType: "Shelf Talker",
+    program: "New Amsterdam Holiday",
+    ruleType: "Prior Approval",
+    tags: ["POS", "VT"],
+    status: "Denied",
+    emailSent: "N/A",
+  },
+  {
+    id: "2",
+    active: true,
+    sequenceNum: "110000011",
+    itemType: "Carton Rider",
+    program: "Barefoot June Focs 2021",
+    ruleType: "Prior Approval",
+    tags: ["POS", "ME"],
+    status: "Pending",
+    emailSent: new Date().toLocaleDateString(),
+  },
+  {
+    id: "3",
+    active: true,
+    sequenceNum: "110000012",
+    itemType: "Structure",
+    program: "Whitehaven Summer Splash",
+    ruleType: "Price",
+    tags: ["Product Display", "$25", "WV"],
+    status: "Pending",
+    emailSent:"N/A",
+  },
+  {
+    id: "4",
+    active: true,
+    sequenceNum: "110000013",
+    itemType: "Shelf Talker",
+    program: "La Marca Winter 2021",
+    ruleType: "Item Type",
+    tags: ["Wine", "Necker", "UT"],
+    status: "Non-Compliant",
+    emailSent: "N/A",
+  },
+  {
+    id: "5",
+    active: true,
+    sequenceNum: "110000014",
+    itemType: "Structure",
+    program: "Whitehaven Summer Splash",
+    ruleType: "Price",
+    tags: ["Product Display", "$150", "MD"],
+    status: "Pending",
+    emailSent: "N/A",
+  },
+  {
+    id: "6",
+    active: true,
+    sequenceNum: "110000015",
+    itemType: "Shelf Talker",
+    program: "Whitehaven Summer Splash",
+    ruleType: "Prior Approval",
+    tags: ["POS", "IN"],
+    status: "Approved",
+    emailSent: "N/A",
+  },
+  {
+    id: "7",
+    active: true,
+    sequenceNum: "110000016",
+    itemType: "Drinkware",
+    program: "New Amsterdam Holiday",
+    ruleType: "Item Type",
+    tags: ["CAS", "Spirits", "AL"],
+    status: "Non-Compliant",
+    emailSent: "N/A",
+  },
+  {
+    id: "8",
+    active: true,
+    sequenceNum: "110000017",
+    itemType: "Drinkware",
+    program: "New Amsterdam Holiday",
+    ruleType: "Price",
+    tags: ["CAS", "Spirits", "$3", "OH"],
+    status: "Pending",
+    emailSent: "N/A",
+  },
+]
+
 export const currentPOItems = generatePOItems(20);
 export const currentBidItems = generatePOItems(20);
 export const singlePO = generatePOItems(3);
@@ -697,5 +737,4 @@ export const rfqCurrent = generateRFQs(20, "current");
 export const rfqAll = generateRFQs(20, "all");
 export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
-export const complianceItems = generateComplianceItems(20);
 export const yearToDateBudgets = generateYearToDateBudgets(20);
