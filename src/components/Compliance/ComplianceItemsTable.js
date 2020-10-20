@@ -222,19 +222,18 @@ const ComplianceItemsTable = ({
                 const isItemSelected = isSelected(row.id);
                 const labelId = `compliance-Checkbox-${index}`;
                 return (
-                  <TableRow key={index} hover>
-                    {row.active ? (
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          onClick={(event) => event.stopPropagation()}
-                          onChange={(event) => {
-                            handleClick(event, row.id);
-                            event.stopPropagation();
-                          }}
-                        />
-                      </TableCell>
+                  <TableRow key={index} hover >
+                    {row.active ? (<TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, row.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
                     ) : (
                       <TableCell padding="checkbox">
                         <Tooltip title="Activate Rule">

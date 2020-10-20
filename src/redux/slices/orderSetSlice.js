@@ -71,7 +71,11 @@ const orderSetSlice = createSlice({
       let newItems = currentOrder.items.map((item) => {
         if (item.itemNumber === itemNumber) {
           let numVal = value === "" ? 0 : parseInt(value);
-          return { ...item, totalItems: numVal, estTotal: numVal * item.price };
+          return {
+            ...item,
+            totalItems: numVal,
+            estTotal: numVal * item.estCost,
+          };
         } else return item;
       });
       let newTotalItems = 0;
@@ -220,10 +224,10 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       id: item.id,
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
-      brand: item.item.brand.name,
+      brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
-      price: item.item["cost"],
-      qty: `${item.item["qty-per-pack"]} / pack`,
+      estCost: item.item["estimated-cost"],
+      packSize: item.item["qty-per-pack"],
       imgUrl: item.item["img-url"],
       estTotal: 0,
       totalItems: 0,
@@ -252,7 +256,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item["cost"],
+          estCost: item.item["estimated-cost"],
           packSize: item.item["qty-per-pack"],
           estTotal: item.qty * item.item["cost"],
           totalItems: item.qty,
@@ -319,14 +323,15 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders.data[0]["order-set-items"]);
     let currentItems = currentOrders.data[0]["order-set-items"].map((item) => ({
       id: item.id,
       complianceStatus: item.item["compliance-status"],
       itemNumber: item.item["item-number"],
-      brand: item.item.brand.name,
+      brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
-      price: item.item["cost"],
-      qty: `${item.item["qty-per-pack"]} / pack`,
+      estCost: item.item["estimated-cost"],
+      packSize: item.item["qty-per-pack"],
       imgUrl: item.item["img-url"],
       estTotal: 0,
       totalItems: 0,
@@ -356,8 +361,9 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
           complianceStatus: item.item["compliance-status"],
           itemNumber: item.item["item-number"],
           itemType: item.item.type,
-          price: item.item["cost"],
-          estTotal: item.qty * item.item["cost"],
+          estCost: item.item["estimated-cost"],
+          packSize: item.item["qty-per-pack"],
+          estTotal: item.qty * item.item["estimated-cost"],
           totalItems: item.qty,
         }))
         .sort((a, b) => {

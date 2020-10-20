@@ -60,10 +60,14 @@ const OrderConfirmationTable = ({ items }) => {
                 </TableCell>
                 <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
-                <TableCell align="left">{item.qty}</TableCell>
-                <TableCell align="left">{`${formatMoney(item.price)}`}</TableCell>
+                <TableCell align="left">{item.packSize}</TableCell>
+                <TableCell align="left">{`${formatMoney(
+                  item.estCost
+                )}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
-                <TableCell align="left">{`${formatMoney(item.estTotal)}`}</TableCell>
+                <TableCell align="left">{`${formatMoney(
+                  item.estTotal
+                )}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

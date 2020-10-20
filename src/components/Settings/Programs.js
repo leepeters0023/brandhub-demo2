@@ -87,7 +87,9 @@ const Programs = () => {
     if (
       currentItemList.filter((item) => item.itemNumber === item).length === 0
     ) {
-      let newItem = items.find((item) => item.itemNumber === parseInt(currentItemNumber));
+      let newItem = items.find(
+        (item) => item.itemNumber === parseInt(currentItemNumber)
+      );
       currentItemList.push(newItem);
       setCurrentItems(currentItemList);
     }
@@ -96,25 +98,30 @@ const Programs = () => {
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
     //temporary event handler
-    console.log(programName, programDescription, programGoals, programStrategies)
+    console.log(
+      programName,
+      programDescription,
+      programGoals,
+      programStrategies
+    );
     resetProgramName();
     resetProgramDesicription();
     resetProgramGoals();
     resetProgramStrategies();
-  }
+  };
 
   const handleModalClose = () => {
     handleModal(false);
   };
 
   const handleProgramClick = (program) => {
-    setCurrentProgram(program)
+    setCurrentProgram(program);
     handleModal(true);
-  }
+  };
 
   return (
     <>
-    <div className={classes.relativeContainer}>
+      <div className={classes.relativeContainer}>
         <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="lg">
           <DialogTitle>
             <Typography className={classes.headerText}>
@@ -122,7 +129,10 @@ const Programs = () => {
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <EditProgramModal handleClose={handleModalClose} currentProgram={currentProgram} />
+            <EditProgramModal
+              handleClose={handleModalClose}
+              currentProgram={currentProgram}
+            />
           </DialogContent>
         </Dialog>
       </div>
@@ -257,7 +267,7 @@ const Programs = () => {
             { title: "Brand", field: "brand" },
             { title: "Item Type", field: "itemType" },
             { title: "Qty/pk", field: "qty" },
-            { title: "Price", field: "price" },
+            { title: "Est. Cost", field: "estCost" },
           ]}
           data={currentItems}
           editable={{
@@ -281,14 +291,14 @@ const Programs = () => {
         />
         <br />
         <Button
-        className={classes.largeButton}
-        variant="contained"
-        color="secondary"
-        id="profile"
-        onClick={handleFormSubmit}
-      >
-        SUBMIT
-      </Button>
+          className={classes.largeButton}
+          variant="contained"
+          color="secondary"
+          id="profile"
+          onClick={handleFormSubmit}
+        >
+          SUBMIT
+        </Button>
       </form>
       <br />
       <br />

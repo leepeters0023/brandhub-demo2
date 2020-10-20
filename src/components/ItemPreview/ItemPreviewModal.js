@@ -89,7 +89,16 @@ const ItemPreviewModal = (props) => {
   const dispatch = useDispatch();
   const {
     type,
-    currentItem: { id, itemNumber, brand, itemType, price, imgUrl, qty, stock },
+    currentItem: {
+      id,
+      itemNumber,
+      brand,
+      itemType,
+      estCost,
+      imgUrl,
+      qty,
+      stock,
+    },
     handleClose,
     previewModal,
   } = props;
@@ -132,7 +141,7 @@ const ItemPreviewModal = (props) => {
         disableScrollLock
         fullWidth
         maxWidth="lg"
-        style={{zIndex: "15000"}}
+        style={{ zIndex: "15000" }}
       >
         <DialogContent>
           <Grid container spacing={5} className={classes.dialogGrid}>
@@ -201,7 +210,7 @@ const ItemPreviewModal = (props) => {
                 </Typography>
               </div>
               <Typography className={classes.headerText} variant="h5">
-                {`${formatMoney(price)}`}
+                {`${formatMoney(estCost)}`}
               </Typography>
               <Box bgcolor="primary.main" className={classes.dividerBox} />
               <br />

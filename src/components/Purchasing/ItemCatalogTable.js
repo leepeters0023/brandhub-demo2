@@ -24,7 +24,7 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
         <Table className={classes.table} aria-label="item-catalog">
           <TableHead>
             <TableRow>
-            <TableCell className={classes.headerText} align="left">
+              <TableCell className={classes.headerText} align="left">
                 Preview
               </TableCell>
               <TableCell className={classes.headerText} align="left">
@@ -68,23 +68,23 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
                 <TableCell align="left">{item.itemType}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.brand}</TableCell>
-                <TableCell align="left">{item.qty}</TableCell>
+                <TableCell align="left">{item.packSize}</TableCell>
                 {catalogType === "inStock" && (
                   <TableCell>{item.stock}</TableCell>
                 )}
-                <TableCell>{`${formatMoney(item.price)}`}</TableCell>
+                <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     </>
-  )
-}
+  );
+};
 
 ItemCatalogTable.propTypes = {
   items: PropTypes.array,
   handlePreview: PropTypes.func.isRequired,
-}
+};
 
 export default ItemCatalogTable;
