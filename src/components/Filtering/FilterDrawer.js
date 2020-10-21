@@ -198,6 +198,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(fetchFilteredOrderSets(allFilters));
   };
 
+  //TODO write handle grouping change function that fetches order history / rollup by
+  // order or item
+
+  
   useEffect(() => {
     if (setToClear) {
       resetAllFilters();

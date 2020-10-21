@@ -19,6 +19,7 @@ import {
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
+import OrderHistoryByItemTable from "../components/OrderHistory/OrderHistoryByItemTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -29,6 +30,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
+
+//mock data
+import { orderHistoryItems } from "../assets/mockdata/dataGenerator";
 
 const csvHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -83,6 +87,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentGrouping = useSelector((state) => state.filters.groupBy);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -161,12 +166,22 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <OrderHistoryTable
-          orders={currentOrders}
-          isOrdersLoading={isOrdersLoading}
-          handleSort={handleSort}
-          scrollRef={scrollRef}
-        />
+        {currentGrouping === "order" && (
+          <OrderHistoryTable
+            orders={currentOrders}
+            isOrdersLoading={isOrdersLoading}
+            handleSort={handleSort}
+            scrollRef={scrollRef}
+          />
+        )}
+        {currentGrouping === "item" && (
+          <OrderHistoryByItemTable
+            items={orderHistoryItems}
+            isOrdersLoading={isOrdersLoading}
+            handleSort={handleSort}
+            scrollRef={scrollRef}
+          />
+        )}
         {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />

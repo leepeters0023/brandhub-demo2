@@ -25,6 +25,29 @@ let territories = [
   "Kroger",
   "Multi Territory",
 ];
+let distributors = [
+  {
+    name: "ABC Storage",
+    state: "WY",
+  },
+  {
+    name: "Albertson's LLC Intermtn Div",
+    state: "ID",
+  },
+  {
+    name: "Breakthru Bev",
+    state: "IL",
+  },
+  {
+    name: "Clatsop Dist",
+    state: "OR",
+  },
+  {
+    name: "Dayton Heidelberg",
+    state: "OH",
+  },
+];
+let packSizes = ["1", "10", "12", "25", "50"]
 
 const generatePOItems = (dataPoints) => {
   let data = [];
@@ -58,6 +81,48 @@ const generatePOItems = (dataPoints) => {
   }
   return data;
 };
+
+const generateOrderHistoryItems = (dataPoints) => {
+  let data = [];
+  let orderStatus = ["Submitted", "Approved", "Shipped", "Denied"]
+  for (let i = 0; i < dataPoints; i++) {
+    let sequenceNumber = (1110000010 + i).toString();
+    let orderNum = (550 + i).toString();
+    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
+    let currentItemType =
+      itemTypes[Math.floor(Math.random() * itemTypes.length)];
+    let currentDistributor = distributors[Math.floor(Math.random() * distributors.length)];
+    let packSize = packSizes[Math.floor(Math.random() * packSizes.length)];
+    let totalItems = Math.floor(Math.random() * 100) + 50;
+    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
+    let totalEstCost = totalItems * estCost;
+    let actCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
+    let totalActCost = totalItems * estCost;
+    let orderDate = "10/01/2020";
+    let status = orderStatus[Math.floor(Math.random() * orderStatus.length)]
+    let shipDate = status === "Shipped" ? new Date().toLocaleDateString() : "---";
+    let tracking = status === "Shipped" ? (125770000010 + i).toString() : "---";
+    data.push({
+      sequenceNum: sequenceNumber,
+      id: orderNum,
+      program: currentProgram,
+      itemType: currentItemType,
+      distributorName: currentDistributor.name,
+      distributorState: currentDistributor.state,
+      packSize: packSize,
+      totalItems: totalItems,
+      estCost: estCost,
+      totalEstCost: totalEstCost,
+      actCost: actCost,
+      totalActCost: totalActCost,
+      orderDate: orderDate,
+      shipDate: shipDate,
+      tracking: tracking,
+      status: status,
+    })
+  }
+  return data;
+}
 
 const generateRFQs = (dataPoints, stat) => {
   let statusAll = [
@@ -583,7 +648,8 @@ export const rules = [
   {
     ruleType: "Price",
     tags: ["LA", "Spirits", "Wine", "Malt", "Structure", "$155"],
-    desc: "For Wine, Malt, and Spirits, Structure Items must cost less than $155",
+    desc:
+      "For Wine, Malt, and Spirits, Structure Items must cost less than $155",
     contact: null,
     email: null,
   },
@@ -632,10 +698,11 @@ export const rules = [
   {
     ruleType: "Product",
     tags: ["VA", "Spirits", "Malt", "Wine", "Structure", "Wood"],
-    desc: "For Wine, Malt, and Spirits, Structure Items cannot be made of wood or metal.",
+    desc:
+      "For Wine, Malt, and Spirits, Structure Items cannot be made of wood or metal.",
     contact: null,
     email: null,
-  }
+  },
 ];
 
 export const complianceItems = [
@@ -670,7 +737,7 @@ export const complianceItems = [
     ruleType: "Price",
     tags: ["Product Display", "$25", "WV"],
     status: "Pending",
-    emailSent:"N/A",
+    emailSent: "N/A",
   },
   {
     id: "4",
@@ -727,8 +794,9 @@ export const complianceItems = [
     status: "Pending",
     emailSent: "N/A",
   },
-]
+];
 
+export const orderHistoryItems = generateOrderHistoryItems(20);
 export const currentPOItems = generatePOItems(20);
 export const currentBidItems = generatePOItems(20);
 export const singlePO = generatePOItems(3);
