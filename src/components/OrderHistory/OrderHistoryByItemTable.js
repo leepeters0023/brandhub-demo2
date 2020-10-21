@@ -35,9 +35,9 @@ const headCells = [
     label: "Total Items",
     sort: false,
   },
-  { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
+  // { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
-  { id: "actCost", disablePadding: false, label: "Act. Cost", sort: false },
+  // { id: "actCost", disablePadding: false, label: "Act. Cost", sort: false },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
@@ -192,21 +192,21 @@ const OrderHistoryByItemTable = ({
                   <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     {row.estCost !== "---"
                       ? formatMoney(row.estCost)
                       : row.estCost}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell align="left">
                     {row.estTotal !== "---"
                       ? formatMoney(row.totalEstCost)
                       : row.totalEstCost}
                   </TableCell>
-                  <TableCell align="left">
+                  {/* <TableCell align="left">
                     {row.actCost !== "---"
                       ? formatMoney(row.actCost)
                       : row.actCost}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell align="left">
                     {row.actTotal !== "---"
                       ? formatMoney(row.totalActCost)

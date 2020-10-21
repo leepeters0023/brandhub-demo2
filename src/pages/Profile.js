@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 import { useWindowHash } from "../hooks/UtilityHooks";
 
-//import General from "../components/Settings/General";
-import Users from "../components/Settings/Users";
-import Budgets from "../components/Settings/Budgets";
+import General from "../components/Profile/General";
+import FavoriteDistributors from "../components/Profile/FavoriteDistributors";
+import FavoriteItems from "../components/Profile/FavoriteItems";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -24,12 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Settings = ({ userType, handleFiltersClosed }) => {
+const Profile = ({ userType, handleFiltersClosed }) => {
   const classes = useStyles();
-  const tabs = ["#general", "#users", "#budgets"];
+  const tabs = ["#general", "#favoriteDist", "#favoriteItem"]
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
+
+  const handleChangeTab = useWindowHash(tabs, setSelectedIndex)
 
   useEffect(() => {
     handleFiltersClosed();
@@ -52,36 +53,32 @@ const Settings = ({ userType, handleFiltersClosed }) => {
               >
                 <ListItemText primary="General" />
               </ListItem>
-              {userType !== "field1" && (
-                <>
-                  <Divider />
-                  <ListItem
-                    button
-                    selected={selectedIndex === 2}
-                    onClick={(evt) => {
-                      handleChangeTab(evt, 2);
-                    }}
-                  >
-                    <ListItemText primary="Users" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    button
-                    selected={selectedIndex === 3}
-                    onClick={(evt) => {
-                      handleChangeTab(evt, 3);
-                    }}
-                  >
-                    <ListItemText primary="Budgets" />
-                  </ListItem>
-                </>
-              )}
+              <Divider />
+              <ListItem
+                button
+                selected={selectedIndex === 2}
+                onClick={(evt) => {
+                  handleChangeTab(evt, 2);
+                }}
+              >
+                <ListItemText primary="Favorite Distributors" />
+              </ListItem>
+              <Divider />
+              <ListItem
+                button
+                selected={selectedIndex === 3}
+                onClick={(evt) => {
+                  handleChangeTab(evt, 3);
+                }}
+              >
+                <ListItemText primary="Favorite Items" />
+              </ListItem>
             </List>
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
-            {selectedIndex === 1 && <Budgets />}
-            {selectedIndex === 2 && <Users />}
-            {selectedIndex === 3 && <Budgets />}
+            {selectedIndex === 1 && <General />}
+            {selectedIndex === 2 && <FavoriteDistributors />}
+            {selectedIndex === 3 && <FavoriteItems />}
           </Grid>
           <Grid item md={1} xs={false} />
         </Grid>
@@ -91,9 +88,9 @@ const Settings = ({ userType, handleFiltersClosed }) => {
   );
 };
 
-Settings.propTypes = {
+Profile.propTypes = {
   userType: PropTypes.string,
   handleFiltersClosed: PropTypes.func.isRequired,
 };
 
-export default Settings;
+export default Profile;

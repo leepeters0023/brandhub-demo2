@@ -16,6 +16,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -75,6 +76,19 @@ const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
             <NotificationsIcon color="secondary" fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Notifications" />
+        </MenuItem>
+        <Divider />
+        <MenuItem
+          component={Link}
+          to="/profile#general"
+          onClick={() => {
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <AccountBoxIcon color="secondary" fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
         </MenuItem>
         <Divider />
         <MenuItem

@@ -42,6 +42,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
+import Profile from "./pages/Profile";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import ProgramNew from "./pages/ProgramNew";
@@ -432,6 +433,16 @@ const App = () => {
             />,
             "/budgets/ytod",
             ["field2", "super"],
+            role
+          )}
+          {handleAuth(
+            <Profile
+              path="/profile"
+              userType={role}
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/profile",
+            ["field1", "field2", "compliance", "super"],
             role
           )}
           {handleAuth(
