@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
-import format from "date-fns/format";
+//import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -18,6 +18,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
@@ -176,18 +177,19 @@ const OrderHistoryByItemTable = ({
               items.length > 0 &&
               items.map((row) => (
                 <TableRow
-                  key={row.orderNum}
+                  key={row.id}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
-                    handleRowClick(row.orderNum);
+                    handleRowClick(row.id);
                   }}
                 >
                   <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
-                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left">{row.distributorName}</TableCell>
+                  <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
@@ -197,8 +199,8 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.estTotal !== "---"
-                      ? formatMoney(row.estTotal)
-                      : row.estTotal}
+                      ? formatMoney(row.totalEstCost)
+                      : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.actCost !== "---"
@@ -207,23 +209,25 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.actTotal !== "---"
-                      ? formatMoney(row.actTotal)
-                      : row.actTotal}
+                      ? formatMoney(row.totalActCost)
+                      : row.totalActCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      // ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      ? row.orderDate
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
-                    {row.orderDate !== "---"
-                      ? format(new Date(row.shipDate), "MM/dd/yyyy")
+                    {row.shipDate !== "---"
+                      // ? format(new Date(row.shipDate), "MM/dd/yyyy")
+                      ? row.shipDate
                       : row.shipDate}
                   </TableCell>
                   <TableCell align="left">{row.tracking}</TableCell>
                   <TableCell align="left">
-                    {row.orderStatus[0].toUpperCase() +
-                      row.orderStatus.slice(1)}
+                    {row.status[0].toUpperCase() +
+                      row.status.slice(1)}
                   </TableCell>
                 </TableRow>
               ))}
