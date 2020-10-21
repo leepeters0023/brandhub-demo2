@@ -17,6 +17,34 @@ user: {
 }
 */
 
+//mock favorites
+let favoriteItems = [
+  {
+    id: "1",
+    imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100945/Select/110011067_Large_1-Case_Talker_vbfgnx.jpg",
+    itemNumber: "0110006615",
+    itemType: "Digital Banner",
+    program: "Apothic Winter 2021",
+    estCost: 299
+  },
+  {
+    id: "2",
+    imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100945/Select/110008964_Large_1-carton_rider_p7c8oo.jpg",
+    itemNumber: "0110006617",
+    itemType: "Case Sleeves",
+    program: "Apothic General",
+    estCost: 599
+  },
+  {
+    id: "3",
+    imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
+    itemNumber: "0110004612",
+    itemType: "Advertising Specialties",
+    program: "New Amsterdam Fall 2021",
+    estCost: 550
+  }
+]
+
 let initialState = {
   loginIsLoading: false,
   isLoading: false,
@@ -30,6 +58,8 @@ let initialState = {
   territories: [],
   managedUsers: [],
   currentTerritory: "",
+  favoriteDistributors: [],
+  favoriteItems: favoriteItems,
   logInError: null,
   error: null,
 };
@@ -87,6 +117,10 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
+    setDistributors(state, action) {
+      const { distributors } = action.payload;
+      state.favoriteDistributors = distributors;
+    },
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
@@ -112,6 +146,7 @@ export const {
   getUserSuccess,
   setLoginSuccess,
   updateCurrentTerritory,
+  setDistributors,
   removeUser,
   setLogInFailure,
   setFailure,
