@@ -7,6 +7,8 @@ import {
   // fetchNextOrderSetItems,
 } from "../../api/orderApi";
 
+import { mapOrderSetHistory } from "../apiMaps";
+
 let initialState = {
   isLoading: false,
   isNextLoading: false,
@@ -16,12 +18,6 @@ let initialState = {
   orderSets: [],
   itemGroups: [],
   error: null,
-};
-
-const orderTypeMap = {
-  "pre-order": "Pre Order",
-  "in-stock": "In Stock",
-  "on-demand": "On Demand",
 };
 
 const startLoading = (state) => {
@@ -117,22 +113,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    console.log(orderSets);
-    let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
-      id: orderSet.id,
-      type: orderTypeMap[orderSet.type],
-      user: orderSet.user.name,
-      program: orderSet.program ? orderSet.program.name : null,
-      state: orderSet["random-order-state"],
-      totalItems: orderSet["total-quantity"],
-      totalOrders: orderSet["order-count"],
-      totalEstCost: orderSet["total-estimated-cost"],
-      totalActCost: "---",
-      budget: "$25,000.00",
-      orderDate: orderSet["submitted-at"] ? orderSet["submitted-at"] : "---",
-      dueDate: orderSet["due-date"],
-      status: orderSet.status,
-    }));
+    let mappedOrderSets = mapOrderSetHistory((orderSets.data.orders))
     dispatch(
       getOrderSetsSuccess({
         orderSets: mappedOrderSets,
@@ -157,22 +138,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    console.log(orderSets);
-    let mappedOrderSets = orderSets.data.orders.map((orderSet) => ({
-      id: orderSet.id,
-      type: orderTypeMap[orderSet.type],
-      user: orderSet.user.name,
-      program: orderSet.program ? orderSet.program.name : null,
-      state: orderSet["random-order-state"],
-      totalItems: orderSet["total-quantity"],
-      totalOrders: orderSet["order-count"],
-      totalEstCost: orderSet["total-estimated-cost"],
-      totalActCost: "---",
-      budget: "$25,000.00",
-      orderDate: orderSet["submitted-at"] ? orderSet["submitted-at"] : "---",
-      dueDate: orderSet["due-date"],
-      status: orderSet.status,
-    }));
+    let mappedOrderSets = mapOrderSetHistory((orderSets.data.orders))
     dispatch(
       getNextOrderSetsSuccess({
         orderSets: mappedOrderSets,

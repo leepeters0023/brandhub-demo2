@@ -31,6 +31,7 @@ let initialState = {
   territory: [],
   type: null,
   user: [],
+  userName: null,
   sortOrder: null,
   sortOrderBy: null,
   sortProgramsBy: null,
@@ -71,6 +72,7 @@ const filterSlice = createSlice({
       state.territory = [];
       state.type = null;
       state.user = [];
+      state.userName = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
       state.sortProgramsBy = null;
@@ -115,6 +117,7 @@ const filterSlice = createSlice({
       state.territory = [];
       state.type = null;
       state.user = [];
+      state.userName = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
       state.sortProgramsBy = null;
@@ -156,7 +159,7 @@ const filterSlice = createSlice({
         chippable = [
           "brand",
           "program",
-          "itemyType",
+          "itemType",
           "tag",
           "ruleType",
           "sequenceNum",
@@ -185,7 +188,8 @@ const filterSlice = createSlice({
             filter === "brand" ||
             filter === "user" ||
             filter === "distributor" ||
-            filter === "territory"
+            filter === "territory" ||
+            filter === "tag"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });

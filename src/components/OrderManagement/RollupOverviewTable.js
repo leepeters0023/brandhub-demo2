@@ -194,7 +194,7 @@ const RollupOverViewTable = ({
                     );
                   }}
                 >
-                  <TableCell align="left">{row.user}</TableCell>
+                  <TableCell align="left">{row.userName}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">

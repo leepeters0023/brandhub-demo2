@@ -73,7 +73,7 @@ export const mapOrderSet = (order) => {
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
     dueDate: order["due-date"] ? order["due-date"] : "---",
-    type: order.type,
+    type: orderTypeMap[order.type],
     program: order.program ? order.program.name : "---",
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
@@ -81,6 +81,16 @@ export const mapOrderSet = (order) => {
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
     totalEstCost: order["total-estimated-cost"],
+    totalActCost: order["total-actual-cost"] ? order["total-actual-cost"] : "---",
+    budget: order.budget ? order.budget : "$25,000.00"
   }
   return formattedOrder
+}
+
+export const mapOrderSetHistory = (orders) => {
+  let mappedOrders = orders.map((order) => {
+    let formattedOrder = mapOrderSet(order);
+    return formattedOrder;
+  });
+  return mappedOrders;
 }
