@@ -242,7 +242,7 @@ const Users = () => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "history-orders" }));
+    dispatch(setFilterType({ type: "user-settings" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,
