@@ -13,6 +13,7 @@ const DrawerOrdersNav = ({
   inStockOrderId,
   onDemandOrderId,
   role,
+  handleCouponModal,
 }) => {
   return (
     <Grid container spacing={2}>
@@ -53,9 +54,10 @@ const DrawerOrdersNav = ({
           {role !== "field1" && (
             <ListItem
               button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/coupons"
+              onClick={() => {
+                handleDrawerClose()
+                handleCouponModal()
+              }}
             >
               <ListItemText
                 primary="+ New Coupon"
@@ -97,19 +99,6 @@ const DrawerOrdersNav = ({
           >
             <ListItemText primary="On-Demand" />
           </ListItem>
-          {role !== "field1" && (
-            <ListItem
-              button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/coupons"
-            >
-              <ListItemText
-                style={{fontStyle: "italic"}}
-                primary="* Coupon"
-              />
-            </ListItem>
-          )}
         </List>
       </Grid>
       {role !== "field1" && (

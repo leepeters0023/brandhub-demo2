@@ -4,6 +4,7 @@ import brandReducer from "./slices/brandSlice";
 import complianceContactReducer from "./slices/complianceContactSlice";
 import complianceItemsReducer from "./slices/complianceItemsSlice";
 import complianceRulesReducer from "./slices/complianceRulesSlice";
+import couponReducer from "./slices/couponSlice";
 import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
 import filterReducer from "./slices/filterSlice";
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   complianceContacts: complianceContactReducer,
   complianceItems: complianceItemsReducer,
   complianceRules: complianceRulesReducer,
+  coupons: couponReducer,
   currentOrder: currentOrderReducer,
   distributors: distributorReducer,
   filters: filterReducer,
