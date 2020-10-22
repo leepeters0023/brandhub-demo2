@@ -85,7 +85,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const orderNote = useSelector((state) => state.orderSet.orderNote);
   const currentOrderType = useSelector((state) => state.orderSet.type);
-  const currentOrderId = useSelector((state) => state.orderSet.orderId);
+  const currentOrderId = useSelector((state) => state.orderSet.id);
   const orderStatus = useSelector((state) => state.orderSet.status);
   const currentItems = useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);

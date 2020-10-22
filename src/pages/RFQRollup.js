@@ -95,7 +95,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "250px",
+              width: "300px",
               justifyContent: "flex-end",
             }}
           >
@@ -110,7 +110,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 navigate("/purchasing/rfq#new");
               }}
             >
-              CREATE BID
+              CREATE QUOTE
             </Button>
             <Tooltip title="Print Purchase Order Items">
               <IconButton>

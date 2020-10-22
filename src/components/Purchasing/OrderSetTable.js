@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import EditOrderDetailModal from "./EditOrderDetailModal";
+import DistributorSelection from "./DistributorSelection";
 import MemoInputCell from "../Utility/MemoInputCell";
 
 import Box from "@material-ui/core/Box";
@@ -169,9 +170,7 @@ const OrderSetTable = (props) => {
         let refs = {};
         orders.forEach((order) => {
           order.items.forEach((item) => {
-            refs[`${order.id}-${item.itemNumber}`] = React.createRef(
-              null
-            );
+            refs[`${order.id}-${item.itemNumber}`] = React.createRef(null);
           });
         });
         setRefTable(refs);
@@ -234,7 +233,11 @@ const OrderSetTable = (props) => {
                     classes={{ root: classes.root }}
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
-                  ></TableCell>
+                  >
+                    <div className={classes.headerCell}>
+                      <DistributorSelection />
+                    </div>
+                  </TableCell>
                   {currentItems.map((item) => (
                     <TableCell
                       classes={{ root: classes.root }}
@@ -523,7 +526,10 @@ const OrderSetTable = (props) => {
 
                           <Tooltip title="Edit Details">
                             <IconButton
-                              onClick={() => setOrderNumber(ord.id)}
+                              onClick={() => {
+                                setOrderNumber(ord.id);
+                                console.log(ord.id);
+                              }}
                             >
                               <EditIcon fontSize="small" color="inherit" />
                             </IconButton>
@@ -542,9 +548,7 @@ const OrderSetTable = (props) => {
                         orderStatus={orderStatus}
                         orderId={orderId}
                         program={currentProgram}
-                        cellRef={
-                          refTable[`${ord.id}-${item.itemNumber}`]
-                        }
+                        cellRef={refTable[`${ord.id}-${item.itemNumber}`]}
                         handleKeyDown={handleKeyDown}
                         packSize={item.packSize}
                         ref={tableRef}

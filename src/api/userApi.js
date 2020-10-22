@@ -7,7 +7,7 @@ const dataFormatter = new Jsona();
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
   await axios
-    .post(`/auth/token`, {
+    .post(`/auth/token`, {   
       grant_type: "password",
       username: email,
       password: password,
