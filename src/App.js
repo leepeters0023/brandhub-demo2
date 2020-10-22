@@ -28,6 +28,7 @@ import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
 import ComplianceRules from "./pages/ComplianceRules";
 import Coupons from "./pages/Coupons";
+import CouponsModal from "./components/Coupons/CouponModal";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
@@ -75,6 +76,7 @@ const App = () => {
     window.localStorage.getItem("brandhub-role")
   );
   const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
+  const [couponsOpen, setCouponsOpen] = useCallback(useState(false));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -93,6 +95,10 @@ const App = () => {
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
+  };
+
+  const handleCouponModal = () => {
+    setCouponsOpen(!couponsOpen);
   };
 
   const handleLogout = () => {
@@ -163,7 +169,11 @@ const App = () => {
   if (programsIsLoading) {
     return (
       <MuiThemeProvider theme={theme}>
-        <TopDrawerNav userType={role} handleLogout={handleLogout} />
+        <TopDrawerNav
+          userType={role}
+          handleLogout={handleLogout}
+          handleCouponModal={handleCouponModal}
+        />
         <Loading partial={true} />
       </MuiThemeProvider>
     );
@@ -171,10 +181,20 @@ const App = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      {loggedIn && <TopDrawerNav userType={role} handleLogout={handleLogout} />}
+      {loggedIn && (
+        <TopDrawerNav
+          userType={role}
+          handleLogout={handleLogout}
+          handleCouponModal={handleCouponModal}
+        />
+      )}
       <FilterDrawer
         open={filtersOpen}
         handleDrawerClose={handleFiltersClosed}
+      />
+      <CouponsModal
+        handleCouponModal={handleCouponModal}
+        couponsOpen={couponsOpen}
       />
       <div
         id="main-container"

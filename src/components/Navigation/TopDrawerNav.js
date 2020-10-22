@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopDrawerNav = ({ handleLogout }) => {
+const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -210,6 +210,7 @@ const TopDrawerNav = ({ handleLogout }) => {
               inStockOrderId={inStockOrderId}
               onDemandOrderId={onDemandOrderId}
               role={role}
+              handleCouponModal={handleCouponModal}
             />
           )}
           {drawerContent === "purchasing" && (
