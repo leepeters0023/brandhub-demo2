@@ -26,7 +26,7 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
   const dispatch = useDispatch();
 
   const currentOrder = useSelector((state) =>
-    state.orderSet.orders.find((ord) => ord.orderNumber === orderNumber)
+    state.orderSet.orders.find((ord) => ord.id === orderNumber)
   );
 
   const { value: attn, bind: bindAttn } = useInput(

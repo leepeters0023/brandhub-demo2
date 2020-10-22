@@ -89,10 +89,10 @@ const currentOrderSlice = createSlice({
     },
     getCurrentOrderSuccess(state, action) {
       const { order, itemReference } = action.payload;
-      if (order.type === "in-stock") {
+      if (order.type === "In Stock") {
         state.inStockOrderNumber = order.id;
         state.inStockOrderItems = itemReference;
-      } else if (order.type === "on-demand") {
+      } else if (order.type === "On Demand") {
         state.onDemandOrderNumber = order.id;
         state.onDemandOrderItems = itemReference;
       }
