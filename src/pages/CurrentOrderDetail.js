@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
-import addDays from "date-fns/addDays";
-import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { updateOrderNote, fetchOrderSet } from "../redux/slices/orderSetSlice";
+import { fetchOrderSet } from "../redux/slices/orderSetSlice";
 
 import {
   deleteSetItem,
@@ -25,8 +23,6 @@ import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import Loading from "../components/Utility/Loading";
 
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
@@ -34,13 +30,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Container from "@material-ui/core/Container";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -76,11 +65,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [modal, handleModal] = useCallback(useState(false));
-  const [terms, setTerms] = useCallback(useState(false));
-  const [rush, setRush] = useCallback(useState(false));
-  const [dueDate, setDueDate] = useCallback(
-    useState(format(addDays(new Date(), 28), "MM/dd/yyyy"))
-  );
+  const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const orderNote = useSelector((state) => state.orderSet.orderNote);
@@ -138,18 +123,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     dispatch(deleteSetOrder(id));
   };
 
-  const handleOrderNote = (evt) => {
-    dispatch(updateOrderNote({ value: evt.target.value }));
-  };
-
   const handleSave = () => {
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
-  };
-
-  const handleDate = (date) => {
-    console.log(date);
-    console.log(format(date, "MM/dd/yyyy"));
-    setDueDate(format(date, "MM/dd/yyyy"));
   };
 
   const handleSubmit = () => {
@@ -163,7 +138,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     //TODO send due date and rush status as well when available on api
     dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
     dispatch(setOrderSetNotes(currentOrderId, orderNote));
-    setTerms(false);
   };
 
   const handleApproval = () => {
@@ -393,11 +367,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           )}
         </div>
         <br />
-        {(orderStatus === "approved" || orderStatus === "submitted") &&
-        (currentUserRole === "field1" ||
-          (!window.location.hash.includes("approval") &&
-            !window.location.href.includes("rollup"))) ? (
-          <OrderSetOverview />
+        {overviewVisible ||
+        ((orderStatus === "approved" || orderStatus === "submitted") &&
+          (currentUserRole === "field1" ||
+            (!window.location.hash.includes("approval") &&
+              !window.location.href.includes("rollup")))) ? (
+          <OrderSetOverview setOverviewVisible={setOverviewVisible}/>
         ) : (
           <OrderSetTable
             currentProgram={undefined}
@@ -418,179 +393,64 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         )}
         <br />
         <br />
-        {((orderStatus !== "submitted" &&
-          orderStatus !== "approved" &&
-          currentUserRole === "field1") ||
-          (currentUserRole !== "field1" &&
-            window.location.hash.includes("approval")) ||
-          (currentUserRole !== "field1" &&
-            orderStatus !== "submitted" &&
-            orderStatus !== "approved" &&
-            !window.location.hash.includes("approval"))) && (
-          <>
-            <Grid container spacing={5}>
-              <Grid item md={7} xs={12}>
-                {orderStatus === "in-progress" && (
-                  <>
-                    <Typography className={classes.headerText}>
-                      TERMS AND CONDITIONS
-                    </Typography>
-                    <br />
-                    <Typography className={classes.bodyText}>
-                      Use of this site is subject to all Gallo use policies. By
-                      using this site, you warrant that you are a Gallo or Gallo
-                      Sales employee and that you have reviewed, read, and
-                      understand the Compliance rules below associated with this
-                      site and with your intended order. You further warrant
-                      that you will not, under any circumstances, order items
-                      for use in stated where prohibited or use items in a
-                      prohibited manner. If you have any questions, please
-                      contact your Compliance representative.
-                    </Typography>
-                    <br />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={terms}
-                          onChange={() => {
-                            setTerms(!terms);
-                          }}
-                          name="Terms"
-                          color="primary"
-                        />
-                      }
-                      label=" I have read and accept the Terms and Conditions"
-                    />
-                    <br />
-                    <br />
-                  </>
-                )}
-              </Grid>
-              <Grid item md={5} xs={12}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Typography className={classes.headerText}>
-                    Order Notes
-                  </Typography>
-                  <Typography
-                    className={classes.bodyText}
-                    color="textSecondary"
-                  >
-                    {`${(orderNote && orderNote.length) || "0"} / 300`}
-                  </Typography>
-                </div>
-                <br />
-                <TextField
-                  color="secondary"
-                  multiline
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  rows="5"
-                  value={orderNote}
-                  onChange={handleOrderNote}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={rush}
-                        onChange={() => {
-                          setRush(!rush);
-                        }}
-                        name="Rush Order"
-                        color="primary"
-                      />
-                    }
-                    label=" Set Rush Order"
-                  />
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                      color="secondary"
-                      disableToolbar
-                      variant="inline"
-                      format="MM/dd/yyyy"
-                      margin="normal"
-                      id="dueDate"
-                      label="Due Date"
-                      value={dueDate}
-                      onChange={(value) => handleDate(value)}
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                    />
-                  </MuiPickersUtilsProvider>
-                </div>
-              </Grid>
-            </Grid>
-          </>
-        )}
-        <>
-          <br />
-          <div className={classes.orderControl}>
-            {((orderStatus === "in-progress" && currentUserRole === "field1") ||
-              (currentUserRole !== "field1" &&
-                window.location.hash.includes("approval")) ||
-              window.location.href.includes("rollup")) && (
+        <div className={classes.orderControl}>
+          {((orderStatus === "in-progress" && currentUserRole === "field1") ||
+            (currentUserRole !== "field1" &&
+              window.location.hash.includes("approval")) ||
+            window.location.href.includes("rollup")) && (
+            <Button
+              className={classes.largeButton}
+              color="secondary"
+              variant="contained"
+              onClick={handleSave}
+              style={{ marginRight: "10px" }}
+            >
+              SAVE ORDER
+            </Button>
+          )}
+          {orderStatus === "in-progress" && overviewVisible && (
+            <Button
+              className={classes.largeButton}
+              color="secondary"
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              SUBMIT ORDER
+            </Button>
+          )}
+          {orderStatus === "in-progress" && !overviewVisible && (
+            <Button
+              className={classes.largeButton}
+              color="secondary"
+              variant="contained"
+              onClick={() => setOverviewVisible(true)}
+            >
+              ORDER OVERVIEW
+            </Button>
+          )}
+          {window.location.hash.includes("approval") && (
+            <>
               <Button
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                onClick={handleSave}
+                onClick={handleApproval}
                 style={{ marginRight: "10px" }}
               >
-                SAVE ORDER
+                APPROVE
               </Button>
-            )}
-            {orderStatus === "in-progress" && (
               <Button
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                disabled={!terms}
-                onClick={handleSubmit}
+                onClick={() => console.log("denied!")}
               >
-                SUBMIT ORDER
+                DENY
               </Button>
-            )}
-            {window.location.hash.includes("approval") && (
-              <>
-                <Button
-                  className={classes.largeButton}
-                  color="secondary"
-                  variant="contained"
-                  disabled={!terms && currentUserRole === "field1"}
-                  onClick={handleApproval}
-                  style={{ marginRight: "10px" }}
-                >
-                  APPROVE
-                </Button>
-                <Button
-                  className={classes.largeButton}
-                  color="secondary"
-                  variant="contained"
-                  disabled={!terms && currentUserRole === "field1"}
-                  onClick={() => console.log("denied!")}
-                >
-                  DENY
-                </Button>
-              </>
-            )}
-          </div>
-        </>
+            </>
+          )}
+        </div>
+
         <br />
         <br />
       </Container>

@@ -9,7 +9,6 @@ import {
 
 import {
   fetchProgramOrders,
-  updateOrderNote,
 } from "../redux/slices/orderSetSlice";
 
 import {
@@ -17,7 +16,6 @@ import {
   deleteSetOrder,
   setOrderSetNotes,
   submitOrdSet,
-  startOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -36,12 +34,7 @@ import AccordianDetails from "@material-ui/core/AccordionDetails";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputBase from "@material-ui/core/InputBase";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Typography from "@material-ui/core/Typography";
-import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -125,7 +118,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
 
   const [open, setOpen] = useCallback(useState(true));
-  const [terms, setTermsChecked] = useCallback(useState(false));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   const [program, setProgram] = useState(undefined);
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
@@ -190,7 +182,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const handleSubmit = () => {
     dispatch(submitOrdSet(program, "submitted", preOrderId));
     dispatch(setOrderSetNotes(preOrderId, preOrderNote));
-    setTermsChecked(false);
   };
 
   const handleProgramIdHash = useCallback(() => {
@@ -201,10 +192,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     setProgram(id);
     window.location.hash = id;
   }, []);
-
-  const handlePreOrderNote = (evt) => {
-    dispatch(updateOrderNote({ value: evt.target.value }));
-  };
 
   useEffect(() => {
     if (window.location.hash.length === 0) {
@@ -374,79 +361,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         <br />
         {preOrderStatus !== "submitted" && (
           <>
-            <Grid container spacing={5}>
-              <Grid item md={7} xs={12}>
-                <Typography className={classes.headerText}>
-                  TERMS AND CONDITIONS
-                </Typography>
-                <br />
-                <Typography className={classes.bodyText}>
-                  Use of this site is subject to all Gallo use policies. By
-                  using this site, you warrant that you are a Gallo or Gallo
-                  Sales employee and that you have reviewed, read, and
-                  understand the Compliance rules below associated with this
-                  site and with your intended order. You further warrant that
-                  you will not, under any circumstances, order items for use in
-                  stated where prohibited or use items in a prohibited manner.
-                  If you have any questions, please contact your Compliance
-                  representative.
-                </Typography>
-                <br />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={terms}
-                      onChange={() => {
-                        setTermsChecked(!terms);
-                        if (preOrderStatus === "inactive") {
-                          dispatch(
-                            startOrdSet(program, "in-progress", preOrderId)
-                          );
-                        }
-                      }}
-                      name="Terms"
-                      color="primary"
-                    />
-                  }
-                  label=" I have read and accept the Terms and Conditions"
-                />
-              </Grid>
-              <Grid item md={5} xs={12}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  <Typography className={classes.headerText}>
-                    Order Notes
-                  </Typography>
-                  <Typography
-                    className={classes.bodyText}
-                    color="textSecondary"
-                  >
-                    {`${preOrderNote.length} / 300`}
-                  </Typography>
-                </div>
-                <br />
-                <TextField
-                  color="secondary"
-                  multiline
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                  rows="5"
-                  value={preOrderNote}
-                  onChange={handlePreOrderNote}
-                />
-                <br />
-                <br />
-              </Grid>
-            </Grid>
-            <br />
-            <br />
             <div className={classes.orderControl}>
               <Button
                 className={classes.largeButton}
@@ -462,7 +376,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                disabled={!terms}
                 onClick={handleSubmit}
               >
                 SUBMIT ORDER

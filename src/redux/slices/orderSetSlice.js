@@ -87,7 +87,7 @@ const orderSetSlice = createSlice({
       });
       currentOrder.items = [...newItems];
       currentOrder.totalItems = newTotalItems;
-      currentOrder.estTotal = newEstTotal;
+      currentOrder.totalEstCost = newEstTotal;
       orders.splice(orders.indexOf(currentOrder), 1, currentOrder);
       state.orders = [...orders];
     },

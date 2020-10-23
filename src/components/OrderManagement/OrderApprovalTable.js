@@ -258,7 +258,7 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell align="left">{row.id}</TableCell>
                     <TableCell align="left">{row.type}</TableCell>
-                    <TableCell align="left">{row.user}</TableCell>
+                    <TableCell align="left">{row.userName}</TableCell>
                     <TableCell align="left">
                       {row.program ? row.program : "---"}
                     </TableCell>
