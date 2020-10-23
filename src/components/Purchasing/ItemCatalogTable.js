@@ -20,8 +20,11 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
 
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="item-catalog">
+      <TableContainer
+        className={classes.tableContainer}
+        style={{ maxHeight: "Calc(100vh - 250px)" }}
+      >
+        <Table className={classes.table} aria-label="item-catalog" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell className={classes.headerText} align="left">
