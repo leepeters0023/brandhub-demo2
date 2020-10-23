@@ -12,16 +12,16 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
 
-import ItemOneSheet from "./ItemOneSheet";
-import ItemFeedback from "./ItemFeedback";
-import ItemAssembly from "./ItemAssembly";
+// import ItemOneSheet from "./ItemOneSheet";
+// import ItemFeedback from "./ItemFeedback";
+// import ItemAssembly from "./ItemAssembly";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+// import Tabs from "@material-ui/core/Tabs";
+// import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -42,33 +42,15 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
     },
   },
-  imgPreview: {
-    display: "flex",
-    height: "auto",
-  },
   largeImageWrapper: {
     display: "flex",
     alignItems: "center",
-    width: "75%",
+    width: "100%",
+    height: "fit-content",
   },
   largeImage: {
     width: "100%",
     height: "auto",
-  },
-  carousel: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-  },
-  previewImg: {
-    height: "25%",
-    width: "175px",
-    objectFit: "cover",
-    border: `5px solid ${theme.palette.secondary.dark}`,
-    "&:hover": {
-      cursor: "pointer",
-      border: `5px solid ${theme.palette.primary.main}`,
-    },
   },
   itemTitle: {
     display: "flex",
@@ -96,22 +78,29 @@ const ItemPreviewModal = (props) => {
       itemType,
       estCost,
       imgUrl,
-      qty,
+      packSize,
       stock,
+      coupon = false,
+      couponType = "MIR",
+      offerType = "Dual AB/NAB",
+      bottles,
+      bottleDiscount,
+      discountAmount,
+      startDate,
+      expirationDate,
     },
     handleClose,
     previewModal,
   } = props;
 
-  const [currentImage, setImage] = useState(imgUrl);
-  const [value, setValue] = useState(1);
+  // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderNumber);
 
-  const handleChangeTab = (_evt, newValue) => {
-    setValue(newValue);
-  };
+  // const handleChangeTab = (_evt, newValue) => {
+  //   setValue(newValue);
+  // };
 
   const handleModalClose = () => {
     setCurrentItem(null);
@@ -154,89 +143,106 @@ const ItemPreviewModal = (props) => {
               <CancelIcon fontSize="large" color="secondary" />
             </IconButton>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
-              <div className={classes.imgPreview}>
-                <div className={classes.largeImageWrapper}>
-                  <img
-                    className={classes.largeImage}
-                    src={currentImage || imgUrl}
-                    alt={`${brand} ${itemType}`}
-                  />
-                </div>
-                <div className={classes.carousel}>
-                  <img
-                    id={currentImage || imgUrl}
-                    className={classes.previewImg}
-                    src={currentImage || imgUrl}
-                    alt={`${brand} ${itemType}`}
-                    onClick={() => {
-                      setImage(currentImage || imgUrl);
-                    }}
-                  />
-                  <img
-                    id={currentImage || imgUrl}
-                    className={classes.previewImg}
-                    src={currentImage || imgUrl}
-                    alt={`${brand} ${itemType}`}
-                    onClick={() => {
-                      setImage(currentImage || imgUrl);
-                    }}
-                  />
-                  <img
-                    id={currentImage || imgUrl}
-                    className={classes.previewImg}
-                    src={currentImage || imgUrl}
-                    alt={`${brand} ${itemType}`}
-                    onClick={() => {
-                      setImage(currentImage || imgUrl);
-                    }}
-                  />
-                </div>
+              <div className={classes.largeImageWrapper}>
+                <img
+                  className={classes.largeImage}
+                  src={imgUrl}
+                  alt={`${brand} ${itemType}`}
+                />
               </div>
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
-              <Typography color="textSecondary" variant="body2">
-                {brand}
-              </Typography>
-              <div className={classes.itemTitle}>
-                <Typography className={classes.titleText} variant="h2">
-                  {`${brand} ${itemType}`}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  variant="body2"
-                  className={classes.itemNumber}
-                >
-                  {` | #${itemNumber}`}
-                </Typography>
-              </div>
-              <Typography className={classes.headerText} variant="h5">
-                {`${formatMoney(estCost)}`}
-              </Typography>
-              <Box bgcolor="primary.main" className={classes.dividerBox} />
-              <br />
-              <Typography className={classes.bodyText} variant="body1">
-                Item description here
-              </Typography>
-              <Typography className={classes.bodyText} variant="body1">
-                - Item bullet point
-              </Typography>
-              <Typography className={classes.bodyText} variant="body1">
-                - Item bullet point
-              </Typography>
-              <Typography className={classes.bodyText} variant="body1">
-                - Item bullet point
-              </Typography>
-              <br />
-              {type === "inStock" && (
-                <Typography variant="body1" color="textSecondary">
-                  {`Amount Available: ${stock}`}
-                </Typography>
+              {!coupon && (
+                <>
+                  <Typography variant="body1" color="textSecondary">
+                    {`#${itemNumber}`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Brand(s): ${brand}`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Program: ${brand} Winter 2021`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Item Type: ${itemType}`}
+                  </Typography>
+                  <br />
+                  <Box bgcolor="primary.main" className={classes.dividerBox} />
+                  <br />
+                  <Typography className={classes.headerText} variant="h5">
+                    {`Est. Cost: ${formatMoney(estCost)}`}
+                  </Typography>
+                  <br />
+                  <Typography variant="body1" color="textSecondary">
+                    {`Pack Size: ${packSize}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Available to Order: 10/01/2020 - 12/01/2020`}
+                  </Typography>
+                  {type === "inStock" && (
+                    <Typography variant="body1" color="textSecondary">
+                      {`Amount Available: ${stock}`}
+                    </Typography>
+                  )}
+                </>
+              )}
+              {coupon && (
+                <>
+                  <Typography variant="body1" color="textSecondary">
+                    {`#${itemNumber}`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Brand(s): ${brand}`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Program: ${brand} Winter 2021`}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {/* {`Item Type: ${itemType}`} */}
+                    {"Item Type: Necker Coupon"}
+                  </Typography>
+                  <Typography className={classes.headerText}>
+                    {`Coupon Type: ${couponType}`}
+                  </Typography><Typography className={classes.headerText}>
+                    {`Offer Type: ${offerType}`}
+                  </Typography>
+                  <br />
+                  <Box bgcolor="primary.main" className={classes.dividerBox} />
+                  <br />
+                  <Typography className={classes.headerText} variant="h5">
+                    {`Est. Cost: ${formatMoney(estCost)}`}
+                  </Typography>
+                  <br />
+                  <Typography variant="body1" color="textSecondary">
+                    {`Pack Size: ${packSize}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Bottles: ${bottles ? bottles : "---"}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Bottle Discount: ${bottleDiscount ? formatMoney(bottleDiscount) : "---"}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Discount Amount: ${discountAmount ? formatMoney(discountAmount) : "---"}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Promotion Start: ${startDate ? startDate : "---"}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Expiration Date: ${expirationDate ? expirationDate : "---"}`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Available to Order: 10/01/2020 - 12/01/2020`}
+                  </Typography>
+                  {type === "inStock" && (
+                    <Typography variant="body1" color="textSecondary">
+                      {`Amount Available: ${stock}`}
+                    </Typography>
+                  )}
+                </>
               )}
               {type && (
                 <>
-                  <Typography variant="body1" color="textSecondary">
-                    {qty}
-                  </Typography>
                   <br />
                   <Box bgcolor="primary.main" className={classes.dividerBox} />
                   <br />
@@ -250,7 +256,6 @@ const ItemPreviewModal = (props) => {
                     className={classes.largeButton}
                     style={{
                       width: "150px",
-                      marginLeft: "5px",
                       marginTop: "10px",
                     }}
                     onClick={handleAddItem}
@@ -262,7 +267,7 @@ const ItemPreviewModal = (props) => {
             </Grid>
           </Grid>
           <br />
-          <Tabs
+          {/* <Tabs
             variant="fullWidth"
             value={value}
             onChange={handleChangeTab}
@@ -282,7 +287,7 @@ const ItemPreviewModal = (props) => {
           {value === 1 && <ItemOneSheet />}
           {value === 2 && <ItemFeedback />}
           {value === 3 && <ItemAssembly />}
-          <br />
+          <br /> */}
           {type !== "program" && type !== "catalog" && (
             <AddItemConfirmation type={type} item={currentItem} />
           )}

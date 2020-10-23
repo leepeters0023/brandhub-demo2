@@ -42,8 +42,11 @@ const OrderItemTableView = (props) => {
   const classes = useStyles();
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
-        <Table className={classes.table} aria-label="in-stock-table">
+      <TableContainer
+        className={classes.tableContainer}
+        style={{ maxHeight: "Calc(100vh - 250px)" }}
+      >
+        <Table className={classes.table} aria-label="item-table" stickyHeader>
           <TableHead>
             <TableRow>
               {/* <TableCell className={classes.headerText}></TableCell> */}
