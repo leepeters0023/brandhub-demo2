@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const OrderSetOverview = () => {
+const OrderSetOverview = ({ setOverviewVisible }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -132,11 +132,16 @@ const OrderSetOverview = () => {
               .reduce((a, b) => a + b)}`}
           </Typography>
           <Typography className={classes.headerText}>
-            {`Total Cost: ${formatMoney(orderSet.orderTotal)}`}
+            {`Freight Charge: ---`}
+          </Typography>
+          <Typography className={classes.headerText}>
+            {`Tax: ---`}
           </Typography>
           <br />
+          <Divider />
+          <br />
           <Typography className={classes.headerText}>
-            {`Order Notes: ${orderSet.orderNote}`}
+            {`Total Cost: ${formatMoney(orderSet.orderTotal)}`}
           </Typography>
           <br />
           {((currentUserRoll === "super" && orderSet.status !== "approved") ||
@@ -148,7 +153,11 @@ const OrderSetOverview = () => {
               variant="contained"
               color="primary"
               fullWidth
-              onClick={handleEditOrder}
+              onClick={() => {
+                orderSet.status === "in-progress"
+                  ? setOverviewVisible(false)
+                  : handleEditOrder();
+              }}
             >
               EDIT ORDER
             </Button>

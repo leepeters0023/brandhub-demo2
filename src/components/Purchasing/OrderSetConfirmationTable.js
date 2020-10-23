@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
+import format from "date-fns/format";
+import addDays from "date-fns/addDays";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -13,6 +15,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import Checkbox from "@material-ui/core/Checkbox";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -27,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollapseRow = ({ classes, rowData, items }) => {
+const CollapseRow = ({ classes, rowData, orders }) => {
   const [open, setOpen] = useCallback(useState(false));
 
   return (
@@ -42,17 +50,40 @@ const CollapseRow = ({ classes, rowData, items }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{rowData.id}</TableCell>
-        <TableCell align="left">{rowData.distributorName}</TableCell>
-        <TableCell align="left">
-          {`123 Road St., Burlington VT 05401`}
-        </TableCell>
+        <TableCell align="left">{rowData.itemNumber}</TableCell>
+        <TableCell align="left">{rowData.brand}</TableCell>
+        <TableCell align="left">{rowData.itemType}</TableCell>
+        <TableCell align="left">{formatMoney(rowData.estCost)}</TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
-        <TableCell align="left">{`${formatMoney(rowData.totalEstCost)}`}</TableCell>
-        <TableCell align="left">---</TableCell>
+        <TableCell align="left">{formatMoney(rowData.estTotal)}</TableCell>
+        <TableCell align="left">
+          {format(addDays(new Date(), 28), "MM/dd/yyyy")}
+        </TableCell>
+        <TableCell align="left">
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              fullWidth
+              color="secondary"
+              disableToolbar
+              variant="inline"
+              format="MM/dd/yyyy"
+              margin="normal"
+              id={`${rowData.id}-req-date`}
+              label=""
+              value={format(addDays(new Date(), 28), "MM/dd/yyyy")}
+              //onChange={(value) => handle this function!}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </TableCell>
+        <TableCell padding="checkbox">
+          <Checkbox />
+        </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1} style={{ overFlowX: "scroll" }}>
               <Typography
@@ -60,69 +91,47 @@ const CollapseRow = ({ classes, rowData, items }) => {
                 gutterBottom
                 component="div"
               >
-                Item Details
+                Item Allocations
               </Typography>
               <TableContainer>
                 <Table size="small" aria-label="item-details">
                   <TableHead>
                     <TableRow>
-                      <TableCell />
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Est. Cost:
+                          Order #
                         </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Total Items:
+                          Distributor ID
                         </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Est. Total:
+                          Distributor Name
                         </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Act. Total
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Typography className={classes.bodyText}>
-                          Tracking
+                          Total Allocated
                         </Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rowData.items.map((item, index) => (
-                      <TableRow key={`${rowData.id}-${item.id}`}>
+                    {orders.map((order) => (
+                      <TableRow key={`${rowData.id}-${order.id}`}>
                         <TableCell align="center">
-                          <div
-                            style={{
-                              width: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "flex-start",
-                            }}
-                          >
-                            <Typography variant="body2" color="textSecondary">
-                              {`${items[index].brand} - ${items[index].itemType}`}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                              {items[index].itemNumber}
-                            </Typography>
-                          </div>
+                          {order.id}
                         </TableCell>
                         <TableCell align="center">
-                          {`${formatMoney(item.estCost)}`}
+                          {order.distributorId}
                         </TableCell>
-                        <TableCell align="center">{item.totalItems}</TableCell>
+                        <TableCell align="center">{order.distributorName}</TableCell>
                         <TableCell align="center">
-                          {`${formatMoney(item.estTotal)}`}
+                          {order.items.find((item) => item.itemNumber === rowData.itemNumber).totalItems}
                         </TableCell>
-                        <TableCell align="center">---</TableCell>
-                        <TableCell align="center">---</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -150,32 +159,41 @@ const OrderSetConfirmationTable = ({ orders, items }) => {
             <TableRow>
               <TableCell />
               <TableCell className={classes.headerText} align="left">
-                Order #
+                Sequence #
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Distributor
+                Program
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Address
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Total Items
+                Item Type
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Est. Cost
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Act. Cost
+                Total Items
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Est. Total
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Std. Delivery
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Req. Delivery
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Rush
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
+            {items.map((item) => (
               <CollapseRow
-                key={order.id}
+                key={item.id}
                 classes={classes}
-                rowData={order}
-                items={items}
+                rowData={item}
+                orders={orders}
               />
             ))}
           </TableBody>

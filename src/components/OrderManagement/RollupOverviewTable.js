@@ -190,7 +190,7 @@ const RollupOverViewTable = ({
                   className={classes.orderHistoryRow}
                   onClick={() => {
                     navigate(
-                      `/rollup/detail/${row.id}#${row.user} - ${row.program}`
+                      `/rollup/detail/${row.id}#${row.userName} - ${row.program}`
                     );
                   }}
                 >
@@ -208,7 +208,7 @@ const RollupOverViewTable = ({
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
-                    {format(new Date(row.dueDate), "MM/dd/yyyy")}
+                    {row.dueDate !== "---" ? format(new Date(row.dueDate), "MM/dd/yyyy") : row.dueDate}
                   </TableCell>
                   <TableCell align="left">
                     {statusConverter(row.status)}
