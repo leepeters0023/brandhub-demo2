@@ -19,7 +19,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -143,17 +142,14 @@ const ItemCatalog = ({
             </Typography>
             <FilterChipList classes={classes} />
           </div>
-          {itemsLoading ? (
-            <CircularProgress />
-          ) : (
-            <OrderItemViewControl
-              type={"catalog"}
-              currentView={currentView}
-              handlePreview={handlePreview}
-              items={currentItems}
-              catalogType={catalogType}
-            />
-          )}
+          <OrderItemViewControl
+            type={"catalog"}
+            currentView={currentView}
+            handlePreview={handlePreview}
+            items={currentItems}
+            catalogType={catalogType}
+            isItemsLoading={itemsLoading}
+          />
         </>
       </Container>
       <br />

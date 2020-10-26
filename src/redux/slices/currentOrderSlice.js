@@ -44,7 +44,9 @@ let initialState = {
   orderUpdateLoading: false,
   inStockOrderNumber: null,
   inStockOrderItems: [],
+  selectedInStockItems: [],
   onDemandOrderNumber: null,
+  selectedOnDemandItems: [],
   onDemandOrderItems: [],
   userId: null,
   userName: null,
@@ -122,6 +124,28 @@ const currentOrderSlice = createSlice({
       state.orderUpdateLoading = false;
       state.error = null;
     },
+    addBulkItems(state, action) {
+      const { itemArray, type } = action.payload;
+      let items;
+      if (type === "inStock") {
+        items = [...state.inStockOrderItems];
+      } else if (type === "onDemand") {
+        items = [...state.onDemandOrderItems];
+      }
+      items.concat(itemArray)
+      state[`${type}OrderItems`] = items;
+      state.isLoading = false;
+      state.orderUpdateLoading = false;
+      state.error = null;
+    },
+    updateSelection(state, action) {
+      const { type, selectedItems } = action.payload;
+      state[type] = selectedItems;
+    },
+    clearItemSelections(state) {
+      state.selectedInStockItems = [];
+      state.selectedOnDemandItems = [];
+    },
     clearCurrentOrder(state) {
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -149,6 +173,9 @@ export const {
   createNewOrderSuccess,
   getCurrentOrderSuccess,
   addNewItem,
+  addBulkItems,
+  updateSelection,
+  clearItemSelections,
   clearCurrentOrder,
   updateSuccess,
   setFailure,
@@ -171,7 +198,7 @@ export const createNewOrder = (type, itemNumber) => async (dispatch) => {
       createNewOrderSuccess({
         type: type,
         orderId: newOrder.data.id,
-        item: { id: orderItem.data.id, itemNumber: orderItem.data.item.id },
+        item: { id: orderItem.data.item.id, itemNumber: orderItem.data.item["item-number"] },
       })
     );
   } catch (err) {
@@ -225,6 +252,7 @@ export const addNewOrderItem = (orderId, itemId, type) => async (dispatch) => {
     if (orderItem.error) {
       throw orderItem.error;
     }
+    console.log(orderItem)
     dispatch(
       addNewItem({
         item: {
@@ -238,3 +266,29 @@ export const addNewOrderItem = (orderId, itemId, type) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const addBulkOrderItems = (orderId, itemArray, type) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    let orderItems = [];
+    let orderErrors = [];
+    await Promise.all(
+      itemArray.map(async (id) => {
+        const itemStatus = await addOrderSetItem(orderId, id);
+        if (itemStatus.error) {
+          orderErrors.push(itemStatus.error)
+        } else {
+          orderItems.push({id: itemStatus.data.id, itemNumber: itemStatus.data.item["item-number"]})
+        }
+      })
+    )
+    if (orderItems.length > 0) {
+      dispatch(addBulkItems({itemArray: orderItems, type: type}))
+    }
+    if (orderErrors.length > 0) {
+      throw orderErrors.join(", ")
+    }
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
