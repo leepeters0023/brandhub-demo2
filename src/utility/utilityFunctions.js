@@ -62,7 +62,6 @@ export const formatMoney = (value) => {
 };
 
 export const roundUp = (value, rounder) => {
-  console.log(value, rounder)
   if (rounder === 1) {
     return value
   }

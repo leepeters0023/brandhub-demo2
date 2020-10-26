@@ -204,7 +204,6 @@ export const fetchOrder = (id) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
     let formattedOrder = mapSingleOrder(order.data);
     let formattedItems = mapOrderItems(order.data["order-items"]);
     dispatch(

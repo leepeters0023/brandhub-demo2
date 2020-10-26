@@ -199,7 +199,6 @@ const Users = () => {
 
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.id);
     resetSearch();
     //temporarily removing unused vars so build will work on netlify, not permenant
     console.log(

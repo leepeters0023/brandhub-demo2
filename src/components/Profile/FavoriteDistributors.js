@@ -31,7 +31,6 @@ const FavoriteDistributors = () => {
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
-    console.log(value);
     setCurrentDistributors(value);
     dispatch(setDistributors({distributors: value}))
   };

@@ -149,7 +149,6 @@ const MemoInputCell = React.memo(
                     if (parseInt(evt.target.value)%packSize === 0) {
                       dispatch(patchItem(itemId, evt.target.value, orderNumber));
                     } else {
-                      console.log(packSize)
                       let rounded = roundUp(parseInt(evt.target.value), packSize)
                       dispatch(
                         setGridItem({

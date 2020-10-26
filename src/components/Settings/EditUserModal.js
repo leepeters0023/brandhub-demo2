@@ -75,7 +75,6 @@ const EditUserModal = ({ modal, handleModalClose, currentUserId }) => {
 
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.id);
     //temporarily removing unused vars so build will work on netlify, not permenant
     console.log(
       firstName,

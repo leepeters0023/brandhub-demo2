@@ -66,7 +66,6 @@ const ProgramAutoComplete = ({
         inputValue={program}
         onInputChange={(_evt, value) => setProgram(value)}
         onChange={(evt, value) => {
-          console.log(value)
           handleChange(value, "program", filterType);
           handlePrograms(value);
         }}

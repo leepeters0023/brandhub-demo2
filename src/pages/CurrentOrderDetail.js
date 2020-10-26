@@ -102,7 +102,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
 
   const handleOpenConfirm = useCallback(
     (itemNum, itemId) => {
-      console.log(itemNum, itemId);
       setCurrentItemNum(itemNum);
       setCurrentItemId(itemId);
       handleConfirmModal(true);

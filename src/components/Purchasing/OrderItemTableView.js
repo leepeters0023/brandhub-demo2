@@ -38,7 +38,7 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, rowCount, onSelectAllClick, numSelected, type } = props;
+  const { classes, rowCount, onSelectAllClick, numSelected, type, orderLength } = props;
 
   const currentHeader =
     type !== "inStock"
@@ -51,7 +51,7 @@ const EnhancedTableHead = (props) => {
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            checked={rowCount > 0 && numSelected === rowCount - orderLength}
             onChange={onSelectAllClick}
             inputProps={{ "aria-label": "select all items" }}
           />
@@ -109,11 +109,24 @@ const OrderItemTableView = (props) => {
   const selectedItems = useSelector(
     (state) => state.currentOrder[formattedType]
   );
-  console.log(selectedItems);
+  const currentOrderItems = useSelector(
+    (state) => state.currentOrder[`${type}OrderItems`]
+  );
 
   const handleSelectAllClick = (event) => {
+    console.log(event.target.checked)
     if (event.target.checked) {
-      const newSelecteds = currentItems.map((item) => item.id);
+      const newSelecteds = [];
+      currentItems.forEach((item) => {
+        if (
+          currentOrderItems.filter(
+            (orderItem) => item.itemNumber === orderItem.itemNumber
+          ).length === 0
+        ) {
+          newSelecteds.push(item.id);
+        }
+      });
+      //const newSelecteds = currentItems.map((item) => item.id);
       dispatch(
         updateSelection({ type: formattedType, selectedItems: newSelecteds })
       );
@@ -159,6 +172,7 @@ const OrderItemTableView = (props) => {
             onSelectAllClick={handleSelectAllClick}
             rowCount={currentItems.length}
             type={type}
+            orderLength={currentOrderItems.length}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -182,6 +196,11 @@ const OrderItemTableView = (props) => {
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
+                        disabled={
+                          currentOrderItems.filter(
+                            (item) => item.itemNumber === row.itemNumber
+                          ).length !== 0
+                        }
                         onChange={(event) => {
                           handleClick(event, row.id);
                           event.stopPropagation();
@@ -234,7 +253,7 @@ const OrderItemTableView = (props) => {
                   </TableRow>
                 );
               })}
-              {isItemsLoading && (
+            {isItemsLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={type === "inStock" ? 10 : 9}>
                   <CircularProgress />

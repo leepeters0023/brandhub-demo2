@@ -9,6 +9,10 @@ import {
   approveOrdSet,
 } from "../../redux/slices/patchOrderSlice";
 
+import {
+  clearCurrentOrder
+} from "../../redux/slices/currentOrderSlice";
+
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import OrderSetConfirmationTable from "./OrderSetConfirmationTable";
@@ -46,6 +50,10 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
   const handleApproval = () => {
     dispatch(approveOrdSet(orderSet.orderId, "approved", null));
   };
+
+  const handleLeavePage = () => {
+    dispatch(clearCurrentOrder());
+  }
 
   useEffect(() => {
     if (orderSet && currentCSV.data.length === 0) {
@@ -208,6 +216,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     color="secondary"
                     variant="contained"
                     component={Link}
+                    onClick={handleLeavePage}
                     to="/"
                   >
                     DASHBOARD
@@ -220,6 +229,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     color="secondary"
                     variant="contained"
                     component={Link}
+                    onClick={handleLeavePage}
                     to="/orders/open/preorder"
                   >
                     PLACE QUARTERLY ORDER
@@ -232,6 +242,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     color="secondary"
                     variant="contained"
                     component={Link}
+                    onClick={handleLeavePage}
                     to="/orders/items/inStock"
                   >
                     PLACE IN-STOCK ORDER
@@ -244,6 +255,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     color="secondary"
                     variant="contained"
                     component={Link}
+                    onClick={handleLeavePage}
                     to="/orders/items/onDemand"
                   >
                     PLACE ON-DEMAND ORDER
@@ -256,6 +268,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     color="secondary"
                     variant="contained"
                     component={Link}
+                    onClick={handleLeavePage}
                     to="/orders/history"
                   >
                     ORDER HISTORY
