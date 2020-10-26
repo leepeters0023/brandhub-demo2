@@ -9,13 +9,15 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
+const ItemCatalogTable = ({ currentItems, handlePreview, catalogType, isItemsLoading }) => {
   const classes = useStyles();
 
   return (
@@ -56,7 +58,16 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentItems.map((item) => (
+          {!isItemsLoading && currentItems.length === 0 && (
+              <TableRow>
+                <TableCell align="left" colSpan={catalogType === "inStock" ? 8 : 7}>
+                  <Typography className={classes.headerText}>
+                    {`There are no items that match the current search criteria..`}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            )}
+            {!isItemsLoading && currentItems.length > 0 && currentItems.map((item) => (
               <TableRow key={item.id} hover>
                 <TableCell align="left">
                   <img
@@ -78,6 +89,13 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType }) => {
                 <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
               </TableRow>
             ))}
+            {isItemsLoading && (
+              <TableRow>
+                <TableCell align="left" colSpan={catalogType === "inStock" ? 8 : 7}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

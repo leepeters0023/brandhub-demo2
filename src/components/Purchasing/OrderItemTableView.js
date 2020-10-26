@@ -3,6 +3,14 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  updateSelection,
+  clearItemSelections,
+} from "../../redux/slices/currentOrderSlice";
+
+import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,11 +18,65 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AddBoxIcon from "@material-ui/icons/AddBox";
 import CancelIcon from "@material-ui/icons/Cancel";
 import ShareIcon from "@material-ui/icons/Share";
+
+const headCells = [
+  { id: "preview", label: "Preview" },
+  { id: "program", label: "Program" },
+  { id: "itemType", label: "Item Type" },
+  { id: "sequenceNum", label: "Sequence #" },
+  { id: "brand", label: "Brand" },
+  { id: "packSize", label: "Pack Size" },
+  { id: "stock", label: "On Hand" },
+  { id: "estCost", label: "Est. Cost" },
+  { id: "action", label: "" },
+];
+
+const EnhancedTableHead = (props) => {
+  const { classes, rowCount, onSelectAllClick, numSelected, type } = props;
+
+  const currentHeader =
+    type !== "inStock"
+      ? headCells.filter((cell) => cell.id !== "stock")
+      : headCells;
+
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ "aria-label": "select all items" }}
+          />
+        </TableCell>
+        {currentHeader.map((headCell) => (
+          <TableCell
+            className={classes.headerText}
+            key={headCell.id}
+            align="left"
+          >
+            {headCell.label}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
+
+EnhancedTableHead.propTypes = {
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  rowCount: PropTypes.number.isRequired,
+  type: PropTypes.string,
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -38,8 +100,52 @@ const OrderItemTableView = (props) => {
     handlePreview,
     handleAddItem,
     setCurrentItemAdded,
+    isItemsLoading,
   } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const formattedType = `selected${type[0].toUpperCase() + type.slice(1)}Items`;
+
+  const selectedItems = useSelector(
+    (state) => state.currentOrder[formattedType]
+  );
+  console.log(selectedItems);
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = currentItems.map((item) => item.id);
+      dispatch(
+        updateSelection({ type: formattedType, selectedItems: newSelecteds })
+      );
+      return;
+    }
+    dispatch(clearItemSelections());
+  };
+
+  const handleClick = (_event, id) => {
+    const selectedIndex = selectedItems.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selectedItems, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selectedItems.slice(1));
+    } else if (selectedIndex === selectedItems.length - 1) {
+      newSelected = newSelected.concat(selectedItems.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selectedItems.slice(0, selectedIndex),
+        selectedItems.slice(selectedIndex + 1)
+      );
+    }
+
+    dispatch(
+      updateSelection({ type: formattedType, selectedItems: newSelected })
+    );
+  };
+
+  const isSelected = (id) => selectedItems.indexOf(id) !== -1;
+
   return (
     <>
       <TableContainer
@@ -47,113 +153,94 @@ const OrderItemTableView = (props) => {
         style={{ maxHeight: "Calc(100vh - 250px)" }}
       >
         <Table className={classes.table} aria-label="item-table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              {/* <TableCell className={classes.headerText}></TableCell> */}
-              <TableCell className={classes.headerText} align="left">
-                Preview
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Program
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Item Type
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Item #
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Brand
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Qty / Pack
-              </TableCell>
-              {type === "inStock" && (
-                <TableCell className={classes.headerText} align="left">
-                  Stock
-                </TableCell>
-              )}
-              <TableCell className={classes.headerText} align="left">
-                Cost
-              </TableCell>
-              <TableCell
-                className={classes.headerText}
-                classes={{ root: classes.root }}
-                align="center"
-              >
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <EnhancedTableHead
+            classes={classes}
+            numSelected={selectedItems.length}
+            onSelectAllClick={handleSelectAllClick}
+            rowCount={currentItems.length}
+            type={type}
+          />
           <TableBody>
-            {currentItems.map((row) => (
-              <TableRow key={row.id} hover>
-                {/* <TableCell component="th" scope="row">
-                  <Tooltip title="Favorite">
-                    <IconButton>
-                      <StarBorderIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell> */}
-                <TableCell align="left">
-                  <img
-                    id={row.id}
-                    className={classes.previewImageFloat}
-                    src={row.imgUrl}
-                    alt={row.itemType}
-                    onClick={() => {
-                      handlePreview(row.itemNumber);
-                      setCurrentItemAdded(null);
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="left">{row.brand}</TableCell>
-                <TableCell align="left">{row.itemType}</TableCell>
-                <TableCell align="left">{row.itemNumber}</TableCell>
-                <TableCell align="left">{row.brand}</TableCell>
-                <TableCell align="left">{row.packSize}</TableCell>
-                {type === "inStock" && <TableCell>{row.stock}</TableCell>}
-                <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
-                <TableCell align="center">
-                  <div className={classes.tableButtonWrapper}>
-                    {type !== "new-program" && type !== "new-program-current" && (
-                      <IconButton
-                        id={`${row.id}`}
-                        style={{ margin: "5px 2.5px" }}
-                      >
-                        <ShareIcon />
-                      </IconButton>
-                    )}
-
-                    {type !== "program" && type !== "new-program-current" && (
-                      <IconButton
-                        id={`${row.id}`}
-                        style={{ margin: "5px 2.5px" }}
-                        value=""
-                        onClick={(evt) => {
-                          handleAddItem(row);
-                        }}
-                      >
-                        <AddBoxIcon />
-                      </IconButton>
-                    )}
-                    {type === "new-program-current" && (
-                      <>
-                        <IconButton
-                          id={`${row.id}`}
-                          style={{ margin: "5px 2.5px" }}
-                          onClick={() => {
-                            handleAddItem(row, true);
-                          }}
-                        >
-                          <CancelIcon />
-                        </IconButton>
-                      </>
-                    )}
-                  </div>
+            {!isItemsLoading && currentItems.length === 0 && (
+              <TableRow>
+                <TableCell align="left" colSpan={type === "inStock" ? 10 : 9}>
+                  <Typography className={classes.headerText}>
+                    {`There are no items that match the current search criteria..`}
+                  </Typography>
                 </TableCell>
               </TableRow>
-            ))}
+            )}
+            {!isItemsLoading &&
+              currentItems.length > 0 &&
+              currentItems.map((row, index) => {
+                const isItemSelected = isSelected(row.id);
+                const labelId = `item-Checkbox-${index}`;
+                return (
+                  <TableRow key={row.id} hover>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, row.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="left">
+                      <img
+                        id={row.id}
+                        className={classes.previewImageFloat}
+                        src={row.imgUrl}
+                        alt={row.itemType}
+                        onClick={() => {
+                          handlePreview(row.itemNumber);
+                          setCurrentItemAdded(null);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="left">{row.brand}</TableCell>
+                    <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.itemNumber}</TableCell>
+                    <TableCell align="left">{row.brand}</TableCell>
+                    <TableCell align="left">{row.packSize}</TableCell>
+                    {type === "inStock" && <TableCell>{row.stock}</TableCell>}
+                    <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
+                    <TableCell align="center">
+                      {type !== "new-program" &&
+                        type !== "new-program-current" && (
+                          <IconButton
+                            id={`${row.id}`}
+                            style={{ margin: "5px 2.5px" }}
+                          >
+                            <ShareIcon />
+                          </IconButton>
+                        )}
+                      {type === "new-program-current" && (
+                        <>
+                          <IconButton
+                            id={`${row.id}`}
+                            style={{ margin: "5px 2.5px" }}
+                            onClick={() => {
+                              handleAddItem(row, true);
+                            }}
+                          >
+                            <CancelIcon />
+                          </IconButton>
+                        </>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+              {isItemsLoading && (
+              <TableRow>
+                <TableCell align="left" colSpan={type === "inStock" ? 10 : 9}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

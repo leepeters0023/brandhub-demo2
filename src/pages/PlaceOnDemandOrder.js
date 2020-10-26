@@ -23,7 +23,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -36,7 +36,7 @@ const defaultFilters = {
   bu: [],
   program: [],
   sequenceNum: "",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -52,6 +52,9 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);
+  const selectedItems = useSelector(
+    (state) => state.currentOrder.selectedOnDemandItems
+  );
   const currentOrder = useSelector((state) => state.currentOrder);
   const userId = useSelector((state) => state.user.id);
 
@@ -118,6 +121,18 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={selectedItems.length === 0}
+              onClick={() => {
+                console.log("click");
+              }}
+              style={{ marginRight: "20px" }}
+            >
+              ADD TO ORDER
+            </Button>
             <Tooltip title="View Current Order">
               <IconButton
                 component={Link}
@@ -171,16 +186,13 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <>
-          {itemsLoading ? (
-            <CircularProgress />
-          ) : (
-            <OrderItemViewControl
-              type={"onDemand"}
-              currentView={currentView}
-              handlePreview={handlePreview}
-              items={currentItems}
-            />
-          )}
+          <OrderItemViewControl
+            type={"onDemand"}
+            currentView={currentView}
+            handlePreview={handlePreview}
+            items={currentItems}
+            isItemsLoading={itemsLoading}
+          />
         </>
       </Container>
       <br />

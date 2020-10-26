@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import Loading from "../Utility/Loading";
+
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -73,8 +75,13 @@ const OrderItemGridView = (props) => {
     handlePreview,
     handleAddItem,
     setCurrentItemAdded,
+    isItemsLoading
   } = props;
   const classes = useStyles();
+
+  if (isItemsLoading) {
+    return <Loading />
+  }
 
   return (
     <Container className={classes.mainWrapper}>

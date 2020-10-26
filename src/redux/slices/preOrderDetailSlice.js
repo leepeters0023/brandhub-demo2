@@ -106,7 +106,7 @@ export const fetchPreOrders = (id, type) => async (dispatch) => {
           ? ["National"]
           : order["territory-names"].split(", "),
       totalItems: order["total-quantity"],
-      totalEstCost: order["total-cost"],
+      totalEstCost: order["total-estimated-cost"],
       status: order.status,
     }));
     let totalCost = preOrders

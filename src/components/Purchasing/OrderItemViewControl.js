@@ -15,7 +15,7 @@ import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, items, catalogType, secondaryAddFunction } = props;
+  const { type, currentView, handlePreview, items, catalogType, secondaryAddFunction, isItemsLoading } = props;
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
@@ -50,6 +50,7 @@ const OrderItemViewControl = (props) => {
           currentItems={items}
           handlePreview={handlePreview}
           catalogType={catalogType}
+          isItemsLoading={isItemsLoading}
         />
       )}
       {currentView === "grid" && type === "catalog" && (
@@ -57,6 +58,7 @@ const OrderItemViewControl = (props) => {
           currentItems={items}
           handlePreview={handlePreview}
           catalogType={catalogType}
+          isItemsLoading={isItemsLoading}
         />
       )}
       {currentView === "list" && type !== "catalog" && (
@@ -66,6 +68,7 @@ const OrderItemViewControl = (props) => {
           handlePreview={handlePreview}
           handleAddItem={handleAddItem}
           setCurrentItemAdded={setCurrentItemAdded}
+          isItemsLoading={isItemsLoading}
         />
       )}
       {currentView === "grid" && type !== "catalog" && (
@@ -75,6 +78,7 @@ const OrderItemViewControl = (props) => {
           handlePreview={handlePreview}
           handleAddItem={handleAddItem}
           setCurrentItemAdded={setCurrentItemAdded}
+          isItemsLoading={isItemsLoading}
         />
       )}
       {type !== "program" && type !== "catalog" && (
@@ -89,12 +93,14 @@ OrderItemViewControl.propTypes = {
   currentView: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
   items: PropTypes.array,
+  isItemsLoading: PropTypes.bool.isRequired,
 };
 
 export default React.memo(OrderItemViewControl, (prev, next) => {
   return (
     prev.type === next.type &&
     prev.currentView === next.currentView &&
-    prev.items.length === next.items.length
+    prev.items.length === next.items.length &&
+    prev.isItemsLoading === next.isItemsLoading
   )
 });

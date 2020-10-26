@@ -139,13 +139,9 @@ const orderSetSlice = createSlice({
     },
     removeGridOrder(state, action) {
       const { orderId } = action.payload;
-      let deleteOrder = state.orders.find(
-        (order) => order.id === orderId
-      );
+      let deleteOrder = state.orders.find((order) => order.id === orderId);
       state.orderTotal -= deleteOrder.estTotal;
-      let currentOrders = state.orders.filter(
-        (order) => order.id !== orderId
-      );
+      let currentOrders = state.orders.filter((order) => order.id !== orderId);
       state.orders = currentOrders;
       let currentItems = [...state.items];
       currentItems = currentItems.map((item) => {
@@ -221,7 +217,10 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
+    let currentItems = mapOrderItems(
+      currentOrders.data["order-set-items"],
+      "order-set-item"
+    );
     let orders = mapOrderHistoryOrders(currentOrders.data.orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
@@ -231,7 +230,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : 0;
     });
 
-    let orderTotal = currentOrders.data["total-cost"];
+    let orderTotal = currentOrders.data["total-estimated-cost"];
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
@@ -270,7 +269,10 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = mapOrderItems(currentOrders.data[0]["order-set-items"], "order-set-item")
+    let currentItems = mapOrderItems(
+      currentOrders.data[0]["order-set-items"],
+      "order-set-item"
+    );
     let orders = mapOrderHistoryOrders(currentOrders.data[0].orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
@@ -279,7 +281,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         ? 1
         : 0;
     });
-    let orderTotal = currentOrders.data[0]["total-cost"];
+    let orderTotal = currentOrders.data[0]["total-estimated-cost"];
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
