@@ -5,9 +5,7 @@ import {
   createOrderSet,
 } from "../../api/orderApi";
 
-import {
-  mapOrderSet
-} from "../apiMaps";
+import { mapOrderSet } from "../apiMaps";
 
 /*
 * Current Order Model
@@ -89,6 +87,15 @@ const currentOrderSlice = createSlice({
       state.orderUpdateLoading = false;
       state.error = null;
     },
+    createNewBulkOrderSuccess(state, action) {
+      const { type, orderId, itemArray } = action.payload;
+      state[`${type}OrderNumber`] = orderId;
+      state[`${type}OrderItems`] = itemArray;
+      state.orderId = orderId;
+      state.isLoading = false;
+      state.orderUpdateLoading = false;
+      state.error = null;
+    },
     getCurrentOrderSuccess(state, action) {
       const { order, itemReference } = action.payload;
       if (order.type === "In Stock") {
@@ -132,7 +139,7 @@ const currentOrderSlice = createSlice({
       } else if (type === "onDemand") {
         items = [...state.onDemandOrderItems];
       }
-      items.concat(itemArray)
+      items = items.concat(itemArray);
       state[`${type}OrderItems`] = items;
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -171,6 +178,7 @@ export const {
   setIsLoading,
   setUpdateLoading,
   createNewOrderSuccess,
+  createNewBulkOrderSuccess,
   getCurrentOrderSuccess,
   addNewItem,
   addBulkItems,
@@ -198,9 +206,51 @@ export const createNewOrder = (type, itemNumber) => async (dispatch) => {
       createNewOrderSuccess({
         type: type,
         orderId: newOrder.data.id,
-        item: { id: orderItem.data.item.id, itemNumber: orderItem.data.item["item-number"] },
+        item: {
+          id: orderItem.data.id,
+          itemNumber: orderItem.data.item["item-number"],
+        },
       })
     );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const createNewBulkItemOrder = (type, itemArray) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    let newOrder = await createOrderSet(type);
+    if (newOrder.error) {
+      throw newOrder.error;
+    }
+    let orderItems = [];
+    let orderErrors = [];
+    await Promise.all(
+      itemArray.map(async (id) => {
+        const itemStatus = await addOrderSetItem(newOrder.data.id, id);
+        if (itemStatus.error) {
+          orderErrors.push(itemStatus.error);
+        } else {
+          orderItems.push({
+            id: itemStatus.data.id,
+            itemNumber: itemStatus.data.item["item-number"],
+          });
+        }
+      })
+    );
+    if (orderItems.length > 0) {
+      dispatch(
+        createNewBulkOrderSuccess({
+          orderId: newOrder.data.id,
+          itemArray: orderItems,
+          type: type,
+        })
+      );
+    }
+    if (orderErrors.length > 0) {
+      throw orderErrors.join(", ");
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -252,7 +302,6 @@ export const addNewOrderItem = (orderId, itemId, type) => async (dispatch) => {
     if (orderItem.error) {
       throw orderItem.error;
     }
-    console.log(orderItem)
     dispatch(
       addNewItem({
         item: {
@@ -267,7 +316,9 @@ export const addNewOrderItem = (orderId, itemId, type) => async (dispatch) => {
   }
 };
 
-export const addBulkOrderItems = (orderId, itemArray, type) => async (dispatch) => {
+export const addBulkOrderItems = (orderId, itemArray, type) => async (
+  dispatch
+) => {
   try {
     dispatch(setUpdateLoading());
     let orderItems = [];
@@ -276,19 +327,22 @@ export const addBulkOrderItems = (orderId, itemArray, type) => async (dispatch) 
       itemArray.map(async (id) => {
         const itemStatus = await addOrderSetItem(orderId, id);
         if (itemStatus.error) {
-          orderErrors.push(itemStatus.error)
+          orderErrors.push(itemStatus.error);
         } else {
-          orderItems.push({id: itemStatus.data.id, itemNumber: itemStatus.data.item["item-number"]})
+          orderItems.push({
+            id: itemStatus.data.id,
+            itemNumber: itemStatus.data.item["item-number"],
+          });
         }
       })
-    )
+    );
     if (orderItems.length > 0) {
-      dispatch(addBulkItems({itemArray: orderItems, type: type}))
+      dispatch(addBulkItems({ itemArray: orderItems, type: type }));
     }
     if (orderErrors.length > 0) {
-      throw orderErrors.join(", ")
+      throw orderErrors.join(", ");
     }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};

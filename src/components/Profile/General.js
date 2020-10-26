@@ -38,7 +38,6 @@ const General = () => {
 
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
-    console.log(evt.target.id);
     //temporarily removing unused vars so build will work on netlify, not permenant
     console.log(oldPassword, updatePassword, confirmPassword)
     if (evt.target.id==="profile") {

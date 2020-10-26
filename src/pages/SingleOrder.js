@@ -36,7 +36,6 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
-  console.log(currentOrder);
 
   useEffect(() => {
     if (

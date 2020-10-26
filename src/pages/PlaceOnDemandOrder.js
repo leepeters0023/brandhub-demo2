@@ -4,7 +4,12 @@ import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchCurrentOrderByType } from "../redux/slices/currentOrderSlice";
+import {
+  fetchCurrentOrderByType,
+  addBulkOrderItems,
+  createNewBulkItemOrder,
+  clearItemSelections,
+} from "../redux/slices/currentOrderSlice";
 
 import {
   setFilterType,
@@ -62,10 +67,21 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
     handlePreviewModal(true);
+    dispatch(clearItemSelections());
   };
 
   const handleModalClose = () => {
     handlePreviewModal(false);
+  };
+
+  const handleAddToOrder = () => {
+    if (currentOrder.onDemandOrderItems.length === 0) {
+      dispatch(createNewBulkItemOrder("onDemand", selectedItems));
+    } else
+      dispatch(
+        addBulkOrderItems(currentOrder.orderId, selectedItems, "onDemand")
+      );
+    dispatch(clearItemSelections());
   };
 
   useEffect(() => {
@@ -126,9 +142,7 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
               variant="contained"
               color="secondary"
               disabled={selectedItems.length === 0}
-              onClick={() => {
-                console.log("click");
-              }}
+              onClick={handleAddToOrder}
               style={{ marginRight: "20px" }}
             >
               ADD TO ORDER

@@ -152,7 +152,6 @@ export const startOrdSet = (programId, value, orderSetId) => async (
       dispatch(setProgramStatus({ program: programId, status: value }));
     }
     const startStatus = await startOrderSet(orderSetId);
-    console.log(startStatus);
     if (startStatus.error) {
       throw startStatus.error;
     }

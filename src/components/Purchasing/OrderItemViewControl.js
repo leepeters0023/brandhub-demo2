@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewOrderItem,
   createNewOrder,
+  clearItemSelections,
 } from "../../redux/slices/currentOrderSlice";
 
 import OrderItemTableView from "./OrderItemTableView";
@@ -15,7 +16,15 @@ import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
 
 const OrderItemViewControl = (props) => {
-  const { type, currentView, handlePreview, items, catalogType, secondaryAddFunction, isItemsLoading } = props;
+  const {
+    type,
+    currentView,
+    handlePreview,
+    items,
+    catalogType,
+    secondaryAddFunction,
+    isItemsLoading,
+  } = props;
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
@@ -29,14 +38,16 @@ const OrderItemViewControl = (props) => {
         itemType: item.itemType,
       };
 
+      dispatch(clearItemSelections());
+
       if (secondaryAddFunction) {
-        secondaryAddFunction(item, remove)
+        secondaryAddFunction(item, remove);
       } else {
         setCurrentItemAdded(newItem);
         if (!currentOrderId) {
           dispatch(createNewOrder(type, item.id));
         } else {
-          dispatch(addNewOrderItem(currentOrderId, item.id, type))
+          dispatch(addNewOrderItem(currentOrderId, item.id, type));
         }
       }
     },
@@ -102,5 +113,5 @@ export default React.memo(OrderItemViewControl, (prev, next) => {
     prev.currentView === next.currentView &&
     prev.items.length === next.items.length &&
     prev.isItemsLoading === next.isItemsLoading
-  )
+  );
 });
