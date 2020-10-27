@@ -9,8 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
 
 import {
-  approveOrdSet,
   approveMultipleOrderSets,
+  deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
 import {
@@ -54,7 +54,7 @@ const defaultFilters = {
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
-//TODO figure out order denial process / notifications
+//TODO figure out notifications
 const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -96,9 +96,9 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(setSorted());
   };
 
-  const handleApproval = (id) => {
-    dispatch(approveOrdSet(id, "approved", allFilters));
-  };
+  const handleDeny = (id) => {
+    dispatch(deleteOrdSet(id, allFilters))
+  }
 
   const handleBulkApproval = () => {
     dispatch(approveMultipleOrderSets(selected, allFilters));
@@ -184,7 +184,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
           isOrdersLoading={isOrdersLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
-          handleApproval={handleApproval}
+          handleDeny={handleDeny}
           selected={selected}
           setSelected={setSelected}
         />

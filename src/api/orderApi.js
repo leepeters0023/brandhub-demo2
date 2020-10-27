@@ -325,6 +325,30 @@ export const deleteOrderSetItem = async (id) => {
   return response;
 };
 
+export const deleteOrderSet = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .delete(
+      `/api/order-sets/${id}`,
+      {
+        data: {
+          type: "order-set",
+          id: id,
+        }
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
 export const createOrderSet = async (type) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
