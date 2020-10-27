@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +9,8 @@ import {
 } from "../../redux/slices/patchOrderSlice";
 
 import {
-  clearCurrentOrder
+  clearCurrentOrder,
+  clearOrderByType,
 } from "../../redux/slices/currentOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -51,10 +51,6 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
     dispatch(approveOrdSet(orderSet.orderId, "approved", null));
   };
 
-  const handleLeavePage = () => {
-    dispatch(clearCurrentOrder());
-  }
-
   useEffect(() => {
     if (orderSet && currentCSV.data.length === 0) {
       let orderHeaders = [
@@ -91,7 +87,17 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       )}-${typeArray[1][0].toUpperCase()}${typeArray[1].slice(1)}`;
       setOrderType(typeString);
     }
-  }, [orderType, orderSet, setOrderType]);
+
+    return () => {
+      if (orderSet.type === "in-stock") {
+        dispatch(clearOrderByType({ type: "inStock" }));
+      }
+      if (orderSet.type === "on-demand") {
+        dispatch(clearOrderByType({ type: "onDemand" }));
+      }
+      dispatch(clearCurrentOrder());
+    };
+  }, [orderType, orderSet, setOrderType, dispatch]);
 
   return (
     <>
@@ -142,9 +148,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <Typography className={classes.headerText}>
             {`Freight Charge: ---`}
           </Typography>
-          <Typography className={classes.headerText}>
-            {`Tax: ---`}
-          </Typography>
+          <Typography className={classes.headerText}>{`Tax: ---`}</Typography>
           <br />
           <Divider />
           <br />
@@ -206,7 +210,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               <Typography className={classes.headerText}>
                 Thank you for your Submission!
               </Typography>
-              <br />
+              {/* <br />
               <br />
               {!window.location.href.includes("preorder") && (
                 <>
@@ -274,7 +278,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
                     ORDER HISTORY
                   </Button>
                 </>
-              )}
+              )} */}
             </>
           )}
           <br />

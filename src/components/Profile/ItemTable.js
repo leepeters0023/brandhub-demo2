@@ -70,7 +70,7 @@ const ItemTable = ({ items, isLoading }) => {
                   <TableCell align="left">
                   <img
                     id={item.itemNumber}
-                    className={classes.previewImageFloat}
+                    className={classes.previewImg}
                     src={item.imgUrl}
                     alt={item.itemType}
                   />
