@@ -22,6 +22,14 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
+            to="/items/all"
+          >
+            <ListItemText primary="All Items" />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
             to="/items/inStock"
           >
             <ListItemText primary="In-Stock" />

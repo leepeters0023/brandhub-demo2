@@ -165,6 +165,16 @@ const currentOrderSlice = createSlice({
       state.totalCost = 0;
       state.error = null;
     },
+    clearOrderByType(state, action) {
+      const { type } = action.payload;
+      if (type === "inStock") {
+        state.inStockOrderNumber = null;
+        state.inStockOrderItems = [];
+      } else if (type === "onDemand") {
+        state.onDemandOrderNumber = null;
+        state.onDemandOrderItems = [];
+      }
+    },
     updateSuccess(state) {
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -185,6 +195,7 @@ export const {
   updateSelection,
   clearItemSelections,
   clearCurrentOrder,
+  clearOrderByType,
   updateSuccess,
   setFailure,
 } = currentOrderSlice.actions;

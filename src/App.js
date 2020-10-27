@@ -17,6 +17,7 @@ import { clearDistributors } from "./redux/slices/distributorSlice";
 import {
   clearCurrentOrder,
   fetchCurrentOrderByType,
+  clearOrderByType,
 } from "./redux/slices/currentOrderSlice";
 import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
@@ -39,7 +40,6 @@ import ItemCatalog from "./pages/ItemCatalog";
 import Loading from "./components/Utility/Loading";
 import LogIn from "./components/Login";
 import OrderApprovals from "./pages/OrderApprovals";
-import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
@@ -109,6 +109,8 @@ const App = () => {
     dispatch(resetState());
     dispatch(clearDistributors());
     dispatch(clearCurrentOrder());
+    dispatch(clearOrderByType({ type: "inStock" }));
+    dispatch(clearOrderByType({ type: "onDemand" }));
     dispatch(resetItems());
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());
@@ -252,16 +254,6 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/open",
-            ["field1", "field2", "super"],
-            role
-          )}
-          {handleAuth(
-            <OrderConfirmation
-              path="/orders/confirmation/:orderType"
-              userType={role}
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/orders/confirmation",
             ["field1", "field2", "super"],
             role
           )}

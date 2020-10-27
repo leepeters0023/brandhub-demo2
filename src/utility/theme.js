@@ -17,14 +17,47 @@ export default {
       secondary: "#737373",
     },
   },
-  dashboard: {
-    accordian: {
-      transition: "background-color .5s ease",
+  itemGrid: {
+    paperWrapper: {
+      backgroundColor: "whitesmoke",
+      width: "95%",
+      height: "100%",
+      padding: "10px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
-    dashboardAvatar: {
-      height: "75px",
-      width: "75px",
-      marginRight: "16px",
+    itemGridContainer: {
+      maxWidth: "2000px",
+      paddingBottom: "20px",
+    },
+    previewImg: {
+      width: "150px",
+      height: "150px",
+      borderRadius: "50%",
+      objectFit: "cover",
+      "&:hover": {
+        cursor: "pointer",
+      },
+    },
+    singleItem: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      textAlign: "center",
+    },
+    singleItemWrapper: {
+      position: "relative",
+      width: "100%",
+      height: "auto",
+      padding: "0 5px",
+    },
+    checkbox: {
+      position: "absolute",
+      top: "0px",
+      right: "0px",
+      padding: "0px",
     },
   },
   global: {

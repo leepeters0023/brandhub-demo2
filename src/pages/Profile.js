@@ -78,7 +78,7 @@ const Profile = ({ userType, handleFiltersClosed }) => {
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
             {selectedIndex === 1 && <General />}
             {selectedIndex === 2 && <FavoriteDistributors />}
-            {selectedIndex === 3 && <FavoriteItems />}
+            {selectedIndex === 3 && <FavoriteItems classes={classes}/>}
           </Grid>
           <Grid item md={1} xs={false} />
         </Grid>
