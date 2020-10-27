@@ -15,6 +15,7 @@ import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 
+import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -50,6 +51,7 @@ const ItemCatalog = ({
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
+  const selectedItems = useSelector((state) => state.items.selectedItems);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -87,7 +89,7 @@ const ItemCatalog = ({
   return (
     <>
       <ItemPreviewModal
-        type={null}
+        type={"catalog"}
         currentItem={currentItem}
         handleClose={handleModalClose}
         previewModal={previewModal}
@@ -99,6 +101,24 @@ const ItemCatalog = ({
           </Typography>
 
           <div className={classes.innerConfigDiv}>
+            <Button
+              className={classes.largeButton}
+              style={{ marginRight: "20px" }}
+              variant="contained"
+              color="secondary"
+              disabled={selectedItems.length === 0}
+            >
+              ADD TO FAVORITES
+            </Button>
+            <Button
+              className={classes.largeButton}
+              style={{ marginRight: "20px" }}
+              variant="contained"
+              color="secondary"
+              disabled={selectedItems.length === 0}
+            >
+              CREATE SHARE LINK
+            </Button>
             <Tooltip title="View List">
               <IconButton
                 onClick={() => {

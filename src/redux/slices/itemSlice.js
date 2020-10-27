@@ -9,6 +9,7 @@ let initialState = {
   pagesLoaded: 0,
   nextLink: null,
   items: [],
+  selectedItems: [],
   error: null,
 };
 
@@ -51,6 +52,13 @@ const itemSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    updateItemSelection(state, action) {
+      const { selectedItems } = action.payload;
+      state.selectedItems = selectedItems;
+    },
+    clearItemSelection(state) {
+      state.selectedItems = [];
+    },
     resetItems(state) {
       state.isLoading = false;
       state.orderType = null;
@@ -59,6 +67,7 @@ const itemSlice = createSlice({
       state.pageLoaded = 0;
       state.nextLink = null;
       state.items = [];
+      state.selectedItems = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -69,6 +78,8 @@ export const {
   setIsLoading,
   setTotalPages,
   getItemsSuccess,
+  updateItemSelection,
+  clearItemSelection,
   resetItems,
   setFailure,
 } = itemSlice.actions;

@@ -22,7 +22,6 @@ const OrderItemViewControl = (props) => {
     handlePreview,
     items,
     catalogType,
-    secondaryAddFunction,
     isItemsLoading,
   } = props;
   const dispatch = useDispatch();
@@ -40,18 +39,14 @@ const OrderItemViewControl = (props) => {
 
       dispatch(clearItemSelections());
 
-      if (secondaryAddFunction) {
-        secondaryAddFunction(item, remove);
+      setCurrentItemAdded(newItem);
+      if (!currentOrderId) {
+        dispatch(createNewOrder(type, item.id));
       } else {
-        setCurrentItemAdded(newItem);
-        if (!currentOrderId) {
-          dispatch(createNewOrder(type, item.id));
-        } else {
-          dispatch(addNewOrderItem(currentOrderId, item.id, type));
-        }
+        dispatch(addNewOrderItem(currentOrderId, item.id, type));
       }
     },
-    [dispatch, secondaryAddFunction, setCurrentItemAdded, currentOrderId, type]
+    [dispatch, setCurrentItemAdded, currentOrderId, type]
   );
 
   return (

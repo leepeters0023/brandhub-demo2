@@ -13,13 +13,16 @@ import {
   setClear,
 } from "../redux/slices/filterSlice";
 
+import { clearItemSelection } from "../redux/slices/itemSlice";
+
 import { useInput } from "../hooks/InputHooks";
 
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import FilterChipList from "../components/Filtering/FilterChipList";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -29,7 +32,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -42,30 +44,33 @@ import ViewModuleIcon from "@material-ui/icons/ViewModule";
 
 import { regions } from "../utility/constants";
 
-const TerritorySelector = React.memo(({ classes, handleTerritories }) => (
-  <div className={classes.inputRow}>
-    <Autocomplete
-      multiple
-      fullWidth
-      id="tags-standard"
-      options={regions}
-      getOptionLabel={(option) => option.name}
-      onChange={(_evt, value) => handleTerritories(value)}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          variant="outlined"
-          label="Territory"
-          size="small"
-        />
-      )}
-    />
-  </div>
-), (prev, next) => {
-  return (
-    Object.keys(prev.classes).length === Object.keys(next.classes).length
-  )
-});
+const TerritorySelector = React.memo(
+  ({ classes, handleTerritories }) => (
+    <div className={classes.inputRow}>
+      <Autocomplete
+        multiple
+        fullWidth
+        id="tags-standard"
+        options={regions}
+        getOptionLabel={(option) => option.name}
+        onChange={(_evt, value) => handleTerritories(value)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="Territory"
+            size="small"
+          />
+        )}
+      />
+    </div>
+  ),
+  (prev, next) => {
+    return (
+      Object.keys(prev.classes).length === Object.keys(next.classes).length
+    );
+  }
+);
 
 const defaultFilters = {
   brand: [],
@@ -112,6 +117,7 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const currentItems = useSelector((state) => state.items.items);
+  const selectedItems = useSelector((state) => state.items.selectedItems);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -123,24 +129,48 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
     handlePreviewModal(false);
   };
 
-  const handleProgramItem = useCallback(
-    (item, remove) => {
-      let items = [...currentProgramItems];
-      let currentItem = items.find((i) => i.id === item.id);
-      if (!currentItem) {
-        items.push(item);
-        setCurrentProgramItems(items);
-      } else if (currentItem && remove) {
-        items = items.filter((i) => i.id !== item.id);
-        setCurrentProgramItems(items);
-      }
+  const handleAddItems = useCallback(() => {
+    let newItems = [];
+    selectedItems.forEach((item) => {
+      let currentItem = currentItems.find((i) => i.id === item);
+      let sequenceNum = currentItem.itemNumber;
+      newItems.push(sequenceNum);
+    });
+    let items;
+    if (currentProgramItems.length === 0) {
+      items = newItems;
+    } else {
+      items = [...currentProgramItems];
+      newItems.forEach((item) => {
+        if (!items.includes(item)) {
+          items.push(item);
+        }
+      });
+    }
+    setCurrentProgramItems(items);
+    dispatch(clearItemSelection());
+  }, [
+    currentProgramItems,
+    setCurrentProgramItems,
+    currentItems,
+    selectedItems,
+    dispatch,
+  ]);
+
+  const handleChipClick = useCallback(
+    (item) => {
+      let currentItems = currentProgramItems.filter((i) => i !== item);
+      setCurrentProgramItems(currentItems);
     },
     [currentProgramItems, setCurrentProgramItems]
   );
 
-  const handleTerritories = useCallback((value, _type, _filter) => {
-    setCurrentTerritories(value);
-  }, [setCurrentTerritories]);
+  const handleTerritories = useCallback(
+    (value, _type, _filter) => {
+      setCurrentTerritories(value);
+    },
+    [setCurrentTerritories]
+  );
 
   useEffect(() => {
     dispatch(setFilterType({ type: "item-all" }));
@@ -315,13 +345,18 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
         <br />
         {currentProgramItems.length > 0 ? (
           <>
-            <OrderItemViewControl
-              type={"new-program-current"}
-              currentView="list"
-              handlePreview={handlePreview}
-              items={currentProgramItems}
-              secondaryAddFunction={handleProgramItem}
-            />
+            {currentProgramItems.map((item, index) => (
+              <Chip
+                style={{ margin: "auto 2.5px" }}
+                color="primary"
+                key={index}
+                label={item}
+                onDelete={() => handleChipClick(item)}
+              />
+            ))}
+            <br />
+            <br />
+            <Divider />
             <br />
           </>
         ) : (
@@ -334,8 +369,20 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
             <br />
           </>
         )}
-
-        <Typography className={classes.headerText}>Add Items</Typography>
+        <div className={classes.titleBar}>
+          <Typography className={classes.headerText}>Add Items</Typography>
+          <div className={classes.innerConfigDiv}>
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              disabled={selectedItems.length === 0}
+              onClick={handleAddItems}
+            >
+              ADD TO PROGRAM
+            </Button>
+          </div>
+        </div>
         <br />
         <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
           <Typography
@@ -351,17 +398,14 @@ const ProgramNew = ({ userType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
           <FilterChipList classes={classes} />
         </div>
-        {itemsLoading ? (
-          <CircularProgress />
-        ) : (
-          <OrderItemViewControl
-            type={"new-program"}
-            currentView={currentView}
-            handlePreview={handlePreview}
-            items={currentItems}
-            secondaryAddFunction={handleProgramItem}
-          />
-        )}
+        <br />
+        <OrderItemViewControl
+          type={"catalog"}
+          currentView={currentView}
+          handlePreview={handlePreview}
+          items={currentItems}
+          isItemsLoading={itemsLoading}
+        />
       </Container>
       <br />
     </>

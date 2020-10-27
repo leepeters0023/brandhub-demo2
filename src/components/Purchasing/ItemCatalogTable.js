@@ -3,6 +3,14 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  updateItemSelection,
+  clearItemSelection,
+} from "../../redux/slices/itemSlice";
+
+import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,12 +21,96 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
+const headCells = [
+  { id: "preview", label: "Preview" },
+  { id: "program", label: "Program" },
+  { id: "itemType", label: "Item Type" },
+  { id: "sequenceNum", label: "Sequence #" },
+  { id: "brand", label: "Brand" },
+  { id: "packSize", label: "Pack Size" },
+  { id: "stock", label: "On Hand" },
+  { id: "estCost", label: "Est. Cost" },
+];
+
+const EnhancedTableHead = (props) => {
+  const { classes, rowCount, onSelectAllClick, numSelected } = props;
+
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ "aria-label": "select all items" }}
+          />
+        </TableCell>
+        {headCells.map((headCell) => (
+          <TableCell
+            className={classes.headerText}
+            key={headCell.id}
+            align="left"
+          >
+            {headCell.label}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
+
+EnhancedTableHead.propTypes = {
+  classes: PropTypes.object.isRequired,
+  numSelected: PropTypes.number.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalogTable = ({ currentItems, handlePreview, catalogType, isItemsLoading }) => {
+const ItemCatalogTable = ({
+  currentItems,
+  handlePreview,
+  isItemsLoading,
+}) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const selectedItems = useSelector((state) => state.items.selectedItems);
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = currentItems.map((item) => item.id);
+      dispatch(updateItemSelection({ selectedItems: newSelecteds }));
+      return;
+    }
+    dispatch(clearItemSelection({ selectedItems: [] }));
+  };
+
+  const handleClick = (_event, id) => {
+    const selectedIndex = selectedItems.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selectedItems, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selectedItems.slice(1));
+    } else if (selectedIndex === selectedItems.length - 1) {
+      newSelected = newSelected.concat(selectedItems.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selectedItems.slice(0, selectedIndex),
+        selectedItems.slice(selectedIndex + 1)
+      );
+    }
+
+    dispatch(updateItemSelection({ selectedItems: newSelected }));
+  };
+
+  const isSelected = (id) => selectedItems.indexOf(id) !== -1;
 
   return (
     <>
@@ -27,71 +119,62 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType, isItemsLoa
         style={{ maxHeight: "Calc(100vh - 250px)" }}
       >
         <Table className={classes.table} aria-label="item-catalog" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.headerText} align="left">
-                Preview
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Program
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Item Type
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Item #
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Brand
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Qty / Pack
-              </TableCell>
-              {catalogType === "inStock" && (
-                <TableCell className={classes.headerText} align="left">
-                  Stock
-                </TableCell>
-              )}
-              <TableCell className={classes.headerText} align="left">
-                Cost
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <EnhancedTableHead
+            classes={classes}
+            numSelected={selectedItems.length}
+            onSelectAllClick={handleSelectAllClick}
+            rowCount={currentItems.length}
+          />
           <TableBody>
-          {!isItemsLoading && currentItems.length === 0 && (
+            {!isItemsLoading && currentItems.length === 0 && (
               <TableRow>
-                <TableCell align="left" colSpan={catalogType === "inStock" ? 8 : 7}>
+                <TableCell align="left" colSpan={8}>
                   <Typography className={classes.headerText}>
                     {`There are no items that match the current search criteria..`}
                   </Typography>
                 </TableCell>
               </TableRow>
             )}
-            {!isItemsLoading && currentItems.length > 0 && currentItems.map((item) => (
-              <TableRow key={item.id} hover>
-                <TableCell align="left">
-                  <img
-                    id={item.itemNumber}
-                    className={classes.previewImageFloat}
-                    src={item.imgUrl}
-                    alt={item.itemType}
-                    onClick={() => handlePreview(item.itemNumber)}
-                  />
-                </TableCell>
-                <TableCell align="left">{item.brand}</TableCell>
-                <TableCell align="left">{item.itemType}</TableCell>
-                <TableCell align="left">{item.itemNumber}</TableCell>
-                <TableCell align="left">{item.brand}</TableCell>
-                <TableCell align="left">{item.packSize}</TableCell>
-                {catalogType === "inStock" && (
-                  <TableCell>{item.stock}</TableCell>
-                )}
-                <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
-              </TableRow>
-            ))}
+            {!isItemsLoading &&
+              currentItems.length > 0 &&
+              currentItems.map((item, index) => {
+                const isItemSelected = isSelected(item.id);
+                const labelId = `item-Checkbox-${index}`;
+                return (
+                  <TableRow key={item.id} hover>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isItemSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, item.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="left">
+                      <img
+                        id={item.itemNumber}
+                        className={classes.previewImageFloat}
+                        src={item.imgUrl}
+                        alt={item.itemType}
+                        onClick={() => handlePreview(item.itemNumber)}
+                      />
+                    </TableCell>
+                    <TableCell align="left">{item.brand}</TableCell>
+                    <TableCell align="left">{item.itemType}</TableCell>
+                    <TableCell align="left">{item.itemNumber}</TableCell>
+                    <TableCell align="left">{item.brand}</TableCell>
+                    <TableCell align="left">{item.packSize}</TableCell>
+                    <TableCell align="left">{item.stock ? item.stock : "---"}</TableCell>
+                    <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
+                  </TableRow>
+                );
+              })}
             {isItemsLoading && (
               <TableRow>
-                <TableCell align="left" colSpan={catalogType === "inStock" ? 8 : 7}>
+                <TableCell align="left" colSpan={8}>
                   <CircularProgress />
                 </TableCell>
               </TableRow>
@@ -104,8 +187,9 @@ const ItemCatalogTable = ({ currentItems, handlePreview, catalogType, isItemsLoa
 };
 
 ItemCatalogTable.propTypes = {
-  items: PropTypes.array,
+  currentItems: PropTypes.array,
   handlePreview: PropTypes.func.isRequired,
+  isItemsLoading: PropTypes.bool.isRequired,
 };
 
 export default ItemCatalogTable;
