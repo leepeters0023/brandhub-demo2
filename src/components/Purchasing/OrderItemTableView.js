@@ -17,13 +17,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
-
-import CancelIcon from "@material-ui/icons/Cancel";
-import ShareIcon from "@material-ui/icons/Share";
 
 const headCells = [
   { id: "preview", label: "Preview" },
@@ -34,16 +30,16 @@ const headCells = [
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
   { id: "estCost", label: "Est. Cost" },
-  { id: "action", label: "" },
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, rowCount, onSelectAllClick, numSelected, type, orderLength } = props;
-
-  const currentHeader =
-    type !== "inStock"
-      ? headCells.filter((cell) => cell.id !== "stock")
-      : headCells;
+  const {
+    classes,
+    rowCount,
+    onSelectAllClick,
+    numSelected,
+    orderLength,
+  } = props;
 
   return (
     <TableHead>
@@ -56,7 +52,7 @@ const EnhancedTableHead = (props) => {
             inputProps={{ "aria-label": "select all items" }}
           />
         </TableCell>
-        {currentHeader.map((headCell) => (
+        {headCells.map((headCell) => (
           <TableCell
             className={classes.headerText}
             key={headCell.id}
@@ -75,33 +71,20 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   rowCount: PropTypes.number.isRequired,
-  type: PropTypes.string,
+  orderLength: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  tableButtonWrapper: {
-    display: "flex",
-    flexWrap: "none",
-    width: "148px",
-    justifyContent: "center",
-  },
-  root: {
-    width: "150px !important",
-    maxWidth: "150px !important",
-    minWidth: "150px !important",
-  },
 }));
 
-const OrderItemTableView = (props) => {
-  const {
-    type,
-    currentItems,
-    handlePreview,
-    handleAddItem,
-    setCurrentItemAdded,
-    isItemsLoading,
-  } = props;
+const OrderItemTableView = ({
+  type,
+  currentItems,
+  handlePreview,
+  setCurrentItemAdded,
+  isItemsLoading,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const formattedType = `selected${type[0].toUpperCase() + type.slice(1)}Items`;
@@ -114,7 +97,7 @@ const OrderItemTableView = (props) => {
   );
 
   const handleSelectAllClick = (event) => {
-    console.log(event.target.checked)
+    console.log(event.target.checked);
     if (event.target.checked) {
       const newSelecteds = [];
       currentItems.forEach((item) => {
@@ -171,13 +154,12 @@ const OrderItemTableView = (props) => {
             numSelected={selectedItems.length}
             onSelectAllClick={handleSelectAllClick}
             rowCount={currentItems.length}
-            type={type}
             orderLength={currentOrderItems.length}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
               <TableRow>
-                <TableCell align="left" colSpan={type === "inStock" ? 10 : 9}>
+                <TableCell align="left" colSpan={8}>
                   <Typography className={classes.headerText}>
                     {`There are no items that match the current search criteria..`}
                   </Typography>
@@ -224,38 +206,16 @@ const OrderItemTableView = (props) => {
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
-                    {type === "inStock" && <TableCell>{row.stock}</TableCell>}
-                    <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
-                    <TableCell align="center">
-                      {type !== "new-program" &&
-                        type !== "new-program-current" && (
-                          <IconButton
-                            id={`${row.id}`}
-                            style={{ margin: "5px 2.5px" }}
-                          >
-                            <ShareIcon />
-                          </IconButton>
-                        )}
-                      {type === "new-program-current" && (
-                        <>
-                          <IconButton
-                            id={`${row.id}`}
-                            style={{ margin: "5px 2.5px" }}
-                            onClick={() => {
-                              handleAddItem(row, true);
-                            }}
-                          >
-                            <CancelIcon />
-                          </IconButton>
-                        </>
-                      )}
+                    <TableCell align="left">
+                      {row.stock ? row.stock : "---"}
                     </TableCell>
+                    <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
                   </TableRow>
                 );
               })}
             {isItemsLoading && (
               <TableRow>
-                <TableCell align="left" colSpan={type === "inStock" ? 10 : 9}>
+                <TableCell align="left" colSpan={8}>
                   <CircularProgress />
                 </TableCell>
               </TableRow>

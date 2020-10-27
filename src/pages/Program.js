@@ -156,10 +156,11 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
               <CircularProgress />
             ) : (
               <OrderItemViewControl
-                type={"program"}
+                type={"catalog"}
                 currentView={currentView}
                 handlePreview={handlePreview}
                 items={currentProgram.items}
+                isItemsLoading={itemsLoading}
               />
             )}
           </>
