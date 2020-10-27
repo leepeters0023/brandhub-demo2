@@ -9,6 +9,7 @@ import {
   restartOrderSet,
   submitOrderSet,
   approveOrderSet,
+  deleteOrderSet,
   setOrderSetNote,
   setOrderDetail,
 } from "../../api/orderApi";
@@ -244,6 +245,25 @@ export const approveMultipleOrderSets = (orderSetArray, filters) => async (
     );
     dispatch(fetchFilteredOrderSets(filters));
     dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const deleteOrdSet = (orderSetId, filters) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const deleteStatus = await deleteOrderSet(orderSetId);
+    if (deleteStatus.error) {
+      throw deleteStatus.error;
+    }
+    if (filters) {
+      dispatch(fetchFilteredOrderSets(filters));
+    }
+    dispatch(patchSuccess());
+    if (!filters) {
+      navigate("/orders/approvals");
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

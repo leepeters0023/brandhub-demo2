@@ -154,7 +154,7 @@ const OrderApprovalTable = ({
   handleSort,
   isOrdersLoading,
   scrollRef,
-  handleApproval,
+  handleDeny,
   selected,
   setSelected,
 }) => {
@@ -279,6 +279,7 @@ const OrderApprovalTable = ({
                           <IconButton
                             onClick={(event) => {
                               event.stopPropagation();
+                              handleDeny(row.id);
                             }}
                           >
                             <CancelIcon color="inherit" />
@@ -308,7 +309,7 @@ OrderApprovalTable.propTypes = {
   handleSort: PropTypes.func.isRequired,
   isOrdersLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any.isRequired,
-  handleApproval: PropTypes.func.isRequired,
+  handleDeny: PropTypes.func.isRequired,
 };
 
 export default OrderApprovalTable;

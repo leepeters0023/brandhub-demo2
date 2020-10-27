@@ -12,6 +12,7 @@ import {
   setOrderSetNotes,
   submitOrdSet,
   approveOrdSet,
+  deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -142,6 +143,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const handleApproval = () => {
     dispatch(approveOrdSet(orderId, "approved"));
   };
+
+  const handleDeny = () => {
+    dispatch(deleteOrdSet(orderId))
+  }
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
@@ -393,7 +398,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          {((orderStatus === "in-progress" && currentUserRole === "field1") ||
+          {((orderStatus === "in-progress") ||
             (currentUserRole !== "field1" &&
               window.location.hash.includes("approval")) ||
             window.location.href.includes("rollup")) && (
@@ -442,7 +447,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                onClick={() => console.log("denied!")}
+                onClick={handleDeny}
               >
                 DENY
               </Button>
