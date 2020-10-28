@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollapseRow = ({ classes, rowData, orders }) => {
+const CollapseRow = ({ classes, rowData, orders, type }) => {
   const [open, setOpen] = useCallback(useState(false));
 
   return (
@@ -56,31 +56,35 @@ const CollapseRow = ({ classes, rowData, orders }) => {
         <TableCell align="left">{formatMoney(rowData.estCost)}</TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
         <TableCell align="left">{formatMoney(rowData.estTotal)}</TableCell>
-        <TableCell align="left">
-          {format(addDays(new Date(), 28), "MM/dd/yyyy")}
-        </TableCell>
-        <TableCell align="left">
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              fullWidth
-              color="secondary"
-              disableToolbar
-              variant="inline"
-              format="MM/dd/yyyy"
-              margin="normal"
-              id={`${rowData.id}-req-date`}
-              label=""
-              value={format(addDays(new Date(), 28), "MM/dd/yyyy")}
-              //onChange={(value) => handle this function!}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
-            />
-          </MuiPickersUtilsProvider>
-        </TableCell>
-        <TableCell padding="checkbox">
-          <Checkbox />
-        </TableCell>
+        {type !== "pre-order" && (
+          <>
+            <TableCell align="left">
+              {format(addDays(new Date(), 28), "MM/dd/yyyy")}
+            </TableCell>
+            <TableCell align="left">
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  fullWidth
+                  color="secondary"
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="normal"
+                  id={`${rowData.id}-req-date`}
+                  label=""
+                  value={format(addDays(new Date(), 28), "MM/dd/yyyy")}
+                  //onChange={(value) => handle this function!}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+            </TableCell>
+            <TableCell padding="checkbox">
+              <Checkbox />
+            </TableCell>
+          </>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
@@ -122,15 +126,19 @@ const CollapseRow = ({ classes, rowData, orders }) => {
                   <TableBody>
                     {orders.map((order) => (
                       <TableRow key={`${rowData.id}-${order.id}`}>
-                        <TableCell align="center">
-                          {order.id}
-                        </TableCell>
+                        <TableCell align="center">{order.id}</TableCell>
                         <TableCell align="center">
                           {order.distributorId}
                         </TableCell>
-                        <TableCell align="center">{order.distributorName}</TableCell>
                         <TableCell align="center">
-                          {order.items.find((item) => item.itemNumber === rowData.itemNumber).totalItems}
+                          {order.distributorName}
+                        </TableCell>
+                        <TableCell align="center">
+                          {
+                            order.items.find(
+                              (item) => item.itemNumber === rowData.itemNumber
+                            ).totalItems
+                          }
                         </TableCell>
                       </TableRow>
                     ))}
@@ -145,7 +153,7 @@ const CollapseRow = ({ classes, rowData, orders }) => {
   );
 };
 
-const OrderSetConfirmationTable = ({ orders, items }) => {
+const OrderSetConfirmationTable = ({ orders, items, type }) => {
   const classes = useStyles();
 
   return (
@@ -176,15 +184,19 @@ const OrderSetConfirmationTable = ({ orders, items }) => {
               <TableCell className={classes.headerText} align="left">
                 Est. Total
               </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Std. Delivery
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Req. Delivery
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Rush
-              </TableCell>
+              {type !== "pre-order" && (
+                <>
+                  <TableCell className={classes.headerText} align="left">
+                    Std. Delivery
+                  </TableCell>
+                  <TableCell className={classes.headerText} align="left">
+                    Req. Delivery
+                  </TableCell>
+                  <TableCell className={classes.headerText} align="left">
+                    Rush
+                  </TableCell>
+                </>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -194,6 +206,7 @@ const OrderSetConfirmationTable = ({ orders, items }) => {
                 classes={classes}
                 rowData={item}
                 orders={orders}
+                type={type}
               />
             ))}
           </TableBody>

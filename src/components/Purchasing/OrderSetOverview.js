@@ -111,6 +111,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <OrderSetConfirmationTable
             orders={orderSet.orders}
             items={orderSet.items}
+            type={orderSet.type}
           />
         </Grid>
         <Grid item lg={3} sm={12} xs={12}>
@@ -146,9 +147,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               .reduce((a, b) => a + b)}`}
           </Typography>
           <Typography className={classes.headerText}>
-            {`Freight Charge: ---`}
+            {`Est. Freight Charge: ---`}
           </Typography>
-          <Typography className={classes.headerText}>{`Tax: ---`}</Typography>
+          <Typography className={classes.headerText}>{`Est. Tax: ---`}</Typography>
           <br />
           <Divider />
           <br />
