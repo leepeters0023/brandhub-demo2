@@ -376,7 +376,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           (currentUserRole === "field1" ||
             (!window.location.hash.includes("approval") &&
               !window.location.href.includes("rollup")))) ? (
-          <OrderSetOverview setOverviewVisible={setOverviewVisible}/>
+          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
         ) : (
           <OrderSetTable
             currentProgram={undefined}
