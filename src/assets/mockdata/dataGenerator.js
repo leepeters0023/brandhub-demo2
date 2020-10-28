@@ -232,6 +232,40 @@ const generateYearToDateBudgets = (dataPoints) => {
   return data;
 };
 
+export const generateShippingParams = (dataPoints) => {
+  const generateParamItems = (itemCount) => {
+    let items = [];
+    for (let i = 0; i < itemCount; i++) {
+      let sequenceNumber = (1110000010 + i).toString();
+      let currentItemType =
+        itemTypes[Math.floor(Math.random() * itemTypes.length)];
+      let totalItems = Math.floor(Math.random() * 100) + 20;
+      items.push({
+        id: i + 1,
+        itemNumber: sequenceNumber,
+        itemType: currentItemType,
+        totalItems: totalItems,
+        shippingStatus: "Ok",
+        tracking: "---",
+        tax: "---"
+      })
+    }
+    return items;
+  }
+  let data = [];
+  for (let i = 0; i < dataPoints; i++) {
+    data.push({
+      id: i+1,
+      attn: "Firstname Lastname",
+      address: "123 Road St. Burlington VT 05401",
+      carrier: "---",
+      method: "---",
+      items: generateParamItems(Math.floor(Math.random()*4 + 1))
+    })
+  }
+  return data;
+}
+
 export const rules = [
   {
     ruleType: "Prior Approval",
@@ -806,3 +840,4 @@ export const rfqAll = generateRFQs(20, "all");
 export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
 export const yearToDateBudgets = generateYearToDateBudgets(20);
+export const shippingParams = generateShippingParams(5);

@@ -4,41 +4,26 @@ import React, { useEffect } from "react";
 import format from "date-fns/format";
 import clsx from "clsx";
 
-import { formatMoney } from "../../utility/utilityFunctions";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import {
   addCost,
-  updateCost,
   // updateSupplierNotes,
   // updateLabel,
 } from "../../redux/slices/purchaseOrderSlice";
 
+import POItemsTable from "./POItemsTable";
+
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-import Table from "@material-ui/core/Table";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableBody from "@material-ui/core/TableBody";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
-
-import CancelIcon from "@material-ui/icons/Cancel";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-
-//mock data
-import { singlePO } from "../../assets/mockdata/dataGenerator";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -54,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentPO = () => {
+const CurrentPO = ({ purchaseOrderItems }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -185,145 +170,12 @@ const CurrentPO = () => {
       <Divider style={{ width: "75%", minWidth: "1000px" }} />
       <br />
       <br />
-      <TableContainer
-        className={classes.tableContainer}
-        style={{ width: "75%", minWidth: "1000px" }}
-      >
-        <Typography
-          className={classes.titleText}
-          style={{ marginLeft: "20px" }}
-        >
-          Purchase Order Items:
-        </Typography>
-        <br />
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.headerText} align="left">
-                Sequence #
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Program
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Item Type
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Qty Desired
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Qty Ordered
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Cost/Unit
-              </TableCell>
-              <TableCell className={classes.headerText} align="left">
-                Total
-              </TableCell>
-              <TableCell className={classes.headerText} align="right">
-                Remove
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {singlePO.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell align="left">{row.sequenceNum}</TableCell>
-                <TableCell align="left">{row.program}</TableCell>
-                <TableCell align="left">{row.itemType}</TableCell>
-                <TableCell align="left">{row.totalItems}</TableCell>
-                <TableCell align="left">
-                  <TextField
-                    value={row.totalItems}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                  />
-                </TableCell>
-                <TableCell align="left">
-                  <TextField
-                    value={formatMoney(row.estCost)}
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                  />
-                </TableCell>
-                <TableCell align="left">{formatMoney(row.estTotal)}</TableCell>
-                <TableCell align="right">
-                  <Tooltip title="Remove">
-                    <IconButton
-                      onClick={(event) => {
-                        event.stopPropagation();
-                      }}
-                    >
-                      <CancelIcon color="inherit" />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-            <TableRow>
-              <TableCell className={classes.headerText}>Set Up Fee:</TableCell>
-              <TableCell colSpan={7} align="left">
-                <Tooltip title="Add Another Cost">
-                  <IconButton
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      addNewCost();
-                    }}
-                  >
-                    <AddCircleIcon color="inherit" />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-            {additionalCosts.map((cost, index) => (
-              <TableRow key={index}>
-                <TableCell className={classes.headerText}>
-                  Description:
-                </TableCell>
-                <TableCell colSpan={4}>
-                  <TextField
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={cost.description}
-                    onChange={(evt) => {
-                      dispatch(
-                        updateCost({
-                          key: "description",
-                          value: evt.target.value,
-                          index: index,
-                        })
-                      );
-                    }}
-                  />
-                </TableCell>
-                <TableCell className={classes.headerText} align="right">
-                  Cost:
-                </TableCell>
-                <TableCell colSpan={2}>
-                  <TextField
-                    variant="outlined"
-                    size="small"
-                    fullWidth
-                    value={cost.cost}
-                    onChange={(evt) => {
-                      dispatch(
-                        updateCost({
-                          key: "cost",
-                          value: evt.target.value,
-                          index: index,
-                        })
-                      );
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <POItemsTable
+        items={purchaseOrderItems}
+        classes={classes}
+        addNewCost={addNewCost}
+        additionalCosts={additionalCosts}
+      />
       <br />
       <br />
       <div
@@ -341,75 +193,7 @@ const CurrentPO = () => {
           Total: $25,000.00
         </Typography>
       </div>
-      <br />
-      <br />
-      {/* This will be mapped over all shipping locations */}
-      <Grid
-        container
-        spacing={5}
-        style={{ width: "75%", minWidth: "1000px", backgroundColor: "#f2f2f2" }}
-      >
-        <Grid item sm={6}>
-          <div className={classes.fullHeightGridItem}>
-            <Typography className={classes.titleText}>Ship To:</Typography>
-            <br />
-            <div>
-              <Typography className={clsx(classes.headerText, classes.POText)}>
-                Attention:
-              </Typography>
-              <Typography className={clsx(classes.headerText, classes.POText)}>
-                Address:
-              </Typography>
-              <TextField
-                label="Label"
-                color="secondary"
-                multiline
-                fullWidth
-                variant="outlined"
-                size="small"
-                rows="4"
-              />
-            </div>
-          </div>
-        </Grid>
-        <Grid item sm={6}>
-          <div className={classes.fullHeightGridItem}>
-            <Typography className={classes.titleText}>
-              Shipping Detail:
-            </Typography>
-            <br />
-            <div>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  color="secondary"
-                  className={classes.dateField}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  id="actualShip"
-                  label="Actual Ship"
-                  value={format(new Date(), "MM/dd/yyyy")}
-                  //onChange={(value) => handleFilters(value, "toDate")}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-              </MuiPickersUtilsProvider>
-              <br />
-              <Typography className={clsx(classes.headerText, classes.POText)}>
-                Carrier:
-              </Typography>
-              <Typography className={clsx(classes.headerText, classes.POText)}>
-                Method:
-              </Typography>
-              <Typography className={clsx(classes.headerText, classes.POText)}>
-                Tracking Numbers:
-              </Typography>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
+      <br />    
       <br />
     </>
   );
