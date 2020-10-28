@@ -30,7 +30,7 @@ const headCells = [
   {
     id: "totalNotCompliant",
     disablePadding: false,
-    label: "Not Compliant",
+    label: "Pending Compliance",
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
