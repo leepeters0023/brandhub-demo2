@@ -7,9 +7,7 @@ import {
   fetchPreOrders,
 } from "../redux/slices/preOrderDetailSlice";
 
-import {
-  fetchProgramOrders,
-} from "../redux/slices/orderSetSlice";
+import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 
 import {
   deleteSetItem,
@@ -125,6 +123,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
+  const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
 
   const currentUserId = useSelector((state) => state.user.id);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
@@ -338,8 +337,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         <br />
         {userPrograms.length === 0 || !program || programsLoading ? (
           <CircularProgress color="inherit" />
-        ) : preOrderStatus === "complete" || preOrderStatus === "submitted" ? (
-          <OrderSetOverview />
+        ) : overviewVisible ||
+          preOrderStatus === "complete" ||
+          preOrderStatus === "submitted" ? (
+          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
         ) : (
           <OrderSetTable
             currentProgram={program}
@@ -371,15 +372,26 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
               >
                 SAVE ORDER
               </Button>
-
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                onClick={handleSubmit}
-              >
-                SUBMIT ORDER
-              </Button>
+              {!overviewVisible && (
+                <Button
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => setOverviewVisible(true)}
+                >
+                  ORDER OVERVIEW
+                </Button>
+              )}
+              {overviewVisible && (
+                <Button
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleSubmit}
+                >
+                  SUBMIT ORDER
+                </Button>
+              )}
             </div>
           </>
         )}
