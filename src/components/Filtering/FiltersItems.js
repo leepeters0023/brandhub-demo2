@@ -61,7 +61,7 @@ const FiltersItems = ({
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
-            filterType={"item"}
+            filterType={"item-all"}
           />
         </ListItem>
         <ListItem>
@@ -70,7 +70,7 @@ const FiltersItems = ({
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
-            filterType={"item"}
+            filterType={"item-all"}
           />
         </ListItem>
         <ListItem>
@@ -79,7 +79,7 @@ const FiltersItems = ({
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
-            filterType={"item"}
+            filterType={"item-all"}
           />
         </ListItem>
         <ListItem>
@@ -88,7 +88,7 @@ const FiltersItems = ({
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
-            filterType={"item"}
+            filterType={"item-all"}
           />
         </ListItem>
         <Divider />

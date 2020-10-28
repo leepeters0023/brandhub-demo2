@@ -20,6 +20,7 @@ import { formatMoney } from "../utility/utilityFunctions";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import RollupOverviewTable from "../components/OrderManagement/RollupOverviewTable";
+import RollupOverviewByItemTable from "../components/OrderManagement/RollupOverviewByItemTable";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -33,6 +34,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
+
+//mock data
+import { quarterlyRollupItems } from "../assets/mockdata/dataGenerator";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -70,6 +74,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     (state) => state.orderSetHistory.isNextLoading
   );
   const currentUserRoll = useSelector((state) => state.user.role);
+  const currentGrouping = useSelector((state) => state.filters.groupBy);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
@@ -192,12 +197,22 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <RollupOverviewTable
-          rollupData={currentPreOrders}
-          handleSort={handleSort}
-          isRollupLoading={isPreOrdersLoading}
-          scrollRef={scrollRef}
-        />
+        {currentGrouping === "order" && (
+          <RollupOverviewTable
+            rollupData={currentPreOrders}
+            handleSort={handleSort}
+            isRollupLoading={isPreOrdersLoading}
+            scrollRef={scrollRef}
+          />
+        )}
+        {currentGrouping === "item" && (
+          <RollupOverviewByItemTable
+            items={quarterlyRollupItems}
+            handleSort={handleSort}
+            isRollupLoading={isPreOrdersLoading}
+            scrollRef={scrollRef}
+          />
+        )}
         {isNextPreOrdersLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { navigate } from "@reach/router";
+//import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -17,7 +17,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "user", disablePadding: false, label: "Person", sort: true},
+  { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
@@ -30,7 +30,12 @@ const headCells = [
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
@@ -118,7 +123,7 @@ const useStyles = makeStyles((theme) => ({
 const RollupOverviewByItemTable = ({
   items,
   handleSort,
-  isOrdersLoading,
+  isRollupLoading,
   scrollRef,
 }) => {
   const classes = useStyles();
@@ -133,7 +138,7 @@ const RollupOverviewByItemTable = ({
   };
 
   const handleRowClick = (orderNum) => {
-    navigate(`/orders/history/${orderNum}`);
+    //navigate(`/orders/history/${orderNum}`);
   };
 
   return (
@@ -155,7 +160,7 @@ const RollupOverviewByItemTable = ({
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {!isOrdersLoading && items.length === 0 && (
+            {!isRollupLoading && items.length === 0 && (
               <TableRow>
                 <TableCell align="left" colSpan={11}>
                   <Typography className={classes.headerText}>
@@ -164,11 +169,11 @@ const RollupOverviewByItemTable = ({
                 </TableCell>
               </TableRow>
             )}
-            {!isOrdersLoading &&
+            {!isRollupLoading &&
               items.length > 0 &&
               items.map((row) => (
                 <TableRow
-                  key={row.orderNum}
+                  key={row.id}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
@@ -189,7 +194,7 @@ const RollupOverviewByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.estTotal !== "---"
-                      ? formatMoney(row.estTotal)
+                      ? formatMoney(row.totalEstCost)
                       : row.estTotal}
                   </TableCell>
                   <TableCell align="left">
@@ -202,13 +207,10 @@ const RollupOverviewByItemTable = ({
                       ? format(new Date(row.dueDate), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
-                  <TableCell align="left">
-                    {row.orderStatus[0].toUpperCase() +
-                      row.orderStatus.slice(1)}
-                  </TableCell>
+                  <TableCell align="left">{row.status}</TableCell>
                 </TableRow>
               ))}
-            {isOrdersLoading && (
+            {isRollupLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={11}>
                   <CircularProgress />
@@ -225,7 +227,7 @@ const RollupOverviewByItemTable = ({
 RollupOverviewByItemTable.propTypes = {
   items: PropTypes.array,
   handleSort: PropTypes.func.isRequired,
-  isOrdersLoading: PropTypes.bool.isRequired,
+  isRollupLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any.isRequired,
 };
 
