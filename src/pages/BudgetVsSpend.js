@@ -88,7 +88,9 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Year to Date Budget vs. Spend</Typography>
+          <Typography className={classes.titleText}>
+            Year to Date Budget vs. Spend
+          </Typography>
           <div
             style={{
               display: "flex",

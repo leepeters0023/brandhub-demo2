@@ -175,6 +175,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "item-all") {
         dispatch(fetchFilteredItems("all"))
       }
+      dispatch(setChips({filterType: allFilters.filterType}))
     }
   }, [
     dispatch,
@@ -184,6 +185,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     setReset,
     defaultFilters,
     filterType,
+    allFilters.filterType
   ]);
 
   //TODO write PO, rfq, compliance (rules / items), items, budget search when available

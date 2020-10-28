@@ -127,7 +127,7 @@ const filterSlice = createSlice({
     setChips(state, action) {
       const { filterType } = action.payload;
       let chippable;
-      if (filterType === "item") {
+      if (filterType.includes("item-")) {
         chippable = ["bu", "brand", "itemType", "program"];
       }
       if (
@@ -142,7 +142,6 @@ const filterSlice = createSlice({
           "itemType",
           "program",
           "sequenceNum",
-          "status",
           "user",
           "rfqNum",
           "poNum",
