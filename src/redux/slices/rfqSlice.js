@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchRFQItems } from "../../api/supplierApi";
+import { fetchRFQItems, createRFQ } from "../../api/supplierApi";
 
 import { mapRFQItems } from "../apiMaps";
 /*
@@ -78,6 +78,7 @@ let initialState = {
   rfqNum: null,
   rfqStatus: null,
   rfqItems: [],
+  selectedRFQItem: null,
   error: null,
 };
 
@@ -116,6 +117,10 @@ const rfqSlice = createSlice({
       state.rfqItems = state.rfqItems.concat(rfqItems);
       state.isNextLoading = false;
       state.error = null;
+    },
+    setSelectedRFQItem(state, action) {
+      const { itemId } = action.payload;
+      state.selectedRFQItem = itemId;
     },
     updateQty(state, action) {
       const { sequenceNum, value } = action.payload;
@@ -178,6 +183,7 @@ export const {
   setNextIsLoading,
   getRFQItemsSuccess,
   getNextRFQItemsSuccess,
+  setSelectedRFQItem,
   updateQty,
   updateNote,
   updateSupplier,
@@ -198,6 +204,19 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
     let mappedItems = mapRFQItems(items.data);
     console.log(mappedItems);
     dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
+  } catch (err) {
+    dispatch(setFailure(err.toString()));
+  }
+};
+
+export const createNewRFQ = (item, user) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const newRFQ = await createRFQ(item, user);
+    if (newRFQ.error) {
+      throw newRFQ.error;
+    }
+    console.log(newRFQ.data);
   } catch (err) {
     dispatch(setFailure(err.toString()));
   }

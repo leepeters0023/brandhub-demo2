@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { navigate } from "@reach/router";
 
 //import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
+import { createNewRFQ } from "../redux/slices/rfqSlice";
 
 import {
   setFilterType,
@@ -65,7 +66,12 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const isRFQItemsLoading = useSelector((state) => state.rfq.isLoading);
   const currentRFQItems = useSelector((state) => state.rfq.rfqItems);
   const currentUserRole = useSelector((state) => state.user.role);
+  const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem)
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
+
+  const handleNewRFQ = () => {
+    dispatch(createNewRFQ(selectedRFQItem))
+  }
 
   const handleSort = (sortObject) => {
     //scrollRef.current.scrollTop = 0;
@@ -122,7 +128,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
               onClick={() => {
-                //TODO create bid function
+                handleNewRFQ()
                 navigate("/purchasing/rfq#new");
               }}
             >
