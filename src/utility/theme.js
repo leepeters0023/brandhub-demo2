@@ -1,3 +1,6 @@
+/*
+Global styles for the site, handled by Material UI
+*/
 export default {
   palette: {
     primary: {
