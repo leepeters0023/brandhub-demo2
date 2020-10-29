@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 
 import { filter } from "../utility/utilityFunctions";
 
+/*
+Manages sorting and filtering of programs in the Pre Order Program view
+This is the only view where sorting is handled in the UI
+*/
 export const useProgramSort = (programList, sortOption, filters) => {
   const [sortedList, setSortedList] = useState(programList);
   const monthValue = {
@@ -62,6 +66,10 @@ export const useProgramSort = (programList, sortOption, filters) => {
   return sortedList;
 };
 
+/*
+For views using tabs, manages history and makes sure that browser functions
+are recognized by the ui where there are tabs that render different views
+*/
 export const useWindowHash = (
   hashArray,
   updateFunc,

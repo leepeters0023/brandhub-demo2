@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 /*
-* RFQ Item Model
+* RFQ Item Model (not final!)
 
 {
   id: string (read),

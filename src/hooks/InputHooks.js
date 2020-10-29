@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { formatMoney } from "../utility/utilityFunctions";
 
+//Standard input hook for generic input fields
 export const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
@@ -17,6 +18,7 @@ export const useInput = (initialValue) => {
   };
 };
 
+//Input hook for money fields, auto formats to $00.00 format on blur
 export const useMoneyInput = (initialValue, _updateFunc) => {
   const [value, setValue] = useState(initialValue);
   const moneyArray = ["$", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
@@ -50,6 +52,7 @@ export const useMoneyInput = (initialValue, _updateFunc) => {
   };
 }
 
+//Input field that only accepts numbers, for use in order tables
 export const useNumberOnlyInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
   const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
@@ -76,6 +79,7 @@ export const useNumberOnlyInput = (initialValue) => {
   };
 };
 
+//Input field that limits total characters, used for order notes
 export const useLimitedInput = (initialValue, max) => {
   const [value, setValue] = useState(initialValue);
 
@@ -94,6 +98,7 @@ export const useLimitedInput = (initialValue, max) => {
   };
 };
 
+//Input field for use with filters, or inputs that require secondary update functions
 export const useDetailedInput = (
   initialValue,
   secondaryFunc,

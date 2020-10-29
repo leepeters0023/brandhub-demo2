@@ -15,6 +15,7 @@ const monthMap = {
   "12": "December",
 }
 
+//Handles filtering of programs for the Pre Order Program View
 export const filter = (array, filters) => {
   let filteredArray = [];
   if (filters.length !== 0) {
@@ -44,6 +45,10 @@ export const filter = (array, filters) => {
   } else return array;
 };
 
+/*
+Formats integers into $00.00 format for display purposes, all incoming data
+representing money from the api is in cents
+*/
 export const formatMoney = (value) => {
   let moneyAr = (value / 100).toFixed(2).split(".");
   if (moneyAr[0].length > 3) {
@@ -61,6 +66,7 @@ export const formatMoney = (value) => {
   }
 };
 
+//Used in order tables to ensure order numbers match pack size
 export const roundUp = (value, rounder) => {
   if (rounder === 1) {
     return value
@@ -76,6 +82,7 @@ export const roundUp = (value, rounder) => {
   return roundedUp;
 };
 
+//Used for filtering purposes, just a quick call to modify an array
 export const separateByComma = (array, key) => {
   if (key) {
     return array.map((index) => index[key]).join(",");
@@ -84,6 +91,7 @@ export const separateByComma = (array, key) => {
   }
 };
 
+//Formats programs for the Pre Order Program View
 export const mapPrograms = (programs) => {
   const programArray = programs.map((prog) => ({
     id: prog.id,
