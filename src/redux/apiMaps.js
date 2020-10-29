@@ -119,7 +119,8 @@ export const mapRFQItems = (items) => {
   }
 
   let mappedItems = items.map((item) => ({
-    id: item.id,
+    id: item.item.id,
+    itemId: item.item.id,
     sequenceNum: item["item-number"],
     territory: item["territory-name"],
     program: determineProgram(item),
