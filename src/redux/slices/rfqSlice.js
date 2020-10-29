@@ -217,6 +217,7 @@ export const createNewRFQ = (item, user) => async (dispatch) => {
       throw newRFQ.error;
     }
     console.log(newRFQ.data);
+    //TODO getNewRFQSuccess: map all rfq params to state, read in on new rfq.
   } catch (err) {
     dispatch(setFailure(err.toString()));
   }
