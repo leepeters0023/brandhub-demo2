@@ -12,7 +12,7 @@ import { createSlice } from "@reduxjs/toolkit";
   totalOrdered: int (read),
   notCompliant: int (read),
   estCost: int (read),
-  estTotal: int (read),
+  totalEstCost: int (read),
   dueDate: date string (read),
   supplier: string (read)
 }
@@ -27,7 +27,7 @@ let initialState = {
   nextLink: null,
   items: [],
   error: false,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -50,7 +50,7 @@ const itemRollupSlice = createSlice({
     setIsLoading: startLoading,
     setNextIsLoading: startNextLoading,
     getItemRollupSuccess(state, action) {
-      const {items, nextLink} = action.payload;
+      const { items, nextLink } = action.payload;
       state.nextPage = nextLink ? true : false;
       state.nextLink = nextLink;
       state.items = [...items];
@@ -58,7 +58,7 @@ const itemRollupSlice = createSlice({
       state.error = null;
     },
     getNextItemRollupSuccess(state, action) {
-      const {items, nextLink} = action.payload;
+      const { items, nextLink } = action.payload;
       state.nextPage = nextLink ? true : false;
       state.nextLink = nextLink;
       state.items = state.items.concat(items);
@@ -75,8 +75,8 @@ const itemRollupSlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,

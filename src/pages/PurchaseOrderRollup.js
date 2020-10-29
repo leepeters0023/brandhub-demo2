@@ -65,7 +65,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup" }));
+    dispatch(setFilterType({ type: "itemRollup-po" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,

@@ -57,7 +57,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
         { label: "Order Number", key: "orderNum" },
         { label: "Distributor", key: "distributorName" },
         { label: "Total Items", key: "totalItems" },
-        { label: "Est. Cost", key: "estTotal" },
+        { label: "Est. Cost", key: "totalEstCost" },
       ];
       let itemHeaders = orderSet.items.map((item) => ({
         label: item.itemNumber,
@@ -69,7 +69,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
         dataObject.orderNum = order.orderNumber;
         dataObject.distributorName = order.distributorName;
         dataObject.totalItems = order.totalItems;
-        dataObject.estTotal = formatMoney(order.estTotal);
+        dataObject.totalEstCost = formatMoney(order.totalEstCost);
         order.items.forEach((item) => {
           dataObject[item.itemNumber] = item.totalItems;
         });
@@ -149,7 +149,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <Typography className={classes.headerText}>
             {`Est. Freight Charge: ---`}
           </Typography>
-          <Typography className={classes.headerText}>{`Est. Tax: ---`}</Typography>
+          <Typography
+            className={classes.headerText}
+          >{`Est. Tax: ---`}</Typography>
           <br />
           <Divider />
           <br />

@@ -16,6 +16,7 @@ import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice"
 import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
+import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -35,9 +36,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import {
-  suppliers,
-} from "../../utility/constants";
+import { suppliers } from "../../utility/constants";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -154,8 +153,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     resetRfqNum();
     dispatch(clearBrands());
     dispatch(resetFilters());
-    //TODO handle po, compliance (rules / items), rfq fetch here as well
+    //TODO handle po, compliance (rules / items) fetch here as well
     if (defaultFilters) {
+      console.log(defaultFilters);
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(defaultFilters));
@@ -166,16 +166,17 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(defaultFilters));
       }
-      if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems("inStock"))
+      if (
+        filterType === "item-inStock" ||
+        filterType === "item-onDemand" ||
+        filterType === "item-all"
+      ) {
+        dispatch(fetchFilteredItems(defaultFilters));
       }
-      if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"))
+      if (filterType === "itemRollup-rfq") {
+        dispatch(fetchFilteredRFQItems(defaultFilters));
       }
-      if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"))
-      }
-      dispatch(setChips({filterType: allFilters.filterType}))
+      dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
     dispatch,
@@ -185,7 +186,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     setReset,
     defaultFilters,
     filterType,
-    allFilters.filterType
+    allFilters.filterType,
   ]);
 
   //TODO write PO, rfq, compliance (rules / items), items, budget search when available
@@ -200,10 +201,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(fetchFilteredOrderSets(allFilters));
   };
 
+  const handleFilteredItemFetch = () => {
+    dispatch(setChips({ filterType: "item-all" }));
+    dispatch(fetchFilteredItems(allFilters));
+  };
+
   //TODO write handle grouping change function that fetches order history / rollup by
   // order or item
 
-  
   useEffect(() => {
     if (setToClear) {
       resetAllFilters();
@@ -221,15 +226,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-approvals"
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
-      } 
+      }
       if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems("inStock"))
+        dispatch(fetchFilteredItems(allFilters));
       }
       if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"))
+        dispatch(fetchFilteredItems(allFilters));
       }
       if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"))
+        dispatch(fetchFilteredItems(allFilters));
       }
       dispatch(setSorted());
     }
@@ -278,6 +283,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
+              handleSearch={handleFilteredItemFetch}
             />
           )}
           {filterType && filterType.includes("history") && (
@@ -324,7 +330,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
             />
           )}
-          {filterType === "itemRollup" && (
+          {filterType && filterType.includes("itemRollup") && (
             <FiltersItemRollup
               reset={reset}
               setReset={setReset}

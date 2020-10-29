@@ -8,7 +8,7 @@ import { createSlice } from "@reduxjs/toolkit";
   poNum: string (read),
   supplier: string (read),
   totalOrdered: int (read),
-  estTotal: int (read),
+  totalEstCost: int (read),
   actTotal: int (read),
   status: string (read),
   dueDate: date string (read),
@@ -24,7 +24,7 @@ let initialState = {
   nextLink: null,
   pos: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -72,8 +72,8 @@ const purchaseOrderHistorySlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,

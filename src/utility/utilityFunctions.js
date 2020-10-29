@@ -1,3 +1,4 @@
+import isBefore from "date-fns/isBefore";
 import { brandBULookup } from "./constants";
 
 const monthMap = {
@@ -43,6 +44,17 @@ export const filter = (array, filters) => {
     return filteredArray;
   } else return array;
 };
+
+export const earliestDate = (dateArray) => {
+  let sortedDates = dateArray.sort((a, b) => {
+    return isBefore(new Date(a["start-date"]), new Date(b["start-date"]))
+      ? -1
+      : !isBefore(new Date(a["start-date"]), new Date(b["start-date"]))
+      ? 1
+      : 0;
+  })
+  return sortedDates[0];
+}
 
 export const formatMoney = (value) => {
   let moneyAr = (value / 100).toFixed(2).split(".");

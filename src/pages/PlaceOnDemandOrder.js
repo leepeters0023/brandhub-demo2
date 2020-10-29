@@ -40,6 +40,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  orderType: "on-demand",
   sequenceNum: "",
 };
 
