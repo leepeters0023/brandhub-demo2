@@ -29,7 +29,7 @@ const headCells = [
   { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   {
-    id: "estTotal",
+    id: "totalEstCost",
     disablePadding: false,
     label: "Est. Total",
     sort: false,

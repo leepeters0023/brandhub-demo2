@@ -1,15 +1,17 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { navigate } from "@reach/router";
+
+//import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
 
 import {
   setFilterType,
   setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
+  setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -26,8 +28,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { currentBidItems } from "../assets/mockdata/dataGenerator.js";
-
 const defaultFilters = {
   orderType: "on-demand",
   brand: [],
@@ -42,13 +42,29 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
+const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  // const nextLink = useSelector((state) => state.rfq.nextLink);
+  // const isNextLoading = useSelector(
+  //   (state) => state.rfq.isNextLoading
+  // );
+
+  // const handleBottomScroll = () => {
+  //   if (nextLink && !isNextLoading) {
+  //     if (scrollRef.current.scrollTop !== 0) {
+  //       dispatch(fetchNextFilteredRFQItems(nextLink));
+  //     }
+  //   }
+  // };
+
+  //const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const isRFQItemsLoading = useSelector((state) => state.rfq.isLoading);
+  const currentRFQItems = useSelector((state) => state.rfq.rfqItems);
+  const currentUserRole = useSelector((state) => state.user.role);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -65,7 +81,7 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup" }));
+    dispatch(setFilterType({ type: "itemRollup-rfq" }));
     dispatch(
       setDefaultFilters({
         filterObject: defaultFilters,
@@ -80,12 +96,12 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (currentUserRole.length > 0) {
+      dispatch(setClear());;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -142,8 +158,8 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
         </div>
         <br />
         <ItemRollupTable
-          items={currentBidItems}
-          isItemsLoading={false}
+          items={currentRFQItems}
+          isItemsLoading={isRFQItemsLoading}
           handleSort={handleSort}
           // scrollRef={scrollRef}
           itemSelected={itemSelected}
@@ -162,9 +178,9 @@ const BidRollup = ({ handleFilterDrawer, filtersOpen }) => {
   );
 };
 
-BidRollup.propTypes = {
+RFQRollup.propTypes = {
   handleFilterDrawer: PropTypes.func.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };
 
-export default BidRollup;
+export default RFQRollup;

@@ -23,6 +23,7 @@ const FiltersItems = ({
   classes,
   sequenceNum,
   bindSequenceNum,
+  handleSearch
 }) => {
   const dispatch = useDispatch();
 
@@ -48,6 +49,7 @@ const FiltersItems = ({
             className={classes.largeButton}
             variant="contained"
             color="secondary"
+            onClick={handleSearch}
           >
             SEARCH
           </Button>

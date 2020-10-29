@@ -34,7 +34,12 @@ const headCells = [
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
 ];
@@ -279,7 +284,7 @@ const ItemRollupTable = ({
                       {formatMoney(row.estCost)}
                     </TableCell>
                     <TableCell align="left">
-                      {formatMoney(row.estTotal)}
+                      {formatMoney(row.totalEstCost)}
                     </TableCell>
                     <TableCell align="left">{row.dueDate}</TableCell>
                     {type === "po" && (

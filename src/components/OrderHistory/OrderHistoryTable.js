@@ -38,7 +38,7 @@ const headCells = [
     sort: false,
   },
   {
-    id: "estTotal",
+    id: "totalEstCost",
     disablePadding: false,
     label: "Est. Total",
     sort: false,
@@ -218,8 +218,7 @@ const OrderHistoryTable = ({
                       : row.totalActCost}
                   </TableCell>
                   <TableCell align="left">
-                    {row.status[0].toUpperCase() +
-                      row.status.slice(1)}
+                    {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
                 </TableRow>
               ))}

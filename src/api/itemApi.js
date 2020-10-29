@@ -3,7 +3,7 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
-//TODO incorporate limit, item type (instock vs ondemand), filters, pagination ... 
+//TODO incorporate limit, item type (instock vs ondemand), filters, pagination ...
 // export const fetchFilteredItems = async (filters) => {
 //   const response = { status: "", error: null, data: null };
 //   let filterString = "";
@@ -11,7 +11,8 @@ const dataFormatter = new Jsona();
 //     .get()
 // }
 
-export const fetchItems = async () => {
+export const fetchItems = async (filterObject) => {
+  console.log(filterObject);
   const response = { status: "", error: null, data: null };
   /*
   let progString = filterObject.program.length > 0
@@ -26,10 +27,17 @@ export const fetchItems = async () => {
 
     bu ? id or string...
   */
+  let seqString =
+    filterObject.sequenceNum.length > 0
+      ? `?filter[item-number]=${filterObject.sequenceNum}`
+      : "";
+  let queryString = "/api/items" + seqString;
+  console.log(queryString);
   await axios
-    .get(`/api/items`)
+    .get(queryString)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -39,4 +47,4 @@ export const fetchItems = async () => {
       response.error = err.toString();
     });
   return response;
-}
+};

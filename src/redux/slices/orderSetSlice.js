@@ -40,13 +40,13 @@ const orderSetSlice = createSlice({
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
           orderItems.forEach((item) => {
-            ordTotal += item.estTotal;
+            ordTotal += item.totalEstCost;
             currentItems.find(
               (cItem) => item.itemNumber === cItem.itemNumber
             ).totalItems += item.totalItems;
             currentItems.find(
               (cItem) => item.itemNumber === cItem.itemNumber
-            ).estTotal += item.estTotal;
+            ).totalEstCost += item.totalEstCost;
           });
         });
         state.orderId = orderId;
@@ -75,19 +75,19 @@ const orderSetSlice = createSlice({
           return {
             ...item,
             totalItems: numVal,
-            estTotal: numVal * item.estCost,
+            totalEstCost: numVal * item.estCost,
           };
         } else return item;
       });
       let newTotalItems = 0;
-      let newEstTotal = 0;
+      let newtotalEstCost = 0;
       newItems.forEach((item) => {
         newTotalItems += item.totalItems;
-        newEstTotal += item.estTotal;
+        newtotalEstCost += item.totalEstCost;
       });
       currentOrder.items = [...newItems];
       currentOrder.totalItems = newTotalItems;
-      currentOrder.totalEstCost = newEstTotal;
+      currentOrder.totalEstCost = newtotalEstCost;
       orders.splice(orders.indexOf(currentOrder), 1, currentOrder);
       state.orders = [...orders];
     },
@@ -102,11 +102,11 @@ const orderSetSlice = createSlice({
         totalItems += ord.items.find((item) => item.itemNumber === itemNumber)
           .totalItems;
         totalEstCost += ord.items.find((item) => item.itemNumber === itemNumber)
-          .estTotal;
-        ord.items.forEach((item) => (ordTotal += item.estTotal));
+          .totalEstCost;
+        ord.items.forEach((item) => (ordTotal += item.totalEstCost));
       });
       currentItem.totalItems = totalItems;
-      currentItem.estTotal = totalEstCost;
+      currentItem.totalEstCost = totalEstCost;
       items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = [...items];
       state.orderTotal = ordTotal;
@@ -115,7 +115,7 @@ const orderSetSlice = createSlice({
       const { itemNum } = action.payload;
       state.orderTotal -= state.items.find(
         (item) => item.itemNumber === itemNum
-      ).estTotal;
+      ).totalEstCost;
       let currentItems = state.items.filter(
         (item) => item.itemNumber !== itemNum
       );
@@ -126,21 +126,21 @@ const orderSetSlice = createSlice({
           (item) => item.itemNumber !== itemNum
         );
         let totalItems = 0;
-        let estTotal = 0;
+        let totalEstCost = 0;
         currentItems.forEach((item) => {
           totalItems += item.totalItems;
-          estTotal += item.estTotal;
+          totalEstCost += item.totalEstCost;
         });
         ord.items = currentItems;
         ord.totalItems = totalItems;
-        ord.totalEstCost = estTotal;
+        ord.totalEstCost = totalEstCost;
       });
       state.orders = currentOrders;
     },
     removeGridOrder(state, action) {
       const { orderId } = action.payload;
       let deleteOrder = state.orders.find((order) => order.id === orderId);
-      state.orderTotal -= deleteOrder.estTotal;
+      state.orderTotal -= deleteOrder.totalEstCost;
       let currentOrders = state.orders.filter((order) => order.id !== orderId);
       state.orders = currentOrders;
       let currentItems = [...state.items];
@@ -150,7 +150,7 @@ const orderSetSlice = createSlice({
         );
         return {
           ...item,
-          estTotal: item.estTotal - editItem.estTotal,
+          totalEstCost: item.totalEstCost - editItem.totalEstCost,
           totalItems: item.totalItems - editItem.totalItems,
         };
       });
