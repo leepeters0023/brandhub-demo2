@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrderSet } from "../redux/slices/orderSetSlice";
 
@@ -37,6 +38,18 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+
+const determineOrigin = () => {
+  let origin;
+  if (window.location.href.includes("rollup")) {
+    origin = "/rollup"
+  } else if (window.location.hash.includes("approval")) {
+    origin = "/orders/approvals"
+  } else {
+    origin = "/orders/items"
+  }
+  return origin;
+}
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -149,6 +162,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const handleDeny = () => {
     dispatch(deleteOrdSet(orderId))
   }
+
+  useRetainFiltersOnPopstate(determineOrigin(), dispatch)
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {

@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrder } from "../redux/slices/orderHistorySlice";
 
@@ -38,6 +39,8 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
+
+  useRetainFiltersOnPopstate("/orders/history", dispatch)
 
   useEffect(() => {
     if (

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Logo from "../../assets/RTA_Logo_Stacked.png";
 import { Link } from "@reach/router";
-import { useSelector } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { setRetain } from "../../redux/slices/filterSlice";
 
 import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
@@ -83,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
   const [drawerContent, setDrawerContent] = useState(null);
@@ -101,9 +105,12 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
     setOpen(true);
   };
 
-  const handleDrawerClose = () => {
+  const handleDrawerClose = (mouseEvent) => {
     setOpen(false);
     setDrawerContent(null);
+    if (!mouseEvent) {
+      dispatch(setRetain({ value: false }))
+    }
   };
 
   return (
@@ -122,7 +129,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             [classes.drawerClose]: !open,
           }),
         }}
-        onMouseLeave={handleDrawerClose}
+        onMouseLeave={() => handleDrawerClose(true)}
       >
         <div
           style={{
