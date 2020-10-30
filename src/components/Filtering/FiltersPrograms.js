@@ -86,7 +86,7 @@ const FiltersPrograms = ({
             handleChange={handleFilters}
             reset={reset}
             setReset={setReset}
-            filterType={"item"}
+            filterType={"program"}
           />
         </ListItem>
         <ListItem>
