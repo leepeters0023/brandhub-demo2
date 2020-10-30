@@ -7,7 +7,7 @@ import {
   setDefaultFilters,
   updateMultipleFilters,
   setClear,
-  setRetain
+  setRetain,
 } from "../redux/slices/filterSlice";
 
 /*
@@ -114,13 +114,17 @@ export const useWindowHash = (
   return handleChangeTab;
 };
 
+/*
+Handles setting initial filters for views with filters, and retaining those
+filters if retainFilters is truthy in state
+*/
 export const useInitialFilters = (
   filterType,
   defaultFilters,
   retainFilters,
   dispatch,
   handleFilterDrawer,
-  currentUserRole,
+  currentUserRole
 ) => {
   useEffect(() => {
     dispatch(setFilterType({ type: filterType }));
@@ -144,8 +148,24 @@ export const useInitialFilters = (
     if (currentUserRole.length > 0 && !retainFilters) {
       dispatch(setClear());
     } else {
-      dispatch(setRetain({value: false}))
+      dispatch(setRetain({ value: false }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+};
+
+/*
+For views that filtered views can 
+*/
+export const useRetainFiltersOnPopstate = (origin, dispatch) => {
+  const handleRetain = (event) => {
+    if (!origin) return null;
+    if (event.target.location.pathname.includes(origin)) {
+      dispatch(setRetain({ value: true }));
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("popstate", handleRetain);
+    return () => window.removeEventListener("popstate", handleRetain);
+  });
 };

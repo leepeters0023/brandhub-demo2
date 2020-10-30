@@ -11,10 +11,7 @@ import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
 
-import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";

@@ -79,6 +79,7 @@ const filterSlice = createSlice({
       state.sortProgramsBy = null;
       state.chipList = [];
       state.clearFilters = false;
+      state.retainFilters = false;
       state.defaultFilters = { ...filterObject };
     },
     updateMultipleFilters(state, action) {
@@ -128,6 +129,7 @@ const filterSlice = createSlice({
       state.sortProgramsBy = null;
       state.chipList = [];
       state.clearFilters = false;
+      state.retainFilters = false;
     },
     setChips(state, action) {
       const { filterType } = action.payload;

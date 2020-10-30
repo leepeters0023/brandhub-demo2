@@ -4,6 +4,7 @@ import { Link } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useWindowHash } from "../hooks/UtilityHooks";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchItems } from "../redux/slices/programsSlice";
 
@@ -67,6 +68,8 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useRetainFiltersOnPopstate("/programs", dispatch)
 
   useEffect(() => {
     handleFiltersClosed();
