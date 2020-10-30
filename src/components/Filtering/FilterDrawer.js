@@ -10,6 +10,7 @@ import {
   setChips,
   resetFilters,
   setSorted,
+  setRetain,
 } from "../../redux/slices/filterSlice";
 
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
@@ -35,9 +36,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import {
-  suppliers,
-} from "../../utility/constants";
+import { suppliers } from "../../utility/constants";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -62,6 +61,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const filterType = useSelector((state) => state.filters.filterType);
   const setToClear = useSelector((state) => state.filters.clearFilters);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   const sorted = useSelector((state) => state.filters.sorted);
   const defaultFilters = useSelector((state) => state.filters.defaultFilters);
   const allFilters = useSelector((state) => state.filters);
@@ -167,15 +167,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredOrderSets(defaultFilters));
       }
       if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems("inStock"))
+        dispatch(fetchFilteredItems("inStock"));
       }
       if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"))
+        dispatch(fetchFilteredItems("onDemand"));
       }
       if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"))
+        dispatch(fetchFilteredItems("all"));
       }
-      dispatch(setChips({filterType: allFilters.filterType}))
+      dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
     dispatch,
@@ -185,7 +185,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     setReset,
     defaultFilters,
     filterType,
-    allFilters.filterType
+    allFilters.filterType,
   ]);
 
   //TODO write PO, rfq, compliance (rules / items), items, budget search when available
@@ -203,12 +203,22 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   //TODO write handle grouping change function that fetches order history / rollup by
   // order or item
 
-  
   useEffect(() => {
     if (setToClear) {
-      resetAllFilters();
+      if (retainFilters) {
+        dispatch(setRetain({value: false}));
+      } else {
+        resetAllFilters();
+      }
     }
-  }, [setToClear, resetAllFilters]);
+  }, [
+    setToClear,
+    resetAllFilters,
+    retainFilters,
+    allFilters,
+    filterType,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if (sorted) {
@@ -221,15 +231,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-approvals"
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
-      } 
+      }
       if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems("inStock"))
+        dispatch(fetchFilteredItems("inStock"));
       }
       if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"))
+        dispatch(fetchFilteredItems("onDemand"));
       }
       if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"))
+        dispatch(fetchFilteredItems("all"));
       }
       dispatch(setSorted());
     }

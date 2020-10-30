@@ -149,7 +149,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <Typography className={classes.headerText}>
             {`Est. Freight Charge: ---`}
           </Typography>
-          <Typography className={classes.headerText}>{`Est. Tax: ---`}</Typography>
+          <Typography
+            className={classes.headerText}
+          >{`Est. Tax: ---`}</Typography>
           <br />
           <Divider />
           <br />
@@ -167,7 +169,8 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               color="primary"
               fullWidth
               onClick={() => {
-                orderSet.status === "in-progress"
+                orderSet.status === "in-progress" ||
+                orderSet.status === "inactive"
                   ? setOverviewVisible(false)
                   : handleEditOrder();
               }}

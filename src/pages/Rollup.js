@@ -14,6 +14,7 @@ import {
   updateMultipleFilters,
   setSorted,
   setClear,
+  setRetain,
 } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -73,8 +74,9 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextPreOrdersLoading = useSelector(
     (state) => state.orderSetHistory.isNextLoading
   );
-  const currentUserRoll = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
@@ -101,23 +103,27 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     dispatch(setFilterType({ type: "history-rollup" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
+    if (!retainFilters) {
+      dispatch(
+        setDefaultFilters({
+          filterObject: defaultFilters,
+        })
+      );
+      dispatch(
+        updateMultipleFilters({
+          filterObject: defaultFilters,
+        })
+      );
+    }
     handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currentUserRoll.length > 0) {
+    if (currentUserRole.length > 0 && !retainFilters) {
       dispatch(setClear());
+    } else {
+      dispatch(setRetain({value: false}))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
+
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   setSorted,
-  setClear,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -88,6 +87,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const currentOrders = useSelector((state) => state.orderHistory.orders);
   const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -102,28 +102,14 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "history-orders" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "history-orders",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

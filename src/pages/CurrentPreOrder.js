@@ -124,6 +124,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
+  const [switched, setSwitched] = useCallback(useState(false));
 
   const currentUserId = useSelector((state) => state.user.id);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
@@ -189,8 +190,9 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   const handleProgram = useCallback((id) => {
     setProgram(id);
+    setSwitched(true);
     window.location.hash = id;
-  }, []);
+  }, [setSwitched]);
 
   useEffect(() => {
     if (window.location.hash.length === 0) {
@@ -229,6 +231,13 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     window.addEventListener("popstate", handleProgramIdHash);
     return () => window.removeEventListener("popstate", handleProgramIdHash);
   }, [handleProgramIdHash]);
+
+  useEffect(() => {
+    if ((preOrderStatus === "inactive" || preOrderStatus === "in-progress") && overviewVisible && switched) {
+      setOverviewVisible(false)
+      setSwitched(false);
+    }
+  })
 
   useEffect(() => {
     handleFiltersClosed();
@@ -356,6 +365,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
             orderStatus={preOrderStatus}
             currentItems={currentItems}
             orders={orders}
+            orderType="preOrder"
           />
         )}
         <br />
@@ -377,7 +387,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   className={classes.largeButton}
                   color="secondary"
                   variant="contained"
-                  onClick={() => setOverviewVisible(true)}
+                  onClick={() => {
+                    setSwitched(false)
+                    setOverviewVisible(true)
+                  }}
                 >
                   ORDER OVERVIEW
                 </Button>

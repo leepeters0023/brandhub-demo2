@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -27,11 +26,9 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { yearToDateBudgets } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
-  orderType: "on-demand",
   brand: [],
-  program: [],
+  user: [],
   territory: [],
-  sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "user",
 };
@@ -44,7 +41,8 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -60,29 +58,14 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
     //dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "budgets-ytod" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      //TODO filters
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useInitialFilters(
+    "budgets-ytod",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

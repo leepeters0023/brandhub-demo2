@@ -1,15 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Link } from "@reach/router";
 
-import { fetchInitialPrograms } from "../redux/slices/programsSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import {
-  setFilterType,
-  setDefaultFilters,
-  updateMultipleFilters,
-  setClear,
-} from "../redux/slices/filterSlice";
+import { fetchInitialPrograms } from "../redux/slices/programsSlice";
 
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
 
@@ -49,6 +44,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const buFilters = useSelector((state) => state.filters.bu);
   const monthFilters = useSelector((state) => state.filters.month);
   const brandFilter = useSelector((state) => state.filters.brand);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -62,28 +58,14 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
     }
   }, [userType, dispatch, activePrograms, currentTerritory]);
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "program" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (userType.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "program",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    userType
+  );
 
   useEffect(() => {
     if (
