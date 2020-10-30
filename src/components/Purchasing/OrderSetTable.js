@@ -234,9 +234,11 @@ const OrderSetTable = (props) => {
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    <div className={classes.headerCell}>
-                      <DistributorSelection />
-                    </div>
+                    {orderType !== "preOrder" && (
+                      <div className={classes.headerCell}>
+                        <DistributorSelection />
+                      </div>
+                    )}
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell

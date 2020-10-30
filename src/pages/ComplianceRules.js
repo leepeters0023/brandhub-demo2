@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+
+import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -41,7 +40,8 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -57,28 +57,14 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
     //dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "compliance-rules" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useInitialFilters(
+    "compliance-rules",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

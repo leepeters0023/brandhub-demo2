@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
 
@@ -13,13 +14,7 @@ import {
   deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
-import {
-  setFilterType,
-  setDefaultFilters,
-  updateMultipleFilters,
-  setSorted,
-  setClear,
-} from "../redux/slices/filterSlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderApprovalTable from "../components/OrderManagement/OrderApprovalTable";
@@ -82,6 +77,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   );
   const currentOrders = useSelector((state) => state.orderSetHistory.orderSets);
   const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -97,36 +93,22 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleDeny = (id) => {
-    dispatch(deleteOrdSet(id, allFilters))
-  }
+    dispatch(deleteOrdSet(id, allFilters));
+  };
 
   const handleBulkApproval = () => {
     dispatch(approveMultipleOrderSets(selected, allFilters));
     setSelected([]);
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "history-approvals" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "history-approvals",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

@@ -38,6 +38,7 @@ let initialState = {
   chipList: [],
   defaultFilters: null,
   clearFilters: false,
+  retainFilters: false,
   sorted: false,
   filterType: null,
 };
@@ -92,6 +93,10 @@ const filterSlice = createSlice({
     },
     setClear(state) {
       state.clearFilters = true;
+    },
+    setRetain(state, action) {
+      const { value } = action.payload
+      state.retainFilters = value;
     },
     setSorted(state) {
       state.sorted = !state.sorted;
@@ -162,7 +167,6 @@ const filterSlice = createSlice({
           "tag",
           "ruleType",
           "sequenceNum",
-          "status",
         ];
       }
       if (filterType.includes("budget")) {
@@ -209,6 +213,7 @@ export const {
   updateMultipleFilters,
   updateSingleFilter,
   setSorted,
+  setRetain,
   setClear,
   resetFilters,
   setChips,

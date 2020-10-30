@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { fetchOrder } from "../redux/slices/orderHistorySlice";
 
+import { setRetain } from "../redux/slices/filterSlice";
+
 import { formatMoney } from "../utility/utilityFunctions";
 
 import SingleOrderDetailTable from "../components/OrderHistory/SingleOrderDetailTable";
@@ -62,7 +64,13 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
         <div className={classes.titleBar}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Tooltip title="Back to Order History" placement="bottom-start">
-              <IconButton component={Link} to="/orders/history">
+              <IconButton
+                component={Link}
+                to="/orders/history"
+                onClick={() => {
+                  dispatch(setRetain({value: true}));
+                }}
+              >
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
