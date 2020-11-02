@@ -62,7 +62,7 @@ const generatePOItems = (dataPoints) => {
       totalItems / 12 - Math.floor(Math.random() * (totalItems / 12))
     );
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let estTotal = totalItems * estCost;
+    let totalEstCost = totalItems * estCost;
     let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
     let territory = territories[Math.floor(Math.random() * territories.length)];
 
@@ -75,7 +75,7 @@ const generatePOItems = (dataPoints) => {
       totalItems: totalItems,
       totalNotCompliant: totalNotCompliant,
       estCost: estCost,
-      estTotal: estTotal,
+      totalEstCost: totalEstCost,
       dueDate: "10/30/2020",
       supplier: supplier,
     });
@@ -177,7 +177,7 @@ const generateRFQs = (dataPoints, stat) => {
     let sequenceNumber = (1110000010 + i).toString();
     let totalItems = Math.floor(Math.random() * 1000) + 500;
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let estTotal = totalItems * estCost;
+    let totalEstCost = totalItems * estCost;
     let status =
       stat === "all"
         ? statusAll[Math.floor(Math.random() * statusAll.length)]
@@ -190,7 +190,7 @@ const generateRFQs = (dataPoints, stat) => {
       itemType: currentItemType,
       totalItems: totalItems,
       estCost: estCost,
-      estTotal: estTotal,
+      totalEstCost: totalEstCost,
       status: status,
     });
   }
@@ -206,7 +206,7 @@ const generatePOs = (dataPoints, stat) => {
     let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
     let totalItems = Math.floor(Math.random() * 1000) + 500;
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let estTotal = totalItems * estCost;
+    let totalEstCost = totalItems * estCost;
     let status =
       stat === "all"
         ? statusAll[Math.floor(Math.random() * statusAll.length)]
@@ -216,8 +216,8 @@ const generatePOs = (dataPoints, stat) => {
       poNum: poNumber,
       supplier: supplier,
       totalItems: totalItems,
-      estTotal: estTotal,
-      actTotal: estTotal,
+      totalEstCost: totalEstCost,
+      actTotal: totalEstCost,
       status: status,
       dueDate: new Date().toLocaleDateString(),
     });

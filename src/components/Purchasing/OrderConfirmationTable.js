@@ -66,7 +66,7 @@ const OrderConfirmationTable = ({ items }) => {
                 )}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
                 <TableCell align="left">{`${formatMoney(
-                  item.estTotal
+                  item.totalEstCost
                 )}`}</TableCell>
               </TableRow>
             ))}

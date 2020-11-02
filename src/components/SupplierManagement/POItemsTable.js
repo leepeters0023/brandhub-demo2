@@ -88,7 +88,9 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
               <TableCell align="left">{row.totalItems}</TableCell>
               <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
               <MoneyCell initialCost={formatMoney(row.estCost)} />
-              <TableCell align="left">{formatMoney(row.estTotal)}</TableCell>
+              <TableCell align="left">
+                {formatMoney(row.totalEstCost)}
+              </TableCell>
               <TableCell align="right">
                 <Tooltip title="Remove">
                   <IconButton

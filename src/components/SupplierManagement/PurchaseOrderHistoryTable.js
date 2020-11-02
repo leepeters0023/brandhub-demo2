@@ -24,19 +24,19 @@ const headCells = [
     label: "Total Ordered",
     sort: false,
   },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true}
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    classes,
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -118,7 +118,7 @@ const PurchaseOrderHistoryTable = ({
   pos,
   posLoading,
   handleSort,
-  scrollRef
+  scrollRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -166,28 +166,27 @@ const PurchaseOrderHistoryTable = ({
             {!posLoading &&
               pos.length > 0 &&
               pos.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    hover
-                    className={classes.clickableRow}
-                    onClick={() => {
-                      handleRowClick(row.poNum);
-                    }}
-                  >
-                    <TableCell align="left">{row.poNum}</TableCell>
-                    <TableCell align="left">{row.supplier}</TableCell>
-                    <TableCell align="left">{row.totalItems}</TableCell>
-                    <TableCell align="left">
-                      {formatMoney(row.estTotal)}
-                    </TableCell>
-                    <TableCell align="left">
-                      {formatMoney(row.actTotal)}
-                    </TableCell>
-                    <TableCell align="left">{row.status}</TableCell>
-                    <TableCell align="left">{row.dueDate}</TableCell>
-                  </TableRow>
-                )
-              )}
+                <TableRow
+                  key={row.id}
+                  hover
+                  className={classes.clickableRow}
+                  onClick={() => {
+                    handleRowClick(row.poNum);
+                  }}
+                >
+                  <TableCell align="left">{row.poNum}</TableCell>
+                  <TableCell align="left">{row.supplier}</TableCell>
+                  <TableCell align="left">{row.totalItems}</TableCell>
+                  <TableCell align="left">
+                    {formatMoney(row.totalEstCost)}
+                  </TableCell>
+                  <TableCell align="left">
+                    {formatMoney(row.actTotal)}
+                  </TableCell>
+                  <TableCell align="left">{row.status}</TableCell>
+                  <TableCell align="left">{row.dueDate}</TableCell>
+                </TableRow>
+              ))}
             {posLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={9}>

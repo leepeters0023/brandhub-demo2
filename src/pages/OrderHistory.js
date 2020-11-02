@@ -39,7 +39,7 @@ const csvHeaders = [
   { label: "Ship Date", key: "shipDate" },
   { label: "Tracking", key: "trackingNum" },
   { label: "Total Items", key: "totalItems" },
-  { label: "Est. Total", key: "estTotal" },
+  { label: "Est. Total", key: "totalEstCost" },
   { label: "Act. Total", key: "actTotal" },
   { label: "Status", key: "orderStatus" },
 ];

@@ -39,6 +39,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  orderType: "in-stock",
   sequenceNum: "",
 };
 
