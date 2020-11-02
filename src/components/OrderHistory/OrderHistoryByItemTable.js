@@ -36,7 +36,12 @@ const headCells = [
     sort: false,
   },
   // { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   // { id: "actCost", disablePadding: false, label: "Act. Cost", sort: false },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
@@ -198,7 +203,7 @@ const OrderHistoryByItemTable = ({
                       : row.estCost}
                   </TableCell> */}
                   <TableCell align="left">
-                    {row.estTotal !== "---"
+                    {row.totalEstCost !== "---"
                       ? formatMoney(row.totalEstCost)
                       : row.totalEstCost}
                   </TableCell>
@@ -214,20 +219,19 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      // ? format(new Date(row.orderDate), "MM/dd/yyyy")
-                      ? row.orderDate
+                      ? // ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                        row.orderDate
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.shipDate !== "---"
-                      // ? format(new Date(row.shipDate), "MM/dd/yyyy")
-                      ? row.shipDate
+                      ? // ? format(new Date(row.shipDate), "MM/dd/yyyy")
+                        row.shipDate
                       : row.shipDate}
                   </TableCell>
                   <TableCell align="left">{row.tracking}</TableCell>
                   <TableCell align="left">
-                    {row.status[0].toUpperCase() +
-                      row.status.slice(1)}
+                    {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
                 </TableRow>
               ))}

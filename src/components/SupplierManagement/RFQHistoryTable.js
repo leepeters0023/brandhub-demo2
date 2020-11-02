@@ -28,18 +28,18 @@ const headCells = [
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
-  { id: "status", disablePadding: false, label: "Status", sort: true }
+  { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    classes,
-    order,
-    orderBy,
-    onRequestSort,
-  } = props;
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -117,12 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RFQHistoryTable = ({
-  rfqs,
-  rfqsLoading,
-  handleSort,
-  scrollRef
-}) => {
+const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
@@ -169,32 +164,27 @@ const RFQHistoryTable = ({
             {!rfqsLoading &&
               rfqs.length > 0 &&
               rfqs.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    hover
-                    className={classes.clickableRow}
-                    onClick={() => {
-                      handleRowClick(row.rfqNum);
-                    }}
-                  >
-                    <TableCell align="left">{row.rfqNum}</TableCell>
-                    <TableCell align="left">{row.sequenceNum}</TableCell>
-                    <TableCell align="left">{row.program}</TableCell>
-                    <TableCell align="left">{row.itemType}</TableCell>
-                    <TableCell align="left">{row.totalItems}</TableCell>
-                    <TableCell align="left">
-                      {formatMoney(row.estCost)}
-                    </TableCell>
-                    <TableCell align="left">
-                      {formatMoney(row.estTotal)}
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(), "MM/dd/yyyy")}
-                    </TableCell>
-                    <TableCell align="left">{row.status}</TableCell>
-                  </TableRow>
-                )
-              )}
+                <TableRow
+                  key={row.id}
+                  hover
+                  className={classes.clickableRow}
+                  onClick={() => {
+                    handleRowClick(row.rfqNum);
+                  }}
+                >
+                  <TableCell align="left">{row.rfqNum}</TableCell>
+                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">{row.itemType}</TableCell>
+                  <TableCell align="left">{row.totalItems}</TableCell>
+                  <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+                  <TableCell align="left">
+                    {formatMoney(row.totalEstCost)}
+                  </TableCell>
+                  <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
+                  <TableCell align="left">{row.status}</TableCell>
+                </TableRow>
+              ))}
             {rfqsLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={9}>

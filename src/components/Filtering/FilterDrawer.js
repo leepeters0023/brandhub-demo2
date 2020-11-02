@@ -17,6 +17,7 @@ import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice"
 import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
+import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -154,8 +155,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     resetRfqNum();
     dispatch(clearBrands());
     dispatch(resetFilters());
-    //TODO handle po, compliance (rules / items), rfq fetch here as well
+    //TODO handle po, compliance (rules / items) fetch here as well
     if (defaultFilters) {
+      console.log(defaultFilters);
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(defaultFilters));
@@ -166,14 +168,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(defaultFilters));
       }
-      if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems("inStock"));
+      if (
+        filterType === "item-inStock" ||
+        filterType === "item-onDemand" ||
+        filterType === "item-all"
+      ) {
+        dispatch(fetchFilteredItems(defaultFilters));
       }
-      if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"));
-      }
-      if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"));
+      if (filterType === "itemRollup-rfq") {
+        dispatch(fetchFilteredRFQItems(defaultFilters));
       }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
@@ -198,6 +201,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const handleOrderSetFetch = () => {
     dispatch(setChips({ filterType: "history" }));
     dispatch(fetchFilteredOrderSets(allFilters));
+  };
+
+  const handleFilteredItemFetch = () => {
+    dispatch(setChips({ filterType: "item-all" }));
+    dispatch(fetchFilteredItems(allFilters));
   };
 
   //TODO write handle grouping change function that fetches order history / rollup by
@@ -233,6 +241,13 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredOrderSets(allFilters));
       }
       if (filterType === "item-inStock") {
+//         dispatch(fetchFilteredItems(allFilters));
+//       }
+//       if (filterType === "item-onDemand") {
+//         dispatch(fetchFilteredItems(allFilters));
+//       }
+//       if (filterType === "item-all") {
+//         dispatch(fetchFilteredItems(allFilters));
         dispatch(fetchFilteredItems("inStock"));
       }
       if (filterType === "item-onDemand") {
@@ -288,6 +303,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
+              handleSearch={handleFilteredItemFetch}
             />
           )}
           {filterType && filterType.includes("history") && (
@@ -334,7 +350,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
             />
           )}
-          {filterType === "itemRollup" && (
+          {filterType && filterType.includes("itemRollup") && (
             <FiltersItemRollup
               reset={reset}
               setReset={setReset}

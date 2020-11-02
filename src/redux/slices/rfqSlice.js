@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { fetchRFQItems, createRFQ } from "../../api/supplierApi";
+
+import { mapRFQItems } from "../apiMaps";
 /*
 * RFQ Item Model (not final!)
 
@@ -69,32 +72,55 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let initialState = {
   isLoading: false,
+  isNextLoading: false,
+  nextPage: null,
+  nextLink: null,
   rfqNum: null,
   rfqStatus: null,
   rfqItems: [],
+  selectedRFQItem: null,
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
-}
+};
+
+const startNextLoading = (state) => {
+  state.isNextLoading = true;
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.error = error;
-}
+};
 
 const rfqSlice = createSlice({
   name: "rfqSlice",
   initialState,
   reducers: {
     setIsLoading: startLoading,
-    getRFQSuccess(state, action) {
-      const { rfqs } = action.payload;
-      state.rfqItems = [...rfqs ]
+    setNextIsLoading: startNextLoading,
+    getRFQItemsSuccess(state, action) {
+      const { rfqItems, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
+      state.nextLink = nextLink;
+      state.rfqItems = [...rfqItems];
       state.isLoading = false;
       state.error = null;
+    },
+    getNextRFQItemsSuccess(state, action) {
+      const { rfqItems, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
+      state.nextLink = nextLink;
+      state.rfqItems = state.rfqItems.concat(rfqItems);
+      state.isNextLoading = false;
+      state.error = null;
+    },
+    setSelectedRFQItem(state, action) {
+      const { itemId } = action.payload;
+      state.selectedRFQItem = itemId;
     },
     updateQty(state, action) {
       const { sequenceNum, value } = action.payload;
@@ -102,10 +128,10 @@ const rfqSlice = createSlice({
         if (rfq.sequenceNum === sequenceNum) {
           return {
             ...rfq,
-            qty: value
-          }
-        } else return rfq
-      })
+            qty: value,
+          };
+        } else return rfq;
+      });
       state.rfqItems = newRFQs;
       state.error = null;
     },
@@ -116,9 +142,9 @@ const rfqSlice = createSlice({
           return {
             ...rfq,
             supplierNote: value,
-          }
-        } else return rfq
-      })
+          };
+        } else return rfq;
+      });
       state.rfqItems = newRFQs;
       state.error = null;
     },
@@ -133,11 +159,11 @@ const rfqSlice = createSlice({
               [`${supplier}`]: {
                 ...rfq.suppliers[`${supplier}`],
                 [`${key}`]: value,
-              }
-            }
-          }
-        } else return rfq
-      })
+              },
+            },
+          };
+        } else return rfq;
+      });
       state.rfqItems = newRFQs;
       state.error = null;
     },
@@ -149,12 +175,15 @@ const rfqSlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,
-  getRFQSuccess,
+  setNextIsLoading,
+  getRFQItemsSuccess,
+  getNextRFQItemsSuccess,
+  setSelectedRFQItem,
   updateQty,
   updateNote,
   updateSupplier,
@@ -163,3 +192,33 @@ export const {
 } = rfqSlice.actions;
 
 export default rfqSlice.reducer;
+
+export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const items = await fetchRFQItems(filterObject);
+    if (items.error) {
+      throw items.error;
+    }
+    console.log(items.data);
+    let mappedItems = mapRFQItems(items.data);
+    console.log(mappedItems);
+    dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
+  } catch (err) {
+    dispatch(setFailure(err.toString()));
+  }
+};
+
+export const createNewRFQ = (item, user) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const newRFQ = await createRFQ(item, user);
+    if (newRFQ.error) {
+      throw newRFQ.error;
+    }
+    console.log(newRFQ.data);
+    //TODO getNewRFQSuccess: map all rfq params to state, read in on new rfq.
+  } catch (err) {
+    dispatch(setFailure(err.toString()));
+  }
+};

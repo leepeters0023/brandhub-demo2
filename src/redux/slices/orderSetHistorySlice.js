@@ -113,7 +113,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    let mappedOrderSets = mapOrderSetHistory((orderSets.data.orders))
+    let mappedOrderSets = mapOrderSetHistory(orderSets.data.orders);
     dispatch(
       getOrderSetsSuccess({
         orderSets: mappedOrderSets,
@@ -138,7 +138,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    let mappedOrderSets = mapOrderSetHistory((orderSets.data.orders))
+    let mappedOrderSets = mapOrderSetHistory(orderSets.data.orders);
     dispatch(
       getNextOrderSetsSuccess({
         orderSets: mappedOrderSets,
@@ -175,7 +175,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
 //       packSize: item["qty-per-pack"],
 //       totalItems: item.qty,
 //       estCost: item["est-cost"],
-//       estTotal: item["est-total"],
+//       totalEstCost: item["est-total"],
 //       orderDate: item["submitted-at"],
 //       orderDue: item["due-date"] ? item["due-date"] : "---",
 //       status: item.status,
@@ -212,7 +212,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
 //       packSize: item["qty-per-pack"],
 //       totalItems: item.qty,
 //       estCost: item["est-cost"],
-//       estTotal: item["est-total"],
+//       totalEstCost: item["est-total"],
 //       orderDate: item["submitted-at"],
 //       orderDue: item["due-date"] ? item["due-date"] : "---",
 //       status: item.status,

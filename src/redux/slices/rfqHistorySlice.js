@@ -11,7 +11,7 @@ import { createSlice } from "@reduxjs/toolkit";
   itemType: string (read),
   totalOrdered: int (read),
   estCost: int (read),
-  estTotal: int (read),
+  totalEstCost: int (read),
   dueDate: date string (read),
   status: string (read),
 }
@@ -26,7 +26,7 @@ let initialState = {
   nextLink: null,
   rfqs: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -74,8 +74,8 @@ const rfqHistorySlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,

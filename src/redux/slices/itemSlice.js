@@ -19,6 +19,13 @@ let initialState = {
   error: null,
 };
 
+const typeMap = {
+  "in-stock": "inStock",
+  "on-demand": "onDemand",
+  "pre-order": "pre-order",
+  "all": "allItems",
+}
+
 const startLoading = (state) => {
   state.isLoading = true;
 };
@@ -92,10 +99,10 @@ export const {
 
 export default itemSlice.reducer;
 
-export const fetchFilteredItems = (orderType) => async (dispatch) => {
+export const fetchFilteredItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchItems();
+    const items = await fetchItems(filterObject);
     if (items.error) {
       throw items.error;
     }
@@ -103,6 +110,7 @@ export const fetchFilteredItems = (orderType) => async (dispatch) => {
       id: item.id,
       itemNumber: item["item-number"],
       brand: item.brands.map((brand) => brand.name).join(", "),
+      program: item.programs.map((prog) => prog.name).join(", "),
       itemType: item.type,
       estCost: item["estimated-cost"],
       packSize: item["qty-per-pack"],
@@ -111,7 +119,7 @@ export const fetchFilteredItems = (orderType) => async (dispatch) => {
     }));
     dispatch(
       getItemsSuccess({
-        orderType: orderType,
+        orderType: typeMap[filterObject.orderType],
         items: newItems,
         nextLink: "NEXT LINK HERE",
       })

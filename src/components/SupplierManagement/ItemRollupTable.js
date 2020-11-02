@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 //import { navigate } from "@reach/router";
 
+import { useDispatch } from "react-redux";
+
+import { setSelectedRFQItem } from "../../redux/slices/rfqSlice";
+
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import Checkbox from "@material-ui/core/Checkbox";
@@ -34,7 +38,12 @@ const headCells = [
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  { id: "estTotal", disablePadding: false, label: "Est. Total", sort: false },
+  {
+    id: "totalEstCost",
+    disablePadding: false,
+    label: "Est. Total",
+    sort: false,
+  },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
 ];
@@ -63,12 +72,14 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all items" }}
-          />
+          {type === "po" && (
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          )}
         </TableCell>
         {currentHeader.map((headCell) => {
           if (!headCell.sort) {
@@ -153,6 +164,7 @@ const ItemRollupTable = ({
   type,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
   const [selected, setSelected] = useState([]);
@@ -188,6 +200,14 @@ const ItemRollupTable = ({
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
+    }
+
+    if (type === "rfq") {
+      if (newSelected.length === 0) {
+        dispatch(setSelectedRFQItem({ itemId: null }))
+      } else {
+        dispatch(setSelectedRFQItem({ itemId: newSelected[0]}))
+      }
     }
 
     setSelected(newSelected);
@@ -263,6 +283,7 @@ const ItemRollupTable = ({
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
+                        disabled={type === "rfq" && selected.length >= 1 && selected[0] !== row.id}
                         onChange={(event) => {
                           handleClick(event, row.id);
                           event.stopPropagation();
@@ -279,7 +300,7 @@ const ItemRollupTable = ({
                       {formatMoney(row.estCost)}
                     </TableCell>
                     <TableCell align="left">
-                      {formatMoney(row.estTotal)}
+                      {formatMoney(row.totalEstCost)}
                     </TableCell>
                     <TableCell align="left">{row.dueDate}</TableCell>
                     {type === "po" && (

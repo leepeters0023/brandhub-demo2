@@ -193,9 +193,9 @@ const RollupOverviewByItemTable = ({
                       : row.estCost}
                   </TableCell>
                   <TableCell align="left">
-                    {row.estTotal !== "---"
+                    {row.totalEstCost !== "---"
                       ? formatMoney(row.totalEstCost)
-                      : row.estTotal}
+                      : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
