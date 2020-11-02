@@ -2,6 +2,18 @@ import { useState, useEffect, useCallback } from "react";
 
 import { filter } from "../utility/utilityFunctions";
 
+import {
+  setFilterType,
+  setDefaultFilters,
+  updateMultipleFilters,
+  setClear,
+  setRetain,
+} from "../redux/slices/filterSlice";
+
+/*
+Manages sorting and filtering of programs in the Pre Order Program view
+This is the only view where sorting is handled in the UI
+*/
 export const useProgramSort = (programList, sortOption, filters) => {
   const [sortedList, setSortedList] = useState(programList);
   const monthValue = {
@@ -62,6 +74,10 @@ export const useProgramSort = (programList, sortOption, filters) => {
   return sortedList;
 };
 
+/*
+For views using tabs, manages history and makes sure that browser functions
+are recognized by the ui where there are tabs that render different views
+*/
 export const useWindowHash = (
   hashArray,
   updateFunc,
@@ -96,4 +112,60 @@ export const useWindowHash = (
   }, [handleHash]);
 
   return handleChangeTab;
+};
+
+/*
+Handles setting initial filters for views with filters, and retaining those
+filters if retainFilters is truthy in state
+*/
+export const useInitialFilters = (
+  filterType,
+  defaultFilters,
+  retainFilters,
+  dispatch,
+  handleFilterDrawer,
+  currentUserRole
+) => {
+  useEffect(() => {
+    dispatch(setFilterType({ type: filterType }));
+    if (!retainFilters) {
+      dispatch(
+        setDefaultFilters({
+          filterObject: defaultFilters,
+        })
+      );
+      dispatch(
+        updateMultipleFilters({
+          filterObject: defaultFilters,
+        })
+      );
+    }
+    handleFilterDrawer(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (currentUserRole.length > 0 && !retainFilters) {
+      dispatch(setClear());
+    } else {
+      dispatch(setRetain({ value: false }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};
+
+/*
+For views that filtered views can 
+*/
+export const useRetainFiltersOnPopstate = (origin, dispatch) => {
+  const handleRetain = (event) => {
+    if (!origin) return null;
+    if (event.target.location.pathname.includes(origin)) {
+      dispatch(setRetain({ value: true }));
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("popstate", handleRetain);
+    return () => window.removeEventListener("popstate", handleRetain);
+  });
 };

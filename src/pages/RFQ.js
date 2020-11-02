@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
+import { useDispatch } from "react-redux";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
+
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
 import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
 
@@ -46,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BidCreation = ({ handleFiltersClosed }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   /*
     TODO 
@@ -54,6 +58,8 @@ const BidCreation = ({ handleFiltersClosed }) => {
       * Editable fields will update bid state
   */
   const [suppliersSelected, setSuppliersSelected] = useCallback(useState([]));
+
+  useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch)
   
   useEffect(() => {
     handleFiltersClosed();

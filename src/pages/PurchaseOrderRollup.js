@@ -1,15 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { navigate } from "@reach/router";
 
+//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
+
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -49,6 +48,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
   const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -64,28 +64,14 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     //dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup-po" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "itemRollup",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

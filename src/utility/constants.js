@@ -1,3 +1,9 @@
+/*
+Everything in this file is subject to change, and mostly handles "slow moving
+data" that doesn't exist in the api yet.  Plan to eventually remove the majority
+of this and rely soley on the api for information.
+*/
+
 export const itemTypeList = [
   {
     id: "001",

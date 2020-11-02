@@ -13,7 +13,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import ShareIcon from "@material-ui/icons/Share";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -110,27 +109,22 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                     )}`}
                   </Typography>
                 </div>
-                <div className={classes.itemControl}>
-                  {userType === "field1" && (
-                    <Tooltip title="Place Pre-Order">
-                      <span>
-                        <IconButton
-                          component={Link}
-                          to={`/orders/open/preorder#${prog.id}`}
-                        >
-                          <ExitToAppIcon />
-                        </IconButton>
-                      </span>
-                    </Tooltip>
-                  )}
-                  <Tooltip title="Share all Items">
-                    <span>
-                      <IconButton id={`${prog.id}`}>
-                        <ShareIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                </div>
+                {userType === "field1" && (
+                  <div className={classes.itemControl}>
+                    {userType === "field1" && (
+                      <Tooltip title="Place Pre-Order">
+                        <span>
+                          <IconButton
+                            component={Link}
+                            to={`/orders/open/preorder#${prog.id}`}
+                          >
+                            <ExitToAppIcon />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    )}
+                  </div>
+                )}
               </Paper>
             </Grid>
           ))}

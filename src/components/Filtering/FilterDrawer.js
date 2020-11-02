@@ -10,6 +10,7 @@ import {
   setChips,
   resetFilters,
   setSorted,
+  setRetain,
 } from "../../redux/slices/filterSlice";
 
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
@@ -61,6 +62,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const filterType = useSelector((state) => state.filters.filterType);
   const setToClear = useSelector((state) => state.filters.clearFilters);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   const sorted = useSelector((state) => state.filters.sorted);
   const defaultFilters = useSelector((state) => state.filters.defaultFilters);
   const allFilters = useSelector((state) => state.filters);
@@ -211,9 +213,20 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   useEffect(() => {
     if (setToClear) {
-      resetAllFilters();
+      if (retainFilters) {
+        dispatch(setRetain({value: false}));
+      } else {
+        resetAllFilters();
+      }
     }
-  }, [setToClear, resetAllFilters]);
+  }, [
+    setToClear,
+    resetAllFilters,
+    retainFilters,
+    allFilters,
+    filterType,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if (sorted) {
@@ -228,13 +241,20 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredOrderSets(allFilters));
       }
       if (filterType === "item-inStock") {
-        dispatch(fetchFilteredItems(allFilters));
+//         dispatch(fetchFilteredItems(allFilters));
+//       }
+//       if (filterType === "item-onDemand") {
+//         dispatch(fetchFilteredItems(allFilters));
+//       }
+//       if (filterType === "item-all") {
+//         dispatch(fetchFilteredItems(allFilters));
+        dispatch(fetchFilteredItems("inStock"));
       }
       if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems(allFilters));
+        dispatch(fetchFilteredItems("onDemand"));
       }
       if (filterType === "item-all") {
-        dispatch(fetchFilteredItems(allFilters));
+        dispatch(fetchFilteredItems("all"));
       }
       dispatch(setSorted());
     }

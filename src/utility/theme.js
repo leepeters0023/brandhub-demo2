@@ -1,3 +1,6 @@
+/*
+Global styles for the site, handled by Material UI
+*/
 export default {
   palette: {
     primary: {
@@ -35,7 +38,7 @@ export default {
     previewImg: {
       width: "150px",
       height: "150px",
-      borderRadius: "50%",
+      borderRadius: "10px",
       objectFit: "cover",
       "&:hover": {
         cursor: "pointer",
@@ -68,13 +71,13 @@ export default {
     previewImg: {
       width: "75px",
       height: "75px",
-      borderRadius: "50%",
+      borderRadius: "10px",
       objectFit: "cover",
     },
     previewImageFloat: {
       width: "75px",
       height: "75px",
-      borderRadius: "50%",
+      borderRadius: "10px",
       objectFit: "cover",
       "&:hover": {
         cursor: "pointer",

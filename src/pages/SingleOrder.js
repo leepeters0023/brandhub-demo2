@@ -5,8 +5,11 @@ import PropTypes from "prop-types";
 import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrder } from "../redux/slices/orderHistorySlice";
+
+import { setRetain } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -37,6 +40,8 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
 
+  useRetainFiltersOnPopstate("/orders/history", dispatch)
+
   useEffect(() => {
     if (
       (!currentOrder.orderNumber && currentUserRole.length > 0) ||
@@ -62,7 +67,13 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
         <div className={classes.titleBar}>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Tooltip title="Back to Order History" placement="bottom-start">
-              <IconButton component={Link} to="/orders/history">
+              <IconButton
+                component={Link}
+                to="/orders/history"
+                onClick={() => {
+                  dispatch(setRetain({value: true}));
+                }}
+              >
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>

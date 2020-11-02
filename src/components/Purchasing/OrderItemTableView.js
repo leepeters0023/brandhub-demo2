@@ -39,7 +39,13 @@ const EnhancedTableHead = (props) => {
     onSelectAllClick,
     numSelected,
     orderLength,
+    type,
   } = props;
+
+  const currentHeadCells =
+    type === "inStock"
+      ? headCells
+      : headCells.filter((cell) => cell.id !== "stock");
 
   return (
     <TableHead>
@@ -52,7 +58,7 @@ const EnhancedTableHead = (props) => {
             inputProps={{ "aria-label": "select all items" }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
+        {currentHeadCells.map((headCell) => (
           <TableCell
             className={classes.headerText}
             key={headCell.id}
@@ -155,6 +161,7 @@ const OrderItemTableView = ({
             onSelectAllClick={handleSelectAllClick}
             rowCount={currentItems.length}
             orderLength={currentOrderItems.length}
+            type={type}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -206,9 +213,11 @@ const OrderItemTableView = ({
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
-                    <TableCell align="left">
-                      {row.stock ? row.stock : "---"}
-                    </TableCell>
+                    {type === "inStock" && (
+                      <TableCell align="left">
+                        {row.stock ? row.stock : "---"}
+                      </TableCell>
+                    )}
                     <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
                   </TableRow>
                 );

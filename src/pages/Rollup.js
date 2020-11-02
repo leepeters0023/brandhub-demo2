@@ -1,19 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
-
+import { useInitialFilters } from "../hooks/UtilityHooks";
 import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   setSorted,
-  setClear,
 } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -73,8 +70,9 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextPreOrdersLoading = useSelector(
     (state) => state.orderSetHistory.isNextLoading
   );
-  const currentUserRoll = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
@@ -99,28 +97,14 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "history-rollup" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRoll.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "history-rollup",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>
