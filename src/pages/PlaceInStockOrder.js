@@ -2,7 +2,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
+//import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import {
   fetchCurrentOrderByType,
@@ -11,13 +13,10 @@ import {
   clearItemSelections,
 } from "../redux/slices/currentOrderSlice";
 
-import {
-  setFilterType,
-  setDefaultFilters,
-  updateMultipleFilters,
-  //setSorted,
-  setClear,
-} from "../redux/slices/filterSlice";
+// import {
+//   updateMultipleFilters,
+//   setSorted,
+// } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -51,6 +50,20 @@ const useStyles = makeStyles((theme) => ({
 const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  // const nextLink = useSelector((state) => state.items.nextLink);
+  // const isNextLoading = useSelector(
+  //   (state) => state.items.isNextLoading
+  // );
+
+  // const handleBottomScroll = () => {
+  //   if (nextLink && !isNextLoading) {
+  //     if (scrollRef.current.scrollTop !== 0) {
+  //       dispatch(fetchNextItems(nextLink));
+  //     }
+  //   }
+  // };
+
+  // const scrollRef = useBottomScrollListener(handleBottomScroll);
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
@@ -63,6 +76,7 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const currentOrder = useSelector((state) => state.currentOrder);
   const userId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -86,22 +100,6 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   };
 
   useEffect(() => {
-    dispatch(setFilterType({ type: "item-inStock" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (
       (userId && !currentOrder.orderNumber) ||
       (userId && currentOrder.type !== "in-stock")
@@ -111,12 +109,14 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "item-inStock",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   if (orderLoading) {
     return <Loading />;
@@ -208,7 +208,6 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
             handlePreview={handlePreview}
             items={currentItems}
             isItemsLoading={itemsLoading}
-            selectedItems={selectedItems}
           />
         </>
       </Container>

@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { /*useSelector,*/ useDispatch } from "react-redux";
+
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  //setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -45,7 +44,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  //const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -61,29 +61,14 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
     //dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "history-rfq" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      //TODO filters based off of window hash
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // useEffect(() => {
-  //   if (currentUserRole.length > 0) {
-  //     dispatch(setClear());;
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useInitialFilters(
+    "history-rfq",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

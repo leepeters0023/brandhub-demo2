@@ -1,5 +1,4 @@
 import { configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
-//import { middleware as beesMiddleware } from "redux-bees";
 
 import rootReducer from "./rootReducer";
 

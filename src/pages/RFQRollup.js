@@ -1,18 +1,16 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { navigate } from "@reach/router";
 
+//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useSelector, useDispatch } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
+
 //import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
-import { createNewRFQ } from "../redux/slices/rfqSlice";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   //setSorted,
-  setClear
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -65,8 +63,9 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const isRFQItemsLoading = useSelector((state) => state.rfq.isLoading);
   const currentRFQItems = useSelector((state) => state.rfq.rfqItems);
-  const currentUserRole = useSelector((state) => state.user.role);
   const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem)
+  const currentUserRole = useSelector((state) => state.user.role);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleNewRFQ = () => {
@@ -86,28 +85,14 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     //dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "itemRollup-rfq" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    "itemRollup",
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

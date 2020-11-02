@@ -169,7 +169,8 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               color="primary"
               fullWidth
               onClick={() => {
-                orderSet.status === "in-progress"
+                orderSet.status === "in-progress" ||
+                orderSet.status === "inactive"
                   ? setOverviewVisible(false)
                   : handleEditOrder();
               }}

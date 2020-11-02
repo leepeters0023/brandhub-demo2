@@ -1,6 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchItems } from "../../api/itemApi";
 
+/*
+* Item Model
+notes: Items still in flux, will update when format is nailed down
+
+*/
+
 let initialState = {
   isLoading: false,
   orderType: null,

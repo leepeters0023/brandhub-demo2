@@ -4,7 +4,7 @@ import { fetchRFQItems, createRFQ } from "../../api/supplierApi";
 
 import { mapRFQItems } from "../apiMaps";
 /*
-* RFQ Item Model
+* RFQ Item Model (not final!)
 
 {
   id: string (read),

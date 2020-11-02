@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
+import { useDispatch } from "react-redux";
+
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
+
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import ShippingParameter from "../components/SupplierManagement/ShippingParameter";
 
@@ -25,12 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [shippingOption, setShippingOption] = useState("direct");
 
   const handleRadioChange = (event) => {
     setShippingOption(event.target.value);
     //TODO update in redux
-  }
+  };
 
   /*
     TODO 
@@ -38,6 +43,8 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       * Loading state (<Loading /> component)
       * Editable fields will update purchase order state
   */
+
+  useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
   useEffect(() => {
     handleFiltersClosed();

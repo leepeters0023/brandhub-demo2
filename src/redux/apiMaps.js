@@ -1,5 +1,9 @@
 import { earliestDate } from "../utility/utilityFunctions";
 
+/*
+Functions used to ensure data coming from api always matches
+formats defined within the UI
+*/
 const orderTypeMap = {
   "pre-order": "Pre Order",
   "in-stock": "In Stock",

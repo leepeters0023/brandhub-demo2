@@ -264,7 +264,7 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell>{row.state}</TableCell>
                     <TableCell align="left">
-                      {format(new Date(row.orderDate), "MM/dd/yyyy")}
+                      {row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : "---"}
                     </TableCell>
                     <TableCell align="left">
                       {row.totalEstCost !== "---"

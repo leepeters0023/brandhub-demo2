@@ -1,5 +1,10 @@
 import React, { forwardRef } from 'react';
 
+/*
+This file was used to handle the Material Table component that is currently
+not in use, but will save until we fully decide not to use it
+*/
+
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';

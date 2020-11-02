@@ -1,15 +1,14 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
+//import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
+import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import {
-  setFilterType,
-  setDefaultFilters,
-  updateMultipleFilters,
-  //setSorted,
-  setClear,
-} from "../redux/slices/filterSlice";
+// import {
+//   updateMultipleFilters,
+//   setSorted,
+// } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -48,10 +47,25 @@ const ItemCatalog = ({
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
+  // const nextLink = useSelector((state) => state.items.nextLink);
+  // const isNextLoading = useSelector(
+  //   (state) => state.items.isNextLoading
+  // );
+
+  // const handleBottomScroll = () => {
+  //   if (nextLink && !isNextLoading) {
+  //     if (scrollRef.current.scrollTop !== 0) {
+  //       dispatch(fetchNextOrderHistory(nextLink));
+  //     }
+  //   }
+  // };
+
+  // const scrollRef = useBottomScrollListener(handleBottomScroll);
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const selectedItems = useSelector((state) => state.items.selectedItems);
+  const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -63,28 +77,14 @@ const ItemCatalog = ({
     handlePreviewModal(false);
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: `item-${catalogType}` }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentUserRole.length > 0) {
-      dispatch(setClear());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useInitialFilters(
+    `item-${catalogType}`,
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

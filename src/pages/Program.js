@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useWindowHash } from "../hooks/UtilityHooks";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchItems } from "../redux/slices/programsSlice";
 
-import { useWindowHash } from "../hooks/UtilityHooks";
+import { setRetain } from "../redux/slices/filterSlice";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -20,6 +22,7 @@ import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Divider from "@material-ui/core/Divider";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -44,6 +47,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 
   const programs = useSelector((state) => state.programs.programs);
   const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
+  const selectedItems = useSelector((state) => state.items.selectedItems);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -64,6 +68,8 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useRetainFiltersOnPopstate("/programs", dispatch)
 
   useEffect(() => {
     handleFiltersClosed();
@@ -87,7 +93,13 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
             <Tooltip title="Back to All Programs" placement="bottom-start">
-              <IconButton component={Link} to="/programs">
+              <IconButton
+                component={Link}
+                to="/programs"
+                onClick={() => {
+                  dispatch(setRetain({ value: true }));
+                }}
+              >
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
@@ -100,6 +112,28 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+              {value !== 1 && (
+                <>
+                  <Button
+                    className={classes.largeButton}
+                    style={{ marginRight: "20px" }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={selectedItems.length === 0}
+                  >
+                    ADD TO FAVORITES
+                  </Button>
+                  <Button
+                    className={classes.largeButton}
+                    style={{ marginRight: "20px" }}
+                    variant="contained"
+                    color="secondary"
+                    disabled={selectedItems.length === 0}
+                  >
+                    CREATE SHARE LINK
+                  </Button>
+                </>
+              )}
               {userType === "field1" && (
                 <Tooltip title="Place Program Pre-Order">
                   <IconButton

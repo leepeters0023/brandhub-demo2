@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrderSet } from "../redux/slices/orderSetSlice";
 
@@ -14,6 +15,8 @@ import {
   approveOrdSet,
   deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
+
+import { setRetain } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -35,6 +38,18 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+
+const determineOrigin = () => {
+  let origin;
+  if (window.location.href.includes("rollup")) {
+    origin = "/rollup"
+  } else if (window.location.hash.includes("approval")) {
+    origin = "/orders/approvals"
+  } else {
+    origin = "/orders/items"
+  }
+  return origin;
+}
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -148,6 +163,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     dispatch(deleteOrdSet(orderId))
   }
 
+  useRetainFiltersOnPopstate(determineOrigin(), dispatch)
+
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
       if (
@@ -197,6 +214,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             color="secondary"
             variant="contained"
             component={Link}
+            onClick={() => dispatch(setRetain({value: true}))}
             to={
               orderId === "inStock"
                 ? "/orders/items/inStock"
@@ -260,7 +278,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     )}`}</Typography>
                   </div>
                   <Tooltip title="Add Items to Order">
-                    <IconButton component={Link} to={`/orders/items/inStock`}>
+                    <IconButton component={Link} to={`/orders/items/inStock`} onClick={() => dispatch(setRetain({value: true}))}>
                       <ExitToAppIcon
                         fontSize="large"
                         color="inherit"
@@ -293,7 +311,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     )}`}</Typography>
                   </div>
                   <Tooltip title="Add Items to Order">
-                    <IconButton component={Link} to={`/orders/items/onDemand`}>
+                    <IconButton component={Link} to={`/orders/items/onDemand`} onClick={() => dispatch(setRetain({value: true}))}>
                       <ExitToAppIcon
                         fontSize="large"
                         color="inherit"
@@ -312,7 +330,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   title="Quarterly Rollup Overview"
                   placement="bottom-start"
                 >
-                  <IconButton component={Link} to="/rollup">
+                  <IconButton component={Link} to="/rollup" onClick={() => dispatch(setRetain({value: true}))}>
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
                 </Tooltip>
@@ -344,7 +362,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   "approval"
                 ) && (
                   <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton component={Link} to="/orders/approvals">
+                    <IconButton component={Link} to="/orders/approvals" onClick={() => dispatch(setRetain({value: true}))}>
                       <ArrowBackIcon fontSize="large" color="secondary" />
                     </IconButton>
                   </Tooltip>
