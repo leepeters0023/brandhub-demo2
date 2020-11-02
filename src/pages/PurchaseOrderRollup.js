@@ -65,7 +65,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useInitialFilters(
-    "itemRollup",
+    "itemRollup-po",
     defaultFilters,
     retainFilters,
     dispatch,

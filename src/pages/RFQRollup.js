@@ -70,7 +70,9 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleNewRFQ = () => {
-    dispatch(createNewRFQ(selectedRFQItem))
+    let currentItem = currentRFQItems.find((item) => item.id === selectedRFQItem);
+    console.log(currentItem.program[0].id);
+    dispatch(createNewRFQ(selectedRFQItem, currentItem.program[0].id))
   }
 
   const handleSort = (sortObject) => {
@@ -87,7 +89,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   useInitialFilters(
-    "itemRollup",
+    "itemRollup-rfq",
     defaultFilters,
     retainFilters,
     dispatch,

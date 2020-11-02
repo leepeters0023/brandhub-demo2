@@ -110,12 +110,12 @@ export const mapRFQItems = (items) => {
 
   const determineProgram = (i) => {
     if (i["order-program"]) {
-      return i["order-program"].name
+      return [i["order-program"]]
     } else {
-      if (i.program && i.program.length > 1) {
-        return earliestDate(i.program).name
-      } else if (i.program) {
-        return i.program[0].name
+      if (i.programs && i.programs.length > 1) {
+        return earliestDate(i.programs)[0]
+      } else if (i.programs) {
+        return i.programs[0]
       } else {
         return "---"
       }
@@ -126,8 +126,9 @@ export const mapRFQItems = (items) => {
     id: item.item.id,
     itemId: item.item.id,
     sequenceNum: item["item-number"],
-    territory: item["territory-name"],
+    territory: item["territory-name"].length === 0 ? "National" : item["territory-name"],
     program: determineProgram(item),
+    programs: item.programs,
     itemType: item["item-type-description"],
     totalItems: item["total-ordered"],
     totalNotCompliant: item["not-compliant-count"],
@@ -138,3 +139,34 @@ export const mapRFQItems = (items) => {
 
   return mappedItems;
 };
+
+export const mapRFQ = (rfq) => {
+  let mappedRFQ = {
+    id: rfq.id,
+    status: rfq.status ? rfq.status : "Pending",
+    dueDate: rfq["due-date"] ? rfq["due-date"] : "---",
+    inMarketDate: rfq["end-market-date"] ? rfq["end-market-date"] : "---",
+    bids: rfq.bids,
+    program: rfq.program.name,
+    brand: rfq.item.brands.map((brand) => brand.name).join(", "),
+    itemType: rfq.item.type,
+    sequenceNum: rfq.item["item-number"],
+    totalItems: rfq.qty,
+    estCost: rfq.item["estimated-cost"],
+    totalEstCost: rfq.qty * rfq.item["estimated-cost"],
+    supplierNote: rfq.note ? rfq.note : "",
+    //TODO not sure about this line, as we don't know what the spec will look like yet
+    itemSpec: rfq.item.spec ? rfq.item.spec : null,
+    //TODO currently just getting the one image, need to update when we get more
+    imgUrlOne: rfq.item["img-url"],
+    imgUrlTwo: rfq.item["img-url"],
+    imgUrlThree: rfq.item["img-url"]
+  }
+
+  return mappedRFQ;
+}
+
+export const mapRFQHistory = (rfqs) => {
+  let mappedRFQHistory = rfqs.map((rfq => mapRFQ(rfq)))
+  return mappedRFQHistory;
+}

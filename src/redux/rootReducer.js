@@ -19,6 +19,7 @@ import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
 import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
+import supplierReducer from "./slices/supplierSlice";
 import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
 import userReducer from "./slices/userSlice";
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   purchaseOrderHistory: purchaseOrderHistoryReducer,
   rfq: rfqReducer,
   rfqHistory: rfqHistoryReducer,
+  suppliers: supplierReducer,
   tags: tagReducer,
   territories: territoryReducer,
   user: userReducer,

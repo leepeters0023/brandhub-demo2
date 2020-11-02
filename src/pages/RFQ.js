@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
+import { Link } from "@reach/router";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
+import { fetchSingleRFQ, sendBids } from "../redux/slices/rfqSlice";
+import { fetchAllSuppliers } from "../redux/slices/supplierSlice";
+
+import { setRetain } from "../redux/slices/filterSlice";
+
+import Loading from "../components/Utility/Loading";
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
 import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
 
@@ -17,7 +24,11 @@ import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const mockSupplierData = [
   {
@@ -47,29 +58,79 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BidCreation = ({ handleFiltersClosed }) => {
+const RFQ = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  /*
-    TODO 
-      * All bid details would be loaded and stored in bid slice
-      * Loading state (<Loading /> component)
-      * Editable fields will update bid state
-  */
   const [suppliersSelected, setSuppliersSelected] = useCallback(useState([]));
+  const [isNew, setIsNew] = useState(false);
 
-  useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch)
-  
+  const isRFQLoading = useSelector((state) => state.rfq.isLoading);
+  const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
+  const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
+  const isSuppliersLoading = useSelector((state) => state.suppliers.isLoading);
+
+  const handleSendBids = () => {
+    dispatch(sendBids(suppliersSelected, currentRFQ.id))
+  }
+
+  useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch);
+
   useEffect(() => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (currentSuppliers.length === 0) {
+      dispatch(fetchAllSuppliers());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (currentRFQ.id && !isRFQLoading && window.location.hash === "#new") {
+      window.location.hash = currentRFQ.id;
+      setIsNew(true);
+    }
+  }, [currentRFQ.id, isRFQLoading]);
+
+  useEffect(() => {
+    if (!currentRFQ.id && window.location.hash !== "#new") {
+      dispatch(fetchSingleRFQ(window.location.hash.slice(1)));
+    }
+  });
+
+  if (isRFQLoading || !currentRFQ.id) {
+    return <Loading />;
+  }
+
   return (
     <Container className={classes.mainWrapper}>
       <div className={classes.titleBar}>
-        <Typography className={classes.titleText}>RFQ #110012</Typography>
+        {!isNew && (
+          <div className={classes.titleImage}>
+            <Tooltip title="Back to RFQ History" placement="bottom-start">
+              <IconButton
+                component={Link}
+                to="/purchasing/rfqHistory"
+                onClick={() => {
+                  dispatch(setRetain({ value: true }));
+                }}
+              >
+                <ArrowBackIcon fontSize="large" color="secondary" />
+              </IconButton>
+            </Tooltip>
+            <Typography
+              className={classes.titleText}
+            >{`RFQ #${currentRFQ.id}`}</Typography>
+          </div>
+        )}
+        {isNew && (
+          <Typography
+            className={classes.titleText}
+          >{`RFQ #${currentRFQ.id}`}</Typography>
+        )}
       </div>
       <br />
       <div
@@ -80,29 +141,31 @@ const BidCreation = ({ handleFiltersClosed }) => {
           alignItems: "center",
         }}
       >
-        <CurrentRFQ />
+        <CurrentRFQ currentRFQ={currentRFQ} />
         <br />
         <br />
         <Divider style={{ width: "75%", minWidth: "600px" }} />
         <br />
-        {window.location.hash.includes("new") && (
-          <>
-            <RFQSupplierSentTable
-              suppliersSelected={suppliersSelected}
-              setSuppliersSelected={setSuppliersSelected}
-            />
-            <br />
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "10px" }}
-              disabled={suppliersSelected.length === 0}
-            >
-              SEND RFQ
-            </Button>
-          </>
-        )}
+
+        <RFQSupplierSentTable
+          currentSuppliers={currentSuppliers}
+          isLoading={isSuppliersLoading}
+          suppliersSelected={suppliersSelected}
+          setSuppliersSelected={setSuppliersSelected}
+        />
+        <br />
+        <Button
+          className={classes.largeButton}
+          variant="contained"
+          color="secondary"
+          style={{ marginRight: "10px" }}
+          disabled={suppliersSelected.length === 0}
+          onClick={handleSendBids}
+        >
+          SEND RFQ
+        </Button>
+        <br />
+
         {!window.location.hash.includes("new") && (
           <TableContainer
             className={classes.tableContainer}
@@ -167,8 +230,8 @@ const BidCreation = ({ handleFiltersClosed }) => {
   );
 };
 
-BidCreation.propTypes = {
+RFQ.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
 };
 
-export default BidCreation;
+export default RFQ;

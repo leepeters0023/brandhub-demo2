@@ -23,7 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { rfqCurrent, rfqAll } from "../assets/mockdata/dataGenerator.js";
+// import { rfqCurrent, rfqAll } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   brand: [],
@@ -46,6 +46,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
+  const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
@@ -112,8 +114,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
         </div>
         <br />
         <RFQHistoryTable
-          rfqs={window.location.hash.includes("current") ? rfqCurrent : rfqAll}
-          rfqsLoading={false}
+          rfqs={currentRFQs}
+          rfqsLoading={isRFQsLoading}
           handleSort={handleSort}
           // scrollRef={scrollRef}
         />

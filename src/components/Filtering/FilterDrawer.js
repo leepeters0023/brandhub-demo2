@@ -18,6 +18,7 @@ import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice"
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
+import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -127,6 +128,13 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(currentFilters));
       }
+      if (filterType === "itemRollup-rfq" && filter !== "sequenceNum") {
+        dispatch(fetchFilteredRFQItems(currentFilters));
+      }
+      if (filterType === "history-rfq" && filter !== "sequenceNum" &&
+      filter !== "rfqNum") {
+        dispatch(fetchFilteredRFQHistory)
+      }
     },
     [dispatch, allFilters, filterType]
   );
@@ -177,6 +185,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(defaultFilters));
       }
+      if (filterType === "history-rfq") {
+        dispatch(fetchFilteredRFQHistory(defaultFilters));
+      }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
@@ -206,6 +217,18 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(setChips({ filterType: "item-all" }));
     dispatch(fetchFilteredItems(allFilters));
   };
+
+  const handleFilteredRFQFetch = () => {
+    dispatch(setChips({ filterType: "history" }));
+    dispatch(fetchFilteredRFQHistory(allFilters));
+  }
+
+  const historySearchMap = {
+    "orders": handleOrderHistoryFetch,
+    "rollup": handleOrderSetFetch,
+    "approvals": handleOrderSetFetch,
+    "rfq": handleFilteredRFQFetch,
+  }
 
   //TODO write handle grouping change function that fetches order history / rollup by
   // order or item
@@ -245,6 +268,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-all"
       ) {
         dispatch(fetchFilteredItems(allFilters));
+      }
+      if (filterType === "history-rfq") {
+        dispatch(fetchFilteredRFQHistory(allFilters));
       }
 
       dispatch(setSorted());
@@ -311,9 +337,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindPoNum={bindPoNum}
               suppliers={suppliers}
               handleSearch={
-                filterType.includes("orders")
-                  ? handleOrderHistoryFetch
-                  : handleOrderSetFetch
+                // filterType.includes("orders")
+                //   ? handleOrderHistoryFetch
+                //   : handleOrderSetFetch
+                historySearchMap[filterType.split("-")[1]]
               }
               historyType={filterType.split("-")[1]}
             />
@@ -353,6 +380,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
                 // TODO add search for po when api is there
                 () => console.log("Searching!")
               }
+              rollupType={filterType.split("-")[1]}
             />
           )}
           {filterType && filterType.includes("budget") && (
