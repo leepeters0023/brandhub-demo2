@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
 //import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
+import { createNewRFQ } from "../redux/slices/rfqSlice"
 
 import {
   updateMultipleFilters,

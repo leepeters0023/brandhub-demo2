@@ -103,6 +103,8 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const items = await fetchItems(filterObject);
+    console.log(items);
+    console.log(filterObject);
     if (items.error) {
       throw items.error;
     }
@@ -110,7 +112,7 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
       id: item.id,
       itemNumber: item["item-number"],
       brand: item.brands.map((brand) => brand.name).join(", "),
-      program: item.programs.map((prog) => prog.name).join(", "),
+      program: item.programs ? item.programs.map((prog) => prog.name).join(", ") : "---",
       itemType: item.type,
       estCost: item["estimated-cost"],
       packSize: item["qty-per-pack"],
@@ -125,6 +127,6 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
       })
     );
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({error: err.toString()}));
   }
 };

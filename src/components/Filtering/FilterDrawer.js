@@ -157,7 +157,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(resetFilters());
     //TODO handle po, compliance (rules / items) fetch here as well
     if (defaultFilters) {
-      console.log(defaultFilters);
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
         dispatch(fetchFilteredOrderHistory(defaultFilters));
@@ -214,7 +213,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   useEffect(() => {
     if (setToClear) {
       if (retainFilters) {
-        dispatch(setRetain({value: false}));
+        dispatch(setRetain({ value: false }));
       } else {
         resetAllFilters();
       }
@@ -240,22 +239,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(allFilters));
       }
-      if (filterType === "item-inStock") {
-//         dispatch(fetchFilteredItems(allFilters));
-//       }
-//       if (filterType === "item-onDemand") {
-//         dispatch(fetchFilteredItems(allFilters));
-//       }
-//       if (filterType === "item-all") {
-//         dispatch(fetchFilteredItems(allFilters));
-        dispatch(fetchFilteredItems("inStock"));
+      if (
+        filterType === "item-inStock" ||
+        filterType === "item-onDemand" ||
+        filterType === "item-all"
+      ) {
+        dispatch(fetchFilteredItems(allFilters));
       }
-      if (filterType === "item-onDemand") {
-        dispatch(fetchFilteredItems("onDemand"));
-      }
-      if (filterType === "item-all") {
-        dispatch(fetchFilteredItems("all"));
-      }
+
       dispatch(setSorted());
     }
   }, [sorted, dispatch, filterType, allFilters]);
