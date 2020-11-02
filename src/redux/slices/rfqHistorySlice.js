@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { fetchRFQHistory } from "../../api/supplierApi";
+
+import { mapRFQHistory } from "../apiMaps";
+
 /*
 * RFQ Model
 
@@ -87,3 +91,24 @@ export const {
 } = rfqHistorySlice.actions;
 
 export default rfqHistorySlice.reducer;
+
+export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let rfqs = await fetchRFQHistory(filterObject);
+    if (rfqs.error) {
+      throw rfqs.error;
+    }
+    console.log(rfqs);
+    let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
+    dispatch(
+      getRfqHistorySuccess({
+        rfqs: mappedRFQs,
+        nextLink: rfqs.data.nextLink ? rfqs.data.nextLink : null,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

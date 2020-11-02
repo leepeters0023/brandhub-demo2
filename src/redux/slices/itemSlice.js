@@ -104,7 +104,6 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
     dispatch(setIsLoading());
     const items = await fetchItems(filterObject);
     console.log(items);
-    console.log(filterObject);
     if (items.error) {
       throw items.error;
     }

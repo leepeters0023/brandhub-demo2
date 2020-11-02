@@ -1,5 +1,5 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 // import { navigate } from "@reach/router";
 import format from "date-fns/format";
 import clsx from "clsx";
@@ -15,9 +15,6 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
-
-//mock data
-import { singlePO } from "../../assets/mockdata/dataGenerator";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -60,9 +57,14 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     padding: "25px",
   },
+  largePreview: {
+    objectFit: "contain",
+    width: "100%",
+    heigth: "100%",
+  }
 }));
 
-const CurrentRFQ = () => {
+const CurrentRFQ = ({ currentRFQ }) => {
   const classes = useStyles();
   return (
     <>
@@ -85,7 +87,11 @@ const CurrentRFQ = () => {
                   margin="normal"
                   id="quoteDue"
                   label="Quote Due"
-                  value={format(new Date(), "MM/dd/yyyy")}
+                  value={
+                    currentRFQ.dueDate !== "---"
+                      ? format(new Date(currentRFQ.dueDate))
+                      : format(new Date(), "MM/dd/yyyy")
+                  }
                   //onChange={(value) => handleFilters(value, "toDate")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -102,7 +108,11 @@ const CurrentRFQ = () => {
                   margin="normal"
                   id="dueDate"
                   label="Due Date"
-                  value={format(new Date(), "MM/dd/yyyy")}
+                  value={
+                    currentRFQ.inMarketDate !== "---"
+                      ? format(new Date(currentRFQ.inMarketDate))
+                      : format(new Date(), "MM/dd/yyyy")
+                  }
                   //onChange={(value) => handleFilters(value, "toDate")}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -115,31 +125,31 @@ const CurrentRFQ = () => {
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                Program:
+                {`Program:`}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {"Brand(s):"}
+                {`Brand(s):`}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                Item Type:
+                {`Item Type:`}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                Sequence Number:
+                {`Sequence Number:`}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                Qty:
+                {`Qty:`}
               </Typography>
             </Grid>
             <Grid item sm={8}>
@@ -147,31 +157,31 @@ const CurrentRFQ = () => {
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {singlePO[0].program}
+                {currentRFQ.program}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {singlePO[0].program.split(" ")[0]}
+                {currentRFQ.brand}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {singlePO[0].itemType}
+                {currentRFQ.itemType}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {singlePO[0].sequenceNum}
+                {currentRFQ.sequenceNum}
               </Typography>
               <Typography
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {singlePO[0].totalItems}
+                {currentRFQ.totalItems}
               </Typography>
             </Grid>
             <Grid item sm={12}>
@@ -336,6 +346,19 @@ const CurrentRFQ = () => {
           <div className={classes.squareGridItem}>
             <Paper className={classes.squarePaper}>
               <div className={classes.squareInnerPaper}>
+                <img
+                  src={currentRFQ.imgUrlOne}
+                  alt={`Item number ${currentRFQ.sequenceNum}`}
+                  className={classes.largePreview}
+                />
+              </div>
+            </Paper>
+          </div>
+        </Grid>
+        <Grid item md={4} sm={12}>
+          <div className={classes.squareGridItem}>
+            <Paper className={classes.squarePaper}>
+              <div className={classes.squareInnerPaper}>
                 <Typography className={classes.titleText}>
                   Sample Image
                 </Typography>
@@ -344,21 +367,10 @@ const CurrentRFQ = () => {
           </div>
         </Grid>
         <Grid item md={4} sm={12}>
-        <div className={classes.squareGridItem}>
+          <div className={classes.squareGridItem}>
             <Paper className={classes.squarePaper}>
               <div className={classes.squareInnerPaper}>
-              <Typography className={classes.titleText}>
-                  Sample Image
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-        </Grid>
-        <Grid item md={4} sm={12}>
-        <div className={classes.squareGridItem}>
-            <Paper className={classes.squarePaper}>
-              <div className={classes.squareInnerPaper}>
-              <Typography className={classes.titleText}>
+                <Typography className={classes.titleText}>
                   Sample Image
                 </Typography>
               </div>
@@ -368,6 +380,10 @@ const CurrentRFQ = () => {
       </Grid>
     </>
   );
+};
+
+CurrentRFQ.propTypes = {
+  currentRFQ: PropTypes.object.isRequired,
 };
 
 export default CurrentRFQ;

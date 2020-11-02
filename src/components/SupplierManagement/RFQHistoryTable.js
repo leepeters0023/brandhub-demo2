@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
+import { useDispatch } from "react-redux";
+
+import { resetRFQ } from "../../redux/slices/rfqSlice";
+
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
@@ -119,6 +123,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
 
@@ -130,6 +135,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   };
 
   const handleRowClick = (rfqNum) => {
+    dispatch(resetRFQ());
     navigate(`/purchasing/rfq#${rfqNum}`);
   };
 
@@ -169,12 +175,12 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   hover
                   className={classes.clickableRow}
                   onClick={() => {
-                    handleRowClick(row.rfqNum);
+                    handleRowClick(row.id);
                   }}
                 >
-                  <TableCell align="left">{row.rfqNum}</TableCell>
+                  <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">{row.program[0].name}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
@@ -182,7 +188,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                     {formatMoney(row.totalEstCost)}
                   </TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
+                  <TableCell align="left">{row.status[0].toUpperCase() + row.status.slice(1)}</TableCell>
                 </TableRow>
               ))}
             {rfqsLoading && (

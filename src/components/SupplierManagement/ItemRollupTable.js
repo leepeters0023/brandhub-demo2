@@ -292,7 +292,7 @@ const ItemRollupTable = ({
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
-                    <TableCell align="left">{row.program}</TableCell>
+                    <TableCell align="left">{row.program[0].name}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
                     <TableCell align="left">{row.totalNotCompliant}</TableCell>
