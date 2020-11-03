@@ -11,7 +11,7 @@ import { createNewRFQ } from "../redux/slices/rfqSlice"
 
 import {
   updateMultipleFilters,
-  //setSorted,
+  setSorted,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -68,7 +68,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem)
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
+  //TODO nextLink, handleBottomScroll, scrollRef
 
   const handleNewRFQ = () => {
     let currentItem = currentRFQItems.find((item) => item.id === selectedRFQItem);
@@ -86,7 +86,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
         },
       })
     );
-    //dispatch(setSorted());
+    dispatch(setSorted());
   };
 
   useInitialFilters(

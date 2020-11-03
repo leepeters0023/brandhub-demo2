@@ -30,36 +30,52 @@ export const fetchSuppliers = async () => {
 };
 
 export const fetchRollupItems = async (filterObject, type) => {
-  //TODO add sort
-  console.log(filterObject)
-  console.log(type)
+  const sortMap = {
+    sequenceNum: "item-number",
+    program: "order-program-name",
+    itemType: "item-type-description",
+    dueDate: "order-due-date",
+  };
   let typeString = `?filter[order-type]=${filterObject.orderType}`;
-  console.log(typeString)
-  let typeBool = `&filter[is-for-rfq]=${type === "rfq" ? true : false}`
-  console.log(typeBool)
-  console.log(filterObject.user)
-  let userString = filterObject.user.length > 0
-    ? `&filter[user-ids]=${separateByComma(filterObject.user, "id")}`
-    : "";
-    console.log("here")
-  let progString = filterObject.program.length > 0
-    ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
-    : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
-    : "";
-  let itemTypeString = filterObject.itemType.length > 0
-    ? `&filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
-    : "";
-  
-  let queryString = 
+  console.log(typeString);
+  let typeBool = `&filter[is-for-rfq]=${type === "rfq" ? true : false}`;
+  console.log(typeBool);
+  console.log(filterObject.user);
+  let userString =
+    filterObject.user.length > 0
+      ? `&filter[user-ids]=${separateByComma(filterObject.user, "id")}`
+      : "";
+  console.log("here");
+  let progString =
+    filterObject.program.length > 0
+      ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
+      : "";
+  let brandString =
+    filterObject.brand.length > 0
+      ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
+      : "";
+  let itemTypeString =
+    filterObject.itemType.length > 0
+      ? `&filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
+      : "";
+  let seqString =
+    filterObject.sequenceNum.length > 0
+      ? `&filter[item-number]=${filterObject.sequenceNum}`
+      : "";
+  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+
+  let queryString =
     "/api/item-rollups" +
     typeString +
     typeBool +
     userString +
     progString +
     brandString +
-    itemTypeString
+    itemTypeString +
+    seqString +
+    sortString;
 
   const response = { status: "", error: null, data: null };
   console.log(queryString);
@@ -80,7 +96,6 @@ export const fetchRollupItems = async (filterObject, type) => {
 };
 
 export const createRFQ = async (item, program) => {
-  console.log(program);
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
@@ -115,6 +130,33 @@ export const createRFQ = async (item, program) => {
     });
   return response;
 };
+
+export const updateRFQNote = async (id, note) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/request-for-quotes/${id}`,
+      {
+        data: {
+          type: "request-for-quote",
+          id: id,
+          attributes: {
+            note: note
+          }
+        }
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
 
 export const sendBidRequests = async (idArray, rfqId) => {
   const response = { status: "", error: null, data: null };

@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import { navigate } from "@reach/router";
 import format from "date-fns/format";
 import clsx from "clsx";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { updateNote, updateSupplierNote } from "../../redux/slices/rfqSlice";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -61,11 +64,15 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
     width: "100%",
     heigth: "100%",
-  }
+  },
 }));
 
 const CurrentRFQ = ({ currentRFQ }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const currentNote = useSelector((state) => state.rfq.currentRFQ.supplierNote);
+
   return (
     <>
       <Grid
@@ -193,6 +200,15 @@ const CurrentRFQ = ({ currentRFQ }) => {
                 variant="outlined"
                 size="small"
                 rows="4"
+                value={currentNote}
+                onChange={(event) =>
+                  dispatch(updateNote({ note: event.target.value }))
+                }
+                onBlur={(event) =>
+                  dispatch(
+                    updateSupplierNote(currentRFQ.id, event.target.value)
+                  )
+                }
               />
             </Grid>
           </Grid>
