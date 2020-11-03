@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Checkbox from "@material-ui/core/Checkbox";
@@ -50,8 +50,10 @@ const RFQSupplierSentTable = ({
   isLoading,
   suppliersSelected,
   setSuppliersSelected,
+  currentBids,
 }) => {
   const classes = useStyles();
+  const [filteredSuppliers, setFilteredSuppliers] = useState([]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -84,6 +86,26 @@ const RFQSupplierSentTable = ({
 
   const isSelected = (id) => suppliersSelected.indexOf(id) !== -1;
 
+  useEffect(() => {
+    if (
+      (filteredSuppliers.length === 0 &&
+      currentBids.length > 0 &&
+      currentSuppliers.length > 0 &&
+      currentBids.length !== currentSuppliers.length) ||
+      (filteredSuppliers.length + currentBids.length !== currentSuppliers.length)
+    ) {
+      console.log("here!");
+      let newSuppliers = [...currentSuppliers];
+      console.log(newSuppliers);
+      currentBids.forEach((bid) => {
+        newSuppliers = newSuppliers.filter((sup) => sup.id !== bid.supplierId);
+      });
+      setFilteredSuppliers(newSuppliers);
+    }
+  }, [filteredSuppliers, currentSuppliers, currentBids.length, currentBids]);
+
+  console.log(filteredSuppliers)
+
   return (
     <>
       <TableContainer
@@ -106,6 +128,29 @@ const RFQSupplierSentTable = ({
               </TableRow>
             )}
             {!isLoading &&
+              filteredSuppliers.length > 0 &&
+              filteredSuppliers.map((sup, index) => {
+                const isSupplierSelected = isSelected(sup.id);
+                const labelId = `supplier-checked-${index}`;
+                return (
+                  <TableRow key={sup.id}>
+                    <TableCell align="left">{sup.name}</TableCell>
+                    <TableCell align="right" padding="checkbox">
+                      <Checkbox
+                        checked={isSupplierSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, sup.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {!isLoading &&
+              filteredSuppliers.length === 0 &&
               currentSuppliers.length > 0 &&
               currentSuppliers.map((sup, index) => {
                 const isSupplierSelected = isSelected(sup.id);

@@ -141,12 +141,21 @@ export const mapRFQItems = (items) => {
 };
 
 export const mapRFQ = (rfq) => {
+  const mapBids = (bids) => {
+    return bids.map((bid) => ({
+      id: bid.id,
+      supplierId: bid.supplier ? bid.supplier.id : bid.id,
+      note: bid.note,
+      price: bid.price
+    }))
+  }
+
   let mappedRFQ = {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",
     dueDate: rfq["due-date"] ? rfq["due-date"] : "---",
     inMarketDate: rfq["end-market-date"] ? rfq["end-market-date"] : "---",
-    bids: rfq.bids,
+    bids: mapBids(rfq.bids),
     program: rfq.program.name,
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),
     itemType: rfq.item.type,

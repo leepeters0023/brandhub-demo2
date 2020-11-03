@@ -29,10 +29,11 @@ import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
-  orderType: "on-demand",
+  orderType: "pre-order",
   brand: [],
   program: [],
   itemType: [],
+  user: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",

@@ -23,6 +23,8 @@ import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
+import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
+import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -130,6 +132,8 @@ const App = () => {
       dispatch(fetchPreOrders(currentUserId, "initial"));
       dispatch(fetchCurrentOrderByType("inStock", currentUserId));
       dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+      dispatch(fetchAllItemTypes());
+      dispatch(fetchAllSuppliers());
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);

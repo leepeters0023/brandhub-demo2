@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
-  fetchRFQItems,
+  fetchRollupItems,
   createRFQ,
   fetchRFQ,
   sendBidRequests,
@@ -164,7 +164,8 @@ export default rfqSlice.reducer;
 export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchRFQItems(filterObject);
+    console.log("fetching")
+    const items = await fetchRollupItems(filterObject, "rfq");
     if (items.error) {
       throw items.error;
     }
@@ -172,7 +173,7 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
     console.log(mappedItems);
     dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
   } catch (err) {
-    dispatch(setFailure({error: err.toString()}));
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
 
@@ -187,7 +188,7 @@ export const createNewRFQ = (item, user) => async (dispatch) => {
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
-    dispatch(setFailure({error: err.toString()}));
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
 
@@ -202,7 +203,7 @@ export const fetchSingleRFQ = (id) => async (dispatch) => {
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
-    dispatch(setFailure({error: err.toString()}));
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
 
@@ -215,8 +216,8 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
     }
     console.log(bidResponse);
     let mappedRFQ = mapRFQ(bidResponse.data);
-    dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }))
+    dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
-    dispatch(setFailure({error: err.toString()}));
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
