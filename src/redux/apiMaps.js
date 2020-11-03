@@ -106,32 +106,33 @@ export const mapOrderSetHistory = (orders) => {
   return mappedOrders;
 };
 
-export const mapRFQItems = (items) => {
-
+export const mapRollupItems = (items) => {
   const determineProgram = (i) => {
     if (i["order-program"]) {
-      return [i["order-program"]]
+      return [i["order-program"]];
     } else {
       if (i.programs && i.programs.length > 1) {
-        return earliestDate(i.programs)[0]
+        return earliestDate(i.programs)[0];
       } else if (i.programs) {
-        return i.programs[0]
+        return i.programs[0];
       } else {
-        return "---"
+        return "---";
       }
     }
-  }
-
+  };
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.item.id,
     itemId: item.item.id,
     sequenceNum: item["item-number"],
-    territory: item["territory-name"].length === 0 ? "National" : item["territory-name"],
+    territory:
+      item["territory-name"].length === 0 ? "National" : item["territory-name"],
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
     totalItems: item["total-ordered"],
     totalNotCompliant: item["not-compliant-count"],
+    supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: item["estimated-cost"],
     totalEstCost: item["estimated-total"],
     dueDate: item["order-due-date"] ? item["order-due-date"] : "---",
@@ -146,9 +147,9 @@ export const mapRFQ = (rfq) => {
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price
-    }))
-  }
+      price: bid.price,
+    }));
+  };
 
   let mappedRFQ = {
     id: rfq.id,
@@ -169,13 +170,13 @@ export const mapRFQ = (rfq) => {
     //TODO currently just getting the one image, need to update when we get more
     imgUrlOne: rfq.item["img-url"],
     imgUrlTwo: rfq.item["img-url"],
-    imgUrlThree: rfq.item["img-url"]
-  }
+    imgUrlThree: rfq.item["img-url"],
+  };
 
   return mappedRFQ;
-}
+};
 
 export const mapRFQHistory = (rfqs) => {
-  let mappedRFQHistory = rfqs.map((rfq => mapRFQ(rfq)))
+  let mappedRFQHistory = rfqs.map((rfq) => mapRFQ(rfq));
   return mappedRFQHistory;
-}
+};
