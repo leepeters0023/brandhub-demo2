@@ -38,10 +38,6 @@ export const fetchRollupItems = async (filterObject, type) => {
   };
   let typeString = `?filter[order-type]=${filterObject.orderType}`;
   let typeBool = `&filter[is-for-rfq]=${type === "rfq" ? true : false}`;
-  // let userString =
-  //   filterObject.user.length > 0
-  //     ? `&filter[user-ids]=${separateByComma(filterObject.user, "id")}`
-  //     : "";
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
@@ -66,7 +62,6 @@ export const fetchRollupItems = async (filterObject, type) => {
     "/api/item-rollups" +
     typeString +
     typeBool +
-    // userString +
     progString +
     brandString +
     itemTypeString +

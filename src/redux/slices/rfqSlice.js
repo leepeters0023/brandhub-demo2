@@ -8,7 +8,7 @@ import {
   updateRFQNote,
 } from "../../api/supplierApi";
 
-import { mapRFQItems, mapRFQ } from "../apiMaps";
+import { mapRollupItems, mapRFQ } from "../apiMaps";
 /*
 * RFQ Item Model (need to determine!)
 
@@ -171,12 +171,12 @@ export default rfqSlice.reducer;
 export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    console.log("fetching")
+    console.log("fetching");
     const items = await fetchRollupItems(filterObject, "rfq");
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapRFQItems(items.data);
+    let mappedItems = mapRollupItems(items.data);
     console.log(mappedItems);
     dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
   } catch (err) {
@@ -240,4 +240,4 @@ export const updateSupplierNote = (id, note) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
