@@ -7,7 +7,7 @@ import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import {
   updateMultipleFilters,
-  //setSorted,
+  setSorted,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -25,7 +25,18 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 // import { rfqCurrent, rfqAll } from "../assets/mockdata/dataGenerator.js";
 
-const defaultFilters = {
+const defaultCurrentFilters = {
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "sent",
+  rfqNum: "",
+  sequenceNum: "",
+  sortOrder: "asc",
+  sortOrderBy: "rfqNum",
+};
+
+const defaultHistoryFilters = {
   brand: [],
   program: [],
   itemType: [],
@@ -34,7 +45,7 @@ const defaultFilters = {
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "rfqNum",
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -50,6 +61,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
   //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
+  const defaultFilters = window.location.hash === "#current" ? defaultCurrentFilters : defaultHistoryFilters
+
   const handleSort = (sortObject) => {
     //scrollRef.current.scrollTop = 0;
     dispatch(
@@ -60,7 +73,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen }) => {
         },
       })
     );
-    //dispatch(setSorted());
+    dispatch(setSorted());
   };
 
   useInitialFilters(
