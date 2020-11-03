@@ -5,6 +5,7 @@ import {
   createRFQ,
   fetchRFQ,
   sendBidRequests,
+  updateRFQNote,
 } from "../../api/supplierApi";
 
 import { mapRFQItems, mapRFQ } from "../apiMaps";
@@ -33,7 +34,7 @@ let initialState = {
     itemType: null,
     sequenceNum: null,
     totalItems: null,
-    supplierNote: null,
+    supplierNote: "",
     itemSpec: null,
     imgUrlOne: null,
     imgUrlTwo: null,
@@ -114,11 +115,16 @@ const rfqSlice = createSlice({
     },
     updateNote(state, action) {
       const { note } = action.payload;
+      console.log(note);
       state.currentRFQ.supplierNote = note;
     },
     updateBids(state, action) {
       const { bids } = action.payload;
       state.currentRFQ.bids = bids;
+    },
+    updateSuccessful(state) {
+      state.isUpdateLoading = false;
+      state.error = null;
     },
     resetRFQ(state) {
       state.isLoading = false;
@@ -133,7 +139,7 @@ const rfqSlice = createSlice({
       state.currentRFQ.itemType = null;
       state.currentRFQ.sequenceNum = null;
       state.currentRFQ.totalItems = null;
-      state.currentRFQ.supplierNote = null;
+      state.currentRFQ.supplierNote = "";
       state.currentRFQ.itemSpec = null;
       state.currentRFQ.imgUrlOne = null;
       state.currentRFQ.imgUrlTwo = null;
@@ -155,6 +161,7 @@ export const {
   updateQty,
   updateNote,
   updateBids,
+  updateSuccessful,
   resetRFQ,
   setFailure,
 } = rfqSlice.actions;
@@ -221,3 +228,16 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const updateSupplierNote = (id, note) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const noteResponse = await updateRFQNote(id, note);
+    if (noteResponse.error) {
+      throw noteResponse.error;
+    }
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}

@@ -94,17 +94,13 @@ const RFQSupplierSentTable = ({
       currentBids.length !== currentSuppliers.length) ||
       (filteredSuppliers.length + currentBids.length !== currentSuppliers.length)
     ) {
-      console.log("here!");
       let newSuppliers = [...currentSuppliers];
-      console.log(newSuppliers);
       currentBids.forEach((bid) => {
         newSuppliers = newSuppliers.filter((sup) => sup.id !== bid.supplierId);
       });
       setFilteredSuppliers(newSuppliers);
     }
   }, [filteredSuppliers, currentSuppliers, currentBids.length, currentBids]);
-
-  console.log(filteredSuppliers)
 
   return (
     <>

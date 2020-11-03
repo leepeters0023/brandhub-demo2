@@ -223,6 +223,16 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(fetchFilteredRFQHistory(allFilters));
   }
 
+  const handleRFQRollupFetch = () => {
+    dispatch(setChips({ filterType: "itemRollup"}));
+    dispatch(fetchFilteredRFQItems(allFilters));
+  }
+
+  const handlePORollupFetch = () => {
+    //TODO
+    console.log("Fetching!!!!")
+  }
+
   const historySearchMap = {
     "orders": handleOrderHistoryFetch,
     "rollup": handleOrderSetFetch,
@@ -271,6 +281,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "history-rfq") {
         dispatch(fetchFilteredRFQHistory(allFilters));
+      }
+      if (filterType === "itemRollup-rfq") {
+        dispatch(fetchFilteredRFQItems(allFilters));
       }
 
       dispatch(setSorted());
@@ -377,8 +390,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
               handleSearch={
-                // TODO add search for po when api is there
-                () => console.log("Searching!")
+                filterType.split("-")[1] === "rfq" ?
+                handleRFQRollupFetch : 
+                handlePORollupFetch
               }
               rollupType={filterType.split("-")[1]}
             />
