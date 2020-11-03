@@ -9,6 +9,7 @@ import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
 import filterReducer from "./slices/filterSlice";
 import itemReducer from "./slices/itemSlice";
+import itemTypeReducer from "./slices/itemTypeSlice";
 import orderHistoryReducer from "./slices/orderHistorySlice";
 import orderSetHistoryReducer from "./slices/orderSetHistorySlice";
 import orderSetReducer from "./slices/orderSetSlice";
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   distributors: distributorReducer,
   filters: filterReducer,
   items: itemReducer,
+  itemTypes: itemTypeReducer,
   orderHistory: orderHistoryReducer,
   orderSet: orderSetReducer,
   orderSetHistory: orderSetHistoryReducer,

@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-import { itemTypeList } from "../../utility/constants";
-
 const ItemTypeAutoComplete = ({
   classes,
   handleChange,
@@ -20,6 +18,7 @@ const ItemTypeAutoComplete = ({
   const [currentItemTypes, setCurrentItemTypes] = useState([]);
 
   const currentFiltersItemType = useSelector((state) => state.filters.itemType);
+  const itemTypeList = useSelector((state) => state.itemTypes.itemTypeList);
 
   const handleItemTypes = (value) => {
     setCurrentItemTypes(value);

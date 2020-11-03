@@ -133,7 +133,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "history-rfq" && filter !== "sequenceNum" &&
       filter !== "rfqNum") {
-        dispatch(fetchFilteredRFQHistory)
+        dispatch(fetchFilteredRFQHistory(currentFilters))
       }
     },
     [dispatch, allFilters, filterType]

@@ -32,12 +32,10 @@ export const fetchItems = async (filterObject) => {
       ? `?filter[item-number]=${filterObject.sequenceNum}`
       : "";
   let queryString = "/api/items" + seqString;
-  console.log(queryString);
   await axios
     .get(queryString)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -48,3 +46,20 @@ export const fetchItems = async (filterObject) => {
     });
   return response;
 };
+
+export const fetchItemTypes = async () => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get("/api/item-types")
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}

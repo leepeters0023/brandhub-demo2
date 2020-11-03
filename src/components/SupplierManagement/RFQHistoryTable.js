@@ -127,6 +127,24 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
 
+  const handleStatus = (status, bids) => {
+    if (status === "sent") {
+      let bidCount = 0;
+      bids.forEach((bid) => {
+        if (bid.price) {
+          bidCount += 1
+        }
+      })
+      if (bidCount !== bids.length) {
+        return `Waiting for Resp. ${bidCount}/${bids.length}`
+      } else {
+        return "Ready for Review"
+      }
+    } else {
+      return status[0].toUpperCase() + status.slice(1);
+    }
+  }
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -188,7 +206,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                     {formatMoney(row.totalEstCost)}
                   </TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
-                  <TableCell align="left">{row.status[0].toUpperCase() + row.status.slice(1)}</TableCell>
+                  <TableCell align="left">{handleStatus(row.status, row.bids)}</TableCell>
                 </TableRow>
               ))}
             {rfqsLoading && (

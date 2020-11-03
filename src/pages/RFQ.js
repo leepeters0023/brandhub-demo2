@@ -6,50 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchSingleRFQ, sendBids } from "../redux/slices/rfqSlice";
-import { fetchAllSuppliers } from "../redux/slices/supplierSlice";
 
 import { setRetain } from "../redux/slices/filterSlice";
 
 import Loading from "../components/Utility/Loading";
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
 import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
+import RFQSupplierBidTable from "../components/SupplierManagement/RFQSupplierBidTable";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
-const mockSupplierData = [
-  {
-    name: "Imperial",
-    quotedCost: "$5.99",
-    note:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
-  },
-  {
-    name: "Sterling",
-    quotedCost: "6.99",
-    note:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
-  },
-  {
-    name: "Curtis",
-    quotedCost: "5.50",
-    note:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam varius hendrerit eros, non rhoncus ante.",
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -71,20 +44,24 @@ const RFQ = ({ handleFiltersClosed }) => {
   const isSuppliersLoading = useSelector((state) => state.suppliers.isLoading);
 
   const handleSendBids = () => {
-    dispatch(sendBids(suppliersSelected, currentRFQ.id))
-  }
+    dispatch(sendBids(suppliersSelected, currentRFQ.id));
+    setSuppliersSelected([]);
+  };
+
+  const handleAwardBid = (id) => {
+    //TODO tie into api when available
+    console.log(id);
+  };
+
+  const handleBidPO = (id) => {
+    //TODO tie into api when available
+    console.log(id);
+  };
 
   useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch);
 
   useEffect(() => {
     handleFiltersClosed();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (currentSuppliers.length === 0) {
-      dispatch(fetchAllSuppliers());
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -99,7 +76,8 @@ const RFQ = ({ handleFiltersClosed }) => {
     if (!currentRFQ.id && window.location.hash !== "#new") {
       dispatch(fetchSingleRFQ(window.location.hash.slice(1)));
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isRFQLoading || !currentRFQ.id) {
     return <Loading />;
@@ -146,81 +124,37 @@ const RFQ = ({ handleFiltersClosed }) => {
         <br />
         <Divider style={{ width: "75%", minWidth: "600px" }} />
         <br />
-
-        <RFQSupplierSentTable
-          currentSuppliers={currentSuppliers}
-          isLoading={isSuppliersLoading}
-          suppliersSelected={suppliersSelected}
-          setSuppliersSelected={setSuppliersSelected}
-        />
-        <br />
-        <Button
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          style={{ marginRight: "10px" }}
-          disabled={suppliersSelected.length === 0}
-          onClick={handleSendBids}
-        >
-          SEND RFQ
-        </Button>
-        <br />
-
-        {!window.location.hash.includes("new") && (
-          <TableContainer
-            className={classes.tableContainer}
-            style={{ width: "75%", minWidth: "600px" }}
-          >
-            <Typography
-              className={classes.titleText}
-              style={{ marginLeft: "20px" }}
-            >
-              Current Bids:
-            </Typography>
+        {currentRFQ.bids.length !== currentSuppliers.length && (
+          <>
+            <RFQSupplierSentTable
+              currentSuppliers={currentSuppliers}
+              isLoading={isSuppliersLoading}
+              suppliersSelected={suppliersSelected}
+              setSuppliersSelected={setSuppliersSelected}
+              currentBids={currentRFQ.bids}
+            />
             <br />
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.headerText} align="left">
-                    Supplier
-                  </TableCell>
-                  <TableCell className={classes.headerText} align="left">
-                    Quoted Cost
-                  </TableCell>
-                  <TableCell className={classes.headerText} align="left">
-                    Note
-                  </TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mockSupplierData.map((sup) => (
-                  <TableRow key={sup.name}>
-                    <TableCell align="left">{sup.name}</TableCell>
-                    <TableCell align="left">{sup.quotedCost}</TableCell>
-                    <TableCell align="left">{sup.note}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        className={classes.largeButton}
-                        variant="contained"
-                        color="secondary"
-                        style={{ marginRight: "20px" }}
-                      >
-                        AWARD
-                      </Button>
-                      <Button
-                        className={classes.largeButton}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        PO
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              style={{ marginRight: "10px" }}
+              disabled={suppliersSelected.length === 0}
+              onClick={handleSendBids}
+            >
+              SEND RFQ
+            </Button>
+            <br />
+          </>
+        )}
+
+        {currentRFQ.bids.length > 0 && (
+          <RFQSupplierBidTable
+            classes={classes}
+            bids={currentRFQ.bids}
+            handleAward={handleAwardBid}
+            handlePO={handleBidPO}
+          />
         )}
         <br />
       </div>

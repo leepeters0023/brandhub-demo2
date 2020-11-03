@@ -99,7 +99,6 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
     if (rfqs.error) {
       throw rfqs.error;
     }
-    console.log(rfqs);
     let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
     dispatch(
       getRfqHistorySuccess({
