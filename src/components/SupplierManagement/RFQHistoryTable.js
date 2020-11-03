@@ -198,7 +198,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.program[0].name}</TableCell>
+                  <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">{formatMoney(row.estCost)}</TableCell>

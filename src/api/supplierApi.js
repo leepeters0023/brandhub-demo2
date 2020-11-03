@@ -37,15 +37,11 @@ export const fetchRollupItems = async (filterObject, type) => {
     dueDate: "order-due-date",
   };
   let typeString = `?filter[order-type]=${filterObject.orderType}`;
-  console.log(typeString);
   let typeBool = `&filter[is-for-rfq]=${type === "rfq" ? true : false}`;
-  console.log(typeBool);
-  console.log(filterObject.user);
-  let userString =
-    filterObject.user.length > 0
-      ? `&filter[user-ids]=${separateByComma(filterObject.user, "id")}`
-      : "";
-  console.log("here");
+  // let userString =
+  //   filterObject.user.length > 0
+  //     ? `&filter[user-ids]=${separateByComma(filterObject.user, "id")}`
+  //     : "";
   let progString =
     filterObject.program.length > 0
       ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
@@ -70,7 +66,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     "/api/item-rollups" +
     typeString +
     typeBool +
-    userString +
+    // userString +
     progString +
     brandString +
     itemTypeString +
@@ -78,7 +74,6 @@ export const fetchRollupItems = async (filterObject, type) => {
     sortString;
 
   const response = { status: "", error: null, data: null };
-  console.log(queryString);
   await axios
     .get(queryString)
     .then((res) => {
@@ -141,9 +136,9 @@ export const updateRFQNote = async (id, note) => {
           type: "request-for-quote",
           id: id,
           attributes: {
-            note: note
-          }
-        }
+            note: note,
+          },
+        },
       },
       writeHeaders
     )
@@ -156,7 +151,7 @@ export const updateRFQNote = async (id, note) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 export const sendBidRequests = async (idArray, rfqId) => {
   const response = { status: "", error: null, data: null };
@@ -187,16 +182,70 @@ export const sendBidRequests = async (idArray, rfqId) => {
 };
 
 export const fetchRFQHistory = async (filterObject) => {
+  const sortMap = {
+    sequenceNum: "item-number",
+    rfqNum: "id",
+    program: "program-name",
+    itemType: "item-type-description",
+    dueDate: "due-date",
+    status: "status",
+  };
+  let statusString =
+    filterObject.status && filterObject.status.length > 0
+      ? filterObject.status === "all"
+        ? ""
+        : `filter[status]=${filterObject.status}`
+      : "";
+  let progString =
+    filterObject.program.length > 0
+      ? `filter[program-ids]=${separateByComma(filterObject.program, "id")}`
+      : "";
+  let brandString =
+    filterObject.brand.length > 0
+      ? `filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
+      : "";
+  let itemTypeString =
+    filterObject.itemType.length > 0
+      ? `filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
+      : "";
+  let seqString =
+    filterObject.sequenceNum.length > 0
+      ? `filter[item-number]=${filterObject.sequenceNum}`
+      : "";
+  let idString =
+    filterObject.rfqNum && filterObject.rfqNum.length > 0
+      ? `filter[id]=${filterObject.rfqNum}`
+      : "";
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryArray = [
+    statusString,
+    progString,
+    brandString,
+    itemTypeString,
+    seqString,
+    idString,
+    sortString,
+  ];
+  let queryStringAppend = queryArray
+    .filter((query) => query.length !== 0)
+    .join("&");
+  let filterPreCursor = queryStringAppend.length !== 0 ? "?" : "";
+
+  let queryString =
+    "/api/request-for-quotes" + filterPreCursor + queryStringAppend;
+
   const response = { status: "", error: null, data: null };
-  //TODO add filter logic
   await axios
-    .get("/api/request-for-quotes")
+    .get(queryString)
     .then((res) => {
       let dataObject = {
         rfqs: null,
         nextLink: null,
       };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.rfqs = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";

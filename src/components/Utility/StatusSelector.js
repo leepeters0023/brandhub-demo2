@@ -30,8 +30,9 @@ const StatusSelector = ({
   ];
   const rfqStatusList = [
     { status: "awarded", label: "Awarded" },
-    { status: "ready", label: "Ready for Review" },
-    { status: "pending", label: "Waiting for Resp." },
+    { status: "ready-for-review", label: "Ready for Review" },
+    { status: "sent", label: "Waiting for Resp." },
+    { status: "draft", label: "Draft"},
     { status: "all", label: "All Status" },
   ];
   const poStatusList = [
