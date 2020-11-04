@@ -171,7 +171,6 @@ export default rfqSlice.reducer;
 export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    console.log("fetching");
     const items = await fetchRollupItems(filterObject, "rfq");
     if (items.error) {
       throw items.error;

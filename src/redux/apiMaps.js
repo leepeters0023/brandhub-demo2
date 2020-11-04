@@ -143,6 +143,7 @@ export const mapRollupItems = (items) => {
 
 export const mapRFQ = (rfq) => {
   const mapBids = (bids) => {
+    console.log(bids);
     return bids.map((bid) => ({
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
@@ -155,7 +156,7 @@ export const mapRFQ = (rfq) => {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",
     dueDate: rfq["due-date"] ? rfq["due-date"] : "---",
-    inMarketDate: rfq["end-market-date"] ? rfq["end-market-date"] : "---",
+    inMarketDate: rfq["in-market-date"] ? rfq["in-market-date"] : "---",
     bids: mapBids(rfq.bids),
     program: rfq.program.name,
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),

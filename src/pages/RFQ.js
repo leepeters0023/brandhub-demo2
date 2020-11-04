@@ -91,7 +91,7 @@ const RFQ = ({ handleFiltersClosed }) => {
             <Tooltip title="Back to RFQ History" placement="bottom-start">
               <IconButton
                 component={Link}
-                to="/purchasing/rfqHistory"
+                to="/purchasing/rfqHistory/current"
                 onClick={() => {
                   dispatch(setRetain({ value: true }));
                 }}
@@ -126,25 +126,25 @@ const RFQ = ({ handleFiltersClosed }) => {
         <br />
         {currentRFQ.bids.length !== currentSuppliers.length && (
           <>
-            <RFQSupplierSentTable
-              currentSuppliers={currentSuppliers}
-              isLoading={isSuppliersLoading}
-              suppliersSelected={suppliersSelected}
-              setSuppliersSelected={setSuppliersSelected}
-              currentBids={currentRFQ.bids}
-            />
-            <br />
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "10px" }}
-              disabled={suppliersSelected.length === 0}
-              onClick={handleSendBids}
-            >
-              SEND RFQ
-            </Button>
-            <br />
+          <RFQSupplierSentTable
+            currentSuppliers={currentSuppliers}
+            isLoading={isSuppliersLoading}
+            suppliersSelected={suppliersSelected}
+            setSuppliersSelected={setSuppliersSelected}
+            currentBids={currentRFQ.bids}
+          />
+        <br />
+        <Button
+          className={classes.largeButton}
+          variant="contained"
+          color="secondary"
+          style={{ marginRight: "10px" }}
+          disabled={suppliersSelected.length === 0}
+          onClick={handleSendBids}
+          >
+          SEND RFQ
+        </Button>
+        <br />
           </>
         )}
 
