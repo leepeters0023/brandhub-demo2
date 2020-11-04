@@ -54,7 +54,7 @@ export const earliestDate = (dateArray) => {
       ? 1
       : 0;
   })
-  return sortedDates[0];
+  return sortedDates;
 }
 
 /*

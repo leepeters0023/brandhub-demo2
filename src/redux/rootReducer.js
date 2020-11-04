@@ -9,6 +9,7 @@ import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
 import filterReducer from "./slices/filterSlice";
 import itemReducer from "./slices/itemSlice";
+import itemTypeReducer from "./slices/itemTypeSlice";
 import orderHistoryReducer from "./slices/orderHistorySlice";
 import orderSetHistoryReducer from "./slices/orderSetHistorySlice";
 import orderSetReducer from "./slices/orderSetSlice";
@@ -19,6 +20,7 @@ import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
 import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
+import supplierReducer from "./slices/supplierSlice";
 import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
 import userReducer from "./slices/userSlice";
@@ -33,6 +35,7 @@ const rootReducer = combineReducers({
   distributors: distributorReducer,
   filters: filterReducer,
   items: itemReducer,
+  itemTypes: itemTypeReducer,
   orderHistory: orderHistoryReducer,
   orderSet: orderSetReducer,
   orderSetHistory: orderSetHistoryReducer,
@@ -43,6 +46,7 @@ const rootReducer = combineReducers({
   purchaseOrderHistory: purchaseOrderHistoryReducer,
   rfq: rfqReducer,
   rfqHistory: rfqHistoryReducer,
+  suppliers: supplierReducer,
   tags: tagReducer,
   territories: territoryReducer,
   user: userReducer,

@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setClear } from "../../redux/slices/filterSlice";
 
@@ -25,60 +25,74 @@ const FiltersItemRollup = ({
   sequenceNum,
   bindSequenceNum,
   handleSearch,
-  itemTypes,
+  rollupType,
 }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useCallback(useState("on-demand"));
 
+  const currentOrderType = useSelector((state) => state.filters.orderType);
+
+  useEffect(() => {
+    if (value !== currentOrderType) {
+      setValue(currentOrderType);
+    }
+  }, [value, currentOrderType, setValue]);
+
   return (
     <>
       <List>
-        <ListItem
-          style={{
-            display: "flex",
-            flexDirection: "column"
-          }}
-        >
-          <Typography className={classes.headerText}>Order Type:</Typography>
-          <br />
-          <ButtonGroup
-            orientation="vertical"
-            fullWidth
-            color="secondary"
-            aria-label="order-item-type"
-          >
-            <Button
-              className={
-                value === "on-demand"
-                  ? classes.largeButton
-                  : classes.selectedButton
-              }
-              variant={value === "on-demand" ? "contained" : "outlined"}
-              onClick={() => {
-                setValue("on-demand");
-                handleFilters("on-demand", "orderType", "itemRollup");
+        {rollupType === "po" && (
+          <>
+            <ListItem
+              style={{
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              ON-DEMAND
-            </Button>
-            <Button
-              className={
-                value === "pre-order"
-                  ? classes.largeButton
-                  : classes.selectedButton
-              }
-              variant={value === "pre-order" ? "contained" : "outlined"}
-              onClick={() => {
-                setValue("pre-order");
-                handleFilters("pre-order", "orderType", "itemRollup");
-              }}
-            >
-              PRE-ORDER
-            </Button>
-          </ButtonGroup>
-        </ListItem>
-        <ListItem />
-        <Divider />
+              <Typography className={classes.headerText}>
+                Order Type:
+              </Typography>
+              <br />
+              <ButtonGroup
+                orientation="vertical"
+                fullWidth
+                color="secondary"
+                aria-label="order-item-type"
+              >
+                <Button
+                  className={
+                    value === "on-demand"
+                      ? classes.largeButton
+                      : classes.selectedButton
+                  }
+                  variant={value === "on-demand" ? "contained" : "outlined"}
+                  onClick={() => {
+                    setValue("on-demand");
+                    handleFilters("on-demand", "orderType", "itemRollup");
+                  }}
+                >
+                  ON-DEMAND
+                </Button>
+                <Button
+                  className={
+                    value === "pre-order"
+                      ? classes.largeButton
+                      : classes.selectedButton
+                  }
+                  variant={value === "pre-order" ? "contained" : "outlined"}
+                  onClick={() => {
+                    setValue("pre-order");
+                    handleFilters("pre-order", "orderType", "itemRollup");
+                  }}
+                >
+                  PRE-ORDER
+                </Button>
+              </ButtonGroup>
+            </ListItem>
+            <ListItem />
+            <Divider />
+          </>
+        )}
         <ListItem />
         <ListItem>
           <TextField

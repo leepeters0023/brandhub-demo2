@@ -2,16 +2,16 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-//import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
+import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
 import { createNewRFQ } from "../redux/slices/rfqSlice"
 
 import {
   updateMultipleFilters,
-  //setSorted,
+  setSorted,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -21,7 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-//import LinearProgress from "@material-ui/core/LinearProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,10 +29,11 @@ import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
-  orderType: "on-demand",
+  orderType: "pre-order",
   brand: [],
   program: [],
   itemType: [],
+  user: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",
@@ -45,20 +46,20 @@ const useStyles = makeStyles((theme) => ({
 const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const nextLink = useSelector((state) => state.rfq.nextLink);
-  // const isNextLoading = useSelector(
-  //   (state) => state.rfq.isNextLoading
-  // );
+  const nextLink = useSelector((state) => state.rfq.nextLink);
+  const isNextLoading = useSelector(
+    (state) => state.rfq.isNextLoading
+  );
 
-  // const handleBottomScroll = () => {
-  //   if (nextLink && !isNextLoading) {
-  //     if (scrollRef.current.scrollTop !== 0) {
-  //       dispatch(fetchNextFilteredRFQItems(nextLink));
-  //     }
-  //   }
-  // };
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredRFQItems(nextLink));
+      }
+    }
+  };
 
-  //const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
@@ -67,14 +68,15 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem)
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleNewRFQ = () => {
-    dispatch(createNewRFQ(selectedRFQItem))
+    let currentItem = currentRFQItems.find((item) => item.id === selectedRFQItem);
+    console.log(currentItem.program[0].id);
+    dispatch(createNewRFQ(selectedRFQItem, currentItem.program[0].id))
   }
 
   const handleSort = (sortObject) => {
-    //scrollRef.current.scrollTop = 0;
+    scrollRef.current.scrollTop = 0;
     dispatch(
       updateMultipleFilters({
         filterObject: {
@@ -83,11 +85,11 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
         },
       })
     );
-    //dispatch(setSorted());
+    dispatch(setSorted());
   };
 
   useInitialFilters(
-    "itemRollup",
+    "itemRollup-rfq",
     defaultFilters,
     retainFilters,
     dispatch,
@@ -153,17 +155,17 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
           items={currentRFQItems}
           isItemsLoading={isRFQItemsLoading}
           handleSort={handleSort}
-          // scrollRef={scrollRef}
+          scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
           type={"rfq"}
         />
-        {/* {isNextLoading && (
+        {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
         )}
-        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>} */}
+        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
       </Container>
       <br />
     </>

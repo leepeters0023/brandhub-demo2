@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { fetchRFQHistory, fetchNextRFQHistory } from "../../api/purchasingApi";
+
+import { mapRFQHistory } from "../apiMaps";
+
 /*
 * RFQ Model
 
@@ -87,3 +91,43 @@ export const {
 } = rfqHistorySlice.actions;
 
 export default rfqHistorySlice.reducer;
+
+export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let rfqs = await fetchRFQHistory(filterObject);
+    if (rfqs.error) {
+      throw rfqs.error;
+    }
+    let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
+    dispatch(
+      getRfqHistorySuccess({
+        rfqs: mappedRFQs,
+        nextLink: rfqs.data.nextLink,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let rfqs = await fetchNextRFQHistory(url);
+    if (rfqs.error) {
+      throw rfqs.error;
+    }
+    let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
+    dispatch(
+      getRfqHistorySuccess({
+        rfqs: mappedRFQs,
+        nextLink: rfqs.data.nextLink,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

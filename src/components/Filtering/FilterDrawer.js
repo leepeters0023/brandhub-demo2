@@ -18,6 +18,8 @@ import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice"
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
+import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
+import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -127,6 +129,16 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredOrderSets(currentFilters));
       }
+      if (filterType === "itemRollup-rfq" && filter !== "sequenceNum") {
+        dispatch(fetchFilteredRFQItems(currentFilters));
+      }
+      if (filterType === "itemRollup-po" && filter !== "sequenceNum") {
+        dispatch(fetchFilteredPOItems(currentFilters));
+      }
+      if (filterType === "history-rfq" && filter !== "sequenceNum" &&
+      filter !== "rfqNum") {
+        dispatch(fetchFilteredRFQHistory(currentFilters))
+      }
     },
     [dispatch, allFilters, filterType]
   );
@@ -177,6 +189,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(defaultFilters));
       }
+      if (filterType === "itemRollup-po") {
+        dispatch(fetchFilteredPOItems(defaultFilters));
+      }
+      if (filterType === "history-rfq") {
+        dispatch(fetchFilteredRFQHistory(defaultFilters));
+      }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
@@ -206,6 +224,34 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(setChips({ filterType: "item-all" }));
     dispatch(fetchFilteredItems(allFilters));
   };
+
+  const handleFilteredRFQFetch = () => {
+    dispatch(setChips({ filterType: "history" }));
+    dispatch(fetchFilteredRFQHistory(allFilters));
+  }
+
+  const handleRFQRollupFetch = () => {
+    dispatch(setChips({ filterType: "itemRollup"}));
+    dispatch(fetchFilteredRFQItems(allFilters));
+  }
+
+  const handleFilteredPOFetch = () => {
+    //TODO
+    console.log("fetching!")
+  }
+
+  const handlePORollupFetch = () => {
+    dispatch(setChips({ filterType: "itemRollup"}));
+    dispatch(fetchFilteredPOItems(allFilters));
+  }
+
+  const historySearchMap = {
+    "orders": handleOrderHistoryFetch,
+    "rollup": handleOrderSetFetch,
+    "approvals": handleOrderSetFetch,
+    "rfq": handleFilteredRFQFetch,
+    "po" : handleFilteredPOFetch,
+  }
 
   //TODO write handle grouping change function that fetches order history / rollup by
   // order or item
@@ -246,7 +292,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredItems(allFilters));
       }
-
+      if (filterType === "history-rfq") {
+        dispatch(fetchFilteredRFQHistory(allFilters));
+      }
+      if (filterType === "itemRollup-rfq") {
+        dispatch(fetchFilteredRFQItems(allFilters));
+      }
+      if (filterType === "itemRollup-po") {
+        dispatch(fetchFilteredPOItems(allFilters));
+      }
       dispatch(setSorted());
     }
   }, [sorted, dispatch, filterType, allFilters]);
@@ -311,9 +365,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindPoNum={bindPoNum}
               suppliers={suppliers}
               handleSearch={
-                filterType.includes("orders")
-                  ? handleOrderHistoryFetch
-                  : handleOrderSetFetch
+                // filterType.includes("orders")
+                //   ? handleOrderHistoryFetch
+                //   : handleOrderSetFetch
+                historySearchMap[filterType.split("-")[1]]
               }
               historyType={filterType.split("-")[1]}
             />
@@ -350,9 +405,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
               handleSearch={
-                // TODO add search for po when api is there
-                () => console.log("Searching!")
+                filterType.split("-")[1] === "rfq" ?
+                handleRFQRollupFetch : 
+                handlePORollupFetch
               }
+              rollupType={filterType.split("-")[1]}
             />
           )}
           {filterType && filterType.includes("budget") && (

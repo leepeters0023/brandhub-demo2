@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import { setSelectedRFQItem } from "../../redux/slices/rfqSlice";
+import { setSelectedPOItems } from "../../redux/slices/purchaseOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -136,11 +137,6 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  PORollupRow: {
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
   visuallyHidden: {
     border: 0,
     clip: "rect(0 0 0 0)",
@@ -210,14 +206,14 @@ const ItemRollupTable = ({
       }
     }
 
+    if (type === "po") {
+      dispatch(setSelectedPOItems({ selectedItems: newSelected }))
+    }
+
     setSelected(newSelected);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const handleRowClick = (sequenceNum) => {
-    //navigate(`/purchasing/item/${sequenceNum}`);
-  };
 
   useEffect(() => {
     if (selected.length > 0 && !itemSelected) {
@@ -273,10 +269,6 @@ const ItemRollupTable = ({
                   <TableRow
                     key={row.id}
                     hover
-                    className={classes.PORollupRow}
-                    onClick={() => {
-                      handleRowClick(row.sequenceNum);
-                    }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
@@ -292,7 +284,7 @@ const ItemRollupTable = ({
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
-                    <TableCell align="left">{row.program}</TableCell>
+                    <TableCell align="left">{row.program.name ? row.program.name : row.program[0].name}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
                     <TableCell align="left">{row.totalNotCompliant}</TableCell>

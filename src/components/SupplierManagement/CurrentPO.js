@@ -44,7 +44,7 @@ const CurrentPO = ({ purchaseOrderItems }) => {
   const dispatch = useDispatch();
 
   const additionalCosts = useSelector(
-    (state) => state.purchaseOrder.additionalCosts
+    (state) => state.purchaseOrder.currentPO.additionalCosts
   );
 
   const addNewCost = () => {

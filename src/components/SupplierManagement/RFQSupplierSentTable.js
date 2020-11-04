@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import Checkbox from "@material-ui/core/Checkbox";
@@ -7,6 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import TableCell from "@material-ui/core/TableCell";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,31 +45,19 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const RFQSupplierSentTable = ({ suppliersSelected, setSuppliersSelected }) => {
+const RFQSupplierSentTable = ({
+  currentSuppliers,
+  isLoading,
+  suppliersSelected,
+  setSuppliersSelected,
+  currentBids,
+}) => {
   const classes = useStyles();
-
-  const suppliers = [
-    {
-      id: "1",
-      name: "Curtis",
-    },
-    {
-      id: "2",
-      name: "Imperial",
-    },
-    {
-      id: "3",
-      name: "Sterling",
-    },
-    {
-      id: "4",
-      name: "Willey",
-    },
-  ];
+  const [filteredSuppliers, setFilteredSuppliers] = useState([]);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = suppliers.map((sup) => sup.id);
+      const newSelecteds = currentSuppliers.map((sup) => sup.id);
       setSuppliersSelected(newSelecteds);
       return;
     }
@@ -97,6 +86,22 @@ const RFQSupplierSentTable = ({ suppliersSelected, setSuppliersSelected }) => {
 
   const isSelected = (id) => suppliersSelected.indexOf(id) !== -1;
 
+  useEffect(() => {
+    if (
+      (filteredSuppliers.length === 0 &&
+      currentBids.length > 0 &&
+      currentSuppliers.length > 0 &&
+      currentBids.length !== currentSuppliers.length) ||
+      (filteredSuppliers.length + currentBids.length !== currentSuppliers.length)
+    ) {
+      let newSuppliers = [...currentSuppliers];
+      currentBids.forEach((bid) => {
+        newSuppliers = newSuppliers.filter((sup) => sup.id !== bid.supplierId);
+      });
+      setFilteredSuppliers(newSuppliers);
+    }
+  }, [filteredSuppliers, currentSuppliers, currentBids.length, currentBids]);
+
   return (
     <>
       <TableContainer
@@ -111,26 +116,58 @@ const RFQSupplierSentTable = ({ suppliersSelected, setSuppliersSelected }) => {
             rowCount={4}
           />
           <TableBody>
-            {suppliers.map((sup, index) => {
-              const isSupplierSelected = isSelected(sup.id);
-              const labelId = `supplier-checked-${index}`;
-              return (
-                <TableRow key={sup.id}>
-                  <TableCell align="left">{sup.name}</TableCell>
-                  <TableCell align="right" padding="checkbox">
-                    <Checkbox
-                      checked={isSupplierSelected}
-                      inputProps={{ "aria-labelledby": labelId }}
-                      onClick={(event) => event.stopPropagation()}
-                      onChange={(event) => {
-                        handleClick(event, sup.id);
-                        event.stopPropagation();
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {isLoading && currentSuppliers.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={2}>
+                  <CircularProgress />
+                </TableCell>
+              </TableRow>
+            )}
+            {!isLoading &&
+              filteredSuppliers.length > 0 &&
+              filteredSuppliers.map((sup, index) => {
+                const isSupplierSelected = isSelected(sup.id);
+                const labelId = `supplier-checked-${index}`;
+                return (
+                  <TableRow key={sup.id}>
+                    <TableCell align="left">{sup.name}</TableCell>
+                    <TableCell align="right" padding="checkbox">
+                      <Checkbox
+                        checked={isSupplierSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, sup.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {!isLoading &&
+              filteredSuppliers.length === 0 &&
+              currentSuppliers.length > 0 &&
+              currentSuppliers.map((sup, index) => {
+                const isSupplierSelected = isSelected(sup.id);
+                const labelId = `supplier-checked-${index}`;
+                return (
+                  <TableRow key={sup.id}>
+                    <TableCell align="left">{sup.name}</TableCell>
+                    <TableCell align="right" padding="checkbox">
+                      <Checkbox
+                        checked={isSupplierSelected}
+                        inputProps={{ "aria-labelledby": labelId }}
+                        onClick={(event) => event.stopPropagation()}
+                        onChange={(event) => {
+                          handleClick(event, sup.id);
+                          event.stopPropagation();
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
