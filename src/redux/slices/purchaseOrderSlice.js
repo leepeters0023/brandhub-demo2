@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchRollupItems } from "../../api/supplierApi";
+import {
+  fetchRollupItems,
+  fetchNextRollupItems,
+} from "../../api/purchasingApi";
 import { mapRollupItems } from "../apiMaps";
 
 let initialState = {
@@ -93,6 +96,10 @@ const purchaseOrderSlice = createSlice({
       state.error = null;
       state.isLoading = false;
     },
+    setSelectedPOItems(state, action) {
+      const { selectedItems } = action.payload;
+      state.selectedPOItems = selectedItems;
+    },
     addCost(state, action) {
       const { description, cost } = action.payload;
       let currentCosts =
@@ -157,6 +164,7 @@ export const {
   getPOItemsSuccess,
   getNextPOItemsSuccess,
   getSinglePOSuccess,
+  setSelectedPOItems,
   addCost,
   updateCost,
   resetPurchaseOrder,
@@ -165,17 +173,36 @@ export const {
 
 export default purchaseOrderSlice.reducer;
 
-export const fetchFilteredPOtems = (filterObject) => async (dispatch) => {
+export const fetchFilteredPOItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    console.log("fetching");
     const items = await fetchRollupItems(filterObject, "po");
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapRollupItems(items.data);
-    console.log(mappedItems);
-    dispatch(getPOItemsSuccess({ rfqItems: mappedItems }));
+    let mappedItems = mapRollupItems(items.data.items);
+    dispatch(
+      getPOItemsSuccess({ poItems: mappedItems, nextLink: items.data.nextLink })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchNextFilteredPOItems = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    const items = await fetchNextRollupItems(url);
+    if (items.error) {
+      throw items.error;
+    }
+    let mappedItems = mapRollupItems(items.data.items);
+    dispatch(
+      getNextPOItemsSuccess({
+        poItems: mappedItems,
+        nextLink: items.data.nextLink,
+      })
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

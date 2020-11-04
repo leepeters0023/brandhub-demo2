@@ -2,13 +2,14 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
+import { fetchNextFilteredPOItems } from "../redux/slices/purchaseOrderSlice";
 import {
   updateMultipleFilters,
-  //setSorted,
+  setSorted,
 } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -18,14 +19,12 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-//import LinearProgress from "@material-ui/core/LinearProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
-
-import { currentPOItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -44,15 +43,31 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const nextLink = useSelector((state) => state.purchaseOrder.nextLink);
+  const isNextLoading = useSelector(
+    (state) => state.purchaseOrder.isNextLoading
+  );
+
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredPOItems(nextLink));
+      }
+    }
+  };
+
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
+  const isPOItemsLoading = useSelector((state) => state.purchaseOrder.isLoading);
+  const currentPOItems = useSelector((state) => state.purchaseOrder.poItems);
+  const selectedPOItems = useSelector((state) => state.purchaseOrder.selectedPOItems);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
 
   const handleSort = (sortObject) => {
-    //scrollRef.current.scrollTop = 0;
+    scrollRef.current.scrollTop = 0;
     dispatch(
       updateMultipleFilters({
         filterObject: {
@@ -61,8 +76,13 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         },
       })
     );
-    //dispatch(setSorted());
+    dispatch(setSorted());
   };
+
+  const handleNewPO = () => {
+    //TODO
+    console.log(selectedPOItems);
+  }
 
   useInitialFilters(
     "itemRollup-po",
@@ -94,7 +114,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
               onClick={() => {
-                //TODO create po function
+                handleNewPO()
                 navigate("/purchasing/purchaseOrder#new");
               }}
             >
@@ -131,19 +151,19 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         <br />
         <ItemRollupTable
           items={currentPOItems}
-          isItemsLoading={false}
+          isItemsLoading={isPOItemsLoading}
           handleSort={handleSort}
-          // scrollRef={scrollRef}
+          scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
           type={"po"}
         />
-        {/* {isNextLoading && (
+        {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
         )}
-        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>} */}
+        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
       </Container>
       <br />
     </>

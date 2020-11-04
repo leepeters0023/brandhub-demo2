@@ -2,10 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
 import clsx from "clsx";
+import addDays from "date-fns/addDays";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateNote, updateSupplierNote } from "../../redux/slices/rfqSlice";
+import {
+  updateNote,
+  updateSupplierNote,
+  updateRFQDates,
+} from "../../redux/slices/rfqSlice";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -96,10 +101,18 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Quote Due"
                   value={
                     currentRFQ.dueDate !== "---"
-                      ? format(new Date(currentRFQ.dueDate))
+                      ? format(addDays(new Date(currentRFQ.dueDate), 1), "MM/dd/yyyy")
                       : format(new Date(), "MM/dd/yyyy")
                   }
-                  //onChange={(value) => handleFilters(value, "toDate")}
+                  onChange={(value) =>
+                    dispatch(
+                      updateRFQDates(
+                        currentRFQ.id,
+                        "due-date",
+                        format(new Date(value), "yyyy-MM-dd")
+                      )
+                    )
+                  }
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -117,10 +130,18 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Due Date"
                   value={
                     currentRFQ.inMarketDate !== "---"
-                      ? format(new Date(currentRFQ.inMarketDate))
+                      ? format(addDays(new Date(currentRFQ.inMarketDate), 1), "MM/dd/yyyy")
                       : format(new Date(), "MM/dd/yyyy")
                   }
-                  //onChange={(value) => handleFilters(value, "toDate")}
+                  onChange={(value) =>
+                    dispatch(
+                      updateRFQDates(
+                        currentRFQ.id,
+                        "in-market-date",
+                        new Date(value)
+                      )
+                    )
+                  }
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}

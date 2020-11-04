@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setClear } from "../../redux/slices/filterSlice";
 
@@ -29,6 +29,14 @@ const FiltersItemRollup = ({
 }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useCallback(useState("on-demand"));
+
+  const currentOrderType = useSelector((state) => state.filters.orderType);
+
+  useEffect(() => {
+    if (value !== currentOrderType) {
+      setValue(currentOrderType);
+    }
+  }, [value, currentOrderType, setValue]);
 
   return (
     <>

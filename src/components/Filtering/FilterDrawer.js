@@ -19,6 +19,7 @@ import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
+import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -131,6 +132,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-rfq" && filter !== "sequenceNum") {
         dispatch(fetchFilteredRFQItems(currentFilters));
       }
+      if (filterType === "itemRollup-po" && filter !== "sequenceNum") {
+        dispatch(fetchFilteredPOItems(currentFilters));
+      }
       if (filterType === "history-rfq" && filter !== "sequenceNum" &&
       filter !== "rfqNum") {
         dispatch(fetchFilteredRFQHistory(currentFilters))
@@ -185,6 +189,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(defaultFilters));
       }
+      if (filterType === "itemRollup-po") {
+        dispatch(fetchFilteredPOItems(defaultFilters));
+      }
       if (filterType === "history-rfq") {
         dispatch(fetchFilteredRFQHistory(defaultFilters));
       }
@@ -228,9 +235,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(fetchFilteredRFQItems(allFilters));
   }
 
-  const handlePORollupFetch = () => {
+  const handleFilteredPOFetch = () => {
     //TODO
-    console.log("Fetching!!!!")
+    console.log("fetching!")
+  }
+
+  const handlePORollupFetch = () => {
+    dispatch(setChips({ filterType: "itemRollup"}));
+    dispatch(fetchFilteredPOItems(allFilters));
   }
 
   const historySearchMap = {
@@ -238,6 +250,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     "rollup": handleOrderSetFetch,
     "approvals": handleOrderSetFetch,
     "rfq": handleFilteredRFQFetch,
+    "po" : handleFilteredPOFetch,
   }
 
   //TODO write handle grouping change function that fetches order history / rollup by
@@ -285,7 +298,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(allFilters));
       }
-
+      if (filterType === "itemRollup-po") {
+        dispatch(fetchFilteredPOItems(allFilters));
+      }
       dispatch(setSorted());
     }
   }, [sorted, dispatch, filterType, allFilters]);

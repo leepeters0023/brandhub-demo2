@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchRFQHistory } from "../../api/supplierApi";
+import { fetchRFQHistory, fetchNextRFQHistory } from "../../api/purchasingApi";
 
 import { mapRFQHistory } from "../apiMaps";
 
@@ -103,7 +103,7 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
     dispatch(
       getRfqHistorySuccess({
         rfqs: mappedRFQs,
-        nextLink: rfqs.data.nextLink ? rfqs.data.nextLink : null,
+        nextLink: rfqs.data.nextLink,
       })
     );
   } catch (err) {
@@ -112,7 +112,22 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
   }
 };
 
-export const fetchNextRFQHistory = (url) => async (dispatch) => {
-  //TODO
-  console.log(url);
-}
+export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let rfqs = await fetchNextRFQHistory(url);
+    if (rfqs.error) {
+      throw rfqs.error;
+    }
+    let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
+    dispatch(
+      getRfqHistorySuccess({
+        rfqs: mappedRFQs,
+        nextLink: rfqs.data.nextLink,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

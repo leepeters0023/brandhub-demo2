@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchSuppliers } from "../../api/supplierApi";
+import { fetchSuppliers } from "../../api/purchasingApi";
 
 /*
 * Supplier Model
@@ -15,7 +15,7 @@ let initialState = {
   isLoading: false,
   supplierList: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -44,8 +44,8 @@ const supplierSlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,
@@ -63,12 +63,14 @@ export const fetchAllSuppliers = () => async (dispatch) => {
     if (suppliers.error) {
       throw suppliers.error;
     }
-    let mappedSuppliers = suppliers.data.map((supplier) => ({
-      id: supplier.id,
-      name: supplier.name,
-    })).filter((sup) => sup.id !== "4")
+    let mappedSuppliers = suppliers.data
+      .map((supplier) => ({
+        id: supplier.id,
+        name: supplier.name,
+      }))
+      .filter((sup) => sup.id !== "4");
     dispatch(getSuppliersSuccess({ suppliers: mappedSuppliers }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
