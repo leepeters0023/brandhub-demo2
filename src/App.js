@@ -23,6 +23,8 @@ import { resetItems } from "./redux/slices/itemSlice";
 import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
+import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
+import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -130,6 +132,8 @@ const App = () => {
       dispatch(fetchPreOrders(currentUserId, "initial"));
       dispatch(fetchCurrentOrderByType("inStock", currentUserId));
       dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+      dispatch(fetchAllItemTypes());
+      dispatch(fetchAllSuppliers());
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);
@@ -285,7 +289,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfqRollup",
             ["field2", "super"],
             role
           )}
@@ -294,17 +298,17 @@ const App = () => {
               path="/purchasing/rfq"
               handleFiltersClosed={handleFiltersClosed}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfq",
             ["field2", "super"],
             role
           )}
           {handleAuth(
             <RFQHistory
-              path="/purchasing/rfqHistory"
+              path="/purchasing/rfqHistory/:filterOption"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfqHistory",
             ["field2", "super"],
             role
           )}
@@ -314,7 +318,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/poRollup",
             ["field2", "super"],
             role
           )}
@@ -323,7 +327,7 @@ const App = () => {
               path="/purchasing/purchaseOrder"
               handleFiltersClosed={handleFiltersClosed}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/purchaseOrder",
             ["field2", "super"],
             role
           )}
@@ -333,7 +337,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/poHistory",
             ["field2", "super"],
             role
           )}

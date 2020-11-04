@@ -206,7 +206,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 };
 
 Program.propTypes = {
-  userType: PropTypes.string.isRequired,
+  userType: PropTypes.string,
   handleFiltersClosed: PropTypes.func.isRequired,
   programId: PropTypes.string,
 };

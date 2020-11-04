@@ -1,84 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { fetchRFQItems, createRFQ } from "../../api/supplierApi";
+import {
+  fetchRollupItems,
+  fetchNextRollupItems,
+  createRFQ,
+  fetchRFQ,
+  sendBidRequests,
+  updateRFQNote,
+  updateRFQDate,
+} from "../../api/purchasingApi";
 
-import { mapRFQItems } from "../apiMaps";
+import { mapRollupItems, mapRFQ } from "../apiMaps";
 /*
-* RFQ Item Model (not final!)
+* RFQ Item Model (need to determine!)
 
-{
-  id: string (read),
-  sequenceNum: string (read),
-  quoteDate: date string (read/write),
-  dueDate: date string (read/write),
-  program: string (read),
-  brand(s): array (read),
-  itemType: string (read),
-  sequenceNum: string (read),
-  qty: int (read, write),
-  supplierNote: string (read, write),
-  specDetails: object (read)
-    {
-      font4Color: string (read),
-      frontFinish: string (read),
-      back4Color: string (read),
-      hotStamp: string (read),
-      embossing: string (read),
-      stock: string (read),
-      flatSize: string (read),
-      finishingType: string (read),
-      perf: string (read),
-      score: string (read)
-    },
-  images: array (read),
-  suppliers: object (read, write)
-    {
-      imperial: {
-        sent: bool (read, write)
-        awarded: bool (read, write)
-        quote: {
-          quoteCost: int (read),
-          note: string (read),
-        } 
-      },
-      sterling: {
-        sent: bool (read, write)
-        awarded: bool (read, write)
-        quote: {
-          quoteCost: int (read),
-          note: string (read),
-        } 
-      },
-      curtis: {
-        sent: bool (read, write)
-        awarded: bool (read, write)
-        quote: {
-          quoteCost: int (read),
-          note: string (read),
-        } 
-      },
-      willey: {
-        sent: bool (read, write)
-        awarded: bool (read, write)
-        quote: {
-          quoteCost: int (read),
-          note: string (read),
-        } 
-      }
-    }
-}
 
 */
 
 let initialState = {
   isLoading: false,
   isNextLoading: false,
+  isUpdateLoading: false,
   nextPage: null,
   nextLink: null,
-  rfqNum: null,
-  rfqStatus: null,
   rfqItems: [],
   selectedRFQItem: null,
+  currentRFQ: {
+    id: null,
+    status: null,
+    dueDate: null,
+    inMarketDate: null,
+    bids: [],
+    program: null,
+    brand: null,
+    itemType: null,
+    sequenceNum: null,
+    totalItems: null,
+    supplierNote: "",
+    itemSpec: null,
+    imgUrlOne: null,
+    imgUrlTwo: null,
+    imgUrlThree: null,
+  },
   error: null,
 };
 
@@ -88,6 +51,10 @@ const startLoading = (state) => {
 
 const startNextLoading = (state) => {
   state.isNextLoading = true;
+};
+
+const startUpdateLoading = (state) => {
+  state.isUpdateLoading = true;
 };
 
 const loadingFailed = (state, action) => {
@@ -102,6 +69,7 @@ const rfqSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     setNextIsLoading: startNextLoading,
+    setUpdateLoading: startUpdateLoading,
     getRFQItemsSuccess(state, action) {
       const { rfqItems, nextLink } = action.payload;
       state.nextPage = nextLink ? true : false;
@@ -118,60 +86,74 @@ const rfqSlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    getSingleRFQSuccess(state, action) {
+      const { rfq } = action.payload;
+      state.currentRFQ.id = rfq.id;
+      state.currentRFQ.status = rfq.status;
+      state.currentRFQ.dueDate = rfq.dueDate;
+      state.currentRFQ.inMarketDate = rfq.inMarketDate;
+      state.currentRFQ.bids = rfq.bids;
+      state.currentRFQ.program = rfq.program;
+      state.currentRFQ.brand = rfq.brand;
+      state.currentRFQ.itemType = rfq.itemType;
+      state.currentRFQ.sequenceNum = rfq.sequenceNum;
+      state.currentRFQ.totalItems = rfq.totalItems;
+      state.currentRFQ.supplierNote = rfq.supplierNote;
+      state.currentRFQ.itemSpec = rfq.itemSpec ? { ...rfq.itemSpec } : null;
+      state.currentRFQ.imgUrlOne = rfq.imgUrlOne;
+      state.currentRFQ.imgUrlTwo = rfq.imgUrlTwo;
+      state.currentRFQ.imgUrlThree = rfq.imgUrlThree;
+      state.isLoading = false;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     setSelectedRFQItem(state, action) {
       const { itemId } = action.payload;
       state.selectedRFQItem = itemId;
     },
     updateQty(state, action) {
-      const { sequenceNum, value } = action.payload;
-      let newRFQs = state.rfqItems.map((rfq) => {
-        if (rfq.sequenceNum === sequenceNum) {
-          return {
-            ...rfq,
-            qty: value,
-          };
-        } else return rfq;
-      });
-      state.rfqItems = newRFQs;
-      state.error = null;
+      const { qty } = action.payload;
+      state.currentRFQ.totalItems = qty;
     },
     updateNote(state, action) {
-      const { sequenceNum, value } = action.payload;
-      let newRFQs = state.rfqItems.map((rfq) => {
-        if (rfq.sequenceNum === sequenceNum) {
-          return {
-            ...rfq,
-            supplierNote: value,
-          };
-        } else return rfq;
-      });
-      state.rfqItems = newRFQs;
-      state.error = null;
+      const { note } = action.payload;
+      console.log(note);
+      state.currentRFQ.supplierNote = note;
     },
-    updateSupplier(state, action) {
-      const { sequenceNum, supplier, key, value } = action.payload;
-      let newRFQs = state.rfqItems.map((rfq) => {
-        if (rfq.sequenceNum === sequenceNum) {
-          return {
-            ...rfq,
-            suppliers: {
-              ...rfq.suppliers,
-              [`${supplier}`]: {
-                ...rfq.suppliers[`${supplier}`],
-                [`${key}`]: value,
-              },
-            },
-          };
-        } else return rfq;
-      });
-      state.rfqItems = newRFQs;
+    updateBids(state, action) {
+      const { bids } = action.payload;
+      state.currentRFQ.bids = bids;
+    },
+    updateDate(state, action) {
+      const { date, type } = action.payload;
+      if (type === "due-date") {
+        state.currentRFQ.dueDate = date;
+      } else {
+        state.currentRFQ.inMarketDate = date;
+      }
+    },
+    updateSuccessful(state) {
+      state.isUpdateLoading = false;
       state.error = null;
     },
     resetRFQ(state) {
       state.isLoading = false;
-      state.rfqNum = null;
-      state.rfqStatus = null;
       state.rfqItems = [];
+      state.currentRFQ.id = null;
+      state.currentRFQ.status = null;
+      state.currentRFQ.dueDate = null;
+      state.currentRFQ.inMarketDate = null;
+      state.currentRFQ.bids = [];
+      state.currentRFQ.program = null;
+      state.currentRFQ.brand = null;
+      state.currentRFQ.itemType = null;
+      state.currentRFQ.sequenceNum = null;
+      state.currentRFQ.totalItems = null;
+      state.currentRFQ.supplierNote = "";
+      state.currentRFQ.itemSpec = null;
+      state.currentRFQ.imgUrlOne = null;
+      state.currentRFQ.imgUrlTwo = null;
+      state.currentRFQ.imgUrlThree = null;
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -181,12 +163,16 @@ const rfqSlice = createSlice({
 export const {
   setIsLoading,
   setNextIsLoading,
+  setUpdateLoading,
   getRFQItemsSuccess,
   getNextRFQItemsSuccess,
+  getSingleRFQSuccess,
   setSelectedRFQItem,
   updateQty,
   updateNote,
-  updateSupplier,
+  updateBids,
+  updateDate,
+  updateSuccessful,
   resetRFQ,
   setFailure,
 } = rfqSlice.actions;
@@ -196,16 +182,39 @@ export default rfqSlice.reducer;
 export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchRFQItems(filterObject);
+    const items = await fetchRollupItems(filterObject, "rfq");
     if (items.error) {
       throw items.error;
     }
-    console.log(items.data);
-    let mappedItems = mapRFQItems(items.data);
+    let mappedItems = mapRollupItems(items.data.items);
     console.log(mappedItems);
-    dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
+    dispatch(
+      getRFQItemsSuccess({
+        rfqItems: mappedItems,
+        nextLink: items.data.nextLink,
+      })
+    );
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    const items = await fetchNextRollupItems(url);
+    if (items.error) {
+      throw items.error;
+    }
+    let mappedItems = mapRollupItems(items.data.items);
+    dispatch(
+      getNextRFQItemsSuccess({
+        rfqItems: mappedItems,
+        nextLink: items.data.nextLink,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
 
@@ -217,8 +226,66 @@ export const createNewRFQ = (item, user) => async (dispatch) => {
       throw newRFQ.error;
     }
     console.log(newRFQ.data);
-    //TODO getNewRFQSuccess: map all rfq params to state, read in on new rfq.
+    let mappedRFQ = mapRFQ(newRFQ.data);
+    dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
-    dispatch(setFailure(err.toString()));
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchSingleRFQ = (id) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const newRFQ = await fetchRFQ(id);
+    if (newRFQ.error) {
+      throw newRFQ.error;
+    }
+    console.log(newRFQ.data);
+    let mappedRFQ = mapRFQ(newRFQ.data);
+    dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const sendBids = (idArray, rfqId) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const bidResponse = await sendBidRequests(idArray, rfqId);
+    if (bidResponse.error) {
+      throw bidResponse.error;
+    }
+    console.log(bidResponse);
+    let mappedRFQ = mapRFQ(bidResponse.data);
+    dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateSupplierNote = (id, note) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const noteResponse = await updateRFQNote(id, note);
+    if (noteResponse.error) {
+      throw noteResponse.error;
+    }
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const dateResponse = await updateRFQDate(id, dateType, date);
+    if (dateResponse.error) {
+      throw dateResponse.error;
+    }
+    dispatch(updateDate({ date: date, type: dateType }));
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
   }
 };
