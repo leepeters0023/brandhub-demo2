@@ -128,12 +128,16 @@ const App = () => {
 
     if (currentUser && currentRole.length > 0) {
       setRole(currentRole);
-      dispatch(fetchInitialPrograms(currentTerritory.id));
-      dispatch(fetchPreOrders(currentUserId, "initial"));
-      dispatch(fetchCurrentOrderByType("inStock", currentUserId));
-      dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
-      dispatch(fetchAllItemTypes());
-      dispatch(fetchAllSuppliers());
+      if (currentRole !== "supplier") {
+        dispatch(fetchInitialPrograms(currentTerritory.id));
+        dispatch(fetchPreOrders(currentUserId, "initial"));
+        dispatch(fetchCurrentOrderByType("inStock", currentUserId));
+        dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+        dispatch(fetchAllItemTypes());
+        dispatch(fetchAllSuppliers());
+      } else {
+        dispatch(clearPrograms());
+      }
     } else if (currentUser && JSON.parse(currentUser).access_token) {
       dispatch(setIsLoading());
       fetchCurrentUser(JSON.parse(currentUser).access_token);
@@ -209,7 +213,11 @@ const App = () => {
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
-          <Dashboard path="/" handleFiltersClosed={handleFiltersClosed} />
+          <Dashboard
+            path="/"
+            userType={role}
+            handleFiltersClosed={handleFiltersClosed}
+          />
           {handleAuth(
             <Programs
               path="/programs"
@@ -299,7 +307,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/purchasing/rfq",
-            ["field2", "super"],
+            ["field2", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -309,7 +317,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/rfqHistory",
-            ["field2", "super"],
+            ["field2", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -328,7 +336,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/purchasing/purchaseOrder",
-            ["field2", "super"],
+            ["field2", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -338,7 +346,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/poHistory",
-            ["field2", "super"],
+            ["field2", "super", "supplier"],
             role
           )}
           {handleAuth(
