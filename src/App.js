@@ -289,7 +289,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfqRollup",
             ["field2", "super"],
             role
           )}
@@ -298,17 +298,17 @@ const App = () => {
               path="/purchasing/rfq"
               handleFiltersClosed={handleFiltersClosed}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfq",
             ["field2", "super"],
             role
           )}
           {handleAuth(
             <RFQHistory
-              path="/purchasing/rfqHistory"
+              path="/purchasing/rfqHistory/:filterOption"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/rfqHistory",
             ["field2", "super"],
             role
           )}
@@ -318,7 +318,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/poRollup",
             ["field2", "super"],
             role
           )}
@@ -327,7 +327,7 @@ const App = () => {
               path="/purchasing/purchaseOrder"
               handleFiltersClosed={handleFiltersClosed}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/purchaseOrder",
             ["field2", "super"],
             role
           )}
@@ -337,7 +337,7 @@ const App = () => {
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
-            "/orders/items/onDemand",
+            "/purchasing/poHistory",
             ["field2", "super"],
             role
           )}

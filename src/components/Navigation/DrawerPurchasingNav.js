@@ -65,7 +65,7 @@ const DrawerPurchasingNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/rfqHistory#current"
+            to="/purchasing/rfqHistory/current"
           >
             <ListItemText primary="Current RFQs" />
           </ListItem>
@@ -73,7 +73,7 @@ const DrawerPurchasingNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/rfqHistory#all"
+            to="/purchasing/rfqHistory/all"
           >
             <ListItemText primary="RFQ History" />
           </ListItem>

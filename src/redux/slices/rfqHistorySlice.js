@@ -111,3 +111,8 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const fetchNextRFQHistory = (url) => async (dispatch) => {
+  //TODO
+  console.log(url);
+}

@@ -187,8 +187,8 @@ export const fetchRFQHistory = async (filterObject) => {
   };
   let statusString =
     filterObject.status && filterObject.status.length > 0
-      ? filterObject.status === "all"
-        ? ""
+      ? filterObject.status === "not-awarded"
+        ? "not-awarded"
         : `filter[status]=${filterObject.status}`
       : "";
   let progString =
@@ -240,7 +240,6 @@ export const fetchRFQHistory = async (filterObject) => {
         nextLink: null,
       };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.rfqs = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";
