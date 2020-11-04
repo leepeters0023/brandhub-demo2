@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import {
   fetchRollupItems,
+  fetchNextRollupItems,
   createRFQ,
   fetchRFQ,
   sendBidRequests,
   updateRFQNote,
-} from "../../api/supplierApi";
+  updateRFQDate,
+} from "../../api/purchasingApi";
 
 import { mapRollupItems, mapRFQ } from "../apiMaps";
 /*
@@ -122,6 +124,14 @@ const rfqSlice = createSlice({
       const { bids } = action.payload;
       state.currentRFQ.bids = bids;
     },
+    updateDate(state, action) {
+      const { date, type } = action.payload;
+      if (type === "due-date") {
+        state.currentRFQ.dueDate = date;
+      } else {
+        state.currentRFQ.inMarketDate = date;
+      }
+    },
     updateSuccessful(state) {
       state.isUpdateLoading = false;
       state.error = null;
@@ -161,6 +171,7 @@ export const {
   updateQty,
   updateNote,
   updateBids,
+  updateDate,
   updateSuccessful,
   resetRFQ,
   setFailure,
@@ -175,9 +186,33 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapRollupItems(items.data);
+    let mappedItems = mapRollupItems(items.data.items);
     console.log(mappedItems);
-    dispatch(getRFQItemsSuccess({ rfqItems: mappedItems }));
+    dispatch(
+      getRFQItemsSuccess({
+        rfqItems: mappedItems,
+        nextLink: items.data.nextLink,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    const items = await fetchNextRollupItems(url);
+    if (items.error) {
+      throw items.error;
+    }
+    let mappedItems = mapRollupItems(items.data.items);
+    dispatch(
+      getNextRFQItemsSuccess({
+        rfqItems: mappedItems,
+        nextLink: items.data.nextLink,
+      })
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -235,6 +270,20 @@ export const updateSupplierNote = (id, note) => async (dispatch) => {
     if (noteResponse.error) {
       throw noteResponse.error;
     }
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const dateResponse = await updateRFQDate(id, dateType, date);
+    if (dateResponse.error) {
+      throw dateResponse.error;
+    }
+    dispatch(updateDate({ date: date, type: dateType }));
     dispatch(updateSuccessful());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

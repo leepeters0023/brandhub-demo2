@@ -120,7 +120,6 @@ export const mapRollupItems = (items) => {
       }
     }
   };
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.item.id,
     itemId: item.item.id,

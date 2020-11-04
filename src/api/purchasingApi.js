@@ -72,10 +72,32 @@ export const fetchRollupItems = async (filterObject, type) => {
   await axios
     .get(queryString)
     .then((res) => {
+      let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
-      response.data = data;
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchNextRollupItems = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = { items: null, nextLink: null };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
     })
     .catch((err) => {
       console.log(err.toString());
@@ -137,7 +159,37 @@ export const updateRFQNote = async (id, note) => {
       },
       writeHeaders
     )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const updateRFQDate = async (id, dateType, date) => {
+  const response = { status: "", error: null };
+  console.log(date);
+  await axios
+    .patch(
+      `/api/request-for-quotes/${id}`,
+      {
+        data: {
+          type: "request-for-quote",
+          id: id,
+          attributes: {
+            [`${dateType}`]: date,
+          },
+        },
+      },
+      writeHeaders
+    )
     .then((res) => {
+      const data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
     })
     .catch((err) => {
@@ -234,6 +286,29 @@ export const fetchRFQHistory = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(queryString)
+    .then((res) => {
+      let dataObject = {
+        rfqs: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.rfqs = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const fetchNextRFQHistory = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
     .then((res) => {
       let dataObject = {
         rfqs: null,

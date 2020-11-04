@@ -131,7 +131,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
     if (status === "sent") {
       let bidCount = 0;
       bids.forEach((bid) => {
-        if (bid.price) {
+        if (bid.status === "sent") {
           bidCount += 1
         }
       })

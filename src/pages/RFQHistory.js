@@ -10,7 +10,7 @@ import {
   setSorted,
 } from "../redux/slices/filterSlice";
 
-import { fetchNextRFQHistory } from "../redux/slices/rfqHistorySlice"
+import { fetchNextFilteredRFQHistory } from "../redux/slices/rfqHistorySlice"
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import RFQHistoryTable from "../components/SupplierManagement/RFQHistoryTable";
@@ -62,7 +62,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
       if (scrollRef.current.scrollTop !== 0) {
-        dispatch(fetchNextRFQHistory(nextLink));
+        dispatch(fetchNextFilteredRFQHistory(nextLink));
       }
     }
   };
