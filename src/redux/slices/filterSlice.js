@@ -96,7 +96,7 @@ const filterSlice = createSlice({
       state.clearFilters = true;
     },
     setRetain(state, action) {
-      const { value } = action.payload
+      const { value } = action.payload;
       state.retainFilters = value;
     },
     setSorted(state) {
@@ -173,6 +173,9 @@ const filterSlice = createSlice({
       }
       if (filterType.includes("budget")) {
         chippable = ["brand", "user", "territory"];
+      }
+      if (filterType === "user-settings") {
+        chippable = ["user"];
       }
       let filters = [];
       let stateObject = { ...state };

@@ -242,6 +242,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               initials={initials}
               handleLogout={handleLogout}
               handleDrawerClose={handleDrawerClose}
+              userType={role}
             />
           </div>
         </div>
