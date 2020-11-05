@@ -11,6 +11,8 @@ import RegionSelector from "../Utility/RegionSelector";
 import DrawerAssetsNav from "./DrawerAssetsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
 import DrawerPurchasingNav from "./DrawerPurchasingNav";
+import DrawerPONav from "./DrawerPONav";
+import DrawerRFQNav from "./DrawerRFQNav";
 
 import Drawer from "@material-ui/core/Drawer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -36,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     height: "325px",
+  },
+  drawerSupplierOpen: {
+    transition: theme.transitions.create("height", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    height: "175px",
   },
   drawerClose: {
     transition: theme.transitions.create("height", {
@@ -109,7 +118,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
     setOpen(false);
     setDrawerContent(null);
     if (!mouseEvent) {
-      dispatch(setRetain({ value: false }))
+      dispatch(setRetain({ value: false }));
     }
   };
 
@@ -125,7 +134,8 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
         })}
         classes={{
           paper: clsx({
-            [classes.drawerOpen]: open,
+            [classes.drawerOpen]: open && role !== "supplier",
+            [classes.drawerSupplierOpen]: open && role === "supplier",
             [classes.drawerClose]: !open,
           }),
         }}
@@ -152,44 +162,78 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 />
               </Link>
             </Tooltip>
-            <Typography
-              variant="h5"
-              className={clsx(classes.titleText, classes.navigationText, {
-                [classes.selectedNavigationText]: drawerContent === "assets",
-              })}
-              onMouseEnter={() => {
-                handleDrawerOpen();
-                setDrawerContent("assets");
-              }}
-            >
-              Assets
-            </Typography>
-            <Typography
-              variant="h5"
-              className={clsx(classes.titleText, classes.navigationText, {
-                [classes.selectedNavigationText]: drawerContent === "orders",
-              })}
-              onMouseEnter={() => {
-                handleDrawerOpen();
-                setDrawerContent("orders");
-              }}
-            >
-              Orders
-            </Typography>
-            {role !== "field1" && (
-              <Typography
-                variant="h5"
-                className={clsx(classes.titleText, classes.navigationText, {
-                  [classes.selectedNavigationText]:
-                    drawerContent === "purchasing",
-                })}
-                onMouseEnter={() => {
-                  handleDrawerOpen();
-                  setDrawerContent("purchasing");
-                }}
-              >
-                Purchasing
-              </Typography>
+            {role === "supplier" && (
+              <>
+                <Typography
+                  variant="h5"
+                  className={clsx(classes.titleText, classes.navigationText, {
+                    [classes.selectedNavigationText]: drawerContent === "rfq",
+                  })}
+                  onMouseEnter={() => {
+                    handleDrawerOpen();
+                    setDrawerContent("rfq");
+                  }}
+                >
+                  Quotes
+                </Typography>
+                <Typography
+                  variant="h5"
+                  className={clsx(classes.titleText, classes.navigationText, {
+                    [classes.selectedNavigationText]: drawerContent === "po",
+                  })}
+                  onMouseEnter={() => {
+                    handleDrawerOpen();
+                    setDrawerContent("po");
+                  }}
+                >
+                  Purchase Orders
+                </Typography>
+              </>
+            )}
+            {role !== "supplier" && (
+              <>
+                <Typography
+                  variant="h5"
+                  className={clsx(classes.titleText, classes.navigationText, {
+                    [classes.selectedNavigationText]:
+                      drawerContent === "assets",
+                  })}
+                  onMouseEnter={() => {
+                    handleDrawerOpen();
+                    setDrawerContent("assets");
+                  }}
+                >
+                  Assets
+                </Typography>
+                <Typography
+                  variant="h5"
+                  className={clsx(classes.titleText, classes.navigationText, {
+                    [classes.selectedNavigationText]:
+                      drawerContent === "orders",
+                  })}
+                  onMouseEnter={() => {
+                    handleDrawerOpen();
+                    setDrawerContent("orders");
+                  }}
+                >
+                  Orders
+                </Typography>
+                {role !== "field1" && (
+                  <Typography
+                    variant="h5"
+                    className={clsx(classes.titleText, classes.navigationText, {
+                      [classes.selectedNavigationText]:
+                        drawerContent === "purchasing",
+                    })}
+                    onMouseEnter={() => {
+                      handleDrawerOpen();
+                      setDrawerContent("purchasing");
+                    }}
+                  >
+                    Purchasing
+                  </Typography>
+                )}
+              </>
             )}
           </div>
           <div className={classes.navBreak}>
@@ -222,6 +266,18 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
           )}
           {drawerContent === "purchasing" && (
             <DrawerPurchasingNav
+              handleDrawerClose={handleDrawerClose}
+              classes={classes}
+            />
+          )}
+          {drawerContent === "rfq" && (
+            <DrawerRFQNav
+              handleDrawerClose={handleDrawerClose}
+              classes={classes}
+            />
+          )}
+          {drawerContent === "po" && (
+            <DrawerPONav
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />
