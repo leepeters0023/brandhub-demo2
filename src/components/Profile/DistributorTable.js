@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { useDispatch } from "react-redux";
+
+import { deleteSingleDistributor } from "../../redux/slices/userSlice";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const DistributorTable = ({ distributors, isLoading }) => {
+const DistributorTable = ({ distributors, isLoading, id }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  const handleDelete = (id) => {
-    //TODO write function when api is available
-    console.log(id);
+  const handleDelete = (distId) => {
+    dispatch(deleteSingleDistributor({ id: id, distId: distId}))
   };
 
   return (
