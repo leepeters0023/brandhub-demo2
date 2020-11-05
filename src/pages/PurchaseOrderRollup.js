@@ -11,6 +11,7 @@ import {
   updateMultipleFilters,
   setSorted,
 } from "../redux/slices/filterSlice";
+import { createNewRFQ } from "../redux/slices/rfqSlice"
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
@@ -65,6 +66,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const selectedPOItems = useSelector((state) => state.purchaseOrder.selectedPOItems);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const currentOrderType = useSelector((state) => state.filters.orderType);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -78,6 +80,12 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     );
     dispatch(setSorted());
   };
+
+  const handleNewRFQ = () => {
+    let currentItem = currentPOItems.find((item) => item.id === selectedPOItems[0]);
+    console.log(currentItem.program[0].id);
+    dispatch(createNewRFQ(selectedPOItems[0], currentItem.program[0].id))
+  }
 
   const handleNewPO = () => {
     //TODO
@@ -103,10 +111,23 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "250px",
+              width: "500px",
               justifyContent: "flex-end",
             }}
           >
+            {currentOrderType === "pre-order" && (
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                disabled={selectedPOItems.length !== 1}
+                style={{ marginRight: "20px" }}
+                onClick={() => {
+                  handleNewRFQ()
+                  navigate("/purchasing/rfq#new");
+                }}
+              >REQUEST QUOTE</Button>
+            )}
             <Button
               className={classes.largeButton}
               variant="contained"

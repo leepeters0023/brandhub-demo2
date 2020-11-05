@@ -16,7 +16,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -25,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
+const UserNavMenu = ({
+  initials,
+  handleLogout,
+  handleDrawerClose,
+  userType,
+}) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,9 +48,9 @@ const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
         <IconButton
           aria-owns={anchorEl ? "notifications" : undefined}
           aria-haspopup="true"
-          onClick={(evt)=>{
-            handleOpen(evt)
-            handleDrawerClose()
+          onClick={(evt) => {
+            handleOpen(evt);
+            handleDrawerClose();
           }}
         >
           <Avatar className={classes.avatar}>{initials}</Avatar>
@@ -78,32 +83,36 @@ const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
-        <MenuItem
-          component={Link}
-          to="/profile#general"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <AccountBoxIcon color="secondary" fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Profile" />
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          component={Link}
-          to="/settings#general"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <SettingsIcon color="secondary" fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </MenuItem>
-        <Divider />
+        {userType !== "supplier" && (
+          <>
+            <MenuItem
+              component={Link}
+              to="/profile#general"
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <AccountBoxIcon color="secondary" fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Profile" />
+            </MenuItem>
+            <Divider />
+            <MenuItem
+              component={Link}
+              to="/settings#general"
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <SettingsIcon color="secondary" fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </MenuItem>
+            <Divider />
+          </>
+        )}
         <MenuItem
           component={Link}
           to="/help"
@@ -138,6 +147,8 @@ const UserNavMenu = ({ initials, handleLogout, handleDrawerClose }) => {
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
+  handleDrawerClose: PropTypes.func.isRequired,
+  userType: PropTypes.string
 };
 
 export default UserNavMenu;
