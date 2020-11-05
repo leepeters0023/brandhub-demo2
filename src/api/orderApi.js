@@ -15,6 +15,7 @@ const writeHeaders = {
 
 // ------------ Order Set Calls ------------ //
 
+//Returns all orders in an order set based on the program and current user's territory
 export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -34,6 +35,7 @@ export const fetchOrdersByProgram = async (program, userId) => {
   return response;
 };
 
+//Returns all orders in an order set based on the order set's id
 export const fetchOrderSetById = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -51,6 +53,7 @@ export const fetchOrderSetById = async (id) => {
   return response;
 };
 
+//Returns all pre-order order sets based on current user's territory
 export const fetchAllPreOrders = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -71,6 +74,7 @@ export const fetchAllPreOrders = async (id) => {
   return response;
 };
 
+//Returns order set history based on filters, paginated in groups of 20
 export const fetchAllFilteredOrderSets = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
@@ -163,6 +167,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
   return response;
 };
 
+//If initial order set fetch would have more than 20 responses, this call handles the next page
 export const fetchNextOrderSets = async (url) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -194,6 +199,8 @@ export const fetchNextOrderSets = async (url) => {
   return response;
 };
 
+/*Users can only have one active On-demand or In-stock order set in draft
+status at a time, so this call will get their current order-set by type*/
 export const fetchSingleOrderSetByType = async (type, userId) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
@@ -214,6 +221,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
   return response;
 };
 
+//Updates notes on an order set, may or may not be keeping this call
 export const setOrderSetNote = async (id, note) => {
   const response = { status: "", error: null };
   await axios
@@ -241,6 +249,14 @@ export const setOrderSetNote = async (id, note) => {
   return response;
 };
 
+/*
+The following calls handle order set statuses.  The status of
+an order set determines whether it can move to the next step in
+the order process. Order-sets go from inactive to draft to submitted
+to approved.  An order set in draft can not jump straight to approved.
+*/
+
+//Updates status of order set from inactive to draft status
 export const startOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -256,6 +272,7 @@ export const startOrderSet = async (id) => {
   return response;
 };
 
+//Returns and order set to draft status from being submitted
 export const restartOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -271,6 +288,7 @@ export const restartOrderSet = async (id) => {
   return response;
 };
 
+//Updates status of order set from draft to submitted
 export const submitOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -286,6 +304,7 @@ export const submitOrderSet = async (id) => {
   return response;
 };
 
+//Updates status of order set from submitted to approved
 export const approveOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -301,6 +320,7 @@ export const approveOrderSet = async (id) => {
   return response;
 };
 
+//Permanently deletes an order set item with matching id
 export const deleteOrderSetItem = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -325,6 +345,7 @@ export const deleteOrderSetItem = async (id) => {
   return response;
 };
 
+//Permanently deletes an order set
 export const deleteOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -349,6 +370,7 @@ export const deleteOrderSet = async (id) => {
   return response;
 }
 
+//Creates a new order set and returns the new order set
 export const createOrderSet = async (type) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
@@ -378,7 +400,8 @@ export const createOrderSet = async (type) => {
   return response;
 };
 
-export const addOrderSetItem = async (id, item, qty) => {
+//Adds an item to an order set, must submit the order set id and item id
+export const addOrderSetItem = async (id, item) => {
   const response = { status: "", error: null, data: null };
   await axios
     .post(
@@ -419,6 +442,7 @@ export const addOrderSetItem = async (id, item, qty) => {
 
 // ------------ Single Order Calls ------------ //
 
+//Returns all single orders based on filters, paginated in groups of 20
 export const fetchOrderHistory = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
@@ -507,6 +531,7 @@ export const fetchOrderHistory = async (filterObject) => {
   return response;
 };
 
+//If initial order fetch would have more than 20 responses, this call handles the next page
 export const fetchNextHistory = async (url) => {
   const response = { status: "", error: null, data: null };
   let queryString = decodeURIComponent(url).split("+").join(" ");
@@ -528,6 +553,7 @@ export const fetchNextHistory = async (url) => {
   return response;
 };
 
+//Returns single order based on it's id
 export const fetchSingleOrder = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -545,6 +571,7 @@ export const fetchSingleOrder = async (id) => {
   return response;
 };
 
+//Updates the quantity of a single item on an order
 export const patchOrderItem = async (id, qty) => {
   const response = { status: "", error: null };
   await axios
@@ -572,6 +599,7 @@ export const patchOrderItem = async (id, qty) => {
   return response;
 };
 
+//Updates the note and attention line on an order
 export const setOrderDetail = async (id, note, attn) => {
   const response = { status: "", error: null };
   await axios
@@ -600,38 +628,7 @@ export const setOrderDetail = async (id, note, attn) => {
   return response;
 };
 
-export const setOrderShipping = async (orderId, distId) => {
-  const response = { status: "", error: null };
-  await axios
-    .patch(
-      `/api/orders/${orderId}`,
-      {
-        data: {
-          type: "order",
-          id: orderId,
-          relationships: {
-            distributor: {
-              data: {
-                type: "distributor",
-                id: distId,
-              },
-            },
-          },
-        },
-      },
-      writeHeaders
-    )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
+//Permanentely deletes an order
 export const deleteOrder = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -656,6 +653,7 @@ export const deleteOrder = async (id) => {
   return response;
 };
 
+//Permanentely deletes an order item
 export const deleteOrderItem = async (id) => {
   const response = { status: "", error: null };
   await axios
@@ -669,21 +667,6 @@ export const deleteOrderItem = async (id) => {
       },
       writeHeaders
     )
-    .then((res) => {
-      response.status = "ok";
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.err = err.toString();
-    });
-  return response;
-};
-
-export const submitOrder = async (id) => {
-  const response = { status: "", error: null };
-  await axios
-    .post(`/api/orders/${id}/submit`, null, writeHeaders)
     .then((res) => {
       response.status = "ok";
     })

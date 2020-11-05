@@ -12,6 +12,7 @@ const writeHeaders = {
   },
 };
 
+//Returns all active suppliers
 export const fetchSuppliers = async () => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -29,6 +30,7 @@ export const fetchSuppliers = async () => {
   return response;
 };
 
+//Returns rollup items for the rfq and po process based on filters and the view, paginated in groups of 20
 export const fetchRollupItems = async (filterObject, type) => {
   const sortMap = {
     sequenceNum: "item-number",
@@ -63,6 +65,7 @@ export const fetchRollupItems = async (filterObject, type) => {
   return response;
 };
 
+//Handles next page for rollup items
 export const fetchNextRollupItems = async (url) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -83,6 +86,7 @@ export const fetchNextRollupItems = async (url) => {
   return response;
 };
 
+//Creates a new RFQ based on an item and it's associated program
 export const createRFQ = async (item, program) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
@@ -119,6 +123,7 @@ export const createRFQ = async (item, program) => {
   return response;
 };
 
+//Updates the note on an RFQ
 export const updateRFQNote = async (id, note) => {
   const response = { status: "", error: null };
   await axios
@@ -146,6 +151,7 @@ export const updateRFQNote = async (id, note) => {
   return response;
 };
 
+//Updates the due date or in market date on an RFQ
 export const updateRFQDate = async (id, dateType, date) => {
   const response = { status: "", error: null };
   console.log(date);
@@ -176,6 +182,7 @@ export const updateRFQDate = async (id, dateType, date) => {
   return response;
 };
 
+//Accepts an array of supplier ids, and sends bid requests to those suppliers
 export const sendBidRequests = async (idArray, rfqId) => {
   const response = { status: "", error: null, data: null };
   const newIds = idArray.map((id) => parseInt(id));
@@ -204,6 +211,7 @@ export const sendBidRequests = async (idArray, rfqId) => {
   return response;
 };
 
+//Returns rfqs based on filters, paginated in groups of 20
 export const fetchRFQHistory = async (filterObject) => {
   const sortMap = {
     sequenceNum: "item-number",
@@ -240,6 +248,7 @@ export const fetchRFQHistory = async (filterObject) => {
   return response;
 };
 
+//Handles next page for rfq history
 export const fetchNextRFQHistory = async (url) => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -263,6 +272,7 @@ export const fetchNextRFQHistory = async (url) => {
   return response;
 };
 
+//Returns a single RFQ based on it's id
 export const fetchRFQ = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios

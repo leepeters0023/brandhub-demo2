@@ -3,6 +3,7 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
+//Returns a filtered array of distributors based on partial matches to their name
 export const fetchDistributors = async (name) => {
   const response = { status: "", error: null, data: null };
   await axios
