@@ -142,7 +142,6 @@ export const mapRollupItems = (items) => {
 
 export const mapRFQ = (rfq) => {
   const mapBids = (bids) => {
-    console.log(bids);
     return bids.map((bid) => ({
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
