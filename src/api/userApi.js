@@ -3,7 +3,7 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
-
+//Logs the user in based on email and password
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
   await axios
@@ -23,6 +23,8 @@ export const logInUser = async (email, password) => {
   return response;
 };
 
+//After login, headers are updated with the current user's access token
+//This call will only work if the bearer token is present in the headers
 export const getUser = async () => {
   const response = { status: "", error: null, data: null };
   await axios
@@ -39,12 +41,14 @@ export const getUser = async () => {
   return response;
 };
 
+//Removes user information from local storage on logout, and removes authenticated headers from axios
 export const logoutUser = () => {
   localStorage.removeItem("brandhub-user");
   localStorage.removeItem("brandhub-role");
   delete axios.defaults.headers.common["Authorization"];
 };
 
+//Set's users info in local storage and updates axios headers on successful login
 const setAuthToken = (token) => {
   const authToken = `Bearer ${token.access_token}`;
   localStorage.setItem("brandhub-user", JSON.stringify(token));
