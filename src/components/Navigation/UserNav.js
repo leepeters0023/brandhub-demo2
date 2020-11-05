@@ -83,36 +83,36 @@ const UserNavMenu = ({
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
-        {userType !== "supplier" && (
-          <>
-            <MenuItem
-              component={Link}
-              to="/profile#general"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <AccountBoxIcon color="secondary" fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </MenuItem>
-            <Divider />
-            <MenuItem
-              component={Link}
-              to="/settings#general"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <SettingsIcon color="secondary" fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </MenuItem>
-            <Divider />
-          </>
-        )}
+        {userType !== "supplier" && [
+          <MenuItem
+            key="profile"
+            component={Link}
+            to="/profile#general"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <AccountBoxIcon color="secondary" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </MenuItem>,
+          <Divider key="divider1"/>,
+          <MenuItem
+            key="settings"
+            component={Link}
+            to="/settings#general"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <SettingsIcon color="secondary" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </MenuItem>,
+          <Divider key="divider2" />,
+        ]}
         <MenuItem
           component={Link}
           to="/help"
@@ -148,7 +148,7 @@ UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
   handleDrawerClose: PropTypes.func.isRequired,
-  userType: PropTypes.string
+  userType: PropTypes.string,
 };
 
 export default UserNavMenu;
