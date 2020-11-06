@@ -176,7 +176,6 @@ export default purchaseOrderSlice.reducer;
 export const fetchFilteredPOItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    console.log("here");
     const items = await fetchRollupItems(filterObject, "po");
     if (items.error) {
       throw items.error;
