@@ -80,7 +80,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
                   >
                     {`${program.name}-${program.focusMonth}`}
                   </Typography>
-                  {program.status === "submitted" && (
+                  {(program.status === "submitted" || program.status === "approved") && (
                     <Tooltip title="Submitted">
                       <CheckCircleIcon
                         color="secondary"

@@ -12,7 +12,7 @@ import {
   setIsLoading,
   clearPrograms,
 } from "./redux/slices/programsSlice";
-import { fetchPreOrders, resetState } from "./redux/slices/preOrderDetailSlice";
+import { fetchPreOrders, clearPreOrderDetail } from "./redux/slices/preOrderDetailSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
 import {
   clearCurrentOrder,
@@ -25,6 +25,7 @@ import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
 import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
+import { clearOrderSet } from "./redux/slices/orderSetSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -109,7 +110,7 @@ const App = () => {
     setCurrentUser(null);
     dispatch(removeUser());
     dispatch(clearPrograms());
-    dispatch(resetState());
+    dispatch(clearPreOrderDetail());
     dispatch(clearDistributors());
     dispatch(clearCurrentOrder());
     dispatch(clearOrderByType({ type: "inStock" }));
@@ -118,6 +119,7 @@ const App = () => {
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());
     dispatch(resetOrderSetHistory());
+    dispatch(clearOrderSet());
   };
 
   useEffect(() => {
