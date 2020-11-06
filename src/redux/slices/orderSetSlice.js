@@ -179,7 +179,7 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
-    resetState(state) {
+    clearOrderSet(state) {
       state.isLoading = false;
       state.orderId = null;
       state.type = null;
@@ -204,7 +204,7 @@ export const {
   updateOrderDetails,
   updateOrderNote,
   setOrderStatus,
-  resetState,
+  clearOrderSet,
   setFailure,
 } = orderSetSlice.actions;
 

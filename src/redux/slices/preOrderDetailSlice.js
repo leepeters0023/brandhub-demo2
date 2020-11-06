@@ -60,7 +60,7 @@ const preOrderDetailSlice = createSlice({
       const { name } = action.payload;
       state.name = name;
     },
-    resetState(state) {
+    clearPreOrderDetail(state) {
       state.isLoading = false;
       state.initialPreOrderLoading = false;
       state.preOrderSummaryLoading = false;
@@ -81,7 +81,7 @@ export const {
   setPreOrderSummary,
   setPreOrderDetails,
   setProgramName,
-  resetState,
+  clearPreOrderDetail,
   setFailure,
 } = preOrderDetailSlice.actions;
 
