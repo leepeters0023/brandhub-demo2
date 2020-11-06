@@ -43,18 +43,18 @@ const preOrderDetailSlice = createSlice({
     setInitialPreOrdersLoading: startInitialLoading,
     setSummaryLoading: startSummaryLoading,
     setPreOrderSummary(state, action) {
-      const { preOrders, totalCost } = action.payload;
+      const { preOrders, totalCost, totalModCost } = action.payload;
       state.preOrderSummary = [...preOrders];
       state.preOrderTotal = totalCost;
+      state.preOrderTotalMod = totalModCost;
       state.initialPreOrderLoading = false;
       state.preOrderSummaryLoading = false;
       state.error = null;
     },
     setPreOrderDetails(state, action) {
-      const { territories, programId, orderTotal } = action.payload;
+      const { territories, programId } = action.payload;
       state.programId = programId;
       state.territories = [...territories];
-      state.preOrderTotalMod = state.preOrderTotal - orderTotal;
     },
     setProgramName(state, action) {
       const { name } = action.payload;
@@ -87,7 +87,7 @@ export const {
 
 export default preOrderDetailSlice.reducer;
 
-export const fetchPreOrders = (id, type) => async (dispatch) => {
+export const fetchPreOrders = (id, type, program) => async (dispatch) => {
   try {
     if (type === "initial") {
       dispatch(setInitialPreOrdersLoading());
@@ -112,13 +112,21 @@ export const fetchPreOrders = (id, type) => async (dispatch) => {
     let totalCost = preOrders
       .map((order) => order.totalEstCost)
       .reduce((a, b) => a + b);
+    let totalModCost = currentPreOrders.data.preOrders
+      .filter((order) => order.program.id !== program)
+      .map((ord) => ord["total-estimated-cost"])
+      .reduce((a, b) => a + b);
     preOrders.forEach((order) => {
       dispatch(
         setProgramStatus({ program: order.programId, status: order.status })
       );
     });
     dispatch(
-      setPreOrderSummary({ preOrders: preOrders, totalCost: totalCost })
+      setPreOrderSummary({
+        preOrders: preOrders,
+        totalCost: totalCost,
+        totalModCost: totalModCost,
+      })
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

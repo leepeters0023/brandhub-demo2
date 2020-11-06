@@ -160,43 +160,6 @@ const generateQuarterlyRollupItems = (dataPoints) => {
   return data;
 };
 
-const generateRFQs = (dataPoints, stat) => {
-  let statusAll = [
-    "Awaiting Resp 0/3",
-    "Awaiting Resp 1/3",
-    "Awaiting Resp 2/3",
-    "Awarded",
-    "Ready for Review",
-  ];
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
-    let currentItemType =
-      itemTypes[Math.floor(Math.random() * itemTypes.length)];
-    let rfqNumber = (543000120 + i).toString();
-    let sequenceNumber = (1110000010 + i).toString();
-    let totalItems = Math.floor(Math.random() * 1000) + 500;
-    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let totalEstCost = totalItems * estCost;
-    let status =
-      stat === "all"
-        ? statusAll[Math.floor(Math.random() * statusAll.length)]
-        : "Ready for Review";
-    data.push({
-      id: (i + 1).toString(),
-      rfqNum: rfqNumber,
-      sequenceNum: sequenceNumber,
-      program: currentProgram,
-      itemType: currentItemType,
-      totalItems: totalItems,
-      estCost: estCost,
-      totalEstCost: totalEstCost,
-      status: status,
-    });
-  }
-  return data;
-};
-
 const generatePOs = (dataPoints, stat) => {
   let statusAll = ["In Progress", "Complete", "Canceled"];
 
@@ -867,11 +830,7 @@ export const complianceItems = [
 
 export const orderHistoryItems = generateOrderHistoryItems(20);
 export const currentPOItems = generatePOItems(20);
-export const currentBidItems = generatePOItems(20);
 export const singlePO = generatePOItems(3);
-export const bidItem = generatePOItems(1);
-export const rfqCurrent = generateRFQs(20, "current");
-export const rfqAll = generateRFQs(20, "all");
 export const poCurrent = generatePOs(20, "current");
 export const poAll = generatePOs(20, "all");
 export const yearToDateBudgets = generateYearToDateBudgets(20);

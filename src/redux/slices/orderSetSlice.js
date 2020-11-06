@@ -230,7 +230,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         : 0;
     });
 
-    let orderTotal = currentOrders.data["total-estimated-cost"];
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
@@ -243,7 +242,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       setPreOrderDetails({
         territories: territories,
         programId: null,
-        orderTotal: orderTotal,
       })
     );
 
@@ -281,7 +279,6 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         ? 1
         : 0;
     });
-    let orderTotal = currentOrders.data[0]["total-estimated-cost"];
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
@@ -294,7 +291,6 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
       setPreOrderDetails({
         territories: territories,
         programId: program,
-        orderTotal: orderTotal,
       })
     );
     dispatch(
