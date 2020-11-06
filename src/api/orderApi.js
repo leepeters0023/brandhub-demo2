@@ -1,7 +1,7 @@
 import axios from "axios";
 import Jsona from "jsona";
 
-//import { separateByComma } from "../utility/utilityFunctions";
+import { separateByComma } from "../utility/utilityFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -96,30 +96,29 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       : "&filter[status]!=approved"
     : "";
   //TODO fix this (program, brand, user, itemType)
-  /* 
-  let userString = filterObject.user.length > 0
-    ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
-    : "";
+ 
+  // let userString = filterObject.user.length > 0
+  //   ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
+  //   : "";
   let progString = filterObject.program.length > 0
-    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
+    ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
     : "";
   let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
-    : "",
+    ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
+    : "";
   let itemTypeString = filterObject.itemType.length > 0
     ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
-    : "",
-  */
+    : "";
   let userString = filterObject.user.length > 0
     ? `&filter[user-id]=${filterObject.user[0].id}`
     : "";
-  let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program[0].name}`
-      : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-id]=${filterObject.brand[0].id}`
-    : "";
+  // let progString =
+  //   filterObject.program.length > 0
+  //     ? `&filter[program-name]=${filterObject.program[0].name}`
+  //     : "";
+  // let brandString = filterObject.brand.length > 0
+  //   ? `&filter[brand-id]=${filterObject.brand[0].id}`
+  //   : "";
   let seqString =
     filterObject.sequenceNum.length > 0
       ? `&filter[item-number]=${filterObject.sequenceNum}`
@@ -135,6 +134,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     userString +
     progString +
     brandString +
+    itemTypeString +
     seqString +
     sortString;
 
