@@ -1,8 +1,21 @@
-## Netlify Deploy Status
-[![Netlify Status](https://api.netlify.com/api/v1/badges/2ca45d1f-e08a-4ba2-b0bf-e895d72e7a6c/deploy-status)](https://app.netlify.com/sites/clever-bassi-76d9e9/deploys)
+# Brandhub React/Redux UI
 
+The user interface for Brandhub, built with Create React App and Redux Toolkit
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+## Developing
+
+### Prerequisites
+
+* You will need to have the api running locally on localhost:4000, pull down the current api from [https://github.com/SelectDesign/brandhub-api](https://github.com/SelectDesign/brandhub-api) and follow all instructions in the READ ME there to get it running.
+* After pulling the code base, run `npm install` to install all dependancies
+
+### Running the dev environment
+
+* Run `mix phx.server` from the api directory, and `npm start` from the UI directory to run the full application in development
+
+### Testing
+
+Currently under development with Cypress, will update when ready
 
 ## Available Scripts
 
@@ -15,11 +28,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -41,7 +49,17 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Dependency Libraries
+
+* Redux Toolkit: [https://github.com/reduxjs/redux-toolkit](https://github.com/reduxjs/redux-toolkit)
+* React Redux: [https://github.com/reduxjs/react-redux](https://github.com/reduxjs/react-redux)
+* Reach Router: [https://github.com/reach/router](https://github.com/reach/router)
+* Material UI: [https://material-ui.com/](https://material-ui.com/)
+* Axios: [https://github.com/axios/axios](https://github.com/axios/axios)
+* React Bottom Scroll Listener: [https://github.com/karl-run/react-bottom-scroll-listener](https://github.com/karl-run/react-bottom-scroll-listener)
+* Date-fns: [https://github.com/date-fns/date-fns](https://github.com/date-fns/date-fns)
+
+## Learn More (From Create React App)
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
