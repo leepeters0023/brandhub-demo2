@@ -12,7 +12,6 @@ import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
-  setOrderSetNotes,
   submitOrdSet,
 } from "../redux/slices/patchOrderSlice";
 
@@ -34,8 +33,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputBase from "@material-ui/core/InputBase";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import Container from "@material-ui/core/Container";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -129,7 +126,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const currentUserId = useSelector((state) => state.user.id);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
-  const preOrderNote = useSelector((state) => state.orderSet.orderNote);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const preOrderStatus = useSelector((state) => state.orderSet.status);
   const currentItems = useSelector((state) => state.orderSet.items);
@@ -175,24 +171,22 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     dispatch(deleteSetOrder(id));
   };
 
-  const handleSave = () => {
-    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
-  };
-
   const handleSubmit = () => {
     dispatch(submitOrdSet(program, "submitted", preOrderId));
-    dispatch(setOrderSetNotes(preOrderId, preOrderNote));
   };
 
   const handleProgramIdHash = useCallback(() => {
     setProgram(window.location.hash.slice(1));
   }, []);
 
-  const handleProgram = useCallback((id) => {
-    setProgram(id);
-    setSwitched(true);
-    window.location.hash = id;
-  }, [setSwitched]);
+  const handleProgram = useCallback(
+    (id) => {
+      setProgram(id);
+      setSwitched(true);
+      window.location.hash = id;
+    },
+    [setSwitched]
+  );
 
   useEffect(() => {
     if (window.location.hash.length === 0) {
@@ -233,11 +227,15 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   }, [handleProgramIdHash]);
 
   useEffect(() => {
-    if ((preOrderStatus === "inactive" || preOrderStatus === "in-progress") && overviewVisible && switched) {
-      setOverviewVisible(false)
+    if (
+      (preOrderStatus === "inactive" || preOrderStatus === "in-progress") &&
+      overviewVisible &&
+      switched
+    ) {
+      setOverviewVisible(false);
       setSwitched(false);
     }
-  })
+  });
 
   useEffect(() => {
     handleFiltersClosed();
@@ -246,24 +244,13 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={confirmModal}
-          disableScrollLock
-          onClose={handleCloseConfirm}
-          fullWidth
-          maxWidth="sm"
-          style={{ zIndex: "15000" }}
-        >
-          <DialogContent>
-            <AreYouSure
-              handleRemove={handleRemoveItem}
-              handleModalClose={handleCloseConfirm}
-              itemNumber={currentItemNum}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <AreYouSure
+        open={confirmModal}
+        handleClose={handleCloseConfirm}
+        handleRemove={handleRemoveItem}
+        itemNumber={currentItemNum}
+        type="order"
+      />
       <OrderItemPreview
         handleModalClose={handleModalClose}
         modal={modal}
@@ -373,23 +360,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         {preOrderStatus !== "submitted" && (
           <>
             <div className={classes.orderControl}>
-              <Button
-                className={classes.largeButton}
-                color="secondary"
-                variant="contained"
-                style={{ marginRight: "20px" }}
-                onClick={handleSave}
-              >
-                SAVE ORDER
-              </Button>
               {!overviewVisible && (
                 <Button
                   className={classes.largeButton}
                   color="secondary"
                   variant="contained"
                   onClick={() => {
-                    setSwitched(false)
-                    setOverviewVisible(true)
+                    setSwitched(false);
+                    setOverviewVisible(true);
                   }}
                 >
                   ORDER OVERVIEW
@@ -402,7 +380,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   variant="contained"
                   onClick={handleSubmit}
                 >
-                  SUBMIT ORDER
+                  COMPLETE ORDER
                 </Button>
               )}
             </div>

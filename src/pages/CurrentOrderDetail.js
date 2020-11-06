@@ -10,7 +10,6 @@ import { fetchOrderSet } from "../redux/slices/orderSetSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
-  setOrderSetNotes,
   submitOrdSet,
   approveOrdSet,
   deleteOrdSet,
@@ -29,8 +28,6 @@ import Loading from "../components/Utility/Loading";
 
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
 import Container from "@material-ui/core/Container";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -42,14 +39,14 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 const determineOrigin = () => {
   let origin;
   if (window.location.href.includes("rollup")) {
-    origin = "/rollup"
+    origin = "/rollup";
   } else if (window.location.hash.includes("approval")) {
-    origin = "/orders/approvals"
+    origin = "/orders/approvals";
   } else {
-    origin = "/orders/items"
+    origin = "/orders/items";
   }
   return origin;
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -84,7 +81,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
-  const orderNote = useSelector((state) => state.orderSet.orderNote);
   const currentOrderType = useSelector((state) => state.orderSet.type);
   const currentOrderId = useSelector((state) => state.orderSet.orderId);
   const orderStatus = useSelector((state) => state.orderSet.status);
@@ -138,10 +134,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     dispatch(deleteSetOrder(id));
   };
 
-  const handleSave = () => {
-    dispatch(setOrderSetNotes(currentOrderId, orderNote));
-  };
-
   const handleSubmit = () => {
     let role = currentUserRole;
     if (
@@ -152,7 +144,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     }
     //TODO send due date and rush status as well when available on api
     dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
-    dispatch(setOrderSetNotes(currentOrderId, orderNote));
   };
 
   const handleApproval = () => {
@@ -160,10 +151,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   };
 
   const handleDeny = () => {
-    dispatch(deleteOrdSet(orderId))
-  }
+    dispatch(deleteOrdSet(orderId));
+  };
 
-  useRetainFiltersOnPopstate(determineOrigin(), dispatch)
+  useRetainFiltersOnPopstate(determineOrigin(), dispatch);
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
@@ -214,7 +205,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             color="secondary"
             variant="contained"
             component={Link}
-            onClick={() => dispatch(setRetain({value: true}))}
+            onClick={() => dispatch(setRetain({ value: true }))}
             to={
               orderId === "inStock"
                 ? "/orders/items/inStock"
@@ -232,24 +223,13 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
-      <div className={classes.relativeContainer}>
-        <Dialog
-          open={confirmModal}
-          onClose={handleCloseConfirm}
-          disableScrollLock
-          fullWidth
-          maxWidth="sm"
-          style={{ zIndex: "15000" }}
-        >
-          <DialogContent>
-            <AreYouSure
-              handleRemove={handleRemoveItem}
-              handleModalClose={handleCloseConfirm}
-              itemNumber={currentItemNum}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+      <AreYouSure
+        open={confirmModal}
+        handleRemove={handleRemoveItem}
+        handleClose={handleCloseConfirm}
+        itemNumber={currentItemNum}
+        type="item"
+      />
       <OrderItemPreview
         handleModalClose={handleModalClose}
         modal={modal}
@@ -278,7 +258,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     )}`}</Typography>
                   </div>
                   <Tooltip title="Add Items to Order">
-                    <IconButton component={Link} to={`/orders/items/inStock`} onClick={() => dispatch(setRetain({value: true}))}>
+                    <IconButton
+                      component={Link}
+                      to={`/orders/items/inStock`}
+                      onClick={() => dispatch(setRetain({ value: true }))}
+                    >
                       <ExitToAppIcon
                         fontSize="large"
                         color="inherit"
@@ -311,7 +295,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     )}`}</Typography>
                   </div>
                   <Tooltip title="Add Items to Order">
-                    <IconButton component={Link} to={`/orders/items/onDemand`} onClick={() => dispatch(setRetain({value: true}))}>
+                    <IconButton
+                      component={Link}
+                      to={`/orders/items/onDemand`}
+                      onClick={() => dispatch(setRetain({ value: true }))}
+                    >
                       <ExitToAppIcon
                         fontSize="large"
                         color="inherit"
@@ -330,7 +318,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   title="Quarterly Rollup Overview"
                   placement="bottom-start"
                 >
-                  <IconButton component={Link} to="/rollup" onClick={() => dispatch(setRetain({value: true}))}>
+                  <IconButton
+                    component={Link}
+                    to="/rollup"
+                    onClick={() => dispatch(setRetain({ value: true }))}
+                  >
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
                 </Tooltip>
@@ -362,7 +354,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   "approval"
                 ) && (
                   <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton component={Link} to="/orders/approvals" onClick={() => dispatch(setRetain({value: true}))}>
+                    <IconButton
+                      component={Link}
+                      to="/orders/approvals"
+                      onClick={() => dispatch(setRetain({ value: true }))}
+                    >
                       <ArrowBackIcon fontSize="large" color="secondary" />
                     </IconButton>
                   </Tooltip>
@@ -416,20 +412,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          {((orderStatus === "in-progress") ||
-            (currentUserRole !== "field1" &&
-              window.location.hash.includes("approval")) ||
-            window.location.href.includes("rollup")) && (
-            <Button
-              className={classes.largeButton}
-              color="secondary"
-              variant="contained"
-              onClick={handleSave}
-              style={{ marginRight: "10px" }}
-            >
-              SAVE ORDER
-            </Button>
-          )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button
               className={classes.largeButton}

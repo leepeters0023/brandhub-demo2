@@ -43,6 +43,7 @@ import Loading from "./components/Utility/Loading";
 import LogIn from "./components/Login";
 import OrderApprovals from "./pages/OrderApprovals";
 import OrderHistory from "./pages/OrderHistory";
+import PendingCompliance from "./pages/PendingCompliance";
 import PlaceInStockOrder from "./pages/PlaceInStockOrder";
 import PlaceOnDemandOrder from "./pages/PlaceOnDemandOrder";
 import Profile from "./pages/Profile";
@@ -417,6 +418,15 @@ const App = () => {
             />,
             "/items",
             ["field1", "field2", "compliance", "super"],
+            role
+          )}
+          {handleAuth(
+            <PendingCompliance
+              path="/compliance/pending/:itemId"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/compliance/pending",
+            ["field2", "compliance", "super"],
             role
           )}
           {handleAuth(

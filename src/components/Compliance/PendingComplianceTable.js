@@ -1,17 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { navigate } from "@reach/router";
 
-import { useDispatch } from "react-redux";
-
-import { setSelectedRFQItem } from "../../redux/slices/rfqSlice";
-import { setSelectedPOItems } from "../../redux/slices/purchaseOrderSlice";
-
-import { formatMoney } from "../../utility/utilityFunctions";
-
-import ConfirmDeleteRollupItem from "../Utility/ConfirmDeleteRollupItem";
-
-import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,39 +9,20 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
+import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
-import DeleteIcon from "@material-ui/icons/Delete";
+//There is no sorting or filtering for this table at the moment, but we are leaving the
+//ability to to add that if need be
 
 const headCells = [
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
-  { id: "program", disablePadding: false, label: "Program", sort: true },
-  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
-  {
-    id: "totalItems",
-    disablePadding: false,
-    label: "Total Ordered",
-    sort: false,
-  },
-  {
-    id: "totalNotCompliant",
-    disablePadding: false,
-    label: "Pending Compliance",
-    sort: false,
-  },
-  { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  {
-    id: "totalEstCost",
-    disablePadding: false,
-    label: "Est. Total",
-    sort: false,
-  },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
-  { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
+  { id: "user", disablePadding: false, label: "Person", sort: false },
+  { id: "distributorName", disablePadding: false, label: "Distributor", sort: false },
+  { id: "distributorState", disablePadding: false, label: "State", sort: false },
+  { id: "qty", disablePadding: false, label: "Total Items", sort: false },
+  { id: "rule", disablePadding: false, label: "Rule", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -64,33 +34,24 @@ const EnhancedTableHead = (props) => {
     onRequestSort,
     onSelectAllClick,
     numSelected,
-    type,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
-  const currentHeader =
-    type === "po"
-      ? headCells
-      : headCells
-          .filter((cell) => cell.id !== "supplier")
-          .filter((cell) => cell.id !== "totalNotCompliant");
-
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          {type === "po" && (
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{ "aria-label": "select all items" }}
-            />
-          )}
+          <Checkbox
+            disabled={rowCount.length === 0}
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{ "aria-label": "select all items" }}
+          />
         </TableCell>
-        {currentHeader.map((headCell) => {
+        {headCells.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -128,7 +89,6 @@ const EnhancedTableHead = (props) => {
             );
           }
         })}
-        <TableCell align="right" />
       </TableRow>
     </TableHead>
   );
@@ -136,12 +96,9 @@ const EnhancedTableHead = (props) => {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -157,49 +114,19 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
-  clickableCell: {
-    "&:hover": {
-      cursor: "pointer",
-      backgroundColor: "#737373",
-      color: "white",
-    },
-  },
 }));
 
-const ItemRollupTable = ({
+const ComplianceItemsTable = ({
   items,
+  itemsLoading,
   handleSort,
-  isItemsLoading,
-  scrollRef,
   itemSelected,
   setItemSelected,
-  type,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("sequenceNum");
+  const [orderBy, setOrderBy] = useState("user");
   const [selected, setSelected] = useState([]);
-  const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
-  const [currentId, setCurrentId] = useCallback(useState(null));
-
-  const handleOpenConfirm = useCallback((id) => {
-    setCurrentId(id)
-    setConfirmOpen(true);
-  }, [setConfirmOpen, setCurrentId]);
-
-  const handleRemove = useCallback(
-    (id) => {
-      //TODO
-      console.log(id);
-      setConfirmOpen(false);
-    },
-    [setConfirmOpen]
-  );
-
-  const handleCloseConfirm = useCallback(() => {
-    setConfirmOpen(false);
-  }, [setConfirmOpen]);
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -234,26 +161,10 @@ const ItemRollupTable = ({
       );
     }
 
-    if (type === "rfq") {
-      if (newSelected.length === 0) {
-        dispatch(setSelectedRFQItem({ itemId: null }));
-      } else {
-        dispatch(setSelectedRFQItem({ itemId: newSelected[0] }));
-      }
-    }
-
-    if (type === "po") {
-      dispatch(setSelectedPOItems({ selectedItems: newSelected }));
-    }
-
     setSelected(newSelected);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const handleComplianceClick = (id, itemNumber) => {
-    navigate(`/compliance/pending/${id}#${itemNumber}`);
-  };
 
   useEffect(() => {
     if (selected.length > 0 && !itemSelected) {
@@ -269,17 +180,9 @@ const ItemRollupTable = ({
 
   return (
     <>
-      <ConfirmDeleteRollupItem
-        open={confirmOpen}
-        handleClose={handleCloseConfirm}
-        handleRemove={handleRemove}
-        itemId={currentId}
-        type={type}
-      />
       <TableContainer
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 375px)" }}
-        ref={scrollRef}
       >
         <Table
           stickyHeader
@@ -288,93 +191,51 @@ const ItemRollupTable = ({
         >
           <EnhancedTableHead
             classes={classes}
-            numSelected={selected.length}
             onRequestSort={handleRequestSort}
-            onSelectAllClick={handleSelectAllClick}
             order={order}
             orderBy={orderBy}
+            numSelected={selected.length}
+            onSelectAllClick={handleSelectAllClick}
             rowCount={items.length}
-            type={type}
           />
           <TableBody>
-            {!isItemsLoading && items.length === 0 && (
+            {!itemsLoading && items.length === 0 && (
               <TableRow>
                 <TableCell align="left" colSpan={11}>
                   <Typography className={classes.headerText}>
-                    {`There are no items that match the current search criteria..`}
+                    {`There are no order items that match the current search criteria..`}
                   </Typography>
                 </TableCell>
               </TableRow>
             )}
-            {!isItemsLoading &&
+            {!itemsLoading &&
               items.length > 0 &&
               items.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
-                const labelId = `po-rollup-Checkbox-${index}`;
-
+                const labelId = `compliance-Checkbox-${index}`;
                 return (
-                  <TableRow key={row.id} hover>
+                  <TableRow key={index} hover >
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
-                        disabled={
-                          type === "rfq" &&
-                          selected.length >= 1 &&
-                          selected[0] !== row.id
-                        }
                         onChange={(event) => {
                           handleClick(event, row.id);
                           event.stopPropagation();
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
-                    <TableCell align="left">
-                      {row.program.name
-                        ? row.program.name
-                        : row.program[0].name}
-                    </TableCell>
-                    <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.user}</TableCell>
+                    <TableCell align="left">{row.distributorName}</TableCell>
+                    <TableCell align="left">{row.distributorState}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
-                    {type === "po" && (
-                      <TableCell
-                        align="left"
-                        className={classes.clickableCell}
-                        onClick={() => {
-                          handleComplianceClick(row.id, row.sequenceNum);
-                        }}
-                      >
-                        {row.totalNotCompliant}
-                      </TableCell>
-                    )}
-                    <TableCell align="left">
-                      {formatMoney(row.estCost)}
-                    </TableCell>
-                    <TableCell align="left">
-                      {formatMoney(row.totalEstCost)}
-                    </TableCell>
-                    <TableCell align="left">{row.dueDate}</TableCell>
-                    {type === "po" && (
-                      <TableCell align="left">{row.supplier}</TableCell>
-                    )}
-                    <TableCell align="right" padding="checkbox">
-                      <Tooltip
-                        title={`Delete ${
-                          type === "po" ? "Purchase Order Item" : "RFQ Item"
-                        }`}
-                      >
-                        <IconButton onClick={() => handleOpenConfirm(row.id)}>
-                          <DeleteIcon color="inherit" />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
+                    <TableCell align="left">{row.rule}</TableCell>
                   </TableRow>
                 );
               })}
-            {isItemsLoading && (
+            {itemsLoading && (
               <TableRow>
                 <TableCell align="left" colSpan={9}>
                   <CircularProgress />
@@ -388,14 +249,11 @@ const ItemRollupTable = ({
   );
 };
 
-ItemRollupTable.propTypes = {
+ComplianceItemsTable.propTypes = {
   items: PropTypes.array,
-  handleSort: PropTypes.func.isRequired,
-  isItemsLoading: PropTypes.bool.isRequired,
+  //handleSort: PropTypes.func.isRequired,
+  itemsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
-  itemSelected: PropTypes.bool.isRequired,
-  setItemSelected: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired,
 };
 
-export default ItemRollupTable;
+export default ComplianceItemsTable;

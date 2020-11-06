@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
+const ConfirmDeleteRollupItem = ({ open, handleClose, handleRemove, itemId, type }) => {
   const classes = useStyles();
 
   return (
@@ -43,11 +43,9 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
           <br />
           <div className={classes.confirmDeletModal}>
             <Typography className={classes.headerText}>
-              {type === "pendingCompliance"
-                ? `Are you sure you want to cancel the selected order${
-                    itemNumber.length > 1 ? "s" : ""
-                  }?`
-                : "Are you sure you want to remove this item?"}
+              {type === "po"
+                ? "Deleting this Purchase Order Item will remove it from all approved orders that contain this item"
+                : "Deleting this Quote Item will remove it from all approved orders that contain this item"}
             </Typography>
             <Typography className={classes.titleText}>
               This action cannot be undone.
@@ -57,12 +55,10 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
               className={classes.largeButton}
               color="secondary"
               onClick={() => {
-                handleRemove(itemNumber);
+                handleRemove(itemId);
               }}
             >
-              {type === "pendingCompliance"
-                ? `CANCEL ORDER${itemNumber.length > 1 ? "S" : ""}`
-                : "REMOVE ITEM"}
+              REMOVE ITEM
             </Button>
           </div>
         </DialogContent>
@@ -71,12 +67,12 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
   );
 };
 
-AreYouSure.propTypes = {
+ConfirmDeleteRollupItem.propTypes = {
   open: PropTypes.bool.isRequired,
   handleRemove: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  itemNumber: PropTypes.any,
+  itemId: PropTypes.any,
   type: PropTypes.string,
 };
 
-export default AreYouSure;
+export default ConfirmDeleteRollupItem;
