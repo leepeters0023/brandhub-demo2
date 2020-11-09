@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchItems } from "../../api/itemApi";
+import { mapItems } from "../apiMaps";
 
 /*
 * Item Model
@@ -103,21 +104,10 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const items = await fetchItems(filterObject);
-    console.log(items);
     if (items.error) {
       throw items.error;
     }
-    let newItems = items.data.map((item) => ({
-      id: item.id,
-      itemNumber: item["item-number"],
-      brand: item.brands.map((brand) => brand.name).join(", "),
-      program: item.programs ? item.programs.map((prog) => prog.name).join(", ") : "---",
-      itemType: item.type,
-      estCost: item["estimated-cost"],
-      packSize: item["qty-per-pack"],
-      stock: Math.floor(Math.random() * 25 + 26),
-      imgUrl: item["img-url"],
-    }));
+    let newItems = mapItems(items.data)
     dispatch(
       getItemsSuccess({
         orderType: typeMap[filterObject.orderType],

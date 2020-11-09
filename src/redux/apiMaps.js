@@ -1,4 +1,5 @@
 import { earliestDate } from "../utility/utilityFunctions";
+import { brandBULookup } from "../utility/constants";
 
 /*
 Functions used to ensure data coming from api always matches
@@ -9,6 +10,67 @@ const orderTypeMap = {
   "in-stock": "In Stock",
   "on-demand": "On Demand",
 };
+
+const monthMap = {
+  "01": "January",
+  "02": "February",
+  "03": "March",
+  "04": "April",
+  "05": "May",
+  "06": "June",
+  "07": "July",
+  "08": "August",
+  "09": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December",
+}
+
+export const mapItems = (items) => {
+  let mappedItems = items.map((item) => ({
+    id: item.id,
+    itemNumber: item["item-number"],
+    brand: item.brands.map((brand) => brand.name).join(", "),
+    program: item.programs ? item.programs.map((prog) => prog.name).join(", ") : "---",
+    itemType: item.type,
+    estCost: item["estimated-cost"],
+    packSize: item["qty-per-pack"],
+    stock: Math.floor(Math.random() * 25 + 26),
+    imgUrl: item["img-url"],
+  }))
+  return mappedItems;
+}
+
+export const mapPrograms = (programs) => {
+  const programArray = programs.map((prog) => ({
+    id: prog.id,
+    type: prog.type,
+    name: prog.name,
+    brand:
+      prog.brands.length > 0
+        ? prog.brands.map((brand) => brand.name)
+        : ["BRAND"],
+    unit: brandBULookup[prog.brands[0].name] || "UNIT",
+    desc:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
+    goals: prog.goals,
+    strategies: prog.strategies,
+    startDate: prog["start-date"],
+    endDate: prog["end-date"],
+    focusMonth: monthMap[prog["start-date"].split("-")[1]],
+    imgUrl: prog["img-url"],
+    items: [],
+    status: false,
+  }));
+  programArray.sort((a, b) => {
+    return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
+      ? -1
+      : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
+      ? 1
+      : 0;
+  });
+  return programArray;
+}
 
 export const mapSingleOrder = (order) => {
   let formattedOrder = {
@@ -39,7 +101,6 @@ export const mapSingleOrder = (order) => {
 };
 
 export const mapOrderHistoryOrders = (orders) => {
-  console.log(orders);
   let mappedOrders = orders.map((order) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
