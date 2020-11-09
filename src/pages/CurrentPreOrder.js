@@ -335,7 +335,8 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           <CircularProgress color="inherit" />
         ) : overviewVisible ||
           preOrderStatus === "complete" ||
-          preOrderStatus === "submitted" ? (
+          preOrderStatus === "submitted" ||
+          preOrderStatus === "approved" ? (
           <OrderSetOverview setOverviewVisible={setOverviewVisible} />
         ) : (
           <OrderSetTable
@@ -357,7 +358,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         )}
         <br />
         <br />
-        {preOrderStatus !== "submitted" && (
+        {preOrderStatus !== "submitted" && preOrderStatus !== "approved" && (
           <>
             <div className={classes.orderControl}>
               {!overviewVisible && (
