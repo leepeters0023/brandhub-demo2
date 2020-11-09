@@ -71,6 +71,12 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "300px !important",
     minWidth: "300px !important",
   },
+  noPadCell: {
+    width: "300px !important",
+    maxWidth: "300px !important",
+    minWidth: "300px !important",
+    padding: 0,
+  }
 }));
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
@@ -487,7 +493,7 @@ const OrderSetTable = (props) => {
                 {orders.map((ord) => (
                   <TableRow key={ord.id}>
                     <TableCell
-                      classes={{ root: classes.root }}
+                      classes={{ root: classes.noPadCell }}
                       className={classes.borderRight}
                       style={{
                         position: "sticky",
@@ -498,44 +504,52 @@ const OrderSetTable = (props) => {
                     >
                       <div
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          width: "Calc(100% - 8px)",
-                          position: "absolute",
-                          top: "0",
-                          left: "0",
-                          height: "100%",
-                          padding: "0px 2px 0px 6px",
+                          position: "relative",
+                          width: "100%",
+                          height: "fit-content",
                         }}
                       >
-                        <Tooltip
-                          placement="right"
-                          title={`${ord.distributorCity}, ${ord.distributorState}`}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "Calc(100% - 8px)",
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            height: "100%",
+                            padding: "0px 2px 0px 6px",
+                          }}
                         >
-                          <Typography className={classes.headerText} noWrap>
-                            {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
-                          </Typography>
-                        </Tooltip>
-                        <div style={{ display: "flex" }}>
-                          <Tooltip title="Delete Order">
-                            <IconButton
-                              onClick={() => handleRemoveOrder(ord.id)}
-                            >
-                              <CancelIcon fontSize="small" color="inherit" />
-                            </IconButton>
+                          <Tooltip
+                            placement="right"
+                            title={`${ord.distributorCity}, ${ord.distributorState}`}
+                          >
+                            <Typography className={classes.headerText} noWrap>
+                              {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
+                            </Typography>
                           </Tooltip>
+                          <div style={{ display: "flex" }}>
+                            <Tooltip title="Delete Order">
+                              <IconButton
+                                onClick={() => handleRemoveOrder(ord.id)}
+                              >
+                                <CancelIcon fontSize="small" color="inherit" />
+                              </IconButton>
+                            </Tooltip>
 
-                          <Tooltip title="Edit Details">
-                            <IconButton
-                              onClick={() => {
-                                setOrderNumber(ord.id);
-                                console.log(ord.id);
-                              }}
-                            >
-                              <EditIcon fontSize="small" color="inherit" />
-                            </IconButton>
-                          </Tooltip>
+                            <Tooltip title="Edit Details">
+                              <IconButton
+                                onClick={() => {
+                                  setOrderNumber(ord.id);
+                                  console.log(ord.id);
+                                }}
+                              >
+                                <EditIcon fontSize="small" color="inherit" />
+                              </IconButton>
+                            </Tooltip>
+                          </div>
                         </div>
                       </div>
                     </TableCell>

@@ -1,5 +1,10 @@
 import { separateByComma } from "../utility/utilityFunctions";
 
+/*
+Builds the string of filters used when querying the api, currently not
+tied into everything as we are still updating filters for a lot of the
+routes, but eventually will be tied in to all queries with filters
+*/
 //TODO add missing filters when they work correctly
 export const buildFilters = (
   filterObject,
