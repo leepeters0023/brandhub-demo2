@@ -9,6 +9,31 @@ import {
 
 import { mapOrderSetHistory } from "../apiMaps";
 
+/*
+* Order Set History Model
+TODO: Create single item group model, api call not available yet
+TODO: Tie in budget when it is in the api
+single order set model:
+{
+  id: string (read),
+  userId: string (read),
+  userName: string (read),
+  orderDate: string (read),
+  approvedDate: string (read, write (only field2 or higher can approve orders)),
+  dueDate: string (read),
+  type: string (read),
+  program: string (read),
+  territories: string (read),
+  state: string (read),
+  status: string (read, write),
+  orderCount: int (read),
+  totalItems: int (read),
+  totalEstCost: int (read),
+  totalActCost: int (read),
+  budget: int (read)
+}
+*/
+
 let initialState = {
   isLoading: false,
   isNextLoading: false,

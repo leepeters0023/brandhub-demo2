@@ -39,6 +39,7 @@ export const mapSingleOrder = (order) => {
 };
 
 export const mapOrderHistoryOrders = (orders) => {
+  console.log(orders);
   let mappedOrders = orders.map((order) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;

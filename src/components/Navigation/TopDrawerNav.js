@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     height: "325px",
+    overflowY: "hidden",
   },
   drawerSupplierOpen: {
     transition: theme.transitions.create("height", {
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     height: "175px",
+    overflowY: "hidden",
   },
   drawerClose: {
     transition: theme.transitions.create("height", {
@@ -85,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    width: "fit-content",
     margin: "0",
   },
   navList: {
@@ -143,10 +146,9 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
       >
         <div
           style={{
-            display: "flex",
+            display: "inline",
             width: "Calc(100% - 50px)",
             padding: "10px 25px",
-            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
@@ -236,7 +238,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               </>
             )}
           </div>
-          <div className={classes.navBreak}>
+          <div className={classes.navBreak} style={{float: "right", marginTop: "-67px"}}>
             {territories.length > 1 && <RegionSelector />}
             <UserNav
               initials={initials}

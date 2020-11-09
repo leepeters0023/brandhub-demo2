@@ -1,6 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { navigate } from "@reach/router";
 
+/*
+* Patch Order Model
+notes: This slice manages the loading and error state for multiple views. It also manages
+the loading and error state for each individual cell in the order grids
+
+loading cell array:
+{
+  id: string (read) (this id is in reference to the order-item id),
+  orderNum: string (read),
+}
+
+*/
+
 import {
   patchOrderItem,
   deleteOrderSetItem,
@@ -10,7 +23,6 @@ import {
   submitOrderSet,
   approveOrderSet,
   deleteOrderSet,
-  setOrderSetNote,
   setOrderDetail,
 } from "../../api/orderApi";
 
@@ -96,6 +108,7 @@ export const {
 
 export default patchOrderSlice.reducer;
 
+//Updates a single order-item from the order grid
 export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -116,6 +129,7 @@ export const patchItem = (id, qty, orderNumber) => async (dispatch) => {
   }
 };
 
+//Deletes an item from an order set, and deletes all corresponding order items within it
 export const deleteSetItem = (id, itemNum) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -130,6 +144,7 @@ export const deleteSetItem = (id, itemNum) => async (dispatch) => {
   }
 };
 
+//Deletes an order, and all order items corresponding with it form an order set
 export const deleteSetOrder = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -144,6 +159,7 @@ export const deleteSetOrder = (id) => async (dispatch) => {
   }
 };
 
+//Updates status on order set from inactive to in-progress
 export const startOrdSet = (programId, value, orderSetId) => async (
   dispatch
 ) => {
@@ -163,6 +179,7 @@ export const startOrdSet = (programId, value, orderSetId) => async (
   }
 };
 
+//Updates status on order set from submitted to in-progress
 export const restartOrdSet = (programId, value, orderSetId) => async (
   dispatch
 ) => {
@@ -182,6 +199,7 @@ export const restartOrdSet = (programId, value, orderSetId) => async (
   }
 };
 
+//Updates status on order set from in-progress to submitted
 export const submitOrdSet = (programId, value, orderSetId, role) => async (
   dispatch
 ) => {
@@ -208,6 +226,7 @@ export const submitOrdSet = (programId, value, orderSetId, role) => async (
   }
 };
 
+//updates status on order set from submitted to approved
 export const approveOrdSet = (orderSetId, value, filters) => async (
   dispatch
 ) => {
@@ -230,6 +249,7 @@ export const approveOrdSet = (orderSetId, value, filters) => async (
   }
 };
 
+//accepts an array of subbmitted order ids and moves them all to approved status
 export const approveMultipleOrderSets = (orderSetArray, filters) => async (
   dispatch
 ) => {
@@ -250,6 +270,7 @@ export const approveMultipleOrderSets = (orderSetArray, filters) => async (
   }
 };
 
+//deletes an entire order set, and all orders and order items within it
 export const deleteOrdSet = (orderSetId, filters) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
@@ -269,19 +290,7 @@ export const deleteOrdSet = (orderSetId, filters) => async (dispatch) => {
   }
 };
 
-export const setOrderSetNotes = (id, note) => async (dispatch) => {
-  try {
-    dispatch(setIsLoading());
-    const noteStatus = await setOrderSetNote(id, note);
-    if (noteStatus.error) {
-      throw noteStatus.error;
-    }
-    dispatch(patchSuccess());
-  } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-  }
-};
-
+//updates note and attention line on an individual order
 export const setOrderDetails = (id, note, attn, type) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
