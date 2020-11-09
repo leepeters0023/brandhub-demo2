@@ -20,7 +20,7 @@ const FieldDash = ({ classes, InfoPopover }) => {
   const preOrderOpen = anchorEl ? anchorEl.id === "pre-order-parent" : false;
   const inStockOpen = anchorEl ? anchorEl.id === "in-stock-parent" : false;
   const onDemandOpen = anchorEl ? anchorEl.id === "on-demand-parent" : false;
-  const couponOpen = anchorEl ? anchorEl.id === "coupon-parent" : false;
+  const historyOpen = anchorEl ? anchorEl.id === "history-parent" : false;
 
   return (
     <Grid container spacing={6} justify="center" style={{ width: "95%" }}>
@@ -42,7 +42,7 @@ const FieldDash = ({ classes, InfoPopover }) => {
         <InfoPopover
           id={"pre-order"}
           info={
-            "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts."
+            "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts"
           }
           classes={classes}
           open={preOrderOpen}
@@ -112,7 +112,7 @@ const FieldDash = ({ classes, InfoPopover }) => {
         <InfoPopover
           id={"on-demand"}
           info={
-            "Place orders for items that will need to be produced for your order."
+            "Place orders for items that will need to be produced for your order"
           }
           classes={classes}
           open={onDemandOpen}
@@ -120,26 +120,30 @@ const FieldDash = ({ classes, InfoPopover }) => {
           handlePopoverClose={handlePopoverClose}
         />
       </Grid>
-      <Grid item md={3} sm={6} xs={12}>
+      <Grid item md={3} sm={6} xs={12} component={Link} to="/orders/history">
         <div className={classes.dashboardGridItem}>
           <Paper className={classes.dashPaper}>
             <div
-              id="coupon-parent"
+              id="history-parent"
               className={classes.innerPaper}
-              aria-owns={couponOpen ? "coupon" : undefined}
+              aria-owns={historyOpen ? "order-history" : undefined}
               aria-haspopup="true"
               onMouseEnter={handlePopoverOpen}
               onMouseLeave={handlePopoverClose}
             >
-              <Typography className={classes.titleText}>Coupons</Typography>
+              <Typography className={classes.titleText}>
+                Order History
+              </Typography>
             </div>
           </Paper>
         </div>
         <InfoPopover
-          id={"pre-order"}
-          info={"Create new coupons, or edit existing coupons"}
+          id={"order-history"}
+          info={
+            "View order history grouped by item or order & get tracking information"
+          }
           classes={classes}
-          open={couponOpen}
+          open={historyOpen}
           anchorEl={anchorEl}
           handlePopoverClose={handlePopoverClose}
         />

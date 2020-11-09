@@ -77,6 +77,9 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const userId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const isUpdateLoading = useSelector(
+    (state) => state.currentOrder.orderUpdateLoading
+  );
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -151,6 +154,7 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
             <Tooltip title="View Current Order">
               <IconButton
                 component={Link}
+                disabled={isUpdateLoading}
                 to={
                   currentOrder.inStockOrderItems.length > 0
                     ? `/orders/open/${currentOrder.inStockOrderNumber}`
