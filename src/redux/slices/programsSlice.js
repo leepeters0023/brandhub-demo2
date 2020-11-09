@@ -5,7 +5,30 @@ import {
   fetchProgramItems,
   fetchProgramsByName,
 } from "../../api/programApi";
-import { mapPrograms } from "../../utility/utilityFunctions";
+import { mapPrograms, mapItems } from "../apiMaps";
+
+/*
+* Program Model
+
+single program:
+{
+  id: string (read),
+  type: string (read),
+  name: string (read),
+  brand: string (read),
+  unit: string (read),
+  desc: string (read),
+  goals: string (read),
+  strategies: string (read),
+  startDate: date string (read),
+  endDate: date string (read),
+  focusMonth: string (read, based on start date month),
+  imgUrl: string (read),
+  items: array (read, see item model in itemSlice)
+  status: bool || string (read, write);
+}
+
+*/
 
 let initialState = {
   isLoading: false,
@@ -66,27 +89,16 @@ const programsSlice = createSlice({
     },
     getProgramItemsSuccess(state, action) {
       const { program, items } = action.payload;
-      let progItems = items.map((item) => ({
-        id: item.id,
-        itemNumber: item["item-number"],
-        brand: item.brands.map((brand) => brand.name).join(", "),
-        itemType: item.type,
-        estCost: item["estimated-cost"],
-        packSize: item["qty-per-pack"],
-        imgUrl: item["img-url"],
-      }));
-
       let updatedPrograms = state.programs.map((prog) => {
         if (prog.id === program) {
           return {
             ...prog,
-            items: [...progItems],
+            items: [...items],
           };
         } else {
           return prog;
         }
       });
-
       state.programs = updatedPrograms;
       state.itemsIsLoading = false;
       state.error = null;
@@ -187,7 +199,8 @@ export const fetchItems = (id) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    dispatch(getProgramItemsSuccess({ program: id, items: items.data }));
+    let mappedItems = mapItems(items.data)
+    dispatch(getProgramItemsSuccess({ program: id, items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

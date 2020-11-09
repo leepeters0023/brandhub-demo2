@@ -7,7 +7,6 @@ const dataFormatter = new Jsona();
 
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
-  console.log(filterObject);
   const response = { status: "", error: null, data: null };
   /*
   let progString = filterObject.program.length > 0

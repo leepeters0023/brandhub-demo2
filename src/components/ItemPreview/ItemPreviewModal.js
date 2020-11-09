@@ -248,7 +248,7 @@ const ItemPreviewModal = (props) => {
                   <br />
                 </>
               )}
-              {type && type !== "program" && (
+              {type && type !== "program" && type !== "catalog" && (
                 <>
                   <Button
                     variant="contained"
