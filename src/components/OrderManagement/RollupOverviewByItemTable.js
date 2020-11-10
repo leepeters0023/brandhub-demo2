@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-//import { navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -37,7 +37,7 @@ const headCells = [
     sort: false,
   },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "orderDue", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
@@ -137,8 +137,20 @@ const RollupOverviewByItemTable = ({
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
-  const handleRowClick = (orderNum) => {
-    //navigate(`/orders/history/${orderNum}`);
+  const statusConverter = (status) => {
+    if (status === "inactive") {
+      return "Not Started";
+    } else if (status === "in-progress") {
+      return "In Progress";
+    } else if (status === "submitted") {
+      return "Order Submitted";
+    } else {
+      return "Error";
+    }
+  };
+
+  const handleRowClick = (id, userName, program) => {
+    navigate(`/rollup/detail/${id}#${userName} - ${program}`);
   };
 
   return (
@@ -171,13 +183,13 @@ const RollupOverviewByItemTable = ({
             )}
             {!isRollupLoading &&
               items.length > 0 &&
-              items.map((row) => (
+              items.map((row, index) => (
                 <TableRow
-                  key={row.id}
+                  key={index}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
-                    handleRowClick(row.orderNum);
+                    handleRowClick(row.orderSetId, row.user, row.program);
                   }}
                 >
                   <TableCell align="left">{row.user}</TableCell>
@@ -203,11 +215,13 @@ const RollupOverviewByItemTable = ({
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
-                    {row.dueDate !== "---"
-                      ? format(new Date(row.dueDate), "MM/dd/yyyy")
-                      : row.orderDate}
+                    {row.orderDue !== "---"
+                      ? format(new Date(row.orderDue), "MM/dd/yyyy")
+                      : row.orderDue}
                   </TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
+                  <TableCell align="left">
+                    {statusConverter(row.status)}
+                  </TableCell>
                 </TableRow>
               ))}
             {isRollupLoading && (

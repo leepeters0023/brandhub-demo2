@@ -14,7 +14,7 @@ import {
 } from "../../redux/slices/filterSlice";
 
 import { fetchFilteredOrderHistory } from "../../redux/slices/orderHistorySlice";
-import { fetchFilteredOrderSets } from "../../redux/slices/orderSetHistorySlice";
+import { fetchFilteredOrderSets, fetchFilteredOrderSetItems } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
 import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
@@ -127,7 +127,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter !== "rfqNum" &&
         filter !== "poNum"
       ) {
-        dispatch(fetchFilteredOrderSets(currentFilters));
+        if (currentFilters.groupBy === "order") {
+          dispatch(fetchFilteredOrderSets(currentFilters));
+        } else {
+          dispatch(fetchFilteredOrderSetItems(currentFilters));
+        }
       }
       if (filterType === "itemRollup-rfq" && filter !== "sequenceNum") {
         dispatch(fetchFilteredRFQItems(currentFilters));
@@ -217,7 +221,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const handleOrderSetFetch = () => {
     dispatch(setChips({ filterType: "history" }));
-    dispatch(fetchFilteredOrderSets(allFilters));
+    if (allFilters.groupBy === "order") {
+      dispatch(fetchFilteredOrderSets(allFilters));
+    } else {
+      dispatch(fetchFilteredOrderSetItems(allFilters));
+    }
   };
 
   const handleFilteredItemFetch = () => {
@@ -283,7 +291,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-rollup" ||
         filterType === "history-approvals"
       ) {
-        dispatch(fetchFilteredOrderSets(allFilters));
+        if (allFilters.groupBy === "order") {
+          dispatch(fetchFilteredOrderSets(allFilters));
+        } else {
+          dispatch(fetchFilteredOrderSetItems(allFilters));
+        }
       }
       if (
         filterType === "item-inStock" ||

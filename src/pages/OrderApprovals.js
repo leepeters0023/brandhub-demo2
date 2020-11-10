@@ -40,6 +40,7 @@ const defaultFilters = {
   brand: [],
   itemType: [],
   sequenceNum: "",
+  groupBy: "order",
   type: "not-pre-order",
   status: "submitted",
   sortOrder: "asc",
