@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "300px !important",
     minWidth: "300px !important",
     padding: 0,
+  },
+  tableRoot: {
+    borderCollapse: "inherit",
   }
 }));
 
@@ -203,7 +206,7 @@ const OrderSetTable = (props) => {
         />
       )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
-        <Table stickyHeader={true} size="small" aria-label="pre-order-table">
+        <Table stickyHeader={true} size="small" aria-label="pre-order-table" classes={{root: classes.tableRoot}}>
           {currentItems.length === 0 ? (
             <TableHead>
               <TableRow>
@@ -340,6 +343,7 @@ const OrderSetTable = (props) => {
                           size="small"
                           className={classes.table}
                           aria-label="item-info"
+                          classes={{root: classes.tableRoot}}
                         >
                           <TableBody
                             style={{ position: "relative", zIndex: "10" }}
