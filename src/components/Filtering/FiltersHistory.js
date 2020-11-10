@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import subDays from "date-fns/subDays";
 import format from "date-fns/format";
@@ -50,11 +50,16 @@ const FiltersHistory = ({
   );
 
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentGrouping = useSelector((state) => state.filters.groupBy)
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
   const [value, setValue] = useCallback(useState("order"));
 
-  //TODO need to add group by in API calls
+  useEffect(() => {
+    if (currentGrouping !== value) {
+      setValue(currentGrouping);
+    }
+  }, [currentGrouping, value, setValue])
 
   return (
     <>

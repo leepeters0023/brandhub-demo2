@@ -11,7 +11,6 @@ import { mapOrderSetHistory, mapOrderSetItems } from "../apiMaps";
 
 /*
 * Order Set History Model
-TODO: Create single item group model, api call not available yet
 TODO: Tie in budget when it is in the api
 single order set model:
 {
@@ -31,6 +30,23 @@ single order set model:
   totalEstCost: int (read),
   totalActCost: int (read),
   budget: int (read)
+}
+
+order set item model
+{
+  user: string (read),
+  sequenceNum: string (read),
+  program: string (read),
+  itemType: string (read),
+  state: string (read),
+  packSize: int (read),
+  totalItems: int (read, write (calculated when edits are made in order grid, we don't directly write)),
+  estCost: int (read),
+  totalEstCost: int (read, write (same as totalItems)),
+  orderDate: date string (read),
+  orderDue: date string (read),
+  status: string (read, write (updates when order / approval windows close ** not in yet)),
+  orderSetId: string (read)
 }
 */
 
@@ -190,22 +206,7 @@ export const fetchFilteredOrderSetItems = (filterObject) => async (
     if (orderSetItems.error) {
       throw orderSetItems.error;
     }
-    console.log(orderSetItems);
     let mappedItems = mapOrderSetItems(orderSetItems.data.items)
-    // .map((item) => ({
-    //   user: item["user-name"],
-    //   sequenceNum: item["sequence-number"],
-    //   program: item["program-name"],
-    //   itemType: item["item-type-description"],
-    //   state: item["state-names"] ? item["state-names"] : "---",
-    //   packSize: item["qty-per-pack"],
-    //   totalItems: item["total-item'qty"],
-    //   estCost: item["estimated-cost"],
-    //   totalEstCost: item["total-estimated-cost"],
-    //   orderDate: item["order-set-submitted-at"],
-    //   orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
-    //   status: item["order-set-status"],
-    // }));
     dispatch(
       getOrderSetItemsSuccess({
         itemGroups: mappedItems,
@@ -228,22 +229,7 @@ export const fetchNextFilteredOrderSetItems = (url) => async (
     if (orderSetItems.error) {
       throw orderSetItems.error;
     }
-    console.log(orderSetItems);
     let mappedItems = mapOrderSetItems(orderSetItems.data.items)
-    // .map((item) => ({
-    //   user: item["user-name"],
-    //   sequenceNum: item["sequence-number"],
-    //   program: item["program-name"],
-    //   itemType: item["item-type-description"],
-    //   state: item["state-names"] ? item["state-names"] : "---",
-    //   packSize: item["qty-per-pack"],
-    //   totalItems: item["total-item'qty"],
-    //   estCost: item["estimated-cost"],
-    //   totalEstCost: item["total-estimated-cost"],
-    //   orderDate: item["order-set-submitted-at"],
-    //   orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
-    //   status: item["order-set-status"],
-    // }));
     dispatch(
       getNextOrderSetItemsSuccess({
         itemGroups: mappedItems,

@@ -6,17 +6,19 @@ tied into everything as we are still updating filters for a lot of the
 routes, but eventually will be tied in to all queries with filters
 */
 //TODO add missing filters when they work correctly
+//TODO build mapping of values that are different for types and remove inline ternaries
 export const buildFilters = (
   filterObject,
   uniqueFilter,
   sortString,
-  urlBase
+  urlBase,
+  type
 ) => {
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
         ? ""
-        : `filter[status]=${filterObject.status}`
+        : `filter[${type === "order-set" ? "order-set-status" : "status"}]=${filterObject.status}`
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
   let orderTypeString = filterObject.orderType
@@ -26,7 +28,7 @@ export const buildFilters = (
     filterObject.fromDate &&
     filterObject.toDate &&
     filterObject.status === "submitted"
-      ? `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
+      ? `filter[${type === "order-set" ? "order-set-submitted-at-range" : "submitted-at-range"}]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let seqString =
     filterObject.sequenceNum.length > 0

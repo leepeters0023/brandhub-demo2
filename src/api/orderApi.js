@@ -2,6 +2,7 @@ import axios from "axios";
 import Jsona from "jsona";
 
 import { separateByComma } from "../utility/utilityFunctions";
+import { buildFilters } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -201,16 +202,15 @@ export const fetchNextOrderSets = async (url) => {
 
 export const fetchOrderSetItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  //TODO handle filters
+  let queryString = buildFilters(filterObject, "", "", "/api/order-set-item-summaries", "order-set")
   await axios
-    .get("/api/order-set-item-summaries")
+    .get(queryString)
     .then((res) => {
       let dataObject = {
         items: null,
         nextLink: null,
       };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -234,7 +234,6 @@ export const fetchNextOrderSetItems = async (url) => {
         nextLink: null,
       };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
