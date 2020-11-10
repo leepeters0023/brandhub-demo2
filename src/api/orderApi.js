@@ -199,6 +199,55 @@ export const fetchNextOrderSets = async (url) => {
   return response;
 };
 
+export const fetchOrderSetItems = async (filterObject) => {
+  const response = { status: "", error: null, data: null };
+  //TODO handle filters
+  await axios
+    .get("/api/order-set-item-summaries")
+    .then((res) => {
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchNextOrderSetItems = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
 /*Users can only have one active On-demand or In-stock order set in draft
 status at a time, so this call will get their current order-set by type*/
 export const fetchSingleOrderSetByType = async (type, userId) => {

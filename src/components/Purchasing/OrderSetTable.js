@@ -243,7 +243,7 @@ const OrderSetTable = (props) => {
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    {orderType !== "preOrder" && (
+                    {orderType !== "preOrder" && orderType !== "pre-order" && (
                       <div className={classes.headerCell}>
                         <DistributorSelection />
                       </div>

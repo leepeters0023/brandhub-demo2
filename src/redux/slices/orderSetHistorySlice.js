@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchAllFilteredOrderSets,
   fetchNextOrderSets,
-  // fetchOrderSetItems,
-  // fetchNextOrderSetItems,
+  fetchOrderSetItems,
+  fetchNextOrderSetItems,
 } from "../../api/orderApi";
 
-import { mapOrderSetHistory } from "../apiMaps";
+import { mapOrderSetHistory, mapOrderSetItems } from "../apiMaps";
 
 /*
 * Order Set History Model
@@ -181,76 +181,78 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
   }
 };
 
-// export const fetchFilteredOrderSetItems = (filterObject) => async (
-//   dispatch
-// ) => {
-//   try {
-//     dispatch(setIsLoading());
-//     let orderSetItems = await fetchOrderSetItems(filterObject);
-//     if (orderSetItems.error) {
-//       throw orderSetItems.error;
-//     }
-//     console.log(orderSetItems);
-//     let mappedItems = orderSetItems.data.items.map((item) => ({
-//       user: orderSetItems.data.user.name,
-//       sequenceNum: item["item-number"],
-//       program: item.program,
-//       itemType: item["item-type"],
-//       state: item.state ? item.state : "---",
-//       packSize: item["qty-per-pack"],
-//       totalItems: item.qty,
-//       estCost: item["est-cost"],
-//       totalEstCost: item["est-total"],
-//       orderDate: item["submitted-at"],
-//       orderDue: item["due-date"] ? item["due-date"] : "---",
-//       status: item.status,
-//     }));
-//     dispatch(
-//       getOrderSetItemsSuccess({
-//         itemGroups: mappedItems,
-//         nextLink: orderSetItems.data.nextLink
-//           ? orderSetItems.data.nextLink
-//           : null,
-//       })
-//     );
-//   } catch (err) {
-//     dispatch(setFailure({ error: err.toString() }));
-//   }
-// };
+export const fetchFilteredOrderSetItems = (filterObject) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    let orderSetItems = await fetchOrderSetItems(filterObject);
+    if (orderSetItems.error) {
+      throw orderSetItems.error;
+    }
+    console.log(orderSetItems);
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    // .map((item) => ({
+    //   user: item["user-name"],
+    //   sequenceNum: item["sequence-number"],
+    //   program: item["program-name"],
+    //   itemType: item["item-type-description"],
+    //   state: item["state-names"] ? item["state-names"] : "---",
+    //   packSize: item["qty-per-pack"],
+    //   totalItems: item["total-item'qty"],
+    //   estCost: item["estimated-cost"],
+    //   totalEstCost: item["total-estimated-cost"],
+    //   orderDate: item["order-set-submitted-at"],
+    //   orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
+    //   status: item["order-set-status"],
+    // }));
+    dispatch(
+      getOrderSetItemsSuccess({
+        itemGroups: mappedItems,
+        nextLink: orderSetItems.data.nextLink
+          ? orderSetItems.data.nextLink
+          : null,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
 
-// export const fetchNextFilteredOrderSetItems = (url) => async (
-//   dispatch
-// ) => {
-//   try {
-//     dispatch(setIsLoading());
-//     let orderSetItems = await fetchNextOrderSetItems(url);
-//     if (orderSetItems.error) {
-//       throw orderSetItems.error;
-//     }
-//     console.log(orderSetItems);
-//     let mappedItems = orderSetItems.data.items.map((item) => ({
-//       user: orderSetItems.data.user.name,
-//       sequenceNum: item["item-number"],
-//       program: item.program,
-//       itemType: item["item-type"],
-//       state: item.state ? item.state : "---",
-//       packSize: item["qty-per-pack"],
-//       totalItems: item.qty,
-//       estCost: item["est-cost"],
-//       totalEstCost: item["est-total"],
-//       orderDate: item["submitted-at"],
-//       orderDue: item["due-date"] ? item["due-date"] : "---",
-//       status: item.status,
-//     }));
-//     dispatch(
-//       getNextOrderSetItemsSuccess({
-//         itemGroups: mappedItems,
-//         nextLink: orderSetItems.data.nextLink
-//           ? orderSetItems.data.nextLink
-//           : null,
-//       })
-//     );
-//   } catch (err) {
-//     dispatch(setFailure({ error: err.toString() }));
-//   }
-// };
+export const fetchNextFilteredOrderSetItems = (url) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setNextIsLoading());
+    let orderSetItems = await fetchNextOrderSetItems(url);
+    if (orderSetItems.error) {
+      throw orderSetItems.error;
+    }
+    console.log(orderSetItems);
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    // .map((item) => ({
+    //   user: item["user-name"],
+    //   sequenceNum: item["sequence-number"],
+    //   program: item["program-name"],
+    //   itemType: item["item-type-description"],
+    //   state: item["state-names"] ? item["state-names"] : "---",
+    //   packSize: item["qty-per-pack"],
+    //   totalItems: item["total-item'qty"],
+    //   estCost: item["estimated-cost"],
+    //   totalEstCost: item["total-estimated-cost"],
+    //   orderDate: item["order-set-submitted-at"],
+    //   orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
+    //   status: item["order-set-status"],
+    // }));
+    dispatch(
+      getNextOrderSetItemsSuccess({
+        itemGroups: mappedItems,
+        nextLink: orderSetItems.data.nextLink
+          ? orderSetItems.data.nextLink
+          : null,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
