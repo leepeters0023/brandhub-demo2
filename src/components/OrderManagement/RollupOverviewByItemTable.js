@@ -37,8 +37,8 @@ const headCells = [
     sort: false,
   },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
-  { id: "orderDue", disablePadding: false, label: "Due Date", sort: true },
-  { id: "status", disablePadding: false, label: "Status", sort: true },
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
