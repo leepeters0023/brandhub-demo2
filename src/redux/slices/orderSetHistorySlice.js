@@ -3,15 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchAllFilteredOrderSets,
   fetchNextOrderSets,
-  // fetchOrderSetItems,
-  // fetchNextOrderSetItems,
+  fetchOrderSetItems,
+  fetchNextOrderSetItems,
 } from "../../api/orderApi";
 
-import { mapOrderSetHistory } from "../apiMaps";
+import { mapOrderSetHistory, mapOrderSetItems } from "../apiMaps";
 
 /*
 * Order Set History Model
-TODO: Create single item group model, api call not available yet
 TODO: Tie in budget when it is in the api
 single order set model:
 {
@@ -31,6 +30,23 @@ single order set model:
   totalEstCost: int (read),
   totalActCost: int (read),
   budget: int (read)
+}
+
+order set item model
+{
+  user: string (read),
+  sequenceNum: string (read),
+  program: string (read),
+  itemType: string (read),
+  state: string (read),
+  packSize: int (read),
+  totalItems: int (read, write (calculated when edits are made in order grid, we don't directly write)),
+  estCost: int (read),
+  totalEstCost: int (read, write (same as totalItems)),
+  orderDate: date string (read),
+  orderDue: date string (read),
+  status: string (read, write (updates when order / approval windows close ** not in yet)),
+  orderSetId: string (read)
 }
 */
 
@@ -181,76 +197,48 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
   }
 };
 
-// export const fetchFilteredOrderSetItems = (filterObject) => async (
-//   dispatch
-// ) => {
-//   try {
-//     dispatch(setIsLoading());
-//     let orderSetItems = await fetchOrderSetItems(filterObject);
-//     if (orderSetItems.error) {
-//       throw orderSetItems.error;
-//     }
-//     console.log(orderSetItems);
-//     let mappedItems = orderSetItems.data.items.map((item) => ({
-//       user: orderSetItems.data.user.name,
-//       sequenceNum: item["item-number"],
-//       program: item.program,
-//       itemType: item["item-type"],
-//       state: item.state ? item.state : "---",
-//       packSize: item["qty-per-pack"],
-//       totalItems: item.qty,
-//       estCost: item["est-cost"],
-//       totalEstCost: item["est-total"],
-//       orderDate: item["submitted-at"],
-//       orderDue: item["due-date"] ? item["due-date"] : "---",
-//       status: item.status,
-//     }));
-//     dispatch(
-//       getOrderSetItemsSuccess({
-//         itemGroups: mappedItems,
-//         nextLink: orderSetItems.data.nextLink
-//           ? orderSetItems.data.nextLink
-//           : null,
-//       })
-//     );
-//   } catch (err) {
-//     dispatch(setFailure({ error: err.toString() }));
-//   }
-// };
+export const fetchFilteredOrderSetItems = (filterObject) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setIsLoading());
+    let orderSetItems = await fetchOrderSetItems(filterObject);
+    if (orderSetItems.error) {
+      throw orderSetItems.error;
+    }
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    dispatch(
+      getOrderSetItemsSuccess({
+        itemGroups: mappedItems,
+        nextLink: orderSetItems.data.nextLink
+          ? orderSetItems.data.nextLink
+          : null,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
 
-// export const fetchNextFilteredOrderSetItems = (url) => async (
-//   dispatch
-// ) => {
-//   try {
-//     dispatch(setIsLoading());
-//     let orderSetItems = await fetchNextOrderSetItems(url);
-//     if (orderSetItems.error) {
-//       throw orderSetItems.error;
-//     }
-//     console.log(orderSetItems);
-//     let mappedItems = orderSetItems.data.items.map((item) => ({
-//       user: orderSetItems.data.user.name,
-//       sequenceNum: item["item-number"],
-//       program: item.program,
-//       itemType: item["item-type"],
-//       state: item.state ? item.state : "---",
-//       packSize: item["qty-per-pack"],
-//       totalItems: item.qty,
-//       estCost: item["est-cost"],
-//       totalEstCost: item["est-total"],
-//       orderDate: item["submitted-at"],
-//       orderDue: item["due-date"] ? item["due-date"] : "---",
-//       status: item.status,
-//     }));
-//     dispatch(
-//       getNextOrderSetItemsSuccess({
-//         itemGroups: mappedItems,
-//         nextLink: orderSetItems.data.nextLink
-//           ? orderSetItems.data.nextLink
-//           : null,
-//       })
-//     );
-//   } catch (err) {
-//     dispatch(setFailure({ error: err.toString() }));
-//   }
-// };
+export const fetchNextFilteredOrderSetItems = (url) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setNextIsLoading());
+    let orderSetItems = await fetchNextOrderSetItems(url);
+    if (orderSetItems.error) {
+      throw orderSetItems.error;
+    }
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    dispatch(
+      getNextOrderSetItemsSuccess({
+        itemGroups: mappedItems,
+        nextLink: orderSetItems.data.nextLink
+          ? orderSetItems.data.nextLink
+          : null,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

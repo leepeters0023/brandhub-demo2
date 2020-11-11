@@ -2,6 +2,7 @@ import axios from "axios";
 import Jsona from "jsona";
 
 import { separateByComma } from "../utility/utilityFunctions";
+import { buildFilters } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -198,6 +199,64 @@ export const fetchNextOrderSets = async (url) => {
     });
   return response;
 };
+
+export const fetchOrderSetItems = async (filterObject) => {
+  const response = { status: "", error: null, data: null };
+  const sortMap = {
+    sequenceNum: "item-number",
+    program: "program-name",
+    itemType: "item-type-description",
+    user: "user-name",
+    orderDate: "order-set-submitted-at",
+    dueDate: "program-order-due-date",
+  }
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryString = buildFilters(filterObject, "", sortString, "/api/order-set-item-summaries", "order-set-items")
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchNextOrderSetItems = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
 
 /*Users can only have one active On-demand or In-stock order set in draft
 status at a time, so this call will get their current order-set by type*/

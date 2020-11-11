@@ -41,6 +41,25 @@ export const mapItems = (items) => {
   return mappedItems;
 }
 
+export const mapOrderSetItems = (items) => {
+  let mappedItems = items.map((item) => ({
+    user: item["user-name"],
+    sequenceNum: item["sequence-number"],
+    program: item["program-name"],
+    itemType: item["item-type-description"],
+    state: item["state-names"] ? item["state-names"] : "---",
+    packSize: item["qty-per-pack"],
+    totalItems: item["total-item-qty"],
+    estCost: item["estimated-cost"],
+    totalEstCost: item["total-estimated-cost"],
+    orderDate: item["order-set-submitted-at"],
+    orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
+    status: item["order-set-status"],
+    orderSetId: item["order-set"].id,
+  }));
+  return mappedItems
+}
+
 export const mapPrograms = (programs) => {
   const programArray = programs.map((prog) => ({
     id: prog.id,

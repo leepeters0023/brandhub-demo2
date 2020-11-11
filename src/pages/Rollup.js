@@ -6,7 +6,7 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
-import { fetchNextFilteredOrderSets } from "../redux/slices/orderSetHistorySlice";
+import { fetchNextFilteredOrderSets, fetchNextFilteredOrderSetItems } from "../redux/slices/orderSetHistorySlice";
 
 import {
   updateMultipleFilters,
@@ -33,7 +33,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 //mock data
-import { quarterlyRollupItems } from "../assets/mockdata/dataGenerator";
+// import { quarterlyRollupItems } from "../assets/mockdata/dataGenerator";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -61,6 +61,9 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
   );
+  const quarterlyRollupItems = useSelector(
+    (state) => state.orderSetHistory.itemGroups
+  )
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
@@ -77,7 +80,11 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
       if (scrollRef.current.scrollTop !== 0) {
-        dispatch(fetchNextFilteredOrderSets(nextLink));
+        if(currentGrouping === "order") {
+          dispatch(fetchNextFilteredOrderSets(nextLink));
+        } else {
+          dispatch(fetchNextFilteredOrderSetItems(nextLink));
+        }
       }
     }
   };
