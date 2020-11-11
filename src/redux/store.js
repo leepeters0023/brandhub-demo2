@@ -1,6 +1,16 @@
 import { configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./rootReducer";
+
+const persistConfig = {
+  key: "root",
+  storage,
+  blacklist: ["user"]
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const middleware = [...getDefaultMiddleware({
   thunk: true,
@@ -8,10 +18,12 @@ const middleware = [...getDefaultMiddleware({
   serializableCheck: false,
 })]
 
-const store = configureStore({
-  reducer: rootReducer,
+export const store = configureStore({
+  reducer: persistedReducer,
   middleware
 });
+
+export const persistor = persistStore(store);
 
 if (process.env.NODE_ENV === "development" && module.hot) {
   module.hot.accept("./rootReducer", () => {
@@ -20,4 +32,4 @@ if (process.env.NODE_ENV === "development" && module.hot) {
   });
 }
 
-export default store;
+//export default { store, persistor };
