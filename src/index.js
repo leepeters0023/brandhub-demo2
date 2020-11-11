@@ -5,13 +5,16 @@ import { Provider } from "react-redux";
 import "./Index.css";
 import App from "./App";
 import ErrorBoundary from "./components/Utility/ErrorBoundary";
-import store from "./redux/store";
+import { store, persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <Provider store={store}>
     <ErrorBoundary>
-      <App />
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
     </ErrorBoundary>
   </Provider>,
   document.getElementById("root")
