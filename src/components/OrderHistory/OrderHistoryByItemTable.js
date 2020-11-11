@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
-//import format from "date-fns/format";
+import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -180,21 +180,21 @@ const OrderHistoryByItemTable = ({
             )}
             {!isOrdersLoading &&
               items.length > 0 &&
-              items.map((row) => (
+              items.map((row, index) => (
                 <TableRow
-                  key={row.id}
+                  key={index}
                   hover
                   className={classes.orderHistoryRow}
                   onClick={() => {
-                    handleRowClick(row.id);
+                    handleRowClick(row.orderId);
                   }}
                 >
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.id}</TableCell>
+                  <TableCell align="left">{row.orderId}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
-                  <TableCell align="left">{row.distributorName}</TableCell>
-                  <TableCell align="left">{row.distributorState}</TableCell>
+                  <TableCell align="left">{row.distributor}</TableCell>
+                  <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {/* <TableCell align="left">
@@ -219,14 +219,12 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? // ? format(new Date(row.orderDate), "MM/dd/yyyy")
-                        row.orderDate
+                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.shipDate !== "---"
-                      ? // ? format(new Date(row.shipDate), "MM/dd/yyyy")
-                        row.shipDate
+                      ? format(new Date(row.shipDate), "MM/dd/yyyy")
                       : row.shipDate}
                   </TableCell>
                   <TableCell align="left">{row.tracking}</TableCell>
