@@ -628,6 +628,47 @@ export const fetchNextHistory = async (url) => {
   return response;
 };
 
+export const fetchOrderHistoryByItem = async (filterObect) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get("/api/order-items")
+    .then((res) => {
+      let dataObject = { items: null, nextLink: null };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchNextOrderHistoryByItem = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = { items: null, nextLink: null };
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data)
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
 //Returns single order based on it's id
 export const fetchSingleOrder = async (id) => {
   const response = { status: "", error: null, data: null };

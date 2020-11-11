@@ -127,6 +127,28 @@ export const mapOrderHistoryOrders = (orders) => {
   return mappedOrders;
 };
 
+export const mapOrderHistoryItems = (items) => {
+  let mappedItems = items.map((item) => ({
+    sequenceNum: item["item-number"],
+    program: item["program-names"].join(", "),
+    itemType: item["item-type-description"],
+    distributor: item["distributor-name"],
+    state: item.state ? item.state : "---",
+    packSize: item["qty-per-pack"],
+    totalItems: item.qty,
+    estCost: item["estimated-cost"],
+    totalEstCost: item["total-estimated-cost"],
+    actCost: item["actual-cost"] ? item["actual-cost"] : "---",
+    actTotal: item["total-actual-cost"] ? item["total-actual-cost"] : "---",
+    orderDate: item["order-submitted-at"],
+    shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
+    tracking: item["tracking-number"] ? item["tracking-number"] : "---",
+    status: item["order-status"],
+    orderId: item.order.id
+  }));
+  return mappedItems;
+}
+
 export const mapOrderItems = (items, type) => {
   let mappedItems = items
     .map((item) => ({
