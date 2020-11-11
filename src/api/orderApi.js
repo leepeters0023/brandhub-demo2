@@ -202,7 +202,18 @@ export const fetchNextOrderSets = async (url) => {
 
 export const fetchOrderSetItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  let queryString = buildFilters(filterObject, "", "", "/api/order-set-item-summaries", "order-set")
+  const sortMap = {
+    sequenceNum: "item-number",
+    program: "program-name",
+    itemType: "item-type-description",
+    user: "user-name",
+    orderDate: "order-set-submitted-at",
+    dueDate: "program-order-due-date",
+  }
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryString = buildFilters(filterObject, "", sortString, "/api/order-set-item-summaries", "order-set-items")
   await axios
     .get(queryString)
     .then((res) => {
