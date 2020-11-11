@@ -44,7 +44,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     sortMap[filterObject.sortOrderBy]
   }`;
 
-  let queryString = buildFilters(filterObject, typeBool, sortString, "/api/item-rollups")
+  let queryString = buildFilters(filterObject, typeBool, sortString, "/api/item-rollups", "rollup")
 
   const response = { status: "", error: null, data: null };
   await axios
@@ -224,7 +224,7 @@ export const fetchRFQHistory = async (filterObject) => {
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString = buildFilters(filterObject, "", sortString, "/api/request-for-quotes")
+  let queryString = buildFilters(filterObject, "", sortString, "/api/request-for-quotes", "rfq-history")
 
   const response = { status: "", error: null, data: null };
   await axios
