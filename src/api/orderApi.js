@@ -13,7 +13,6 @@ const writeHeaders = {
   },
 };
 
-
 // ------------ Order Set Calls ------------ //
 
 //Returns all orders in an order set based on the program and current user's territory
@@ -87,32 +86,37 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
   };
   let typeString = `?filter[type]=${filterObject.type}`;
   let dateString =
-    filterObject.fromDate && filterObject.toDate && filterObject.status === "submitted"
+    filterObject.fromDate &&
+    filterObject.toDate &&
+    filterObject.status === "submitted"
       ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
-  let statusString =
-    filterObject.status ?
-    filterObject.status !== "all"
+  let statusString = filterObject.status
+    ? filterObject.status !== "all"
       ? `&filter[status]=${filterObject.status}`
       : "&filter[status]!=approved"
     : "";
   //TODO fix this (program, brand, user, itemType)
- 
+
   // let userString = filterObject.user.length > 0
   //   ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
   //   : "";
-  let progString = filterObject.program.length > 0
-    ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
-    : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
-    : "";
-  let itemTypeString = filterObject.itemType.length > 0
-    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
-    : "";
-  let userString = filterObject.user.length > 0
-    ? `&filter[user-id]=${filterObject.user[0].id}`
-    : "";
+  let progString =
+    filterObject.program.length > 0
+      ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
+      : "";
+  let brandString =
+    filterObject.brand.length > 0
+      ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
+      : "";
+  let itemTypeString =
+    filterObject.itemType.length > 0
+      ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
+      : "";
+  let userString =
+    filterObject.user.length > 0
+      ? `&filter[user-id]=${filterObject.user[0].id}`
+      : "";
   // let progString =
   //   filterObject.program.length > 0
   //     ? `&filter[program-name]=${filterObject.program[0].name}`
@@ -209,11 +213,17 @@ export const fetchOrderSetItems = async (filterObject) => {
     user: "user-name",
     orderDate: "order-set-submitted-at",
     dueDate: "program-order-due-date",
-  }
+  };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString = buildFilters(filterObject, "", sortString, "/api/order-set-item-summaries", "order-set-items")
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/order-set-item-summaries",
+    "order-set-items"
+  );
   await axios
     .get(queryString)
     .then((res) => {
@@ -233,7 +243,7 @@ export const fetchOrderSetItems = async (filterObject) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const fetchNextOrderSetItems = async (url) => {
   const response = { status: "", error: null, data: null };
@@ -256,7 +266,7 @@ export const fetchNextOrderSetItems = async (url) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 /*Users can only have one active On-demand or In-stock order set in draft
 status at a time, so this call will get their current order-set by type*/
@@ -414,7 +424,7 @@ export const deleteOrderSet = async (id) => {
         data: {
           type: "order-set",
           id: id,
-        }
+        },
       },
       writeHeaders
     )
@@ -427,7 +437,7 @@ export const deleteOrderSet = async (id) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 //Creates a new order set and returns the new order set
 export const createOrderSet = async (type) => {
@@ -508,18 +518,15 @@ export const fetchOrderHistory = async (filterObject) => {
     orderNum: "id",
     distributor: "distributor-name",
     state: "distributor-state",
-    program: "program-name",
     orderDate: "submitted-at",
     shipDate: "ship-date",
     status: "order-status",
   };
   let statusString = filterObject.status
     ? `filter[status]=${filterObject.status}&`
-    : "filter[status]=not-draft&";
+    : "";
   let typeString = filterObject.type
-    ? filterObject.type === "not-pre-order"
-      ? `&filter[type]=not-pre-order`
-      : `&filter[type]=${filterObject.type}`
+    ? `&filter[type]=${filterObject.type}`
     : "";
   let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
   //TODO fix this (program, brand, user, distributor)
@@ -540,21 +547,24 @@ export const fetchOrderHistory = async (filterObject) => {
     ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
     : "",
   */
-  let distString = filterObject.distributor.length > 0
-    ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
-    : "";
-  let userString = filterObject.user.length > 0
-    ? `&filter[user-id]=${filterObject.user[0].id}`
-    : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-id]=${filterObject.brand[0].id}`
-    : "";
+  let distString =
+    filterObject.distributor.length > 0
+      ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
+      : "";
+  let userString =
+    filterObject.user.length > 0
+      ? `&filter[user-id]=${filterObject.user[0].id}`
+      : "";
+  let brandString =
+    filterObject.brand.length > 0
+      ? `&filter[brand-id]=${filterObject.brand[0].id}`
+      : "";
   let progString =
-    (filterObject.program && filterObject.program.length > 0)
+    filterObject.program && filterObject.program.length > 0
       ? `&filter[program-name]=${filterObject.program[0].name}`
       : "";
   let seqString =
-    (filterObject.sequenceNum && filterObject.sequenceNum.length > 0)
+    filterObject.sequenceNum && filterObject.sequenceNum.length > 0
       ? `&filter[item-number]=${filterObject.sequenceNum}`
       : "";
   let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
@@ -571,7 +581,13 @@ export const fetchOrderHistory = async (filterObject) => {
     progString +
     seqString +
     sortString;
-
+  // let queryString = buildFilters(
+  //   filterObject,
+  //   "",
+  //   sortString,
+  //   "/api/orders",
+  //   "history"
+  // );
   await axios
     .get(queryString)
     .then((res) => {
