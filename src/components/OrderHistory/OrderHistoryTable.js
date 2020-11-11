@@ -28,7 +28,7 @@ const headCells = [
     sort: true,
   },
   { id: "state", disablePadding: false, label: "State", sort: true },
-  { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
   {

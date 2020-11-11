@@ -19,7 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
-  { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
     id: "distributor",

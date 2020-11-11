@@ -29,7 +29,9 @@ export const fetchItems = async (filterObject) => {
   await axios
     .get(queryString)
     .then((res) => {
+      console.log(res)
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })

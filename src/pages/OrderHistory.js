@@ -54,6 +54,7 @@ const defaultFilters = {
   program: [],
   itemType: [],
   sequenceNum: "",
+  status: "not-draft",
   sortOrder: "asc",
   sortOrderBy: "orderDate",
 };

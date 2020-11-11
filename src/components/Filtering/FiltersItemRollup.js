@@ -59,6 +59,20 @@ const FiltersItemRollup = ({
                 color="secondary"
                 aria-label="order-item-type"
               >
+                {/* <Button
+                  className={
+                    value === ""
+                      ? classes.largeButton
+                      : classes.selectedButton
+                  }
+                  variant={value === "" ? "contained" : "outlined"}
+                  onClick={() => {
+                    setValue("");
+                    handleFilters("", "orderType", "itemRollup");
+                  }}
+                >
+                  ALL
+                </Button> */}
                 <Button
                   className={
                     value === "on-demand"

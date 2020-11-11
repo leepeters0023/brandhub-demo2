@@ -18,7 +18,9 @@ export const buildFilters = (
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
         ? ""
-        : `filter[${type === "order-set-items" ? "order-set-status" : "status"}]=${filterObject.status}`
+        : `filter[${
+            type === "order-set-items" ? "order-set-status" : "status"
+          }]=${filterObject.status}`
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
   let orderTypeString = filterObject.orderType
@@ -28,7 +30,11 @@ export const buildFilters = (
     filterObject.fromDate &&
     filterObject.toDate &&
     filterObject.status === "submitted"
-      ? `filter[${type === "order-set-items" ? "order-set-submitted-at-range" : "submitted-at-range"}]=${filterObject.fromDate} - ${filterObject.toDate}`
+      ? `filter[${
+          type === "order-set-items"
+            ? "order-set-submitted-at-range"
+            : "submitted-at-range"
+        }]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let seqString =
     filterObject.sequenceNum.length > 0
@@ -41,6 +47,13 @@ export const buildFilters = (
   let poString =
     filterObject.poNum && filterObject.poNum.length > 0
       ? `filter[id]=${filterObject.poNum}`
+      : "";
+  let distributorString =
+    filterObject.distrubutor && filterObject.distributor.length > 0
+      ? `filter[distributor-ids]=${separateByComma(
+          filterObject.distributor,
+          "id"
+        )}`
       : "";
   let userString =
     filterObject.user && filterObject.user.length > 0
@@ -72,6 +85,7 @@ export const buildFilters = (
     seqString,
     rfqString,
     poString,
+    distributorString,
     progString,
     brandString,
     itemTypeString,
