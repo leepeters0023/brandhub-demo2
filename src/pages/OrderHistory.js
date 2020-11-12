@@ -9,7 +9,7 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchNextOrderHistory } from "../redux/slices/orderHistorySlice";
+import { fetchNextOrderHistory, fetchNextFilteredOrderHistoryByItem } from "../redux/slices/orderHistorySlice";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
@@ -26,9 +26,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
-
-//mock data
-import { orderHistoryItems } from "../assets/mockdata/dataGenerator";
 
 const csvHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -66,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
@@ -74,7 +72,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
       if (scrollRef.current.scrollTop !== 0) {
-        dispatch(fetchNextOrderHistory(nextLink));
+        if (currentGrouping === "order") {
+          dispatch(fetchNextOrderHistory(nextLink));
+        } else {
+          dispatch(fetchNextFilteredOrderHistoryByItem(nextLink));
+        }
       }
     }
   };
@@ -83,8 +85,8 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
 
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);
+  const currentOrderItems = useSelector((state) => state.orderHistory.items);
   const currentUserRole = useSelector((state) => state.user.role);
-  const currentGrouping = useSelector((state) => state.filters.groupBy);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleSort = (sortObject) => {
@@ -160,7 +162,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
         )}
         {currentGrouping === "item" && (
           <OrderHistoryByItemTable
-            items={orderHistoryItems}
+            items={currentOrderItems}
             isOrdersLoading={isOrdersLoading}
             handleSort={handleSort}
             scrollRef={scrollRef}

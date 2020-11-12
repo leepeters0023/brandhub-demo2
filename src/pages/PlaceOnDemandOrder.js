@@ -2,9 +2,11 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+
+import { fetchNextFilteredItems } from "../redux/slices/itemSlice";
 
 import {
   fetchCurrentOrderByType,
@@ -12,11 +14,6 @@ import {
   createNewBulkItemOrder,
   clearItemSelections,
 } from "../redux/slices/currentOrderSlice";
-
-// import {
-//   updateMultipleFilters,
-//   setSorted,
-// } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -28,6 +25,7 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -50,20 +48,18 @@ const useStyles = makeStyles((theme) => ({
 const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const nextLink = useSelector((state) => state.items.nextLink);
-  // const isNextLoading = useSelector(
-  //   (state) => state.items.isNextLoading
-  // );
+  const nextLink = useSelector((state) => state.items.nextLink);
+  const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
-  // const handleBottomScroll = () => {
-  //   if (nextLink && !isNextLoading) {
-  //     if (scrollRef.current.scrollTop !== 0) {
-  //       dispatch(fetchNextItems(nextLink));
-  //     }
-  //   }
-  // };
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredItems(nextLink));
+      }
+    }
+  };
 
-  // const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
@@ -205,15 +201,21 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
         </div>
         <br />
-        <>
-          <OrderItemViewControl
-            type={"onDemand"}
-            currentView={currentView}
-            handlePreview={handlePreview}
-            items={currentItems}
-            isItemsLoading={itemsLoading}
-          />
-        </>
+
+        <OrderItemViewControl
+          type={"onDemand"}
+          currentView={currentView}
+          handlePreview={handlePreview}
+          items={currentItems}
+          isItemsLoading={itemsLoading}
+          scrollRef={scrollRef}
+        />
+        {isNextLoading && (
+          <div style={{ width: "100%" }}>
+            <LinearProgress />
+          </div>
+        )}
+        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
       </Container>
       <br />
     </>

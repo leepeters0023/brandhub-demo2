@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchItems } from "../../api/itemApi";
+import { fetchItems, fetchNextItems } from "../../api/itemApi";
 import { mapItems } from "../apiMaps";
 
 /*
@@ -10,6 +10,7 @@ notes: Items still in flux, will update when format is nailed down
 
 let initialState = {
   isLoading: false,
+  isNextLoading: false,
   orderType: null,
   itemsPerPage: 20,
   totalPages: null,
@@ -31,6 +32,10 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startNextLoading = (state) => {
+  state.isNextLoading = true;
+}
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
@@ -42,6 +47,7 @@ const itemSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setNextIsLoading: startNextLoading,
     setTotalPages(state, action) {
       const { pageCount } = action.payload;
       state.totalPages = pageCount;
@@ -56,14 +62,13 @@ const itemSlice = createSlice({
       state.error = null;
     },
     getNextItemsSuccess(state, action) {
-      const { orderType, items, nextLink } = action.payload;
+      const { items, nextLink } = action.payload;
       let currentItems = [...state.items];
       let updatedItems = currentItems.concat(items);
-      state.orderType = orderType;
       state.pagesLoaded += 1;
       state.nextLink = nextLink;
       state.items = updatedItems;
-      state.isLoading = false;
+      state.isNextLoading = false;
       state.error = null;
     },
     updateItemSelection(state, action) {
@@ -90,8 +95,10 @@ const itemSlice = createSlice({
 
 export const {
   setIsLoading,
+  setNextIsLoading,
   setTotalPages,
   getItemsSuccess,
+  getNextItemsSuccess,
   updateItemSelection,
   clearItemSelection,
   resetItems,
@@ -107,15 +114,34 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    let newItems = mapItems(items.data)
+    let newItems = mapItems(items.data.items)
     dispatch(
       getItemsSuccess({
         orderType: typeMap[filterObject.orderType],
         items: newItems,
-        nextLink: "NEXT LINK HERE",
+        nextLink: items.data.nextLink,
       })
     );
   } catch (err) {
     dispatch(setFailure({error: err.toString()}));
   }
 };
+
+export const fetchNextFilteredItems = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    const items = await fetchNextItems(url);
+    if (items.error) {
+      throw items.error;
+    }
+    let newItems = mapItems(items.data.items)
+    dispatch(
+      getNextItemsSuccess({
+        items: newItems,
+        nextLink: items.data.nextLink,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({error: err.toString()}));
+  }
+}
