@@ -27,7 +27,6 @@ const monthMap = {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],

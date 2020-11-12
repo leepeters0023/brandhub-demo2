@@ -29,7 +29,6 @@ export const fetchItems = async (filterObject) => {
       response.status = "error";
       response.error = err.toString();
     });
-    console.log(response)
   return response;
 };
 
@@ -53,7 +52,6 @@ export const fetchNextItems = async (url) => {
       response.status = "error";
       response.error = err.toString();
     });
-    console.log(response)
   return response;
 }
 

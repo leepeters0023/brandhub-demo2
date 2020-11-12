@@ -38,13 +38,12 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemCatalog = ({
   catalogType,
-  userType,
   handleFilterDrawer,
   filtersOpen,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [currentType, setCurrentType] = useCallback(useState(null));
+  const [currentType, setCurrentType] = useCallback(useState(catalogType));
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
@@ -77,7 +76,7 @@ const ItemCatalog = ({
   };
 
   useEffect(() => {
-    if (!currentType || currentType !== catalogType) {
+    if (catalogType && currentType !== catalogType) {
       console.log("setting");
       setCurrentType(catalogType);
       dispatch(
@@ -90,8 +89,6 @@ const ItemCatalog = ({
     }
     defaultFilters.orderType = catalogType === "all" ? "" : catalogType;
   }, [currentType, catalogType, dispatch, setCurrentType]);
-
-  console.log(currentType);
 
   useInitialFilters(
     `item-${catalogType}`,

@@ -22,7 +22,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const headCells = [
-  { id: "id", disablePadding: false, label: "Order #", sort: true },
+  { id: "id", disablePadding: false, label: "Order #", sort: false },
   { id: "type", disablePadding: false, label: "Type", sort: false },
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },

@@ -5,7 +5,7 @@ Builds the string of filters used when querying the api, currently not
 tied into everything as we are still updating filters for a lot of the
 routes, but eventually will be tied in to all queries with filters
 */
-//TODO add missing filters when they work correctly
+//TODO add missing filters when they work correctly (BU currently is it I think?)
 const statusMap = {
   "order-set-items": "order-set-status",
   "history-items": "order-status",
@@ -112,6 +112,5 @@ export const buildFilters = (
 
   let queryString = urlBase + filterPreCursor + queryStringAppend;
 
-  console.log(queryString);
   return queryString;
 };
