@@ -593,6 +593,7 @@ export const fetchOrderHistory = async (filterObject) => {
     .then((res) => {
       let dataObject = { orders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -628,10 +629,23 @@ export const fetchNextHistory = async (url) => {
   return response;
 };
 
-export const fetchOrderHistoryByItem = async (filterObect) => {
+export const fetchOrderHistoryByItem = async (filterObject) => {
+  const sortMap = {
+    sequenceNum: "item-number",
+    distributor: "distributor-name",
+    itemType: "item-type-description",
+    orderNum: "order-id",
+    orderDate: "order-submitted-at",
+    shipDate: "order-shipped-at",
+  }
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+
+  let queryString = buildFilters(filterObject, "", sortString, "/api/order-items", "history-items")
   const response = { status: "", error: null, data: null };
   await axios
-    .get("/api/order-items")
+    .get(queryString)
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);

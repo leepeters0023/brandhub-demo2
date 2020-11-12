@@ -21,25 +21,28 @@ const monthMap = {
   "07": "July",
   "08": "August",
   "09": "September",
-  "10": "October",
-  "11": "November",
-  "12": "December",
-}
+  10: "October",
+  11: "November",
+  12: "December",
+};
 
 export const mapItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],
     brand: item.brands.map((brand) => brand.name).join(", "),
-    program: item.programs ? item.programs.map((prog) => prog.name).join(", ") : "---",
+    program: item.programs
+      ? item.programs.map((prog) => prog.name).join(", ")
+      : "---",
     itemType: item.type,
     estCost: item["estimated-cost"],
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
     imgUrl: item["img-url"],
-  }))
+  }));
   return mappedItems;
-}
+};
 
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
@@ -53,12 +56,14 @@ export const mapOrderSetItems = (items) => {
     estCost: item["estimated-cost"],
     totalEstCost: item["total-estimated-cost"],
     orderDate: item["order-set-submitted-at"],
-    orderDue: item["program-order-due-date"] ? item["program-order-due-date"] : "---",
+    orderDue: item["program-order-due-date"]
+      ? item["program-order-due-date"]
+      : "---",
     status: item["order-set-status"],
     orderSetId: item["order-set"].id,
   }));
-  return mappedItems
-}
+  return mappedItems;
+};
 
 export const mapPrograms = (programs) => {
   const programArray = programs.map((prog) => ({
@@ -89,7 +94,7 @@ export const mapPrograms = (programs) => {
       : 0;
   });
   return programArray;
-}
+};
 
 export const mapSingleOrder = (order) => {
   let formattedOrder = {
@@ -102,7 +107,10 @@ export const mapSingleOrder = (order) => {
     distributorAddressOne: order.distributor["street-address-1"],
     distributorAddressTwo: order.distributor["street-address-2"],
     distributorZip: order.distributor.zip,
-    program: order.program ? order.program.name : "---",
+    program:
+      order["program-names"] && order["program-names"].length > 0
+        ? order["program-names"].join(", ")
+        : "---",
     type: orderTypeMap[order.type],
     items: mapOrderItems(order["order-items"], "history"),
     status: order.status === "submitted" ? "Pending" : order.status,
@@ -139,15 +147,15 @@ export const mapOrderHistoryItems = (items) => {
     estCost: item["estimated-cost"],
     totalEstCost: item["total-estimated-cost"],
     actCost: item["actual-cost"] ? item["actual-cost"] : "---",
-    actTotal: item["total-actual-cost"] ? item["total-actual-cost"] : "---",
+    totalActCost: item["total-actual-cost"] ? item["total-actual-cost"] : "---",
     orderDate: item["order-submitted-at"],
     shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
     tracking: item["tracking-number"] ? item["tracking-number"] : "---",
     status: item["order-status"],
-    orderId: item.order.id
+    orderId: item.order.id,
   }));
   return mappedItems;
-}
+};
 
 export const mapOrderItems = (items, type) => {
   let mappedItems = items

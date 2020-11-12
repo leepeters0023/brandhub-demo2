@@ -1,14 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-// import {
-//   updateMultipleFilters,
-//   setSorted,
-// } from "../redux/slices/filterSlice";
+import { fetchNextFilteredItems } from "../redux/slices/itemSlice";
+import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -19,6 +17,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
@@ -29,6 +28,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  orderType: "",
   sequenceNum: "",
 };
 
@@ -44,23 +44,22 @@ const ItemCatalog = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [currentType, setCurrentType] = useCallback(useState(null));
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
-  // const nextLink = useSelector((state) => state.items.nextLink);
-  // const isNextLoading = useSelector(
-  //   (state) => state.items.isNextLoading
-  // );
+  const nextLink = useSelector((state) => state.items.nextLink);
+  const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
-  // const handleBottomScroll = () => {
-  //   if (nextLink && !isNextLoading) {
-  //     if (scrollRef.current.scrollTop !== 0) {
-  //       dispatch(fetchNextOrderHistory(nextLink));
-  //     }
-  //   }
-  // };
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredItems(nextLink));
+      }
+    }
+  };
 
-  // const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
@@ -76,6 +75,23 @@ const ItemCatalog = ({
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  useEffect(() => {
+    if (!currentType || currentType !== catalogType) {
+      console.log("setting");
+      setCurrentType(catalogType);
+      dispatch(
+        updateSingleFilter({
+          filter: "orderType",
+          value: catalogType === "all" ? "" : catalogType,
+        })
+      );
+      dispatch(setSorted());
+    }
+    defaultFilters.orderType = catalogType === "all" ? "" : catalogType;
+  }, [currentType, catalogType, dispatch, setCurrentType]);
+
+  console.log(currentType);
 
   useInitialFilters(
     `item-${catalogType}`,
@@ -169,7 +185,16 @@ const ItemCatalog = ({
             items={currentItems}
             catalogType={catalogType}
             isItemsLoading={itemsLoading}
+            scrollRef={scrollRef}
           />
+          {isNextLoading && (
+            <div style={{ width: "100%" }}>
+              <LinearProgress />
+            </div>
+          )}
+          {!isNextLoading && (
+            <div style={{ width: "100%", height: "4px" }}></div>
+          )}
         </>
       </Container>
       <br />

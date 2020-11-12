@@ -171,7 +171,7 @@ const OrderHistoryByItemTable = ({
           <TableBody>
             {!isOrdersLoading && items.length === 0 && (
               <TableRow>
-                <TableCell align="left" colSpan={11}>
+                <TableCell align="left" colSpan={14}>
                   <Typography className={classes.headerText}>
                     {`You currently don't have any items on record that match this search criteria..`}
                   </Typography>
@@ -213,7 +213,7 @@ const OrderHistoryByItemTable = ({
                       : row.actCost}
                   </TableCell> */}
                   <TableCell align="left">
-                    {row.actTotal !== "---"
+                    {row.totalActCost !== "---"
                       ? formatMoney(row.totalActCost)
                       : row.totalActCost}
                   </TableCell>
