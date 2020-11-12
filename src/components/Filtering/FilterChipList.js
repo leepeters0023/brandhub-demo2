@@ -43,6 +43,7 @@ const FilterChipList = () => {
       );
       dispatchObject.value = currentFilterArray;
     }
+    console.log(dispatchObject)
     dispatch(updateSingleFilter(dispatchObject));
     dispatch(setChips({ filterType: filterType }));
     dispatch(setSorted());

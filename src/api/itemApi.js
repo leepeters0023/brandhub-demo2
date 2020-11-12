@@ -1,47 +1,61 @@
 import axios from "axios";
 import Jsona from "jsona";
 
+import { buildFilters } from "./apiFunctions";
+
 const dataFormatter = new Jsona();
 
-//TODO incorporate item type (instock vs ondemand), filters, pagination ...
+//TODO incorporate item type (instock vs ondemand)
 
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  /*
-  let progString = filterObject.program.length > 0
-    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
-    : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
-    : "",
-  let itemTypeString = filterObject.itemType.length > 0
-    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
-    : "",
-
-    bu ? id or string...
-  */
-  let seqString =
-    filterObject.sequenceNum.length > 0
-      ? `?filter[item-number]=${filterObject.sequenceNum}`
-      : "";
-  let queryString = "/api/items" + seqString;
+  const queryString = buildFilters(filterObject,"", "", "/api/items");
   await axios
     .get(queryString)
     .then((res) => {
-      console.log(res)
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
-      response.data = data;
+      response.data = dataObject;
     })
     .catch((err) => {
       console.log(err.toString());
       response.status = "error";
       response.error = err.toString();
     });
+    console.log(response)
   return response;
 };
+
+export const fetchNextItems = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = {
+        items: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.items = data;
+      dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+    console.log(response)
+  return response;
+}
 
 //Returns item types and returns an array of all available item types
 export const fetchItemTypes = async () => {

@@ -90,6 +90,7 @@ const filterSlice = createSlice({
     },
     updateSingleFilter(state, action) {
       const { filter, value } = action.payload;
+      console.log(filter, value)
       state[filter] = value;
     },
     setClear(state) {
