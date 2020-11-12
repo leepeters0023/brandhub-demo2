@@ -104,7 +104,6 @@ const OrderItemTableView = ({
   );
 
   const handleSelectAllClick = (event) => {
-    console.log(event.target.checked);
     if (event.target.checked) {
       const newSelecteds = [];
       currentItems.forEach((item) => {

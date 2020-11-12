@@ -1,7 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
 
-import { separateByComma } from "../utility/utilityFunctions";
 import { buildFilters } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
@@ -20,7 +19,7 @@ export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(
-      `/api/order-sets?filter[type]=pre-order&filter[program_id]=${program}&filter[user-id]=${userId}`
+      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -57,7 +56,7 @@ export const fetchOrderSetById = async (id) => {
 export const fetchAllPreOrders = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/order-sets?filter[type]=pre-order&filter[user-id]=${id}`)
+    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
@@ -84,65 +83,16 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     orderDate: "submitted-at",
     dueDate: "due-date",
   };
-  let typeString = `?filter[type]=${filterObject.type}`;
-  let dateString =
-    filterObject.fromDate &&
-    filterObject.toDate &&
-    filterObject.status === "submitted"
-      ? `&filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
-      : "";
-  let statusString = filterObject.status
-    ? filterObject.status !== "all"
-      ? `&filter[status]=${filterObject.status}`
-      : "&filter[status]!=approved"
-    : "";
-  //TODO fix this (program, brand, user, itemType)
-
-  // let userString = filterObject.user.length > 0
-  //   ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
-  //   : "";
-  let progString =
-    filterObject.program.length > 0
-      ? `&filter[program-ids]=${separateByComma(filterObject.program, "id")}`
-      : "";
-  let brandString =
-    filterObject.brand.length > 0
-      ? `&filter[brand-ids]=${separateByComma(filterObject.brand, "id")}`
-      : "";
-  let itemTypeString =
-    filterObject.itemType.length > 0
-      ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
-      : "";
-  let userString =
-    filterObject.user.length > 0
-      ? `&filter[user-id]=${filterObject.user[0].id}`
-      : "";
-  // let progString =
-  //   filterObject.program.length > 0
-  //     ? `&filter[program-name]=${filterObject.program[0].name}`
-  //     : "";
-  // let brandString = filterObject.brand.length > 0
-  //   ? `&filter[brand-id]=${filterObject.brand[0].id}`
-  //   : "";
-  let seqString =
-    filterObject.sequenceNum.length > 0
-      ? `&filter[item-number]=${filterObject.sequenceNum}`
-      : "";
   let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString =
-    "/api/order-sets" +
-    typeString +
-    dateString +
-    statusString +
-    userString +
-    progString +
-    brandString +
-    itemTypeString +
-    seqString +
-    sortString;
-
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/order-sets",
+    "order-set-history"
+  );
   await axios
     .get(queryString)
     .then((res) => {
@@ -275,7 +225,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .get(
-      `/api/order-sets?filter[user-id]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
+      `/api/order-sets?filter[user-ids]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -515,79 +465,23 @@ export const addOrderSetItem = async (id, item) => {
 export const fetchOrderHistory = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
-    orderNum: "id",
+    id: "id",
     distributor: "distributor-name",
     state: "distributor-state",
     orderDate: "submitted-at",
     shipDate: "ship-date",
-    status: "order-status",
+    status: "status",
   };
-  let statusString = filterObject.status
-    ? `filter[status]=${filterObject.status}&`
-    : "";
-  let typeString = filterObject.type
-    ? `&filter[type]=${filterObject.type}`
-    : "";
-  let dateString = `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`;
-  //TODO fix this (program, brand, user, distributor)
-  /* 
-  let distString = filterObject.distributor.length > 0
-    ? `&filter[distributor-id]=${separateByComma(filterObject.distributor, "id")}`
-    : "";
-  let userString = filterObject.user.length > 0
-    ? `&filter[user-id]=${separateByComma(filterObject.user, "id")}`
-    : "";
-  let progString = filterObject.program.length > 0
-    ? `&filter[program-id]=${separateByComma(filterObject.program, "id")}`
-    : "";
-  let brandString = filterObject.brand.length > 0
-    ? `&filter[brand-id]=${separateByComma(filterObject.brand, "id")}`
-    : "",
-  let itemTypeString = filterObject.itemType.length > 0
-    ? `&filter[item-type-id]=${separateByComma(filterObject.itemType, "id")}`
-    : "",
-  */
-  let distString =
-    filterObject.distributor.length > 0
-      ? `&filter[distributor-id]=${filterObject.distributor[0].id}`
-      : "";
-  let userString =
-    filterObject.user.length > 0
-      ? `&filter[user-id]=${filterObject.user[0].id}`
-      : "";
-  let brandString =
-    filterObject.brand.length > 0
-      ? `&filter[brand-id]=${filterObject.brand[0].id}`
-      : "";
-  let progString =
-    filterObject.program && filterObject.program.length > 0
-      ? `&filter[program-name]=${filterObject.program[0].name}`
-      : "";
-  let seqString =
-    filterObject.sequenceNum && filterObject.sequenceNum.length > 0
-      ? `&filter[item-number]=${filterObject.sequenceNum}`
-      : "";
   let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString =
-    "/api/orders?" +
-    statusString +
-    dateString +
-    typeString +
-    distString +
-    userString +
-    brandString +
-    progString +
-    seqString +
-    sortString;
-  // let queryString = buildFilters(
-  //   filterObject,
-  //   "",
-  //   sortString,
-  //   "/api/orders",
-  //   "history"
-  // );
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/orders",
+    "history"
+  );
   await axios
     .get(queryString)
     .then((res) => {
@@ -637,12 +531,18 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     orderNum: "order-id",
     orderDate: "order-submitted-at",
     shipDate: "order-shipped-at",
-  }
+  };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
 
-  let queryString = buildFilters(filterObject, "", sortString, "/api/order-items", "history-items")
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/order-items",
+    "history-items"
+  );
   const response = { status: "", error: null, data: null };
   await axios
     .get(queryString)
@@ -660,7 +560,7 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const fetchNextOrderHistoryByItem = async (url) => {
   const response = { status: "", error: null, data: null };
@@ -669,7 +569,7 @@ export const fetchNextOrderHistoryByItem = async (url) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
+      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -681,7 +581,7 @@ export const fetchNextOrderHistoryByItem = async (url) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 //Returns single order based on it's id
 export const fetchSingleOrder = async (id) => {

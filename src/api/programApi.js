@@ -41,7 +41,7 @@ export const fetchNationalPrograms = async () => {
 export const fetchProgramItems = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/items?filter[program-id]=${id}`)
+    .get(`/api/items?filter[program-ids]=${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";

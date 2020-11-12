@@ -90,7 +90,6 @@ const filterSlice = createSlice({
     },
     updateSingleFilter(state, action) {
       const { filter, value } = action.payload;
-      console.log(filter, value)
       state[filter] = value;
     },
     setClear(state) {
@@ -136,7 +135,7 @@ const filterSlice = createSlice({
       const { filterType } = action.payload;
       let chippable;
       if (filterType.includes("item-")) {
-        chippable = ["bu", "brand", "itemType", "program"];
+        chippable = ["bu", "brand", "itemType", "program", "sequenceNum"];
       }
       if (
         filterType.includes("history") ||

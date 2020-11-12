@@ -157,9 +157,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredRFQHistory(currentFilters));
       }
       if (
-        filterType === "item-all" ||
-        filterType === "item-inStock" ||
-        filterType === "item-onDemand"
+        (filterType === "item-all" ||
+          filterType === "item-inStock" ||
+          filterType === "item-onDemand") &&
+        filter !== "sequenceNum"
       ) {
         dispatch(fetchFilteredItems(currentFilters));
       }

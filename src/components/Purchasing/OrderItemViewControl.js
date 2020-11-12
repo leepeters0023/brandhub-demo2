@@ -67,7 +67,6 @@ const OrderItemViewControl = (props) => {
           handlePreview={handlePreview}
           catalogType={catalogType}
           isItemsLoading={isItemsLoading}
-          scrollRef={scrollRef}
         />
       )}
       {currentView === "list" && type !== "catalog" && (
@@ -89,7 +88,6 @@ const OrderItemViewControl = (props) => {
           handleAddItem={handleAddItem}
           setCurrentItemAdded={setCurrentItemAdded}
           isItemsLoading={isItemsLoading}
-          scrollRef={scrollRef}
         />
       )}
       {type !== "program" && type !== "catalog" && (
@@ -105,7 +103,7 @@ OrderItemViewControl.propTypes = {
   handlePreview: PropTypes.func.isRequired,
   items: PropTypes.array,
   isItemsLoading: PropTypes.bool.isRequired,
-  scrollRef: PropTypes.any.isRequired
+  scrollRef: PropTypes.any
 };
 
 export default React.memo(OrderItemViewControl, (prev, next) => {

@@ -71,6 +71,9 @@ const itemSlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    clearNextLink(state) {
+      state.nextLink = null;
+    },
     updateItemSelection(state, action) {
       const { selectedItems } = action.payload;
       state.selectedItems = selectedItems;
@@ -99,6 +102,7 @@ export const {
   setTotalPages,
   getItemsSuccess,
   getNextItemsSuccess,
+  clearNextLink,
   updateItemSelection,
   clearItemSelection,
   resetItems,
@@ -130,6 +134,7 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
 export const fetchNextFilteredItems = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(clearNextLink());
     const items = await fetchNextItems(url);
     if (items.error) {
       throw items.error;
