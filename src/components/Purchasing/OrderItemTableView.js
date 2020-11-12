@@ -90,6 +90,7 @@ const OrderItemTableView = ({
   handlePreview,
   setCurrentItemAdded,
   isItemsLoading,
+  scrollRef,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -153,6 +154,7 @@ const OrderItemTableView = ({
       <TableContainer
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 250px)" }}
+        ref={scrollRef}
       >
         <Table className={classes.table} aria-label="item-table" stickyHeader>
           <EnhancedTableHead
@@ -208,7 +210,7 @@ const OrderItemTableView = ({
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.brand}</TableCell>
+                    <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>

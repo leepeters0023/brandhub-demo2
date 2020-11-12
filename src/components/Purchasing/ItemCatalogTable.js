@@ -75,6 +75,8 @@ const ItemCatalogTable = ({
   currentItems,
   handlePreview,
   isItemsLoading,
+  catalogType,
+  scrollRef
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -117,6 +119,7 @@ const ItemCatalogTable = ({
       <TableContainer
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 250px)" }}
+        ref={scrollRef}
       >
         <Table className={classes.table} aria-label="item-catalog" stickyHeader>
           <EnhancedTableHead
@@ -162,7 +165,7 @@ const ItemCatalogTable = ({
                         onClick={() => handlePreview(item.itemNumber)}
                       />
                     </TableCell>
-                    <TableCell align="left">{item.brand}</TableCell>
+                    <TableCell align="left">{item.program}</TableCell>
                     <TableCell align="left">{item.itemType}</TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
                     <TableCell align="left">{item.brand}</TableCell>

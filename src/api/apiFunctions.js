@@ -6,6 +6,15 @@ tied into everything as we are still updating filters for a lot of the
 routes, but eventually will be tied in to all queries with filters
 */
 //TODO add missing filters when they work correctly
+const statusMap = {
+  "order-set-items": "order-set-status",
+  "history-items": "order-status",
+};
+
+const dateMap = {
+  "order-set-items": "order-set-submitted-at-range",
+  "history-items": "order-submitted-at-range",
+};
 
 export const buildFilters = (
   filterObject,
@@ -19,7 +28,9 @@ export const buildFilters = (
       ? filterObject.status === "all"
         ? ""
         : `filter[${
-            type === "order-set-items" ? "order-set-status" : "status"
+            type === "order-set-items" || type === "history-items"
+              ? statusMap[type]
+              : "status"
           }]=${filterObject.status}`
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
@@ -31,13 +42,13 @@ export const buildFilters = (
     filterObject.toDate &&
     filterObject.status === "submitted"
       ? `filter[${
-          type === "order-set-items"
-            ? "order-set-submitted-at-range"
+          type === "order-set-items" || type === "history-items"
+            ? dateMap[type]
             : "submitted-at-range"
         }]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let seqString =
-    filterObject.sequenceNum.length > 0
+    filterObject.sequenceNum && filterObject.sequenceNum.length > 0
       ? `filter[item-number]=${filterObject.sequenceNum}`
       : "";
   let rfqString =
@@ -49,7 +60,7 @@ export const buildFilters = (
       ? `filter[id]=${filterObject.poNum}`
       : "";
   let distributorString =
-    filterObject.distrubutor && filterObject.distributor.length > 0
+    filterObject.distributor && filterObject.distributor.length > 0
       ? `filter[distributor-ids]=${separateByComma(
           filterObject.distributor,
           "id"

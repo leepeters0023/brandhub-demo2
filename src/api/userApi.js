@@ -7,7 +7,7 @@ const dataFormatter = new Jsona();
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
   await axios
-    .post(`/auth/token`, {   
+    .post(`/auth/token`, {
       grant_type: "password",
       username: email,
       password: password,
@@ -30,8 +30,7 @@ export const getUser = async () => {
   await axios
     .get(`/api/current-user`)
     .then((res) => {
-      let data = dataFormatter.deserialize(res.data)
-      console.log(data)
+      let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
     })
