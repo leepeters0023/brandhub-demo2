@@ -252,8 +252,10 @@ export const generateShippingParams = (dataPoints) => {
   };
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
+    let distributor = distributors[Math.floor(Math.random()*distributors.length)]
     data.push({
       id: i + 1,
+      distributor: distributor.name,
       attn: "Firstname Lastname",
       address: "123 Road St. Burlington VT 05401",
       carrier: "---",
