@@ -138,10 +138,13 @@ const ShippingParameter = ({ shippingInfo }) => {
             </TableRow>
           </TableHead>
           <TableBody>
+            {shippingInfo.map((param, index) =>(
               <CollapseRow 
-              key={item.id}
+              key={index}
               classes={classes}
+              shippingInfo={param}
               />
+            ))};
           </TableBody>
         </Table>
       </TableContainer>
