@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
 import clsx from "clsx";
-import addDays from "date-fns/addDays";
+//import addDays from "date-fns/addDays";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -101,7 +101,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Quote Due"
                   value={
                     currentRFQ.dueDate !== "---"
-                      ? format(addDays(new Date(currentRFQ.dueDate), 1), "MM/dd/yyyy")
+                      ? format(new Date(currentRFQ.dueDate), "MM/dd/yyyy")
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>
@@ -130,7 +130,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Due Date"
                   value={
                     currentRFQ.inMarketDate !== "---"
-                      ? format(addDays(new Date(currentRFQ.inMarketDate), 1), "MM/dd/yyyy")
+                      ? format(new Date(currentRFQ.inMarketDate), "MM/dd/yyyy")
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>
