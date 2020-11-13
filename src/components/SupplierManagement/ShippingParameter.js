@@ -1,91 +1,151 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import format from "date-fns/format";
-import clsx from "clsx";
 
-import ItemAllocationTable from "./ItemAllocationTable";
-
-import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Collapse from "@material-ui/core/Collapse";
+import IconButton from "@material-ui/core/IconButton";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { makeStyles } from "@material-ui/core/styles";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
-const ShippingParameter = ({ classes, shippingInfo }) => {
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+  root: {
+    "& > *": {
+      borderBottom: "unset",
+    },
+  },
+}));
+
+const CollapseRow = ({ shippingInfo, classes }) => {
+  const [open, setOpen] = useCallback(useState(false));
+  console.log(shippingInfo)
   return (
-    <Grid
-      container
-      spacing={3}
-      style={{ width: "100%", minWidth: "1000px", backgroundColor: "#f2f2f2", margin: "0px"}}
-    >
-      <Grid item sm={6}>
-        <div className={classes.fullHeightGridItem}>
-          <Typography className={classes.titleText}>Ship To:</Typography>
-          <br />
-          <div>
-            <Typography className={clsx(classes.headerText, classes.POText)}>
-              Attention:
-            </Typography>
-            <Typography className={clsx(classes.headerText, classes.POText)}>
-              Address:
-            </Typography>
-            <br />
-            <TextField
-              label="Label"
-              color="secondary"
-              multiline
-              fullWidth
-              variant="outlined"
-              size="small"
-              rows="4"
-            />
-          </div>
-        </div>
-      </Grid>
-      <Grid item sm={6}>
-        <div className={classes.fullHeightGridItem}>
-          <Typography className={classes.titleText}>
-            Shipping Detail:
-          </Typography>
-          <br />
-          <div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                color="secondary"
-                className={classes.dateField}
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id={`actualShip-${shippingInfo.id}`}
-                label="Actual Ship"
-                value={format(new Date(), "MM/dd/yyyy")}
-                //onChange={(value) => handleFilters(value, "toDate")}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
+    <>
+      <TableRow className={classes.root}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell align="left">{shippingInfo.distributor}</TableCell>
+        <TableCell align="left">{shippingInfo.address}</TableCell>
+        <TableCell align="left">{shippingInfo.attn}</TableCell>
+        <TableCell align="left">{shippingInfo.carrier}</TableCell>
+        <TableCell align="left">{shippingInfo.method}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1} style={{ overFlowX: "scroll" }}>
+              <TableContainer>
+                <Table size="small" aria-label="item-details">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Sequence Number
+                            </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Item Type
+                            </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Total Items
+                            </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Shipping Status
+                            </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Tracking
+                            </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography className={classes.bodyText}>
+                          Tax
+                            </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {shippingInfo.items.map((item) => (
+                      <TableRow key={`${item.id}`}>
+                        <TableCell align="center">{item.itemNumber}</TableCell>
+                        <TableCell align="center">{item.itemType}</TableCell>
+                        <TableCell align="center">{item.totalItems}</TableCell>
+                        <TableCell align="center">{item.shippingStatus}</TableCell>
+                        <TableCell align="center">{item.tracking}</TableCell>
+                        <TableCell align="center">{item.tax}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
+  );
+};
+
+const ShippingParameter = ({ shippingInfo }) => {
+  const classes = useStyles();
+
+  return (
+    <>
+      <TableContainer
+        className={classes.tableContainer}
+        style={{ maxHeight: "Calc(100vh - 300px)" }}
+      >
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell className={classes.headerText} align="left">
+                Distributor:
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Ship To:
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Attn:
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Carrier:
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Method:
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+              <CollapseRow 
+              key={item.id}
+              classes={classes}
               />
-            </MuiPickersUtilsProvider>
-            <br />
-            <Typography className={clsx(classes.headerText, classes.POText)}>
-              Carrier:
-            </Typography>
-            <Typography className={clsx(classes.headerText, classes.POText)}>
-              Method:
-            </Typography>
-          </div>
-        </div>
-      </Grid>
-      <Grid item sm={12}>
-        <ItemAllocationTable
-          classes={classes}
-          allocations={shippingInfo.items}
-        />
-      </Grid>
-    </Grid>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
