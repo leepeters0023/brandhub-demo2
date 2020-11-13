@@ -23,9 +23,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "preview", label: "Preview" },
+  { id: "sequenceNum", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
-  { id: "sequenceNum", label: "Sequence #" },
+  { id: "itemDescription", label: "Item Desc." },
   { id: "brand", label: "Brand" },
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
@@ -209,9 +210,10 @@ const OrderItemTableView = ({
                         }}
                       />
                     </TableCell>
+                    <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
-                    <TableCell align="left">{row.itemNumber}</TableCell>
+                    <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
                     {type === "inStock" && (

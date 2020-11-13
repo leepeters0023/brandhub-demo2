@@ -23,9 +23,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "preview", label: "Preview" },
+  { id: "sequenceNum", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
-  { id: "sequenceNum", label: "Sequence #" },
+  { id: "itemDescription", label: "Item Desc."},
   { id: "brand", label: "Brand" },
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
@@ -165,9 +166,10 @@ const ItemCatalogTable = ({
                         onClick={() => handlePreview(item.itemNumber)}
                       />
                     </TableCell>
+                    <TableCell align="left">{item.itemNumber}</TableCell>
                     <TableCell align="left">{item.program}</TableCell>
                     <TableCell align="left">{item.itemType}</TableCell>
-                    <TableCell align="left">{item.itemNumber}</TableCell>
+                    <TableCell align="left">{item.itemDescription}</TableCell>
                     <TableCell align="left">{item.brand}</TableCell>
                     <TableCell align="left">{item.packSize}</TableCell>
                     <TableCell align="left">{item.stock ? item.stock : "---"}</TableCell>

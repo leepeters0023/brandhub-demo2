@@ -96,12 +96,13 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   );
 
   const handleModalOpen = useCallback(
-    (img, brand, itemType, itemNumber) => {
+    (img, brand, itemType, itemNumber, itemDescription) => {
       setCurrentItem({
         imgUrl: img,
         brand: brand,
         itemType: itemType,
         itemNumber: itemNumber,
+        itemDescription: itemDescription
       });
       handleModal(true);
     },
