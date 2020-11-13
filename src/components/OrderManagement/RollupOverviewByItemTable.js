@@ -14,6 +14,7 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
@@ -21,6 +22,12 @@ const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  {
+    id: "itemDescription",
+    disablePadding: false,
+    label: "Item Desc.",
+    sort: false,
+  },
   { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "packSize", disablePadding: false, label: "Qty / Pack", sort: false },
   {
@@ -195,8 +202,23 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">{row.itemType}</TableCell>
-                  <TableCell align="left">{row.state}</TableCell>
+                  <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
+                    {row.itemType}
+                  </TableCell>
+                  <TableCell align="left">{row.itemDescription}</TableCell>
+                  {row.state.length > 2 ? (
+                    <Tooltip
+                      title={`${row.state.split(", ").splice(1).join(", ")}`}
+                    >
+                      <TableCell align="left">
+                        <Typography variant="body2">{`${
+                          row.state.split(", ")[0]
+                        }...`}</Typography>
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.state}</TableCell>
+                  )}
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">

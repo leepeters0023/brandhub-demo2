@@ -22,6 +22,12 @@ const headCells = [
   { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
+    id: "itemDescription",
+    disablePadding: false,
+    label: "Item Desc.",
+    sort: false,
+  },
+  {
     id: "distributor",
     disablePadding: false,
     label: "Distributor",
@@ -192,7 +198,10 @@ const OrderHistoryByItemTable = ({
                   <TableCell align="left">{row.sequenceNum}</TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">{row.itemType}</TableCell>
+                  <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
+                    {row.itemType}
+                  </TableCell>
+                  <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.packSize}</TableCell>

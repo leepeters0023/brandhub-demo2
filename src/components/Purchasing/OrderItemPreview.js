@@ -31,7 +31,14 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
   return (
     <>
       <div className={classes.relativeContainer}>
-        <Dialog open={modal} onClose={handleModalClose} fullWidth maxWidth="sm">
+        <Dialog
+          open={modal}
+          onClose={handleModalClose}
+          fullWidth
+          maxWidth="sm"
+          disableScrollLock
+          style={{ zIndex: "15000" }}
+        >
           <DialogContent>
             <IconButton
               className={classes.closeButton}
@@ -50,10 +57,14 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
                 className={classes.bodyText}
                 variant="body1"
               >{`${currentItem.brand} ${currentItem.itemType}`}</Typography>
+              <Typography className={classes.bodyText} variant="body1">
+                {currentItem.itemDescription}
+              </Typography>
               <Typography
                 variant="body2"
                 color="textSecondary"
               >{`${currentItem.itemNumber}`}</Typography>
+              <br />
             </div>
           </DialogContent>
         </Dialog>
@@ -65,7 +76,7 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
 OrderItemPreview.propTypes = {
   handleModalClose: PropTypes.func.isRequired,
   modal: PropTypes.bool.isRequired,
-  currentItem: PropTypes.object
-}
+  currentItem: PropTypes.object,
+};
 
 export default OrderItemPreview;

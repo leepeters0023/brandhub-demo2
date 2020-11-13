@@ -109,7 +109,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                       updateRFQDates(
                         currentRFQ.id,
                         "due-date",
-                        format(new Date(value), "yyyy-MM-dd")
+                        new Date(value)
                       )
                     )
                   }

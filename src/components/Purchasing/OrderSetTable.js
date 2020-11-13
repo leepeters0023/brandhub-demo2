@@ -276,7 +276,8 @@ const OrderSetTable = (props) => {
                               item.imgUrl,
                               item.brand,
                               item.itemType,
-                              item.itemNumber
+                              item.itemNumber,
+                              item.itemDescription
                             )
                           }
                         />
