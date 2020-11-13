@@ -127,7 +127,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-            <ShippingParameter classes={classes} shippingInfo={shippingParams} />
+              <ShippingParameter classes={classes} shippingInfo={shippingParams} />
             <br />
             <br />
           </div>
