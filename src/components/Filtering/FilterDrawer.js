@@ -11,6 +11,7 @@ import {
   resetFilters,
   setSorted,
   setRetain,
+  setFetchCurrent,
 } from "../../redux/slices/filterSlice";
 
 import {
@@ -72,6 +73,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const setToClear = useSelector((state) => state.filters.clearFilters);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const sorted = useSelector((state) => state.filters.sorted);
+  const fetchCurrent = useSelector((state) => state.filters.fetchCurrent);
   const defaultFilters = useSelector((state) => state.filters.defaultFilters);
   const allFilters = useSelector((state) => state.filters);
 
@@ -307,7 +309,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   ]);
 
   useEffect(() => {
-    if (sorted) {
+    if (sorted || fetchCurrent) {
       //TODO handle po, compliance (rules / items), budget sorting here as well
       if (filterType === "history-orders") {
         if (allFilters.groupBy === "order") {
@@ -342,9 +344,14 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "itemRollup-po") {
         dispatch(fetchFilteredPOItems(allFilters));
       }
-      dispatch(setSorted());
+      if (sorted) {
+        dispatch(setSorted());
+      }
+      if (fetchCurrent) {
+        dispatch(setFetchCurrent());
+      }
     }
-  }, [sorted, dispatch, filterType, allFilters]);
+  }, [sorted, fetchCurrent, dispatch, filterType, allFilters]);
 
   return (
     <>

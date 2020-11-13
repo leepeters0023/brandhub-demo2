@@ -39,6 +39,7 @@ let initialState = {
   defaultFilters: null,
   clearFilters: false,
   retainFilters: false,
+  fetchCurrent: false,
   sorted: false,
   filterType: null,
 };
@@ -101,6 +102,9 @@ const filterSlice = createSlice({
     },
     setSorted(state) {
       state.sorted = !state.sorted;
+    },
+    setFetchCurrent(state) {
+      state.fetchCurrent = !state.fetchCurrent;
     },
     resetFilters(state) {
       state.fromDate = null;
@@ -220,6 +224,7 @@ export const {
   setSorted,
   setRetain,
   setClear,
+  setFetchCurrent,
   resetFilters,
   setChips,
 } = filterSlice.actions;

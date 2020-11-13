@@ -8,6 +8,7 @@ import {
   updateMultipleFilters,
   setClear,
   setRetain,
+  setFetchCurrent,
 } from "../redux/slices/filterSlice";
 
 /*
@@ -149,6 +150,7 @@ export const useInitialFilters = (
       dispatch(setClear());
     } else {
       dispatch(setRetain({ value: false }));
+      dispatch(setFetchCurrent());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
