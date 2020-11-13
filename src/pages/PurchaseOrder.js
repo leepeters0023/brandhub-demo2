@@ -127,13 +127,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-            {shippingParams.map((param) => (
-              <div key={param.id}>
-                <ShippingParameter classes={classes} shippingInfo={param} />
-                <br />
-                <br />
-              </div>
-            ))}
+            <ShippingParameter classes={classes} shippingInfo={shippingParams} />
+            <br />
+            <br />
           </div>
           <br />
           <Button

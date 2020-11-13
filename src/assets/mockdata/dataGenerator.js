@@ -246,6 +246,7 @@ export const generateShippingParams = (dataPoints) => {
         shippingStatus: "Ok",
         tracking: "---",
         tax: "---",
+        actualShip: "---",
       });
     }
     return items;
