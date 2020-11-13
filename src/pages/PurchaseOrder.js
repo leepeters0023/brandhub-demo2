@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
-import ShippingParameter from "../components/SupplierManagement/ShippingParameter";
+import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -127,7 +127,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-              <ShippingParameter classes={classes} shippingInfo={shippingParams} />
+              <ShippingParameterTable classes={classes} shippingInfo={shippingParams} />
             <br />
             <br />
           </div>

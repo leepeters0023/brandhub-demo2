@@ -246,7 +246,6 @@ export const generateShippingParams = (dataPoints) => {
         shippingStatus: "Ok",
         tracking: "---",
         tax: "---",
-        actualShip: "---",
       });
     }
     return items;
@@ -261,6 +260,7 @@ export const generateShippingParams = (dataPoints) => {
       address: "123 Road St. Burlington VT 05401",
       carrier: "---",
       method: "---",
+      actualShip: "---",
       items: generateParamItems(Math.floor(Math.random() * 4 + 1)),
     });
   }
