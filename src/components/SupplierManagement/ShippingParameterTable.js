@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const CollapseRow = ({ shippingInfo, classes }) => {
   const [open, setOpen] = useCallback(useState(false));
-  console.log(shippingInfo)
   return (
     <>
       <TableRow className={classes.root}>
@@ -44,6 +43,7 @@ const CollapseRow = ({ shippingInfo, classes }) => {
         <TableCell align="left">{shippingInfo.attn}</TableCell>
         <TableCell align="left">{shippingInfo.carrier}</TableCell>
         <TableCell align="left">{shippingInfo.method}</TableCell>
+        <TableCell align="left">{shippingInfo.actualShip}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
@@ -107,7 +107,7 @@ const CollapseRow = ({ shippingInfo, classes }) => {
   );
 };
 
-const ShippingParameter = ({ shippingInfo }) => {
+const ShippingParameterTable = ({ shippingInfo }) => {
   const classes = useStyles();
 
   return (
@@ -135,6 +135,9 @@ const ShippingParameter = ({ shippingInfo }) => {
               <TableCell className={classes.headerText} align="left">
                 Method:
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Act. Ship:
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -144,7 +147,7 @@ const ShippingParameter = ({ shippingInfo }) => {
               classes={classes}
               shippingInfo={param}
               />
-            ))};
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -152,9 +155,10 @@ const ShippingParameter = ({ shippingInfo }) => {
   );
 };
 
-ShippingParameter.propTypes = {
-  classes: PropTypes.object.isRequired,
-  shippingInfo: PropTypes.object.isRequired,
+ShippingParameterTable.propTypes = {
+  shippingInfo: PropTypes.array.isRequired,
 };
 
-export default React.memo(ShippingParameter);
+export default React.memo(ShippingParameterTable, (prev, next) => {
+  return prev.shippingInfo.length === next.shippingInfo.length
+});
