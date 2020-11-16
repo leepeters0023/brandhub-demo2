@@ -153,7 +153,7 @@ export const updateRFQNote = async (id, note) => {
 
 //Updates the due date or in market date on an RFQ
 export const updateRFQDate = async (id, dateType, date) => {
-  const response = { status: "", error: null };
+  const response = { status: "", error: null, data: null };
   await axios
     .patch(
       `/api/request-for-quotes/${id}`,
@@ -171,6 +171,7 @@ export const updateRFQDate = async (id, dateType, date) => {
     .then((res) => {
       const data = dataFormatter.deserialize(res.data);
       response.status = "ok";
+      response.data = data;
     })
     .catch((err) => {
       console.log(err.toString());
