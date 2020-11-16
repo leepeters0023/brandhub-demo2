@@ -26,7 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const OrderItemGridView = (props) => {
-  const { currentItems, handlePreview, catalogType, isItemsLoading } = props;
+  const {
+    currentItems,
+    handlePreview,
+    catalogType,
+    isItemsLoading,
+    type,
+  } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -93,8 +99,8 @@ const OrderItemGridView = (props) => {
             )}
             {currentItems.length > 0 &&
               currentItems.map((item, index) => {
-                const isItemSelected = isSelected(item.id);
-                const labelId = `item-Checkbox-${index}`;
+                const isItemSelected = type === "new-program" ? null : isSelected(item.id);
+                const labelId = type === "newProgram" ? null : `item-Checkbox-${index}`;
                 return (
                   <Grid
                     className={classes.singleItem}
@@ -107,16 +113,18 @@ const OrderItemGridView = (props) => {
                   >
                     <Paper className={classes.paperWrapper}>
                       <div className={classes.singleItemWrapper}>
-                        <Checkbox
-                          className={classes.checkbox}
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          onClick={(event) => event.stopPropagation()}
-                          onChange={(event) => {
-                            handleClick(event, item.id);
-                            event.stopPropagation();
-                          }}
-                        />
+                        {type !== "new-program" && (
+                          <Checkbox
+                            className={classes.checkbox}
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            onClick={(event) => event.stopPropagation()}
+                            onChange={(event) => {
+                              handleClick(event, item.id);
+                              event.stopPropagation();
+                            }}
+                          />
+                        )}
                         <img
                           id={item.itemNumber}
                           className={classes.previewImg}
@@ -130,7 +138,10 @@ const OrderItemGridView = (props) => {
                         {`${item.brand} ${item.itemType}`}
                       </Typography>
                       <Typography variant="body1" color="textSecondary">
-                        {`#${item.itemNumber} | ${item.packSize}`}
+                        {`#${item.itemNumber}`}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary">
+                        {`Pack Size: ${item.packSize}`}
                       </Typography>
                       {catalogType === "inStock" && (
                         <Typography variant="body1" color="textSecondary">

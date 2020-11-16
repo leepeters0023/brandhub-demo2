@@ -83,7 +83,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const handleNewRFQ = () => {
     let currentItem = currentPOItems.find((item) => item.id === selectedPOItems[0]);
-    console.log(currentItem.program[0].id);
     dispatch(createNewRFQ(selectedPOItems[0], currentItem.program[0].id))
   }
 

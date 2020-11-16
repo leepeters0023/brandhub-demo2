@@ -115,7 +115,7 @@ const PendingCompliance = ({ handleFiltersClosed, itemId }) => {
               className={classes.titleText}
               style={{ marginTop: "5px" }}
             >
-              {`Order Item ${window.location.hash}`}
+              {`Pending Compliance for Order Item ${window.location.hash}`}
             </Typography>
           </div>
           <div
