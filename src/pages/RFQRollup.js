@@ -71,7 +71,6 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const handleNewRFQ = () => {
     let currentItem = currentRFQItems.find((item) => item.id === selectedRFQItem);
-    console.log(currentItem.program[0].id);
     dispatch(createNewRFQ(selectedRFQItem, currentItem.program[0].id))
   }
 

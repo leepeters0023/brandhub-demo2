@@ -24,7 +24,6 @@ const FavoriteDistributors = () => {
   const dispatch = useDispatch();
 
   const currentDistributorLists = useSelector(state => state.user.favoriteDistributors);
-  console.log(currentDistributorLists)
   useEffect(() => {
     if (currentDistributorLists.length === 0) {
       dispatch(createNewFavoriteDistList({id: (Math.floor(Math.random() * 100 + 1000)).toString()}))

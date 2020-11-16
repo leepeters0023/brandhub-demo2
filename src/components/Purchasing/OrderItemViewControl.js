@@ -10,7 +10,7 @@ import {
 } from "../../redux/slices/currentOrderSlice";
 
 import OrderItemTableView from "./OrderItemTableView";
-import OrderPreGridView from "./OrderItemGridView";
+import OrderItemGridView from "./OrderItemGridView";
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
 import ItemCatalogTable from "./ItemCatalogTable";
 import ItemCatalogGrid from "./ItemCatalogGrid";
@@ -61,12 +61,14 @@ const OrderItemViewControl = (props) => {
           scrollRef={scrollRef}
         />
       )}
-      {currentView === "grid" && type === "catalog" && (
+      {((currentView === "grid" && type === "catalog") ||
+        (currentView === "grid" && type === "new-program")) && (
         <ItemCatalogGrid
           currentItems={items}
           handlePreview={handlePreview}
           catalogType={catalogType}
           isItemsLoading={isItemsLoading}
+          type={type}
         />
       )}
       {currentView === "list" && type !== "catalog" && (
@@ -80,17 +82,19 @@ const OrderItemViewControl = (props) => {
           scrollRef={scrollRef}
         />
       )}
-      {currentView === "grid" && type !== "catalog" && (
-        <OrderPreGridView
-          type={type}
-          currentItems={items}
-          handlePreview={handlePreview}
-          handleAddItem={handleAddItem}
-          setCurrentItemAdded={setCurrentItemAdded}
-          isItemsLoading={isItemsLoading}
-        />
-      )}
-      {type !== "program" && type !== "catalog" && (
+      {currentView === "grid" &&
+        type !== "catalog" &&
+        type !== "new-program" && (
+          <OrderItemGridView
+            type={type}
+            currentItems={items}
+            handlePreview={handlePreview}
+            handleAddItem={handleAddItem}
+            setCurrentItemAdded={setCurrentItemAdded}
+            isItemsLoading={isItemsLoading}
+          />
+        )}
+      {type !== "program" && type !== "catalog" && type !== "new-program" && (
         <AddItemConfirmation type={type} item={currentItemAdded} />
       )}
     </>
@@ -103,7 +107,7 @@ OrderItemViewControl.propTypes = {
   handlePreview: PropTypes.func.isRequired,
   items: PropTypes.array,
   isItemsLoading: PropTypes.bool.isRequired,
-  scrollRef: PropTypes.any
+  scrollRef: PropTypes.any,
 };
 
 export default React.memo(OrderItemViewControl, (prev, next) => {

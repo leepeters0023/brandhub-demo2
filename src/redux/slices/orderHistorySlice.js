@@ -252,7 +252,6 @@ export const fetchFilteredOrderHistoryByItem = (filterObject) => async (
   try {
     dispatch(setIsLoading());
     let items = await fetchOrderHistoryByItem(filterObject);
-    console.log(items);
     if (items.error) {
       throw items.error;
     }
@@ -274,7 +273,6 @@ export const fetchNextFilteredOrderHistoryByItem = (url) => async (
   try {
     dispatch(setNextIsLoading());
     let items = await fetchNextOrderHistoryByItem(url);
-    console.log(items);
     if (items.error) {
       throw items.error;
     }
