@@ -26,7 +26,7 @@ const headCells = [
   { id: "sequenceNum", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
-  { id: "itemDescription", label: "Item Desc."},
+  { id: "itemDescription", label: "Item Desc." },
   { id: "brand", label: "Brand" },
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
@@ -34,7 +34,12 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, rowCount, onSelectAllClick, numSelected } = props;
+  const { classes, rowCount, onSelectAllClick, numSelected, type } = props;
+
+  const currentHeadCells =
+    type === "in-stock"
+      ? headCells
+      : headCells.filter((cell) => cell.id !== "stock");
 
   return (
     <TableHead>
@@ -47,7 +52,7 @@ const EnhancedTableHead = (props) => {
             inputProps={{ "aria-label": "select all items" }}
           />
         </TableCell>
-        {headCells.map((headCell) => (
+        {currentHeadCells.map((headCell) => (
           <TableCell
             className={classes.headerText}
             key={headCell.id}
@@ -77,10 +82,11 @@ const ItemCatalogTable = ({
   handlePreview,
   isItemsLoading,
   catalogType,
-  scrollRef
+  scrollRef,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  console.log(catalogType);
 
   const selectedItems = useSelector((state) => state.items.selectedItems);
 
@@ -128,6 +134,7 @@ const ItemCatalogTable = ({
             numSelected={selectedItems.length}
             onSelectAllClick={handleSelectAllClick}
             rowCount={currentItems.length}
+            type={catalogType}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -172,7 +179,11 @@ const ItemCatalogTable = ({
                     <TableCell align="left">{item.itemDescription}</TableCell>
                     <TableCell align="left">{item.brand}</TableCell>
                     <TableCell align="left">{item.packSize}</TableCell>
-                    <TableCell align="left">{item.stock ? item.stock : "---"}</TableCell>
+                    {catalogType === "in-stock" && (
+                      <TableCell align="left">
+                        {item.stock ? item.stock : "---"}
+                      </TableCell>
+                    )}
                     <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
                   </TableRow>
                 );
