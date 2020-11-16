@@ -50,8 +50,6 @@ const OrderItemViewControl = (props) => {
     [dispatch, setCurrentItemAdded, currentOrderId, type]
   );
 
-  console.log(type);
-
   return (
     <>
       {currentView === "list" && type === "catalog" && (

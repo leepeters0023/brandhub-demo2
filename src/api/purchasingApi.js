@@ -52,7 +52,6 @@ export const fetchRollupItems = async (filterObject, type) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -155,7 +154,6 @@ export const updateRFQNote = async (id, note) => {
 //Updates the due date or in market date on an RFQ
 export const updateRFQDate = async (id, dateType, date) => {
   const response = { status: "", error: null };
-  console.log(date);
   await axios
     .patch(
       `/api/request-for-quotes/${id}`,
@@ -172,7 +170,6 @@ export const updateRFQDate = async (id, dateType, date) => {
     )
     .then((res) => {
       const data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
     })
     .catch((err) => {

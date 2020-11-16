@@ -117,7 +117,6 @@ const rfqSlice = createSlice({
     },
     updateNote(state, action) {
       const { note } = action.payload;
-      console.log(note);
       state.currentRFQ.supplierNote = note;
     },
     updateBids(state, action) {
@@ -187,7 +186,6 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
       throw items.error;
     }
     let mappedItems = mapRollupItems(items.data.items);
-    console.log(mappedItems);
     dispatch(
       getRFQItemsSuccess({
         rfqItems: mappedItems,
@@ -225,7 +223,6 @@ export const createNewRFQ = (item, user) => async (dispatch) => {
     if (newRFQ.error) {
       throw newRFQ.error;
     }
-    console.log(newRFQ.data);
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
@@ -240,7 +237,6 @@ export const fetchSingleRFQ = (id) => async (dispatch) => {
     if (newRFQ.error) {
       throw newRFQ.error;
     }
-    console.log(newRFQ.data);
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
@@ -255,7 +251,6 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
     if (bidResponse.error) {
       throw bidResponse.error;
     }
-    console.log(bidResponse);
     let mappedRFQ = mapRFQ(bidResponse.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {

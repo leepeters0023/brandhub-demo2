@@ -548,7 +548,6 @@ const OrderSetTable = (props) => {
                               <IconButton
                                 onClick={() => {
                                   setOrderNumber(ord.id);
-                                  console.log(ord.id);
                                 }}
                               >
                                 <EditIcon fontSize="small" color="inherit" />
