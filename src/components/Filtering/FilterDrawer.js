@@ -330,7 +330,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (
         filterType === "item-inStock" ||
+        filterType === "item-in-stock" ||
         filterType === "item-onDemand" ||
+        filterType === "item-on-demand" ||
         filterType === "item-all"
       ) {
         dispatch(fetchFilteredItems(allFilters));
