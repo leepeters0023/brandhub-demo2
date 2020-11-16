@@ -77,7 +77,6 @@ const ItemCatalog = ({
 
   useEffect(() => {
     if (catalogType && currentType !== catalogType) {
-      console.log("setting");
       setCurrentType(catalogType);
       dispatch(
         updateSingleFilter({

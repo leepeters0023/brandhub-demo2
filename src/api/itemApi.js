@@ -41,6 +41,7 @@ export const fetchNextItems = async (url) => {
         items: null,
         nextLink: null,
       };
+      console.log(res);
       let data = dataFormatter.deserialize(res.data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
