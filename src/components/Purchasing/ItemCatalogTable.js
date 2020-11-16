@@ -86,7 +86,6 @@ const ItemCatalogTable = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  console.log(catalogType);
 
   const selectedItems = useSelector((state) => state.items.selectedItems);
 
