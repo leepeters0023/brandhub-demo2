@@ -41,6 +41,7 @@ export const fetchOrderSetById = async (id) => {
     .get(`/api/order-sets/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })

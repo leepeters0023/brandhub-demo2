@@ -180,6 +180,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(document.referrer);
+
   if (isLoading) {
     return <Loading />;
   }
@@ -206,7 +208,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             color="secondary"
             variant="contained"
             component={Link}
-            onClick={() => dispatch(setRetain({ value: true }))}
             to={
               orderId === "inStock"
                 ? "/orders/items/inStock"
@@ -262,7 +263,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     <IconButton
                       component={Link}
                       to={`/orders/items/inStock`}
-                      onClick={() => dispatch(setRetain({ value: true }))}
                     >
                       <ExitToAppIcon
                         fontSize="large"
@@ -299,7 +299,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                     <IconButton
                       component={Link}
                       to={`/orders/items/onDemand`}
-                      onClick={() => dispatch(setRetain({ value: true }))}
                     >
                       <ExitToAppIcon
                         fontSize="large"
