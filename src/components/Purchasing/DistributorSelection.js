@@ -8,6 +8,10 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "space-around",
     alignItems: "center",
-  }
-}))
+  },
+}));
 
 const DistributorSelection = () => {
   const classes = useStyles();
@@ -28,15 +32,25 @@ const DistributorSelection = () => {
   const [open, setOpen] = useState(false);
   const [distributor, setDistributor] = useState("");
   const [currentDistributors, setCurrentDistributors] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
   const currentOrders = useSelector((state) => state.orderSet.orders);
+  const favoriteLists = useSelector((state) => state.user.favoriteDistributors);
 
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -58,7 +72,7 @@ const DistributorSelection = () => {
         name: ord.distributorName,
         "is-active": true,
         country: "USA",
-      }))
+      }));
       setCurrentDistributors(mappedDistributors);
     }
   }, [currentOrders, currentDistributors.length]);
@@ -110,12 +124,50 @@ const DistributorSelection = () => {
         className={classes.largeButton}
         color="secondary"
         variant="contained"
+        disabled={favoriteLists.length === 0}
+        aria-controls="favorite-dist-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
       >
-        USE FAVORITES
+        {favoriteLists.length > 0 ? "USE FAVORITES" : "NO FAVORITES SET"}
       </Button>
+      {favoriteLists.length > 0 && (
+        <Menu
+          id="favorite-dist-menu"
+          anchorEl={anchorEl}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          style={{marginTop: "10px", width: "100%"}}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {favoriteLists.map((fav, index) => {
+            if (index !== favoriteLists.length - 1) {
+              return [
+                <MenuItem key={fav.id} onClick={handleClose}>
+                  <ListItemText primary={fav.name} />
+                </MenuItem>,
+                <Divider />,
+              ];
+            } else {
+              return (
+                <MenuItem key={fav.id} onClick={handleClose}>
+                  <ListItemText primary={fav.name} />
+                </MenuItem>
+              );
+            }
+          })}
+        </Menu>
+      )}
     </div>
   );
 };
-
 
 export default React.memo(DistributorSelection);
