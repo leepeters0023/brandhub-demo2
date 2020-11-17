@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
 
-import { deleteSingleDistributor } from "../../redux/slices/userSlice";
+import { updateAttentionLine } from "../../redux/slices/userSlice";
+
+import EditAttnModal from "./EditAttnModal";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -17,23 +19,46 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-import CancelIcon from "@material-ui/icons/Cancel";
+import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const DistributorTable = ({ distributors, isLoading, id }) => {
+const DistributorAttnTable = ({ distributors, isLoading }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const handleDelete = (distId) => {
-    dispatch(deleteSingleDistributor({ id: id, distId: distId}))
+  const [currentDist, setCurrentDist] = useCallback(useState(null));
+  const [isEditOpen, setEditOpen] = useCallback(useState(false));
+
+  const handleEdit = (id, value) => {
+    dispatch(updateAttentionLine({ id: id, attn: value }));
+  };
+
+  const handleEditOpen = (id, value, name) => {
+    setCurrentDist({ id: id, attn: value, name: name });
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setCurrentDist(null);
+    setEditOpen(false);
   };
 
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
+      {currentDist && (
+        <EditAttnModal
+          id={currentDist.id}
+          attention={currentDist.attn}
+          dist={currentDist.name}
+          handleEdit={handleEdit}
+          editOpen={isEditOpen}
+          handleClose={handleEditClose}
+        />
+      )}
+      <TableContainer className={classes.tableContainer} style={{maxHeight: "45vh"}}>
         <Table stickyHeader className={classes.table}>
           <TableHead>
             <TableRow>
@@ -52,15 +77,18 @@ const DistributorTable = ({ distributors, isLoading, id }) => {
               <TableCell className={classes.headerText} align="left">
                 Zip
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Attention
+              </TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
             {!isLoading && distributors.length === 0 && (
               <TableRow>
-                <TableCell align="left" colSpan={6}>
+                <TableCell align="left" colSpan={7}>
                   <Typography className={classes.headerText}>
-                    {`You currently don't have any favorite distributors set...`}
+                    {`There are no distributors that fit your search criteria...`}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -80,10 +108,15 @@ const DistributorTable = ({ distributors, isLoading, id }) => {
                   <TableCell align="left">{dist.city}</TableCell>
                   <TableCell align="left">{dist.state}</TableCell>
                   <TableCell align="left">{dist.zip}</TableCell>
+                  <TableCell align="left">{dist.attn}</TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Remove Favorite">
-                      <IconButton onClick={() => handleDelete(dist.id)}>
-                        <CancelIcon fontSize="small" color="inherit" />
+                    <Tooltip title="Edit Attention">
+                      <IconButton
+                        onClick={() =>
+                          handleEditOpen(dist.id, dist.attn, dist.name)
+                        }
+                      >
+                        <EditIcon fontSize="small" color="inherit" />
                       </IconButton>
                     </Tooltip>
                   </TableCell>
@@ -103,9 +136,9 @@ const DistributorTable = ({ distributors, isLoading, id }) => {
   );
 };
 
-DistributorTable.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
+DistributorAttnTable.propTypes = {
   distributors: PropTypes.array.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
-export default React.memo(DistributorTable);
+export default React.memo(DistributorAttnTable);

@@ -179,6 +179,11 @@ const userSlice = createSlice({
       );
       state.favoriteDistributors = updatedDistributors;
     },
+    updateAttentionLine(state, action) {
+      const { id, attn } = action.payload
+      //TODO
+      console.log(id, attn);
+    },
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
@@ -209,6 +214,7 @@ export const {
   setDistributors,
   deleteSingleDistributor,
   deleteDistributorList,
+  updateAttentionLine,
   removeUser,
   setLogInFailure,
   setFailure,
