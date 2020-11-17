@@ -23,7 +23,7 @@ const FiltersItems = ({
   classes,
   sequenceNum,
   bindSequenceNum,
-  handleSearch
+  handleSearch,
 }) => {
   const dispatch = useDispatch();
 
@@ -57,6 +57,16 @@ const FiltersItems = ({
         <ListItem />
         <Divider />
         <ListItem />
+        <ListItem>
+          <Button
+            fullWidth
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+          >
+            FILTER FAVORITES
+          </Button>
+        </ListItem>
         <ListItem>
           <BrandAutoComplete
             classes={classes}
