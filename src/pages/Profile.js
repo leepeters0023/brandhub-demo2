@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useWindowHash } from "../hooks/UtilityHooks";
 
 import General from "../components/Profile/General";
-import FavoriteDistributors from "../components/Profile/FavoriteDistributors";
+import DistributorOptions from "../components/Profile/DistributorOptions";
 import FavoriteItems from "../components/Profile/FavoriteItems";
 
 import Container from "@material-ui/core/Container";
@@ -61,7 +61,7 @@ const Profile = ({ userType, handleFiltersClosed }) => {
                   handleChangeTab(evt, 2);
                 }}
               >
-                <ListItemText primary="Favorite Distributors" />
+                <ListItemText primary="Distributor Options" />
               </ListItem>
               <Divider />
               <ListItem
@@ -77,7 +77,7 @@ const Profile = ({ userType, handleFiltersClosed }) => {
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
             {selectedIndex === 1 && <General />}
-            {selectedIndex === 2 && <FavoriteDistributors />}
+            {selectedIndex === 2 && <DistributorOptions />}
             {selectedIndex === 3 && <FavoriteItems classes={classes}/>}
           </Grid>
           <Grid item md={1} xs={false} />

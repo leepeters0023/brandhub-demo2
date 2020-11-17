@@ -252,7 +252,8 @@ export const generateShippingParams = (dataPoints) => {
   };
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
-    let distributor = distributors[Math.floor(Math.random()*distributors.length)]
+    let distributor =
+      distributors[Math.floor(Math.random() * distributors.length)];
     data.push({
       id: i + 1,
       distributor: distributor.name,
@@ -276,7 +277,7 @@ export const generatePendingComplianceItems = (dataPoints) => {
       distributors[Math.floor(Math.random() * distributors.length)];
     let totalItems = Math.floor(Math.random() * 1000) + 500;
     data.push({
-      id: i+1,
+      id: i + 1,
       territory: territory,
       user: user,
       distributorName: distributor.name,
@@ -288,6 +289,141 @@ export const generatePendingComplianceItems = (dataPoints) => {
   }
   return data;
 };
+
+export const distributorList = [
+  {
+    id: "1",
+    name: "ABC Storage",
+    city: "Evansville",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "WY",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "P",
+    pos_only: false,
+  },
+
+  {
+    id: "2",
+    name: "Albertson's LLC Intermtn Div",
+    city: "Boise",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "ID",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "P",
+    pos_only: false,
+  },
+
+  {
+    id: "3",
+    name: "Antonio Origliio Inc",
+    city: "Philadelphia",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "PA",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "4",
+    name: "Blue Ridge Bev Co",
+    city: "Abingdon",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "VA",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "5",
+    name: "Blue Rock Dist",
+    city: "Miles City",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "MT",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "6",
+    name: "Breakthru Bev",
+    city: "Rockford",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "IL",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "P",
+    pos_only: false,
+  },
+  {
+    id: "7",
+    name: "Bronkens Good Time Co",
+    city: "Bozeman",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "MT",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "8",
+    name: "Clatsop Dist",
+    city: "Warrenton",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "OR",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "9",
+    name: "Crown Dist",
+    city: "Aberdeen",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "WA",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "S",
+    pos_only: false,
+  },
+  {
+    id: "10",
+    name: "Dayton Heidelberg",
+    city: "Moraine",
+    zip: "01938",
+    "street-address-1": "1 Main St",
+    country: "USA",
+    state: "OH",
+    attn: "Firstname Lastname",
+    is_active: true,
+    type: "P",
+    pos_only: true,
+  },
+];
 
 export const rules = [
   {
