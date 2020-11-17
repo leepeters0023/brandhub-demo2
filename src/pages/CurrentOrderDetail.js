@@ -180,8 +180,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(document.referrer);
-
   if (isLoading) {
     return <Loading />;
   }
