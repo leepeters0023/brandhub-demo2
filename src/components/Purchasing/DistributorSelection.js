@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
+
+import CustomAddressModal from "./CustomAddressModal";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -12,7 +14,17 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+
+const typeMap = {
+  "in-stock": "In Stock",
+  "on-demand": "On Demand",
+  "pre-order": "Pre Order",
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -30,6 +42,7 @@ const DistributorSelection = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useCallback(useState(false));
   const [distributor, setDistributor] = useState("");
   const [currentDistributors, setCurrentDistributors] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -37,7 +50,10 @@ const DistributorSelection = () => {
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
   const currentOrders = useSelector((state) => state.orderSet.orders);
+  const orderSetId = useSelector((state) => state.orderSet.orderId);
+  const orderType = useSelector((state) => state.orderSet.type);
   const favoriteLists = useSelector((state) => state.user.favoriteDistributors);
+  const currentRole = useSelector((state) => state.user.role);
 
   const loading = open && isLoading;
 
@@ -79,6 +95,12 @@ const DistributorSelection = () => {
 
   return (
     <div className={classes.distSelection}>
+      <CustomAddressModal
+        orderSetId={orderSetId}
+        orderType={typeMap[orderType]}
+        open={isModalOpen}
+        handleClose={setModalOpen}
+      />
       <Autocomplete
         multiple
         freeSolo
@@ -119,18 +141,27 @@ const DistributorSelection = () => {
           />
         )}
       />
-      <Button
-        fullWidth
-        className={classes.largeButton}
-        color="secondary"
-        variant="contained"
-        disabled={favoriteLists.length === 0}
-        aria-controls="favorite-dist-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        {favoriteLists.length > 0 ? "USE FAVORITES" : "NO FAVORITES SET"}
-      </Button>
+      <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <Button
+          fullWidth
+          className={classes.largeButton}
+          color="secondary"
+          variant="contained"
+          disabled={favoriteLists.length === 0}
+          aria-controls="favorite-dist-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          {favoriteLists.length > 0 ? "USE FAVORITES" : "NO FAVORITES SET"}
+        </Button>
+        {currentRole !== "field1" && (
+          <Tooltip title={"Add Custom Address"}>
+            <IconButton edge="end" onClick={() => setModalOpen(true)}>
+              <AddCircleIcon color="inherit" fontSize="large" />
+            </IconButton>
+          </Tooltip>
+        )}
+      </div>
       {favoriteLists.length > 0 && (
         <Menu
           id="favorite-dist-menu"
@@ -144,7 +175,7 @@ const DistributorSelection = () => {
             vertical: "top",
             horizontal: "center",
           }}
-          style={{marginTop: "10px", width: "100%"}}
+          style={{ marginTop: "10px", width: "100%" }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
