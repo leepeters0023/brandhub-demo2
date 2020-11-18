@@ -27,6 +27,7 @@ import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
 import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
+import { fetchTerritories, clearTerritories } from "./redux/slices/territorySlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -122,6 +123,7 @@ const App = () => {
     dispatch(resetOrderSetHistory());
     dispatch(clearOrderSet());
     dispatch(resetNewProgram());
+    dispatch(clearTerritories());
   };
 
   useEffect(() => {
@@ -140,6 +142,7 @@ const App = () => {
         dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
+        dispatch(fetchTerritories());
       } else {
         dispatch(clearPrograms());
       }

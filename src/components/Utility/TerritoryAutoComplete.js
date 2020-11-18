@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector /*useDispatch*/ } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-//import { fetchTerritories } from "../../redux/slices/territorySlice";
+import { fetchTerritoriesByName } from "../../redux/slices/territorySlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
-//mockData
-import { regions } from "../../utility/constants";
 
 const TerritoryAutoComplete = ({
   classes,
@@ -19,29 +16,28 @@ const TerritoryAutoComplete = ({
   setReset,
   filterType,
 }) => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [territory, setTerritory] = useState("");
   const [currentTerritories, setCurrentTerritories] = useState([]);
 
-  //const isLoading = useSelector((state) => state.territories.isLoading);
-  const options = regions;
+  const isLoading = useSelector((state) => state.territories.isLoading);
+  const options = useSelector((state) => state.territories.filteredTerritoryList);;
   const currentFiltersTerritory = useSelector(
     (state) => state.filters.territory
   );
 
-  //const loading = open && isLoading;
-  const loading = false;
+  const loading = open && isLoading;
 
   const handleTerritories = (value) => {
     setCurrentTerritories(value);
   };
 
-  // useEffect(() => {
-  //   if (territory.length >= 1) {
-  //     dispatch(fetchTerritories(territory));
-  //   }
-  // }, [territory, dispatch]);
+  useEffect(() => {
+    if (territory.length >= 1) {
+      dispatch(fetchTerritoriesByName(territory));
+    }
+  }, [territory, dispatch]);
 
   useEffect(() => {
     if (currentFiltersTerritory.length !== currentTerritories.length) {

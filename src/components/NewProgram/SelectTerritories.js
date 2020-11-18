@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { updateTerritories } from "../../redux/slices/newProgramSlice";
 
@@ -9,19 +9,17 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-
-//mockdata switch when territory fetch becomes available
-import { regions } from "../../utility/constants";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const TerritorySelector = React.memo(
-  ({ classes, handleTerritories }) => (
+  ({ classes, handleTerritories, territories }) => (
     <div className={classes.inputRow}>
       <Autocomplete
         multiple
         fullWidth
         freeSolo
         id="tags-standard"
-        options={regions}
+        options={territories}
         getOptionLabel={(option) => option.name}
         onChange={(_evt, value) => handleTerritories(value)}
         renderInput={(params) => (
@@ -47,12 +45,19 @@ const SelectTerritories = ({ classes }) => {
 
   const [allTerritories, setAllTerritories] = useCallback(useState(false));
 
+  const territories = useSelector((state) => state.territories.territoryList);
+  const isLoading = useSelector((state) => state.territories.isLoading);
+
   const handleTerritories = useCallback(
     (value, _type, _filter) => {
       dispatch(updateTerritories({ territories: value }));
     },
     [dispatch]
   );
+
+  if (isLoading) {
+    return <CircularProgress />
+  }
 
   return (
     <>
@@ -64,7 +69,7 @@ const SelectTerritories = ({ classes }) => {
               if (allTerritories) {
                 dispatch(updateTerritories({ territories: [] }));
               } else {
-                dispatch(updateTerritories({ territories: regions }));
+                dispatch(updateTerritories({ territories: territories }));
               }
               setAllTerritories(!allTerritories);
             }}
@@ -78,6 +83,7 @@ const SelectTerritories = ({ classes }) => {
         <TerritorySelector
           classes={classes}
           handleTerritories={handleTerritories}
+          territories={territories}
         />
       )}
     </>
