@@ -183,10 +183,13 @@ const ItemRollupTable = ({
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
   const [currentId, setCurrentId] = useCallback(useState(null));
 
-  const handleOpenConfirm = useCallback((id) => {
-    setCurrentId(id)
-    setConfirmOpen(true);
-  }, [setConfirmOpen, setCurrentId]);
+  const handleOpenConfirm = useCallback(
+    (id) => {
+      setCurrentId(id);
+      setConfirmOpen(true);
+    },
+    [setConfirmOpen, setCurrentId]
+  );
 
   const handleRemove = useCallback(
     (id) => {
@@ -332,11 +335,26 @@ const ItemRollupTable = ({
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
-                    <TableCell align="left">
-                      {row.program.name
-                        ? row.program.name
-                        : row.program[0].name}
-                    </TableCell>
+                    {row.programs.length > 1 && (
+                      <Tooltip title={`${row.programs.join(", ")}`}>
+                        <TableCell align="left">
+                          {row.program && row.program !== "---"
+                            ? row.program.name
+                            : row.programs.length > 0
+                            ? row.programs[0].name
+                            : "---"}
+                        </TableCell>
+                      </Tooltip>
+                    )}
+                    {row.programs.length <= 1 && (
+                      <TableCell align="left">
+                        {row.program && row.program !== "---"
+                          ? row.program.name
+                          : row.programs.length > 0
+                          ? row.programs[0].name
+                          : "---"}
+                      </TableCell>
+                    )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
                     {type === "po" && (
