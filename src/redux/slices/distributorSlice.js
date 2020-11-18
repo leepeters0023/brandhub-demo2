@@ -19,6 +19,7 @@ notes: notes: This slice is users soley to build the distributor auto complete f
 let initialState = {
   isLoading: false,
   distributorList: [],
+  editAttnList: [],
   error: null,
 };
 
@@ -38,14 +39,19 @@ const distributorSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     getDistributorsSuccess(state, action) {
-      const { distributors } = action.payload;
-      state.distributorList = distributors
+      const { distributors, attn } = action.payload;
+      if (!attn) {
+        state.distributorList = distributors
+      } else {
+        state.editAttnList = distributors
+      }
       state.isLoading = false;
       state.error = null;
     },
     clearDistributors(state) {
       state.isLoading = false;
       state.distributorList = [];
+      state.editAttnList = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -61,14 +67,19 @@ export const {
 
 export default distributorSlice.reducer;
 
-export const fetchUserDistributors = (name) => async (dispatch) => {
+export const fetchUserDistributors = (name, attn = false) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     let distributors = await fetchDistributors(name);
     if (distributors.error) {
       throw distributors.error;
     }
-    dispatch(getDistributorsSuccess({ distributors: distributors.data }));
+    //for mock data, will update when fields are there
+    let mappedDistributors = distributors.data.map((dist) => ({
+      ...dist,
+      attn: "Firstname Lastname"
+    }))
+    dispatch(getDistributorsSuccess({ distributors: mappedDistributors, attn: attn }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
