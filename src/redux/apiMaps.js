@@ -26,33 +26,6 @@ const monthMap = {
   12: "December",
 };
 
-// let traegerImages = [
-//   {
-//     brand: "Traeger",
-//     itemType: "Large Grill Fence",
-//     imgUrl:
-//       "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg",
-//   },
-//   {
-//     brand: "Trager",
-//     itemType: "Cleaning Product Display",
-//     imgUrl:
-//       "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg",
-//   },
-//   {
-//     brand: "Trager",
-//     itemType: "Shelf Drop Tray Display",
-//     imgUrl:
-//       "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_ShelfDripTrayDisplay_xpdb9b.jpg",
-//   },
-//   {
-//     brand: "Trager",
-//     itemType: "Sauce Rub Fixture",
-//     imgUrl:
-//       "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_SauceRubFixture_pphgyn.jpg",
-//   },
-// ];
-
 export const mapItems = (items) => {
   let mappedItems = items.map((item) => ({
     id: item.id,
@@ -68,12 +41,6 @@ export const mapItems = (items) => {
     stock: Math.floor(Math.random() * 25 + 26),
     imgUrl: item["img-url"],
   }));
-  // let demoItems = mappedItems.map((item, index) => ({
-  //   ...item,
-  //   imgUrl: index < 4 ? traegerImages[index].imgUrl : item.imgUrl,
-  //   itemType: index < 4 ? traegerImages[index].itemType : item.itemType,
-  //   brand: index < 4 ? "Traeger" : item.brand
-  // }))
   return mappedItems;
 };
 
@@ -96,13 +63,6 @@ export const mapOrderSetItems = (items) => {
     status: item["order-set-status"],
     orderSetId: item["order-set"].id,
   }));
-  // let demoItems = mappedItems.slice(0, 4);
-  // demoItems = demoItems.map((item, index) => ({
-  //   ...item,
-  //   imgUrl: traegerImages[index].imgUrl,
-  //   itemType: traegerImages[index].itemType,
-  //   brand: "Traeger",
-  // }));
   return mappedItems;
 };
 
@@ -225,14 +185,6 @@ export const mapOrderItems = (items, type) => {
         ? 1
         : 0;
     });
-  // let demoItems = mappedItems.slice(0, 4);
-  // demoItems = demoItems.map((item, index) => ({
-  //   ...item,
-  //   imgUrl: traegerImages[index].imgUrl,
-  //   itemType: traegerImages[index].itemType,
-  //   brand: "Traeger",
-  // }));
-  // console.log(demoItems);
   return mappedItems;
 };
 
@@ -271,11 +223,11 @@ export const mapOrderSetHistory = (orders) => {
 export const mapRollupItems = (items) => {
   const determineProgram = (i) => {
     if (i["order-program"]) {
-      return [i["order-program"]];
+      return i["order-program"];
     } else {
       if (i.programs && i.programs.length > 1) {
         return earliestDate(i.programs)[0];
-      } else if (i.programs) {
+      } else if (i.programs.length === 1) {
         return i.programs[0];
       } else {
         return "---";
