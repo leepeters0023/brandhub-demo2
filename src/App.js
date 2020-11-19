@@ -120,6 +120,7 @@ const App = () => {
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  //const link = useSelector((state) => state.user.redirectLink);
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
@@ -323,7 +324,7 @@ const App = () => {
         id="main-container"
         style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
       >
-        {role === "view-only" && territories.length === 0 && (
+        {currentRole === "view-only" && territories.length === 0 && (
           <Redirect noThrow to="/newUser" />
         )}
         {window.location.pathname.includes("/oauth") && (
