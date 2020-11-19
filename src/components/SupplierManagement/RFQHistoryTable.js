@@ -42,14 +42,18 @@ const headCells = [
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
+headCells.map((item, i) => {
+  let x = item.map()
+  })
+
 const EnhancedTableHead = (props) => {
   const { classes, order, orderBy, onRequestSort } = props;
   const role = useSelector((state) => state.user.role);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-  console.log(role)
 
+ 
   return (
     <TableHead>
       <TableRow>
