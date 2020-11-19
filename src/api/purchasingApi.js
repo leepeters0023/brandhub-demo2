@@ -52,6 +52,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -288,3 +289,159 @@ export const fetchRFQ = async (id) => {
     });
   return response;
 };
+
+//Creates a new PO based on an item and it's associated program
+export const createPO = async (ids, orderType) => {
+  const response = { status: "", error: null, data: null };
+  let requestBody = {
+    data: {
+      type: "purchase-order",
+      attributes: {
+        "item-ids": ids,
+        "order-type": orderType,
+      }
+    },
+  };
+  await axios
+    .post("/api/purchase-orders", requestBody, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Updates the note on an PO
+export const updatePONote = async (id, note) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            note: note,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Updates date fields on the PO
+export const updatePODate = async (id, dateType, date) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            [`${dateType}`]: date,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Adds additional line items (like a set up fee) to a po
+export const addAdditionalPOCost = async (id, name, cost) => {
+  const response = { status: "", errror: null };
+  await axios
+    .post(
+      "/api/order-items",
+      {
+        data: {
+          type: "order-item",
+          attributes: {
+            "item-type-description": "Additional PO Cost",
+            name: name,
+            cost: cost,
+          },
+          relationships: {
+            "purchase-order": {
+              data: {
+                type: "purchase-order",
+                id: id
+              }
+            }
+          }
+        }
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
+//Updates the actual cost of an item on a po
+export const updatePOItemCost = async (id, itemId, cost) => {
+  const response = { status: "", errror: null };
+  await axios
+    .patch(
+      `/api/order-items/${itemId}`,
+      {
+        data: {
+          type: "order-item",
+          id: itemId,
+          attributes: {
+            "actual-cost": cost
+          },
+          relationships: {
+            "purchase-order": {
+              data: {
+                type: "purchase-order",
+                id: id
+              }
+            }
+          }
+        }
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
