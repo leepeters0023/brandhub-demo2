@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
@@ -48,15 +48,15 @@ const EnhancedTableHead = (props) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
-  if (role === "supplier") {
-    let x = headCells.map((item) => item.id)
-    let index = x.indexOf("totalEstCost")
-    let y = headCell.map((z, i) => {
-      
-    }
-    console.log(y)
-  };
+  
+  useEffect(() =>{
+    if (role === "supplier") {
+      let x = headCells.map((item) => item.id)
+      let index = x.indexOf("totalEstCost")
+      headCells.splice(index, 1);
+      console.log(headCells)
+    };
+  },[role])
   
   return (
     <TableHead>
