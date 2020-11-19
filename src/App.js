@@ -12,7 +12,10 @@ import {
   setIsLoading,
   clearPrograms,
 } from "./redux/slices/programsSlice";
-import { fetchPreOrders, clearPreOrderDetail } from "./redux/slices/preOrderDetailSlice";
+import {
+  fetchPreOrders,
+  clearPreOrderDetail,
+} from "./redux/slices/preOrderDetailSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
 import {
   clearCurrentOrder,
@@ -27,8 +30,12 @@ import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
 import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
-import { fetchTerritories, clearTerritories } from "./redux/slices/territorySlice";
+import {
+  fetchTerritories,
+  clearTerritories,
+} from "./redux/slices/territorySlice";
 
+import AuthOLanding from "./pages/AuthOLanding";
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
@@ -42,8 +49,9 @@ import FilterDrawer from "./components/Filtering/FilterDrawer";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
+import Landing from "./pages/Landing";
 import Loading from "./components/Utility/Loading";
-import LogIn from "./components/Login";
+//import LogIn from "./components/Login";
 import OrderApprovals from "./pages/OrderApprovals";
 import OrderHistory from "./pages/OrderHistory";
 import PendingCompliance from "./pages/PendingCompliance";
@@ -78,9 +86,9 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(
     window.localStorage.getItem("brandhub-user")
   );
-  const [role, setRole] = useState(
-    window.localStorage.getItem("brandhub-role")
-  );
+  // const [role, setRole] = useState(
+  //   window.localStorage.getItem("brandhub-role")
+  // );
   const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
   const [couponsOpen, setCouponsOpen] = useCallback(useState(false));
 
@@ -94,10 +102,11 @@ const App = () => {
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  //const link = useSelector((state) => state.user.redirectLink);
 
-  const handleLogIn = (user) => {
-    setRole(user);
-  };
+  // const handleLogIn = (user) => {
+  //   setRole(user);
+  // };
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
@@ -134,7 +143,7 @@ const App = () => {
     };
 
     if (currentUser && currentRole.length > 0) {
-      setRole(currentRole);
+      //setRole(currentRole);
       if (currentRole !== "supplier") {
         dispatch(fetchInitialPrograms(currentTerritory.id));
         dispatch(fetchPreOrders(currentUserId, "initial"));
@@ -168,9 +177,13 @@ const App = () => {
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
-        <Redirect noThrow to="/login" />
+        {/* <Redirect noThrow to="/login" /> */}
+        {/* {!link && <Redirect noThrow to="/oauth/initial" />} */}
         <Router>
-          <LogIn setAuth={handleLogIn} path="/login" />
+          {/* <LogIn setAuth={handleLogIn} path="/login" /> */}
+          <Landing path="/" />
+          <AuthOLanding path="/oauth" />
+          <AuthOLanding path="/oauth/:code" />
         </Router>
       </MuiThemeProvider>
     );
@@ -188,7 +201,7 @@ const App = () => {
     return (
       <MuiThemeProvider theme={theme}>
         <TopDrawerNav
-          userType={role}
+          userType={currentRole}
           handleLogout={handleLogout}
           handleCouponModal={handleCouponModal}
         />
@@ -201,7 +214,7 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       {loggedIn && (
         <TopDrawerNav
-          userType={role}
+          userType={currentRole}
           handleLogout={handleLogout}
           handleCouponModal={handleCouponModal}
         />
@@ -218,45 +231,48 @@ const App = () => {
         id="main-container"
         style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
       >
-        {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
+        {window.location.pathname.includes("/oauth") && (
+          <Redirect noThrow to="/dashboard" />
+        )}
 
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
+          <Landing path="/" />
           <Dashboard
-            path="/"
-            userType={role}
+            path="/dashboard"
+            userType={currentRole}
             handleFiltersClosed={handleFiltersClosed}
           />
           {handleAuth(
             <Programs
               path="/programs"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/programs",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <ProgramNew
               path="/programs/new"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/programs",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Program
               path="/program/:programId"
-              userType={role}
+              userType={currentRole}
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/program",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <CurrentPreOrder
@@ -265,39 +281,39 @@ const App = () => {
             />,
             "/orders/open/preorder",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <CurrentOrderDetail
               path="/orders/open/:orderId"
-              userType={role}
+              userType={currentRole}
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/open",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PlaceInStockOrder
               path="/orders/items/inStock"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/orders/items/inStock",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PlaceOnDemandOrder
               path="/orders/items/onDemand"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <RFQRollup
@@ -307,7 +323,7 @@ const App = () => {
             />,
             "/purchasing/rfqRollup",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <RFQ
@@ -316,7 +332,7 @@ const App = () => {
             />,
             "/purchasing/rfq",
             ["field2", "super", "supplier"],
-            role
+            currentRole
           )}
           {handleAuth(
             <RFQHistory
@@ -326,7 +342,7 @@ const App = () => {
             />,
             "/purchasing/rfqHistory",
             ["field2", "super", "supplier"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PurchaseOrderRollup
@@ -336,7 +352,7 @@ const App = () => {
             />,
             "/purchasing/poRollup",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PurchaseOrder
@@ -345,7 +361,7 @@ const App = () => {
             />,
             "/purchasing/purchaseOrder",
             ["field2", "super", "supplier"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PurchaseOrderHistory
@@ -355,7 +371,7 @@ const App = () => {
             />,
             "/purchasing/poHistory",
             ["field2", "super", "supplier"],
-            role
+            currentRole
           )}
           {handleAuth(
             <SingleOrder
@@ -364,29 +380,29 @@ const App = () => {
             />,
             "/orders/history",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <OrderHistory
               path="/orders/history"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/orders/history",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <OrderApprovals
               path="/orders/approvals"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/orders/approvals",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Rollup
@@ -396,7 +412,7 @@ const App = () => {
             />,
             "/rollup",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <CurrentOrderDetail
@@ -405,7 +421,7 @@ const App = () => {
             />,
             "/rollup/detail",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Coupons
@@ -414,18 +430,18 @@ const App = () => {
             />,
             "/coupons",
             ["field1", "field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <ItemCatalog
               path="/items/:catalogType"
-              userType={role}
+              userType={currentRole}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/items",
             ["field1", "field2", "compliance", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <PendingCompliance
@@ -434,17 +450,17 @@ const App = () => {
             />,
             "/compliance/pending",
             ["field2", "compliance", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <ComplianceContacts
               path="/compliance/contacts"
-              userType={role}
+              userType={currentRole}
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/compliance/contacts",
             ["field2", "compliance", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <ComplianceItems
@@ -454,7 +470,7 @@ const App = () => {
             />,
             "/orders/items/onDemand",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <ComplianceRules
@@ -464,7 +480,7 @@ const App = () => {
             />,
             "/orders/items/onDemand",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <BudgetVsSpend
@@ -474,33 +490,33 @@ const App = () => {
             />,
             "/budgets/ytod",
             ["field2", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Profile
               path="/profile"
-              userType={role}
+              userType={currentRole}
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/profile",
             ["field1", "field2", "compliance", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Settings
               path="/settings"
-              userType={role}
+              userType={currentRole}
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/settings",
             ["field1", "field2", "compliance", "super"],
-            role
+            currentRole
           )}
           {handleAuth(
             <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
             "/help",
             [],
-            role
+            currentRole
           )}
           <FourOhFour default path="/whoops" />
         </Router>

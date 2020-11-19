@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser, logInUser } from "../../api/userApi";
+import { getLoginURL, getUser, logInUser, loginUserWithAuthO } from "../../api/userApi";
 
 /*
 * DataFormat:
@@ -58,6 +58,7 @@ let initialState = {
   initials: "",
   email: "",
   role: "",
+  redirectLink: null,
   territories: [],
   managedUsers: [],
   currentTerritory: "",
@@ -179,6 +180,10 @@ const userSlice = createSlice({
       );
       state.favoriteDistributors = updatedDistributors;
     },
+    setRedirectLink(state, action) {
+      const { link } = action.payload;
+      state.redirectLink = link
+    },
     updateAttentionLine(state, action) {
       const { id, attn } = action.payload
       //TODO
@@ -192,6 +197,7 @@ const userSlice = createSlice({
       state.initials = "";
       state.email = "";
       state.role = "";
+      state.redirectLink = null;
       state.territories = [];
       state.managedUsers = [];
       state.error = null;
@@ -208,6 +214,7 @@ export const {
   setLoginLoading,
   getUserSuccess,
   setLoginSuccess,
+  setRedirectLink,
   updateCurrentTerritory,
   createNewFavoriteDistList,
   updateDistributorListName,
@@ -277,3 +284,31 @@ export const logIn = (email, password) => async (dispatch) => {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
 };
+
+export const loginWithCode = (code) => async (dispatch) => {
+  try {
+    dispatch(setLoginLoading());
+    const res = await loginUserWithAuthO(code);
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setLoginSuccess());
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
+  }
+}
+
+export const getRedirect = () => async (dispatch) => {
+  try {
+    console.log("getting url")
+    const res = await getLoginURL()
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setRedirectLink({link: res.data["redirect_url"]}));
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
+  }
+}
