@@ -7,14 +7,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredPOItems } from "../redux/slices/purchaseOrderSlice";
-import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
-import { createNewRFQ } from "../redux/slices/rfqSlice"
+//import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
+import { createNewRFQ } from "../redux/slices/rfqSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
+import AddToPOMenu from "../components/SupplierManagement/AddToPOMenu";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -61,9 +60,17 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
-  const isPOItemsLoading = useSelector((state) => state.purchaseOrder.isLoading);
+  const isPOHistoryLoading = useSelector(
+    (state) => state.purchaseOrderHistory.isLoading
+  );
+  const draftPOs = useSelector((state) => state.purchaseOrderHistory.pos);
+  const isPOItemsLoading = useSelector(
+    (state) => state.purchaseOrder.isLoading
+  );
   const currentPOItems = useSelector((state) => state.purchaseOrder.poItems);
-  const selectedPOItems = useSelector((state) => state.purchaseOrder.selectedPOItems);
+  const selectedPOItems = useSelector(
+    (state) => state.purchaseOrder.selectedPOItems
+  );
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentOrderType = useSelector((state) => state.filters.orderType);
@@ -82,14 +89,16 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleNewRFQ = () => {
-    let currentItem = currentPOItems.find((item) => item.id === selectedPOItems[0]);
-    dispatch(createNewRFQ(selectedPOItems[0], currentItem.program[0].id))
-  }
+    let currentItem = currentPOItems.find(
+      (item) => item.id === selectedPOItems[0]
+    );
+    dispatch(createNewRFQ(selectedPOItems[0], currentItem.program[0].id));
+  };
 
   const handleNewPO = () => {
     //TODO
     console.log(selectedPOItems);
-  }
+  };
 
   useInitialFilters(
     "itemRollup-po",
@@ -99,6 +108,14 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  /*
+  useEffect(() => {
+    if (draftPOs.length === 0) {
+      dispatch(fetchFilteredPOHistory({ ... filters here ... }))
+    }
+  }, [])
+  */
 
   return (
     <>
@@ -110,7 +127,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
           <div
             style={{
               display: "flex",
-              width: "500px",
+              width: "650px",
               justifyContent: "flex-end",
             }}
           >
@@ -122,11 +139,19 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 disabled={selectedPOItems.length !== 1}
                 style={{ marginRight: "20px" }}
                 onClick={() => {
-                  handleNewRFQ()
+                  handleNewRFQ();
                   navigate("/purchasing/rfq#new");
                 }}
-              >REQUEST QUOTE</Button>
+              >
+                REQUEST QUOTE
+              </Button>
             )}
+            <AddToPOMenu
+              classes={classes}
+              isLoading={isPOHistoryLoading}
+              draftPOs={draftPOs}
+              itemSelected={itemSelected}
+            />
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -134,7 +159,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
               onClick={() => {
-                handleNewPO()
+                handleNewPO();
                 navigate("/purchasing/purchaseOrder#new");
               }}
             >

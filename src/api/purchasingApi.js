@@ -44,7 +44,13 @@ export const fetchRollupItems = async (filterObject, type) => {
     sortMap[filterObject.sortOrderBy]
   }`;
 
-  let queryString = buildFilters(filterObject, typeBool, sortString, "/api/item-rollups", "rollup")
+  let queryString = buildFilters(
+    filterObject,
+    typeBool,
+    sortString,
+    "/api/item-rollups",
+    "rollup"
+  );
 
   const response = { status: "", error: null, data: null };
   await axios
@@ -224,7 +230,13 @@ export const fetchRFQHistory = async (filterObject) => {
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString = buildFilters(filterObject, "", sortString, "/api/request-for-quotes", "rfq-history")
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/request-for-quotes",
+    "rfq-history"
+  );
 
   const response = { status: "", error: null, data: null };
   await axios
@@ -299,7 +311,7 @@ export const createPO = async (ids, orderType) => {
       attributes: {
         "item-ids": ids,
         "order-type": orderType,
-      }
+      },
     },
   };
   await axios
@@ -378,10 +390,10 @@ export const addAdditionalPOCost = async (id, name, cost) => {
   const response = { status: "", errror: null };
   await axios
     .post(
-      "/api/order-items",
+      "/api/purchase-order-items",
       {
         data: {
-          type: "order-item",
+          type: "purchase-order-item",
           attributes: {
             "item-type-description": "Additional PO Cost",
             name: name,
@@ -391,11 +403,11 @@ export const addAdditionalPOCost = async (id, name, cost) => {
             "purchase-order": {
               data: {
                 type: "purchase-order",
-                id: id
-              }
-            }
-          }
-        }
+                id: id,
+              },
+            },
+          },
+        },
       },
       writeHeaders
     )
@@ -408,30 +420,22 @@ export const addAdditionalPOCost = async (id, name, cost) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 //Updates the actual cost of an item on a po
-export const updatePOItemCost = async (id, itemId, cost) => {
+export const updatePOItemCost = async (id, cost) => {
   const response = { status: "", errror: null };
   await axios
     .patch(
-      `/api/order-items/${itemId}`,
+      `/api/purchase-order-items/${id}`,
       {
         data: {
-          type: "order-item",
-          id: itemId,
+          type: "purchase-order-item",
+          id: id,
           attributes: {
-            "actual-cost": cost
+            "actual-cost": cost,
           },
-          relationships: {
-            "purchase-order": {
-              data: {
-                type: "purchase-order",
-                id: id
-              }
-            }
-          }
-        }
+        },
       },
       writeHeaders
     )
@@ -444,4 +448,4 @@ export const updatePOItemCost = async (id, itemId, cost) => {
       response.err = err.toString();
     });
   return response;
-}
+};
