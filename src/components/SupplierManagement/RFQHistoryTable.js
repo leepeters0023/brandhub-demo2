@@ -19,6 +19,7 @@ import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import { SignalCellularNullSharp } from "@material-ui/icons";
 
 let headCells = [
   { id: "rfqNum", disablePadding: false, label: "RFQ #", sort: true },
@@ -54,7 +55,6 @@ const EnhancedTableHead = (props) => {
       let x = headCells.map((item) => item.id)
       let index = x.indexOf("totalEstCost")
       headCells.splice(index, 1);
-      console.log(headCells)
     };
   },[role])
   
@@ -133,6 +133,8 @@ const useStyles = makeStyles((theme) => ({
 
 const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const classes = useStyles();
+  const role = useSelector((state) => state.user.role);
+  const [isSupplier, setIsSupplier] = useState(false);
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
@@ -154,6 +156,13 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
       return status[0].toUpperCase() + status.slice(1);
     }
   }
+
+  useEffect(() =>{
+    if (role === "supplier") {
+      setIsSupplier(true)
+      console.log("Supplier!")
+    }
+  },[])
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -211,7 +220,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+                  {!isSupplier && (<TableCell align="left">{formatMoney(row.estCost)}</TableCell>)}
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost)}
                   </TableCell>
