@@ -46,17 +46,22 @@ let headCells = [
 const EnhancedTableHead = (props) => {
   const { classes, order, orderBy, onRequestSort } = props;
   const role = useSelector((state) => state.user.role);
+  const [isSupplier, setIsSupplier] = useState(false);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
   
   useEffect(() =>{
     if (role === "supplier") {
-      let x = headCells.map((item) => item.id)
-      let index = x.indexOf("totalEstCost")
-      headCells.splice(index, 1);
-    };
-  },[role])
+      setIsSupplier(true)
+    }
+  },[])
+  
+  const removeTotalEstCost = (headCells) => {
+    let cellIds = headCells.map((item) => item.id)
+    let index = cellIds.indexOf("totalEstCost")
+    return headCells.splice(index, 1);
+  };
   
   return (
     <TableHead>
@@ -160,7 +165,6 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   useEffect(() =>{
     if (role === "supplier") {
       setIsSupplier(true)
-      console.log("Supplier!")
     }
   },[])
 
