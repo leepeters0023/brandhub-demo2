@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { resetRFQ } from "../../redux/slices/rfqSlice";
 
@@ -44,9 +44,11 @@ const headCells = [
 
 const EnhancedTableHead = (props) => {
   const { classes, order, orderBy, onRequestSort } = props;
+  const role = useSelector((state) => state.user.role);
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  console.log(role)
 
   return (
     <TableHead>
