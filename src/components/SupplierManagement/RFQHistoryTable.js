@@ -20,7 +20,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-const headCells = [
+let headCells = [
   { id: "rfqNum", disablePadding: false, label: "RFQ #", sort: true },
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
@@ -42,10 +42,6 @@ const headCells = [
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 
-headCells.map((item, i) => {
-  let x = item.map()
-  })
-
 const EnhancedTableHead = (props) => {
   const { classes, order, orderBy, onRequestSort } = props;
   const role = useSelector((state) => state.user.role);
@@ -53,7 +49,15 @@ const EnhancedTableHead = (props) => {
     onRequestSort(event, property);
   };
 
- 
+  if (role === "supplier") {
+    let x = headCells.map((item) => item.id)
+    let index = x.indexOf("totalEstCost")
+    let y = headCell.map((z, i) => {
+      
+    }
+    console.log(y)
+  };
+  
   return (
     <TableHead>
       <TableRow>
