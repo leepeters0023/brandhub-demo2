@@ -38,6 +38,7 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -47,6 +48,38 @@ export const getUser = async () => {
     });
   return response;
 };
+
+export const getLoginURL = async () => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get("/oauth/login_url")
+    .then((res) => {
+      console.log(res);
+      response.status = "ok";
+      response.data = res.data;
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const loginUserWithAuthO = async (code) => {
+  const response = { status: "", error: null };
+  await axios
+    .get(`/oauth/${code}`)
+    .then((res) => {
+      console.log(res.data)
+      setAuthToken(res.data);
+      response.status = "ok";
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
 
 //Removes user information from local storage on logout, and removes authenticated headers from axios
 export const logoutUser = () => {

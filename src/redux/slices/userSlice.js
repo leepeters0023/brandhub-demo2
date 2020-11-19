@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFavoriteItems, getUser, logInUser } from "../../api/userApi";
+import { addFavoriteItems, getUser, logInUser, getLoginURL, loginUserWithAuthO } from "../../api/userApi";
 import { mapItems } from "../apiMaps";
 
 /*
@@ -29,6 +29,7 @@ let initialState = {
   initials: "",
   email: "",
   role: "",
+  redirectLink: null,
   territories: [],
   managedUsers: [],
   currentTerritory: "",
@@ -106,6 +107,10 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
+    setRedirectLink(state, action) {
+      const { link } = action.payload;
+      state.redirectLink = link
+    },
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
@@ -114,6 +119,7 @@ const userSlice = createSlice({
       state.initials = "";
       state.email = "";
       state.role = "";
+      state.redirectLink = null;
       state.territories = [];
       state.managedUsers = [];
       state.favoriteItems = [];
@@ -134,6 +140,7 @@ export const {
   getUserSuccess,
   setLoginSuccess,
   updateFavoriteItems,
+  setRedirectLink,
   updateCurrentTerritory,
   removeUser,
   setLogInFailure,
@@ -210,5 +217,33 @@ export const addToFavoriteItems = (idArray) => async (dispatch) => {
     dispatch(updateFavoriteItems({items: items}))
   } catch (err) {
     dispatch(setUpdateFailure({ error: err.toString() }));
+  }
+}
+
+export const loginWithCode = (code) => async (dispatch) => {
+  try {
+    dispatch(setLoginLoading());
+    const res = await loginUserWithAuthO(code);
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setLoginSuccess());
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
+  }
+}
+
+export const getRedirect = () => async (dispatch) => {
+  try {
+    console.log("getting url")
+    const res = await getLoginURL()
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setRedirectLink({link: res.data["redirect_url"]}));
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
   }
 }

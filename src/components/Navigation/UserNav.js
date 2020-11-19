@@ -129,7 +129,7 @@ const UserNavMenu = ({
         <Divider />
         <MenuItem
           component={Link}
-          to="/login"
+          to="/"
           onClick={() => {
             handleLogout();
             handleClose();
