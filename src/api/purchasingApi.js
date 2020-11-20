@@ -291,6 +291,7 @@ export const fetchRFQ = async (id) => {
     .get(`/api/request-for-quotes/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -446,6 +447,106 @@ export const updatePOItemCost = async (id, cost) => {
       console.log(err.toString());
       response.status = "error";
       response.err = err.toString();
+    });
+  return response;
+};
+
+export const submitPO = async (id) => {
+  const response = { status: "", error: "" };
+  //TODO confirm this is the correct route
+  await axios
+    .post(`/api/purchase-orders/${id}/submit`, null, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
+//Returns pos based on filters, paginated in groups of 20
+export const fetchPOHistory = async (filterObject) => {
+  const sortMap = {
+    poNum: "id",
+    supplier: "supplier-name",
+    dueDate: "due-date",
+    status: "status",
+  };
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/purchase-orders",
+    "po-history"
+  );
+
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = {
+        pos: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.pos = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+//Handles next page for po history
+export const fetchNextPOHistory = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = {
+        pos: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.pos = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+//Returns a single PO based on it's id
+export const fetchPO = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/purchase-orders/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
     });
   return response;
 };

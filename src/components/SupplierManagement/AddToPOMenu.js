@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
-//import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
+import { setSelectedPOItems } from "../../redux/slices/purchaseOrderSlice";
 //import { addToDraftPO } from "../../redux/slices/purchaseOrderHistorySlice";
 
 import Button from "@material-ui/core/Button";
@@ -13,11 +14,12 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 
 const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
+    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -31,7 +33,9 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
         className={classes.largeButton}
         variant="contained"
         color="secondary"
-        disabled={(isLoading || draftPOs.length === 0) && !itemSelected}
+        aria-controls="draft-purchase-orders"
+        aria-haspopup="true"
+        disabled={isLoading || !itemSelected || draftPOs.length === 0}
         style={{ marginRight: "20px" }}
         onClick={handleClick}
       >
@@ -40,7 +44,7 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
       {draftPOs.length > 0 && !isLoading && (
         <Menu
           id="draft-purchase-orders"
-          anchor={anchorEl}
+          anchorEl={anchorEl}
           getContentAnchorEl={null}
           anchorOrigin={{
             vertical: "bottom",
@@ -61,6 +65,7 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
                   key={index}
                   onClick={() => {
                     handleClose();
+                    dispatch(setSelectedPOItems({ selectedItems: []}))
                     navigate(`/purchasing/purchaseOrder#${po.id}`);
                     //todo
                     //dispatch(addToDraftPO(po.id))
@@ -77,6 +82,7 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
                   onClick={() => {
                     handleClose();
                     navigate(`/purchasing/purchaseOrder#${po.id}`);
+                    dispatch(setSelectedPOItems({ selectedItems: []}))
                     //todo
                     //dispatch(addToDraftPO(po.id))
                   }}
