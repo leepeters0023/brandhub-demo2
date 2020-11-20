@@ -44,7 +44,13 @@ export const fetchRollupItems = async (filterObject, type) => {
     sortMap[filterObject.sortOrderBy]
   }`;
 
-  let queryString = buildFilters(filterObject, typeBool, sortString, "/api/item-rollups", "rollup")
+  let queryString = buildFilters(
+    filterObject,
+    typeBool,
+    sortString,
+    "/api/item-rollups",
+    "rollup"
+  );
 
   const response = { status: "", error: null, data: null };
   await axios
@@ -52,6 +58,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -223,7 +230,13 @@ export const fetchRFQHistory = async (filterObject) => {
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
-  let queryString = buildFilters(filterObject, "", sortString, "/api/request-for-quotes", "rfq-history")
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/request-for-quotes",
+    "rfq-history"
+  );
 
   const response = { status: "", error: null, data: null };
   await axios
@@ -278,6 +291,255 @@ export const fetchRFQ = async (id) => {
     .get(`/api/request-for-quotes/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+//Creates a new PO based on an item and it's associated program
+export const createPO = async (ids, orderType) => {
+  const response = { status: "", error: null, data: null };
+  let requestBody = {
+    data: {
+      type: "purchase-order",
+      attributes: {
+        "item-ids": ids,
+        "order-type": orderType,
+      },
+    },
+  };
+  await axios
+    .post("/api/purchase-orders", requestBody, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Updates the note on an PO
+export const updatePONote = async (id, note) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            note: note,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Updates date fields on the PO
+export const updatePODate = async (id, dateType, date) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            [`${dateType}`]: date,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Adds additional line items (like a set up fee) to a po
+export const addAdditionalPOCost = async (id, name, cost) => {
+  const response = { status: "", errror: null };
+  await axios
+    .post(
+      "/api/purchase-order-items",
+      {
+        data: {
+          type: "purchase-order-item",
+          attributes: {
+            "item-type-description": "Additional PO Cost",
+            name: name,
+            cost: cost,
+          },
+          relationships: {
+            "purchase-order": {
+              data: {
+                type: "purchase-order",
+                id: id,
+              },
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//Updates the actual cost of an item on a po
+export const updatePOItemCost = async (id, cost) => {
+  const response = { status: "", errror: null };
+  await axios
+    .patch(
+      `/api/purchase-order-items/${id}`,
+      {
+        data: {
+          type: "purchase-order-item",
+          id: id,
+          attributes: {
+            "actual-cost": cost,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+export const submitPO = async (id) => {
+  const response = { status: "", error: "" };
+  //TODO confirm this is the correct route
+  await axios
+    .post(`/api/purchase-orders/${id}/submit`, null, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
+//Returns pos based on filters, paginated in groups of 20
+export const fetchPOHistory = async (filterObject) => {
+  const sortMap = {
+    poNum: "id",
+    supplier: "supplier-name",
+    dueDate: "due-date",
+    status: "status",
+  };
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+    sortMap[filterObject.sortOrderBy]
+  }`;
+  let queryString = buildFilters(
+    filterObject,
+    "",
+    sortString,
+    "/api/purchase-orders",
+    "po-history"
+  );
+
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(queryString)
+    .then((res) => {
+      let dataObject = {
+        pos: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.pos = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+//Handles next page for po history
+export const fetchNextPOHistory = async (url) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(url)
+    .then((res) => {
+      let dataObject = {
+        pos: null,
+        nextLink: null,
+      };
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.pos = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+//Returns a single PO based on it's id
+export const fetchPO = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/purchase-orders/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
