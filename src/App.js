@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Router, Redirect } from "@reach/router";
+import { Router, Redirect, navigate } from "@reach/router";
 import axios from "axios";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "./api/userApi";
 
 import { fetchWarehouse, resetAddresses } from "./redux/slices/addressSlice";
-import { removeUser, fetchUser } from "./redux/slices/userSlice";
+import {
+  removeUser,
+  fetchUser,
+  setExpires,
+  setTimeoutSet,
+} from "./redux/slices/userSlice";
 import {
   fetchInitialPrograms,
   setIsLoading,
@@ -98,14 +103,14 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(
     window.localStorage.getItem("brandhub-user")
   );
-  // const [role, setRole] = useState(
-  //   window.localStorage.getItem("brandhub-role")
-  // );
   const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
   const [couponsOpen, setCouponsOpen] = useCallback(useState(false));
+  const [logoutTimeout, setLogoutTimeout] = useCallback(useState(null));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
+  const reduxExpiresIn = useSelector((state) => state.user.sessionExpire);
+  const timeOutSet = useSelector((state) => state.user.timeOutSet);
   const userError = useSelector((state) => state.user.error);
   const territories = useSelector((state) => state.user.territories);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
@@ -115,11 +120,6 @@ const App = () => {
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
-  //const link = useSelector((state) => state.user.redirectLink);
-
-  // const handleLogIn = (user) => {
-  //   setRole(user);
-  // };
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
@@ -129,7 +129,7 @@ const App = () => {
     setCouponsOpen(!couponsOpen);
   };
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logoutUser();
     setCurrentUser(null);
     dispatch(removeUser());
@@ -151,7 +151,12 @@ const App = () => {
     dispatch(resetComplianceRules());
     dispatch(clearSharedItems());
     dispatch(resetAddresses());
-  };
+  }, [dispatch]);
+
+  const handleTimeout = useCallback(() => {
+    handleLogout();
+    navigate("/");
+  }, [handleLogout])
 
   useEffect(() => {
     const fetchCurrentUser = async (token) => {
@@ -190,8 +195,14 @@ const App = () => {
         dispatch(clearPrograms());
       }
     } else if (currentUser && JSON.parse(currentUser).access_token) {
-      dispatch(setIsLoading());
-      fetchCurrentUser(JSON.parse(currentUser).access_token);
+      console.log(new Date(JSON.parse(currentUser).expires_in).toDateString());
+      if (new Date(JSON.parse(currentUser).expires_in) < new Date()) {
+        handleLogout();
+        navigate("/oauth");
+      } else {
+        dispatch(setIsLoading());
+        fetchCurrentUser(JSON.parse(currentUser).access_token);
+      }
     } else {
       setCurrentUser(null);
     }
@@ -203,6 +214,39 @@ const App = () => {
       setCurrentUser(window.localStorage.getItem("brandhub-user"));
     }
   }, [loggedIn, currentUser]);
+
+  useEffect(() => {
+    if (currentUser && JSON.parse(currentUser).expires_in) {
+      if (reduxExpiresIn !== JSON.parse(currentUser).expires_in) {
+        dispatch(
+          setExpires({
+            expires: JSON.parse(currentUser).expires_in,
+          })
+        );
+      }
+    }
+  }, [reduxExpiresIn, currentUser, dispatch, handleLogout]);
+
+  useEffect(() => {
+    if (reduxExpiresIn && !timeOutSet) {
+      //TODO handle refresh or ask user to stay logged in??
+      dispatch(setTimeoutSet());
+      let msToLogout = new Date(reduxExpiresIn) - new Date();
+      setLogoutTimeout(setTimeout(handleTimeout, msToLogout));
+    }
+
+    return () => {
+      console.log("clearing");
+      clearTimeout(logoutTimeout);
+    };
+  }, [
+    reduxExpiresIn,
+    timeOutSet,
+    dispatch,
+    setLogoutTimeout,
+    handleTimeout,
+    logoutTimeout,
+  ]);
 
   if (userError) {
     handleLogout();
