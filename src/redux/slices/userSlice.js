@@ -49,6 +49,7 @@ let favoriteItems = [
 ];
 
 let initialState = {
+  authIsLoading: false,
   loginIsLoading: false,
   isLoading: false,
   loggedIn: false,
@@ -72,6 +73,10 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startAuth = (state) => {
+  state.authIsLoading = true;
+}
+
 const startLogin = (state) => {
   state.loginIsLoading = true;
 };
@@ -80,6 +85,7 @@ const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.error = error;
 };
 
@@ -87,6 +93,7 @@ const logInFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.logInError = error;
 };
 
@@ -96,6 +103,7 @@ const userSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     setLoginLoading: startLogin,
+    setAuthLoading: startAuth,
     setLoginSuccess(state) {
       state.loginIsLoading = false;
       state.loggedIn = true;
@@ -182,7 +190,8 @@ const userSlice = createSlice({
     },
     setRedirectLink(state, action) {
       const { link } = action.payload;
-      state.redirectLink = link
+      state.redirectLink = link;
+      state.authIsLoading = false;
     },
     updateAttentionLine(state, action) {
       const { id, attn } = action.payload
@@ -212,6 +221,7 @@ const userSlice = createSlice({
 export const {
   setIsLoading,
   setLoginLoading,
+  setAuthLoading,
   getUserSuccess,
   setLoginSuccess,
   setRedirectLink,
@@ -301,6 +311,7 @@ export const loginWithCode = (code) => async (dispatch) => {
 
 export const getRedirect = () => async (dispatch) => {
   try {
+    dispatch(setAuthLoading());
     console.log("getting url")
     const res = await getLoginURL()
     if (res.error) {

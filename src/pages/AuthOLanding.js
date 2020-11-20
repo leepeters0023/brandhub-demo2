@@ -11,13 +11,14 @@ const AuthOLanding = ({ code }) => {
   const dispatch = useDispatch()
   const link = useSelector((state) => state.user.redirectLink)
   const currentRole = useSelector((state) => state.user.role);
+  const isLinkLoading = useSelector((state) => state.user.authIsLoading);
   console.log(link);
   
   useEffect(() => {
-    if (!link && !code) {
+    if (!link && !code && !isLinkLoading) {
       dispatch(getRedirect());
     }
-  }, [link, code, dispatch])
+  }, [link, isLinkLoading, code, dispatch])
 
   useEffect(() => {
     if (link && !code) {
