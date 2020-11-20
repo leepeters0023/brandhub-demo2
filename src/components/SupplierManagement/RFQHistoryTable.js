@@ -39,6 +39,7 @@ let headCells = [
     label: "Est. Total",
     sort: false,
   },
+  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
@@ -51,8 +52,8 @@ const EnhancedTableHead = (props) => {
 
   const currentHeadCells =
     role !== "supplier"
-      ? headCells
-      : headCells.filter((cell) => cell.id !== "totalEstCost" && cell.id !== "estCost");
+      ? headCells.filter((cell) => cell.id !== "actTotal")
+      : headCells.filter((cell) => cell.id !== "totalEstCost" && cell.id !== "estCost" && cell.id !== "program");
 
   return (
     <TableHead>
@@ -133,7 +134,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-
+  console.log(rfqs)
   const handleStatus = (status, bids) => {
     if (status === "sent") {
       let bidCount = 0;
@@ -206,7 +207,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.program}</TableCell>
+                  {role !== "supplier" &&(<TableCell align="left">{row.program}</TableCell>)}
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (
@@ -215,6 +216,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                       <TableCell align="left">{formatMoney(row.totalEstCost)}</TableCell>
                     </>
                   )}
+                  {role === "supplier" && row.totalActCost ? (<TableCell align="left">{formatMoney(row.totalActCost) }</TableCell>) : (<TableCell align="left">---</TableCell>)}
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">{handleStatus(row.status, row.bids)}</TableCell>
                 </TableRow>
