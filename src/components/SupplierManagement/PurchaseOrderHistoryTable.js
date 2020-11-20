@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
+import { useSelector } from "react-redux";
+
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
@@ -36,15 +38,20 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const { classes, order, orderBy, onRequestSort, role } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
+  const currentHeadCells =
+  role !== "supplier"
+    ? headCells
+    : headCells.filter((cell) => cell.id !== "supplier");
+
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => {
+        {currentHeadCells.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -121,6 +128,7 @@ const PurchaseOrderHistoryTable = ({
   scrollRef,
 }) => {
   const classes = useStyles();
+  const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
 
@@ -152,6 +160,7 @@ const PurchaseOrderHistoryTable = ({
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
+            role={role}
           />
           <TableBody>
             {!posLoading && pos.length === 0 && (
@@ -175,7 +184,7 @@ const PurchaseOrderHistoryTable = ({
                   }}
                 >
                   <TableCell align="left">{row.poNum}</TableCell>
-                  <TableCell align="left">{row.supplier}</TableCell>
+                  {role !== "supplier" && (<TableCell align="left">{row.supplier}</TableCell>)}
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost)}
