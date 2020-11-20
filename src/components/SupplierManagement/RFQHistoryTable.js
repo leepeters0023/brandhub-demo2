@@ -44,29 +44,20 @@ let headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort } = props;
-  const role = useSelector((state) => state.user.role);
-  const [isSupplier, setIsSupplier] = useState(false);
+  const { classes, order, orderBy, onRequestSort, role } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-  
-  useEffect(() =>{
-    if (role === "supplier") {
-      setIsSupplier(true)
-    }
-  },[])
-  
-  const removeTotalEstCost = (headCells) => {
-    let cellIds = headCells.map((item) => item.id)
-    let index = cellIds.indexOf("totalEstCost")
-    return headCells.splice(index, 1);
-  };
-  
+
+  const currentHeadCells =
+    role !== "supplier"
+      ? headCells
+      : headCells.filter((cell) => cell.id !== "totalEstCost" && cell.id !== "estCost");
+
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => {
+        {currentHeadCells.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -139,7 +130,6 @@ const useStyles = makeStyles((theme) => ({
 const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const classes = useStyles();
   const role = useSelector((state) => state.user.role);
-  const [isSupplier, setIsSupplier] = useState(false);
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
@@ -161,12 +151,6 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
       return status[0].toUpperCase() + status.slice(1);
     }
   }
-
-  useEffect(() =>{
-    if (role === "supplier") {
-      setIsSupplier(true)
-    }
-  },[])
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -197,6 +181,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
+            role={role}
           />
           <TableBody>
             {!rfqsLoading && rfqs.length === 0 && (
@@ -224,10 +209,12 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  {!isSupplier && (<TableCell align="left">{formatMoney(row.estCost)}</TableCell>)}
-                  <TableCell align="left">
-                    {formatMoney(row.totalEstCost)}
-                  </TableCell>
+                  {role !== "supplier" && (
+                    <>
+                      <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+                      <TableCell align="left">{formatMoney(row.totalEstCost)}</TableCell>
+                    </>
+                  )}
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">{handleStatus(row.status, row.bids)}</TableCell>
                 </TableRow>
