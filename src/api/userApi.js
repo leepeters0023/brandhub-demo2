@@ -59,12 +59,13 @@ export const getLoginURL = async () => {
 }
 
 export const loginUserWithAuthO = async (code) => {
-  const response = { status: "", error: null };
+  const response = { status: "", error: null, data: null };
   await axios
     .get(`/oauth/${code}`)
     .then((res) => {
       console.log(res.data)
       setAuthToken(res.data);
+      response.data = res.data;
       response.status = "ok";
     })
     .catch((err) => {
