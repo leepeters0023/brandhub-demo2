@@ -297,7 +297,7 @@ export const restartOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
     .post(`/api/order-sets/${id}/restart`, null, writeHeaders)
-    .then((res) => {
+    .then((_res) => {
       response.status = "ok";
     })
     .catch((err) => {
@@ -313,7 +313,7 @@ export const submitOrderSet = async (id) => {
   const response = { status: "", error: null };
   await axios
     .post(`/api/order-sets/${id}/submit`, null, writeHeaders)
-    .then((res) => {
+    .then((_res) => {
       response.status = "ok";
     })
     .catch((err) => {
