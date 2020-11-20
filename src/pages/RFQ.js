@@ -86,8 +86,8 @@ const RFQ = ({ handleFiltersClosed }) => {
   return (
     <Container className={classes.mainWrapper}>
       <div className={classes.titleBar}>
-        {!isNew && (
-          <div className={classes.titleImage}>
+        <div className={classes.titleImage}>
+          {!isNew && (
             <Tooltip title="Back to RFQ History" placement="bottom-start">
               <IconButton
                 component={Link}
@@ -99,16 +99,24 @@ const RFQ = ({ handleFiltersClosed }) => {
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
-            <Typography
-              className={classes.titleText}
-            >{`RFQ #${currentRFQ.id}`}</Typography>
-          </div>
-        )}
-        {isNew && (
+          )}
+          {isNew && (
+            <Tooltip title="Back to RFQ Rollup" placement="bottom-start">
+              <IconButton
+                component={Link}
+                to="/purchasing/rfqRollup"
+                onClick={() => {
+                  dispatch(setRetain({ value: true }));
+                }}
+              >
+                <ArrowBackIcon fontSize="large" color="secondary" />
+              </IconButton>
+            </Tooltip>
+          )}
           <Typography
             className={classes.titleText}
           >{`RFQ #${currentRFQ.id}`}</Typography>
-        )}
+        </div>
       </div>
       <br />
       <div
@@ -126,25 +134,25 @@ const RFQ = ({ handleFiltersClosed }) => {
         <br />
         {currentRFQ.bids.length !== currentSuppliers.length && (
           <>
-          <RFQSupplierSentTable
-            currentSuppliers={currentSuppliers}
-            isLoading={isSuppliersLoading}
-            suppliersSelected={suppliersSelected}
-            setSuppliersSelected={setSuppliersSelected}
-            currentBids={currentRFQ.bids}
-          />
-        <br />
-        <Button
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          style={{ marginRight: "10px" }}
-          disabled={suppliersSelected.length === 0}
-          onClick={handleSendBids}
-          >
-          SEND RFQ
-        </Button>
-        <br />
+            <RFQSupplierSentTable
+              currentSuppliers={currentSuppliers}
+              isLoading={isSuppliersLoading}
+              suppliersSelected={suppliersSelected}
+              setSuppliersSelected={setSuppliersSelected}
+              currentBids={currentRFQ.bids}
+            />
+            <br />
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              style={{ marginRight: "10px" }}
+              disabled={suppliersSelected.length === 0}
+              onClick={handleSendBids}
+            >
+              SEND RFQ
+            </Button>
+            <br />
           </>
         )}
 
