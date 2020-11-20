@@ -19,6 +19,7 @@ user: {
 */
 
 let initialState = {
+  authIsLoading: false,
   loginIsLoading: false,
   updateIsLoading: false,
   isLoading: false,
@@ -46,6 +47,10 @@ const startUpdate = (state) => {
   state.updateIsLoading = true;
 }
 
+const startAuth = (state) => {
+  state.authIsLoading = true;
+}
+
 const startLogin = (state) => {
   state.loginIsLoading = true;
 };
@@ -53,12 +58,15 @@ const startLogin = (state) => {
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.error = error;
 };
 
 const logInFailed = (state, action) => {
   const { error } = action.payload;
   state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.logInError = error;
 };
 
@@ -75,6 +83,7 @@ const userSlice = createSlice({
     setIsLoading: startLoading,
     setLoginLoading: startLogin,
     setUpdateLoading: startUpdate,
+    setAuthLoading: startAuth,
     setLoginSuccess(state) {
       state.loginIsLoading = false;
       state.loggedIn = true;
@@ -109,7 +118,8 @@ const userSlice = createSlice({
     },
     setRedirectLink(state, action) {
       const { link } = action.payload;
-      state.redirectLink = link
+      state.redirectLink = link;
+      state.authIsLoading = false;
     },
     removeUser: (state) => {
       state.isLoading = false;
@@ -137,6 +147,7 @@ export const {
   setIsLoading,
   setLoginLoading,
   setUpdateLoading,
+  setAuthLoading,
   getUserSuccess,
   setLoginSuccess,
   updateFavoriteItems,
@@ -236,6 +247,7 @@ export const loginWithCode = (code) => async (dispatch) => {
 
 export const getRedirect = () => async (dispatch) => {
   try {
+    dispatch(setAuthLoading());
     console.log("getting url")
     const res = await getLoginURL()
     if (res.error) {
