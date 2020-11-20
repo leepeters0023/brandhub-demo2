@@ -120,7 +120,6 @@ const App = () => {
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
-  //const link = useSelector((state) => state.user.redirectLink);
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
