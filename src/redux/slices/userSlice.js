@@ -60,6 +60,9 @@ let initialState = {
   email: "",
   role: "",
   redirectLink: null,
+  sessionExpire: null,
+  refreshToken: null,
+  timeOutSet: false,
   territories: [],
   managedUsers: [],
   currentTerritory: "",
@@ -104,7 +107,10 @@ const userSlice = createSlice({
     setIsLoading: startLoading,
     setLoginLoading: startLogin,
     setAuthLoading: startAuth,
-    setLoginSuccess(state) {
+    setLoginSuccess(state, action) {
+      const { refresh, expires } = action.payload;
+      state.refreshToken = refresh;
+      state.sessionExpire = expires;
       state.loginIsLoading = false;
       state.loggedIn = true;
       state.error = null;
@@ -193,6 +199,13 @@ const userSlice = createSlice({
       state.redirectLink = link;
       state.authIsLoading = false;
     },
+    setExpires (state, action) {
+      const { expires } = action.payload;
+      state.sessionExpire = expires;
+    },
+    setTimeoutSet (state) {
+      state.timeOutSet = !state.timeOutSet
+    },
     updateAttentionLine(state, action) {
       const { id, attn } = action.payload
       //TODO
@@ -207,6 +220,9 @@ const userSlice = createSlice({
       state.email = "";
       state.role = "";
       state.redirectLink = null;
+      state.refreshToken = null;
+      state.sessionExpire = null;
+      state.timeOutSet = false;
       state.territories = [];
       state.managedUsers = [];
       state.error = null;
@@ -225,6 +241,8 @@ export const {
   getUserSuccess,
   setLoginSuccess,
   setRedirectLink,
+  setExpires,
+  setTimeoutSet,
   updateCurrentTerritory,
   createNewFavoriteDistList,
   updateDistributorListName,
@@ -303,7 +321,7 @@ export const loginWithCode = (code) => async (dispatch) => {
       throw res.error;
     }
     console.log(res);
-    dispatch(setLoginSuccess());
+    dispatch(setLoginSuccess({refresh: res.data["refresh_token"], expires: res.data["expires_in"]}));
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
