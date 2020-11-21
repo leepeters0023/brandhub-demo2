@@ -17,7 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tooltip } from "@material-ui/core";
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const headCells = [
   { id: "poNum", disablePadding: false, label: "PO #", sort: true },
@@ -190,19 +190,22 @@ const PurchaseOrderHistoryTable = ({
                     <> 
                       {row.brands.length > 1 ? (
                         <Tooltip title={`${row.brands.join(",")}`}>
-                          <TableCell align="left">{row.brands[0]}</TableCell>
+                          <TableCell align="left">{row.brands[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
+                          </TableCell> 
                         </Tooltip>) : (
                           <TableCell align="left">{row.brands[0]}</TableCell>
                         )}
                       {row.itemDescription.length > 1 ? (
                         <Tooltip title={`${row.itemDescription.join(",")}`}>
-                          <TableCell align="left">{row.itemDescription[0]}</TableCell>
+                          <TableCell align="left">{row.itemDescription[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
+                          </TableCell>
                         </Tooltip>) : (
                           <TableCell align="left">{row.itemDescription[0]}</TableCell>
                         )}
                       {row.itemTypes.length > 1 ? (
                         <Tooltip title={`${row.itemTypes.join(",")}`}>
-                          <TableCell align="left">{row.itemTypes[0]}</TableCell>
+                          <TableCell align="left">{row.itemTypes[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
+                          </TableCell>
                         </Tooltip>) : (
                           <TableCell align="left">{row.itemTypes[0]}</TableCell>
                         )}
