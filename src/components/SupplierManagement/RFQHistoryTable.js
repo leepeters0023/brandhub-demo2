@@ -39,7 +39,7 @@ let headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "actTotal", disablePadding: false, label: "Actual Total", sort: false },
+  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
   { id: "bidValue", disablePadding: false, label: "Bid", sort: true },
@@ -135,7 +135,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-  
+
   const handleStatus = (status, bids) => {
     if (role === "supplier") {
       status = "New"

@@ -261,7 +261,7 @@ export const mapRFQ = (rfq) => {
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price,
+      price: bid.price, 
     }));
   };
 

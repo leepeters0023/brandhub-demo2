@@ -7,6 +7,7 @@ let programs = [
   "Whitehaven Summer Splash",
   "High Noon Spring 2021",
 ];
+
 let itemTypes = [
   "Shelf Talker",
   "Carton Rider",
@@ -49,7 +50,7 @@ let distributors = [
 ];
 let packSizes = ["1", "10", "12", "25", "50"];
 let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"];
-
+// create needed fields here
 const generatePOItems = (dataPoints) => {
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
@@ -162,10 +163,30 @@ const generateQuarterlyRollupItems = (dataPoints) => {
 
 const generatePOs = (dataPoints, stat) => {
   let statusAll = ["In Progress", "Complete", "Canceled"];
-
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
     let poNumber = (543000120 + i).toString();
+    let brands =  [
+      "Apothic",
+      "Orin Swift",
+      "Barefoot",
+      "E & J",
+      "New Amsterdam",
+      "High Noon",
+      "La Marca",
+    ];
+    let itemTypes =  [
+      "Shelf Talker",
+      "Carton Rider",
+      "Mass Display",
+      "Necker",
+      "Glorifier",
+    ];
+    let itemDescription = [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo",
+    ];
     let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
     let totalItems = Math.floor(Math.random() * 1000) + 500;
     let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
@@ -177,6 +198,9 @@ const generatePOs = (dataPoints, stat) => {
     data.push({
       id: (i + 1).toString(),
       poNum: poNumber,
+      brands : brands,
+      itemTypes : itemTypes,
+      itemDescription : itemDescription,
       supplier: supplier,
       totalItems: totalItems,
       totalEstCost: totalEstCost,
