@@ -11,6 +11,7 @@ import { setRetain } from "../redux/slices/filterSlice";
 
 import Loading from "../components/Utility/Loading";
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
+import RFQAcceptOrDecline from "../components/SupplierManagement/RFQAcceptOrDecline";
 import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
 import RFQSupplierBidTable from "../components/SupplierManagement/RFQSupplierBidTable";
 
@@ -145,19 +146,22 @@ const RFQ = ({ handleFiltersClosed }) => {
                   onClick={handleSendBids}
                 >
                   SEND RFQ
-        </Button>
+                </Button>
                 <br />
               </>
             )}
+            {currentRFQ.bids.length > 0 && (
+              <RFQSupplierBidTable
+                classes={classes}
+                bids={currentRFQ.bids}
+                handleAward={handleAwardBid}
+                handlePO={handleBidPO}
+              />
+            )}
           </>
         )}
-        {currentRFQ.bids.length > 0 && (
-          <RFQSupplierBidTable
-            classes={classes}
-            bids={currentRFQ.bids}
-            handleAward={handleAwardBid}
-            handlePO={handleBidPO}
-          />
+        {role === "supplier" && (
+          <RFQAcceptOrDecline />
         )}
         <br />
       </div>
