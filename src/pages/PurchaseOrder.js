@@ -47,12 +47,12 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (currentPO.id && !isPOLoading && window.location.hash === "#new") {
-      console.log("hash update");
+      console.log("hash update")
       window.location.hash = currentPO.id;
       setIsNew(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPO.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPO.id])
 
   useEffect(() => {
     if (!currentPO.id && window.location.hash !== "#new") {
@@ -61,15 +61,8 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (currentPO.id && window.location.hash !== "#new" && currentPO.id !== window.location.hash.slice(1)) {
-  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   if (isPOLoading || !currentPO.id) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
@@ -103,9 +96,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 </IconButton>
               </Tooltip>
             )}
-            <Typography className={classes.titleText}>
-              {`Purchase Order #${currentPO.id}`}
-            </Typography>
+          <Typography className={classes.titleText}>
+            {`Purchase Order #${currentPO.id}`}
+          </Typography>
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
@@ -127,6 +120,17 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }}
         >
           <CurrentPO currentPO={currentPO} />
+          {window.location.hash.includes("new") && (
+            <div>
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+              >
+                SUBMIT PURCHASE ORDER
+              </Button>
+            </div>
+          )}
           <br />
           {(window.location.hash.includes("new") ||
             currentPO.status === "draft") && (
