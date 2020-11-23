@@ -68,7 +68,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
-  if (isPOLoading) {
+  if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
 
@@ -127,7 +127,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }}
         >
           <CurrentPO currentPO={currentPO} />
-
           <br />
           {(window.location.hash.includes("new") ||
             currentPO.status === "draft") && (
