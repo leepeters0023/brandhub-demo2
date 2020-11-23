@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { setRetain } from "../redux/slices/filterSlice";
+import { fetchSinglePO } from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
+import Loading from "../components/Utility/Loading";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
 
 import Container from "@material-ui/core/Container";
@@ -24,7 +26,7 @@ import PublishIcon from "@material-ui/icons/Publish";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 //mock data
-import { singlePO, shippingParams } from "../assets/mockdata/dataGenerator";
+import { shippingParams } from "../assets/mockdata/dataGenerator";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -38,19 +40,14 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const [isNew, setIsNew] = useState(false);
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
-  //const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
+  const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
 
   const handleRadioChange = (event) => {
     setShippingOption(event.target.value);
     //TODO update in redux
   };
 
-  /*
-    TODO 
-      * All purchase order details would be loaded and stored in purchase order slice
-      * Loading state (<Loading /> component)
-      * Editable fields will update purchase order state
-  */
+  //TODO  Editable fields will update purchase order state
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -60,21 +57,24 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   }, []);
 
   useEffect(() => {
-    if (/*currentPO.id && */ !isPOLoading && window.location.hash === "#new") {
-      //window.location.hash = currentPO.id;
+    if (currentPO.id && !isPOLoading && window.location.hash === "#new") {
+      console.log("hash update")
+      window.location.hash = currentPO.id;
       setIsNew(true);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [currentPO.id])
 
-  // useEffect(() => {
-  //   if (!currentPO.id && window.location.hash !== "#new") {
-  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (!currentPO.id && window.location.hash !== "#new") {
+      dispatch(fetchSinglePO(window.location.hash.slice(1)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  //TODO add back button!!!, update filters conditionally based on url param!
+  if (isPOLoading || !currentPO.id) {
+    return <Loading />
+  }
 
   return (
     <>
@@ -108,7 +108,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               </Tooltip>
             )}
           <Typography className={classes.titleText}>
-            Purchase Order #110012
+            {`Purchase Order #${currentPO.id}`}
           </Typography>
           </div>
           <div className={classes.configButtons}>
@@ -130,7 +130,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             alignItems: "center",
           }}
         >
-          <CurrentPO purchaseOrderItems={singlePO} />
+          <CurrentPO currentPO={currentPO} />
           {window.location.hash.includes("new") && (
             <div>
               <Button
