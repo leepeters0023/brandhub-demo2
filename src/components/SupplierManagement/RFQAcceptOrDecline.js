@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-import FormControl from '@material-ui/core/FormControl';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
+import { formatMoney } from "../../utility/utilityFunctions";
+import { useMoneyInput } from "../../hooks/InputHooks";
+
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles((theme) => ({
     ...theme.global,
@@ -16,7 +16,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const RFQAcceptOrDecline = ({ }) => {
+const MoneyCell = ({ initialCost }) => {
+    const { value: cost, bind: bindCost } = useMoneyInput(initialCost);
+    //TODO, write update function and pass to useMoneyInput
+    return (
+        <TextField
+          value={cost}
+          variant="outlined"
+          size="small"
+          fullWidth
+          {...bindCost}
+        />
+    );
+  };
+
+const RFQAcceptOrDecline = () => {
     const classes = useStyles();
     const [values, setValues] = useState({
         amount: '',
@@ -64,16 +78,7 @@ const RFQAcceptOrDecline = ({ }) => {
               </Button>
             </Grid>
             <Grid item>
-                <FormControl fullWidth className={classes.margin} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                    <OutlinedInput
-                        id="outlined-adornment-amount"
-                        value={values.amount}
-                        onChange={handleChange('amount')}
-                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                        labelWidth={60}
-                    />
-                </FormControl>
+              <MoneyCell value={values.amount} initialCost={formatMoney(values.amount)}/>
             </Grid>
             <Grid item style={{alignSelf: "flex-end"}}>
                 <Button
