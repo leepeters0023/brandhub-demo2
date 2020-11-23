@@ -61,7 +61,6 @@ let initialState = {
   territories: [],
   managedUsers: [],
   currentTerritory: "",
-  favoriteDistributors: [],
   favoriteItems: favoriteItems,
   logInError: null,
   error: null,
@@ -121,64 +120,6 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
-    createNewFavoriteDistList(state, action) {
-      //TODO get id from api call (async redux thunk call)
-      const { id } = action.payload;
-      let newDistributorList = {
-        id: id,
-        name: "",
-        distributors: [],
-      };
-      let updatedLists = state.favoriteDistributors.concat([
-        newDistributorList,
-      ]);
-      state.favoriteDistributors = updatedLists;
-    },
-    updateDistributorListName(state, action) {
-      const { id, value } = action.payload;
-      let updatedDistributors = state.favoriteDistributors.map((distList) => {
-        if (distList.id === id) {
-          return {
-            ...distList,
-            name: value,
-          };
-        } else return { ...distList };
-      });
-      state.favoriteDistributors = updatedDistributors;
-    },
-    setDistributors(state, action) {
-      const { distributors, id } = action.payload;
-      let updatedDistributors = state.favoriteDistributors.map((distList) => {
-        if (distList.id === id) {
-          return {
-            ...distList,
-            distributors: [...distributors],
-          };
-        } else return { ...distList };
-      });
-      state.favoriteDistributors = updatedDistributors;
-    },
-    deleteSingleDistributor(state, action) {
-      const { id, distId } = action.payload;
-      let updatedDistributors = state.favoriteDistributors.map((distList) => {
-        if (distList.id === id) {
-          return {
-            ...distList,
-            distributors: distList.distributors.filter(
-              (dist) => dist.id !== distId
-            ),
-          };
-        } else return { ...distList };
-      });
-      state.favoriteDistributors = updatedDistributors;
-    },
-    deleteDistributorList(state, action) {
-      const { id } = action.payload;
-      let updatedDistributors = state.favoriteDistributors.filter(
-        (distList) => distList.id !== id
-      );
-      state.favoriteDistributors = updatedDistributors;
-    },
     updateAttentionLine(state, action) {
       const { id, attn } = action.payload
       //TODO
@@ -208,13 +149,8 @@ export const {
   setLoginLoading,
   getUserSuccess,
   setLoginSuccess,
-  updateCurrentTerritory,
-  createNewFavoriteDistList,
-  updateDistributorListName,
-  setDistributors,
-  deleteSingleDistributor,
-  deleteDistributorList,
   updateAttentionLine,
+  updateCurrentTerritory,
   removeUser,
   setLogInFailure,
   setFailure,
