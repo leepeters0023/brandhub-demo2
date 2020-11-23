@@ -6,7 +6,7 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchNextFilteredPOItems } from "../redux/slices/purchaseOrderSlice";
+import { fetchNextFilteredPOItems, createNewPO } from "../redux/slices/purchaseOrderSlice";
 //import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 import { createNewRFQ } from "../redux/slices/rfqSlice";
@@ -96,8 +96,16 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleNewPO = () => {
-    //TODO
-    console.log(selectedPOItems);
+    let idArray = [];
+    currentPOItems.forEach((item) => {
+      selectedPOItems.forEach((id) => {
+        if (item.id === id) {
+          idArray = idArray.concat(item.orderItemIds)
+        }
+      })
+    })
+    dispatch(createNewPO(idArray))
+    console.log(console.log(idArray));
   };
 
   useInitialFilters(
@@ -116,6 +124,8 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     }
   }, [])
   */
+
+  //TODO  update filters conditionally based on url param!
 
   return (
     <>
