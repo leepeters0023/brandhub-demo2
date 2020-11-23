@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const MoneyCell = ({ initialCost, inputActive }) => {
-    const { value: cost, bind: bindCost } = useMoneyInput(initialCost);
+const MoneyCell = ({ quote }) => {
+    const { value: cost, bind: bindCost } = useMoneyInput(quote);
     //TODO, write update function and pass to useMoneyInput
     return (
         <TextField
@@ -40,9 +40,7 @@ const handleDecline = (event, id) => {
 
 const RFQAcceptOrDecline = () => {
     const classes = useStyles();
-    const [values, setValues] = useState({
-        amount: '',
-    })
+    const [quoteValue] = useState(0)
 
     return (
         <Grid
@@ -54,10 +52,10 @@ const RFQAcceptOrDecline = () => {
             spacing={5}
         >
             <Grid item>
-                <Typography> Accept or Decline Quote</Typography>
+                <Typography>Accept or Decline RFQ</Typography>
             </Grid>
             <Grid item>
-                <MoneyCell value={values.amount} initialCost={formatMoney(values.amount)} />
+                <MoneyCell value={quoteValue} quote={formatMoney(quoteValue)} />
             </Grid>
             <Grid item style={{ alignSelf: "flex-end" }}>
                 <Button
@@ -73,7 +71,7 @@ const RFQAcceptOrDecline = () => {
                 <Button
                     style={{ marginLeft: "10px" }}
                     className={classes.largeButton}
-                    value={values.accepted}
+                    value={quoteValue.accepted}
                     variant="contained"
                     color="secondary"
                     onClick={() => {
