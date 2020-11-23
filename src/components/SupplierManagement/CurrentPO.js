@@ -218,6 +218,9 @@ const CurrentPO = ({ currentPO }) => {
         </Grid>
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
+            {`RFQ Number: ${currentPO.rfqNumber}`}
+          </Typography>
+          <Typography className={clsx(classes.headerText, classes.POText)}>
             {`Spec Details: ${currentPO.specDetails}`}
           </Typography>
         </Grid>
