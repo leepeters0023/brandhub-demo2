@@ -245,6 +245,7 @@ export const mapRollupItems = (items) => {
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
     totalItems: item["total-ordered"],
+    orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["not-compliant-count"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: item["estimated-cost"],
@@ -252,6 +253,33 @@ export const mapRollupItems = (items) => {
     dueDate: item["order-due-date"] ? item["order-due-date"] : "---",
   }));
 
+  return mappedItems;
+};
+
+export const mapPOItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    itemId: item.item.id,
+    sequenceNum: item["item-number"] ? item["item-number"] : "---",
+    program: item.program ? item.program : "---",
+    itemType: item["item-type-description"]
+      ? item["item-type-description"]
+      : "---",
+    totalItems: item.qty,
+    estCost: item["estimated-cost"]
+      ? item["estimated-cost"]
+      : item["unit-cost"],
+    actCost: item["actual-cost"]
+      ? item["actual-cost"]
+      : item["estimated-cost"]
+      ? item["estimated-cost"]
+      : item["unit-cost"],
+    totalCost: item["actual-cost"]
+      ? item["actual-cost"] * item.qty
+      : item["estimated-cost"]
+      ? item["estimated-cost"] * item.qty
+      : item["unit-cost"] * item.qty,
+  }));
   return mappedItems;
 };
 
