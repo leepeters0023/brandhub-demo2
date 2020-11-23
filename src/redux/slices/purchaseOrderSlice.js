@@ -4,6 +4,8 @@ import {
   fetchNextRollupItems,
   createPO,
   fetchPO,
+  updatePODate,
+  updatePONote,
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPOItems } from "../apiMaps";
 import addDays from "date-fns/addDays";
@@ -134,6 +136,12 @@ const purchaseOrderSlice = createSlice({
     updateSupplierNotes(state, action) {
       const { value } = action.payload;
       state.currentPO.supplierNotes = value;
+      state.isUpdateLoading = false;
+    },
+    updateDate(state, action) {
+      const { type, value } = action.payload;
+      state.currentPO[type] = value;
+      state.isUpdateLoading = false;
     },
     resetPurchaseOrder(state) {
       state.isLoading = false;
@@ -143,6 +151,8 @@ const purchaseOrderSlice = createSlice({
       state.nextLink = null;
       state.poItems = [];
       state.selectedPOItems = [];
+      state.currentPO.id = null;
+      state.currentPO.status = null;
       state.currentPO.dueDate = null;
       state.currentPO.expectedShip = null;
       state.currentPO.actualShip = null;
@@ -175,6 +185,8 @@ export const {
   setSelectedPOItems,
   addCost,
   updateCost,
+  updateDate,
+  updateSupplierNotes,
   resetPurchaseOrder,
   setFailure,
 } = purchaseOrderSlice.actions;
@@ -314,3 +326,34 @@ export const createNewPO = (idArray) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const updateDateByType = (id, type, value) => async (dispatch) => {
+  const typeMap = {
+    "in-market-date": "dueDate",
+    "expected-ship-date": "expectedShip",
+    "actual-ship-date" : "actualShip"
+  }
+  try {
+    dispatch(setUpdateLoading());
+    const dateStatus = updatePODate(id, type, value)
+    if (dateStatus.error) {
+      throw dateStatus.error
+    }
+    dispatch(updateDate({type: typeMap[type], value: value}))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const updateSupplierNote = (id, note) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const noteStatus = updatePONote(id, note)
+    if (noteStatus.error) {
+      throw noteStatus.error
+    }
+    dispatch(updateSupplierNotes({ value: note }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}

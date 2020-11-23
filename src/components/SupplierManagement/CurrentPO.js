@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 // import { navigate } from "@reach/router";
 import clsx from "clsx";
 
@@ -10,8 +10,8 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import {
   addCost,
-  // updateSupplierNotes,
-  // updateLabel,
+  updateDateByType,
+  updateSupplierNote,
 } from "../../redux/slices/purchaseOrderSlice";
 
 import POItemsTable from "./POItemsTable";
@@ -45,16 +45,15 @@ const CurrentPO = ({ currentPO }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes)
+  const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes);
 
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
   );
 
   const updateNote = () => {
-    //TODO
-    console.lot(note)
-  }
+    dispatch(updateSupplierNote(currentPO.id, note))
+  };
 
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
@@ -107,7 +106,15 @@ const CurrentPO = ({ currentPO }) => {
                 id="dueDate"
                 label="Due Date"
                 value={currentPO.dueDate}
-                //onChange={(value) => handleFilters(value, "toDate")}
+                onChange={(value) =>
+                  dispatch(
+                    updateDateByType(
+                      currentPO.id,
+                      "in-market-date",
+                      new Date(value)
+                    )
+                  )
+                }
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
@@ -124,7 +131,15 @@ const CurrentPO = ({ currentPO }) => {
                 id="expectedShip"
                 label="Expected Ship"
                 value={currentPO.expectedShip}
-                //onChange={(value) => handleFilters(value, "toDate")}
+                onChange={(value) =>
+                  dispatch(
+                    updateDateByType(
+                      currentPO.id,
+                      "expected-ship-date",
+                      new Date(value)
+                    )
+                  )
+                }
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
@@ -155,6 +170,10 @@ const CurrentPO = ({ currentPO }) => {
               Supplier Notes:
             </Typography>
             <br />
+            <Typography className={clsx(classes.headerText, classes.POText)}>
+              {`RFQ Number: ${currentPO.rfqNumber}`}
+            </Typography>
+            <br />
             <TextField
               label="Supplier Notes"
               color="secondary"
@@ -169,9 +188,6 @@ const CurrentPO = ({ currentPO }) => {
           </div>
         </Grid>
         <Grid item sm={6}>
-          <Typography className={clsx(classes.headerText, classes.POText)}>
-            {`RFQ Number: ${currentPO.rfqNumber}`}
-          </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
             {`Spec Details: ${currentPO.specDetails}`}
           </Typography>
@@ -204,10 +220,14 @@ const CurrentPO = ({ currentPO }) => {
           {`Total: ${formatMoney(currentPO.totalCost)}`}
         </Typography>
       </div>
-      <br />    
+      <br />
       <br />
     </>
   );
 };
+
+CurrentPO.propTypes = {
+  currentPO: PropTypes.object
+}
 
 export default CurrentPO;
