@@ -240,13 +240,13 @@ export const fetchSinglePO = (id) => async (dispatch) => {
       status: newPO.data.status,
       dueDate: newPO.data["in-market-date"]
         ? newPO.data["in-market-date"]
-        : format(addDays(new Date(), 120), "MM/dd/yyyy"),
+        : addDays(new Date(), 120),
       expectedShip: newPO.data["expected-ship-date"]
         ? newPO.data["expected-ship-date"]
-        : format(addDays(new Date(), 90), "MM/dd/yyyy"),
+        : addDays(new Date(), 90),
       actualShip: newPO.data["actual-ship-date"]
         ? newPO.data["actual-ship-date"]
-        : format(addDays(new Date(), 90), "MM/dd/yyyy"),
+        : addDays(new Date(), 90),
       terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
       supplier: newPO.data.suppler ? newPO.data.supplier.name : "---",
       contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
