@@ -63,7 +63,7 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
               Item Type
             </TableCell>
             <TableCell className={classes.headerText} align="left">
-              Qty Desired
+              Qty Ordered
             </TableCell>
             <TableCell className={classes.headerText} align="left">
               Est. Cost/Unit
@@ -89,7 +89,7 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
               <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
               <MoneyCell initialCost={formatMoney(row.estCost)} />
               <TableCell align="left">
-                {formatMoney(row.totalEstCost)}
+                {formatMoney(row.totalCost)}
               </TableCell>
               <TableCell align="right">
                 <Tooltip title="Remove">
