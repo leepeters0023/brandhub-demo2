@@ -16,33 +16,33 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const MoneyCell = ({ initialCost }) => {
+const MoneyCell = ({ initialCost, inputActive }) => {
     const { value: cost, bind: bindCost } = useMoneyInput(initialCost);
     //TODO, write update function and pass to useMoneyInput
     return (
         <TextField
-          value={cost}
-          variant="outlined"
-          size="small"
-          fullWidth
-          {...bindCost}
+            value={cost}
+            variant="outlined"
+            size="small"
+            fullWidth
+            {...bindCost}
         />
     );
-  };
+};
+
+const handleSubmit = (event, id) => {
+    //submit that RFQ!
+}
+
+const handleDecline = (event, id) => {
+    //declined
+}
 
 const RFQAcceptOrDecline = () => {
     const classes = useStyles();
     const [values, setValues] = useState({
         amount: '',
-        accepted: false,
-        declined: false,
-        notes: '',
     })
-
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-        console.log(event.target.value)
-    };
 
     return (
         <Grid
@@ -54,40 +54,33 @@ const RFQAcceptOrDecline = () => {
             spacing={5}
         >
             <Grid item>
-                <Typography style={{ marginBottom: "10px" }}> Accept or Decline Quote</Typography>
-                <Button
-                    className={classes.largeButton}
-                    disabled={values.accepted}
-                    value={"true"}
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleChange("accepted")}
-                >
-                    Accept
-              </Button>
-                <Button
-                    className={classes.largeButton}
-                    disabled={values.declined}
-                    value={"true"}
-                    variant="contained"
-                    color="secondary"
-                    style={{ marginLeft: "10px" }}
-                    onClick={handleChange("declined")}
-                >
-                    Decline
-              </Button>
+                <Typography> Accept or Decline Quote</Typography>
             </Grid>
             <Grid item>
-              <MoneyCell value={values.amount} initialCost={formatMoney(values.amount)}/>
+                <MoneyCell value={values.amount} initialCost={formatMoney(values.amount)} />
             </Grid>
-            <Grid item style={{alignSelf: "flex-end"}}>
+            <Grid item style={{ alignSelf: "flex-end" }}>
                 <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => {
+                        handleDecline()
+                    }}
+                >
+                    Decline
+                </Button>
+                <Button
+                    style={{ marginLeft: "10px" }}
                     className={classes.largeButton}
                     value={values.accepted}
                     variant="contained"
                     color="secondary"
+                    onClick={() => {
+                        handleSubmit()
+                    }}
                 >
-                    Submit
+                    Accept and Submit
               </Button>
             </Grid>
         </Grid>
