@@ -189,21 +189,21 @@ const PurchaseOrderHistoryTable = ({
                   {role === "supplier" && (
                     <> 
                       {row.brands.length > 1 ? (
-                        <Tooltip title={`${row.brands.join(",")}`}>
+                        <Tooltip placement="left" title={`${row.brands.join(",")}`}>
                           <TableCell align="left">{row.brands[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
                           </TableCell> 
                         </Tooltip>) : (
                           <TableCell align="left">{row.brands[0]}</TableCell>
                         )}
                       {row.itemDescription.length > 1 ? (
-                        <Tooltip title={`${row.itemDescription.join(",")}`}>
+                        <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
                           <TableCell align="left">{row.itemDescription[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
                           </TableCell>
                         </Tooltip>) : (
                           <TableCell align="left">{row.itemDescription[0]}</TableCell>
                         )}
                       {row.itemTypes.length > 1 ? (
-                        <Tooltip title={`${row.itemTypes.join(",")}`}>
+                        <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
                           <TableCell align="left">{row.itemTypes[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
                           </TableCell>
                         </Tooltip>) : (
