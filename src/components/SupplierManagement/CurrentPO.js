@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 // import { navigate } from "@reach/router";
-import format from "date-fns/format";
 import clsx from "clsx";
 
 import { useSelector, useDispatch } from "react-redux";
+
+import { useInput } from "../../hooks/InputHooks";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import {
   addCost,
@@ -39,13 +41,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentPO = ({ purchaseOrderItems }) => {
+const CurrentPO = ({ currentPO }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes)
 
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
   );
+
+  const updateNote = () => {
+    //TODO
+    console.lot(note)
+  }
 
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
@@ -67,16 +76,16 @@ const CurrentPO = ({ purchaseOrderItems }) => {
       >
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Supplier:
+            {`Supplier: ${currentPO.supplier}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Contact Name:
+            {`Contact Name: ${currentPO.contactName}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Email:
+            {`Email: ${currentPO.email}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Phone:
+            {`Phone: ${currentPO.phone}`}
           </Typography>
         </Grid>
         <Grid item sm={6}>
@@ -97,7 +106,7 @@ const CurrentPO = ({ purchaseOrderItems }) => {
                 margin="normal"
                 id="dueDate"
                 label="Due Date"
-                value={format(new Date(), "MM/dd/yyyy")}
+                value={currentPO.dueDate}
                 //onChange={(value) => handleFilters(value, "toDate")}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
@@ -114,7 +123,7 @@ const CurrentPO = ({ purchaseOrderItems }) => {
                 margin="normal"
                 id="expectedShip"
                 label="Expected Ship"
-                value={format(new Date(), "MM/dd/yyyy")}
+                value={currentPO.expectedShip}
                 //onChange={(value) => handleFilters(value, "toDate")}
                 KeyboardButtonProps={{
                   "aria-label": "change date",
@@ -124,10 +133,10 @@ const CurrentPO = ({ purchaseOrderItems }) => {
           </div>
           <br />
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Terms: Net 30 Days
+            {`Terms: ${currentPO.terms}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Purchased By:
+            {`Purchased By: ${currentPO.purchasedBy}`}
           </Typography>
         </Grid>
       </Grid>
@@ -154,15 +163,17 @@ const CurrentPO = ({ purchaseOrderItems }) => {
               variant="outlined"
               size="small"
               rows="4"
+              onBlur={updateNote}
+              {...bindNote}
             />
           </div>
         </Grid>
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            RFQ Number:
+            {`RFQ Number: ${currentPO.rfqNumber}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Spec Details:
+            {`Spec Details: ${currentPO.specDetails}`}
           </Typography>
         </Grid>
       </Grid>
@@ -171,7 +182,7 @@ const CurrentPO = ({ purchaseOrderItems }) => {
       <br />
       <br />
       <POItemsTable
-        items={purchaseOrderItems}
+        items={currentPO.poItems}
         classes={classes}
         addNewCost={addNewCost}
         additionalCosts={additionalCosts}
@@ -190,7 +201,7 @@ const CurrentPO = ({ purchaseOrderItems }) => {
           className={classes.titleText}
           style={{ marginRight: "20px" }}
         >
-          Total: $25,000.00
+          {`Total: ${formatMoney(currentPO.totalCost)}`}
         </Typography>
       </div>
       <br />    

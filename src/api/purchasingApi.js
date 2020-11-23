@@ -304,14 +304,13 @@ export const fetchRFQ = async (id) => {
 };
 
 //Creates a new PO based on an item and it's associated program
-export const createPO = async (ids, orderType) => {
+export const createPO = async (ids) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
       type: "purchase-order",
       attributes: {
-        "item-ids": ids,
-        "order-type": orderType,
+        "order-item-ids": ids,
       },
     },
   };
@@ -319,6 +318,7 @@ export const createPO = async (ids, orderType) => {
     .post("/api/purchase-orders", requestBody, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.data = data;
       response.status = "ok";
     })
