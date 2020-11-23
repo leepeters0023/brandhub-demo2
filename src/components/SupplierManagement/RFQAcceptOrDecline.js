@@ -1,20 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 
-import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
 import FormControl from '@material-ui/core/FormControl';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
-import Input from '@material-ui/core/Input';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 const useStyles = makeStyles((theme) => ({
     ...theme.global,
@@ -81,19 +74,6 @@ const RFQAcceptOrDecline = ({ }) => {
                         labelWidth={60}
                     />
                 </FormControl>
-            </Grid>
-            <Grid item>
-                <TextField
-                    value={values.notes}
-                    label="Supplier Notes"
-                    color="secondary"
-                    multiline
-                    fullWidth
-                    variant="outlined"
-                    size="small"
-                    rows="4"
-                    onBlur={handleChange('note')}
-                />
             </Grid>
             <Grid item style={{alignSelf: "flex-end"}}>
                 <Button
