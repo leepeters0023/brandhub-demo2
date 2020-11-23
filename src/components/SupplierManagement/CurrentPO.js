@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 // import { navigate } from "@reach/router";
 import clsx from "clsx";
@@ -20,6 +20,9 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -46,6 +49,7 @@ const CurrentPO = ({ currentPO }) => {
   const dispatch = useDispatch();
 
   const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes);
+  const [shippingOption, setShippingOption] = useState("direct");
 
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
@@ -58,6 +62,12 @@ const CurrentPO = ({ currentPO }) => {
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
   };
+
+  const handleRadioChange = (event) => {
+    setShippingOption(event.target.value);
+    //TODO update in redux
+  };
+
 
   useEffect(() => {
     if (additionalCosts.length === 0) {
@@ -210,9 +220,27 @@ const CurrentPO = ({ currentPO }) => {
           width: "75%",
           minWidth: "1000px",
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
         }}
       >
+        <RadioGroup
+                    aria-label="shipping-options"
+                    name="shipping-options"
+                    value={shippingOption}
+                    onChange={handleRadioChange}
+                    row
+                  >
+                    <FormControlLabel
+                      value="direct"
+                      control={<Radio />}
+                      label="Direct Ship"
+                    />
+                    <FormControlLabel
+                      value="cdc"
+                      control={<Radio />}
+                      label="Ship to CDC"
+                    />
+                  </RadioGroup>
         <Typography
           className={classes.titleText}
           style={{ marginRight: "20px" }}
