@@ -17,9 +17,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
@@ -36,16 +33,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [shippingOption, setShippingOption] = useState("direct");
   const [isNew, setIsNew] = useState(false);
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
-
-  const handleRadioChange = (event) => {
-    setShippingOption(event.target.value);
-    //TODO update in redux
-  };
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -77,7 +68,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
-  if (isPOLoading) {
+  if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
 
@@ -136,8 +127,26 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }}
         >
           <CurrentPO currentPO={currentPO} />
-
           <br />
+          {(window.location.hash.includes("new") ||
+            currentPO.status === "draft") && (
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+            >
+              SUBMIT PURCHASE ORDER
+            </Button>
+          )}
+          {currentPO.status === "in-progress" && (
+            <Button
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+          >
+            EDIT PURCHASE ORDER
+          </Button>
+          )}
           <br />
           <div
             style={{
@@ -150,28 +159,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               <Typography className={classes.titleText}>
                 Shipping Info
               </Typography>
-              <div className={classes.configButtons}>
-                <div className={classes.innerConfigDiv}>
-                  <RadioGroup
-                    aria-label="shipping-options"
-                    name="shipping-options"
-                    value={shippingOption}
-                    onChange={handleRadioChange}
-                    row
-                  >
-                    <FormControlLabel
-                      value="direct"
-                      control={<Radio />}
-                      label="Direct Ship"
-                    />
-                    <FormControlLabel
-                      value="cdc"
-                      control={<Radio />}
-                      label="Ship to CDC"
-                    />
-                  </RadioGroup>
-                </div>
-              </div>
             </div>
             <br />
             <br />
@@ -182,16 +169,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             <br />
             <br />
           </div>
-          {(window.location.hash.includes("new") ||
-            currentPO.status === "draft") && (
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-            >
-              SUBMIT PURCHASE ORDER
-            </Button>
-          )}
         </div>
         <br />
         <br />
