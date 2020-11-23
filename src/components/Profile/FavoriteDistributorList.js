@@ -3,12 +3,11 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useInput } from "../../hooks/InputHooks";
 
-import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
 import {
-  setDistributors,
-  updateDistributorListName,
-  deleteDistributorList,
-} from "../../redux/slices/userSlice";
+  fetchUserDistributors,
+  deleteFavoriteDistributorList,
+  updateFavoriteDistributorList,
+} from "../../redux/slices/distributorSlice";
 
 import DistributorTable from "./DistributorTable";
 
@@ -22,11 +21,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MemoNameInput = React.memo(
-  ({ dispatch, id }) => {
+  ({ dispatch, id, currentList }) => {
     const currentValue = useSelector(
       (state) =>
-        state.user.favoriteDistributors.find((distList) => distList.id === id)
-          .name
+        state.distributors.favoriteDistributors.find(
+          (distList) => distList.id === id
+        ).name
     );
     const { value: name, bind: bindName } = useInput(currentValue);
 
@@ -42,7 +42,7 @@ const MemoNameInput = React.memo(
         value={name}
         {...bindName}
         onBlur={() =>
-          dispatch(updateDistributorListName({ id: id, value: name }))
+          dispatch(updateFavoriteDistributorList(id, name, currentList))
         }
       />
     );
@@ -81,19 +81,28 @@ const FavoriteDistributorList = ({ id, index }) => {
   const options = useSelector((state) => state.distributors.distributorList);
   const userDistributors = useSelector(
     (state) =>
-      state.user.favoriteDistributors.find((distList) => distList.id === id)
-        .distributors
+      state.distributors.favoriteDistributors.find(
+        (distList) => distList.id === id
+      ).distributors
+  );
+  const name = useSelector(
+    (state) =>
+      state.distributors.favoriteDistributors.find(
+        (distList) => distList.id === id
+      ).name
   );
 
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
-    dispatch(setDistributors({ distributors: value, id: id }));
+    dispatch(
+      updateFavoriteDistributorList(id, name, value)
+    );
   };
 
   const handleDeleteList = () => {
-    dispatch(deleteDistributorList({ id: id }));
+    dispatch(deleteFavoriteDistributorList(id));
   };
 
   useEffect(() => {
@@ -118,14 +127,18 @@ const FavoriteDistributorList = ({ id, index }) => {
           alignItems: "center",
         }}
       >
-        <MemoNameInput dispatch={dispatch} id={id} />
+        <MemoNameInput
+          dispatch={dispatch}
+          id={id}
+          currentList={currentDistributors}
+        />
         <Autocomplete
           style={{ width: "45%" }}
           multiple
           freeSolo
           renderTags={() => null}
           className={classes.queryField}
-          id="distributor-auto-complete"
+          id={`distributor-auto-complete-${id}`}
           open={open}
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
@@ -168,6 +181,7 @@ const FavoriteDistributorList = ({ id, index }) => {
       <br />
       <DistributorTable
         distributors={userDistributors}
+        name={name}
         isLoading={false}
         id={id}
       />
