@@ -47,8 +47,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     //TODO update in redux
   };
 
-  //TODO  Editable fields will update purchase order state
-
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
   useEffect(() => {
@@ -58,12 +56,12 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (currentPO.id && !isPOLoading && window.location.hash === "#new") {
-      console.log("hash update")
+      console.log("hash update");
       window.location.hash = currentPO.id;
       setIsNew(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPO.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPO.id]);
 
   useEffect(() => {
     if (!currentPO.id && window.location.hash !== "#new") {
@@ -72,8 +70,15 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isPOLoading || !currentPO.id) {
-    return <Loading />
+  // useEffect(() => {
+  //   if (currentPO.id && window.location.hash !== "#new" && currentPO.id !== window.location.hash.slice(1)) {
+  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  if (isPOLoading) {
+    return <Loading />;
   }
 
   return (
@@ -87,7 +92,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   component={Link}
                   to="/purchasing/poHistory#current"
                   onClick={() => {
-                    dispatch(setRetain({ value: true}))
+                    dispatch(setRetain({ value: true }));
                   }}
                 >
                   <ArrowBackIcon fontSize="large" color="secondary" />
@@ -100,16 +105,16 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   component={Link}
                   to="/purchasing/poRollup"
                   onClick={() => {
-                    dispatch(setRetain({ value: true}))
+                    dispatch(setRetain({ value: true }));
                   }}
                 >
                   <ArrowBackIcon fontSize="large" color="secondary" />
                 </IconButton>
               </Tooltip>
             )}
-          <Typography className={classes.titleText}>
-            {`Purchase Order #${currentPO.id}`}
-          </Typography>
+            <Typography className={classes.titleText}>
+              {`Purchase Order #${currentPO.id}`}
+            </Typography>
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
@@ -131,17 +136,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }}
         >
           <CurrentPO currentPO={currentPO} />
-          {window.location.hash.includes("new") && (
-            <div>
-              <Button
-                className={classes.largeButton}
-                variant="contained"
-                color="secondary"
-              >
-                SUBMIT PURCHASE ORDER
-              </Button>
-            </div>
-          )}
+
           <br />
           <br />
           <div
@@ -180,18 +175,23 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-              <ShippingParameterTable classes={classes} shippingInfo={shippingParams} />
+            <ShippingParameterTable
+              classes={classes}
+              shippingInfo={shippingParams}
+            />
             <br />
             <br />
           </div>
-          <br />
-          <Button
-            className={classes.largeButton}
-            variant="contained"
-            color="secondary"
-          >
-            SUBMIT SHIPPING PARAMS
-          </Button>
+          {(window.location.hash.includes("new") ||
+            currentPO.status === "draft") && (
+            <Button
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+            >
+              SUBMIT PURCHASE ORDER
+            </Button>
+          )}
         </div>
         <br />
         <br />
