@@ -25,17 +25,17 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
 
-// const defualtCurrentFilters = {
-//   supplier: [],
-//   brand: [],
-//   program: [],
-//   itemType: [],
-//   status: "in-progress",
-//   poNum: "",
-//   sequenceNum: "",
-//   sortOrder: "asc",
-//   sortOrderBy: "poNum",
-// }
+const defualtCurrentFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "in-progress",
+  poNum: "",
+  sequenceNum: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+}
 
 const defaultFilters = {
   supplier: [],
