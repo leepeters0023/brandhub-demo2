@@ -25,6 +25,18 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
 
+const defualtCurrentFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "in-progress",
+  poNum: "",
+  sequenceNum: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+}
+
 const defaultFilters = {
   supplier: [],
   brand: [],
@@ -41,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
+const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.rfqHistory.nextLink);
