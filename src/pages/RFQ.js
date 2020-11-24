@@ -87,8 +87,8 @@ const RFQ = ({ handleFiltersClosed }) => {
   return (
     <Container role={role} className={classes.mainWrapper}>
       <div className={classes.titleBar}>
-        {!isNew && (
-          <div className={classes.titleImage}>
+        <div className={classes.titleImage}>
+          {!isNew && (
             <Tooltip title="Back to RFQ History" placement="bottom-start">
               <IconButton
                 component={Link}
@@ -100,16 +100,24 @@ const RFQ = ({ handleFiltersClosed }) => {
                 <ArrowBackIcon fontSize="large" color="secondary" />
               </IconButton>
             </Tooltip>
-            <Typography
-              className={classes.titleText}
-            >{`RFQ #${currentRFQ.id}`}</Typography>
-          </div>
-        )}
-        {isNew && (
+          )}
+          {isNew && (
+            <Tooltip title="Back to RFQ Rollup" placement="bottom-start">
+              <IconButton
+                component={Link}
+                to="/purchasing/rfqRollup"
+                onClick={() => {
+                  dispatch(setRetain({ value: true }));
+                }}
+              >
+                <ArrowBackIcon fontSize="large" color="secondary" />
+              </IconButton>
+            </Tooltip>
+          )}
           <Typography
             className={classes.titleText}
           >{`RFQ #${currentRFQ.id}`}</Typography>
-        )}
+        </div>
       </div>
       <br />
       <div

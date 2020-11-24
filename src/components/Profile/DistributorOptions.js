@@ -30,7 +30,7 @@ const DistributorOptions = () => {
   const currentDistributors = useSelector(
     (state) => state.distributors.editAttnList
   );
-  const isLoading = useSelector((state) => state.distributors.isLoading);
+  const isLoading = useSelector((state) => state.distributors.attnIsLoading);
 
   useEffect(() => {
     if (distName.length >= 1) {

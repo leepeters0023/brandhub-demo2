@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { Link } from "@reach/router";
 
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
+
+import { setRetain } from "../redux/slices/filterSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
@@ -19,6 +21,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 //mock data
 import { singlePO, shippingParams } from "../assets/mockdata/dataGenerator";
@@ -30,7 +33,12 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [shippingOption, setShippingOption] = useState("direct");
+  const [isNew, setIsNew] = useState(false);
+
+  const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
+  //const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
 
   const handleRadioChange = (event) => {
     setShippingOption(event.target.value);
@@ -51,13 +59,58 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (/*currentPO.id && */ !isPOLoading && window.location.hash === "#new") {
+      //window.location.hash = currentPO.id;
+      setIsNew(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // useEffect(() => {
+  //   if (!currentPO.id && window.location.hash !== "#new") {
+  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  //TODO add back button!!!, update filters conditionally based on url param!
+
   return (
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
+          <div className={classes.titleImage}>
+            {!isNew && (
+              <Tooltip title="Back to PO History" placement="bottom-start">
+                <IconButton
+                  component={Link}
+                  to="/purchasing/poHistory#current"
+                  onClick={() => {
+                    dispatch(setRetain({ value: true}))
+                  }}
+                >
+                  <ArrowBackIcon fontSize="large" color="secondary" />
+                </IconButton>
+              </Tooltip>
+            )}
+            {isNew && (
+              <Tooltip title="Back to PO Rollup" placement="bottom-start">
+                <IconButton
+                  component={Link}
+                  to="/purchasing/poRollup"
+                  onClick={() => {
+                    dispatch(setRetain({ value: true}))
+                  }}
+                >
+                  <ArrowBackIcon fontSize="large" color="secondary" />
+                </IconButton>
+              </Tooltip>
+            )}
           <Typography className={classes.titleText}>
             Purchase Order #110012
           </Typography>
+          </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               <Tooltip title="Upload File">
