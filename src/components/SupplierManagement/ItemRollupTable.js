@@ -317,7 +317,7 @@ const ItemRollupTable = ({
                 const labelId = `po-rollup-Checkbox-${index}`;
 
                 return (
-                  <TableRow key={row.id} hover>
+                  <TableRow key={index} hover>
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isItemSelected}
