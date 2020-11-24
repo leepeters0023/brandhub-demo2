@@ -19,7 +19,6 @@ import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
-import { SignalCellularNullSharp } from "@material-ui/icons";
 
 let headCells = [
   { id: "rfqNum", disablePadding: false, label: "RFQ #", sort: true },
