@@ -50,7 +50,7 @@ let distributors = [
 ];
 let packSizes = ["1", "10", "12", "25", "50"];
 let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"];
-// create needed fields here
+
 const generatePOItems = (dataPoints) => {
   let data = [];
   for (let i = 0; i < dataPoints; i++) {
