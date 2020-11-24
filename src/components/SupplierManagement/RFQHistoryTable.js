@@ -26,6 +26,7 @@ let headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
   {
     id: "totalItems",
     disablePadding: false,
@@ -135,7 +136,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-
+ 
   const handleStatus = (status, bids) => {
     if (role === "supplier") {
       status = "New"
@@ -213,6 +214,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   <TableCell align="left">{row.sequenceNum}</TableCell>
                   {role !== "supplier" && (<TableCell align="left">{row.program}</TableCell>)}
                   <TableCell align="left">{row.itemType}</TableCell>
+                  <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (
                     <>
