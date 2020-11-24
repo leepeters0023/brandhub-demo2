@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    height: "325px",
+    height: "345px",
     overflowY: "hidden",
   },
   drawerSupplierOpen: {
