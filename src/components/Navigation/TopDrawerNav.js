@@ -205,7 +205,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                     setDrawerContent("assets");
                   }}
                 >
-                  Assets
+                  Items
                 </Typography>
                 <Typography
                   variant="h5"
