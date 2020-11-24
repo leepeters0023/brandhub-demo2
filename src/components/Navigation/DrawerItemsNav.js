@@ -65,7 +65,6 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-        {userType !== "field1" && (
           <List className={classes.navList}>
             <ListItem>
               <ListItemText
@@ -78,6 +77,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               onClick={handleDrawerClose}
               component={Link}
               to="/compliance/items"
+              // accurate that we should be showing this to all users?
             >
               <ListItemText primary="Item Compliance" />
             </ListItem>
@@ -86,10 +86,12 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               onClick={handleDrawerClose}
               component={Link}
               to="/compliance/rules"
+             // accurate that we should be showing this to all users?
             >
               <ListItemText primary="Rules" />
             </ListItem>
-            <ListItem
+            {(userType === "compliance" || userType === "super") && (
+              <ListItem
               button
               onClick={handleDrawerClose}
               component={Link}
@@ -97,8 +99,8 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             >
               <ListItemText primary="Contacts" />
             </ListItem>
+            )}
           </List>
-        )}
       </Grid>
     </Grid>
   );
