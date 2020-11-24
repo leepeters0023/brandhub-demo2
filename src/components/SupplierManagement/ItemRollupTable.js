@@ -30,7 +30,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
   {
@@ -336,6 +338,7 @@ const ItemRollupTable = ({
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
+                    <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>
                         <TableCell align="left">
@@ -356,6 +359,7 @@ const ItemRollupTable = ({
                             : "---"}
                       </TableCell>
                     )}
+                    <TableCell align="left">{row.projectNum}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
