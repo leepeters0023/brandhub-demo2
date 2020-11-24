@@ -8,7 +8,7 @@ import { setRetain } from "../../redux/slices/filterSlice";
 
 import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
-import DrawerAssetsNav from "./DrawerAssetsNav";
+import DrawerItemsNav from "./DrawerItemsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
 import DrawerPurchasingNav from "./DrawerPurchasingNav";
 import DrawerPONav from "./DrawerPONav";
@@ -218,7 +218,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                     setDrawerContent("orders");
                   }}
                 >
-                  Orders
+                  Order
                 </Typography>
                 {role !== "field1" && (
                   <Typography
@@ -238,7 +238,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               </>
             )}
           </div>
-          <div className={classes.navBreak} style={{float: "right", marginTop: "-67px"}}>
+          <div className={classes.navBreak} style={{ float: "right", marginTop: "-67px" }}>
             {territories.length > 1 && <RegionSelector />}
             <UserNav
               initials={initials}
@@ -251,7 +251,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
         <br />
         <div className={classes.drawerContent}>
           {drawerContent === "assets" && (
-            <DrawerAssetsNav
+            <DrawerItemsNav
               userType={role}
               handleDrawerClose={handleDrawerClose}
               classes={classes}

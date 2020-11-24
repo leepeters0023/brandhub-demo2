@@ -86,6 +86,8 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
+            {(currentUserRole === "compliance" || currentUserRole === "super") && (
+            <> 
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -112,6 +114,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
             >
               OVERRIDE RULE
             </Button>
+            </> )}
             <Tooltip title="Print Items">
               <IconButton>
                 <PrintIcon color="secondary" />

@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
+const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
   return (
     <Grid container spacing={2}>
       <Grid item sm={3} xs={12}>
@@ -24,23 +24,15 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/items/all"
           >
-            <ListItemText primary="All Items" />
+            <ListItemText primary="Current" />
           </ListItem>
           <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items/in-stock"
+            to="/items/archive"
           >
-            <ListItemText primary="In-Stock" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/items/on-demand"
-          >
-            <ListItemText primary="On-Demand" />
+            <ListItemText primary="Archive" />
           </ListItem>
         </List>
       </Grid>
@@ -52,7 +44,7 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
               primary="Programs:"
             />
           </ListItem>
-          {userType !== "field1" && (
+          {(userType === "field2" || userType === "super") && (
             <ListItem
               button
               onClick={handleDrawerClose}
@@ -112,9 +104,9 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
   );
 };
 
-DrawerAssetsNav.propTypes = {
+DrawerItemsNav.propTypes = {
   handleDrawerClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
-export default DrawerAssetsNav;
+export default DrawerItemsNav;
