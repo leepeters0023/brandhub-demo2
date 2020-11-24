@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+//import { useSelector, useDispatch } from "react-redux";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 import { useMoneyInput } from "../../hooks/InputHooks";
@@ -30,6 +31,8 @@ const MoneyCell = ({ quote }) => {
     );
 };
 
+// const returnNote = useSelector((state) => state.rfq.currentRFQ.returnNote);
+
 const handleSubmit = (event, id) => {
     //submit that RFQ!
 }
@@ -56,6 +59,24 @@ const RFQAcceptOrDecline = () => {
             </Grid>
             <Grid item>
                 <MoneyCell value={quoteValue} quote={formatMoney(quoteValue)} />
+            </Grid>
+            <Grid item>
+            <TextField
+                label="Return Note"
+                color="secondary"
+                multiline
+                fullWidth
+                variant="outlined"
+                size="small"
+                rows="4"
+                //value={returnNote}
+                onChange={(event) => {}
+                  //update returnNote
+                }
+                onBlur={(event) => {}
+                    //update returnNote
+                }
+              />
             </Grid>
             <Grid item style={{ alignSelf: "flex-end" }}>
                 <Button
