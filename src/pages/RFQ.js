@@ -11,6 +11,7 @@ import { setRetain } from "../redux/slices/filterSlice";
 
 import Loading from "../components/Utility/Loading";
 import CurrentRFQ from "../components/SupplierManagement/CurrentRFQ";
+import RFQAcceptOrDecline from "../components/SupplierManagement/RFQAcceptOrDecline";
 import RFQSupplierSentTable from "../components/SupplierManagement/RFQSupplierSentTable";
 import RFQSupplierBidTable from "../components/SupplierManagement/RFQSupplierBidTable";
 
@@ -37,7 +38,7 @@ const RFQ = ({ handleFiltersClosed }) => {
 
   const [suppliersSelected, setSuppliersSelected] = useCallback(useState([]));
   const [isNew, setIsNew] = useState(false);
-
+  const role = useSelector((state) => state.user.role);
   const isRFQLoading = useSelector((state) => state.rfq.isLoading);
   const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
   const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
@@ -84,7 +85,7 @@ const RFQ = ({ handleFiltersClosed }) => {
   }
 
   return (
-    <Container className={classes.mainWrapper}>
+    <Container role={role} className={classes.mainWrapper}>
       <div className={classes.titleBar}>
         <div className={classes.titleImage}>
           {!isNew && (
@@ -132,37 +133,43 @@ const RFQ = ({ handleFiltersClosed }) => {
         <br />
         <Divider style={{ width: "75%", minWidth: "600px" }} />
         <br />
-        {currentRFQ.bids.length !== currentSuppliers.length && (
+        {role !== "supplier" && (
           <>
-            <RFQSupplierSentTable
-              currentSuppliers={currentSuppliers}
-              isLoading={isSuppliersLoading}
-              suppliersSelected={suppliersSelected}
-              setSuppliersSelected={setSuppliersSelected}
-              currentBids={currentRFQ.bids}
-            />
-            <br />
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "10px" }}
-              disabled={suppliersSelected.length === 0}
-              onClick={handleSendBids}
-            >
-              SEND RFQ
-            </Button>
-            <br />
+            {currentRFQ.bids.length !== currentSuppliers.length && (
+              <>
+                <RFQSupplierSentTable
+                  currentSuppliers={currentSuppliers}
+                  isLoading={isSuppliersLoading}
+                  suppliersSelected={suppliersSelected}
+                  setSuppliersSelected={setSuppliersSelected}
+                  currentBids={currentRFQ.bids}
+                />
+                <br />
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  style={{ marginRight: "10px" }}
+                  disabled={suppliersSelected.length === 0}
+                  onClick={handleSendBids}
+                >
+                  SEND RFQ
+                </Button>
+                <br />
+              </>
+            )}
+            {currentRFQ.bids.length > 0 && (
+              <RFQSupplierBidTable
+                classes={classes}
+                bids={currentRFQ.bids}
+                handleAward={handleAwardBid}
+                handlePO={handleBidPO}
+              />
+            )}
           </>
         )}
-
-        {currentRFQ.bids.length > 0 && (
-          <RFQSupplierBidTable
-            classes={classes}
-            bids={currentRFQ.bids}
-            handleAward={handleAwardBid}
-            handlePO={handleBidPO}
-          />
+        {role === "supplier" && (
+          <RFQAcceptOrDecline />
         )}
         <br />
       </div>
