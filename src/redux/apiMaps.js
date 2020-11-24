@@ -137,8 +137,12 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     sequenceNum: item["item-number"],
+    imgUrl: item.item["img-url"],
+    orderType: item.item["order-type"],
+    brand: item.item.brands.map((brand) => brand.name),
     program: item["program-names"].join(", "),
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -221,6 +225,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -238,8 +243,12 @@ export const mapRollupItems = (items) => {
     id: item.item.id,
     itemId: item.item.id,
     sequenceNum: item["item-number"],
+    projectNum: item["project-number"] ? item["project-number"] : "---",
     territory:
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
+    brand: item.brands
+      ? item.brands.map((brand) => brand.name).join(", ")
+      : "---",
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
@@ -265,6 +274,7 @@ export const mapPOItems = (items) => {
     itemType: item["item-type-description"]
       ? item["item-type-description"]
       : "---",
+    packSize: item["qty-per-pack"] ? item["qty-per-pack"] : "5",
     totalItems: item.qty,
     estCost: item["estimated-cost"]
       ? item["estimated-cost"]
@@ -289,7 +299,7 @@ export const mapRFQ = (rfq) => {
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price, 
+      price: bid.price,
     }));
   };
 

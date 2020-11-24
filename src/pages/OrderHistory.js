@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import "date-fns";
 import subDays from "date-fns/subDays";
@@ -9,12 +9,16 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchNextOrderHistory, fetchNextFilteredOrderHistoryByItem } from "../redux/slices/orderHistorySlice";
+import {
+  fetchNextOrderHistory,
+  fetchNextFilteredOrderHistoryByItem,
+} from "../redux/slices/orderHistorySlice";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
+import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import OrderHistoryByItemTable from "../components/OrderHistory/OrderHistoryByItemTable";
 
 import Typography from "@material-ui/core/Typography";
@@ -63,6 +67,8 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [currentItem, setCurrentItem] = useCallback(useState({}));
+  const [modal, handleModal] = useCallback(useState(false));
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
@@ -89,6 +95,24 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
 
+  const handleModalOpen = useCallback(
+    (img, brand, itemType, itemNumber, itemDescription) => {
+      setCurrentItem({
+        imgUrl: img,
+        brand: brand,
+        itemType: itemType,
+        itemNumber: itemNumber,
+        itemDescription: itemDescription,
+      });
+      handleModal(true);
+    },
+    [handleModal, setCurrentItem]
+  );
+
+  const handleModalClose = () => {
+    handleModal(false);
+  };
+
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
@@ -113,6 +137,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <OrderItemPreview
+        handleModalClose={handleModalClose}
+        modal={modal}
+        currentItem={currentItem}
+      />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order History</Typography>
@@ -166,6 +195,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
             isOrdersLoading={isOrdersLoading}
             handleSort={handleSort}
             scrollRef={scrollRef}
+            handlePreview={handleModalOpen}
           />
         )}
         {isNextLoading && (
