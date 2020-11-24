@@ -51,7 +51,7 @@ const RFQAcceptOrDecline = () => {
             direction="column"
             justify="center"
             alignItems="stretch"
-            style={{ width: "75%", minWidth: "600px" }}
+            style={{ width: "50%", minWidth: "600px" }}
             spacing={5}
         >
             <Grid sm={8} item>
