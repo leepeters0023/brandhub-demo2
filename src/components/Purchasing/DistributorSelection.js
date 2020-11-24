@@ -52,7 +52,7 @@ const DistributorSelection = () => {
   const currentOrders = useSelector((state) => state.orderSet.orders);
   const orderSetId = useSelector((state) => state.orderSet.orderId);
   const orderType = useSelector((state) => state.orderSet.type);
-  const favoriteLists = useSelector((state) => state.user.favoriteDistributors);
+  const favoriteLists = useSelector((state) => state.distributors.favoriteDistributors);
   const currentRole = useSelector((state) => state.user.role);
 
   const loading = open && isLoading;
