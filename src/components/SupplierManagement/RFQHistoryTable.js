@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { resetRFQ } from "../../redux/slices/rfqSlice";
 
@@ -19,12 +19,14 @@ import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import { SignalCellularNullSharp } from "@material-ui/icons";
 
-const headCells = [
+let headCells = [
   { id: "rfqNum", disablePadding: false, label: "RFQ #", sort: true },
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
   {
     id: "totalItems",
     disablePadding: false,
@@ -38,20 +40,27 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
+  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
+  { id: "bidValue", disablePadding: false, label: "Bid", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const { classes, order, orderBy, onRequestSort, role } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
+  const currentHeadCells =
+    role !== "supplier"
+      ? headCells.filter((cell) => cell.id !== "bidValue")
+      : headCells.filter((cell) => cell.id !== "totalEstCost" && cell.id !== "estCost" && cell.id !== "program");
+
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => {
+        {currentHeadCells.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -123,11 +132,16 @@ const useStyles = makeStyles((theme) => ({
 
 const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const classes = useStyles();
+  const role = useSelector((state) => state.user.role);
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-
+  console.log(rfqs)
   const handleStatus = (status, bids) => {
+    if (role === "supplier" && status === "sent") {
+      return "New"
+      //TODO: add further supplier bid status when available
+    }
     if (status === "sent") {
       let bidCount = 0;
       bids.forEach((bid) => {
@@ -174,6 +188,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
+            role={role}
           />
           <TableBody>
             {!rfqsLoading && rfqs.length === 0 && (
@@ -198,15 +213,24 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{row.program}</TableCell>
+                  {role !== "supplier" && (<TableCell align="left">{row.program}</TableCell>)}
                   <TableCell align="left">{row.itemType}</TableCell>
+                  <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
-                  <TableCell align="left">
-                    {formatMoney(row.totalEstCost)}
-                  </TableCell>
+                  {role !== "supplier" && (
+                    <>
+                      <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+                      <TableCell align="left">{formatMoney(row.totalEstCost)}</TableCell>
+                    </>
+                  )}
+                  <TableCell align="left">{row.actTotal
+                    ? formatMoney(row.actTotal)
+                    : "---"}</TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">{handleStatus(row.status, row.bids)}</TableCell>
+                  {role === "supplier" && (<TableCell align="left">{row.bids[0].price
+                    ? formatMoney(row.bids[0].price)
+                    : "---"}</TableCell>)}
                 </TableRow>
               ))}
             {rfqsLoading && (
