@@ -32,6 +32,7 @@ const headCells = [
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
   {
     id: "totalItems",
     disablePadding: false,
@@ -356,6 +357,7 @@ const ItemRollupTable = ({
                       </TableCell>
                     )}
                     <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
                     {type === "po" && (
                       <TableCell
