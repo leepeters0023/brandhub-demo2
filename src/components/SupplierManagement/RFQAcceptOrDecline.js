@@ -54,13 +54,13 @@ const RFQAcceptOrDecline = () => {
             style={{ width: "75%", minWidth: "600px" }}
             spacing={5}
         >
-            <Grid item>
+            <Grid sm={8} item>
                 <Typography>Accept or Decline RFQ</Typography>
             </Grid>
-            <Grid item>
+            <Grid sm={12} item>
                 <MoneyCell value={quoteValue} quote={formatMoney(quoteValue)} />
             </Grid>
-            <Grid item>
+            <Grid sm={12} item>
             <TextField
                 label="Return Note"
                 color="secondary"
@@ -78,7 +78,7 @@ const RFQAcceptOrDecline = () => {
                 }
               />
             </Grid>
-            <Grid item style={{ alignSelf: "flex-end" }}>
+            <Grid sm={10} item style={{alignSelf: "flex-end"}}>
                 <Button
                     className={classes.largeButton}
                     variant="contained"

@@ -16,20 +16,20 @@ import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
-import { Tooltip } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const headCells = [
   { id: "poNum", disablePadding: false, label: "PO #", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: true },
+  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "totalItems", disablePadding: false, label: "Total Ordered", sort: false, },
   { id: "totalEstCost", disablePadding: false, label: "Est. Total", sort: false, },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: true },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
-  { id: "brand", disablePadding: false, label: "Brand", sort: true },
-  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
-  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -126,7 +126,7 @@ const PurchaseOrderHistoryTable = ({
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-  console.log(pos)
+ 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -180,38 +180,37 @@ const PurchaseOrderHistoryTable = ({
                 >
                   <TableCell align="left">{row.poNum}</TableCell>
                   {role !== "supplier" && (<TableCell align="left">{row.supplier}</TableCell>)}
+                  {role === "supplier" && (
+                    <>
+                      {row.itemTypes.length > 1 ? (
+                        <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
+                          <TableCell align="left">{row.itemTypes[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
+                          </TableCell>
+                        </Tooltip>) : (
+                          <TableCell align="left">{row.itemTypes[0]}</TableCell>
+                        )}
+                      {row.itemDescription.length > 1 ? (
+                        <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
+                          <TableCell align="left">{row.itemDescription[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
+                          </TableCell>
+                        </Tooltip>) : (
+                          <TableCell align="left">{row.itemDescription[0]}</TableCell>
+                        )}
+                      {row.brands.length > 1 ? (
+                        <Tooltip placement="left" title={`${row.brands.join(",")}`}>
+                          <TableCell align="left">{row.brands[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
+                          </TableCell>
+                        </Tooltip>) : (
+                          <TableCell align="left">{row.brands[0]}</TableCell>
+                        )}
+                    </>
+                  )}
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (<TableCell align="left">{formatMoney(row.totalEstCost)}
                   </TableCell>)}
                   <TableCell align="left">{formatMoney(row.actTotal)}</TableCell>
                   <TableCell align="left">{row.status}</TableCell>
                   <TableCell align="left">{row.dueDate}</TableCell>
-                  {role === "supplier" && (
-                    <> 
-                      {row.brands.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.brands.join(",")}`}>
-                          <TableCell align="left">{row.brands[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
-                          </TableCell> 
-                        </Tooltip>) : (
-                          <TableCell align="left">{row.brands[0]}</TableCell>
-                        )}
-                      {row.itemDescription.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
-                          <TableCell align="left">{row.itemDescription[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
-                          </TableCell>
-                        </Tooltip>) : (
-                          <TableCell align="left">{row.itemDescription[0]}</TableCell>
-                        )}
-                      {row.itemTypes.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
-                          <TableCell align="left">{row.itemTypes[0]}<br/><MoreHorizIcon fontSize="small" color="inherit"/>
-                          </TableCell>
-                        </Tooltip>) : (
-                          <TableCell align="left">{row.itemTypes[0]}</TableCell>
-                        )}
-                        
-                    </>
-                  )}
                 </TableRow>
               ))}
             {posLoading && (
