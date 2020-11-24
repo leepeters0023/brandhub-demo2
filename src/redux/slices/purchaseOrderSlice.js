@@ -33,6 +33,8 @@ let initialState = {
     purchasedBy: null,
     supplierNotes: "",
     rfqNumber: null,
+    shippingLabel: null,
+    keyAcctTape: "",
     specDetails: null,
     poItems: [],
     additionalCosts: [],
@@ -97,6 +99,8 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.phone = purchaseOrder.phone;
       state.currentPO.purchasedBy = purchaseOrder.purchasedBy;
       state.currentPO.supplierNotes = purchaseOrder.supplierNotes;
+      state.currentPO.shippingLabel = purchaseOrder.shippingLabel;
+      state.currentPO.keyAcctTape = purchaseOrder.keyAcctTape;
       state.currentPO.rfqNumber = purchaseOrder.rfqNumber;
       state.currentPO.specDetails = purchaseOrder.specDetails;
       state.currentPO.poItems = purchaseOrder.poItems;
@@ -163,6 +167,8 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.phone = null;
       state.currentPO.purchasedBy = null;
       state.currentPO.supplierNotes = "";
+      state.currentPO.shippingLabel = null;
+      state.currentPO.keyAcctTape = "";
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
@@ -256,6 +262,8 @@ export const fetchSinglePO = (id) => async (dispatch) => {
         ? newPO.data.purchaser.name
         : `Buyer # ${newPO.data.purchaser.id}`,
       supplierNotes: newPO.data.note ? newPO.data.note : "",
+      keyAcctTape: newPO.data["key-account-tape"] ? newPO.data["key-account-tape"] : "",
+      shippingLabel: newPO.data.label ? newPO.data.label : "---",
       rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
       specDetails: newPO.data["spec-details"]
         ? newPO.data["spec-details"]
@@ -306,6 +314,8 @@ export const createNewPO = (idArray) => async (dispatch) => {
         ? newPO.data.purchaser.name
         : `Buyer # ${newPO.data.purchaser.id}`,
       supplierNotes: newPO.data.note ? newPO.data.note : "",
+      keyAcctTape: newPO.data["key-account-tape"] ? newPO.data["key-account-tape"] : "",
+      shippingLabel: newPO.data.label ? newPO.data.label : "---",
       rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
       specDetails: newPO.data["spec-details"]
         ? newPO.data["spec-details"]

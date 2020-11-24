@@ -49,6 +49,9 @@ const CurrentPO = ({ currentPO }) => {
   const dispatch = useDispatch();
 
   const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes);
+  const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
+    currentPO.keyAcctTape
+  );
   const [shippingOption, setShippingOption] = useState("direct");
 
   const additionalCosts = useSelector(
@@ -56,7 +59,7 @@ const CurrentPO = ({ currentPO }) => {
   );
 
   const updateNote = () => {
-    dispatch(updateSupplierNote(currentPO.id, note))
+    dispatch(updateSupplierNote(currentPO.id, note));
   };
 
   const addNewCost = () => {
@@ -67,7 +70,6 @@ const CurrentPO = ({ currentPO }) => {
     setShippingOption(event.target.value);
     //TODO update in redux
   };
-
 
   useEffect(() => {
     if (additionalCosts.length === 0) {
@@ -181,8 +183,25 @@ const CurrentPO = ({ currentPO }) => {
             </Typography>
             <br />
             <Typography className={clsx(classes.headerText, classes.POText)}>
+              {`Shipping Labels: ${currentPO.shippingLabel}`}
+            </Typography>
+            <Typography className={clsx(classes.headerText, classes.POText)}>
               {`RFQ Number: ${currentPO.rfqNumber}`}
             </Typography>
+            <br />
+            <TextField
+              label="Key Account Tape"
+              color="secondary"
+              multiline
+              fullWidth
+              variant="outlined"
+              size="small"
+              rows="2"
+              onBlur={() => {
+                /* TODO */ console.log(keyAcctTape);
+              }}
+              {...bindKeyAcctTape}
+            />
             <br />
             <TextField
               label="Supplier Notes"
@@ -224,23 +243,23 @@ const CurrentPO = ({ currentPO }) => {
         }}
       >
         <RadioGroup
-                    aria-label="shipping-options"
-                    name="shipping-options"
-                    value={shippingOption}
-                    onChange={handleRadioChange}
-                    row
-                  >
-                    <FormControlLabel
-                      value="direct"
-                      control={<Radio />}
-                      label="Direct Ship"
-                    />
-                    <FormControlLabel
-                      value="cdc"
-                      control={<Radio />}
-                      label="Ship to CDC"
-                    />
-                  </RadioGroup>
+          aria-label="shipping-options"
+          name="shipping-options"
+          value={shippingOption}
+          onChange={handleRadioChange}
+          row
+        >
+          <FormControlLabel
+            value="direct"
+            control={<Radio />}
+            label="Direct Ship"
+          />
+          <FormControlLabel
+            value="cdc"
+            control={<Radio />}
+            label="Ship to CDC"
+          />
+        </RadioGroup>
         <Typography
           className={classes.titleText}
           style={{ marginRight: "20px" }}
@@ -255,7 +274,7 @@ const CurrentPO = ({ currentPO }) => {
 };
 
 CurrentPO.propTypes = {
-  currentPO: PropTypes.object
-}
+  currentPO: PropTypes.object,
+};
 
 export default CurrentPO;

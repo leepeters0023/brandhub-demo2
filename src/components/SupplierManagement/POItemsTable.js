@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 
 import { updateCost } from "../../redux/slices/purchaseOrderSlice";
 
-import { useMoneyInput } from "../../hooks/InputHooks";
+import { useMoneyInput, useNumberOnlyInput } from "../../hooks/InputHooks";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -39,6 +39,22 @@ const MoneyCell = ({ initialCost }) => {
   );
 };
 
+const PackSizeCell = ({ initialPackSize }) => {
+  const { value: packSize, bind: bindPackSize } = useNumberOnlyInput(initialPackSize);
+  //TODO, handle calls on blur when available
+  return (
+    <TableCell align="left">
+      <TextField
+        value={packSize}
+        variant="outlined"
+        size="small"
+        fullWidth
+        {...bindPackSize}
+      />
+    </TableCell>
+  )
+}
+
 const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
   const dispatch = useDispatch();
   return (
@@ -63,6 +79,9 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
               Item Type
             </TableCell>
             <TableCell className={classes.headerText} align="left">
+              Pack Size
+            </TableCell>
+            <TableCell className={classes.headerText} align="left">
               Qty Ordered
             </TableCell>
             <TableCell className={classes.headerText} align="left">
@@ -85,6 +104,7 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
               <TableCell align="left">{row.sequenceNum}</TableCell>
               <TableCell align="left">{row.program}</TableCell>
               <TableCell align="left">{row.itemType}</TableCell>
+              <PackSizeCell initialPackSize={row.packSize} />
               <TableCell align="left">{row.totalItems}</TableCell>
               <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
               <MoneyCell initialCost={formatMoney(row.estCost)} />
