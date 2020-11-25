@@ -51,7 +51,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               component={Link}
               to="/programs/new"
             >
-              <ListItemText primary="+ New Ad Hoc Program" />
+              <ListItemText primary="Create Ad Hoc Program" />
             </ListItem>
           )}
           <ListItem
