@@ -27,6 +27,7 @@ import { fetchFilteredItems } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
 import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
+import { fetchFilteredPOHistory } from "../../redux/slices/purchaseOrderHistorySlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -159,6 +160,13 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredRFQHistory(currentFilters));
       }
       if (
+        filterType === "history-po" &&
+        filter !== "sequenceNum" &&
+        filter !== "poNum"
+      ) {
+        dispatch(fetchFilteredPOHistory(currentFilters));
+      }
+      if (
         (filterType === "item-all" ||
           filterType === "item-inStock" ||
           filterType === "item-onDemand") &&
@@ -224,6 +232,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "history-rfq") {
         dispatch(fetchFilteredRFQHistory(defaultFilters));
       }
+      if (filterType === "history-po") {
+        dispatch(fetchFilteredPOHistory(defaultFilters));
+      }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
@@ -273,8 +284,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   };
 
   const handleFilteredPOFetch = () => {
-    //TODO
-    console.log("fetching!");
+    dispatch(setChips({ filterType: "history" }));
+    dispatch(fetchFilteredPOHistory(allFilters));
   };
 
   const handlePORollupFetch = () => {
@@ -341,6 +352,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "history-rfq") {
         dispatch(fetchFilteredRFQHistory(allFilters));
+      }
+      if (filterType === "history-po") {
+        dispatch(fetchFilteredPOHistory(allFilters));
       }
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(allFilters));
@@ -416,12 +430,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               poNum={poNum}
               bindPoNum={bindPoNum}
               suppliers={suppliers}
-              handleSearch={
-                // filterType.includes("orders")
-                //   ? handleOrderHistoryFetch
-                //   : handleOrderSetFetch
-                historySearchMap[filterType.split("-")[1]]
-              }
+              handleSearch={historySearchMap[filterType.split("-")[1]]}
               historyType={filterType.split("-")[1]}
             />
           )}

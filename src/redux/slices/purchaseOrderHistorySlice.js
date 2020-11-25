@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchPOHistory, fetchNextPOHistory } from "../../api/purchasingApi";
+import { mapPOHistoryItems } from "../apiMaps";
 
 /*
 * PO Model
@@ -85,3 +87,44 @@ export const {
 } = purchaseOrderHistorySlice.actions;
 
 export default purchaseOrderHistorySlice.reducer;
+
+export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let pos = await fetchPOHistory(filterObject);
+    if (pos.error) {
+      throw pos.error;
+    }
+    console.log(pos)
+    const mappedPOItems = mapPOHistoryItems(pos.data.pos);
+    dispatch(
+      getPoHistorySuccess({
+        pos: mappedPOItems,
+        nextLink: pos.data.nextLink,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchNextFilteredPOHistory = (url) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let pos = await fetchNextPOHistory(url);
+    if (pos.error) {
+      throw pos.error;
+    }
+    const mappedPOItems = mapPOHistoryItems(pos.data.pos);
+    dispatch(
+      getNextPoHistorySuccess({
+        pos: mappedPOItems,
+        nextLink: pos.data.nextLink,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

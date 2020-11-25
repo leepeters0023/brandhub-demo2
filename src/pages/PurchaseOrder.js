@@ -61,13 +61,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {
-  //   if (currentPO.id && window.location.hash !== "#new" && currentPO.id !== window.location.hash.slice(1)) {
-  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
@@ -81,7 +74,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               <Tooltip title="Back to PO History" placement="bottom-start">
                 <IconButton
                   component={Link}
-                  to="/purchasing/poHistory#current"
+                  to="/purchasing/poHistory/current"
                   onClick={() => {
                     dispatch(setRetain({ value: true }));
                   }}

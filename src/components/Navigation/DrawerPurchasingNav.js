@@ -31,7 +31,7 @@ const DrawerPurchasingNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#current"
+            to="/purchasing/poHistory/current"
           >
             <ListItemText primary="Current POs" />
           </ListItem>
@@ -39,7 +39,7 @@ const DrawerPurchasingNav = ({ handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#all"
+            to="/purchasing/poHistory/all"
           >
             <ListItemText primary="PO History" />
           </ListItem>

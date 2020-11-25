@@ -121,7 +121,7 @@ export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
     }
     let mappedRFQs = mapRFQHistory(rfqs.data.rfqs);
     dispatch(
-      getRfqHistorySuccess({
+      getNextRfqHistorySuccess({
         rfqs: mappedRFQs,
         nextLink: rfqs.data.nextLink,
       })

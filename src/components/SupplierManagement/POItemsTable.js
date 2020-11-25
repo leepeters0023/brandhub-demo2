@@ -5,7 +5,11 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useDispatch } from "react-redux";
 
-import { updateCost } from "../../redux/slices/purchaseOrderSlice";
+import {
+  updateCost,
+  setItemActCost,
+  setItemPackSize,
+} from "../../redux/slices/purchaseOrderSlice";
 
 import { useMoneyInput, useNumberOnlyInput } from "../../hooks/InputHooks";
 
@@ -20,11 +24,16 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
-const MoneyCell = ({ initialCost }) => {
-  const { value: cost, bind: bindCost } = useMoneyInput(initialCost);
+const MoneyCell = ({ initialCost, id }) => {
+  const { value: cost, bind: bindCost } = useMoneyInput(
+    initialCost,
+    setItemActCost,
+    id
+  );
   //TODO, write update function and pass to useMoneyInput
   return (
     <TableCell align="left">
@@ -39,8 +48,10 @@ const MoneyCell = ({ initialCost }) => {
   );
 };
 
-const PackSizeCell = ({ initialPackSize }) => {
-  const { value: packSize, bind: bindPackSize } = useNumberOnlyInput(initialPackSize);
+const PackSizeCell = ({ initialPackSize, id, dispatch }) => {
+  const { value: packSize, bind: bindPackSize } = useNumberOnlyInput(
+    initialPackSize
+  );
   //TODO, handle calls on blur when available
   return (
     <TableCell align="left">
@@ -50,10 +61,13 @@ const PackSizeCell = ({ initialPackSize }) => {
         size="small"
         fullWidth
         {...bindPackSize}
+        onBlur={() => {
+          dispatch(setItemPackSize(id, packSize));
+        }}
       />
     </TableCell>
-  )
-}
+  );
+};
 
 const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
   const dispatch = useDispatch();
@@ -102,15 +116,29 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
           {items.map((row) => (
             <TableRow key={row.id}>
               <TableCell align="left">{row.sequenceNum}</TableCell>
-              <TableCell align="left">{row.program}</TableCell>
+              {row.program !== "---" && row.program.length > 1 ? (
+                <Tooltip placement="left" title={`${row.program.join(", ")}`}>
+                  <TableCell
+                    align="left"
+                    style={{ display: "flex", alignItems: "flex-end" }}
+                  >
+                    {row.program[0]}
+                    <MoreHorizIcon fontSize="small" color="inherit" />
+                  </TableCell>
+                </Tooltip>
+              ) : (
+                <TableCell align="left">{row.program[0] || row.program}</TableCell>
+              )}
               <TableCell align="left">{row.itemType}</TableCell>
-              <PackSizeCell initialPackSize={row.packSize} />
+              <PackSizeCell
+                initialPackSize={row.packSize}
+                id={row.id}
+                dispatch={dispatch}
+              />
               <TableCell align="left">{row.totalItems}</TableCell>
               <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
-              <MoneyCell initialCost={formatMoney(row.estCost)} />
-              <TableCell align="left">
-                {formatMoney(row.totalCost)}
-              </TableCell>
+              <MoneyCell initialCost={formatMoney(row.actCost)} id={row.id} />
+              <TableCell align="left">{formatMoney(row.totalCost)}</TableCell>
               <TableCell align="right">
                 <Tooltip title="Remove">
                   <IconButton
