@@ -7,7 +7,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
-const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
+const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
   return (
     <Grid container spacing={2}>
       <Grid item sm={3} xs={12}>
@@ -24,23 +24,16 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/items/all"
           >
-            <ListItemText primary="All Items" />
+            <ListItemText primary="Current" />
           </ListItem>
           <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items/in-stock"
+            to="/items/all"
+            //to="/items/archive"
           >
-            <ListItemText primary="In-Stock" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/items/on-demand"
-          >
-            <ListItemText primary="On-Demand" />
+            <ListItemText primary="Archive" />
           </ListItem>
         </List>
       </Grid>
@@ -52,14 +45,14 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
               primary="Programs:"
             />
           </ListItem>
-          {userType !== "field1" && (
+          {(userType === "field2" || userType === "super") && (
             <ListItem
               button
               onClick={handleDrawerClose}
               component={Link}
               to="/programs/new"
             >
-              <ListItemText primary="+ New Ad Hoc Program" />
+              <ListItemText primary="Create Ad Hoc Program" />
             </ListItem>
           )}
           <ListItem
@@ -73,7 +66,6 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-        {userType !== "field1" && (
           <List className={classes.navList}>
             <ListItem>
               <ListItemText
@@ -86,18 +78,21 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
               onClick={handleDrawerClose}
               component={Link}
               to="/compliance/items"
+              // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="Item Compliance" />
+              <ListItemText primary="Item Rules" />
             </ListItem>
             <ListItem
               button
               onClick={handleDrawerClose}
               component={Link}
               to="/compliance/rules"
+             // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="Rules" />
+              <ListItemText primary="General Rules" />
             </ListItem>
-            <ListItem
+            {(userType === "compliance" || userType === "super") && (
+              <ListItem
               button
               onClick={handleDrawerClose}
               component={Link}
@@ -105,16 +100,16 @@ const DrawerAssetsNav = ({ userType, handleDrawerClose, classes }) => {
             >
               <ListItemText primary="Contacts" />
             </ListItem>
+            )}
           </List>
-        )}
       </Grid>
     </Grid>
   );
 };
 
-DrawerAssetsNav.propTypes = {
+DrawerItemsNav.propTypes = {
   handleDrawerClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
-export default DrawerAssetsNav;
+export default DrawerItemsNav;

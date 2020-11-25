@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import { useSelector, useDispatch } from "react-redux";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -39,18 +41,20 @@ const EnhancedTableHead = (props) => {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
-
+  const currentUserRole = useSelector((state) => state.user.role);
+  // unclear why userType cannot be passed in with props as it can in DrawerItemsNav
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
+          {(currentUserRole === "compliance" || currentUserRole === "super") && (
+          <TableCell padding="checkbox">
+            <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{ "aria-label": "select all items" }}
           />
-        </TableCell>
+          </TableCell>)}
         {headCells.map((headCell) => {
           if (!headCell.sort) {
             return (
@@ -134,7 +138,7 @@ const ComplianceItemsTable = ({
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
   const [selected, setSelected] = useState([]);
-
+  const currentUserRole = useSelector((state) => state.user.role);
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -223,7 +227,9 @@ const ComplianceItemsTable = ({
                 const labelId = `compliance-Checkbox-${index}`;
                 return (
                   <TableRow key={index} hover >
-                    {row.active ? (<TableCell padding="checkbox">
+                    {(currentUserRole === "compliance" || currentUserRole === "super") && (
+                      <>
+                       {row.active ? (<TableCell padding="checkbox">
                       <Checkbox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
@@ -235,14 +241,17 @@ const ComplianceItemsTable = ({
                       />
                     </TableCell>
                     ) : (
-                      <TableCell padding="checkbox">
-                        <Tooltip title="Activate Rule">
-                          <IconButton>
-                            <AutorenewIcon fontSize="small" color="inherit" />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
+                        <TableCell padding="checkbox">
+                          <Tooltip title="Activate Rule">
+                            <IconButton>
+                              <AutorenewIcon fontSize="small" color="inherit" />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      )}
+                      </>
                     )}
+                   
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
@@ -250,31 +259,31 @@ const ComplianceItemsTable = ({
                     <TableCell align="left">{row.tags.join(", ")}</TableCell>
                     <TableCell align="left">
                       {row.status === "Pending" &&
-                      row.ruleType === "Prior Approval" ? (
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography variant="body2">{row.status}</Typography>
+                        row.ruleType === "Prior Approval" ? (
                           <div
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
-                            <Typography
-                              variant="body2"
-                              style={{ marginRight: "10px" }}
+                            <Typography variant="body2">{row.status}</Typography>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
                             >
-                              {`Email sent on ${row.emailSent}`}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              className={classes.emailButton}
-                            >
-                              {"(resend)"}
-                            </Typography>
+                              <Typography
+                                variant="body2"
+                                style={{ marginRight: "10px" }}
+                              >
+                                {`Email sent on ${row.emailSent}`}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                className={classes.emailButton}
+                              >
+                                {"(resend)"}
+                              </Typography>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <Typography variant="body2">{row.status}</Typography>
-                      )}
+                        ) : (
+                          <Typography variant="body2">{row.status}</Typography>
+                        )}
                     </TableCell>
                   </TableRow>
                 );

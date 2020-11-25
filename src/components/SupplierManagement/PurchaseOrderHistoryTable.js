@@ -126,7 +126,7 @@ const PurchaseOrderHistoryTable = ({
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
- 
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -183,24 +183,30 @@ const PurchaseOrderHistoryTable = ({
                   {role === "supplier" && (
                     <>
                       {row.itemTypes.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
-                          <TableCell align="left">{row.itemTypes[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
-                          </TableCell>
-                        </Tooltip>) : (
+                        <TableCell align="left">{row.itemTypes[0]}<br />
+                          <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
+                            <MoreHorizIcon fontSize="small" color="inherit" />
+                          </Tooltip>
+                        </TableCell>
+                      ) : (
                           <TableCell align="left">{row.itemTypes[0]}</TableCell>
                         )}
                       {row.itemDescription.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
-                          <TableCell align="left">{row.itemDescription[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
-                          </TableCell>
-                        </Tooltip>) : (
+                        <TableCell align="left">{row.itemDescription[0]}<br />
+                          <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
+                            <MoreHorizIcon fontSize="small" color="inherit" />
+                          </Tooltip>
+                        </TableCell>
+                      ) : (
                           <TableCell align="left">{row.itemDescription[0]}</TableCell>
                         )}
                       {row.brands.length > 1 ? (
-                        <Tooltip placement="left" title={`${row.brands.join(",")}`}>
-                          <TableCell align="left">{row.brands[0]}<br /><MoreHorizIcon fontSize="small" color="inherit" />
-                          </TableCell>
-                        </Tooltip>) : (
+                        <TableCell align="left">{row.brands[0]}<br />
+                          <Tooltip placement="left" title={`${row.brands.join(",")}`}>
+                            <MoreHorizIcon fontSize="small" color="inherit" />
+                          </Tooltip>
+                        </TableCell>
+                      ) : (
                           <TableCell align="left">{row.brands[0]}</TableCell>
                         )}
                     </>
