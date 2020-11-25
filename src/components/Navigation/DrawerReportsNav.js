@@ -8,10 +8,11 @@ import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Box from "@material-ui/core/Box";
 
 const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
   const currentUserRole = useSelector((state) => state.user.role);
-  
+
   return (
     <Grid container spacing={2}>
       {currentUserRole !== "field1" && (
@@ -30,7 +31,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <ListItemText primary="various reports based on user role, TBD" />
+                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
@@ -59,7 +60,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 onClick={handleDrawerClose}
                 component={Link}
                 to="/orders/history"
-                //TODO handler filters for /byOrder and /byItem
+              //TODO handler filters for /byOrder and /byItem
               >
                 <ListItemText primary="By Item" />
               </ListItem>
@@ -69,7 +70,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
       )}
       {currentUserRole !== "compliance" && (
         <>
-        <Grid item sm={3} xs={12}>
+          <Grid item sm={3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
@@ -91,13 +92,13 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <ListItemText primary="various options based on user role, TBD" />
+                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
         </>
       )}
-     
+
     </Grid>
   );
 };
