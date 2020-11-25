@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredPOItems, createNewPO } from "../redux/slices/purchaseOrderSlice";
-//import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
+import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 import { createNewRFQ } from "../redux/slices/rfqSlice";
 
@@ -117,13 +117,24 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     currentUserRole
   );
 
-  /*
+
   useEffect(() => {
     if (draftPOs.length === 0) {
-      dispatch(fetchFilteredPOHistory({ ... filters here ... }))
+      dispatch(fetchFilteredPOHistory({
+        supplier: [],
+        brand: [],
+        program: [],
+        itemType: [],
+        status: "draft",
+        poNum: "",
+        sequenceNum: "",
+        sortOrder: "asc",
+        sortOrderBy: "poNum",
+      }))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  */
+
 
   //TODO  update filters conditionally based on url param!
 
