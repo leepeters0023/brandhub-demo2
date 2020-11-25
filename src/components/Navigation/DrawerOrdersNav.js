@@ -19,14 +19,8 @@ const DrawerOrdersNav = ({
     <>
       {role !== "compliance" && (
         <Grid container spacing={1}>
-          <Grid item sm={3} xs={12}>
+          <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
-                  primary="Place an Order:"
-                />
-              </ListItem>
               <ListItem
                 button
                 onClick={handleDrawerClose}
@@ -67,7 +61,7 @@ const DrawerOrdersNav = ({
             </List>
           </Grid>
           {role === "field1" && <Grid item sm={1} xs={12} />}
-          <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
+          <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
@@ -102,7 +96,7 @@ const DrawerOrdersNav = ({
             </List>
           </Grid>
           {(role === "field2" || role === "super") && (
-            <Grid item sm={3} xs={12}>
+            <Grid item sm={role === "super" ? 2 : 3} xs={12}>
               <List className={classes.navList}>
                 <ListItem>
                   <ListItemText
@@ -129,9 +123,9 @@ const DrawerOrdersNav = ({
               </List>
             </Grid>
           )}
-          {role === "purchasing" && (
+          {(role === "purchasing"  || role === "super") && (
             <>
-            <Grid item sm={2} xs={12}>
+            <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
@@ -165,7 +159,7 @@ const DrawerOrdersNav = ({
               </ListItem>
             </List>
           </Grid>
-          <Grid item sm={3} xs={12}>
+          <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText

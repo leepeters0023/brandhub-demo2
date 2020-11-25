@@ -30,7 +30,8 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items/archive"
+            to="/items/all"
+            //to="/items/archive"
           >
             <ListItemText primary="Archive" />
           </ListItem>
