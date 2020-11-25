@@ -29,7 +29,7 @@ const defaultCurrentFilters = {
   brand: [],
   program: [],
   itemType: [],
-  status: "draft-and-submitted",
+  status: "submitted",
   poNum: "",
   sequenceNum: "",
   sortOrder: "asc",

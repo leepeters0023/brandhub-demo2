@@ -213,15 +213,12 @@ const PurchaseOrderHistoryTable = ({
                   )}
                   {role === "supplier" && (
                     <>
-                    <TableCell align="left">{row.itemType}</TableCell>
-                    <TableCell align="left">{row.itemDesc}</TableCell>
+                      <TableCell align="left">{row.itemType}</TableCell>
+                      <TableCell align="left">{row.itemDesc}</TableCell>
                     </>
                   )}
                   {row.brand.length > 1 ? (
-                    <Tooltip
-                      placement="left"
-                      title={`${row.brand.join(", ")}`}
-                    >
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
                         align="left"
                         style={{ display: "flex", alignItems: "flex-end" }}
@@ -239,10 +236,10 @@ const PurchaseOrderHistoryTable = ({
                       {formatMoney(row.estCost)}
                     </TableCell>
                   )}
+                  <TableCell align="left">{formatMoney(row.actCost)}</TableCell>
                   <TableCell align="left">
-                    {formatMoney(row.actCost)}
+                    {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
                   <TableCell align="left">{row.dueDate}</TableCell>
                 </TableRow>
               ))}
