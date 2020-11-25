@@ -18,7 +18,7 @@ const DrawerOrdersNav = ({
   return (
     <>
       {role !== "compliance" && (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           <Grid item sm={3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
@@ -80,18 +80,6 @@ const DrawerOrdersNav = ({
                 onClick={handleDrawerClose}
                 component={Link}
                 to={
-                  inStockOrderId
-                    ? `/orders/open/${inStockOrderId}`
-                    : "/orders/open/inStock"
-                }
-              >
-                <ListItemText primary="In-Stock" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to={
                   onDemandOrderId
                     ? `/orders/open/${onDemandOrderId}`
                     : "/orders/open/onDemand"
@@ -99,9 +87,21 @@ const DrawerOrdersNav = ({
               >
                 <ListItemText primary="On-Demand" />
               </ListItem>
+              <ListItem
+                button
+                onClick={handleDrawerClose}
+                component={Link}
+                to={
+                  inStockOrderId
+                    ? `/orders/open/${inStockOrderId}`
+                    : "/orders/open/inStock"
+                }
+              >
+                <ListItemText primary="In-Stock" />
+              </ListItem>
             </List>
           </Grid>
-          {role !== "field1" && (
+          {(role === "field2" || role === "super") && (
             <Grid item sm={3} xs={12}>
               <List className={classes.navList}>
                 <ListItem>
@@ -124,48 +124,83 @@ const DrawerOrdersNav = ({
                   component={Link}
                   to="/orders/approvals"
                 >
-                  <ListItemText primary="Approvals" />
+                  <ListItemText primary="On Demand / Inventory Order" />
                 </ListItem>
               </List>
             </Grid>
           )}
-          <Grid item sm={role === "field1" ? 4 : 3} xs={12}>
+          {role === "purchasing" && (
+            <>
+            <Grid item sm={2} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
                   primaryTypographyProps={{ className: classes.headerText }}
-                  primary="Reporting:"
+                  primary="Purchase Orders:"
                 />
               </ListItem>
               <ListItem
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/orders/history"
+                to="/purchasing/poRollup"
               >
-                <ListItemText primary="Order History" />
+                <ListItemText primary="+ New Purchase Order" />
               </ListItem>
               <ListItem
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/budgets/ytod"
+                to="/purchasing/poHistory#current"
               >
-                <ListItemText primary="Budget vs. Spend (YtoD)" />
+                <ListItemText primary="Current" />
               </ListItem>
               <ListItem
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/"
+                to="/purchasing/poHistory#all"
               >
-                <ListItemText
-                  style={{ fontStyle: "italic" }}
-                  primary="* Inventory"
-                />
+                <ListItemText primary="History" />
               </ListItem>
             </List>
           </Grid>
+          <Grid item sm={3} xs={12}>
+            <List className={classes.navList}>
+              <ListItem>
+                <ListItemText
+                  primaryTypographyProps={{ className: classes.headerText }}
+                  primary="Request for Quotes:"
+                />
+              </ListItem>
+              <ListItem
+                button
+                onClick={handleDrawerClose}
+                component={Link}
+                to="/purchasing/rfqRollup"
+              >
+                <ListItemText primary="+ New RFQ" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={handleDrawerClose}
+                component={Link}
+                to="/purchasing/rfqHistory/current"
+              >
+                <ListItemText primary="Current" />
+              </ListItem>
+              <ListItem
+                button
+                onClick={handleDrawerClose}
+                component={Link}
+                to="/purchasing/rfqHistory/all"
+              >
+                <ListItemText primary="History" />
+              </ListItem>
+            </List>
+          </Grid>
+          </>
+          )}
         </Grid>
       )}
     </>
