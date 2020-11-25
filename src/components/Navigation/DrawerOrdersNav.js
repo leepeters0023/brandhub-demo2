@@ -123,7 +123,7 @@ const DrawerOrdersNav = ({
               </List>
             </Grid>
           )}
-          {(role === "purchasing"  || role === "super") && (
+          {(role === "purchaser"  || role === "super") && (
             <>
             <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
@@ -145,7 +145,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/purchasing/poHistory#current"
+                to="/purchasing/poHistory/current"
               >
                 <ListItemText primary="Current" />
               </ListItem>
@@ -153,7 +153,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/purchasing/poHistory#all"
+                to="/purchasing/poHistory/all"
               >
                 <ListItemText primary="History" />
               </ListItem>
