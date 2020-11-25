@@ -15,31 +15,9 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
 
   return (
     <Grid container spacing={2}>
-      {currentUserRole !== "field1" && (
+       {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
         <>
-          <Grid item sm={3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
-                  primary="Reporting:"
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to=""
-              >
-                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
-              </ListItem>
-            </List>
-          </Grid>
-        </>
-      )}
-      {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
-        <>
-          <Grid item sm={3} xs={12}>
+          <Grid item sm={currentUserRole  === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
@@ -63,6 +41,28 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
               //TODO handler filters for /byOrder and /byItem
               >
                 <ListItemText primary="By Item" />
+              </ListItem>
+            </List>
+          </Grid>
+        </>
+      )}
+      {currentUserRole !== "field1" && (
+        <>
+          <Grid item sm={3} xs={12}>
+            <List className={classes.navList}>
+              <ListItem>
+                <ListItemText
+                  primaryTypographyProps={{ className: classes.headerText }}
+                  primary="Reporting:"
+                />
+              </ListItem>
+              <ListItem
+                button
+                onClick={handleDrawerClose}
+                component={Link}
+                to=""
+              >
+                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
