@@ -291,4 +291,4 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
   );
 };
 
-export default TopDrawerNav;
+export default React.memo(TopDrawerNav);
