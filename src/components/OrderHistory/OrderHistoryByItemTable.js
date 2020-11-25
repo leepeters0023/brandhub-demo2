@@ -22,9 +22,9 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 const headCells = [
   { id: "preview", disablePadding: false, label: "Preview", sort: false },
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
-  { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {

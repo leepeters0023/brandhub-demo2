@@ -17,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
@@ -205,68 +206,21 @@ const PurchaseOrderHistoryTable = ({
                   }}
                 >
                   <TableCell align="left">{row.poNum}</TableCell>
-                  {row.sequenceNum.length > 1 ? (
-                    <Tooltip
-                      placement="left"
-                      title={`${row.sequenceNum.join(", ")}`}
-                    >
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
-                      >
-                        {row.sequenceNum[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
-                    <TableCell align="left">{row.sequenceNum[0]}</TableCell>
-                  )}
+                  <TableCell align="left">{row.sequenceNum}</TableCell>
                   <TableCell align="left">{row.projectNum}</TableCell>
                   {role !== "supplier" && (
                     <TableCell align="left">{row.supplier}</TableCell>
                   )}
                   {role === "supplier" && (
                     <>
-                      {row.itemTypes.length > 1 ? (
-                        <Tooltip
-                          placement="left"
-                          title={`${row.itemTypes.join(", ")}`}
-                        >
-                          <TableCell
-                            align="left"
-                            style={{ display: "flex", alignItems: "flex-end" }}
-                          >
-                            {row.itemTypes[0]}
-                            <MoreHorizIcon fontSize="small" color="inherit" />
-                          </TableCell>
-                        </Tooltip>
-                      ) : (
-                        <TableCell align="left">{row.itemTypes[0]}</TableCell>
-                      )}
-                      {row.itemDescription.length > 1 ? (
-                        <Tooltip
-                          placement="left"
-                          title={`${row.itemDescription.join(", ")}`}
-                        >
-                          <TableCell
-                            align="left"
-                            style={{ display: "flex", alignItems: "flex-end" }}
-                          >
-                            {row.itemDescription[0]}
-                            <MoreHorizIcon fontSize="small" color="inherit" />
-                          </TableCell>
-                        </Tooltip>
-                      ) : (
-                        <TableCell align="left">
-                          {row.itemDescription[0]}
-                        </TableCell>
-                      )}
+                    <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.itemDesc}</TableCell>
                     </>
                   )}
-                  {row.brands.length > 1 ? (
+                  {row.brand.length > 1 ? (
                     <Tooltip
                       placement="left"
-                      title={`${row.brands.join(", ")}`}
+                      title={`${row.brand.join(", ")}`}
                     >
                       <TableCell
                         align="left"
@@ -277,16 +231,16 @@ const PurchaseOrderHistoryTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                    <TableCell align="left">{row.brands[0]}</TableCell>
+                    <TableCell align="left">{row.brand[0]}</TableCell>
                   )}
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (
                     <TableCell align="left">
-                      {formatMoney(row.totalEstCost)}
+                      {formatMoney(row.estCost)}
                     </TableCell>
                   )}
                   <TableCell align="left">
-                    {formatMoney(row.actTotal)}
+                    {formatMoney(row.actCost)}
                   </TableCell>
                   <TableCell align="left">{row.status}</TableCell>
                   <TableCell align="left">{row.dueDate}</TableCell>

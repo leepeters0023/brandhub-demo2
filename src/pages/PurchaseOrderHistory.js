@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import {
   updateMultipleFilters,
   setSorted,
 } from "../redux/slices/filterSlice";
+import { fetchNextFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import PurchaseOrderHistoryTable from "../components/SupplierManagement/PurchaseOrderHistoryTable";
@@ -23,21 +24,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { poCurrent, poAll } from "../assets/mockdata/dataGenerator.js";
+const defaultCurrentFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "draft-and-submitted",
+  poNum: "",
+  sequenceNum: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+}
 
-// const defualtCurrentFilters = {
-//   supplier: [],
-//   brand: [],
-//   program: [],
-//   itemType: [],
-//   status: "in-progress",
-//   poNum: "",
-//   sequenceNum: "",
-//   sortOrder: "asc",
-//   sortOrderBy: "poNum",
-// }
-
-const defaultFilters = {
+const defaultHistoryFilters = {
   supplier: [],
   brand: [],
   program: [],
@@ -64,17 +63,20 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption })
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
       if (scrollRef.current.scrollTop !== 0) {
-        //dispatch(fetchNextFilteredPOHistory(nextLink));
+        dispatch(fetchNextFilteredPOHistory(nextLink));
       }
     }
   };
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
-  //  const [currentView, setCurrentView] = useState(filterOption);
+
+  const [currentView, setCurrentView] = useState(filterOption);
+
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isPOsLoading = useSelector((state) => state.purchaseOrderHistory.isLoading);
-  //const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos)
+  const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos)
+  const defaultFilters = filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -97,6 +99,18 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption })
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (currentView !== filterOption) {
+      setCurrentView(filterOption);
+      if (filterOption === "current") {
+        dispatch(updateMultipleFilters({filterObject: defaultCurrentFilters}))
+      } else {
+        dispatch(updateMultipleFilters({ filterObject: defaultHistoryFilters}))
+      }
+      dispatch(setSorted());
+    }
+  }, [currentView, setCurrentView, filterOption, dispatch])
 
   return (
     <>
@@ -142,7 +156,7 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption })
         </div>
         <br />
         <PurchaseOrderHistoryTable
-          pos={window.location.hash.includes("current") ? poCurrent : poAll}
+          pos={currentPOs}
           posLoading={isPOsLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}

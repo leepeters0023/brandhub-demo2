@@ -451,6 +451,33 @@ export const updatePOItemCost = async (id, cost) => {
   return response;
 };
 
+export const updatePOItemPackSize = async (id, packSize) => {
+  const response = { status: "", errror: null };
+  await axios
+    .patch(
+      `/api/purchase-order-items/${id}`,
+      {
+        data: {
+          type: "purchase-order-item",
+          id: id,
+          attributes: {
+            "actual-qty-per-pack": packSize,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
 export const submitPO = async (id) => {
   const response = { status: "", error: "" };
   //TODO confirm this is the correct route
@@ -482,7 +509,7 @@ export const fetchPOHistory = async (filterObject) => {
     filterObject,
     "",
     sortString,
-    "/api/purchase-orders",
+    "/api/purchase-order-items",
     "po-history"
   );
 

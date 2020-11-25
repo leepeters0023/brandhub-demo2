@@ -355,7 +355,7 @@ const App = () => {
           )}
           {handleAuth(
             <PurchaseOrderHistory
-              path="/purchasing/poHistory"
+              path="/purchasing/poHistory/:filterOption"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,

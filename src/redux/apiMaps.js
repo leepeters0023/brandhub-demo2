@@ -269,29 +269,37 @@ export const mapPOItems = (items) => {
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
-    sequenceNum: item["item-number"] ? item["item-number"] : "---",
-    program: item.program ? item.program : "---",
-    itemType: item["item-type-description"]
-      ? item["item-type-description"]
-      : "---",
-    packSize: item["qty-per-pack"] ? item["qty-per-pack"] : "5",
+    sequenceNum: item["item-number"],
+    program: item["program-names"].length > 0 ? item["program-names"] : "---",
+    itemType: item["item-type-description"],
+    packSize: item["actual-qty-per-pack"],
     totalItems: item.qty,
-    estCost: item["estimated-cost"]
-      ? item["estimated-cost"]
-      : item["unit-cost"],
-    actCost: item["actual-cost"]
-      ? item["actual-cost"]
-      : item["estimated-cost"]
-      ? item["estimated-cost"]
-      : item["unit-cost"],
-    totalCost: item["actual-cost"]
-      ? item["actual-cost"] * item.qty
-      : item["estimated-cost"]
-      ? item["estimated-cost"] * item.qty
-      : item["unit-cost"] * item.qty,
+    estCost: item["item-estimated-cost"],
+    actCost: item["actual-cost"],
+    totalCost: item["actual-cost"] * item.qty,
   }));
   return mappedItems;
 };
+
+export const mapPOHistoryItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    itemId: item.item.id,
+    poNum: item["purchase-order"].id,
+    sequenceNum: item["item-number"],
+    projectNum: item["project-number"] ? item["project-number"] : "---",
+    supplier: item["supplier-name"] ? item["supplier-name"] : "---",
+    itemType: item["item-type-description"],
+    itemDesc: item["item-description"] ? item["item-description"] : "---",
+    brand: item["brand-names"],
+    totalItems: item.qty,
+    estCost: item["item-estimated-cost"],
+    actCost: item["actual-cost"],
+    status: item["po-status"],
+    dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+  }))
+  return mappedItems;
+}
 
 export const mapRFQ = (rfq) => {
   const mapBids = (bids) => {
