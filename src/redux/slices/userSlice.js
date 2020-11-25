@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser, logInUser } from "../../api/userApi";
+import { addFavoriteItems, getUser, logInUser } from "../../api/userApi";
+import { mapItems } from "../apiMaps";
 
 /*
 * DataFormat:
@@ -17,39 +18,9 @@ user: {
 }
 */
 
-//mock favorites
-let favoriteItems = [
-  {
-    id: "1",
-    imgUrl:
-      "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100945/Select/110011067_Large_1-Case_Talker_vbfgnx.jpg",
-    itemNumber: "0110006615",
-    itemType: "Digital Banner",
-    program: "Apothic Winter 2021",
-    estCost: 299,
-  },
-  {
-    id: "2",
-    imgUrl:
-      "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100945/Select/110008964_Large_1-carton_rider_p7c8oo.jpg",
-    itemNumber: "0110006617",
-    itemType: "Case Sleeves",
-    program: "Apothic General",
-    estCost: 599,
-  },
-  {
-    id: "3",
-    imgUrl:
-      "https://res.cloudinary.com/joshdowns-dev/image/upload/v1595013432/Select/bh_newamsterdam_glorifier_g7orb2.jpg",
-    itemNumber: "0110004612",
-    itemType: "Advertising Specialties",
-    program: "New Amsterdam Fall 2021",
-    estCost: 550,
-  },
-];
-
 let initialState = {
   loginIsLoading: false,
+  updateIsLoading: false,
   isLoading: false,
   loggedIn: false,
   id: "",
@@ -61,7 +32,7 @@ let initialState = {
   territories: [],
   managedUsers: [],
   currentTerritory: "",
-  favoriteItems: favoriteItems,
+  favoriteItems: [],
   logInError: null,
   error: null,
 };
@@ -70,6 +41,10 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startUpdate = (state) => {
+  state.updateIsLoading = true;
+}
+
 const startLogin = (state) => {
   state.loginIsLoading = true;
 };
@@ -77,16 +52,20 @@ const startLogin = (state) => {
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
-  state.loginIsLoading = false;
   state.error = error;
 };
 
 const logInFailed = (state, action) => {
   const { error } = action.payload;
-  state.isLoading = false;
   state.loginIsLoading = false;
   state.logInError = error;
 };
+
+const updateFailed = (state, action) => {
+  const { error } = action.payload;
+  state.updateIsLoading = false;
+  state.error = error;
+}
 
 const userSlice = createSlice({
   name: "user",
@@ -94,6 +73,7 @@ const userSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     setLoginLoading: startLogin,
+    setUpdateLoading: startUpdate,
     setLoginSuccess(state) {
       state.loginIsLoading = false;
       state.loggedIn = true;
@@ -111,10 +91,16 @@ const userSlice = createSlice({
       state.managedUsers =
         user.managedUsers.length > 0 ? [...user.managedUsers] : [];
       state.currentTerritory = user.currentTerritory;
+      state.favoriteItems = user.favoriteItems;
       state.isLoading = false;
       state.loggedIn = true;
       state.logInError = null;
       state.error = null;
+    },
+    updateFavoriteItems(state, action) {
+      const {items} = action.payload;
+      state.favoriteItems = [...items];
+      state.updateIsLoading = false;
     },
     updateCurrentTerritory(state, action) {
       const { territory } = action.payload;
@@ -135,11 +121,13 @@ const userSlice = createSlice({
       state.role = "";
       state.territories = [];
       state.managedUsers = [];
+      state.favoriteItems = [];
       state.error = null;
       state.logInError = null;
       state.loggedIn = false;
     },
     setLogInFailure: logInFailed,
+    setUpdateFailure: updateFailed,
     setFailure: loadingFailed,
   },
 });
@@ -147,12 +135,15 @@ const userSlice = createSlice({
 export const {
   setIsLoading,
   setLoginLoading,
+  setUpdateLoading,
   getUserSuccess,
   setLoginSuccess,
+  updateFavoriteItems,
   updateAttentionLine,
   updateCurrentTerritory,
   removeUser,
   setLogInFailure,
+  setUpdateFailure,
   setFailure,
 } = userSlice.actions;
 
@@ -193,7 +184,9 @@ export const fetchUser = () => async (dispatch) => {
           : [],
       currentTerritory:
         user.data.territories.length > 0 ? user.data.territories[0].id : null,
+      favoriteItems: mapItems(user.data["favorite-items"])
     };
+    console.log(currentUser);
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));
@@ -213,3 +206,19 @@ export const logIn = (email, password) => async (dispatch) => {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
 };
+
+export const addToFavoriteItems = (idArray) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const res = await addFavoriteItems(idArray);
+    console.log(res);
+    if (res.error) {
+      throw res.error
+    }
+    const items = mapItems(res.data["favorite-items"])
+    dispatch(updateFavoriteItems({items: items}))
+  } catch (err) {
+    console.log(err);
+    dispatch(setUpdateFailure({ error: err.toString() }));
+  }
+}
