@@ -79,7 +79,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               to="/compliance/items"
               // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="Item Compliance" />
+              <ListItemText primary="Item Rules" />
             </ListItem>
             <ListItem
               button
@@ -88,7 +88,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               to="/compliance/rules"
              // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="Rules" />
+              <ListItemText primary="General Rules" />
             </ListItem>
             {(userType === "compliance" || userType === "super") && (
               <ListItem

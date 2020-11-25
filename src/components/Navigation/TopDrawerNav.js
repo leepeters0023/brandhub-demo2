@@ -10,7 +10,7 @@ import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
 import DrawerItemsNav from "./DrawerItemsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
-import DrawerPurchasingNav from "./DrawerPurchasingNav";
+import DrawerReportsNav from "./DrawerReportsNav";
 import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
 
@@ -220,19 +220,21 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 >
                   Order
                 </Typography>
-                {role !== "field1" && (
+                {role !== "purchasing" && (
                   <Typography
                     variant="h5"
                     className={clsx(classes.titleText, classes.navigationText, {
                       [classes.selectedNavigationText]:
                         drawerContent === "purchasing",
+                      //TODO figure out drawerContent and change to Reports
                     })}
                     onMouseEnter={() => {
                       handleDrawerOpen();
                       setDrawerContent("purchasing");
+                      //TODO figure out drawerContent and change to Reports
                     }}
                   >
-                    Purchasing
+                    Reports
                   </Typography>
                 )}
               </>
@@ -268,7 +270,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             />
           )}
           {drawerContent === "purchasing" && (
-            <DrawerPurchasingNav
+            <DrawerReportsNav
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />
