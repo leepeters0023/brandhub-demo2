@@ -3,6 +3,13 @@ import Jsona from "jsona";
 
 const dataFormatter = new Jsona();
 
+const writeHeaders = {
+  headers: {
+    Accept: "application/vnd.api+json",
+    "Content-Type": "application/vnd.api+json",
+  },
+};
+
 //Logs the user in based on email and password
 export const logInUser = async (email, password) => {
   const response = { status: "", error: null };
@@ -31,6 +38,7 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -54,3 +62,32 @@ const setAuthToken = (token) => {
   localStorage.setItem("brandhub-user", JSON.stringify(token));
   axios.defaults.headers.common["Authorization"] = authToken;
 };
+
+export const addFavoriteItems = async (idArray) => {
+  const response = { status: "", error: null, data: null }
+  const ids = idArray.map((id => ({ type: "item", id: id})))
+  console.log(ids)
+  await axios
+    .patch("/api/current-user/123456", {
+      data: {
+        type: "current-user",
+        relationships: {
+          "favorite-items": {
+            data: ids
+          }
+        }
+      }
+    }, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
