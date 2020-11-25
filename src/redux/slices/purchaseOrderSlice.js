@@ -6,10 +6,11 @@ import {
   fetchPO,
   updatePODate,
   updatePONote,
+  updatePOItemCost,
+  updatePOItemPackSize,
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPOItems } from "../apiMaps";
 import addDays from "date-fns/addDays";
-import format from "date-fns/format";
 
 let initialState = {
   isLoading: false,
@@ -114,6 +115,38 @@ const purchaseOrderSlice = createSlice({
       const { selectedItems } = action.payload;
       state.selectedPOItems = selectedItems;
     },
+    updateItemActualCost(state, action) {
+      const { id, cost } = action.payload;
+      console.log(id, cost);
+      const updatedItems = state.currentPO.poItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            actCost: +cost,
+            totalCost: +cost * item.totalItems,
+          };
+        } else return item;
+      });
+      console.log(updatedItems);
+      state.currentPO.poItems = updatedItems;
+      state.currentPO.totalCost = updatedItems
+        .map((item) => item.totalCost)
+        .reduce((a, b) => a + b);
+      state.isUpdateLoading = false;
+    },
+    updateItemPackSize(state, action) {
+      const { id, packSize } = action.payload;
+      const updatedItems = state.currentPO.poItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            packSize: packSize,
+          };
+        } else return item;
+      });
+      state.currentPO.poItems = updatedItems;
+      state.isUpdateLoading = false;
+    },
     addCost(state, action) {
       const { description, cost } = action.payload;
       let currentCosts =
@@ -189,6 +222,8 @@ export const {
   getNextPOItemsSuccess,
   getSinglePOSuccess,
   setSelectedPOItems,
+  updateItemActualCost,
+  updateItemPackSize,
   addCost,
   updateCost,
   updateDate,
@@ -250,9 +285,6 @@ export const fetchSinglePO = (id) => async (dispatch) => {
       expectedShip: newPO.data["expected-ship-date"]
         ? newPO.data["expected-ship-date"]
         : addDays(new Date(), 90),
-      actualShip: newPO.data["actual-ship-date"]
-        ? newPO.data["actual-ship-date"]
-        : addDays(new Date(), 90),
       terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
       supplier: newPO.data.suppler ? newPO.data.supplier.name : "---",
       contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
@@ -262,7 +294,9 @@ export const fetchSinglePO = (id) => async (dispatch) => {
         ? newPO.data.purchaser.name
         : `Buyer # ${newPO.data.purchaser.id}`,
       supplierNotes: newPO.data.note ? newPO.data.note : "",
-      keyAcctTape: newPO.data["key-account-tape"] ? newPO.data["key-account-tape"] : "",
+      keyAcctTape: newPO.data["key-account-tape"]
+        ? newPO.data["key-account-tape"]
+        : "",
       shippingLabel: newPO.data.label ? newPO.data.label : "---",
       rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
       specDetails: newPO.data["spec-details"]
@@ -283,7 +317,7 @@ export const fetchSinglePO = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const createNewPO = (idArray) => async (dispatch) => {
   try {
@@ -298,13 +332,10 @@ export const createNewPO = (idArray) => async (dispatch) => {
       status: newPO.data.status,
       dueDate: newPO.data["in-market-date"]
         ? newPO.data["in-market-date"]
-        : format(addDays(new Date(), 120), "MM/dd/yyyy"),
+        : addDays(new Date(), 120),
       expectedShip: newPO.data["expected-ship-date"]
         ? newPO.data["expected-ship-date"]
-        : format(addDays(new Date(), 90), "MM/dd/yyyy"),
-      actualShip: newPO.data["actual-ship-date"]
-        ? newPO.data["actual-ship-date"]
-        : format(addDays(new Date(), 90), "MM/dd/yyyy"),
+        : addDays(new Date(), 90),
       terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
       supplier: newPO.data.suppler ? newPO.data.supplier.name : "---",
       contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
@@ -314,7 +345,9 @@ export const createNewPO = (idArray) => async (dispatch) => {
         ? newPO.data.purchaser.name
         : `Buyer # ${newPO.data.purchaser.id}`,
       supplierNotes: newPO.data.note ? newPO.data.note : "",
-      keyAcctTape: newPO.data["key-account-tape"] ? newPO.data["key-account-tape"] : "",
+      keyAcctTape: newPO.data["key-account-tape"]
+        ? newPO.data["key-account-tape"]
+        : "",
       shippingLabel: newPO.data.label ? newPO.data.label : "---",
       rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
       specDetails: newPO.data["spec-details"]
@@ -341,28 +374,54 @@ export const updateDateByType = (id, type, value) => async (dispatch) => {
   const typeMap = {
     "in-market-date": "dueDate",
     "expected-ship-date": "expectedShip",
-    "actual-ship-date" : "actualShip"
-  }
+    "actual-ship-date": "actualShip",
+  };
   try {
     dispatch(setUpdateLoading());
-    const dateStatus = updatePODate(id, type, value)
+    const dateStatus = updatePODate(id, type, value);
     if (dateStatus.error) {
-      throw dateStatus.error
+      throw dateStatus.error;
     }
-    dispatch(updateDate({type: typeMap[type], value: value}))
+    dispatch(updateDate({ type: typeMap[type], value: value }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateSupplierNote = (id, note) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const noteStatus = updatePONote(id, note);
+    if (noteStatus.error) {
+      throw noteStatus.error;
+    }
+    dispatch(updateSupplierNotes({ value: note }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const setItemPackSize = (id, packSize) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const packSizeStatus = updatePOItemPackSize(id, packSize);
+    if (packSizeStatus.error) {
+      throw packSizeStatus.error
+    }
+    dispatch(updateItemPackSize({ id: id, packSize: packSize }))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 }
 
-export const updateSupplierNote = (id, note) => async (dispatch) => {
+export const setItemActCost = (id, cost) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    const noteStatus = updatePONote(id, note)
-    if (noteStatus.error) {
-      throw noteStatus.error
+    const costStatus = updatePOItemCost(id, cost);
+    if (costStatus.error) {
+      throw costStatus.error
     }
-    dispatch(updateSupplierNotes({ value: note }))
+    dispatch(updateItemActualCost({ id: id, cost: cost }))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

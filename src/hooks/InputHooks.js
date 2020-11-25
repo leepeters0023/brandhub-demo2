@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { formatMoney } from "../utility/utilityFunctions";
+import { useDispatch } from "react-redux";
 
 //Standard input hook for generic input fields
 export const useInput = (initialValue) => {
@@ -19,7 +20,8 @@ export const useInput = (initialValue) => {
 };
 
 //Input hook for money fields, auto formats to $00.00 format on blur
-export const useMoneyInput = (initialValue, _updateFunc) => {
+export const useMoneyInput = (initialValue, updateFunc, updateFuncArg) => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState(initialValue);
   const moneyArray = ["$", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
   const strippedValue = (input) => {
@@ -47,6 +49,10 @@ export const useMoneyInput = (initialValue, _updateFunc) => {
       onBlur: (event) => {
         let newValue = formatMoney(strippedValue(event.target.value))
         setValue(newValue);
+        if (updateFunc) {
+          let strippedValue = event.target.value.replace(/\D/g,"");
+          dispatch(updateFunc(updateFuncArg, strippedValue))
+        }
       }
     },
   };
