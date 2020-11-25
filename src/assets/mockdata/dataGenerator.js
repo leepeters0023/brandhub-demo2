@@ -15,7 +15,6 @@ let itemTypes = [
   "Necker",
   "Glorifier",
 ];
-let suppliers = ["Imperial", "Curtis", "Sterling", "Willey"];
 let territories = [
   "Western",
   "Southern",
@@ -50,39 +49,6 @@ let distributors = [
 ];
 let packSizes = ["1", "10", "12", "25", "50"];
 let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"];
-
-const generatePOItems = (dataPoints) => {
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
-    let currentItemType =
-      itemTypes[Math.floor(Math.random() * itemTypes.length)];
-    let sequenceNumber = (1110000010 + i).toString();
-    let totalItems = Math.floor(Math.random() * 1000) + 500;
-    let totalNotCompliant = Math.floor(
-      totalItems / 12 - Math.floor(Math.random() * (totalItems / 12))
-    );
-    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let totalEstCost = totalItems * estCost;
-    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
-    let territory = territories[Math.floor(Math.random() * territories.length)];
-
-    data.push({
-      id: (i + 1).toString(),
-      sequenceNum: sequenceNumber,
-      territory: territory,
-      program: currentProgram,
-      itemType: currentItemType,
-      totalItems: totalItems,
-      totalNotCompliant: totalNotCompliant,
-      estCost: estCost,
-      totalEstCost: totalEstCost,
-      dueDate: "10/30/2020",
-      supplier: supplier,
-    });
-  }
-  return data;
-};
 
 const generateOrderHistoryItems = (dataPoints) => {
   let data = [];
@@ -156,63 +122,6 @@ const generateQuarterlyRollupItems = (dataPoints) => {
       orderDate: orderDate,
       dueDate: dueDate,
       status: "Order Submitted",
-    });
-  }
-  return data;
-};
-
-const generatePOs = (dataPoints, stat) => {
-  let statusAll = ["In Progress", "Complete", "Canceled"];
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let poNumber = (543000120 + i).toString();
-    let brands =  [
-      "Apothic",
-      "Orin Swift",
-      "Barefoot",
-      "E & J",
-      "New Amsterdam",
-      "High Noon",
-      "La Marca",
-    ];
-    let itemTypes =  [
-      "Shelf Talker",
-      "Carton Rider",
-      "Mass Display",
-      "Necker",
-      "Glorifier",
-    ];
-    let itemDescription = [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo",
-    ];
-    let sequenceNumbers = [
-      "1200030201",
-      "1122399298",
-      "2000030382",
-    ]
-    let supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
-    let totalItems = Math.floor(Math.random() * 1000) + 500;
-    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let status =
-      stat === "all"
-        ? statusAll[Math.floor(Math.random() * statusAll.length)]
-        : "In Progress";
-    data.push({
-      id: (i + 1).toString(),
-      poNum: poNumber,
-      sequenceNum: sequenceNumbers,
-      projectNum: "123",
-      brands : brands,
-      itemTypes : itemTypes,
-      itemDescription : itemDescription,
-      supplier: supplier,
-      totalItems: totalItems,
-      totalEstCost: estCost,
-      actTotal: estCost,
-      status: status,
-      dueDate: new Date().toLocaleDateString(),
     });
   }
   return data;
@@ -1021,10 +930,6 @@ export const complianceItems = [
 
 export const pendingComplianceItems = generatePendingComplianceItems(6);
 export const orderHistoryItems = generateOrderHistoryItems(20);
-export const currentPOItems = generatePOItems(20);
-export const singlePO = generatePOItems(3);
-export const poCurrent = generatePOs(20, "current");
-export const poAll = generatePOs(20, "all");
 export const yearToDateBudgets = generateYearToDateBudgets(20);
 export const shippingParams = generateShippingParams(5);
 export const quarterlyRollupItems = generateQuarterlyRollupItems(20);

@@ -494,7 +494,7 @@ export const submitPO = async (id) => {
   return response;
 }
 
-//Returns pos based on filters, paginated in groups of 20
+//Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {
   const sortMap = {
     poNum: "id",
