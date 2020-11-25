@@ -8,9 +8,9 @@ import { setRetain } from "../../redux/slices/filterSlice";
 
 import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
-import DrawerAssetsNav from "./DrawerAssetsNav";
+import DrawerItemsNav from "./DrawerItemsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
-import DrawerPurchasingNav from "./DrawerPurchasingNav";
+import DrawerReportsNav from "./DrawerReportsNav";
 import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
 
@@ -205,7 +205,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                     setDrawerContent("assets");
                   }}
                 >
-                  Assets
+                  Items
                 </Typography>
                 <Typography
                   variant="h5"
@@ -218,27 +218,29 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                     setDrawerContent("orders");
                   }}
                 >
-                  Orders
+                  Order
                 </Typography>
-                {role !== "field1" && (
+                {role !== "purchasing" && (
                   <Typography
                     variant="h5"
                     className={clsx(classes.titleText, classes.navigationText, {
                       [classes.selectedNavigationText]:
                         drawerContent === "purchasing",
+                      //TODO figure out drawerContent and change to Reports
                     })}
                     onMouseEnter={() => {
                       handleDrawerOpen();
                       setDrawerContent("purchasing");
+                      //TODO figure out drawerContent and change to Reports
                     }}
                   >
-                    Purchasing
+                    Reports
                   </Typography>
                 )}
               </>
             )}
           </div>
-          <div className={classes.navBreak} style={{float: "right", marginTop: "-67px"}}>
+          <div className={classes.navBreak} style={{ float: "right", marginTop: "-67px" }}>
             {territories.length > 1 && <RegionSelector />}
             <UserNav
               initials={initials}
@@ -251,7 +253,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
         <br />
         <div className={classes.drawerContent}>
           {drawerContent === "assets" && (
-            <DrawerAssetsNav
+            <DrawerItemsNav
               userType={role}
               handleDrawerClose={handleDrawerClose}
               classes={classes}
@@ -268,7 +270,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             />
           )}
           {drawerContent === "purchasing" && (
-            <DrawerPurchasingNav
+            <DrawerReportsNav
               handleDrawerClose={handleDrawerClose}
               classes={classes}
             />

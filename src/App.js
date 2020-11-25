@@ -453,7 +453,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field2", "super"],
+            ["field1", "field2", "compliance", "super"],
             role
           )}
           {handleAuth(
@@ -463,7 +463,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field2", "super"],
+            ["field1", "field2", "compliance", "super"],
             role
           )}
           {handleAuth(
