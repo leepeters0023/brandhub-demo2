@@ -58,20 +58,20 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {draftPOs.map((po, index) => {
-            if (index !== draftPOs.length - 1) {
+          {[...new Set(draftPOs.map(po => po.poNum))].map((id, index) => {
+            if (index !== [...new Set(draftPOs.map(po => po.poNum))].length - 1) {
               return [
                 <MenuItem
                   key={index}
                   onClick={() => {
                     handleClose();
                     dispatch(setSelectedPOItems({ selectedItems: []}))
-                    navigate(`/purchasing/purchaseOrder#${po.id}`);
+                    navigate(`/purchasing/purchaseOrder#${id}`);
                     //todo
-                    //dispatch(addToDraftPO(po.id))
+                    //dispatch(addToDraftPO(id))
                   }}
                 >
-                  <ListItemText primary={`PO #${po.id}`} />
+                  <ListItemText primary={`PO #${id}`} />
                 </MenuItem>,
                 <Divider />,
               ];
@@ -81,13 +81,13 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
                   key={index}
                   onClick={() => {
                     handleClose();
-                    navigate(`/purchasing/purchaseOrder#${po.id}`);
+                    navigate(`/purchasing/purchaseOrder#${id}`);
                     dispatch(setSelectedPOItems({ selectedItems: []}))
                     //todo
-                    //dispatch(addToDraftPO(po.id))
+                    //dispatch(addToDraftPO(id))
                   }}
                 >
-                  <ListItemText primary={`PO #${po.id}`} />
+                  <ListItemText primary={`PO #${id}`} />
                 </MenuItem>
               );
             }
