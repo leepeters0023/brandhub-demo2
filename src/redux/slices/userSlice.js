@@ -186,7 +186,6 @@ export const fetchUser = () => async (dispatch) => {
         user.data.territories.length > 0 ? user.data.territories[0].id : null,
       favoriteItems: mapItems(user.data["favorite-items"])
     };
-    console.log(currentUser);
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));

@@ -37,6 +37,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  favItems: [],
   orderType: "on-demand",
   sequenceNum: "",
 };
