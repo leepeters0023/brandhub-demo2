@@ -62,7 +62,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
+                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
@@ -92,7 +92,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
+                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
