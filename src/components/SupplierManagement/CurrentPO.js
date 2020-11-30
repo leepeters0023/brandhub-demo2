@@ -116,7 +116,7 @@ const CurrentPO = ({ currentPO }) => {
                 format="MM/dd/yyyy"
                 margin="normal"
                 id="dueDate"
-                label="Due Date"
+                label="In-Market Date"
                 value={currentPO.dueDate}
                 onChange={(value) =>
                   dispatch(
