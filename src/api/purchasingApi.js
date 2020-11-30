@@ -496,10 +496,10 @@ export const submitPO = async (id) => {
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {
   const sortMap = {
-    poNum: "id",
+    poNum: "po-id",
     supplier: "supplier-name",
-    dueDate: "due-date",
-    status: "status",
+    dueDate: "po-in-market-date",
+    status: "po-status",
   };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
