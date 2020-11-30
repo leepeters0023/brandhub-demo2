@@ -32,6 +32,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  favItems: [],
   orderType: "",
   sequenceNum: "",
 };

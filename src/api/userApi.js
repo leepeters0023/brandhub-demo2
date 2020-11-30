@@ -38,7 +38,6 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -66,7 +65,6 @@ const setAuthToken = (token) => {
 export const addFavoriteItems = async (idArray) => {
   const response = { status: "", error: null, data: null }
   const ids = idArray.map((id => ({ type: "item", id: id})))
-  console.log(ids)
   await axios
     .patch("/api/current-user", {
       data: {
@@ -80,7 +78,6 @@ export const addFavoriteItems = async (idArray) => {
     }, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
