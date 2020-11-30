@@ -54,7 +54,7 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
 ];
 
@@ -77,8 +77,8 @@ const EnhancedTableHead = (props) => {
     type === "po"
       ? headCells
       : headCells
-        .filter((cell) => cell.id !== "supplier")
-        .filter((cell) => cell.id !== "totalNotCompliant");
+          .filter((cell) => cell.id !== "supplier")
+          .filter((cell) => cell.id !== "totalNotCompliant");
 
   return (
     <TableHead>
@@ -345,8 +345,8 @@ const ItemRollupTable = ({
                           {row.program && row.program !== "---"
                             ? row.program.name
                             : row.programs.length > 0
-                              ? row.programs[0].name
-                              : "---"}
+                            ? row.programs[0].name
+                            : "---"}
                         </TableCell>
                       </Tooltip>
                     )}
@@ -355,8 +355,8 @@ const ItemRollupTable = ({
                         {row.program && row.program !== "---"
                           ? row.program.name
                           : row.programs.length > 0
-                            ? row.programs[0].name
-                            : "---"}
+                          ? row.programs[0].name
+                          : "---"}
                       </TableCell>
                     )}
                     <TableCell align="left">{row.projectNum}</TableCell>
@@ -386,8 +386,9 @@ const ItemRollupTable = ({
                     )}
                     <TableCell align="right" padding="checkbox">
                       <Tooltip
-                        title={`Delete ${type === "po" ? "Purchase Order Item" : "RFQ Item"
-                          }`}
+                        title={`Delete ${
+                          type === "po" ? "Purchase Order Item" : "RFQ Item"
+                        }`}
                       >
                         <IconButton onClick={() => handleOpenConfirm(row.id)}>
                           <DeleteIcon color="inherit" />

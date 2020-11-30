@@ -40,7 +40,7 @@ let headCells = [
     sort: false,
   },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
   { id: "bidValue", disablePadding: false, label: "Bid", sort: true },
 ];
@@ -54,7 +54,12 @@ const EnhancedTableHead = (props) => {
   const currentHeadCells =
     role !== "supplier"
       ? headCells.filter((cell) => cell.id !== "bidValue")
-      : headCells.filter((cell) => cell.id !== "totalEstCost" && cell.id !== "estCost" && cell.id !== "program");
+      : headCells.filter(
+          (cell) =>
+            cell.id !== "totalEstCost" &&
+            cell.id !== "estCost" &&
+            cell.id !== "program"
+        );
 
   return (
     <TableHead>
@@ -135,28 +140,28 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-  console.log(rfqs)
+  console.log(rfqs);
   const handleStatus = (status, bids) => {
     if (role === "supplier" && status === "sent") {
-      return "New"
+      return "New";
       //TODO: add further supplier bid status when available
     }
     if (status === "sent") {
       let bidCount = 0;
       bids.forEach((bid) => {
         if (bid.status === "sent") {
-          bidCount += 1
+          bidCount += 1;
         }
-      })
+      });
       if (bidCount !== bids.length) {
-        return `Waiting for Resp. ${bidCount}/${bids.length}`
+        return `Waiting for Resp. ${bidCount}/${bids.length}`;
       } else {
-        return "Ready for Review"
+        return "Ready for Review";
       }
     } else {
       return status[0].toUpperCase() + status.slice(1);
     }
-  }
+  };
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -212,24 +217,36 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  {role !== "supplier" && (<TableCell align="left">{row.program}</TableCell>)}
+                  {role !== "supplier" && (
+                    <TableCell align="left">{row.program}</TableCell>
+                  )}
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (
                     <>
-                      <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
-                      <TableCell align="left">{formatMoney(row.totalEstCost)}</TableCell>
+                      <TableCell align="left">
+                        {formatMoney(row.estCost)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatMoney(row.totalEstCost)}
+                      </TableCell>
                     </>
                   )}
-                  <TableCell align="left">{row.actTotal
-                    ? formatMoney(row.actTotal)
-                    : "---"}</TableCell>
+                  <TableCell align="left">
+                    {row.actTotal ? formatMoney(row.actTotal) : "---"}
+                  </TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
-                  <TableCell align="left">{handleStatus(row.status, row.bids)}</TableCell>
-                  {role === "supplier" && (<TableCell align="left">{row.bids[0].price
-                    ? formatMoney(row.bids[0].price)
-                    : "---"}</TableCell>)}
+                  <TableCell align="left">
+                    {handleStatus(row.status, row.bids)}
+                  </TableCell>
+                  {role === "supplier" && (
+                    <TableCell align="left">
+                      {row.bids[0].price
+                        ? formatMoney(row.bids[0].price)
+                        : "---"}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             {rfqsLoading && (

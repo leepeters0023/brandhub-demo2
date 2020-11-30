@@ -52,7 +52,7 @@ const headCells = [
     sort: false,
   },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {

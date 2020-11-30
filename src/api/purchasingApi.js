@@ -58,7 +58,6 @@ export const fetchRollupItems = async (filterObject, type) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
