@@ -23,14 +23,20 @@ const PreOrderSummary = () => {
   const [currentOrderId, setCurrentOrderId] = useState(null);
 
   const programs = useSelector((state) => state.programs.programs);
-  const preOrders = useSelector((state) => state.preOrderDetails.preOrderSummary);
+  const preOrders = useSelector(
+    (state) => state.preOrderDetails.preOrderSummary
+  );
   const currentOrder = useSelector((state) => state.orderSet);
-  const summaryLoading = useSelector((state) => state.preOrderDetails.preOrderSummaryLoading);
+  const summaryLoading = useSelector(
+    (state) => state.preOrderDetails.preOrderSummaryLoading
+  );
 
   useEffect(() => {
     if (
       (!currentSummary && preOrders.length > 0 && !summaryLoading) ||
-      (preOrders.length > 0 && currentOrder.orderId !== currentOrderId && !summaryLoading)
+      (preOrders.length > 0 &&
+        currentOrder.orderId !== currentOrderId &&
+        !summaryLoading)
     ) {
       let summary = preOrders.map((preOrder) => {
         if (
@@ -121,9 +127,11 @@ const PreOrderSummary = () => {
                       <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.orderId
                           ? preOrder.totalItems
-                          : currentOrder.items
+                          : currentOrder.items.length > 0
+                          ? currentOrder.items
                               .map((item) => item.totalItems)
-                              .reduce((a, b) => a + b)}
+                              .reduce((a, b) => a + b)
+                          : "---"}
                       </TableCell>
                       <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.orderId

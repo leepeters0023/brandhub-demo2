@@ -58,7 +58,7 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          {[...new Set(draftPOs.map(po => po.poNum))].map((id, index) => {
+          {[...new Set(draftPOs.map(po => `${po.poNum}-${po.supplier}`))].map((name, index) => {
             if (index !== [...new Set(draftPOs.map(po => po.poNum))].length - 1) {
               return [
                 <MenuItem
@@ -66,12 +66,12 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
                   onClick={() => {
                     handleClose();
                     dispatch(setSelectedPOItems({ selectedItems: []}))
-                    navigate(`/purchasing/purchaseOrder#${id}`);
+                    navigate(`/purchasing/purchaseOrder#${name.split("-")[0]}`);
                     //todo
-                    //dispatch(addToDraftPO(id))
+                    //dispatch(addToDraftPO(name.split("-")[0]))
                   }}
                 >
-                  <ListItemText primary={`PO #${id}`} />
+                  <ListItemText primary={`PO #${name}`} />
                 </MenuItem>,
                 <Divider />,
               ];
@@ -81,13 +81,13 @@ const AddToPOMenu = ({ classes, draftPOs, isLoading, itemSelected }) => {
                   key={index}
                   onClick={() => {
                     handleClose();
-                    navigate(`/purchasing/purchaseOrder#${id}`);
+                    navigate(`/purchasing/purchaseOrder#${name.split("-")[0]}`);
                     dispatch(setSelectedPOItems({ selectedItems: []}))
                     //todo
-                    //dispatch(addToDraftPO(id))
+                    //dispatch(addToDraftPO(name.split("-")[0]))
                   }}
                 >
-                  <ListItemText primary={`PO #${id}`} />
+                  <ListItemText primary={`PO #${name}`} />
                 </MenuItem>
               );
             }

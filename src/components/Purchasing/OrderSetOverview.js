@@ -98,7 +98,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       dispatch(clearCurrentOrder());
     };
   }, [orderType, orderSet, setOrderType, dispatch]);
-
+  
   return (
     <>
       <Grid container spacing={5}>

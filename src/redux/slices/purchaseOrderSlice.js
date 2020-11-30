@@ -8,6 +8,8 @@ import {
   updatePONote,
   updatePOItemCost,
   updatePOItemPackSize,
+  deletePO,
+  deletePOItem,
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPOItems } from "../apiMaps";
 import addDays from "date-fns/addDays";
@@ -133,6 +135,7 @@ const purchaseOrderSlice = createSlice({
         .map((item) => item.totalCost)
         .reduce((a, b) => a + b);
       state.isUpdateLoading = false;
+      state.error = null;
     },
     updateItemPackSize(state, action) {
       const { id, packSize } = action.payload;
@@ -146,6 +149,7 @@ const purchaseOrderSlice = createSlice({
       });
       state.currentPO.poItems = updatedItems;
       state.isUpdateLoading = false;
+      state.error = null;
     },
     addCost(state, action) {
       const { description, cost } = action.payload;
@@ -174,11 +178,46 @@ const purchaseOrderSlice = createSlice({
       const { value } = action.payload;
       state.currentPO.supplierNotes = value;
       state.isUpdateLoading = false;
+      state.error = null;
     },
     updateDate(state, action) {
       const { type, value } = action.payload;
       state.currentPO[type] = value;
       state.isUpdateLoading = false;
+      state.error = null;
+    },
+    deleteItemSuccess(state, action) {
+      const { id } = action.payload;
+      const currentItems = state.currentPO.poItems.filter(
+        (item) => item.id !== id
+      );
+      state.currentPO.poItems = currentItems;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
+    deletePOSuccess(state) {
+      state.isUpdateLoading = false;
+      state.currentPO.id = null;
+      state.currentPO.status = null;
+      state.currentPO.dueDate = null;
+      state.currentPO.expectedShip = null;
+      state.currentPO.actualShip = null;
+      state.currentPO.terms = null;
+      state.currentPO.supplier = null;
+      state.currentPO.contactName = null;
+      state.currentPO.email = null;
+      state.currentPO.phone = null;
+      state.currentPO.purchasedBy = null;
+      state.currentPO.supplierNotes = "";
+      state.currentPO.shippingLabel = null;
+      state.currentPO.keyAcctTape = "";
+      state.currentPO.rfqNumber = null;
+      state.currentPO.specDetails = null;
+      state.currentPO.poItems = [];
+      state.currentPO.additionalCosts = [];
+      state.currentPO.totalCost = null;
+      state.currentPO.shippingParams = [];
+      state.error = null;
     },
     resetPurchaseOrder(state) {
       state.isLoading = false;
@@ -228,6 +267,8 @@ export const {
   updateCost,
   updateDate,
   updateSupplierNotes,
+  deleteItemSuccess,
+  deletePOSuccess,
   resetPurchaseOrder,
   setFailure,
 } = purchaseOrderSlice.actions;
@@ -286,10 +327,10 @@ export const fetchSinglePO = (id) => async (dispatch) => {
         ? newPO.data["expected-ship-date"]
         : addDays(new Date(), 90),
       terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
-      supplier: newPO.data.suppler ? newPO.data.supplier.name : "---",
-      contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
-      email: newPO.data.supplier ? newPO.data.supplier.email : "---",
-      phone: newPO.data.supplier ? newPO.data.supplier.phone : "---",
+      supplier: newPO.data.supplier ? newPO.data.supplier.name : "---",
+      contactName: newPO.data.supplier.contact ? newPO.data.supplier.contact : "---",
+      email: newPO.data.supplier.email ? newPO.data.supplier.email : "---",
+      phone: newPO.data.supplier.phone ? newPO.data.supplier.phone : "---",
       purchasedBy: newPO.data.purchaser.name
         ? newPO.data.purchaser.name
         : `Buyer # ${newPO.data.purchaser.id}`,
@@ -337,7 +378,7 @@ export const createNewPO = (idArray) => async (dispatch) => {
         ? newPO.data["expected-ship-date"]
         : addDays(new Date(), 90),
       terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
-      supplier: newPO.data.suppler ? newPO.data.supplier.name : "---",
+      supplier: newPO.data.supplier ? newPO.data.supplier.name : "---",
       contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
       email: newPO.data.supplier ? newPO.data.supplier.email : "---",
       phone: newPO.data.supplier ? newPO.data.supplier.phone : "---",
@@ -406,22 +447,49 @@ export const setItemPackSize = (id, packSize) => async (dispatch) => {
     dispatch(setUpdateLoading());
     const packSizeStatus = updatePOItemPackSize(id, packSize);
     if (packSizeStatus.error) {
-      throw packSizeStatus.error
+      throw packSizeStatus.error;
     }
-    dispatch(updateItemPackSize({ id: id, packSize: packSize }))
+    dispatch(updateItemPackSize({ id: id, packSize: packSize }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const setItemActCost = (id, cost) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     const costStatus = updatePOItemCost(id, cost);
     if (costStatus.error) {
-      throw costStatus.error
+      throw costStatus.error;
     }
-    dispatch(updateItemActualCost({ id: id, cost: cost }))
+    dispatch(updateItemActualCost({ id: id, cost: cost }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const deleteItem = (id) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const deleteStatus = await deletePOItem(id);
+    console.log(deleteStatus);
+    if (deleteStatus.error) {
+      throw deleteStatus.error;
+    }
+    dispatch(deleteItemSuccess({ id: id }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const deletePurchaseOrder = (id) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const deleteStatus = await deletePO(id);
+    if (deleteStatus.error) {
+      throw deleteStatus.error
+    }
+    dispatch(deletePOSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

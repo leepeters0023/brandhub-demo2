@@ -8,10 +8,9 @@ import { useDispatch } from "react-redux";
 import {
   updateCost,
   setItemActCost,
-  setItemPackSize,
 } from "../../redux/slices/purchaseOrderSlice";
 
-import { useMoneyInput, useNumberOnlyInput } from "../../hooks/InputHooks";
+import { useMoneyInput } from "../../hooks/InputHooks";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -23,6 +22,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
+import Checkbox from "@material-ui/core/Checkbox";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -34,7 +34,6 @@ const MoneyCell = ({ initialCost, id }) => {
     setItemActCost,
     id
   );
-  //TODO, write update function and pass to useMoneyInput
   return (
     <TableCell align="left">
       <TextField
@@ -48,28 +47,7 @@ const MoneyCell = ({ initialCost, id }) => {
   );
 };
 
-const PackSizeCell = ({ initialPackSize, id, dispatch }) => {
-  const { value: packSize, bind: bindPackSize } = useNumberOnlyInput(
-    initialPackSize
-  );
-  //TODO, handle calls on blur when available
-  return (
-    <TableCell align="left">
-      <TextField
-        value={packSize}
-        variant="outlined"
-        size="small"
-        fullWidth
-        {...bindPackSize}
-        onBlur={() => {
-          dispatch(setItemPackSize(id, packSize));
-        }}
-      />
-    </TableCell>
-  );
-};
-
-const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
+const POItemsTable = ({ items, classes, addNewCost, additionalCosts, handleDelete }) => {
   const dispatch = useDispatch();
   return (
     <TableContainer
@@ -107,6 +85,9 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
             <TableCell className={classes.headerText} align="left">
               Total
             </TableCell>
+            <TableCell className={classes.headerText} align="left">
+              Pack Out
+            </TableCell>
             <TableCell className={classes.headerText} align="right">
               Remove
             </TableCell>
@@ -130,20 +111,21 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts }) => {
                 <TableCell align="left">{row.program[0] || row.program}</TableCell>
               )}
               <TableCell align="left">{row.itemType}</TableCell>
-              <PackSizeCell
-                initialPackSize={row.packSize}
-                id={row.id}
-                dispatch={dispatch}
-              />
+              <TableCell align="left">{row.packSize}</TableCell>
               <TableCell align="left">{row.totalItems}</TableCell>
               <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
               <MoneyCell initialCost={formatMoney(row.actCost)} id={row.id} />
               <TableCell align="left">{formatMoney(row.totalCost)}</TableCell>
+              <TableCell padding="checkbox" align="center">
+                <Checkbox />
+                {/* TODO, handle checkbox! */}
+              </TableCell>
               <TableCell align="right">
                 <Tooltip title="Remove">
                   <IconButton
                     onClick={(event) => {
                       event.stopPropagation();
+                      handleDelete(row.id);
                     }}
                   >
                     <CancelIcon color="inherit" />

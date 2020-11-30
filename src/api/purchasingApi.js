@@ -477,8 +477,23 @@ export const updatePOItemPackSize = async (id, packSize) => {
   return response;
 }
 
+export const deletePOItem = async (id) => {
+  const response = { status: "", error: null }
+  await axios
+    .delete(`/api/purchase-order-items/${id}`)
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
 export const submitPO = async (id) => {
-  const response = { status: "", error: "" };
+  const response = { status: "", error: null };
   //TODO confirm this is the correct route
   await axios
     .post(`/api/purchase-orders/${id}/submit`, null, writeHeaders)
@@ -489,6 +504,22 @@ export const submitPO = async (id) => {
       console.log(err.toString());
       response.status = "error";
       response.err = err.toString();
+    });
+  return response;
+}
+
+export const deletePO = async (id) => {
+  const response = { status: "", error: null }
+  await axios
+    .delete(`/api/purchase-orders/${id}`)
+    .then((res) => {
+      console.log(res);
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
     });
   return response;
 }

@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -12,18 +11,18 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  confirmDeleteModal: {
+  warningModal: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "center",
     width: "100%",
     height: "200px",
     textAlign: "center",
   },
 }));
 
-const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
+const WarningModal = ({ open, handleClose, message }) => {
   const classes = useStyles();
 
   return (
@@ -41,29 +40,10 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
             <CancelIcon fontSize="large" color="secondary" />
           </IconButton>
           <br />
-          <div className={classes.confirmDeleteModal}>
+          <div className={classes.warningModal}>
             <Typography className={classes.headerText}>
-              {type === "pendingCompliance"
-                ? `Are you sure you want to cancel the selected order${
-                    itemNumber.length > 1 ? "s" : ""
-                  }?`
-                : "Are you sure you want to remove this item?"}
+              {message}
             </Typography>
-            <Typography className={classes.titleText}>
-              This action cannot be undone.
-            </Typography>
-            <Button
-              variant="contained"
-              className={classes.largeButton}
-              color="secondary"
-              onClick={() => {
-                handleRemove(itemNumber);
-              }}
-            >
-              {type === "pendingCompliance"
-                ? `CANCEL ORDER${itemNumber.length > 1 ? "S" : ""}`
-                : "REMOVE ITEM"}
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -71,12 +51,10 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
   );
 };
 
-AreYouSure.propTypes = {
+WarningModal.propTypes = {
   open: PropTypes.bool.isRequired,
-  handleRemove: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  itemNumber: PropTypes.any,
-  type: PropTypes.string,
+  message: PropTypes.string.isRequired,
 };
 
-export default AreYouSure;
+export default WarningModal;
