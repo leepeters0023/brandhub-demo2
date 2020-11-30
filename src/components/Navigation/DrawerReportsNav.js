@@ -14,10 +14,10 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
   const currentUserRole = useSelector((state) => state.user.role);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} justify="space-around">
        {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
         <>
-          <Grid item sm={currentUserRole  === "super" ? 2 : 3} xs={12}>
+          <Grid item sm={3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
