@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-// import { navigate } from "@reach/router";
+import { navigate } from "@reach/router";
 import clsx from "clsx";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -12,6 +12,8 @@ import {
   addCost,
   updateDateByType,
   updateSupplierNote,
+  deleteItem,
+  deletePurchaseOrder,
 } from "../../redux/slices/purchaseOrderSlice";
 
 import POItemsTable from "./POItemsTable";
@@ -57,6 +59,15 @@ const CurrentPO = ({ currentPO }) => {
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
   );
+
+  const deletePOItem = (id) => {
+    let initialLength = currentPO.poItems.length;
+    dispatch(deleteItem(id));
+    if (initialLength === 1) {
+      dispatch(deletePurchaseOrder(currentPO.id));
+      navigate("/purchasing/poRollup")
+    }
+  }
 
   const updateNote = () => {
     dispatch(updateSupplierNote(currentPO.id, note));
@@ -231,6 +242,7 @@ const CurrentPO = ({ currentPO }) => {
         classes={classes}
         addNewCost={addNewCost}
         additionalCosts={additionalCosts}
+        handleDelete={deletePOItem}
       />
       <br />
       <br />

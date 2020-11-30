@@ -17,6 +17,7 @@ import { createNewRFQ } from "../redux/slices/rfqSlice";
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
 import AddToPOMenu from "../components/SupplierManagement/AddToPOMenu";
+import WarningModal from "../components/Utility/WarningModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -62,6 +63,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
+  const [isWarningOpen, setWarningOpen] = useCallback(useState(false));
 
   const isPOHistoryLoading = useSelector(
     (state) => state.purchaseOrderHistory.isLoading
@@ -100,16 +102,34 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const handleNewPO = () => {
     let idArray = [];
-    currentPOItems.forEach((item) => {
-      selectedPOItems.forEach((id) => {
-        if (item.id === id) {
-          idArray = idArray.concat(item.orderItemIds);
-        }
+    let currentSupplier = [
+      ...new Set(
+        selectedPOItems.map((id) => {
+          let supplier = currentPOItems.find((item) => item.id === id).supplier;
+          return supplier;
+        })
+      ),
+    ];
+    console.log(currentSupplier);
+    if (currentSupplier.length === 1) {
+      currentPOItems.forEach((item) => {
+        selectedPOItems.forEach((id) => {
+          if (item.id === id) {
+            idArray = idArray.concat(item.orderItemIds);
+          }
+        });
       });
-    });
-    dispatch(createNewPO(idArray));
-    console.log(console.log(idArray));
+      dispatch(createNewPO(idArray));
+      console.log(console.log(idArray));
+      navigate("/purchasing/purchaseOrder#new");
+    } else {
+      setWarningOpen(true);
+    }
   };
+
+  const handleCloseWarning = useCallback(() => {
+    setWarningOpen(false);
+  }, [setWarningOpen]);
 
   useInitialFilters(
     "itemRollup-po",
@@ -142,6 +162,11 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <WarningModal
+        open={isWarningOpen}
+        handleClose={handleCloseWarning}
+        message="You must choose items with the same Supplier when creating a new Purchase Order"
+      />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>
@@ -183,7 +208,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               style={{ marginRight: "20px" }}
               onClick={() => {
                 handleNewPO();
-                navigate("/purchasing/purchaseOrder#new");
               }}
             >
               CREATE PO

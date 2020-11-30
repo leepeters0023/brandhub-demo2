@@ -293,6 +293,7 @@ export const mapPOHistoryItems = (items) => {
     itemType: item["item-type-description"],
     itemDesc: item["item-description"] ? item["item-description"] : "---",
     brand: item["brand-names"],
+    program: item["program-names"],
     totalItems: item.qty,
     estCost: item["item-estimated-cost"],
     actCost: item["actual-cost"],
