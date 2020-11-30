@@ -68,7 +68,7 @@ export const addFavoriteItems = async (idArray) => {
   const ids = idArray.map((id => ({ type: "item", id: id})))
   console.log(ids)
   await axios
-    .put("/api/current-user", {
+    .patch("/api/current-user", {
       data: {
         type: "current-user",
         relationships: {
