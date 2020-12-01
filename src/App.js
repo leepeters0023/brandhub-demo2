@@ -375,7 +375,7 @@ const App = () => {
           )}
           {handleAuth(
             <OrderHistory
-              path="/orders/history"
+              path="/orders/history/group/:filterOption"
               userType={role}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}

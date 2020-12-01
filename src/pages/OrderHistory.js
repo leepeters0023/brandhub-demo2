@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "date-fns";
 import subDays from "date-fns/subDays";
@@ -45,7 +45,7 @@ const csvHeaders = [
   { label: "Status", key: "orderStatus" },
 ];
 
-const defaultFilters = {
+const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
   user: [],
@@ -60,13 +60,29 @@ const defaultFilters = {
   sortOrderBy: "orderDate",
 };
 
+const defaultItemFilters = {
+  fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
+  toDate: format(new Date(), "MM/dd/yyyy"),
+  user: [],
+  distributor: [],
+  groupBy: "item",
+  brand: [],
+  program: [],
+  itemType: [],
+  sequenceNum: "",
+  status: "not-draft",
+  sortOrder: "asc",
+  sortOrderBy: "orderDate",
+};
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
+const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [currentView, setCurrentView] = useCallback(useState(filterOption));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [modal, handleModal] = useCallback(useState(false));
   const currentGrouping = useSelector((state) => state.filters.groupBy);
@@ -74,6 +90,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
   );
+  console.log(filterOption)
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -94,6 +111,8 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
   const currentOrderItems = useSelector((state) => state.orderHistory.items);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const defaultFilters =
+    filterOption === "byOrder" ? defaultOrderFilters : defaultItemFilters;
 
   const handleModalOpen = useCallback(
     (img, brand, itemType, itemNumber, itemDescription) => {
@@ -134,6 +153,22 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (currentView !== filterOption) {
+      setCurrentView(filterOption);
+      if (filterOption === "byOrder") {
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultOrderFilters })
+        );
+      } else {
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultItemFilters })
+        );
+      }
+      dispatch(setSorted());
+    }
+  }, [currentView, setCurrentView, filterOption, dispatch]);
 
   return (
     <>
