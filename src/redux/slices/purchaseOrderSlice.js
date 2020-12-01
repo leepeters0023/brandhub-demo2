@@ -11,8 +11,7 @@ import {
   deletePO,
   deletePOItem,
 } from "../../api/purchasingApi";
-import { mapRollupItems, mapPOItems } from "../apiMaps";
-import addDays from "date-fns/addDays";
+import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
@@ -321,44 +320,7 @@ export const fetchSinglePO = (id) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
-    const formattedPO = {
-      id: newPO.data.id,
-      status: newPO.data.status,
-      accepted: false,
-      dueDate: newPO.data["in-market-date"]
-        ? newPO.data["in-market-date"]
-        : addDays(new Date(), 120),
-      expectedShip: newPO.data["expected-ship-date"]
-        ? newPO.data["expected-ship-date"]
-        : addDays(new Date(), 90),
-      terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
-      supplier: newPO.data.supplier ? newPO.data.supplier.name : "---",
-      contactName: newPO.data.supplier.contact ? newPO.data.supplier.contact : "---",
-      email: newPO.data.supplier.email ? newPO.data.supplier.email : "---",
-      phone: newPO.data.supplier.phone ? newPO.data.supplier.phone : "---",
-      purchasedBy: newPO.data.purchaser.name
-        ? newPO.data.purchaser.name
-        : `Buyer # ${newPO.data.purchaser.id}`,
-      supplierNotes: newPO.data.note ? newPO.data.note : "",
-      keyAcctTape: newPO.data["key-account-tape"]
-        ? newPO.data["key-account-tape"]
-        : "",
-      shippingLabel: newPO.data.label ? newPO.data.label : "---",
-      rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
-      specDetails: newPO.data["spec-details"]
-        ? newPO.data["spec-details"]
-        : "---",
-      poItems: mapPOItems(newPO.data["purchase-order-items"]),
-      additionalCosts: newPO.data["extra-costs"]
-        ? newPO.data["extra-costs"]
-        : [],
-      totalCost: mapPOItems(newPO.data["purchase-order-items"])
-        .map((item) => item.totalCost)
-        .reduce((a, b) => a + b),
-      shippingParams: newPO["shipping-params"]
-        ? newPO["shipping-params"]
-        : null,
-    };
+    const formattedPO = mapPurchaseOrder(newPO.data)
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
@@ -373,44 +335,7 @@ export const createNewPO = (idArray) => async (dispatch) => {
       throw newPO.error;
     }
     console.log(newPO);
-    const formattedPO = {
-      id: newPO.data.id,
-      status: newPO.data.status,
-      accepted: false,
-      dueDate: newPO.data["in-market-date"]
-        ? newPO.data["in-market-date"]
-        : addDays(new Date(), 120),
-      expectedShip: newPO.data["expected-ship-date"]
-        ? newPO.data["expected-ship-date"]
-        : addDays(new Date(), 90),
-      terms: newPO.data.terms ? newPO.data.terms : "Net 30 Days",
-      supplier: newPO.data.supplier ? newPO.data.supplier.name : "---",
-      contactName: newPO.data.supplier ? newPO.data.supplier.contact : "---",
-      email: newPO.data.supplier ? newPO.data.supplier.email : "---",
-      phone: newPO.data.supplier ? newPO.data.supplier.phone : "---",
-      purchasedBy: newPO.data.purchaser.name
-        ? newPO.data.purchaser.name
-        : `Buyer # ${newPO.data.purchaser.id}`,
-      supplierNotes: newPO.data.note ? newPO.data.note : "",
-      keyAcctTape: newPO.data["key-account-tape"]
-        ? newPO.data["key-account-tape"]
-        : "",
-      shippingLabel: newPO.data.label ? newPO.data.label : "---",
-      rfqNumber: newPO.data["rfq-number"] ? newPO.data["rfq-number"] : "---",
-      specDetails: newPO.data["spec-details"]
-        ? newPO.data["spec-details"]
-        : "---",
-      poItems: mapPOItems(newPO.data["purchase-order-items"]),
-      additionalCosts: newPO.data["extra-costs"]
-        ? newPO.data["extra-costs"]
-        : [],
-      totalCost: mapPOItems(newPO.data["purchase-order-items"])
-        .map((item) => item.totalCost)
-        .reduce((a, b) => a + b),
-      shippingParams: newPO["shipping-params"]
-        ? newPO["shipping-params"]
-        : null,
-    };
+    const formattedPO = mapPurchaseOrder(newPO.data)
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

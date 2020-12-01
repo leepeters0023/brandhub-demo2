@@ -1,5 +1,6 @@
 import { earliestDate } from "../utility/utilityFunctions";
 import { brandBULookup } from "../utility/constants";
+import addDays from "date-fns/addDays";
 
 /*
 Functions used to ensure data coming from api always matches
@@ -282,6 +283,83 @@ export const mapPOItems = (items) => {
   }));
   return mappedItems;
 };
+
+export const mapPOShippingParamItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    sequenceNum: item["item-number"] ? item["item-number"] : "---",
+    itemType: item["item-type-description"] ? item["item-type-description"] : "---",
+    totalItems: item.qty,
+    shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
+    tracking: item.tracking ? item.tracking : "---",
+    tax: item.tax ? item.tax : "---",
+  }))
+  return mappedItems;
+}
+
+export const mapPOShippingParams = (params) => {
+  console.log(params);
+  const formatAddress = (shipObj) => {
+    let addOne = shipObj["street-address-1"];
+    let addTwo = shipObj["street-address-2"] ? shipObj["street-address-2"] : false;
+    let city = shipObj.city;
+    let state = shipObj.state;
+    let country = shipObj.country;
+    let zip = shipObj.zip;
+    return [addOne, addTwo, city, state, zip, country].filter((address) => address).join(", ")
+  }
+  const mappedParams = params.map((param) => ({
+    id: param.id,
+    distributor: param.distributor ? param.distributor.name : "---",
+    attn: param.attn ? param.attn : "---",
+    address: formatAddress(param),
+    carrier: param.carrier ? param.carrier : "---",
+    method: param.method ? param.method : "---",
+    actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
+    items: mapPOShippingParamItems(param["shipping-parameter-items"])
+  }))
+  return mappedParams;
+}
+
+export const mapPurchaseOrder = (purchaseOrder) => {
+  const formattedPO = {
+    id: purchaseOrder.id,
+    status: purchaseOrder.status,
+    accepted: false,
+    dueDate: purchaseOrder["in-market-date"]
+      ? purchaseOrder["in-market-date"]
+      : addDays(new Date(), 120),
+    expectedShip: purchaseOrder["expected-ship-date"]
+      ? purchaseOrder["expected-ship-date"]
+      : addDays(new Date(), 90),
+    terms: purchaseOrder.terms ? purchaseOrder.terms : "Net 30 Days",
+    supplier: purchaseOrder.supplier ? purchaseOrder.supplier.name : "---",
+    contactName: purchaseOrder.supplier.contact ? purchaseOrder.supplier.contact : "---",
+    email: purchaseOrder.supplier.email ? purchaseOrder.supplier.email : "---",
+    phone: purchaseOrder.supplier.phone ? purchaseOrder.supplier.phone : "---",
+    purchasedBy: purchaseOrder.purchaser.name
+      ? purchaseOrder.purchaser.name
+      : `Buyer # ${purchaseOrder.purchaser.id}`,
+    supplierNotes: purchaseOrder.note ? purchaseOrder.note : "",
+    keyAcctTape: purchaseOrder["key-account-tape"]
+      ? purchaseOrder["key-account-tape"]
+      : "",
+    shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
+    rfqNumber: purchaseOrder["rfq-number"] ? purchaseOrder["rfq-number"] : "---",
+    specDetails: purchaseOrder["spec-details"]
+      ? purchaseOrder["spec-details"]
+      : "---",
+    poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
+    additionalCosts: purchaseOrder["extra-costs"]
+      ? purchaseOrder["extra-costs"]
+      : [],
+    totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
+      .map((item) => item.totalCost)
+      .reduce((a, b) => a + b),
+    shippingParams: mapPOShippingParams(purchaseOrder["shipping-parameters"]),
+  };
+  return formattedPO;
+}
 
 export const mapPOHistoryItems = (items) => {
   const mappedItems = items.map((item) => ({

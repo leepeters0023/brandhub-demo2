@@ -23,9 +23,6 @@ import PublishIcon from "@material-ui/icons/Publish";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-//mock data
-import { shippingParams } from "../assets/mockdata/dataGenerator";
-
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
@@ -211,7 +208,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             <br />
             <ShippingParameterTable
               classes={classes}
-              shippingInfo={shippingParams}
+              shippingInfo={currentPO.shippingParams}
             />
             <br />
             <br />

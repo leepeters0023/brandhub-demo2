@@ -32,9 +32,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-//mock data
-// import { quarterlyRollupItems } from "../assets/mockdata/dataGenerator";
-
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(new Date(), "MM/dd/yyyy"),
