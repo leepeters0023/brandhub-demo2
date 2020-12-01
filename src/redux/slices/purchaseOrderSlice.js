@@ -25,6 +25,7 @@ let initialState = {
   currentPO: {
     id: null,
     status: null,
+    accepted: false,
     dueDate: null,
     expectedShip: null,
     actualShip: null,
@@ -92,6 +93,7 @@ const purchaseOrderSlice = createSlice({
       const { purchaseOrder } = action.payload;
       state.currentPO.id = purchaseOrder.id;
       state.currentPO.status = purchaseOrder.status;
+      state.currentPO.accepted = purchaseOrder.accepted;
       state.currentPO.dueDate = purchaseOrder.dueDate;
       state.currentPO.expectedShip = purchaseOrder.expectedShip;
       state.currentPO.actualShip = purchaseOrder.actualShip;
@@ -199,6 +201,7 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.currentPO.id = null;
       state.currentPO.status = null;
+      state.currentPO.accepted = false;
       state.currentPO.dueDate = null;
       state.currentPO.expectedShip = null;
       state.currentPO.actualShip = null;
@@ -229,6 +232,7 @@ const purchaseOrderSlice = createSlice({
       state.selectedPOItems = [];
       state.currentPO.id = null;
       state.currentPO.status = null;
+      state.currentPO.accepted = false;
       state.currentPO.dueDate = null;
       state.currentPO.expectedShip = null;
       state.currentPO.actualShip = null;
@@ -320,6 +324,7 @@ export const fetchSinglePO = (id) => async (dispatch) => {
     const formattedPO = {
       id: newPO.data.id,
       status: newPO.data.status,
+      accepted: false,
       dueDate: newPO.data["in-market-date"]
         ? newPO.data["in-market-date"]
         : addDays(new Date(), 120),
@@ -371,6 +376,7 @@ export const createNewPO = (idArray) => async (dispatch) => {
     const formattedPO = {
       id: newPO.data.id,
       status: newPO.data.status,
+      accepted: false,
       dueDate: newPO.data["in-market-date"]
         ? newPO.data["in-market-date"]
         : addDays(new Date(), 120),

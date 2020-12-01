@@ -278,6 +278,7 @@ export const mapPOItems = (items) => {
     estCost: item["item-estimated-cost"],
     actCost: item["actual-cost"],
     totalCost: item["actual-cost"] * item.qty,
+    packOut: item["pack-out"] ? item["pack-out"] : false,
   }));
   return mappedItems;
 };

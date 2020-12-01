@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   updateCost,
@@ -28,14 +28,15 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
-const MoneyCell = ({ initialCost, id }) => {
+const MoneyCell = ({ initialCost, id, role, span }) => {
+  let currentFunc = role !== "supplier" ? setItemActCost : undefined;
   const { value: cost, bind: bindCost } = useMoneyInput(
     initialCost,
-    setItemActCost,
+    currentFunc,
     id
   );
   return (
-    <TableCell align="left">
+    <TableCell align="left" colSpan={span ? span : null}>
       <TextField
         value={cost}
         variant="outlined"
@@ -47,8 +48,15 @@ const MoneyCell = ({ initialCost, id }) => {
   );
 };
 
-const POItemsTable = ({ items, classes, addNewCost, additionalCosts, handleDelete }) => {
+const POItemsTable = ({
+  items,
+  classes,
+  addNewCost,
+  additionalCosts,
+  handleDelete,
+}) => {
   const dispatch = useDispatch();
+  const currentRole = useSelector((state) => state.user.role);
   return (
     <TableContainer
       className={classes.tableContainer}
@@ -76,9 +84,11 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts, handleDelet
             <TableCell className={classes.headerText} align="left">
               Qty Ordered
             </TableCell>
-            <TableCell className={classes.headerText} align="left">
-              Est. Cost/Unit
-            </TableCell>
+            {currentRole !== "supplier" && (
+              <TableCell className={classes.headerText} align="left">
+                Est. Cost/Unit
+              </TableCell>
+            )}
             <TableCell className={classes.headerText} align="left">
               Act. Cost/Unit
             </TableCell>
@@ -88,9 +98,11 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts, handleDelet
             <TableCell className={classes.headerText} align="left">
               Pack Out
             </TableCell>
-            <TableCell className={classes.headerText} align="right">
-              Remove
-            </TableCell>
+            {currentRole !== "supplier" && (
+              <TableCell className={classes.headerText} align="right">
+                Remove
+              </TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -108,89 +120,135 @@ const POItemsTable = ({ items, classes, addNewCost, additionalCosts, handleDelet
                   </TableCell>
                 </Tooltip>
               ) : (
-                <TableCell align="left">{row.program[0] || row.program}</TableCell>
+                <TableCell align="left">
+                  {row.program[0] || row.program}
+                </TableCell>
               )}
               <TableCell align="left">{row.itemType}</TableCell>
               <TableCell align="left">{row.packSize}</TableCell>
               <TableCell align="left">{row.totalItems}</TableCell>
-              <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
-              <MoneyCell initialCost={formatMoney(row.actCost)} id={row.id} />
+              {currentRole !== "supplier" && (
+                <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+              )}
+              {currentRole !== "supplier" ? (
+                <MoneyCell
+                  initialCost={formatMoney(row.actCost)}
+                  id={row.id}
+                  role={currentRole}
+                />
+              ) : (
+                <TableCell align="left">{formatMoney(row.actCost)}</TableCell>
+              )}
               <TableCell align="left">{formatMoney(row.totalCost)}</TableCell>
-              <TableCell padding="checkbox" align="center">
-                <Checkbox />
-                {/* TODO, handle checkbox! */}
-              </TableCell>
-              <TableCell align="right">
-                <Tooltip title="Remove">
-                  <IconButton
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleDelete(row.id);
-                    }}
-                  >
-                    <CancelIcon color="inherit" />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
+              {currentRole !== "supplier" && (
+                <TableCell padding="checkbox" align="center">
+                  <Checkbox checked={row.packOut} />
+                  {/* TODO, handle checkbox! */}
+                </TableCell>
+              )}
+              {currentRole === "supplier" && (
+                <TableCell align="left">{row.packout ? "Yes" : "No"}</TableCell>
+              )}
+              {currentRole !== "supplier" && (
+                <TableCell align="right">
+                  <Tooltip title="Remove">
+                    <IconButton
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        handleDelete(row.id);
+                      }}
+                    >
+                      <CancelIcon color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              )}
             </TableRow>
           ))}
-          <TableRow>
-            <TableCell className={classes.headerText}>Set Up Fee:</TableCell>
-            <TableCell colSpan={7} align="left">
-              <Tooltip title="Add Another Cost">
-                <IconButton
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    addNewCost();
-                  }}
+          {currentRole !== "supplier" && (
+            <>
+              <TableRow>
+                <TableCell className={classes.headerText}>
+                  Set Up Fee:
+                </TableCell>
+                <TableCell
+                  colSpan={currentRole !== "supplier" ? 7 : 6}
+                  align="left"
                 >
-                  <AddCircleIcon color="inherit" />
-                </IconButton>
-              </Tooltip>
-            </TableCell>
-          </TableRow>
-          {additionalCosts.map((cost, index) => (
-            <TableRow key={index}>
-              <TableCell className={classes.headerText}>Description:</TableCell>
-              <TableCell colSpan={4}>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  value={cost.description}
-                  onChange={(evt) => {
-                    dispatch(
-                      updateCost({
-                        key: "description",
-                        value: evt.target.value,
-                        index: index,
-                      })
-                    );
-                  }}
-                />
+                  <Tooltip title="Add Another Cost">
+                    <IconButton
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        addNewCost();
+                      }}
+                    >
+                      <AddCircleIcon color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+              {additionalCosts.map((cost, index) => (
+                <TableRow key={index}>
+                  <TableCell className={classes.headerText}>
+                    Description:
+                  </TableCell>
+                  <TableCell colSpan={4}>
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      value={cost.description}
+                      onChange={(evt) => {
+                        dispatch(
+                          updateCost({
+                            key: "description",
+                            value: evt.target.value,
+                            index: index,
+                          })
+                        );
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell className={classes.headerText} align="right">
+                    Cost:
+                  </TableCell>
+                  <TableCell colSpan={2}>
+                    <TextField
+                      variant="outlined"
+                      size="small"
+                      fullWidth
+                      value={cost.cost}
+                      onChange={(evt) => {
+                        dispatch(
+                          updateCost({
+                            key: "cost",
+                            value: evt.target.value,
+                            index: index,
+                          })
+                        );
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </>
+          )}
+          {currentRole === "supplier" && (
+            <>
+            <TableRow>
+              <TableCell colSpan={6} className={classes.headerText}>
+                Total Freight Cost:
               </TableCell>
-              <TableCell className={classes.headerText} align="right">
-                Cost:
-              </TableCell>
-              <TableCell colSpan={2}>
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  value={cost.cost}
-                  onChange={(evt) => {
-                    dispatch(
-                      updateCost({
-                        key: "cost",
-                        value: evt.target.value,
-                        index: index,
-                      })
-                    );
-                  }}
-                />
-              </TableCell>
+              <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
             </TableRow>
-          ))}
+            <TableRow>
+              <TableCell colSpan={6} className={classes.headerText}>
+                Total Tax:
+              </TableCell>
+              <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
+            </TableRow>
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
