@@ -67,7 +67,7 @@ const EnhancedTableHead = (props) => {
           (cell) => cell.id !== "itemDesc" && cell.id !== "itemType"
         )
       : headCells.filter(
-          (cell) => cell.id !== "supplier" && cell.id !== "totalEstCost"
+          (cell) => cell.id !== "supplier" && cell.id !== "estCost"
         );
 
   return (

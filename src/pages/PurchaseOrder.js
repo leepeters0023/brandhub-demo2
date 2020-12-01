@@ -21,6 +21,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 //mock data
 import { shippingParams } from "../assets/mockdata/dataGenerator";
@@ -37,6 +38,15 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
+  const currentRole = useSelector((state) => state.user.role);
+
+  const handleSupplierSubmit = () => {
+    //TODO
+  };
+
+  const handleSupplierDecline = () => {
+    //TODO
+  };
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -102,11 +112,27 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              <Tooltip title="Upload File">
-                <IconButton>
-                  <PublishIcon fontSize="large" color="inherit" />
-                </IconButton>
-              </Tooltip>
+              {currentRole !== "supplier" && (
+                <Tooltip title="Upload File">
+                  <IconButton>
+                    <PublishIcon fontSize="large" color="inherit" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {currentRole === "supplier" && (
+                <>
+                  <Tooltip title="Upload Shipping File">
+                    <IconButton>
+                      <PublishIcon fontSize="large" color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download Shipping File">
+                    <IconButton>
+                      <GetAppIcon fontSize="large" color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -121,24 +147,52 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         >
           <CurrentPO currentPO={currentPO} />
           <br />
-          {(window.location.hash.includes("new") ||
-            currentPO.status === "draft") && (
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-            >
-              SUBMIT PURCHASE ORDER
-            </Button>
+          {currentRole !== "supplier" && (
+            <>
+              {(isNew || currentPO.status === "draft") && (
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                >
+                  SUBMIT PURCHASE ORDER
+                </Button>
+              )}
+              {currentPO.status === "in-progress" && (
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                >
+                  EDIT PURCHASE ORDER
+                </Button>
+              )}
+            </>
           )}
-          {currentPO.status === "in-progress" && (
-            <Button
-            className={classes.largeButton}
-            variant="contained"
-            color="secondary"
-          >
-            EDIT PURCHASE ORDER
-          </Button>
+          {currentRole === "supplier" && !currentPO.accepted && (
+            <div style={{display: "flex"}}>
+              <Button
+                style={{ marginRight: "10px" }}
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  handleSupplierSubmit();
+                }}
+              >
+                Accept
+              </Button>
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  handleSupplierDecline();
+                }}
+              >
+                Decline
+              </Button>
+            </div>
           )}
           <br />
           <div
