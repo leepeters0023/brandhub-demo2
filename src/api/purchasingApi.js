@@ -12,24 +12,6 @@ const writeHeaders = {
   },
 };
 
-//Returns all active suppliers
-export const fetchSuppliers = async () => {
-  const response = { status: "", error: null, data: null };
-  await axios
-    .get("/api/suppliers")
-    .then((res) => {
-      let data = dataFormatter.deserialize(res.data);
-      response.status = "ok";
-      response.data = data;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
 //Returns rollup items for the rfq and po process based on filters and the view, paginated in groups of 20
 export const fetchRollupItems = async (filterObject, type) => {
   const sortMap = {

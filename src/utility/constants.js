@@ -39,8 +39,6 @@ export const couponTypeList = [
 
 export const ruleTypes = ["Prior Approval", "Item Type", "Material", "Pricing"];
 
-export const suppliers = ["Sterling", "Imperial", "Curtis", "Willey"];
-
 export const units = ["Compass", "Popular", "Renaissance", "Spirits"];
 
 export const couponTypes = ["MIR", "INS"];

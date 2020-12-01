@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchSuppliers } from "../../api/purchasingApi";
+import { fetchSuppliers, fetchFilteredSuppliers } from "../../api/supplierApi";
 
 /*
 * Supplier Model
@@ -14,6 +14,7 @@ import { fetchSuppliers } from "../../api/purchasingApi";
 let initialState = {
   isLoading: false,
   supplierList: [],
+  filteredSupplierList: [],
   error: null,
 };
 
@@ -38,9 +39,16 @@ const supplierSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    getFilteredSuppliersSuccess(state, action) {
+      const { suppliers } = action.payload;
+      state.filteredSupplierList = suppliers;
+      state.isLoading = false;
+      state.error = null;
+    },
     clearSuppliers(state) {
       state.isLoading = false;
       state.supplierList = [];
+      state.filteredSupplierList = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -50,6 +58,7 @@ const supplierSlice = createSlice({
 export const {
   setIsLoading,
   getSuppliersSuccess,
+  getFilteredSuppliersSuccess,
   clearSuppliers,
   setFailure,
 } = supplierSlice.actions;
@@ -70,6 +79,25 @@ export const fetchAllSuppliers = () => async (dispatch) => {
       }))
       .filter((sup) => sup.id !== "4");
     dispatch(getSuppliersSuccess({ suppliers: mappedSuppliers }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const fetchSuppliersByName = (name) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let suppliers = await fetchFilteredSuppliers(name);
+    if (suppliers.error) {
+      throw suppliers.error;
+    }
+    let mappedSuppliers = suppliers.data
+      .map((supplier) => ({
+        id: supplier.id,
+        name: supplier.name,
+      }))
+      .filter((sup) => sup.id !== "4");
+    dispatch(getFilteredSuppliersSuccess({ suppliers: mappedSuppliers }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

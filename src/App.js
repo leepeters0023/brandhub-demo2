@@ -27,7 +27,7 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
-import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
+import { fetchAllSuppliers, clearSuppliers } from "./redux/slices/supplierSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
@@ -130,6 +130,7 @@ const App = () => {
     dispatch(clearOrderSet());
     dispatch(resetNewProgram());
     dispatch(clearTerritories());
+    dispatch(clearSuppliers());
   };
 
   useEffect(() => {

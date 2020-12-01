@@ -47,8 +47,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
-import { suppliers } from "../../utility/constants";
-
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   drawer: {
@@ -429,7 +427,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               bindRfqNum={bindRfqNum}
               poNum={poNum}
               bindPoNum={bindPoNum}
-              suppliers={suppliers}
               handleSearch={historySearchMap[filterType.split("-")[1]]}
               historyType={filterType.split("-")[1]}
             />
