@@ -5,10 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 import { fetchNextFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -34,7 +31,7 @@ const defaultCurrentFilters = {
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "poNum",
-}
+};
 
 const defaultHistoryFilters = {
   supplier: [],
@@ -52,13 +49,15 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
+const PurchaseOrderHistory = ({
+  handleFilterDrawer,
+  filtersOpen,
+  filterOption,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.rfqHistory.nextLink);
-  const isNextLoading = useSelector(
-    (state) => state.rfqHistory.isNextLoading
-  );
+  const isNextLoading = useSelector((state) => state.rfqHistory.isNextLoading);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -74,9 +73,12 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption })
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  const isPOsLoading = useSelector((state) => state.purchaseOrderHistory.isLoading);
-  const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos)
-  const defaultFilters = filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters
+  const isPOsLoading = useSelector(
+    (state) => state.purchaseOrderHistory.isLoading
+  );
+  const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos);
+  const defaultFilters =
+    filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters;
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -104,13 +106,17 @@ const PurchaseOrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption })
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
       if (filterOption === "current") {
-        dispatch(updateMultipleFilters({filterObject: defaultCurrentFilters}))
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultCurrentFilters })
+        );
       } else {
-        dispatch(updateMultipleFilters({ filterObject: defaultHistoryFilters}))
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultHistoryFilters })
+        );
       }
       dispatch(setSorted());
     }
-  }, [currentView, setCurrentView, filterOption, dispatch])
+  }, [currentView, setCurrentView, filterOption, dispatch]);
 
   return (
     <>
