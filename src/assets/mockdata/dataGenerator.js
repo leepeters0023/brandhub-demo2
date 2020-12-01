@@ -1,20 +1,3 @@
-let programs = [
-  "Apothic Fall 20201",
-  "Barefoot June Focus 2021",
-  "La Marca Winter 2021",
-  "New Amsterdam Christmas",
-  "Orin Swift January 2021",
-  "Whitehaven Summer Splash",
-  "High Noon Spring 2021",
-];
-
-let itemTypes = [
-  "Shelf Talker",
-  "Carton Rider",
-  "Mass Display",
-  "Necker",
-  "Glorifier",
-];
 let territories = [
   "Western",
   "Southern",
@@ -47,85 +30,7 @@ let distributors = [
     state: "OH",
   },
 ];
-let packSizes = ["1", "10", "12", "25", "50"];
 let people = ["Sally Field", "John Doe", "Josh Downs", "Carlton Dunn"];
-
-const generateOrderHistoryItems = (dataPoints) => {
-  let data = [];
-  let orderStatus = ["Submitted", "Approved", "Shipped", "Denied"];
-  for (let i = 0; i < dataPoints; i++) {
-    let sequenceNumber = (1110000010 + i).toString();
-    let orderNum = (550 + i).toString();
-    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
-    let currentItemType =
-      itemTypes[Math.floor(Math.random() * itemTypes.length)];
-    let currentDistributor =
-      distributors[Math.floor(Math.random() * distributors.length)];
-    let packSize = packSizes[Math.floor(Math.random() * packSizes.length)];
-    let totalItems = Math.floor(Math.random() * 100) + 50;
-    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let totalEstCost = totalItems * estCost;
-    let actCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let totalActCost = totalItems * estCost;
-    let orderDate = "10/01/2020";
-    let status = orderStatus[Math.floor(Math.random() * orderStatus.length)];
-    let shipDate =
-      status === "Shipped" ? new Date().toLocaleDateString() : "---";
-    let tracking = status === "Shipped" ? (125770000010 + i).toString() : "---";
-    data.push({
-      sequenceNum: sequenceNumber,
-      id: orderNum,
-      program: currentProgram,
-      itemType: currentItemType,
-      distributorName: currentDistributor.name,
-      distributorState: currentDistributor.state,
-      packSize: packSize,
-      totalItems: totalItems,
-      estCost: estCost,
-      totalEstCost: totalEstCost,
-      actCost: actCost,
-      totalActCost: totalActCost,
-      orderDate: orderDate,
-      shipDate: shipDate,
-      tracking: tracking,
-      status: status,
-    });
-  }
-  return data;
-};
-
-const generateQuarterlyRollupItems = (dataPoints) => {
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let user = people[Math.floor(Math.random() * people.length)];
-    let sequenceNumber = (1110000010 + i).toString();
-    let currentProgram = programs[Math.floor(Math.random() * programs.length)];
-    let currentItemType =
-      itemTypes[Math.floor(Math.random() * itemTypes.length)];
-    let packSize = packSizes[Math.floor(Math.random() * packSizes.length)];
-    let totalItems = Math.floor(Math.random() * 100) + 50;
-    let estCost = (Math.floor(Math.random() * 20) + 5) * 100 - 1;
-    let totalEstCost = totalItems * estCost;
-    let orderDate = new Date().toLocaleDateString();
-    let dueDate = new Date().toLocaleDateString();
-    data.push({
-      id: i + 1,
-      user: user,
-      sequenceNum: sequenceNumber,
-      program: currentProgram,
-      itemType: currentItemType,
-      state: "VT",
-      packSize: packSize,
-      totalItems: totalItems,
-      estCost: estCost,
-      totalEstCost: totalEstCost,
-      orderDate: orderDate,
-      dueDate: dueDate,
-      status: "Order Submitted",
-    });
-  }
-  return data;
-};
 
 const generateYearToDateBudgets = (dataPoints) => {
   let brands = [
@@ -166,44 +71,6 @@ const generateYearToDateBudgets = (dataPoints) => {
     });
   }
 
-  return data;
-};
-
-export const generateShippingParams = (dataPoints) => {
-  const generateParamItems = (itemCount) => {
-    let items = [];
-    for (let i = 0; i < itemCount; i++) {
-      let sequenceNumber = (1110000010 + i).toString();
-      let currentItemType =
-        itemTypes[Math.floor(Math.random() * itemTypes.length)];
-      let totalItems = Math.floor(Math.random() * 100) + 20;
-      items.push({
-        id: i + 1,
-        itemNumber: sequenceNumber,
-        itemType: currentItemType,
-        totalItems: totalItems,
-        shippingStatus: "Ok",
-        tracking: "---",
-        tax: "---",
-      });
-    }
-    return items;
-  };
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let distributor =
-      distributors[Math.floor(Math.random() * distributors.length)];
-    data.push({
-      id: i + 1,
-      distributor: distributor.name,
-      attn: "Firstname Lastname",
-      address: "123 Road St. Burlington VT 05401",
-      carrier: "---",
-      method: "---",
-      actualShip: "---",
-      items: generateParamItems(Math.floor(Math.random() * 4 + 1)),
-    });
-  }
   return data;
 };
 
@@ -929,7 +796,4 @@ export const complianceItems = [
 ];
 
 export const pendingComplianceItems = generatePendingComplianceItems(6);
-export const orderHistoryItems = generateOrderHistoryItems(20);
 export const yearToDateBudgets = generateYearToDateBudgets(20);
-export const shippingParams = generateShippingParams(5);
-export const quarterlyRollupItems = generateQuarterlyRollupItems(20);
