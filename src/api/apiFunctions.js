@@ -84,7 +84,7 @@ export const buildFilters = (
       : "";
   let favItemString =
     filterObject.favItems && filterObject.favItems.length > 0
-      ? `filter[item-ids]=${separateByComma(filterObject.favItems, "id")}`
+      ? `filter[ids]=${separateByComma(filterObject.favItems, "id")}`
       : "";
   let supplierString =
     filterObject.supplier && filterObject.supplier.length > 0
