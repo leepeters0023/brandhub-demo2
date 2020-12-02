@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} justify="space-around">
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
           <ListItem>

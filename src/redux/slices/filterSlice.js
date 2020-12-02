@@ -191,8 +191,7 @@ const filterSlice = createSlice({
           if (
             filter === "bu" ||
             filter === "month" ||
-            filter === "ruleType" ||
-            filter === "supplier"
+            filter === "ruleType"
           ) {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
@@ -204,7 +203,8 @@ const filterSlice = createSlice({
             filter === "user" ||
             filter === "distributor" ||
             filter === "territory" ||
-            filter === "tag"
+            filter === "tag" ||
+            filter === "supplier"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });

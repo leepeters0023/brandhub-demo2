@@ -14,10 +14,10 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
   const currentUserRole = useSelector((state) => state.user.role);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} justify="space-around">
        {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
         <>
-          <Grid item sm={currentUserRole  === "super" ? 2 : 3} xs={12}>
+          <Grid item sm={3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
@@ -29,7 +29,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/orders/history"
+                to="/orders/history/group/byOrder"
               >
                 <ListItemText primary="By Order" />
               </ListItem>
@@ -37,8 +37,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/orders/history"
-              //TODO handler filters for /byOrder and /byItem
+                to="/orders/history/group/byItem"
               >
                 <ListItemText primary="By Item" />
               </ListItem>
@@ -62,7 +61,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
+                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
@@ -92,7 +91,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <Box fontStyle="italic"><ListItemText primary="various reports based on user role, TBD" /></Box>
+                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
               </ListItem>
             </List>
           </Grid>
