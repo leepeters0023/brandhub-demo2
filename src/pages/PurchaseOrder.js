@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { setRetain } from "../redux/slices/filterSlice";
-import { fetchSinglePO, submitPurchaseOrder } from "../redux/slices/purchaseOrderSlice";
+import {
+  fetchSinglePO,
+  submitPurchaseOrder,
+} from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import Loading from "../components/Utility/Loading";
@@ -48,7 +51,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const handlePurchaserSubmit = () => {
     dispatch(submitPurchaseOrder(currentPO.id));
     navigate("/purchasing/poHistory/current");
-  }
+  };
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -114,24 +117,43 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               {currentRole !== "supplier" && (
-                <Tooltip title="Upload File">
-                  <IconButton>
-                    <PublishIcon fontSize="large" color="inherit" />
-                  </IconButton>
-                </Tooltip>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<PublishIcon />}
+                >
+                  ORDER INFO
+                </Button>
               )}
               {currentRole === "supplier" && (
                 <>
-                  <Tooltip title="Upload Shipping File">
-                    <IconButton>
-                      <PublishIcon fontSize="large" color="inherit" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Download Shipping File">
-                    <IconButton>
-                      <GetAppIcon fontSize="large" color="inherit" />
-                    </IconButton>
-                  </Tooltip>
+                  <Button
+                    className={classes.largeButton}
+                    style={{marginRight: "10px"}}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<GetAppIcon />}
+                  >
+                    SHIPPING
+                  </Button>
+                  <Button
+                    className={classes.largeButton}
+                    style={{marginRight: "10px"}}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<GetAppIcon />}
+                  >
+                    ORDER INFO
+                  </Button>
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<PublishIcon />}
+                  >
+                    SHIPPING
+                  </Button>
                 </>
               )}
             </div>
@@ -172,7 +194,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </>
           )}
           {currentRole === "supplier" && !currentPO.accepted && (
-            <div style={{display: "flex"}}>
+            <div style={{ display: "flex" }}>
               <Button
                 style={{ marginRight: "10px" }}
                 className={classes.largeButton}

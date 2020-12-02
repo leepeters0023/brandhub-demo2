@@ -97,7 +97,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
           </Grid>
         </>
       )}
-
+      {currentUserRole === "field1" && <Grid item sm={3} xs={12} />}
     </Grid>
   );
 };
