@@ -9,6 +9,8 @@ import { useInitialFilters } from "../hooks/UtilityHooks";
 import {
   fetchNextFilteredPOItems,
   createNewPO,
+  setSelectedPOItems,
+  addItemsToPO
 } from "../redux/slices/purchaseOrderSlice";
 import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
@@ -120,8 +122,36 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         });
       });
       dispatch(createNewPO(idArray));
-      console.log(console.log(idArray));
+      console.log(idArray);
       navigate("/purchasing/purchaseOrder#new");
+    } else {
+      setWarningOpen(true);
+    }
+  };
+
+  const handleAddToPO = (id) => {
+    let idArray = [];
+    const poRef = draftPOs.find((po) => po.poNum === id);
+    let currentSupplier = [
+      ...new Set(
+        selectedPOItems.map((id) => {
+          let supplier = currentPOItems.find((item) => item.id === id).supplier;
+          return supplier;
+        })
+      ),
+    ];
+    if (currentSupplier.length === 1 && poRef.supplier === currentSupplier[0]) {
+      currentPOItems.forEach((item) => {
+        selectedPOItems.forEach((id) => {
+          if (item.id === id) {
+            idArray = idArray.concat(item.orderItemIds);
+          }
+        });
+      });
+      dispatch(setSelectedPOItems({ selectedItems: [] }));
+      dispatch(addItemsToPO(idArray, id))
+      console.log(idArray);
+      navigate(`/purchasing/purchaseOrder#${id}`);
     } else {
       setWarningOpen(true);
     }
@@ -199,6 +229,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               isLoading={isPOHistoryLoading}
               draftPOs={draftPOs}
               itemSelected={itemSelected}
+              handleAddToPO={handleAddToPO}
             />
             <Button
               className={classes.largeButton}
