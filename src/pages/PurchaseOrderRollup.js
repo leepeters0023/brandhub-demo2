@@ -112,7 +112,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         })
       ),
     ];
-    console.log(currentSupplier);
     if (currentSupplier.length === 1) {
       currentPOItems.forEach((item) => {
         selectedPOItems.forEach((id) => {
@@ -122,7 +121,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         });
       });
       dispatch(createNewPO(idArray));
-      console.log(idArray);
       navigate("/purchasing/purchaseOrder#new");
     } else {
       setWarningOpen(true);
@@ -150,7 +148,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
       });
       dispatch(setSelectedPOItems({ selectedItems: [] }));
       dispatch(addItemsToPO(idArray, id))
-      console.log(idArray);
       navigate(`/purchasing/purchaseOrder#${id}`);
     } else {
       setWarningOpen(true);

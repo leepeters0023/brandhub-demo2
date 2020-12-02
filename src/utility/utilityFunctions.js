@@ -86,3 +86,9 @@ export const separateByComma = (array, key) => {
     return array.join(",");
   }
 };
+
+//Unifies dates to UTC time so days show up correctly in date pickers
+export const formatDate = (date) => {
+  let tempDate = new Date(date);
+  return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
+};

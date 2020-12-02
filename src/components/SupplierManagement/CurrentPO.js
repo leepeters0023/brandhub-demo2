@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useInput } from "../../hooks/InputHooks";
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import {
   addCost,
@@ -92,11 +92,6 @@ const CurrentPO = () => {
     } else {
       dispatch(setDirectShip(currentPO.id, false));
     }
-  };
-
-  const formatDate = (date) => {
-    let tempDate = new Date(date);
-    return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
   };
 
   useEffect(() => {

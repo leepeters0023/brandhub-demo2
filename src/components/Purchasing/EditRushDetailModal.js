@@ -6,6 +6,7 @@ import addDays from "date-fns/addDays";
 import { /*useDispatch,*/ useSelector } from "react-redux";
 
 //import { setRushStatus } from "../../redux/slices/patchOrderSlice";
+import { formatDate } from "../../utility/utilityFunctions";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -94,7 +95,7 @@ const EditRushDetailModal = ({ itemId, handleClose }) => {
                 label=""
                 value={
                   currentItem.requestedShip
-                    ? currentItem.requestedShip
+                    ? formatDate(currentItem.requestedShip)
                     : format(addDays(new Date(), 28), "MM/dd/yyyy")
                 }
                 //onChange={(value) => handle this function!}

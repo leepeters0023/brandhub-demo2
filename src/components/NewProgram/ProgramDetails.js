@@ -4,6 +4,7 @@ import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInput } from "../../hooks/InputHooks";
+import { formatDate } from "../../utility/utilityFunctions";
 
 import { updateName, updateDate } from "../../redux/slices/newProgramSlice";
 
@@ -73,7 +74,7 @@ const ProgramDetails = ({ classes }) => {
             margin="normal"
             id="orderStart"
             label="Order Window Start"
-            value={orderStartDate}
+            value={formatDate(orderStartDate)}
             onChange={(value) => handleDate("orderStartDate", value)}
             KeyboardButtonProps={{
               "aria-label": "change date",
@@ -90,7 +91,7 @@ const ProgramDetails = ({ classes }) => {
             margin="normal"
             id="orderEnd"
             label="Order Window End"
-            value={orderEndDate}
+            value={formatDate(orderEndDate)}
             onChange={(value) => handleDate("orderEndDate", value)}
             KeyboardButtonProps={{
               "aria-label": "change date",
@@ -110,7 +111,7 @@ const ProgramDetails = ({ classes }) => {
             margin="normal"
             id="inMarketStart"
             label="In Market Start"
-            value={inMarketStartDate}
+            value={formatDate(inMarketStartDate)}
             onChange={(value) => handleDate("inMarketStartDate", value)}
             KeyboardButtonProps={{
               "aria-label": "change date",
@@ -127,7 +128,7 @@ const ProgramDetails = ({ classes }) => {
             margin="normal"
             id="inMarketEnd"
             label="In Market End"
-            value={inMarketEndDate}
+            value={formatDate(inMarketEndDate)}
             onChange={(value) => handleDate("inMarketEndDate", value)}
             KeyboardButtonProps={{
               "aria-label": "change date",
