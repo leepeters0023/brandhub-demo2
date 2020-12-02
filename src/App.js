@@ -12,7 +12,10 @@ import {
   setIsLoading,
   clearPrograms,
 } from "./redux/slices/programsSlice";
-import { fetchPreOrders, clearPreOrderDetail } from "./redux/slices/preOrderDetailSlice";
+import {
+  fetchPreOrders,
+  clearPreOrderDetail,
+} from "./redux/slices/preOrderDetailSlice";
 import { clearDistributors } from "./redux/slices/distributorSlice";
 import {
   clearCurrentOrder,
@@ -24,10 +27,13 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
-import { fetchAllSuppliers } from "./redux/slices/supplierSlice";
+import { fetchAllSuppliers, clearSuppliers } from "./redux/slices/supplierSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
-import { fetchTerritories, clearTerritories } from "./redux/slices/territorySlice";
+import {
+  fetchTerritories,
+  clearTerritories,
+} from "./redux/slices/territorySlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -124,6 +130,7 @@ const App = () => {
     dispatch(clearOrderSet());
     dispatch(resetNewProgram());
     dispatch(clearTerritories());
+    dispatch(clearSuppliers());
   };
 
   useEffect(() => {
@@ -234,7 +241,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/programs",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -245,7 +252,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/programs",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -255,7 +262,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/program",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -264,7 +271,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/open/preorder",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -274,7 +281,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/open",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -285,7 +292,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/inStock",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -296,7 +303,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -306,7 +313,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/rfqRollup",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -315,7 +322,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/purchasing/rfq",
-            ["field2", "super", "supplier"],
+            ["field2", "purchaser", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -325,7 +332,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/rfqHistory",
-            ["field2", "super", "supplier"],
+            ["field2", "purchaser", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -335,7 +342,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/poRollup",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -344,17 +351,17 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/purchasing/purchaseOrder",
-            ["field2", "super", "supplier"],
+            ["field2", "purchaser", "super", "supplier"],
             role
           )}
           {handleAuth(
             <PurchaseOrderHistory
-              path="/purchasing/poHistory"
+              path="/purchasing/poHistory/:filterOption"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/purchasing/poHistory",
-            ["field2", "super", "supplier"],
+            ["field2", "purchaser", "super", "supplier"],
             role
           )}
           {handleAuth(
@@ -363,18 +370,18 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/history",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
             <OrderHistory
-              path="/orders/history"
+              path="/orders/history/group/:filterOption"
               userType={role}
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />,
             "/orders/history",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -385,7 +392,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/approvals",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -395,7 +402,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/rollup",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -404,7 +411,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/rollup/detail",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -413,7 +420,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/coupons",
-            ["field1", "field2", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -424,7 +431,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/items",
-            ["field1", "field2", "compliance", "super"],
+            ["field1", "field2", "compliance", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -433,7 +440,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/compliance/pending",
-            ["field2", "compliance", "super"],
+            ["field2", "compliance", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -443,7 +450,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/compliance/contacts",
-            ["field2", "compliance", "super"],
+            ["field2", "compliance", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -473,7 +480,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/budgets/ytod",
-            ["field2", "super"],
+            ["field2", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -483,7 +490,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/profile",
-            ["field1", "field2", "compliance", "super"],
+            ["field1", "field2", "compliance", "purchaser", "super"],
             role
           )}
           {handleAuth(
@@ -493,7 +500,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/settings",
-            ["field1", "field2", "compliance", "super"],
+            ["field1", "field2", "compliance", "purchaser", "super"],
             role
           )}
           {handleAuth(

@@ -39,8 +39,14 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
+  const currentGrouping = useSelector((state) => state.filters.groupBy);
 
-  useRetainFiltersOnPopstate("/orders/history", dispatch)
+  useRetainFiltersOnPopstate(
+    `/orders/history/group/by${
+      currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
+    }`,
+    dispatch
+  );
 
   useEffect(() => {
     if (
@@ -69,9 +75,11 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Tooltip title="Back to Order History" placement="bottom-start">
               <IconButton
                 component={Link}
-                to="/orders/history"
+                to={`/orders/history/group/by${
+                  currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
+                }`}
                 onClick={() => {
-                  dispatch(setRetain({value: true}));
+                  dispatch(setRetain({ value: true }));
                 }}
               >
                 <ArrowBackIcon fontSize="large" color="secondary" />

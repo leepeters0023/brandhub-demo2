@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
@@ -6,14 +6,20 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchNextFilteredPOItems } from "../redux/slices/purchaseOrderSlice";
-//import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
+import {
+  fetchNextFilteredPOItems,
+  createNewPO,
+  setSelectedPOItems,
+  addItemsToPO
+} from "../redux/slices/purchaseOrderSlice";
+import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 import { createNewRFQ } from "../redux/slices/rfqSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
 import AddToPOMenu from "../components/SupplierManagement/AddToPOMenu";
+import WarningModal from "../components/Utility/WarningModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -59,6 +65,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
+  const [isWarningOpen, setWarningOpen] = useCallback(useState(false));
 
   const isPOHistoryLoading = useSelector(
     (state) => state.purchaseOrderHistory.isLoading
@@ -96,9 +103,63 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleNewPO = () => {
-    //TODO
-    console.log(selectedPOItems);
+    let idArray = [];
+    let currentSupplier = [
+      ...new Set(
+        selectedPOItems.map((id) => {
+          let supplier = currentPOItems.find((item) => item.id === id).supplier;
+          return supplier;
+        })
+      ),
+    ];
+    console.log(currentSupplier);
+    if (currentSupplier.length === 1) {
+      currentPOItems.forEach((item) => {
+        selectedPOItems.forEach((id) => {
+          if (item.id === id) {
+            idArray = idArray.concat(item.orderItemIds);
+          }
+        });
+      });
+      dispatch(createNewPO(idArray));
+      console.log(idArray);
+      navigate("/purchasing/purchaseOrder#new");
+    } else {
+      setWarningOpen(true);
+    }
   };
+
+  const handleAddToPO = (id) => {
+    let idArray = [];
+    const poRef = draftPOs.find((po) => po.poNum === id);
+    let currentSupplier = [
+      ...new Set(
+        selectedPOItems.map((id) => {
+          let supplier = currentPOItems.find((item) => item.id === id).supplier;
+          return supplier;
+        })
+      ),
+    ];
+    if (currentSupplier.length === 1 && poRef.supplier === currentSupplier[0]) {
+      currentPOItems.forEach((item) => {
+        selectedPOItems.forEach((id) => {
+          if (item.id === id) {
+            idArray = idArray.concat(item.orderItemIds);
+          }
+        });
+      });
+      dispatch(setSelectedPOItems({ selectedItems: [] }));
+      dispatch(addItemsToPO(idArray, id))
+      console.log(idArray);
+      navigate(`/purchasing/purchaseOrder#${id}`);
+    } else {
+      setWarningOpen(true);
+    }
+  };
+
+  const handleCloseWarning = useCallback(() => {
+    setWarningOpen(false);
+  }, [setWarningOpen]);
 
   useInitialFilters(
     "itemRollup-po",
@@ -109,16 +170,33 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     currentUserRole
   );
 
-  /*
   useEffect(() => {
-    if (draftPOs.length === 0) {
-      dispatch(fetchFilteredPOHistory({ ... filters here ... }))
-    }
-  }, [])
-  */
+    dispatch(
+      fetchFilteredPOHistory({
+        supplier: [],
+        brand: [],
+        program: [],
+        itemType: [],
+        status: "draft",
+        poNum: "",
+        sequenceNum: "",
+        sortOrder: "asc",
+        sortOrderBy: "poNum",
+      })
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //TODO  update filters conditionally based on url param!
 
   return (
     <>
+      <WarningModal
+        open={isWarningOpen}
+        handleClose={handleCloseWarning}
+        message="You must choose items with the same Supplier when creating a new Purchase Order"
+      />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>
@@ -151,6 +229,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               isLoading={isPOHistoryLoading}
               draftPOs={draftPOs}
               itemSelected={itemSelected}
+              handleAddToPO={handleAddToPO}
             />
             <Button
               className={classes.largeButton}
@@ -160,7 +239,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               style={{ marginRight: "20px" }}
               onClick={() => {
                 handleNewPO();
-                navigate("/purchasing/purchaseOrder#new");
               }}
             >
               CREATE PO
