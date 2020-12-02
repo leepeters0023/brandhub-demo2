@@ -18,7 +18,7 @@ const DrawerOrdersNav = ({
   return (
     <>
       {role !== "compliance" && (
-        <Grid container spacing={1}>
+        <Grid container spacing={1} justify="space-around">
           <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem
