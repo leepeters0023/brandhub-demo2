@@ -99,7 +99,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "distributor" ||
         filter === "orderType" ||
         filter === "territory" ||
-        filter === "supplier"
+        filter === "supplier" ||
+        filter === "favItems"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;

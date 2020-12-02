@@ -5,8 +5,12 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchNextFilteredItems } from "../redux/slices/itemSlice";
+import {
+  fetchNextFilteredItems,
+  clearItemSelection,
+} from "../redux/slices/itemSlice";
 import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
+import { addToFavoriteItems } from "../redux/slices/userSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -28,6 +32,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
+  favItems: [],
   orderType: "",
   sequenceNum: "",
 };
@@ -36,11 +41,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemCatalog = ({
-  catalogType,
-  handleFilterDrawer,
-  filtersOpen,
-}) => {
+const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentType, setCurrentType] = useCallback(useState(catalogType));
@@ -64,6 +65,7 @@ const ItemCatalog = ({
   const currentUserRole = useSelector((state) => state.user.role);
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const favoriteItems = useSelector((state) => state.user.favoriteItems);
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -73,6 +75,18 @@ const ItemCatalog = ({
 
   const handleModalClose = () => {
     handlePreviewModal(false);
+  };
+
+  const handleFavoriteItems = () => {
+    console.log(selectedItems);
+    const uniqueArray = [
+      ...new Set(selectedItems.concat(favoriteItems.map((i) => i.id))),
+    ];
+    console.log(uniqueArray);
+    if (uniqueArray.length > 0) {
+      dispatch(addToFavoriteItems(uniqueArray));
+    }
+    dispatch(clearItemSelection());
   };
 
   useEffect(() => {
@@ -119,6 +133,7 @@ const ItemCatalog = ({
               variant="contained"
               color="secondary"
               disabled={selectedItems.length === 0}
+              onClick={handleFavoriteItems}
             >
               ADD TO FAVORITES
             </Button>

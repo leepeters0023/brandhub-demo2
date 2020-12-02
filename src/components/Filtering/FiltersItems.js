@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setClear } from "../../redux/slices/filterSlice";
 
@@ -26,6 +26,8 @@ const FiltersItems = ({
   handleSearch,
 }) => {
   const dispatch = useDispatch();
+
+  const favoriteItems = useSelector(state => state.user.favoriteItems)
 
   return (
     <>
@@ -63,6 +65,8 @@ const FiltersItems = ({
             className={classes.largeButton}
             variant="contained"
             color="secondary"
+            disabled={favoriteItems.length === 0}
+            onClick={()=>handleFilters([...favoriteItems], "favItems", "item-all")}
           >
             FILTER FAVORITES
           </Button>
