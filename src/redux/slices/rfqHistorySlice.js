@@ -107,7 +107,6 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
       })
     );
   } catch (err) {
-    console.log(err);
     dispatch(setFailure({ error: err.toString() }));
   }
 };
@@ -127,7 +126,6 @@ export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
       })
     );
   } catch (err) {
-    console.log(err);
     dispatch(setFailure({ error: err.toString() }));
   }
 };

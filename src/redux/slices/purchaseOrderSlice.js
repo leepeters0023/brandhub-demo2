@@ -127,7 +127,6 @@ const purchaseOrderSlice = createSlice({
     },
     updateItemActualCost(state, action) {
       const { id, cost } = action.payload;
-      console.log(id, cost);
       const updatedItems = state.currentPO.poItems.map((item) => {
         if (item.id === id) {
           return {
@@ -137,7 +136,6 @@ const purchaseOrderSlice = createSlice({
           };
         } else return item;
       });
-      console.log(updatedItems);
       state.currentPO.poItems = updatedItems;
       state.currentPO.totalCost = updatedItems
         .map((item) => item.totalCost)
@@ -186,7 +184,6 @@ const purchaseOrderSlice = createSlice({
       const { id, packOut } = action.payload;
       const updatedItems = state.currentPO.poItems.map((item) => {
         if (item.id === id) {
-          console.log("here!")
           return {
             ...item,
             packOut: packOut,
@@ -379,7 +376,6 @@ export const createNewPO = (idArray) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
-    console.log(newPO);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
@@ -394,7 +390,6 @@ export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
     if (updatedPO.error) {
       throw updatedPO.error;
     }
-    console.log(updatedPO);
     const formattedPO = mapPurchaseOrder(updatedPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
@@ -502,7 +497,6 @@ export const deleteItem = (id) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     const deleteStatus = await deletePOItem(id);
-    console.log(deleteStatus);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }

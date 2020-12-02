@@ -189,7 +189,6 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));
-    console.log(err);
   }
 };
 
@@ -210,14 +209,12 @@ export const addToFavoriteItems = (idArray) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     const res = await addFavoriteItems(idArray);
-    console.log(res);
     if (res.error) {
       throw res.error
     }
     const items = mapItems(res.data["favorite-items"])
     dispatch(updateFavoriteItems({items: items}))
   } catch (err) {
-    console.log(err);
     dispatch(setUpdateFailure({ error: err.toString() }));
   }
 }

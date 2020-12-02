@@ -78,11 +78,9 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleFavoriteItems = () => {
-    console.log(selectedItems);
     const uniqueArray = [
       ...new Set(selectedItems.concat(favoriteItems.map((i) => i.id))),
     ];
-    console.log(uniqueArray);
     if (uniqueArray.length > 0) {
       dispatch(addToFavoriteItems(uniqueArray));
     }

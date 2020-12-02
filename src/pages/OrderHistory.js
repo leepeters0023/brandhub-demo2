@@ -90,7 +90,6 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
   );
-  console.log(filterOption)
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {

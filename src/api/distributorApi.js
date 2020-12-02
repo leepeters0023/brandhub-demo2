@@ -34,7 +34,6 @@ export const getFavDistributors = async () => {
     .get("/api/distributor-favorite-sets")
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })

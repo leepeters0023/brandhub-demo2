@@ -272,7 +272,6 @@ export const fetchRFQ = async (id) => {
     .get(`/api/request-for-quotes/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -299,7 +298,6 @@ export const createPO = async (ids) => {
     .post("/api/purchase-orders", requestBody, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.data = data;
       response.status = "ok";
     })
@@ -325,7 +323,6 @@ export const addToPO = async (ids, poNum) => {
     .patch(`/api/purchase-orders/${poNum}`, requestBody, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.data = data;
       response.status = "ok";
     })
@@ -601,8 +598,7 @@ export const deletePO = async (id) => {
   const response = { status: "", error: null };
   await axios
     .delete(`/api/purchase-orders/${id}`)
-    .then((res) => {
-      console.log(res);
+    .then((_res) => {
       response.status = "ok";
     })
     .catch((err) => {
@@ -685,7 +681,6 @@ export const fetchPO = async (id) => {
     .get(`/api/purchase-orders/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })

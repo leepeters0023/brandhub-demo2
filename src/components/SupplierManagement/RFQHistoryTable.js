@@ -140,7 +140,6 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("sequenceNum");
-  console.log(rfqs);
   const handleStatus = (status, bids) => {
     if (role === "supplier" && status === "sent") {
       return "New";

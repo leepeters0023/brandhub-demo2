@@ -11,6 +11,7 @@ import {
   updateSupplierNote,
   updateRFQDates,
 } from "../../redux/slices/rfqSlice";
+import { formatDate } from "../../utility/utilityFunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -101,7 +102,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Quote Due"
                   value={
                     currentRFQ.dueDate !== "---"
-                      ? format(new Date(currentRFQ.dueDate), "MM/dd/yyyy")
+                      ? formatDate(currentRFQ.dueDate)
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>
@@ -126,7 +127,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="In-Market Date"
                   value={
                     currentRFQ.inMarketDate !== "---"
-                      ? format(new Date(currentRFQ.inMarketDate), "MM/dd/yyyy")
+                      ? formatDate(currentRFQ.inMarketDate)
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>

@@ -95,7 +95,6 @@ export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
     if (pos.error) {
       throw pos.error;
     }
-    console.log(pos)
     const mappedPOItems = mapPOHistoryItems(pos.data.pos);
     dispatch(
       getPoHistorySuccess({
@@ -104,7 +103,6 @@ export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
       })
     );
   } catch (err) {
-    console.log(err);
     dispatch(setFailure({ error: err.toString() }));
   }
 };
@@ -124,7 +122,6 @@ export const fetchNextFilteredPOHistory = (url) => async (dispatch) => {
       })
     );
   } catch (err) {
-    console.log(err);
     dispatch(setFailure({ error: err.toString() }));
   }
 };

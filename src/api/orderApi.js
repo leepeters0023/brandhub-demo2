@@ -41,7 +41,6 @@ export const fetchOrderSetById = async (id) => {
     .get(`/api/order-sets/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -488,7 +487,6 @@ export const fetchOrderHistory = async (filterObject) => {
     .then((res) => {
       let dataObject = { orders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -570,7 +568,6 @@ export const fetchNextOrderHistoryByItem = async (url) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";

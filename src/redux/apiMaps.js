@@ -138,7 +138,6 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     sequenceNum: item["item-number"],
     imgUrl: item.item["img-url"],
@@ -194,7 +193,6 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
-  console.log(order)
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,
@@ -227,7 +225,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -298,7 +295,6 @@ export const mapPOShippingParamItems = (items) => {
 }
 
 export const mapPOShippingParams = (params) => {
-  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"] ? shipObj["street-address-2"] : false;

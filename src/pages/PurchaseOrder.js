@@ -59,7 +59,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (currentPO.id && !isPOLoading && window.location.hash === "#new") {
-      console.log("hash update");
       window.location.hash = currentPO.id;
       setIsNew(true);
     }
