@@ -37,9 +37,11 @@ const StatusSelector = ({
     { status: "all", label: "All Status" },
   ];
   const poStatusList = [
-    { status: "in-progress", label: "In Progress" },
+    { status: "draft", label: "Draft" },
+    { status: "submitted", label: "Submitted" },
+    { status: "draft-and-submitted", label: "Not Accepted" },
+    { status: "in-progress", label: "Accepted" },
     { status: "complete", label: "Complete" },
-    { status: "denied", label: "Denied" },
     { status: "all", label: "All Status" },
   ];
 

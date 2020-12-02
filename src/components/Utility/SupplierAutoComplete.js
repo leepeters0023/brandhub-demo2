@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchSuppliersByName } from "../../redux/slices/supplierSlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-import { suppliers } from "../../utility/constants";
 
 const FocusMonthAutoComplete = ({
   classes,
@@ -15,15 +16,26 @@ const FocusMonthAutoComplete = ({
   setReset,
   filterType,
 }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [supplier, setSupplier] = useState("");
   const [currentSuppliers, setCurrentSuppliers] = useState([]);
 
+  const isLoading = useSelector((state) => state.suppliers.isLoading);
+  const options = useSelector((state) => state.suppliers.filteredSupplierList);
   const currentFiltersSupplier = useSelector((state) => state.filters.supplier);
+
+  const loading = open && isLoading;
 
   const handleSuppliers = (value) => {
     setCurrentSuppliers(value);
   };
+
+  useEffect(() => {
+    if (supplier.length >= 1) {
+      dispatch(fetchSuppliersByName(supplier))
+    }
+  }, [supplier, dispatch])
 
   useEffect(() => {
     if (currentFiltersSupplier.length !== currentSuppliers.length) {
@@ -57,9 +69,10 @@ const FocusMonthAutoComplete = ({
           handleChange(value, "supplier", filterType);
           handleSuppliers(value);
         }}
-        getOptionSelected={(option, value) => option === value}
-        getOptionLabel={(supplier) => supplier}
-        options={suppliers}
+        getOptionSelected={(option, value) => option.name === value.name}
+        getOptionLabel={(option) => option.name}
+        options={options}
+        loading={loading}
         value={currentSuppliers}
         renderInput={(params) => (
           <TextField

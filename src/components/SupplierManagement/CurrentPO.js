@@ -1,15 +1,20 @@
-import React, { useEffect } from "react";
-// import PropTypes from "prop-types";
-// import { navigate } from "@reach/router";
-import format from "date-fns/format";
+import React, { useEffect, useState } from "react";
+import { navigate } from "@reach/router";
 import clsx from "clsx";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { useInput } from "../../hooks/InputHooks";
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import {
   addCost,
-  // updateSupplierNotes,
-  // updateLabel,
+  updateDateByType,
+  updateSupplierNote,
+  updateKeyAccountTape,
+  setDirectShip,
+  deleteItem,
+  deletePurchaseOrder,
 } from "../../redux/slices/purchaseOrderSlice";
 
 import POItemsTable from "./POItemsTable";
@@ -18,6 +23,9 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from "@material-ui/core/Radio";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -39,16 +47,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentPO = ({ purchaseOrderItems }) => {
+const CurrentPO = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
   );
+  const currentRole = useSelector((state) => state.user.role);
+
+  const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes);
+  const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
+    currentPO.keyAcctTape
+  );
+  const [shippingOption, setShippingOption] = useState(
+    currentPO.directShip ? "direct" : "cdc"
+  );
+
+  const deletePOItem = (id) => {
+    let initialLength = currentPO.poItems.length;
+    dispatch(deleteItem(id));
+    if (initialLength === 1) {
+      dispatch(deletePurchaseOrder(currentPO.id));
+      navigate("/purchasing/poRollup");
+    }
+  };
+
+  const updateNote = () => {
+    dispatch(updateSupplierNote(currentPO.id, note));
+  };
+
+  const updateTape = () => {
+    dispatch(updateKeyAccountTape(currentPO.id, keyAcctTape));
+  };
 
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
+  };
+
+  const handleRadioChange = (event) => {
+    setShippingOption(event.target.value);
+    if (event.target.value === "direct") {
+      dispatch(setDirectShip(currentPO.id, true));
+    } else {
+      dispatch(setDirectShip(currentPO.id, false));
+    }
+  };
+
+  const formatDate = (date) => {
+    let tempDate = new Date(date);
+    return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
   };
 
   useEffect(() => {
@@ -67,16 +115,16 @@ const CurrentPO = ({ purchaseOrderItems }) => {
       >
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Supplier:
+            {`Supplier: ${currentPO.supplier}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Contact Name:
+            {`Contact Name: ${currentPO.contactName}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Email:
+            {`Email: ${currentPO.email}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Phone:
+            {`Phone: ${currentPO.phone}`}
           </Typography>
         </Grid>
         <Grid item sm={6}>
@@ -87,47 +135,81 @@ const CurrentPO = ({ purchaseOrderItems }) => {
               justifyContent: "space-between",
             }}
           >
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                color="secondary"
-                className={classes.dateField}
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="dueDate"
-                label="Due Date"
-                value={format(new Date(), "MM/dd/yyyy")}
-                //onChange={(value) => handleFilters(value, "toDate")}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-            </MuiPickersUtilsProvider>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                color="secondary"
-                className={classes.dateField}
-                disableToolbar
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="expectedShip"
-                label="Expected Ship"
-                value={format(new Date(), "MM/dd/yyyy")}
-                //onChange={(value) => handleFilters(value, "toDate")}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-            </MuiPickersUtilsProvider>
+            {currentRole !== "supplier" && (
+              <>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    className={classes.dateField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="dueDate"
+                    label="In-Market Date"
+                    value={formatDate(currentPO.dueDate)}
+                    onChange={(value) =>
+                      dispatch(
+                        updateDateByType(
+                          currentPO.id,
+                          "in-market-date",
+                          new Date(value)
+                        )
+                      )
+                    }
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    className={classes.dateField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="expectedShip"
+                    label="Expected Ship"
+                    value={formatDate(currentPO.expectedShip)}
+                    onChange={(value) =>
+                      dispatch(
+                        updateDateByType(
+                          currentPO.id,
+                          "expected-ship-date",
+                          new Date(value)
+                        )
+                      )
+                    }
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </>
+            )}
+            {currentRole === "supplier" && (
+              <>
+                <Typography
+                  className={clsx(classes.headerText, classes.POText)}
+                >
+                  {`In-Market Date:  ${currentPO.dueDate}`}
+                </Typography>
+                <Typography
+                  className={clsx(classes.headerText, classes.POText)}
+                >
+                  {`Expected Ship:  ${currentPO.expectedShip}`}
+                </Typography>
+              </>
+            )}
           </div>
           <br />
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Terms: Net 30 Days
+            {`Terms: ${currentPO.terms}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            Purchased By:
+            {`Purchased By: ${currentPO.purchasedBy}`}
           </Typography>
         </Grid>
       </Grid>
@@ -146,23 +228,55 @@ const CurrentPO = ({ purchaseOrderItems }) => {
               Supplier Notes:
             </Typography>
             <br />
-            <TextField
-              label="Supplier Notes"
-              color="secondary"
-              multiline
-              fullWidth
-              variant="outlined"
-              size="small"
-              rows="4"
-            />
+            <Typography className={clsx(classes.headerText, classes.POText)}>
+              {`Shipping Labels: ${currentPO.shippingLabel}`}
+            </Typography>
+            <Typography className={clsx(classes.headerText, classes.POText)}>
+              {`RFQ Number: ${currentPO.rfqNumber}`}
+            </Typography>
+            <br />
+            {currentRole !== "supplier" && (
+              <>
+                <TextField
+                  label="Key Account Tape"
+                  color="secondary"
+                  multiline
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  rows="2"
+                  onBlur={updateTape}
+                  {...bindKeyAcctTape}
+                />
+                <br />
+                <TextField
+                  label="Supplier Notes"
+                  color="secondary"
+                  multiline
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  rows="4"
+                  onBlur={updateNote}
+                  {...bindNote}
+                />
+              </>
+            )}
+            {currentRole === "supplier" && (
+              <>
+                <Typography className={classes.bodyText}>
+                  {`Key Account Tape: ${currentPO.keyAcctTape}`}
+                </Typography>
+                <Typography className={classes.bodyText}>
+                  {`Note: ${currentPO.supplierNotes}`}
+                </Typography>
+              </>
+            )}
           </div>
         </Grid>
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            RFQ Number:
-          </Typography>
-          <Typography className={clsx(classes.headerText, classes.POText)}>
-            Spec Details:
+            {`Spec Details: ${currentPO.specDetails}`}
           </Typography>
         </Grid>
       </Grid>
@@ -171,10 +285,11 @@ const CurrentPO = ({ purchaseOrderItems }) => {
       <br />
       <br />
       <POItemsTable
-        items={purchaseOrderItems}
+        items={currentPO.poItems}
         classes={classes}
         addNewCost={addNewCost}
         additionalCosts={additionalCosts}
+        handleDelete={deletePOItem}
       />
       <br />
       <br />
@@ -183,20 +298,43 @@ const CurrentPO = ({ purchaseOrderItems }) => {
           width: "75%",
           minWidth: "1000px",
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
         }}
       >
+        {currentRole !== "supplier" && (
+          <RadioGroup
+            aria-label="shipping-options"
+            name="shipping-options"
+            value={shippingOption}
+            onChange={handleRadioChange}
+            row
+          >
+            <FormControlLabel
+              value="direct"
+              control={<Radio />}
+              label="Direct Ship"
+            />
+            <FormControlLabel
+              value="cdc"
+              control={<Radio />}
+              label="Ship to CDC"
+            />
+          </RadioGroup>
+        )}
+        {currentRole === "supplier" && (
+          <Typography className={classes.headerText}>Direct Ship</Typography>
+        )}
         <Typography
           className={classes.titleText}
           style={{ marginRight: "20px" }}
         >
-          Total: $25,000.00
+          {`Total: ${formatMoney(currentPO.totalCost)}`}
         </Typography>
       </div>
-      <br />    
+      <br />
       <br />
     </>
   );
 };
 
-export default CurrentPO;
+export default React.memo(CurrentPO);

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { setRetain } from "../redux/slices/filterSlice";
+import { fetchSinglePO, submitPurchaseOrder } from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
+import Loading from "../components/Utility/Loading";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
 
 import Container from "@material-ui/core/Container";
@@ -15,16 +17,11 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
-//mock data
-import { singlePO, shippingParams } from "../assets/mockdata/dataGenerator";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -34,23 +31,24 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [shippingOption, setShippingOption] = useState("direct");
   const [isNew, setIsNew] = useState(false);
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
-  //const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
+  const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
+  const currentRole = useSelector((state) => state.user.role);
 
-  const handleRadioChange = (event) => {
-    setShippingOption(event.target.value);
-    //TODO update in redux
+  const handleSupplierSubmit = () => {
+    //TODO
   };
 
-  /*
-    TODO 
-      * All purchase order details would be loaded and stored in purchase order slice
-      * Loading state (<Loading /> component)
-      * Editable fields will update purchase order state
-  */
+  const handleSupplierDecline = () => {
+    //TODO
+  };
+
+  const handlePurchaserSubmit = () => {
+    dispatch(submitPurchaseOrder(currentPO.id));
+    navigate("/purchasing/poHistory/current");
+  }
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -60,21 +58,24 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   }, []);
 
   useEffect(() => {
-    if (/*currentPO.id && */ !isPOLoading && window.location.hash === "#new") {
-      //window.location.hash = currentPO.id;
+    if (currentPO.id && !isPOLoading && window.location.hash === "#new") {
+      console.log("hash update");
+      window.location.hash = currentPO.id;
       setIsNew(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPO.id]);
 
-  // useEffect(() => {
-  //   if (!currentPO.id && window.location.hash !== "#new") {
-  //     dispatch(fetchSinglePO(window.location.hash.slice(1)));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    if (!currentPO.id && window.location.hash !== "#new") {
+      dispatch(fetchSinglePO(window.location.hash.slice(1)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  //TODO add back button!!!, update filters conditionally based on url param!
+  if (isPOLoading || !currentPO.id) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -85,9 +86,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               <Tooltip title="Back to PO History" placement="bottom-start">
                 <IconButton
                   component={Link}
-                  to="/purchasing/poHistory#current"
+                  to="/purchasing/poHistory/current"
                   onClick={() => {
-                    dispatch(setRetain({ value: true}))
+                    dispatch(setRetain({ value: true }));
                   }}
                 >
                   <ArrowBackIcon fontSize="large" color="secondary" />
@@ -100,24 +101,40 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   component={Link}
                   to="/purchasing/poRollup"
                   onClick={() => {
-                    dispatch(setRetain({ value: true}))
+                    dispatch(setRetain({ value: true }));
                   }}
                 >
                   <ArrowBackIcon fontSize="large" color="secondary" />
                 </IconButton>
               </Tooltip>
             )}
-          <Typography className={classes.titleText}>
-            Purchase Order #110012
-          </Typography>
+            <Typography className={classes.titleText}>
+              {`Purchase Order #${currentPO.id}`}
+            </Typography>
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
-              <Tooltip title="Upload File">
-                <IconButton>
-                  <PublishIcon fontSize="large" color="inherit" />
-                </IconButton>
-              </Tooltip>
+              {currentRole !== "supplier" && (
+                <Tooltip title="Upload File">
+                  <IconButton>
+                    <PublishIcon fontSize="large" color="inherit" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {currentRole === "supplier" && (
+                <>
+                  <Tooltip title="Upload Shipping File">
+                    <IconButton>
+                      <PublishIcon fontSize="large" color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Download Shipping File">
+                    <IconButton>
+                      <GetAppIcon fontSize="large" color="inherit" />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -130,19 +147,56 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             alignItems: "center",
           }}
         >
-          <CurrentPO purchaseOrderItems={singlePO} />
-          {window.location.hash.includes("new") && (
-            <div>
+          <CurrentPO currentPO={currentPO} />
+          <br />
+          {currentRole !== "supplier" && (
+            <>
+              {(isNew || currentPO.status === "draft") && (
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  onClick={handlePurchaserSubmit}
+                >
+                  SUBMIT PURCHASE ORDER
+                </Button>
+              )}
+              {currentPO.status === "submitted" && (
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                >
+                  SUBMIT EDITS
+                </Button>
+              )}
+            </>
+          )}
+          {currentRole === "supplier" && !currentPO.accepted && (
+            <div style={{display: "flex"}}>
+              <Button
+                style={{ marginRight: "10px" }}
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  handleSupplierSubmit();
+                }}
+              >
+                Accept
+              </Button>
               <Button
                 className={classes.largeButton}
                 variant="contained"
                 color="secondary"
+                onClick={() => {
+                  handleSupplierDecline();
+                }}
               >
-                SUBMIT PURCHASE ORDER
+                Decline
               </Button>
             </div>
           )}
-          <br />
           <br />
           <div
             style={{
@@ -155,43 +209,16 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               <Typography className={classes.titleText}>
                 Shipping Info
               </Typography>
-              <div className={classes.configButtons}>
-                <div className={classes.innerConfigDiv}>
-                  <RadioGroup
-                    aria-label="shipping-options"
-                    name="shipping-options"
-                    value={shippingOption}
-                    onChange={handleRadioChange}
-                    row
-                  >
-                    <FormControlLabel
-                      value="direct"
-                      control={<Radio />}
-                      label="Direct Ship"
-                    />
-                    <FormControlLabel
-                      value="cdc"
-                      control={<Radio />}
-                      label="Ship to CDC"
-                    />
-                  </RadioGroup>
-                </div>
-              </div>
             </div>
             <br />
             <br />
-              <ShippingParameterTable classes={classes} shippingInfo={shippingParams} />
+            <ShippingParameterTable
+              classes={classes}
+              shippingInfo={currentPO.shippingParams}
+            />
             <br />
             <br />
           </div>
-          <br />
-          <Button
-            className={classes.largeButton}
-            variant="contained"
-            color="secondary"
-          >
-            SUBMIT SHIPPING PARAMS
-          </Button>
         </div>
         <br />
         <br />

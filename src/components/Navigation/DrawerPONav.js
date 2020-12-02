@@ -16,14 +16,14 @@ const DrawerOrdersNav = ({
   classes,
 }) => {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} justify="space-around">
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
           <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#new"
+            to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
               <Avatar>
@@ -40,7 +40,7 @@ const DrawerOrdersNav = ({
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#current"
+            to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
               <Avatar>
@@ -57,7 +57,7 @@ const DrawerOrdersNav = ({
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#hold"
+            to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
               <Avatar>
@@ -74,7 +74,7 @@ const DrawerOrdersNav = ({
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/purchasing/poHistory#all"
+            to="/purchasing/poHistory/all"
           >
             <ListItemText primary="History" />
           </ListItem>

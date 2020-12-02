@@ -106,11 +106,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   }
                   onChange={(value) =>
                     dispatch(
-                      updateRFQDates(
-                        currentRFQ.id,
-                        "due-date",
-                        new Date(value)
-                      )
+                      updateRFQDates(currentRFQ.id, "due-date", new Date(value))
                     )
                   }
                   KeyboardButtonProps={{
@@ -127,7 +123,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   format="MM/dd/yyyy"
                   margin="normal"
                   id="dueDate"
-                  label="Due Date"
+                  label="In-Market Date"
                   value={
                     currentRFQ.inMarketDate !== "---"
                       ? format(new Date(currentRFQ.inMarketDate), "MM/dd/yyyy")

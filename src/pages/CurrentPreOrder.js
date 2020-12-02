@@ -24,7 +24,9 @@ import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import PreOrderSummary from "../components/Purchasing/PreOrderSummary";
+import Loading from "../components/Utility/Loading";
 
+import Typography from "@material-ui/core/Typography";
 import Accordion from "@material-ui/core/Accordion";
 import AccordianSummary from "@material-ui/core/AccordionSummary";
 import AccordianDetails from "@material-ui/core/AccordionDetails";
@@ -242,6 +244,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <AreYouSure
@@ -331,30 +337,38 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           </AccordianDetails>
         </Accordion>
         <br />
-        {userPrograms.length === 0 || !program || programsLoading ? (
+        {(userPrograms.length === 0 || !program || programsLoading) && (
           <CircularProgress color="inherit" />
-        ) : overviewVisible ||
+        )}
+        {(overviewVisible ||
           preOrderStatus === "complete" ||
           preOrderStatus === "submitted" ||
-          preOrderStatus === "approved" ? (
-          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-        ) : (
+          preOrderStatus === "approved") &&
+          currentItems.length > 0 && (
+            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+          )}
+        {!overviewVisible && (preOrderStatus === "in-progress" || preOrderStatus === "inactive") && currentItems.length > 0 && (
           <OrderSetTable
-            currentProgram={program}
-            open={open}
-            setOpen={setOpen}
-            tableStyle={tableStyle}
-            setTableStyle={setTableStyle}
-            handleModalOpen={handleModalOpen}
-            handleOpenConfirm={handleOpenConfirm}
-            handleRemoveOrder={handleRemoveOrder}
-            isLoading={isLoading}
-            orderId={preOrderId}
-            orderStatus={preOrderStatus}
-            currentItems={currentItems}
-            orders={orders}
-            orderType="preOrder"
-          />
+          currentProgram={program}
+          open={open}
+          setOpen={setOpen}
+          tableStyle={tableStyle}
+          setTableStyle={setTableStyle}
+          handleModalOpen={handleModalOpen}
+          handleOpenConfirm={handleOpenConfirm}
+          handleRemoveOrder={handleRemoveOrder}
+          isLoading={isLoading}
+          orderId={preOrderId}
+          orderStatus={preOrderStatus}
+          currentItems={currentItems}
+          orders={orders}
+          orderType="preOrder"
+        />
+        )}
+        {!programsLoading && currentItems.length === 0 && (
+          <Typography className={classes.headerText}>
+            There are no items in this program
+          </Typography>
         )}
         <br />
         <br />
@@ -370,6 +384,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                     setSwitched(false);
                     setOverviewVisible(true);
                   }}
+                  disabled={currentItems.length === 0}
                 >
                   ORDER OVERVIEW
                 </Button>
