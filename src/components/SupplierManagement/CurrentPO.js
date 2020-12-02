@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { navigate } from "@reach/router";
 import clsx from "clsx";
-import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -61,7 +60,9 @@ const CurrentPO = () => {
   const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
     currentPO.keyAcctTape
   );
-  const [shippingOption, setShippingOption] = useState(currentPO.directShip ? "direct" : "cdc");
+  const [shippingOption, setShippingOption] = useState(
+    currentPO.directShip ? "direct" : "cdc"
+  );
 
   const deletePOItem = (id) => {
     let initialLength = currentPO.poItems.length;
@@ -77,8 +78,8 @@ const CurrentPO = () => {
   };
 
   const updateTape = () => {
-    dispatch(updateKeyAccountTape(currentPO.id, keyAcctTape))
-  }
+    dispatch(updateKeyAccountTape(currentPO.id, keyAcctTape));
+  };
 
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
@@ -87,16 +88,16 @@ const CurrentPO = () => {
   const handleRadioChange = (event) => {
     setShippingOption(event.target.value);
     if (event.target.value === "direct") {
-      dispatch(setDirectShip(currentPO.id, true))
+      dispatch(setDirectShip(currentPO.id, true));
     } else {
-      dispatch(setDirectShip(currentPO.id, false))
+      dispatch(setDirectShip(currentPO.id, false));
     }
   };
 
   const formatDate = (date) => {
     let tempDate = new Date(date);
-    return new Date(tempDate.getTime() + tempDate.getTimezoneOffset()*60000)
-  }
+    return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
+  };
 
   useEffect(() => {
     if (additionalCosts.length === 0) {
@@ -193,15 +194,12 @@ const CurrentPO = () => {
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`In-Market Date:  ${format(currentPO.dueDate, "MM/dd/yyyy")}`}
+                  {`In-Market Date:  ${currentPO.dueDate}`}
                 </Typography>
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`Expected Ship:  ${format(
-                    currentPO.expectedShip,
-                    "MM/dd/yyyy"
-                  )}`}
+                  {`Expected Ship:  ${currentPO.expectedShip}`}
                 </Typography>
               </>
             )}
