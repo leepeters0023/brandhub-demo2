@@ -14,11 +14,17 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 const headCells = [
+  { id: "preview", disablePadding: false, label: "Preview", sort: false },
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
@@ -34,22 +40,24 @@ const headCells = [
     sort: true,
   },
   { id: "state", disablePadding: false, label: "State", sort: false },
-  { id: "packSize", disablePadding: false, label: "Qty / Pack", sort: false },
   {
     id: "totalItems",
     disablePadding: false,
-    label: "Total Items",
+    label: "Total Qty",
     sort: false,
   },
-  // { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   {
-    id: "totalEstCost",
+    id: "estCost",
     disablePadding: false,
-    label: "Est. Total",
+    label: "Est. Cost/Unit",
     sort: false,
   },
-  // { id: "actCost", disablePadding: false, label: "Act. Cost", sort: false },
-  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
+  {
+    id: "actCost",
+    disablePadding: false,
+    label: "Act. Cost/Unit",
+    sort: false,
+  },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
   { id: "tracking", disablePadding: false, label: "Tracking #", sort: false },
@@ -115,6 +123,12 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
 };
 
+const orderTypeMap = {
+  "on-demand": "On Demand",
+  "in-stock": "In Stock",
+  "pre-order": "Pre Order",
+}
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   orderHistoryRow: {
@@ -140,6 +154,7 @@ const OrderHistoryByItemTable = ({
   handleSort,
   isOrdersLoading,
   scrollRef,
+  handlePreview,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -195,8 +210,40 @@ const OrderHistoryByItemTable = ({
                     handleRowClick(row.orderId);
                   }}
                 >
+                  <TableCell align="left">
+                    <img
+                      id={row.sequenceNum}
+                      className={classes.previewImageFloat}
+                      src={row.imgUrl}
+                      alt={row.itemType}
+                      onClick={(evt) => {
+                        evt.stopPropagation();
+                        handlePreview(
+                          row.imgUrl,
+                          row.brand.join(", "),
+                          row.itemType,
+                          row.sequenceNum,
+                          row.itemDescription
+                        );
+                      }}
+                    />
+                  </TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{orderTypeMap[row.orderType]}</TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
@@ -204,27 +251,16 @@ const OrderHistoryByItemTable = ({
                   <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.distributor}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
-                  <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  {/* <TableCell align="left">
+                  <TableCell align="left">
                     {row.estCost !== "---"
                       ? formatMoney(row.estCost)
                       : row.estCost}
-                  </TableCell> */}
-                  <TableCell align="left">
-                    {row.totalEstCost !== "---"
-                      ? formatMoney(row.totalEstCost)
-                      : row.totalEstCost}
                   </TableCell>
-                  {/* <TableCell align="left">
+                  <TableCell align="left">
                     {row.actCost !== "---"
                       ? formatMoney(row.actCost)
                       : row.actCost}
-                  </TableCell> */}
-                  <TableCell align="left">
-                    {row.totalActCost !== "---"
-                      ? formatMoney(row.totalActCost)
-                      : row.totalActCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"

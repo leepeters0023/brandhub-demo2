@@ -42,7 +42,7 @@ const EnhancedTableHead = (props) => {
     onRequestSort(event, property);
   };
   const currentUserRole = useSelector((state) => state.user.role);
-  // unclear why userType cannot be passed in with props as it can in DrawerItemsNav
+  
   return (
     <TableHead>
       <TableRow>

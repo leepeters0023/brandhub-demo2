@@ -30,7 +30,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 const defaultFilters = {
   brand: [],
@@ -147,19 +146,23 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
             >
               ADD TO ORDER
             </Button>
-            <Tooltip title="View Current Order">
-              <IconButton
-                component={Link}
-                disabled={isUpdateLoading}
-                to={
-                  currentOrder.inStockOrderItems.length > 0
-                    ? `/orders/open/${currentOrder.inStockOrderNumber}`
-                    : "/orders/open/inStock"
-                }
-              >
-                <ExitToAppIcon fontSize="large" color="inherit" />
-              </IconButton>
-            </Tooltip>
+            <Button
+              component={Link}
+              disabled={
+                isUpdateLoading || currentOrder.inStockOrderItems.length === 0
+              }
+              to={
+                currentOrder.inStockOrderItems.length > 0
+                  ? `/orders/open/${currentOrder.inStockOrderNumber}`
+                  : "/orders/open/inStock"
+              }
+              className={classes.largeButton}
+              variant="contained"
+              color="secondary"
+              style={{ marginRight: "20px" }}
+            >
+              VIEW ORDER
+            </Button>
             <Tooltip title="View List">
               <IconButton
                 onClick={() => {

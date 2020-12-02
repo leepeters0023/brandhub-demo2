@@ -17,19 +17,42 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "poNum", disablePadding: false, label: "PO #", sort: true },
+  {
+    id: "sequenceNum",
+    disablePadding: false,
+    label: "Sequence #",
+    sort: false,
+  },
+  { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: true },
-  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
-  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
-  { id: "brand", disablePadding: false, label: "Brand", sort: true },
-  { id: "totalItems", disablePadding: false, label: "Total Ordered", sort: false, },
-  { id: "totalEstCost", disablePadding: false, label: "Est. Total", sort: false, },
-  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
+  { id: "itemType", disablePadding: false, label: "Item Type", sort: false },
+  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
+  {
+    id: "totalItems",
+    disablePadding: false,
+    label: "Quantity",
+    sort: false,
+  },
+  {
+    id: "estCost",
+    disablePadding: false,
+    label: "Est. Cost/Unit",
+    sort: false,
+  },
+  {
+    id: "actCost",
+    disablePadding: false,
+    label: "Act. Cost/Unit",
+    sort: false,
+  },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -40,8 +63,12 @@ const EnhancedTableHead = (props) => {
 
   const currentHeadCells =
     role !== "supplier"
-      ? headCells.filter((cell) => cell.id !== "brand" && cell.id !== "itemDesc" && cell.id !== "itemType")
-      : headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "totalEstCost");
+      ? headCells.filter(
+          (cell) => cell.id !== "itemDesc" && cell.id !== "itemType"
+        )
+      : headCells.filter(
+          (cell) => cell.id !== "supplier" && cell.id !== "estCost"
+        );
 
   return (
     <TableHead>
@@ -179,43 +206,40 @@ const PurchaseOrderHistoryTable = ({
                   }}
                 >
                   <TableCell align="left">{row.poNum}</TableCell>
-                  {role !== "supplier" && (<TableCell align="left">{row.supplier}</TableCell>)}
+                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.projectNum}</TableCell>
+                  {role !== "supplier" && (
+                    <TableCell align="left">{row.supplier}</TableCell>
+                  )}
                   {role === "supplier" && (
                     <>
-                      {row.itemTypes.length > 1 ? (
-                        <TableCell align="left">{row.itemTypes[0]}<br />
-                          <Tooltip placement="left" title={`${row.itemTypes.join(",")}`}>
-                            <MoreHorizIcon fontSize="small" color="inherit" />
-                          </Tooltip>
-                        </TableCell>
-                      ) : (
-                          <TableCell align="left">{row.itemTypes[0]}</TableCell>
-                        )}
-                      {row.itemDescription.length > 1 ? (
-                        <TableCell align="left">{row.itemDescription[0]}<br />
-                          <Tooltip placement="left" title={`${row.itemDescription.join(",")}`}>
-                            <MoreHorizIcon fontSize="small" color="inherit" />
-                          </Tooltip>
-                        </TableCell>
-                      ) : (
-                          <TableCell align="left">{row.itemDescription[0]}</TableCell>
-                        )}
-                      {row.brands.length > 1 ? (
-                        <TableCell align="left">{row.brands[0]}<br />
-                          <Tooltip placement="left" title={`${row.brands.join(",")}`}>
-                            <MoreHorizIcon fontSize="small" color="inherit" />
-                          </Tooltip>
-                        </TableCell>
-                      ) : (
-                          <TableCell align="left">{row.brands[0]}</TableCell>
-                        )}
+                      <TableCell align="left">{row.itemType}</TableCell>
+                      <TableCell align="left">{row.itemDesc}</TableCell>
                     </>
                   )}
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brands[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  {role !== "supplier" && (<TableCell align="left">{formatMoney(row.totalEstCost)}
-                  </TableCell>)}
-                  <TableCell align="left">{formatMoney(row.actTotal)}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
+                  {role !== "supplier" && (
+                    <TableCell align="left">
+                      {formatMoney(row.estCost)}
+                    </TableCell>
+                  )}
+                  <TableCell align="left">{formatMoney(row.actCost)}</TableCell>
+                  <TableCell align="left">
+                    {row.status[0].toUpperCase() + row.status.slice(1)}
+                  </TableCell>
                   <TableCell align="left">{row.dueDate}</TableCell>
                 </TableRow>
               ))}

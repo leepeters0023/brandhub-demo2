@@ -1,5 +1,6 @@
 import { earliestDate } from "../utility/utilityFunctions";
 import { brandBULookup } from "../utility/constants";
+import addDays from "date-fns/addDays";
 
 /*
 Functions used to ensure data coming from api always matches
@@ -137,8 +138,12 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     sequenceNum: item["item-number"],
+    imgUrl: item.item["img-url"],
+    orderType: item.item["order-type"],
+    brand: item.item.brands.map((brand) => brand.name),
     program: item["program-names"].join(", "),
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -189,6 +194,7 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
+  console.log(order)
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,
@@ -221,6 +227,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -238,13 +245,18 @@ export const mapRollupItems = (items) => {
     id: item.item.id,
     itemId: item.item.id,
     sequenceNum: item["item-number"],
+    projectNum: item["project-number"] ? item["project-number"] : "---",
     territory:
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
+    brand: item.brands
+      ? item.brands.map((brand) => brand.name).join(", ")
+      : "---",
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
     totalItems: item["total-ordered"],
+    orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["not-compliant-count"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: item["estimated-cost"],
@@ -255,13 +267,127 @@ export const mapRollupItems = (items) => {
   return mappedItems;
 };
 
+export const mapPOItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    itemId: item.item.id,
+    sequenceNum: item["item-number"],
+    program: item["program-names"].length > 0 ? item["program-names"] : "---",
+    itemType: item["item-type-description"],
+    packSize: item["actual-qty-per-pack"],
+    totalItems: item.qty,
+    estCost: item["item-estimated-cost"],
+    actCost: item["actual-cost"],
+    totalCost: item["actual-cost"] * item.qty,
+    packOut: item["has-packout"] ? item["has-packout"] : false,
+  }));
+  return mappedItems;
+};
+
+export const mapPOShippingParamItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    sequenceNum: item["item-number"] ? item["item-number"] : "---",
+    itemType: item["item-type-description"] ? item["item-type-description"] : "---",
+    totalItems: item.qty,
+    shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
+    tracking: item.tracking ? item.tracking : "---",
+    tax: item.tax ? item.tax : "---",
+  }))
+  return mappedItems;
+}
+
+export const mapPOShippingParams = (params) => {
+  console.log(params);
+  const formatAddress = (shipObj) => {
+    let addOne = shipObj["street-address-1"];
+    let addTwo = shipObj["street-address-2"] ? shipObj["street-address-2"] : false;
+    let city = shipObj.city;
+    let state = shipObj.state;
+    let country = shipObj.country;
+    let zip = shipObj.zip;
+    return [addOne, addTwo, city, state, zip, country].filter((address) => address).join(", ")
+  }
+  const mappedParams = params.map((param) => ({
+    id: param.id,
+    distributor: param.distributor ? param.distributor.name : "---",
+    attn: param.attn ? param.attn : "---",
+    address: formatAddress(param),
+    carrier: param.carrier ? param.carrier : "---",
+    method: param.method ? param.method : "---",
+    actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
+    items: mapPOShippingParamItems(param["shipping-parameter-items"])
+  }))
+  return mappedParams;
+}
+
+export const mapPurchaseOrder = (purchaseOrder) => {
+  const formattedPO = {
+    id: purchaseOrder.id,
+    status: purchaseOrder.status,
+    accepted: false,
+    dueDate: purchaseOrder["in-market-date"]
+      ? purchaseOrder["in-market-date"]
+      : addDays(new Date(), 120),
+    expectedShip: purchaseOrder["expected-ship-date"]
+      ? purchaseOrder["expected-ship-date"]
+      : addDays(new Date(), 90),
+    terms: purchaseOrder.terms ? purchaseOrder.terms : "Net 30 Days",
+    supplier: purchaseOrder.supplier.name,
+    contactName: purchaseOrder.supplier.contact ? purchaseOrder.supplier.contact : "---",
+    email: purchaseOrder.supplier.email ? purchaseOrder.supplier.email : "---",
+    phone: purchaseOrder.supplier.phone ? purchaseOrder.supplier.phone : "---",
+    purchasedBy: purchaseOrder.purchaser.name,
+    supplierNotes: purchaseOrder.note ? purchaseOrder.note : "",
+    keyAcctTape: purchaseOrder["key-account-tape"]
+      ? purchaseOrder["key-account-tape"]
+      : "",
+    shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
+    rfqNumber: purchaseOrder["rfq-number"] ? purchaseOrder["rfq-number"] : "---",
+    specDetails: purchaseOrder["spec-details"]
+      ? purchaseOrder["spec-details"]
+      : "---",
+    poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
+    additionalCosts: purchaseOrder["extra-costs"]
+      ? purchaseOrder["extra-costs"]
+      : [],
+    totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
+      .map((item) => item.totalCost)
+      .reduce((a, b) => a + b),
+    directShip: purchaseOrder["is-direct-ship"],
+    shippingParams: mapPOShippingParams(purchaseOrder["shipping-parameters"]),
+  };
+  return formattedPO;
+}
+
+export const mapPOHistoryItems = (items) => {
+  const mappedItems = items.map((item) => ({
+    id: item.id,
+    itemId: item.item.id,
+    poNum: item["purchase-order"].id,
+    sequenceNum: item["item-number"],
+    projectNum: item["project-number"] ? item["project-number"] : "---",
+    supplier: item["supplier-name"] ? item["supplier-name"] : "---",
+    itemType: item["item-type-description"],
+    itemDesc: item["item-description"] ? item["item-description"] : "---",
+    brand: item["brand-names"],
+    program: item["program-names"],
+    totalItems: item.qty,
+    estCost: item["item-estimated-cost"],
+    actCost: item["actual-cost"],
+    status: item["po-status"],
+    dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+  }))
+  return mappedItems;
+}
+
 export const mapRFQ = (rfq) => {
   const mapBids = (bids) => {
     return bids.map((bid) => ({
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price, 
+      price: bid.price,
     }));
   };
 

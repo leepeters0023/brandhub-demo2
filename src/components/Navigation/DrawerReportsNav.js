@@ -29,7 +29,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/orders/history"
+                to="/orders/history/group/byOrder"
               >
                 <ListItemText primary="By Order" />
               </ListItem>
@@ -37,8 +37,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/orders/history"
-              //TODO handler filters for /byOrder and /byItem
+                to="/orders/history/group/byItem"
               >
                 <ListItemText primary="By Item" />
               </ListItem>

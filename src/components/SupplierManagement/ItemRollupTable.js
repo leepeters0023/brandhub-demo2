@@ -30,7 +30,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
   {
@@ -52,7 +54,7 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: false },
 ];
 
@@ -75,8 +77,8 @@ const EnhancedTableHead = (props) => {
     type === "po"
       ? headCells
       : headCells
-        .filter((cell) => cell.id !== "supplier")
-        .filter((cell) => cell.id !== "totalNotCompliant");
+          .filter((cell) => cell.id !== "supplier")
+          .filter((cell) => cell.id !== "totalNotCompliant");
 
   return (
     <TableHead>
@@ -336,14 +338,15 @@ const ItemRollupTable = ({
                     </TableCell>
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
+                    <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>
                         <TableCell align="left">
                           {row.program && row.program !== "---"
                             ? row.program.name
                             : row.programs.length > 0
-                              ? row.programs[0].name
-                              : "---"}
+                            ? row.programs[0].name
+                            : "---"}
                         </TableCell>
                       </Tooltip>
                     )}
@@ -352,10 +355,11 @@ const ItemRollupTable = ({
                         {row.program && row.program !== "---"
                           ? row.program.name
                           : row.programs.length > 0
-                            ? row.programs[0].name
-                            : "---"}
+                          ? row.programs[0].name
+                          : "---"}
                       </TableCell>
                     )}
+                    <TableCell align="left">{row.projectNum}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
@@ -382,8 +386,9 @@ const ItemRollupTable = ({
                     )}
                     <TableCell align="right" padding="checkbox">
                       <Tooltip
-                        title={`Delete ${type === "po" ? "Purchase Order Item" : "RFQ Item"
-                          }`}
+                        title={`Delete ${
+                          type === "po" ? "Purchase Order Item" : "RFQ Item"
+                        }`}
                       >
                         <IconButton onClick={() => handleOpenConfirm(row.id)}>
                           <DeleteIcon color="inherit" />

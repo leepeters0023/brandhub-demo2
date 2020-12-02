@@ -57,7 +57,7 @@ export const buildFilters = (
       : "";
   let poString =
     filterObject.poNum && filterObject.poNum.length > 0
-      ? `filter[id]=${filterObject.poNum}`
+      ? `filter[purchase-order-id]=${filterObject.poNum}`
       : "";
   let distributorString =
     filterObject.distributor && filterObject.distributor.length > 0

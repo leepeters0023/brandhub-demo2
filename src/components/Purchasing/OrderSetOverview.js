@@ -98,7 +98,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       dispatch(clearCurrentOrder());
     };
   }, [orderType, orderSet, setOrderType, dispatch]);
-
+  
   return (
     <>
       <Grid container spacing={5}>
@@ -166,7 +166,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
             <Button
               className={classes.largeButton}
               variant="contained"
-              color="primary"
+              color="secondary"
               fullWidth
               onClick={() => {
                 orderSet.status === "in-progress" ||
@@ -214,75 +214,6 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               <Typography className={classes.headerText}>
                 Thank you for your Submission!
               </Typography>
-              {/* <br />
-              <br />
-              {!window.location.href.includes("preorder") && (
-                <>
-                  <Button
-                    fullWidth
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    component={Link}
-                    onClick={handleLeavePage}
-                    to="/"
-                  >
-                    DASHBOARD
-                  </Button>
-                  <br />
-                  <br />
-                  <Button
-                    fullWidth
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    component={Link}
-                    onClick={handleLeavePage}
-                    to="/orders/open/preorder"
-                  >
-                    PLACE QUARTERLY ORDER
-                  </Button>
-                  <br />
-                  <br />
-                  <Button
-                    fullWidth
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    component={Link}
-                    onClick={handleLeavePage}
-                    to="/orders/items/inStock"
-                  >
-                    PLACE IN-STOCK ORDER
-                  </Button>
-                  <br />
-                  <br />
-                  <Button
-                    fullWidth
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    component={Link}
-                    onClick={handleLeavePage}
-                    to="/orders/items/onDemand"
-                  >
-                    PLACE ON-DEMAND ORDER
-                  </Button>
-                  <br />
-                  <br />
-                  <Button
-                    fullWidth
-                    className={classes.largeButton}
-                    color="secondary"
-                    variant="contained"
-                    component={Link}
-                    onClick={handleLeavePage}
-                    to="/orders/history"
-                  >
-                    ORDER HISTORY
-                  </Button>
-                </>
-              )} */}
             </>
           )}
           <br />

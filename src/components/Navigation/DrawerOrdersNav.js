@@ -145,7 +145,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/purchasing/poHistory#current"
+                to="/purchasing/poHistory/current"
               >
                 <ListItemText primary="Current" />
               </ListItem>
@@ -153,7 +153,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to="/purchasing/poHistory#all"
+                to="/purchasing/poHistory/all"
               >
                 <ListItemText primary="History" />
               </ListItem>
