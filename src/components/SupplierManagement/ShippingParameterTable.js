@@ -91,7 +91,7 @@ const CollapseRow = ({ shippingInfo, classes }) => {
                         <TableCell align="center">{item.sequenceNum}</TableCell>
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
-                        <TableCell align="center">{item.shippingStatus}</TableCell>
+                        <TableCell align="center">{item.shipStatus}</TableCell>
                         <TableCell align="center">{item.tracking}</TableCell>
                         <TableCell align="center">{item.tax}</TableCell>
                       </TableRow>

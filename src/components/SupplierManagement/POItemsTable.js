@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   updateCost,
   setItemActCost,
+  setItemPackOut,
 } from "../../redux/slices/purchaseOrderSlice";
 
 import { useMoneyInput } from "../../hooks/InputHooks";
@@ -57,6 +58,11 @@ const POItemsTable = ({
 }) => {
   const dispatch = useDispatch();
   const currentRole = useSelector((state) => state.user.role);
+
+  const handlePackOut = (id, value) => {
+    dispatch(setItemPackOut(id, value))
+  }
+
   return (
     <TableContainer
       className={classes.tableContainer}
@@ -142,8 +148,7 @@ const POItemsTable = ({
               <TableCell align="left">{formatMoney(row.totalCost)}</TableCell>
               {currentRole !== "supplier" && (
                 <TableCell padding="checkbox" align="center">
-                  <Checkbox checked={row.packOut} />
-                  {/* TODO, handle checkbox! */}
+                  <Checkbox checked={row.packOut} onChange={() => handlePackOut(row.id, !row.packOut)} />
                 </TableCell>
               )}
               {currentRole === "supplier" && (
@@ -171,10 +176,7 @@ const POItemsTable = ({
                 <TableCell className={classes.headerText}>
                   Set Up Fee:
                 </TableCell>
-                <TableCell
-                  colSpan={currentRole !== "supplier" ? 7 : 6}
-                  align="left"
-                >
+                <TableCell colSpan={8} align="left">
                   <Tooltip title="Add Another Cost">
                     <IconButton
                       onClick={(event) => {
@@ -235,18 +237,18 @@ const POItemsTable = ({
           )}
           {currentRole === "supplier" && (
             <>
-            <TableRow>
-              <TableCell colSpan={6} className={classes.headerText}>
-                Total Freight Cost:
-              </TableCell>
-              <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={6} className={classes.headerText}>
-                Total Tax:
-              </TableCell>
-              <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
-            </TableRow>
+              <TableRow>
+                <TableCell colSpan={6} className={classes.headerText}>
+                  Total Freight Cost:
+                </TableCell>
+                <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={6} className={classes.headerText}>
+                  Total Tax:
+                </TableCell>
+                <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
+              </TableRow>
             </>
           )}
         </TableBody>

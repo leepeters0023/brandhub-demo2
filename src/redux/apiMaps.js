@@ -279,7 +279,7 @@ export const mapPOItems = (items) => {
     estCost: item["item-estimated-cost"],
     actCost: item["actual-cost"],
     totalCost: item["actual-cost"] * item.qty,
-    packOut: item["pack-out"] ? item["pack-out"] : false,
+    packOut: item["has-packout"] ? item["has-packout"] : false,
   }));
   return mappedItems;
 };
@@ -333,13 +333,11 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["expected-ship-date"]
       : addDays(new Date(), 90),
     terms: purchaseOrder.terms ? purchaseOrder.terms : "Net 30 Days",
-    supplier: purchaseOrder.supplier ? purchaseOrder.supplier.name : "---",
+    supplier: purchaseOrder.supplier.name,
     contactName: purchaseOrder.supplier.contact ? purchaseOrder.supplier.contact : "---",
     email: purchaseOrder.supplier.email ? purchaseOrder.supplier.email : "---",
     phone: purchaseOrder.supplier.phone ? purchaseOrder.supplier.phone : "---",
-    purchasedBy: purchaseOrder.purchaser.name
-      ? purchaseOrder.purchaser.name
-      : `Buyer # ${purchaseOrder.purchaser.id}`,
+    purchasedBy: purchaseOrder.purchaser.name,
     supplierNotes: purchaseOrder.note ? purchaseOrder.note : "",
     keyAcctTape: purchaseOrder["key-account-tape"]
       ? purchaseOrder["key-account-tape"]
@@ -356,6 +354,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
       .map((item) => item.totalCost)
       .reduce((a, b) => a + b),
+    directShip: purchaseOrder["is-direct-ship"],
     shippingParams: mapPOShippingParams(purchaseOrder["shipping-parameters"]),
   };
   return formattedPO;

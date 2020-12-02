@@ -365,6 +365,33 @@ export const updatePONote = async (id, note) => {
   return response;
 };
 
+export const updatePOTape = async (id, tape) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            "key-account-tape": tape,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
+
 //Updates date fields on the PO
 export const updatePODate = async (id, dateType, date) => {
   const response = { status: "", error: null };
@@ -392,6 +419,33 @@ export const updatePODate = async (id, dateType, date) => {
     });
   return response;
 };
+
+export const updatePODirectShip = async (id, value) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            "is-direct-ship": value,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
 
 //Adds additional line items (like a set up fee) to a po
 export const addAdditionalPOCost = async (id, name, cost) => {
@@ -484,6 +538,33 @@ export const updatePOItemPackSize = async (id, packSize) => {
     });
   return response;
 };
+
+export const updatePOItemPackOut = async (id, value) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-order-items/${id}`,
+      {
+        data: {
+          type: "purchase-order-item",
+          id: id,
+          attributes: {
+            "has-packout": value,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
 
 export const deletePOItem = async (id) => {
   const response = { status: "", error: null };
