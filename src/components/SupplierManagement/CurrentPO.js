@@ -12,6 +12,8 @@ import {
   addCost,
   updateDateByType,
   updateSupplierNote,
+  updateKeyAccountTape,
+  setDirectShip,
   deleteItem,
   deletePurchaseOrder,
 } from "../../redux/slices/purchaseOrderSlice";
@@ -59,7 +61,7 @@ const CurrentPO = () => {
   const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
     currentPO.keyAcctTape
   );
-  const [shippingOption, setShippingOption] = useState("direct");
+  const [shippingOption, setShippingOption] = useState(currentPO.directShip ? "direct" : "cdc");
 
   const deletePOItem = (id) => {
     let initialLength = currentPO.poItems.length;
@@ -74,14 +76,27 @@ const CurrentPO = () => {
     dispatch(updateSupplierNote(currentPO.id, note));
   };
 
+  const updateTape = () => {
+    dispatch(updateKeyAccountTape(currentPO.id, keyAcctTape))
+  }
+
   const addNewCost = () => {
     dispatch(addCost({ description: "", cost: "" }));
   };
 
   const handleRadioChange = (event) => {
     setShippingOption(event.target.value);
-    //TODO update in redux
+    if (event.target.value === "direct") {
+      dispatch(setDirectShip(currentPO.id, true))
+    } else {
+      dispatch(setDirectShip(currentPO.id, false))
+    }
   };
+
+  const formatDate = (date) => {
+    let tempDate = new Date(date);
+    return new Date(tempDate.getTime() + tempDate.getTimezoneOffset()*60000)
+  }
 
   useEffect(() => {
     if (additionalCosts.length === 0) {
@@ -131,7 +146,7 @@ const CurrentPO = () => {
                     margin="normal"
                     id="dueDate"
                     label="In-Market Date"
-                    value={currentPO.dueDate}
+                    value={formatDate(currentPO.dueDate)}
                     onChange={(value) =>
                       dispatch(
                         updateDateByType(
@@ -156,7 +171,7 @@ const CurrentPO = () => {
                     margin="normal"
                     id="expectedShip"
                     label="Expected Ship"
-                    value={currentPO.expectedShip}
+                    value={formatDate(currentPO.expectedShip)}
                     onChange={(value) =>
                       dispatch(
                         updateDateByType(
@@ -232,9 +247,7 @@ const CurrentPO = () => {
                   variant="outlined"
                   size="small"
                   rows="2"
-                  onBlur={() => {
-                    /* TODO */ console.log(keyAcctTape);
-                  }}
+                  onBlur={updateTape}
                   {...bindKeyAcctTape}
                 />
                 <br />

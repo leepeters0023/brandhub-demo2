@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { setRetain } from "../redux/slices/filterSlice";
-import { fetchSinglePO } from "../redux/slices/purchaseOrderSlice";
+import { fetchSinglePO, submitPurchaseOrder } from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import Loading from "../components/Utility/Loading";
@@ -44,6 +44,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const handleSupplierDecline = () => {
     //TODO
   };
+
+  const handlePurchaserSubmit = () => {
+    dispatch(submitPurchaseOrder(currentPO.id));
+    navigate("/purchasing/poHistory/current");
+  }
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -151,17 +156,18 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"
+                  onClick={handlePurchaserSubmit}
                 >
                   SUBMIT PURCHASE ORDER
                 </Button>
               )}
-              {currentPO.status === "in-progress" && (
+              {currentPO.status === "submitted" && (
                 <Button
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"
                 >
-                  EDIT PURCHASE ORDER
+                  SUBMIT EDITS
                 </Button>
               )}
             </>
