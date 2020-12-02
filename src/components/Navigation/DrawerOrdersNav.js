@@ -60,7 +60,6 @@ const DrawerOrdersNav = ({
               )}
             </List>
           </Grid>
-          {role === "field1" && <Grid item sm={1} xs={12} />}
           <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
               <ListItem>
@@ -73,6 +72,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
+                disabled={!onDemandOrderId}
                 to={
                   onDemandOrderId
                     ? `/orders/open/${onDemandOrderId}`
@@ -85,6 +85,7 @@ const DrawerOrdersNav = ({
                 button
                 onClick={handleDrawerClose}
                 component={Link}
+                disabled={!inStockOrderId}
                 to={
                   inStockOrderId
                     ? `/orders/open/${inStockOrderId}`
@@ -195,6 +196,7 @@ const DrawerOrdersNav = ({
           </Grid>
           </>
           )}
+          {role === "field1" && <Grid item sm={3} xs={12} />}
         </Grid>
       )}
     </>

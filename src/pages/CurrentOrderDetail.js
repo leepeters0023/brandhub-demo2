@@ -102,7 +102,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         brand: brand,
         itemType: itemType,
         itemNumber: itemNumber,
-        itemDescription: itemDescription
+        itemDescription: itemDescription,
       });
       handleModal(true);
     },
@@ -257,7 +257,20 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       currentTotal
                     )}`}</Typography>
                   </div>
-                  <Tooltip title="Add Items to Order">
+                  <Button
+                    className={classes.largeButton}
+                    style={{ marginLeft: "20px" }}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={
+                      <ExitToAppIcon style={{ transform: "rotate(180deg)" }} />
+                    }
+                    component={Link}
+                    to={"/orders/items/inStock"}
+                  >
+                    ADD ITEMS
+                  </Button>
+                  {/* <Tooltip title="Add Items to Order">
                     <IconButton
                       component={Link}
                       to={`/orders/items/inStock`}
@@ -268,7 +281,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                         style={{ transform: "rotate(180deg)" }}
                       />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
               </div>
             </>
@@ -293,18 +306,28 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       currentTotal
                     )}`}</Typography>
                   </div>
-                  <Tooltip title="Add Items to Order">
-                    <IconButton
-                      component={Link}
-                      to={`/orders/items/onDemand`}
-                    >
+                  <Button
+                    className={classes.largeButton}
+                    style={{ marginLeft: "20px" }}
+                    variant="contained"
+                    color="secondary"
+                    startIcon={
+                      <ExitToAppIcon style={{ transform: "rotate(180deg)" }} />
+                    }
+                    component={Link}
+                    to={"/orders/items/onDemand"}
+                  >
+                    ADD ITEMS
+                  </Button>
+                  {/* <Tooltip title="Add Items to Order">
+                    <IconButton component={Link} to={`/orders/items/onDemand`}>
                       <ExitToAppIcon
                         fontSize="large"
                         color="inherit"
                         style={{ transform: "rotate(180deg)" }}
                       />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
               </div>
             </>

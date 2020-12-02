@@ -189,12 +189,12 @@ const CurrentPO = () => {
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`In-Market Date:  ${currentPO.dueDate}`}
+                  {`In-Market Date:  ${new Date(currentPO.dueDate).toLocaleDateString()}`}
                 </Typography>
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`Expected Ship:  ${currentPO.expectedShip}`}
+                  {`Expected Ship:  ${new Date(currentPO.expectedShip).toLocaleDateString()}`}
                 </Typography>
               </>
             )}
