@@ -21,13 +21,8 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const ItemTable = ({ items, isLoading }) => {
+const ItemTable = ({ items, isLoading, handleDelete }) => {
   const classes = useStyles();
-
-  const handleDelete = (id) => {
-    //TODO write function when api is available
-    console.log(id);
-  }
 
   return (
     <>

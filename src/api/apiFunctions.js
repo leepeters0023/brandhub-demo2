@@ -82,6 +82,10 @@ export const buildFilters = (
     filterObject.itemType && filterObject.itemType.length > 0
       ? `filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
       : "";
+  let favItemString =
+    filterObject.favItems && filterObject.favItems.length > 0
+      ? `filter[ids]=${separateByComma(filterObject.favItems, "id")}`
+      : "";
   let supplierString =
     filterObject.supplier && filterObject.supplier.length > 0
       ? `filter[supplier-ids]=${separateByComma(filterObject.supplier, "id")}`
@@ -100,6 +104,7 @@ export const buildFilters = (
     progString,
     brandString,
     itemTypeString,
+    favItemString,
     userString,
     supplierString,
     sortString,
@@ -111,6 +116,5 @@ export const buildFilters = (
   let filterPreCursor = queryStringAppend.length !== 0 ? "?" : "";
 
   let queryString = urlBase + filterPreCursor + queryStringAppend;
-
   return queryString;
 };

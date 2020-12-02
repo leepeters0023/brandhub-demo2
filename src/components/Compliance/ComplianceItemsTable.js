@@ -46,15 +46,16 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-          {(currentUserRole === "compliance" || currentUserRole === "super") && (
+        {(currentUserRole === "compliance" || currentUserRole === "super") && (
           <TableCell padding="checkbox">
             <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all items" }}
-          />
-          </TableCell>)}
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </TableCell>
+        )}
         {headCells.map((headCell) => {
           if (!headCell.sort) {
             return (
@@ -226,32 +227,37 @@ const ComplianceItemsTable = ({
                 const isItemSelected = isSelected(row.id);
                 const labelId = `compliance-Checkbox-${index}`;
                 return (
-                  <TableRow key={index} hover >
-                    {(currentUserRole === "compliance" || currentUserRole === "super") && (
+                  <TableRow key={index} hover>
+                    {(currentUserRole === "compliance" ||
+                      currentUserRole === "super") && (
                       <>
-                       {row.active ? (<TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => {
-                          handleClick(event, row.id);
-                          event.stopPropagation();
-                        }}
-                      />
-                    </TableCell>
-                    ) : (
-                        <TableCell padding="checkbox">
-                          <Tooltip title="Activate Rule">
-                            <IconButton>
-                              <AutorenewIcon fontSize="small" color="inherit" />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      )}
+                        {row.active ? (
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              inputProps={{ "aria-labelledby": labelId }}
+                              onClick={(event) => event.stopPropagation()}
+                              onChange={(event) => {
+                                handleClick(event, row.id);
+                                event.stopPropagation();
+                              }}
+                            />
+                          </TableCell>
+                        ) : (
+                          <TableCell padding="checkbox">
+                            <Tooltip title="Activate Rule">
+                              <IconButton>
+                                <AutorenewIcon
+                                  fontSize="small"
+                                  color="inherit"
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                        )}
                       </>
                     )}
-                   
+
                     <TableCell align="left">{row.sequenceNum}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
@@ -259,31 +265,31 @@ const ComplianceItemsTable = ({
                     <TableCell align="left">{row.tags.join(", ")}</TableCell>
                     <TableCell align="left">
                       {row.status === "Pending" &&
-                        row.ruleType === "Prior Approval" ? (
-                          <div
-                            style={{ display: "flex", flexDirection: "column" }}
-                          >
-                            <Typography variant="body2">{row.status}</Typography>
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
-                            >
-                              <Typography
-                                variant="body2"
-                                style={{ marginRight: "10px" }}
-                              >
-                                {`Email sent on ${row.emailSent}`}
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                className={classes.emailButton}
-                              >
-                                {"(resend)"}
-                              </Typography>
-                            </div>
-                          </div>
-                        ) : (
+                      row.ruleType === "Prior Approval" ? (
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
                           <Typography variant="body2">{row.status}</Typography>
-                        )}
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography
+                              variant="body2"
+                              style={{ marginRight: "10px" }}
+                            >
+                              {`Email sent on ${row.emailSent}`}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              className={classes.emailButton}
+                            >
+                              {"(resend)"}
+                            </Typography>
+                          </div>
+                        </div>
+                      ) : (
+                        <Typography variant="body2">{row.status}</Typography>
+                      )}
                     </TableCell>
                   </TableRow>
                 );

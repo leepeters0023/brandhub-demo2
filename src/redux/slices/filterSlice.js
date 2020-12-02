@@ -18,6 +18,7 @@ let initialState = {
   distributor: [],
   groupBy: null,
   itemType: [],
+  favItems: [],
   month: [],
   orderType: null,
   poNum: null,
@@ -60,6 +61,7 @@ const filterSlice = createSlice({
       state.brand = [];
       state.distributor = [];
       state.itemType = [];
+      state.favItems = [];
       state.groupBy = null;
       state.month = [];
       state.orderType = null;
@@ -114,6 +116,7 @@ const filterSlice = createSlice({
       state.distributor = [];
       state.groupBy = null;
       state.itemType = [];
+      state.favItems = [];
       state.month = [];
       state.orderType = null;
       state.poNum = null;
@@ -139,7 +142,7 @@ const filterSlice = createSlice({
       const { filterType } = action.payload;
       let chippable;
       if (filterType.includes("item-")) {
-        chippable = ["bu", "brand", "itemType", "program", "sequenceNum"];
+        chippable = ["bu", "brand", "itemType", "favItems", "program", "sequenceNum"];
       }
       if (
         filterType.includes("history") ||
@@ -206,6 +209,10 @@ const filterSlice = createSlice({
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });
             });
+          } else if (filter === "favItems") {
+            if (stateObject[filter].length > 0) {
+              filters.push({ type: filter, value: "Favorite Items"})
+            }
           } else if (stateObject[filter]) {
             filters.push({ type: filter, value: stateObject[filter] });
           }
