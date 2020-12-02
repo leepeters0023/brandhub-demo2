@@ -311,6 +311,32 @@ export const createPO = async (ids) => {
   return response;
 };
 
+export const addToPO = async (ids, poNum) => {
+  const response = { status: "", error: null, data: null };
+  let requestBody = {
+    data: {
+      type: "purchase-order",
+      attributes: {
+        "order-item-ids": ids,
+      },
+    },
+  };
+  await axios
+    .patch(`/api/purchase-orders/${poNum}`, requestBody, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      console.log(data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
 //Updates the note on an PO
 export const updatePONote = async (id, note) => {
   const response = { status: "", error: null };
@@ -457,10 +483,10 @@ export const updatePOItemPackSize = async (id, packSize) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 export const deletePOItem = async (id) => {
-  const response = { status: "", error: null }
+  const response = { status: "", error: null };
   await axios
     .delete(`/api/purchase-order-items/${id}`)
     .then((res) => {
@@ -472,7 +498,7 @@ export const deletePOItem = async (id) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const submitPO = async (id) => {
   const response = { status: "", error: null };
@@ -488,10 +514,10 @@ export const submitPO = async (id) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 export const deletePO = async (id) => {
-  const response = { status: "", error: null }
+  const response = { status: "", error: null };
   await axios
     .delete(`/api/purchase-orders/${id}`)
     .then((res) => {
@@ -504,7 +530,7 @@ export const deletePO = async (id) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {

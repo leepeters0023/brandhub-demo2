@@ -10,6 +10,7 @@ import {
   updatePOItemPackSize,
   deletePO,
   deletePOItem,
+  addToPO
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
 
@@ -341,6 +342,21 @@ export const createNewPO = (idArray) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const updatedPO = await addToPO(idArray, poNum)
+    if (updatedPO.error) {
+      throw updatedPO.error;
+    }
+    console.log(updatedPO);
+    const formattedPO = mapPurchaseOrder(updatedPO.data)
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 export const updateDateByType = (id, type, value) => async (dispatch) => {
   const typeMap = {
