@@ -223,12 +223,12 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {row.estCost !== "---"
-                      ? formatMoney(row.estCost)
+                      ? formatMoney(row.estCost, false)
                       : row.estCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.totalEstCost !== "---"
-                      ? formatMoney(row.totalEstCost)
+                      ? formatMoney(row.totalEstCost, false)
                       : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">

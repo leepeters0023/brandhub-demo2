@@ -254,7 +254,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       Total:
                     </Typography>
                     <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal
+                      currentTotal, false
                     )}`}</Typography>
                   </div>
                   <Button
@@ -270,18 +270,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   >
                     ADD ITEMS
                   </Button>
-                  {/* <Tooltip title="Add Items to Order">
-                    <IconButton
-                      component={Link}
-                      to={`/orders/items/inStock`}
-                    >
-                      <ExitToAppIcon
-                        fontSize="large"
-                        color="inherit"
-                        style={{ transform: "rotate(180deg)" }}
-                      />
-                    </IconButton>
-                  </Tooltip> */}
                 </div>
               </div>
             </>
@@ -303,7 +291,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       Total:
                     </Typography>
                     <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal
+                      currentTotal, false
                     )}`}</Typography>
                   </div>
                   <Button
@@ -319,15 +307,6 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   >
                     ADD ITEMS
                   </Button>
-                  {/* <Tooltip title="Add Items to Order">
-                    <IconButton component={Link} to={`/orders/items/onDemand`}>
-                      <ExitToAppIcon
-                        fontSize="large"
-                        color="inherit"
-                        style={{ transform: "rotate(180deg)" }}
-                      />
-                    </IconButton>
-                  </Tooltip> */}
                 </div>
               </div>
             </>
@@ -363,7 +342,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   Total:
                 </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
-                  currentTotal
+                  currentTotal, false
                 )}`}</Typography>
               </div>
             </>
@@ -399,7 +378,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   Total:
                 </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
-                  currentTotal
+                  currentTotal, false
                 )}`}</Typography>
               </div>
             </>

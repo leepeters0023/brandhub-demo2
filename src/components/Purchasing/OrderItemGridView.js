@@ -160,7 +160,7 @@ const OrderItemGridView = (props) => {
                         </Typography>
                       )}
                       <Typography variant="body1" color="textSecondary">
-                        {`${formatMoney(item.estCost)}`}
+                        {`${formatMoney(item.estCost, false)}`}
                       </Typography>
                       <br />
                     </Paper>

@@ -65,7 +65,7 @@ const FavoriteDistributors = () => {
         variant="contained"
         color="secondary"
         onClick={() => {
-          dispatch(newFavoriteDistList());
+          dispatch(newFavoriteDistList(currentDistributorLists.length));
         }}
       >
         ADD NEW LIST

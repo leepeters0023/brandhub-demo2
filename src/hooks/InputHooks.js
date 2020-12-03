@@ -20,12 +20,19 @@ export const useInput = (initialValue) => {
 };
 
 //Input hook for money fields, auto formats to $00.00 format on blur
-export const useMoneyInput = (initialValue, updateFunc, updateFuncArg) => {
+export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(initialValue);
   const moneyArray = ["$", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
   const strippedValue = (input) => {
-    return input.split("$").join("").split(".").join("")
+    let tempMoneyAr = input.split("$").join("").split(".");
+    if (tempMoneyAr[1]) {
+      if (parseInt(tempMoneyAr[1]) < 10) {
+        tempMoneyAr.splice(1, 1, `0${tempMoneyAr[1]}`)
+      }
+      return tempMoneyAr.join("");
+    } else return tempMoneyAr[0] + "00"
+    // return input.split("$").join("").split(".").join("")
   }
   //TODO handle update func call
   return {
@@ -47,7 +54,7 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg) => {
         }
       },
       onBlur: (event) => {
-        let newValue = formatMoney(strippedValue(event.target.value))
+        let newValue = formatMoney(strippedValue(event.target.value), ops)
         setValue(newValue);
         if (updateFunc) {
           let strippedValue = event.target.value.replace(/\D/g,"");

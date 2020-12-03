@@ -53,9 +53,9 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
         <TableCell align="left">{rowData.itemNumber}</TableCell>
         <TableCell align="left">{rowData.brand}</TableCell>
         <TableCell align="left">{rowData.itemType}</TableCell>
-        <TableCell align="left">{formatMoney(rowData.estCost)}</TableCell>
+        <TableCell align="left">{formatMoney(rowData.estCost, false)}</TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
-        <TableCell align="left">{formatMoney(rowData.totalEstCost)}</TableCell>
+        <TableCell align="left">{formatMoney(rowData.totalEstCost, false)}</TableCell>
         {type !== "pre-order" && (
           <>
             <TableCell align="left">

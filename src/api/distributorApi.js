@@ -45,7 +45,7 @@ export const getFavDistributors = async () => {
   return response;
 };
 
-export const newFavDistList = async () => {
+export const newFavDistList = async (index) => {
   const response = { status: "", error: null, data: null };
   await axios
     .post(
@@ -54,7 +54,7 @@ export const newFavDistList = async () => {
         data: {
           type: "distributor-favorite-list",
           attributes: {
-            name: "New List",
+            name: `New List ${index}`,
           },
         },
       },

@@ -225,15 +225,15 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   {role !== "supplier" && (
                     <>
                       <TableCell align="left">
-                        {formatMoney(row.estCost)}
+                        {formatMoney(row.estCost, true)}
                       </TableCell>
                       <TableCell align="left">
-                        {formatMoney(row.totalEstCost)}
+                        {formatMoney(row.totalEstCost, true)}
                       </TableCell>
                     </>
                   )}
                   <TableCell align="left">
-                    {row.actTotal ? formatMoney(row.actTotal) : "---"}
+                    {row.actTotal ? formatMoney(row.actTotal, true) : "---"}
                   </TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">
@@ -242,7 +242,7 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                   {role === "supplier" && (
                     <TableCell align="left">
                       {row.bids[0].price
-                        ? formatMoney(row.bids[0].price)
+                        ? formatMoney(row.bids[0].price, true)
                         : "---"}
                     </TableCell>
                   )}

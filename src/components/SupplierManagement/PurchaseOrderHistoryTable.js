@@ -233,10 +233,10 @@ const PurchaseOrderHistoryTable = ({
                   <TableCell align="left">{row.totalItems}</TableCell>
                   {role !== "supplier" && (
                     <TableCell align="left">
-                      {formatMoney(row.estCost)}
+                      {formatMoney(row.estCost, true)}
                     </TableCell>
                   )}
-                  <TableCell align="left">{formatMoney(row.actCost)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.actCost, true)}</TableCell>
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>

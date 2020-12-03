@@ -209,12 +209,12 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {row.totalEstCost !== "---"
-                      ? formatMoney(row.totalEstCost)
+                      ? formatMoney(row.totalEstCost, false)
                       : row.totalEstCost}
                   </TableCell>
                   <TableCell align="left">
                     {row.totalActCost !== "---"
-                      ? formatMoney(row.totalActCost)
+                      ? formatMoney(row.totalActCost, false)
                       : row.totalActCost}
                   </TableCell>
                   <TableCell align="left">

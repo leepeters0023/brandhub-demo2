@@ -53,7 +53,7 @@ const ItemAllocationTable = ({ classes, allocations }) => {
               <TableCell align="left">{item.totalItems}</TableCell>
               <TableCell align="left">{item.shippingStatus}</TableCell>
               <TableCell align="left">{item.tracking}</TableCell>
-              <TableCell align="left">{item.tax !== "---" ? formatMoney(item.tax) : item.tax}</TableCell>
+              <TableCell align="left">{item.tax !== "---" ? formatMoney(item.tax, true) : item.tax}</TableCell>
             </TableRow>
           ))}
         </TableBody>

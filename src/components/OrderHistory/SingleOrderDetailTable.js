@@ -68,11 +68,11 @@ const SingleOrderDetailTable = ({ items }) => {
                 <TableCell align="left">{item.itemNumber}</TableCell>
                 <TableCell align="left">{item.packSize}</TableCell>
                 <TableCell align="left">{`${formatMoney(
-                  item.estCost
+                  item.estCost, false
                 )}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
                 <TableCell align="left">{`${formatMoney(
-                  item.totalEstCost
+                  item.totalEstCost, false
                 )}`}</TableCell>
                 <TableCell align="left">---</TableCell>
                 <TableCell align="left">---</TableCell>

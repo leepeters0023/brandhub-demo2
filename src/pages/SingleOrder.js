@@ -164,7 +164,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               {`Total Items: ${currentOrder.totalItems}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Est. Cost: ${formatMoney(currentOrder.totalEstCost)}`}
+              {`Total Est. Cost: ${formatMoney(currentOrder.totalEstCost, false)}`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Act. Cost: ${currentOrder.totalActCost}`}

@@ -105,7 +105,7 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {`Budget: ${formatMoney(
-                      Math.floor(Math.random() * 1000000 + 1000000)
+                      Math.floor(Math.random() * 1000000 + 1000000), false
                     )}`}
                   </Typography>
                 </div>

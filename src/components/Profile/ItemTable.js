@@ -75,7 +75,7 @@ const ItemTable = ({ items, isLoading, handleDelete }) => {
                   </TableCell>
                   <TableCell align="left">{item.program}</TableCell>
                   <TableCell align="left">{item.itemType}</TableCell>
-                  <TableCell align="left">{formatMoney(item.estCost)}</TableCell>
+                  <TableCell align="left">{formatMoney(item.estCost, false)}</TableCell>
                   <TableCell align="right">
                     <Tooltip title="Remove Favorite">
                       <IconButton onClick={() => handleDelete(item.id)}>

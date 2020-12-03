@@ -10,7 +10,7 @@ import {
   fetchNextFilteredPOItems,
   createNewPO,
   setSelectedPOItems,
-  addItemsToPO
+  addItemsToPO,
 } from "../redux/slices/purchaseOrderSlice";
 import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
@@ -97,25 +97,29 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const handleNewRFQ = () => {
     let currentItem = currentPOItems.find(
-      (item) => item.id === selectedPOItems[0]
+      (item) => item.itemId === selectedPOItems[0].split("-")[1]
     );
-    dispatch(createNewRFQ(selectedPOItems[0], currentItem.program[0].id));
+    dispatch(
+      createNewRFQ(selectedPOItems[0].split("-")[1], currentItem.program.id)
+    );
   };
 
   const handleNewPO = () => {
     let idArray = [];
+    const itemIdArray = selectedPOItems.map((idString) => idString.split("-"));
     let currentSupplier = [
       ...new Set(
-        selectedPOItems.map((id) => {
-          let supplier = currentPOItems.find((item) => item.id === id).supplier;
+        itemIdArray.map((id) => {
+          let supplier = currentPOItems.find((item) => item.itemId === id[1])
+            .supplier;
           return supplier;
         })
       ),
     ];
     if (currentSupplier.length === 1) {
       currentPOItems.forEach((item) => {
-        selectedPOItems.forEach((id) => {
-          if (item.id === id) {
+        itemIdArray.forEach((id) => {
+          if (item.itemId === id[1] && item.id === id[0]) {
             idArray = idArray.concat(item.orderItemIds);
           }
         });
@@ -147,7 +151,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         });
       });
       dispatch(setSelectedPOItems({ selectedItems: [] }));
-      dispatch(addItemsToPO(idArray, id))
+      dispatch(addItemsToPO(idArray, id));
       navigate(`/purchasing/purchaseOrder#${id}`);
     } else {
       setWarningOpen(true);

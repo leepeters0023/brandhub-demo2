@@ -223,12 +223,12 @@ const ItemRollupTable = ({
     setSelected([]);
   };
 
-  const handleClick = (_event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = (_event, id, itemId) => {
+    const selectedIndex = selected.indexOf(`${id}-${itemId}`);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, `${id}-${itemId}`);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -244,7 +244,7 @@ const ItemRollupTable = ({
       if (newSelected.length === 0) {
         dispatch(setSelectedRFQItem({ itemId: null }));
       } else {
-        dispatch(setSelectedRFQItem({ itemId: newSelected[0] }));
+        dispatch(setSelectedRFQItem({ itemId: newSelected[0].split("-")[1] }));
       }
     }
 
@@ -255,7 +255,7 @@ const ItemRollupTable = ({
     setSelected(newSelected);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id, itemId) => selected.indexOf(`${id}-${itemId}`) !== -1;
 
   const handleComplianceClick = (id, itemNumber) => {
     navigate(`/compliance/pending/${id}#${itemNumber}`);
@@ -273,6 +273,7 @@ const ItemRollupTable = ({
     }
   }, [selected, setItemSelected, itemSelected]);
 
+  console.log(items);
   return (
     <>
       <ConfirmDeleteRollupItem
@@ -315,7 +316,7 @@ const ItemRollupTable = ({
             {!isItemsLoading &&
               items.length > 0 &&
               items.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected = isSelected(row.id, row.itemId);
                 const labelId = `po-rollup-Checkbox-${index}`;
 
                 return (
@@ -328,10 +329,10 @@ const ItemRollupTable = ({
                         disabled={
                           type === "rfq" &&
                           selected.length >= 1 &&
-                          selected[0] !== row.id
+                          selected[0] !== `${row.id}-${row.itemId}`
                         }
                         onChange={(event) => {
-                          handleClick(event, row.id);
+                          handleClick(event, row.id, row.itemId);
                           event.stopPropagation();
                         }}
                       />
@@ -375,10 +376,10 @@ const ItemRollupTable = ({
                       </TableCell>
                     )}
                     <TableCell align="left">
-                      {formatMoney(row.estCost)}
+                      {formatMoney(row.estCost, true)}
                     </TableCell>
                     <TableCell align="left">
-                      {formatMoney(row.totalEstCost)}
+                      {formatMoney(row.totalEstCost, true)}
                     </TableCell>
                     <TableCell align="left">{row.dueDate}</TableCell>
                     {type === "po" && (

@@ -34,7 +34,8 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
   const { value: cost, bind: bindCost } = useMoneyInput(
     initialCost,
     currentFunc,
-    id
+    id,
+    true
   );
   return (
     <TableCell align="left" colSpan={span ? span : null}>
@@ -134,18 +135,18 @@ const POItemsTable = ({
               <TableCell align="left">{row.packSize}</TableCell>
               <TableCell align="left">{row.totalItems}</TableCell>
               {currentRole !== "supplier" && (
-                <TableCell align="left">{formatMoney(row.estCost)}</TableCell>
+                <TableCell align="left">{formatMoney(row.estCost, true)}</TableCell>
               )}
               {currentRole !== "supplier" ? (
                 <MoneyCell
-                  initialCost={formatMoney(row.actCost)}
+                  initialCost={formatMoney(row.actCost, true)}
                   id={row.id}
                   role={currentRole}
                 />
               ) : (
-                <TableCell align="left">{formatMoney(row.actCost)}</TableCell>
+                <TableCell align="left">{formatMoney(row.actCost, true)}</TableCell>
               )}
-              <TableCell align="left">{formatMoney(row.totalCost)}</TableCell>
+              <TableCell align="left">{formatMoney(row.totalCost, true)}</TableCell>
               {currentRole !== "supplier" && (
                 <TableCell padding="checkbox" align="center">
                   <Checkbox checked={row.packOut} onChange={() => handlePackOut(row.id, !row.packOut)} />
