@@ -39,11 +39,16 @@ export const couponTypeList = [
 
 export const ruleTypes = ["Prior Approval", "Item Type", "Material", "Pricing"];
 
-export const units = ["Compass", "Popular", "Renaissance", "Spirits"];
+export const units = [
+  { id: "1", name: "Compass" },
+  { id: "2", name: "Renaissance" },
+  { id: "3", name: "Popular" },
+  { id: "4", name: "Spirits" },
+];
 
 export const couponTypes = ["MIR", "INS"];
 
-export const offerTypes = ["AB", "NAB", "Dual AB/NAB", "Dual AB/AB"]
+export const offerTypes = ["AB", "NAB", "Dual AB/NAB", "Dual AB/AB"];
 
 export const regions = [
   {

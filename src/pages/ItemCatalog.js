@@ -35,6 +35,7 @@ const defaultFilters = {
   favItems: [],
   orderType: "",
   sequenceNum: "",
+  itemDesc: "",
 };
 
 const useStyles = makeStyles((theme) => ({

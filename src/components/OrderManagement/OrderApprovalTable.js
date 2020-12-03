@@ -35,9 +35,9 @@ const headCells = [
     sort: false,
   },
   {
-    id: "paidBudget",
+    id: "shippedBudget",
     disablePadding: false,
-    label: "Budget Paid",
+    label: "Budget Shipped",
     sort: false,
   },
   {
@@ -264,7 +264,9 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell>{row.state}</TableCell>
                     <TableCell align="left">
-                      {row.orderDate !== "---" ? format(new Date(row.orderDate), "MM/dd/yyyy") : "---"}
+                      {row.orderDate !== "---"
+                        ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                        : "---"}
                     </TableCell>
                     <TableCell align="left">
                       {row.totalEstCost !== "---"

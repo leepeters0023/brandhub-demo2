@@ -57,8 +57,8 @@ const BUAutoComplete = ({
           handleChange(value, "bu", filterType);
           handleBUs(value);
         }}
-        getOptionSelected={(option, value) => option === value}
-        getOptionLabel={(bu) => bu}
+        getOptionSelected={(option, value) => option.name === value.name}
+        getOptionLabel={(bu) => bu.name}
         options={units}
         value={currentBUs}
         renderInput={(params) => (
