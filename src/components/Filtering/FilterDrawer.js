@@ -100,14 +100,16 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "orderType" ||
         filter === "territory" ||
         filter === "supplier" ||
-        filter === "favItems"
+        filter === "favItems" ||
+        filter === "itemDesc"
       ) {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
         if (
           filter !== "sequenceNum" &&
           filter !== "rfqNum" &&
-          filter !== "poNum"
+          filter !== "poNum" &&
+          filter !== "itemDesc"
         ) {
           dispatch(setChips({ filterType: type }));
         }
@@ -124,7 +126,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "history-orders" &&
         filter !== "sequenceNum" &&
         filter !== "rfqNum" &&
-        filter !== "poNum"
+        filter !== "poNum" &&
+        filter !== "itemDesc"
       ) {
         if (currentFilters.groupBy === "order") {
           dispatch(fetchFilteredOrderHistory(currentFilters));
@@ -137,7 +140,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           filterType === "history-approvals") &&
         filter !== "sequenceNum" &&
         filter !== "rfqNum" &&
-        filter !== "poNum"
+        filter !== "poNum" &&
+        filter !== "itemDesc"
       ) {
         if (currentFilters.groupBy === "order") {
           dispatch(fetchFilteredOrderSets(currentFilters));
@@ -154,14 +158,16 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (
         filterType === "history-rfq" &&
         filter !== "sequenceNum" &&
-        filter !== "rfqNum"
+        filter !== "rfqNum" &&
+        filter !== "itemDesc"
       ) {
         dispatch(fetchFilteredRFQHistory(currentFilters));
       }
       if (
         filterType === "history-po" &&
         filter !== "sequenceNum" &&
-        filter !== "poNum"
+        filter !== "poNum" &&
+        filter !== "itemDesc"
       ) {
         dispatch(fetchFilteredPOHistory(currentFilters));
       }
@@ -169,7 +175,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         (filterType === "item-all" ||
           filterType === "item-inStock" ||
           filterType === "item-onDemand") &&
-        filter !== "sequenceNum"
+        filter !== "sequenceNum" &&
+        filter !== "itemDesc"
       ) {
         dispatch(fetchFilteredItems(currentFilters));
       }
@@ -193,12 +200,18 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     bind: bindRfqNum,
     reset: resetRfqNum,
   } = useDetailedInput("", handleFilters, "rfqNum", filterType);
+  const {
+    value: itemDesc,
+    bind: bindItemDesc,
+    reset: resetItemDesc,
+  } = useDetailedInput("", handleFilters, "itemDesc", filterType);
 
   const resetAllFilters = useCallback(() => {
     setReset(true);
     resetSequenceNum();
     resetPoNum();
     resetRfqNum();
+    resetItemDesc();
     dispatch(clearBrands());
     dispatch(resetFilters());
     //TODO handle po, compliance (rules / items) fetch here as well
@@ -241,6 +254,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     resetSequenceNum,
     resetPoNum,
     resetRfqNum,
+    resetItemDesc,
     setReset,
     defaultFilters,
     filterType,
@@ -413,6 +427,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
+              itemDesc={itemDesc}
+              bindItemDesc={bindItemDesc}
               handleSearch={handleFilteredItemFetch}
             />
           )}

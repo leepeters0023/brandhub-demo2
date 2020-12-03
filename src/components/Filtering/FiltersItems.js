@@ -23,6 +23,8 @@ const FiltersItems = ({
   classes,
   sequenceNum,
   bindSequenceNum,
+  itemDesc,
+  bindItemDesc,
   handleSearch,
 }) => {
   const dispatch = useDispatch();
@@ -43,6 +45,19 @@ const FiltersItems = ({
             size="small"
             value={sequenceNum}
             {...bindSequenceNum}
+          />
+        </ListItem>
+        <ListItem>
+          <TextField
+            color="secondary"
+            fullWidth
+            name="sequenceNum"
+            type="text"
+            label="Item Description"
+            variant="outlined"
+            size="small"
+            value={itemDesc}
+            {...bindItemDesc}
           />
         </ListItem>
         <ListItem>

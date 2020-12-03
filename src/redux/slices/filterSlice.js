@@ -26,6 +26,7 @@ let initialState = {
   rfqNum: null,
   ruleType: [],
   sequenceNum: null,
+  itemDesc: null,
   status: null,
   supplier: [],
   tag: [],
@@ -68,6 +69,7 @@ const filterSlice = createSlice({
       state.poNum = null;
       state.program = [];
       state.sequenceNum = null;
+      state.itemDesc = null;
       state.rfqNum = null;
       state.ruleType = [];
       state.status = null;
@@ -122,6 +124,7 @@ const filterSlice = createSlice({
       state.poNum = null;
       state.program = [];
       state.sequenceNum = null;
+      state.itemDesc = null;
       state.supplier = [];
       state.rfqNum = null;
       state.ruleType = [];
@@ -142,7 +145,15 @@ const filterSlice = createSlice({
       const { filterType } = action.payload;
       let chippable;
       if (filterType.includes("item-")) {
-        chippable = ["bu", "brand", "itemType", "favItems", "program", "sequenceNum"];
+        chippable = [
+          "bu",
+          "brand",
+          "itemType",
+          "favItems",
+          "program",
+          "sequenceNum",
+          "itemDesc",
+        ];
       }
       if (
         filterType.includes("history") ||
@@ -188,11 +199,7 @@ const filterSlice = createSlice({
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (
-            filter === "bu" ||
-            filter === "month" ||
-            filter === "ruleType"
-          ) {
+          if (filter === "month" || filter === "ruleType") {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );
@@ -204,14 +211,15 @@ const filterSlice = createSlice({
             filter === "distributor" ||
             filter === "territory" ||
             filter === "tag" ||
-            filter === "supplier"
+            filter === "supplier" ||
+            filter === "bu"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });
             });
           } else if (filter === "favItems") {
             if (stateObject[filter].length > 0) {
-              filters.push({ type: filter, value: "Favorite Items"})
+              filters.push({ type: filter, value: "Favorite Items" });
             }
           } else if (stateObject[filter]) {
             filters.push({ type: filter, value: stateObject[filter] });

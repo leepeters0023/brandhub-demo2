@@ -27,9 +27,9 @@ const headCells = [
     sort: false,
   },
   {
-    id: "paidBudget",
+    id: "shippedBudget",
     disablePadding: false,
-    label: "Budget Paid",
+    label: "Budget Shipped",
     sort: false,
   },
   {
@@ -208,7 +208,9 @@ const RollupOverViewTable = ({
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
-                    {row.dueDate !== "---" ? format(new Date(row.dueDate), "MM/dd/yyyy") : row.dueDate}
+                    {row.dueDate !== "---"
+                      ? format(new Date(row.dueDate), "MM/dd/yyyy")
+                      : row.dueDate}
                   </TableCell>
                   <TableCell align="left">
                     {statusConverter(row.status)}

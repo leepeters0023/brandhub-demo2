@@ -82,6 +82,10 @@ export const buildFilters = (
     filterObject.itemType && filterObject.itemType.length > 0
       ? `filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
       : "";
+  // let buString =
+  //   filterObject.bu && filterObject.bu.length > 0
+  //     ? `filter[business-unit-ids]=${separateByComma(filterObject.bu, "id")}`
+  //     : "";
   let favItemString =
     filterObject.favItems && filterObject.favItems.length > 0
       ? `filter[ids]=${separateByComma(filterObject.favItems, "id")}`
@@ -104,6 +108,7 @@ export const buildFilters = (
     progString,
     brandString,
     itemTypeString,
+    //buString,
     favItemString,
     userString,
     supplierString,
