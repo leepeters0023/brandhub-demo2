@@ -85,7 +85,7 @@ const TotalsDiv = React.memo(() => {
           }}
         />
       </FormControl>
-      <FormControl
+      {/* <FormControl
         style={{ pointerEvents: "none", minWidth: "100px", marginLeft: "30px" }}
       >
         <InputLabel htmlFor="current-budget" style={{ whiteSpace: "nowrap" }}>
@@ -105,7 +105,7 @@ const TotalsDiv = React.memo(() => {
             pointerEvents: "none",
           }}
         />
-      </FormControl>
+      </FormControl> */}
     </>
   );
 });
