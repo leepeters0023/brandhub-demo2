@@ -69,7 +69,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
         dataObject.orderNum = order.orderNumber;
         dataObject.distributorName = order.distributorName;
         dataObject.totalItems = order.totalItems;
-        dataObject.totalEstCost = formatMoney(order.totalEstCost);
+        dataObject.totalEstCost = formatMoney(order.totalEstCost, false);
         order.items.forEach((item) => {
           dataObject[item.itemNumber] = item.totalItems;
         });
@@ -156,7 +156,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <Divider />
           <br />
           <Typography className={classes.headerText}>
-            {`Total Cost: ${formatMoney(orderSet.orderTotal)}`}
+            {`Total Cost: ${formatMoney(orderSet.orderTotal, false)}`}
           </Typography>
           <br />
           {((currentUserRoll === "super" && orderSet.status !== "approved") ||

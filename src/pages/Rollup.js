@@ -135,7 +135,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                 <InputBase
                   className={classes.titleText}
                   id="program-total"
-                  value={`${orderCount} / ${formatMoney(queryTotal)}`}
+                  value={`${orderCount} / ${formatMoney(queryTotal, false)}`}
                   inputProps={{
                     "aria-label": "naked",
                     "data-lpignore": "true",

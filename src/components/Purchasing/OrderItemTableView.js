@@ -221,7 +221,7 @@ const OrderItemTableView = ({
                         {row.stock ? row.stock : "---"}
                       </TableCell>
                     )}
-                    <TableCell>{`${formatMoney(row.estCost)}`}</TableCell>
+                    <TableCell>{`${formatMoney(row.estCost, false)}`}</TableCell>
                   </TableRow>
                 );
               })}

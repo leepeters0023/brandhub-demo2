@@ -45,8 +45,8 @@ export const earliestDate = (dateArray) => {
 Formats integers into $00.00 format for display purposes, all incoming data
 representing money from the api is in cents
 */
-export const formatMoney = (value) => {
-  let moneyAr = (value / 100).toFixed(2).split(".");
+export const formatMoney = (value, ops) => {
+  let moneyAr = (value / 100).toFixed(ops ? 4 : 2).split(".");
   if (moneyAr[0].length > 3) {
     let preDecimalAr = moneyAr[0].split("").reverse();
     let formattedPreDec = preDecimalAr
@@ -61,6 +61,11 @@ export const formatMoney = (value) => {
     return "$" + moneyAr[0] + "." + moneyAr[1];
   }
 };
+
+//handles incoming money values that are strings
+export const stringToCents = (numString) => {
+  return parseFloat(numString) * 100
+}
 
 //Used in order tables to ensure order numbers match pack size
 export const roundUp = (value, rounder) => {

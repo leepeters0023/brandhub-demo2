@@ -268,7 +268,7 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell align="left">
                       {row.totalEstCost !== "---"
-                        ? formatMoney(row.totalEstCost)
+                        ? formatMoney(row.totalEstCost, false)
                         : row.totalEstCost}
                     </TableCell>
                     <TableCell>$5,000.00</TableCell>

@@ -135,12 +135,12 @@ const PreOrderSummary = () => {
                       </TableCell>
                       <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.orderId
-                          ? formatMoney(preOrder.totalEstCost)
-                          : formatMoney(currentOrder.orderTotal)}
+                          ? formatMoney(preOrder.totalEstCost, false)
+                          : formatMoney(currentOrder.orderTotal, false)}
                       </TableCell>
                       <TableCell align="right">
                         {formatMoney(
-                          Math.floor(Math.random() * 1000000 + 1000000)
+                          Math.floor(Math.random() * 1000000 + 1000000), false
                         )}
                       </TableCell>
                     </TableRow>

@@ -176,11 +176,11 @@ const BudgetVsSpendTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.brand}</TableCell>
                   <TableCell align="left">{row.territory}</TableCell>
-                  <TableCell align="left">{formatMoney(row.budget)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.onHold)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.committed)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.spent)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.remaining)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.budget, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.onHold, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.committed, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.spent, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.remaining, false)}</TableCell>
                 </TableRow>
               ))}
             {budgetsLoading && (

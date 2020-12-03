@@ -323,7 +323,7 @@ const CurrentPO = () => {
           className={classes.titleText}
           style={{ marginRight: "20px" }}
         >
-          {`Total: ${formatMoney(currentPO.totalCost)}`}
+          {`Total: ${formatMoney(currentPO.totalCost, true)}`}
         </Typography>
       </div>
       <br />

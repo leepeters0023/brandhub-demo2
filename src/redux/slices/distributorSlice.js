@@ -202,10 +202,10 @@ export const fetchFavDistributors = () => async (dispatch) => {
   }
 };
 
-export const newFavoriteDistList = () => async (dispatch) => {
+export const newFavoriteDistList = (index) => async (dispatch) => {
   try {
     dispatch(setUpdateIsLoading());
-    const newList = await newFavDistList();
+    const newList = await newFavDistList(index + 1);
     if (newList.error) {
       throw newList.error;
     }

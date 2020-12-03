@@ -183,7 +183,7 @@ const ItemCatalogTable = ({
                         {item.stock ? item.stock : "---"}
                       </TableCell>
                     )}
-                    <TableCell>{`${formatMoney(item.estCost)}`}</TableCell>
+                    <TableCell>{`${formatMoney(item.estCost, false)}`}</TableCell>
                   </TableRow>
                 );
               })}

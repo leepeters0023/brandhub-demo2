@@ -73,7 +73,7 @@ const TotalsDiv = React.memo(() => {
         <InputBase
           className={classes.titleText}
           id="program-total"
-          value={`${formatMoney(programTotal)}`}
+          value={`${formatMoney(programTotal, false)}`}
           inputProps={{ "aria-label": "naked" }}
           style={{
             marginTop: "10px",
@@ -318,7 +318,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   <InputBase
                     className={classes.titleText}
                     id="grand-total"
-                    value={`${formatMoney(grandTotalMod + setTotal)}`}
+                    value={`${formatMoney(grandTotalMod + setTotal, false)}`}
                     inputProps={{ "aria-label": "naked" }}
                     style={{
                       marginTop: "10px",

@@ -150,7 +150,7 @@ const OrderItemGridView = (props) => {
                       )}
                       <br />
                       <Typography className={classes.headerText}>
-                        {`${formatMoney(item.estCost)}`}
+                        {`${formatMoney(item.estCost, false)}`}
                       </Typography>
                     </Paper>
                   </Grid>

@@ -7,12 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredRFQItems } from "../redux/slices/rfqSlice";
-import { createNewRFQ } from "../redux/slices/rfqSlice"
+import { createNewRFQ } from "../redux/slices/rfqSlice";
 
-import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
@@ -47,9 +44,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.rfq.nextLink);
-  const isNextLoading = useSelector(
-    (state) => state.rfq.isNextLoading
-  );
+  const isNextLoading = useSelector((state) => state.rfq.isNextLoading);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -65,14 +60,16 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const isRFQItemsLoading = useSelector((state) => state.rfq.isLoading);
   const currentRFQItems = useSelector((state) => state.rfq.rfqItems);
-  const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem)
+  const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
 
   const handleNewRFQ = () => {
-    let currentItem = currentRFQItems.find((item) => item.id === selectedRFQItem);
-    dispatch(createNewRFQ(selectedRFQItem, currentItem.program.id))
-  }
+    let currentItem = currentRFQItems.find(
+      (item) => item.itemId === selectedRFQItem
+    );
+    dispatch(createNewRFQ(selectedRFQItem, currentItem.program.id));
+  };
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -115,7 +112,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
               disabled={!itemSelected}
               style={{ marginRight: "20px" }}
               onClick={() => {
-                handleNewRFQ()
+                handleNewRFQ();
                 navigate("/purchasing/rfq#new");
               }}
             >

@@ -110,7 +110,7 @@ const TotalEstCostCell = React.memo(({ itemNumber }) => {
       className={classes.borderRightLight}
     >
       <div className={classes.infoCell}>
-        {value ? `${formatMoney(value.totalEstCost)}` : "---"}
+        {value ? `${formatMoney(value.totalEstCost, false)}` : "---"}
       </div>
     </TableCell>
   );
@@ -459,7 +459,7 @@ const OrderSetTable = (props) => {
                                   key={item.id}
                                   className={classes.borderRightLight}
                                 >
-                                  {`${formatMoney(item.estCost)}`}
+                                  {`${formatMoney(item.estCost, false)}`}
                                 </TableCell>
                               ))}
                             </TableRow>

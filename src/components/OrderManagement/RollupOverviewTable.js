@@ -198,7 +198,7 @@ const RollupOverViewTable = ({
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">
-                    {formatMoney(row.totalEstCost)}
+                    {formatMoney(row.totalEstCost, false)}
                   </TableCell>
                   <TableCell align="left">$5,000.00</TableCell>
                   <TableCell align="left">{row.budget}</TableCell>

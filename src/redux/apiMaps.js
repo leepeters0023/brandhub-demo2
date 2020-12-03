@@ -238,8 +238,9 @@ export const mapRollupItems = (items) => {
       }
     }
   };
+  console.log(items)
   let mappedItems = items.map((item) => ({
-    id: item.item.id,
+    id: item.id,
     itemId: item.item.id,
     sequenceNum: item["item-number"],
     projectNum: item["project-number"] ? item["project-number"] : "---",

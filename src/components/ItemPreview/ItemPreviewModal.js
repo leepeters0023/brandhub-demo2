@@ -174,7 +174,7 @@ const ItemPreviewModal = (props) => {
                   <Box bgcolor="primary.main" className={classes.dividerBox} />
                   <br />
                   <Typography className={classes.headerText} variant="h5">
-                    {`Est. Cost: ${formatMoney(estCost)}`}
+                    {`Est. Cost: ${formatMoney(estCost, false)}`}
                   </Typography>
                   <br />
                   <Typography variant="body1" color="textSecondary">
@@ -214,7 +214,7 @@ const ItemPreviewModal = (props) => {
                   <Box bgcolor="primary.main" className={classes.dividerBox} />
                   <br />
                   <Typography className={classes.headerText} variant="h5">
-                    {`Est. Cost: ${formatMoney(estCost)}`}
+                    {`Est. Cost: ${formatMoney(estCost, false)}`}
                   </Typography>
                   <br />
                   <Typography variant="body1" color="textSecondary">
@@ -224,10 +224,10 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${bottleDiscount ? formatMoney(bottleDiscount) : "---"}`}
+                    {`Bottle Discount: ${bottleDiscount ? formatMoney(bottleDiscount, false) : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${discountAmount ? formatMoney(discountAmount) : "---"}`}
+                    {`Discount Amount: ${discountAmount ? formatMoney(discountAmount, false) : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
