@@ -107,9 +107,9 @@ const PreOrderSummary = () => {
               <TableCell className={classes.headerText} align="center">
                 Total Est Cost
               </TableCell>
-              <TableCell className={classes.headerText} align="right">
+              {/* <TableCell className={classes.headerText} align="right">
                 Remaining Budget
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -138,11 +138,11 @@ const PreOrderSummary = () => {
                           ? formatMoney(preOrder.totalEstCost, false)
                           : formatMoney(currentOrder.orderTotal, false)}
                       </TableCell>
-                      <TableCell align="right">
+                      {/* <TableCell align="right">
                         {formatMoney(
                           Math.floor(Math.random() * 1000000 + 1000000), false
                         )}
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   );
                 } else return null;
