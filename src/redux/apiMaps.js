@@ -1,4 +1,4 @@
-import { earliestDate } from "../utility/utilityFunctions";
+import { earliestDate, stringToCents } from "../utility/utilityFunctions";
 import { brandBULookup } from "../utility/constants";
 import addDays from "date-fns/addDays";
 
@@ -28,6 +28,7 @@ const monthMap = {
 };
 
 export const mapItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],
@@ -37,7 +38,7 @@ export const mapItems = (items) => {
       : "---",
     itemType: item.type,
     itemDescription: item.description ? item.description : "---",
-    estCost: item["estimated-cost"],
+    estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
     imgUrl: item["img-url"],
@@ -55,8 +56,8 @@ export const mapOrderSetItems = (items) => {
     state: item["state-names"] ? item["state-names"] : "---",
     packSize: item["qty-per-pack"],
     totalItems: item["total-item-qty"],
-    estCost: item["estimated-cost"],
-    totalEstCost: item["total-estimated-cost"],
+    estCost: stringToCents(item["estimated-cost"]),
+    totalEstCost: stringToCents(item["total-estimated-cost"]),
     orderDate: item["order-set-submitted-at"],
     orderDue: item["program-order-due-date"]
       ? item["program-order-due-date"]
@@ -121,7 +122,7 @@ export const mapSingleOrder = (order) => {
     shipDate: order["shipped-at"] ? order["shipped-at"] : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
-    totalEstCost: order["total-estimated-cost"],
+    totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
     attn: order.attn ? order.attn : "---",
@@ -150,10 +151,10 @@ export const mapOrderHistoryItems = (items) => {
     state: item.state ? item.state : "---",
     packSize: item["qty-per-pack"],
     totalItems: item.qty,
-    estCost: item["estimated-cost"],
-    totalEstCost: item["total-estimated-cost"],
-    actCost: item["actual-cost"] ? item["actual-cost"] : "---",
-    totalActCost: item["total-actual-cost"] ? item["total-actual-cost"] : "---",
+    estCost: stringToCents(item["estimated-cost"]),
+    totalEstCost: stringToCents(item["total-estimated-cost"]),
+    actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
+    totalActCost: item["total-actual-cost"] ? stringToCents(item["total-actual-cost"]) : "---",
     orderDate: item["order-submitted-at"],
     shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
     tracking: item["tracking-number"] ? item["tracking-number"] : "---",
@@ -174,10 +175,10 @@ export const mapOrderItems = (items, type) => {
       itemType: item.item.type,
       itemDescription: item.item.description ? item.item.description : "---",
       packSize: item.item["qty-per-pack"],
-      estCost: item.item["estimated-cost"],
+      estCost: stringToCents(item.item["estimated-cost"]),
       totalItems: type === "order-set-item" ? 0 : item.qty,
       totalEstCost:
-        type === "order-set-item" ? 0 : item["total-estimated-cost"],
+        type === "order-set-item" ? 0 : stringToCents(item["total-estimated-cost"]),
       actTotal: "---",
       complianceStatus: item.item["compliance-status"],
       tracking: item.tracking ? item.tracking : "---",
@@ -207,11 +208,11 @@ export const mapOrderSet = (order) => {
     status: order.status,
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
-    totalEstCost: order["total-estimated-cost"],
+    totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: order["total-actual-cost"]
-      ? order["total-actual-cost"]
+      ? stringToCents(order["total-actual-cost"])
       : "---",
-    budget: order.budget ? order.budget : "$25,000.00",
+    budget: order.budget ? stringToCents(order.budget) : "$25,000.00",
   };
   return formattedOrder;
 };
@@ -257,8 +258,8 @@ export const mapRollupItems = (items) => {
     orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["not-compliant-count"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
-    estCost: item["estimated-cost"],
-    totalEstCost: item["estimated-total"],
+    estCost: stringToCents(item["estimated-cost"]),
+    totalEstCost: stringToCents(item["estimated-total"]),
     dueDate: item["order-due-date"] ? item["order-due-date"] : "---",
   }));
 
@@ -274,9 +275,9 @@ export const mapPOItems = (items) => {
     itemType: item["item-type-description"],
     packSize: item["actual-qty-per-pack"],
     totalItems: item.qty,
-    estCost: item["item-estimated-cost"],
-    actCost: item["actual-cost"],
-    totalCost: item["actual-cost"] * item.qty,
+    estCost: stringToCents(item["item-estimated-cost"]),
+    actCost: stringToCents(item["actual-cost"]),
+    totalCost: stringToCents(item["actual-cost"]) * item.qty,
     packOut: item["has-packout"] ? item["has-packout"] : false,
   }));
   return mappedItems;
@@ -290,7 +291,7 @@ export const mapPOShippingParamItems = (items) => {
     totalItems: item.qty,
     shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
     tracking: item.tracking ? item.tracking : "---",
-    tax: item.tax ? item.tax : "---",
+    tax: item.tax ? stringToCents(item.tax) : "---",
   }))
   return mappedItems;
 }
@@ -370,8 +371,8 @@ export const mapPOHistoryItems = (items) => {
     brand: item["brand-names"],
     program: item["program-names"],
     totalItems: item.qty,
-    estCost: item["item-estimated-cost"],
-    actCost: item["actual-cost"],
+    estCost: stringToCents(item["item-estimated-cost"]),
+    actCost: stringToCents(item["actual-cost"]),
     status: item["po-status"],
     dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
   }))
@@ -384,7 +385,7 @@ export const mapRFQ = (rfq) => {
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price,
+      price: bid.price ? stringToCents(bid.price) : "---",
     }));
   };
 
@@ -400,8 +401,8 @@ export const mapRFQ = (rfq) => {
     itemDescription: rfq.item.description ? rfq.item.description : "---",
     sequenceNum: rfq.item["item-number"],
     totalItems: rfq.qty,
-    estCost: rfq.item["estimated-cost"],
-    totalEstCost: rfq.qty * rfq.item["estimated-cost"],
+    estCost: stringToCents(rfq.item["estimated-cost"]),
+    totalEstCost: rfq.qty * stringToCents(rfq.item["estimated-cost"]),
     supplierNote: rfq.note ? rfq.note : "",
     //TODO not sure about this line, as we don't know what the spec will look like yet
     itemSpec: rfq.item.spec ? rfq.item.spec : null,
