@@ -68,6 +68,7 @@ let initialState = {
   orders: [],
   orderTotal: 0,
   orderNote: "",
+  rebuildRef: false,
   error: null,
 };
 
@@ -94,8 +95,8 @@ const orderSetSlice = createSlice({
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
       const { orderId, type, orders, items, status, note } = action.payload;
+      let currentItems = [...items];
       if (orders.length !== 0) {
-        let currentItems = [...items];
         let ordTotal = 0;
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
@@ -120,8 +121,13 @@ const orderSetSlice = createSlice({
         state.error = null;
       } else {
         state.orders = [];
-        state.items = [];
-        state.isLaoding = false;
+        state.orderId = orderId;
+        state.status = status;
+        state.type = type;
+        state.items = currentItems;
+        state.orderNote = note;
+        state.orderTotal = 0;
+        state.isLoading = false;
         state.error = null;
       }
     },
@@ -239,9 +245,29 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
-    addOrderSuccess(state) {
+    setRebuildRef(state) {
+      state.rebuildRef = !state.rebuildRef;
+    },
+    addOrderSuccess(state, action) {
+      const { order } = action.payload;
+      const currentOrders = [...state.orders]
+      currentOrders.push(order);
+      currentOrders.sort((a, b) => {
+        return a.distributorName < b.distributorName
+          ? -1
+          : a.distributorName > b.distributorName
+          ? 1
+          : 0;
+      });
+      state.orders = currentOrders;
       state.isOrderLoading = false;
-      //TODO
+      state.error = null;
+    },
+    addMultipleOrdersSuccess(state, action) {
+      const { orders } = action.payload;
+      state.orders = [...orders];
+      state.isOrderLoading = false;
+      state.error = null;
     },
     clearOrderSet(state) {
       state.isLoading = false;
@@ -270,7 +296,9 @@ export const {
   updateOrderNote,
   setOrderStatus,
   clearOrderSet,
+  setRebuildRef,
   addOrderSuccess,
+  addMultipleOrdersSuccess,
   setFailure,
 } = orderSetSlice.actions;
 
@@ -381,8 +409,31 @@ export const createSingleOrder = (id, dist) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order.error);
-    dispatch(addOrderSuccess());
+    console.log(order);
+    dispatch(addOrderSuccess({order: order.data}));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const createMultipleOrders = (id, distArray) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    const orders = await addMultipleOrdersToSet(id, distArray);
+    if (orders.error) {
+      throw orders.error;
+    }
+    console.log(orders);
+    let mappedOrders = mapOrderHistoryOrders(orders.data.orders);
+    mappedOrders.sort((a, b) => {
+      return a.distributorName < b.distributorName
+        ? -1
+        : a.distributorName > b.distributorName
+        ? 1
+        : 0;
+    });
+    dispatch(addMultipleOrdersSuccess({orders: mappedOrders}));
+    dispatch(setRebuildRef());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
