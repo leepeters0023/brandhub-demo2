@@ -67,6 +67,7 @@ const programsSlice = createSlice({
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
       if (state.programs.length === 0) {
+        console.log(programs);
         state.programs = [...programs];
         state.initialLoading = false;
       } else {
@@ -82,7 +83,8 @@ const programsSlice = createSlice({
             ? 1
             : 0;
         });
-        state.programs = [...newProgramArray];
+        console.log(newProgramArray)
+        //state.programs = [...newProgramArray];
       }
       state.isLoading = false;
       state.error = null;
@@ -167,8 +169,8 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
     if (natPrograms.error) {
       throw natPrograms.error;
     }
-    const programs = terrPrograms.data.concat(natPrograms.data);
-    const programArray = mapPrograms(programs);
+    //const programs = terrPrograms.data.concat(natPrograms.data);
+    const programArray = mapPrograms(terrPrograms.data);
     dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

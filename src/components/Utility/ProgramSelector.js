@@ -38,7 +38,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
     <>
       <FormControl
         aria-label="program-selector"
-        style={{ margin: "0 5px", width: "300px" }}
+        style={{ margin: "0 5px", width: "400px" }}
         size="small"
       >
         <Select
