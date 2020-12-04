@@ -71,12 +71,12 @@ export const mapPrograms = (programs) => {
   const programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
-    name: prog.name,
+    name: prog.name ? prog.name : "---",
     brand:
       prog.brands.length > 0
-        ? prog.brands.map((brand) => brand.name)
+        ? prog.brands.map((brand) => brand.name ? brand.name : "---")
         : ["BRAND"],
-    unit: brandBULookup[prog.brands[0].name] || "UNIT",
+    unit: prog.brands.length > 0 ? brandBULookup[prog.brands[0].name] : "UNIT",
     desc:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
     goals: prog.goals,
