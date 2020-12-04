@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { addDefaultImg } from "../../utility/utilityFunctions";
+
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
@@ -27,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
   const classes = useStyles();
-
   return (
     <>
       <div className={classes.relativeContainer}>
@@ -50,6 +51,7 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
               <img
                 className={classes.cartPreviewImage}
                 src={currentItem.imgUrl}
+                onError={addDefaultImg}
                 alt={currentItem.itemNumber}
               />
               <br />

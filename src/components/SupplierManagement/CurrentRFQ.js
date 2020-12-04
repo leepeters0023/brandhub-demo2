@@ -11,7 +11,7 @@ import {
   updateSupplierNote,
   updateRFQDates,
 } from "../../redux/slices/rfqSlice";
-import { formatDate } from "../../utility/utilityFunctions";
+import { formatDate, addDefaultImg } from "../../utility/utilityFunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -382,6 +382,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
               <div className={classes.squareInnerPaper}>
                 <img
                   src={currentRFQ.imgUrlOne}
+                  onError={addDefaultImg}
                   alt={`Item number ${currentRFQ.sequenceNum}`}
                   className={classes.largePreview}
                 />

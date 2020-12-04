@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, addDefaultImg } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -214,12 +214,13 @@ const OrderHistoryByItemTable = ({
                     <img
                       id={row.sequenceNum}
                       className={classes.previewImageFloat}
-                      src={row.imgUrl}
+                      src={row.imgUrlThumb}
                       alt={row.itemType}
+                      onError={addDefaultImg}
                       onClick={(evt) => {
                         evt.stopPropagation();
                         handlePreview(
-                          row.imgUrl,
+                          row.imgUrlLg,
                           row.brand.join(", "),
                           row.itemType,
                           row.sequenceNum,

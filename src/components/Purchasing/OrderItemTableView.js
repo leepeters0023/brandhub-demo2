@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { addDefaultImg, formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -202,7 +202,8 @@ const OrderItemTableView = ({
                       <img
                         id={row.id}
                         className={classes.previewImageFloat}
-                        src={row.imgUrl}
+                        src={row.imgUrlThumb}
+                        onError={addDefaultImg}
                         alt={row.itemType}
                         onClick={() => {
                           handlePreview(row.itemNumber);
