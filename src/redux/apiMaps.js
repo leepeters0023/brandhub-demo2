@@ -40,8 +40,11 @@ export const mapItems = (items) => {
     estCost: item["estimated-cost"],
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
-    imgUrl: item["img-url"]
-      ? item["img-url"]
+    imgUrlThumb: item["img-url-thumb"]
+      ? item["img-url-thumb"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlLg: item["img-url-large"]
+      ? item["img-url-large"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
   }));
   return mappedItems;
@@ -145,8 +148,11 @@ export const mapOrderHistoryOrders = (orders) => {
 export const mapOrderHistoryItems = (items) => {
   let mappedItems = items.map((item) => ({
     sequenceNum: item["item-number"],
-    imgUrl: item.item["img-url"]
-      ? item.item["img-url"]
+    imgUrlThumb: item.item["img-url-thumb"]
+      ? item.item["img-url-thumb"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlLg: item.item["img-url-large"]
+      ? item.item["img-url-large"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
     orderType: item.item["order-type"],
     brand: item.item.brands.map((brand) => brand.name),
@@ -176,8 +182,11 @@ export const mapOrderItems = (items, type) => {
       id: item.id,
       itemId: item.item.id,
       itemNumber: item.item["item-number"],
-      imgUrl: item.item["img-url"]
-        ? item.item["img-url"]
+      imgUrlThumb: item.item["img-url-thumb"]
+        ? item.item["img-url-thumb"]
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+      imgUrlLg: item.item["img-url-large"]
+        ? item.item["img-url-large"]
         : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
       brand: item.item.brands.map((brand) => brand.name).join(", "),
       itemType: item.item.type,
@@ -425,14 +434,14 @@ export const mapRFQ = (rfq) => {
     //TODO not sure about this line, as we don't know what the spec will look like yet
     itemSpec: rfq.item.spec ? rfq.item.spec : null,
     //TODO currently just getting the one image, need to update when we get more
-    imgUrlOne: rfq.item["img-url"]
-      ? rfq.item["img-url"]
+    imgUrlThumbOne: rfq.item["img-url-thumb"]
+      ? rfq.item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlTwo: rfq.item["img-url"]
-      ? rfq.item["img-url"]
+    imgUrlThumbTwo: rfq.item["img-url-thumb"]
+      ? rfq.item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlThree: rfq.item["img-url"]
-      ? rfq.item["img-url"]
+    imgUrlThumbThree: rfq.item["img-url-thumb"]
+      ? rfq.item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
   };
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, addDefaultImg } from "../../utility/utilityFunctions";
 
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
@@ -92,6 +92,7 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                       id={prog.id}
                       className={classes.programImg}
                       src={prog.imgUrl}
+                      onError={addDefaultImg}
                       alt={prog.name}
                     />
                   </Tooltip>

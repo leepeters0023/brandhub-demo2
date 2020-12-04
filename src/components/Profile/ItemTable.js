@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { addDefaultImg, formatMoney } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -66,7 +66,8 @@ const ItemTable = ({ items, isLoading, handleDelete }) => {
                   <img
                     id={item.itemNumber}
                     className={classes.previewImg}
-                    src={item.imgUrl}
+                    src={item.imgUrlThumb}
+                    onError={addDefaultImg}
                     alt={item.itemType}
                   />
                 </TableCell>

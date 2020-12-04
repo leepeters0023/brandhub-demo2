@@ -97,3 +97,7 @@ export const formatDate = (date) => {
   let tempDate = new Date(date);
   return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
 };
+
+export const addDefaultImg = (evt) => {
+  evt.target.src = "/images/NotFound.png";
+}

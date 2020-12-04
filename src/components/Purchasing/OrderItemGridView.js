@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, addDefaultImg } from "../../utility/utilityFunctions";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -139,7 +139,8 @@ const OrderItemGridView = (props) => {
                         <img
                           id={item.itemNumber}
                           className={classes.previewImg}
-                          src={item.imgUrl}
+                          src={item.imgUrlThumb}
+                          onError={addDefaultImg}
                           alt={item.itemType}
                           onClick={() => {
                             handlePreview(item.itemNumber);

@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { addDefaultImg } from "../../utility/utilityFunctions";
+
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,7 +27,7 @@ const ProgramDetails = (props) => {
       <br />
       <Grid container spacing={5} justify="center" alignItems="center">
         <Grid item md={3} style={{ textAlign: "center" }}>
-          <img src={imgUrl} className={classes.programImage} alt={name} />
+          <img src={imgUrl} onError={addDefaultImg} className={classes.programImage} alt={name} />
           <Typography className={classes.bodyText}>{`Focus Month: ${focusMonth}`}</Typography>
         </Grid>
         <Grid item md={9}>
