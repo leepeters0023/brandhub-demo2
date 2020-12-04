@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchOrdersByProgram, fetchOrderSetById } from "../../api/orderApi";
+import {
+  fetchOrdersByProgram,
+  fetchOrderSetById,
+  addMultipleOrdersToSet,
+  addSingleOrderToSet,
+} from "../../api/orderApi";
 
 import { setPreOrderDetails } from "./preOrderDetailSlice";
 
@@ -55,6 +60,7 @@ single order set model:
 
 let initialState = {
   isLoading: false,
+  isOrderLoading: false,
   orderId: null,
   type: null,
   status: null,
@@ -69,9 +75,14 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startOrderLoading = (state) => {
+  state.isOrderLoading = true;
+};
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.isOrderLoading = false;
   state.error = error;
 };
 
@@ -80,6 +91,7 @@ const orderSetSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
       const { orderId, type, orders, items, status, note } = action.payload;
       if (orders.length !== 0) {
@@ -227,6 +239,10 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
+    addOrderSuccess(state) {
+      state.isOrderLoading = false;
+      //TODO
+    },
     clearOrderSet(state) {
       state.isLoading = false;
       state.orderId = null;
@@ -244,6 +260,7 @@ const orderSetSlice = createSlice({
 
 export const {
   setIsLoading,
+  setOrderLoading,
   buildTableFromOrders,
   setGridItem,
   setItemTotal,
@@ -253,6 +270,7 @@ export const {
   updateOrderNote,
   setOrderStatus,
   clearOrderSet,
+  addOrderSuccess,
   setFailure,
 } = orderSetSlice.actions;
 
@@ -351,6 +369,20 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         note: note,
       })
     );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const createSingleOrder = (id, dist) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    const order = await addSingleOrderToSet(id, dist);
+    if (order.error) {
+      throw order.error;
+    }
+    console.log(order.error);
+    dispatch(addOrderSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
