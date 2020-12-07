@@ -75,7 +75,7 @@ const DistributorSelection = () => {
   const handleAddFavorites = (id) => {
     let currentList = favoriteLists.find((list) => list.id === id);
     let idArray = currentList.distributors.map((dist) => dist.id);
-    dispatch(createMultipleOrders(orderSetId, idArray))
+    dispatch(createMultipleOrders(idArray, orderSetId, orderType))
   }
 
   useEffect(() => {
