@@ -268,35 +268,6 @@ export const setOrderSetNote = async (id, note) => {
   return response;
 };
 
-export const addMultipleOrdersToSet = async (id, distArray) => {
-  const response = { status: "", error: null, data: null };
-  await axios
-    .patch(
-      `/api/order-sets/${id}`,
-      {
-        data: {
-          type: "order-set",
-          id: id,
-          attributes: {
-            distributor_ids: distArray,
-          },
-        },
-      },
-      writeHeaders
-    )
-    .then((res) => {
-      let data = dataFormatter.deserialize(res.data);
-      response.status = "ok";
-      response.data = data;
-    })
-    .catch((err) => {
-      console.log(err.toString());
-      response.status = "error";
-      response.error = err.toString();
-    });
-  return response;
-};
-
 export const addSingleOrderToSet = async (id, dist, type) => {
   const response = { status: "", error: null, data: null };
   await axios

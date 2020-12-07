@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchOrdersByProgram,
   fetchOrderSetById,
-  addMultipleOrdersToSet,
   addSingleOrderToSet,
 } from "../../api/orderApi";
 
@@ -264,8 +263,15 @@ const orderSetSlice = createSlice({
     },
     addMultipleOrdersSuccess(state, action) {
       const { orders } = action.payload;
-      console.log(orders);
-      state.orders = [...orders];
+      const currentOrders = state.orders.map((ord) => ({...ord})).concat(orders);
+      currentOrders.sort((a, b) => {
+        return a.distributorName < b.distributorName
+          ? -1
+          : a.distributorName > b.distributorName
+          ? 1
+          : 0;
+      });
+      state.orders = [...currentOrders];
       state.isOrderLoading = false;
       state.error = null;
     },
@@ -417,22 +423,21 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   }
 };
 
-export const createMultipleOrders = (id, distArray) => async (dispatch) => {
+export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
-    const orders = await addMultipleOrdersToSet(id, distArray);
-    if (orders.error) {
-      throw orders.error;
-    }
-    console.log(orders);
-    let mappedOrders = mapOrderHistoryOrders(orders.data.orders);
-    mappedOrders.sort((a, b) => {
-      return a.distributorName < b.distributorName
-        ? -1
-        : a.distributorName > b.distributorName
-        ? 1
-        : 0;
-    });
+    const orders = []
+    await Promise.all(
+      idArray.map(async (distId) => {
+        const order = await addSingleOrderToSet(id, distId, type)
+        console.log(order);
+        if (order.error) {
+          throw order.error;
+        }
+        orders.push(order.data);
+      })
+    )
+    let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({orders: mappedOrders}));
     dispatch(setRebuildRef());
   } catch (err) {
