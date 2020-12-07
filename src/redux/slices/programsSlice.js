@@ -67,7 +67,7 @@ const programsSlice = createSlice({
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
       if (state.programs.length === 0) {
-        console.log(programs);
+        //console.log(programs);
         state.programs = [...programs];
         state.initialLoading = false;
       } else {
@@ -83,7 +83,8 @@ const programsSlice = createSlice({
             ? 1
             : 0;
         });
-        console.log(newProgramArray)
+        //TODO return to normal when out of testing and fetching appropriately
+        //console.log(newProgramArray)
         //state.programs = [...newProgramArray];
       }
       state.isLoading = false;

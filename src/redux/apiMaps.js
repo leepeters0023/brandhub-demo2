@@ -73,7 +73,6 @@ export const mapOrderSetItems = (items) => {
 };
 
 export const mapPrograms = (programs) => {
-  console.log(programs);
   const programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
@@ -256,7 +255,6 @@ export const mapRollupItems = (items) => {
       }
     }
   };
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -284,6 +282,7 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
+  console.log(items);
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -291,6 +290,23 @@ export const mapPOItems = (items) => {
     program: item["program-names"].length > 0 ? item["program-names"] : "---",
     itemType: item["item-type-description"],
     packSize: item["actual-qty-per-pack"],
+    itemSpec: {
+      "Back 4-Color": item["item-specification"]["Back 4-Color"],
+      "Back Finish": item["item-specification"]["Back Finish"],
+      "Die/Job Number": item["item-specification"]["Die/Job Number"],
+      Dieline: item["item-specification"]["Dieline"],
+      Embossing: item["item-specification"]["Embossing"],
+      "Flat Size": item["item-specification"]["Flat Size"],
+      "Front 4-Color": item["item-specification"]["Front 4-Color"],
+      "Front Finish": item["item-specification"]["Front Finish"],
+      "Hot Stamp": item["item-specification"]["Hot Stamp"],
+      "Pack Out": item["item-specification"]["Pack Out"],
+      Perf: item["item-specification"]["Perf"],
+      Score: item["item-specification"]["Score"],
+      Stock: item["item-specification"]["Stock"],
+      "Supplier Instructions":
+        item["item-specification"]["Supplier Instructions"],
+    },
     totalItems: item.qty,
     estCost: item["item-estimated-cost"],
     actCost: item["actual-cost"],
@@ -368,9 +384,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
-      : "---",
-    specDetails: purchaseOrder["spec-details"]
-      ? purchaseOrder["spec-details"]
       : "---",
     poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
     additionalCosts: purchaseOrder["extra-costs"]

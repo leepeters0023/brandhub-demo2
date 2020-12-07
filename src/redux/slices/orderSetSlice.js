@@ -6,6 +6,11 @@ import {
 } from "../../api/orderApi";
 
 import { setPreOrderDetails } from "./preOrderDetailSlice";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 
@@ -249,7 +254,9 @@ const orderSetSlice = createSlice({
     },
     addOrderSuccess(state, action) {
       const { order } = action.payload;
-      const currentOrders = state.orders.map((ord) => ({...ord})).concat(order)
+      const currentOrders = state.orders
+        .map((ord) => ({ ...ord }))
+        .concat(order);
       currentOrders.sort((a, b) => {
         return a.distributorName < b.distributorName
           ? -1
@@ -263,7 +270,9 @@ const orderSetSlice = createSlice({
     },
     addMultipleOrdersSuccess(state, action) {
       const { orders } = action.payload;
-      const currentOrders = state.orders.map((ord) => ({...ord})).concat(orders);
+      const currentOrders = state.orders
+        .map((ord) => ({ ...ord }))
+        .concat(orders);
       currentOrders.sort((a, b) => {
         return a.distributorName < b.distributorName
           ? -1
@@ -411,36 +420,41 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
 export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
+    dispatch(patchLoading());
     const order = await addSingleOrderToSet(id, dist, type);
     if (order.error) {
       throw order.error;
     }
-    const formattedOrder = mapOrderHistoryOrders([order.data])
-    dispatch(addOrderSuccess({order: formattedOrder}));
+    const formattedOrder = mapOrderHistoryOrders([order.data]);
+    dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
 export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
-    const orders = []
+    dispatch(patchLoading());
+    const orders = [];
     await Promise.all(
       idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type)
-        console.log(order);
+        const order = await addSingleOrderToSet(id, distId, type);
         if (order.error) {
           throw order.error;
         }
         orders.push(order.data);
       })
-    )
+    );
     let mappedOrders = mapOrderHistoryOrders(orders);
-    dispatch(addMultipleOrdersSuccess({orders: mappedOrders}));
+    dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
     dispatch(setRebuildRef());
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };

@@ -101,6 +101,9 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                 </Typography>
                 <div>
                   <Typography variant="body2" color="textSecondary">
+                    {`Brand(s): ${prog.brand.join(", ")}`}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
