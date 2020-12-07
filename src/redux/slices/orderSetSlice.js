@@ -250,8 +250,7 @@ const orderSetSlice = createSlice({
     },
     addOrderSuccess(state, action) {
       const { order } = action.payload;
-      const currentOrders = [...state.orders]
-      currentOrders.push(order);
+      const currentOrders = state.orders.map((ord) => ({...ord})).concat(order)
       currentOrders.sort((a, b) => {
         return a.distributorName < b.distributorName
           ? -1
@@ -259,12 +258,13 @@ const orderSetSlice = createSlice({
           ? 1
           : 0;
       });
-      state.orders = currentOrders;
+      state.orders = [...currentOrders];
       state.isOrderLoading = false;
       state.error = null;
     },
     addMultipleOrdersSuccess(state, action) {
       const { orders } = action.payload;
+      console.log(orders);
       state.orders = [...orders];
       state.isOrderLoading = false;
       state.error = null;
@@ -402,15 +402,16 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
   }
 };
 
-export const createSingleOrder = (id, dist) => async (dispatch) => {
+export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
-    const order = await addSingleOrderToSet(id, dist);
+    const order = await addSingleOrderToSet(id, dist, type);
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
-    dispatch(addOrderSuccess({order: order.data}));
+    const formattedOrder = mapOrderHistoryOrders([order.data])
+    dispatch(addOrderSuccess({order: formattedOrder}));
+    dispatch(setRebuildRef());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

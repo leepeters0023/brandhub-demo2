@@ -59,9 +59,9 @@ const DistributorSelection = () => {
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
-    console.log(value);
+    console.log(value, orderType);
     setCurrentDistributors(value);
-    dispatch(createSingleOrder(orderSetId, value[0].id))
+    dispatch(createSingleOrder(orderSetId, value[0].id, orderType))
   };
 
   const handleClick = (event) => {
@@ -73,7 +73,6 @@ const DistributorSelection = () => {
   };
 
   const handleAddFavorites = (id) => {
-    console.log(favoriteLists, id)
     let currentList = favoriteLists.find((list) => list.id === id);
     let idArray = currentList.distributors.map((dist) => dist.id);
     dispatch(createMultipleOrders(orderSetId, idArray))
@@ -84,24 +83,6 @@ const DistributorSelection = () => {
       dispatch(fetchUserDistributors(distributor));
     }
   }, [distributor, dispatch]);
-
-  // useEffect(() => {
-  //   if (currentOrders.length !== currentDistributors.length) {
-  //     let mappedDistributors = currentOrders.map((ord) => ({
-  //       id: ord.distributorId,
-  //       type: "distributor",
-  //       zip: ord.distributorZip,
-  //       "street-address-1": ord.distributorAddressOne,
-  //       "street-address-2": ord.distributorAddressTwo,
-  //       city: ord.distributorCity,
-  //       state: ord.distributorState,
-  //       name: ord.distributorName,
-  //       "is-active": true,
-  //       country: "USA",
-  //     }));
-  //     setCurrentDistributors(mappedDistributors);
-  //   }
-  // }, [currentOrders, currentDistributors.length]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {
