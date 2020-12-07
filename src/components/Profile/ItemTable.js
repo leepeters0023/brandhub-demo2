@@ -1,7 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { addDefaultImg, formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
+
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -63,12 +65,11 @@ const ItemTable = ({ items, isLoading, handleDelete }) => {
               items.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell align="left">
-                  <img
+                  <ImageWrapper
                     id={item.itemNumber}
-                    className={classes.previewImg}
-                    src={item.imgUrlThumb}
-                    onError={addDefaultImg}
+                    imgClass={classes.previewImg}
                     alt={item.itemType}
+                    imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
                   <TableCell align="left">

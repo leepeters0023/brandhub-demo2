@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { addDefaultImg } from "../../utility/utilityFunctions";
+import ImageWrapper from "../Utility/ImageWrapper"
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -48,11 +48,11 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
               <CancelIcon fontSize="large" color="secondary" />
             </IconButton>
             <div className={classes.previewModal}>
-              <img
-                className={classes.cartPreviewImage}
-                src={currentItem.imgUrl}
-                onError={addDefaultImg}
+              <ImageWrapper
+                imgUrl={currentItem.imgUrl}
                 alt={currentItem.itemNumber}
+                imgClass={classes.cartPreviewImage}
+                id={currentItem.itemType}
               />
               <br />
               <Typography

@@ -151,12 +151,6 @@ const ItemPreviewModal = (props) => {
                   imgClass={classes.largeImage}
                   id={itemNumber}
                 />
-                {/* <img
-                  className={classes.largeImage}
-                  src={imgUrlLg}
-                  onError={addDefaultImg}
-                  alt={`${brand} ${itemType}`}
-                /> */}
               </div>
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
