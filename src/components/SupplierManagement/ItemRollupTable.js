@@ -273,7 +273,6 @@ const ItemRollupTable = ({
     }
   }, [selected, setItemSelected, itemSelected]);
 
-  console.log(items);
   return (
     <>
       <ConfirmDeleteRollupItem
