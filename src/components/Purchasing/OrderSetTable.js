@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { formatMoney } from "../../utility/utilityFunctions";
+import { setRebuildRef } from "../../redux/slices/orderSetSlice";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 
@@ -136,11 +137,14 @@ const OrderSetTable = (props) => {
     orderType,
   } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
   const tableRef = useRef(null);
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
   const [orderNumberModal, setOrderNumber] = useState(false);
+
+  const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
 
   const handleKeyDown = useCallback(
     (ref, key) => {
@@ -174,10 +178,15 @@ const OrderSetTable = (props) => {
   useEffect(() => {
     if (
       (orders && !refTable) ||
-      `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0] ||
-      Object.keys(refTable).length !== orders.length * currentItems.length
+      (orders.length > 0 &&
+        `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
+      Object.keys(refTable).length !== orders.length * currentItems.length ||
+      rebuildRef
     ) {
       if (orders.length !== 0) {
+        if (rebuildRef) {
+          dispatch(setRebuildRef());
+        }
         let refs = {};
         orders.forEach((order) => {
           order.items.forEach((item) => {
@@ -187,7 +196,14 @@ const OrderSetTable = (props) => {
         setRefTable(refs);
       }
     }
-  }, [orders, refTable, orders.length, currentItems.length]);
+  }, [
+    orders,
+    refTable,
+    orders.length,
+    currentItems.length,
+    rebuildRef,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if ((currentItems && !itemLength) || itemLength !== currentItems.length) {
@@ -195,7 +211,7 @@ const OrderSetTable = (props) => {
     }
   }, [itemLength, currentItems, currentItems.length]);
 
-  if (isLoading || !refTable || !itemLength) {
+  if (isLoading || !itemLength || (!refTable && orders.length > 0)) {
     return <CircularProgress color="inherit" />;
   }
 
