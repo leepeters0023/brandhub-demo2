@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
+import { createSingleOrder, createMultipleOrders } from "../../redux/slices/orderSetSlice";
 
 import CustomAddressModal from "./CustomAddressModal";
 
@@ -49,7 +50,7 @@ const DistributorSelection = () => {
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
-  const currentOrders = useSelector((state) => state.orderSet.orders);
+  //const currentOrders = useSelector((state) => state.orderSet.orders);
   const orderSetId = useSelector((state) => state.orderSet.orderId);
   const orderType = useSelector((state) => state.orderSet.type);
   const favoriteLists = useSelector((state) => state.distributors.favoriteDistributors);
@@ -58,7 +59,9 @@ const DistributorSelection = () => {
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
+    console.log(value, orderType);
     setCurrentDistributors(value);
+    dispatch(createSingleOrder(orderSetId, value[0].id, orderType))
   };
 
   const handleClick = (event) => {
@@ -69,6 +72,12 @@ const DistributorSelection = () => {
     setAnchorEl(null);
   };
 
+  const handleAddFavorites = (id) => {
+    let currentList = favoriteLists.find((list) => list.id === id);
+    let idArray = currentList.distributors.map((dist) => dist.id);
+    dispatch(createMultipleOrders(idArray, orderSetId, orderType))
+  }
+
   useEffect(() => {
     if (distributor.length >= 1) {
       dispatch(fetchUserDistributors(distributor));
@@ -76,22 +85,10 @@ const DistributorSelection = () => {
   }, [distributor, dispatch]);
 
   useEffect(() => {
-    if (currentOrders.length !== currentDistributors.length) {
-      let mappedDistributors = currentOrders.map((ord) => ({
-        id: ord.distributorId,
-        type: "distributor",
-        zip: ord.distributorZip,
-        "street-address-1": ord.distributorAddressOne,
-        "street-address-2": ord.distributorAddressTwo,
-        city: ord.distributorCity,
-        state: ord.distributorState,
-        name: ord.distributorName,
-        "is-active": true,
-        country: "USA",
-      }));
-      setCurrentDistributors(mappedDistributors);
+    if (currentDistributors.length > 0) {
+      setCurrentDistributors([])
     }
-  }, [currentOrders, currentDistributors.length]);
+  }, [currentDistributors])
 
   return (
     <div className={classes.distSelection}>
@@ -113,8 +110,9 @@ const DistributorSelection = () => {
         onClose={() => setOpen(false)}
         inputValue={distributor}
         onInputChange={(_evt, value) => setDistributor(value)}
-        onChange={(_evt, value) => {
+        onChange={(evt, value) => {
           handleDistributors(value);
+          console.log(evt.target.value);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}
@@ -182,14 +180,20 @@ const DistributorSelection = () => {
           {favoriteLists.map((fav, index) => {
             if (index !== favoriteLists.length - 1) {
               return [
-                <MenuItem key={fav.id} onClick={handleClose}>
+                <MenuItem key={fav.id} onClick={() => {
+                  handleClose()
+                  handleAddFavorites(fav.id)
+                }}>
                   <ListItemText primary={fav.name} />
                 </MenuItem>,
                 <Divider />,
               ];
             } else {
               return (
-                <MenuItem key={fav.id} onClick={handleClose}>
+                <MenuItem key={fav.id} onClick={() => {
+                  handleClose()
+                  handleAddFavorites(fav.id)
+                }}>
                   <ListItemText primary={fav.name} />
                 </MenuItem>
               );
