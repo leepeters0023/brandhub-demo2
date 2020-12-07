@@ -9,6 +9,7 @@ import { updateSelection } from "../../redux/slices/currentOrderSlice";
 import { fetchNextFilteredItems } from "../../redux/slices/itemSlice";
 
 import BottomScrollListener from "react-bottom-scroll-listener";
+import ImageWrapper from "../Utility/ImageWrapper";
 import Loading from "../Utility/Loading";
 
 import Checkbox from "@material-ui/core/Checkbox";
@@ -136,12 +137,12 @@ const OrderItemGridView = (props) => {
                             event.stopPropagation();
                           }}
                         />
-                        <img
+                        <ImageWrapper
                           id={item.itemNumber}
-                          className={classes.previewImg}
-                          src={item.imgUrl}
+                          imgClass={classes.previewImg}
                           alt={item.itemType}
-                          onClick={() => {
+                          imgUrl={item.imgUrlThumb}
+                          handleClick={() => {
                             handlePreview(item.itemNumber);
                             setCurrentItemAdded(null);
                           }}

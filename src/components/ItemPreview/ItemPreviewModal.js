@@ -11,6 +11,7 @@ import {
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
+import ImageWrapper from "../Utility/ImageWrapper";
 
 // import ItemOneSheet from "./ItemOneSheet";
 // import ItemFeedback from "./ItemFeedback";
@@ -45,12 +46,11 @@ const useStyles = makeStyles((theme) => ({
   largeImageWrapper: {
     display: "flex",
     alignItems: "center",
-    width: "100%",
-    height: "fit-content",
+    margin: "25px 0"
   },
   largeImage: {
-    width: "100%",
-    height: "auto",
+    maxHeight: "500px",
+    objectFit: "contain"
   },
   itemTitle: {
     display: "flex",
@@ -78,7 +78,7 @@ const ItemPreviewModal = (props) => {
       itemType,
       itemDescription,
       estCost,
-      imgUrl,
+      imgUrlLg,
       packSize,
       stock,
       coupon = false,
@@ -115,7 +115,7 @@ const ItemPreviewModal = (props) => {
     };
 
     setCurrentItem(newItem);
-    
+
     if (!currentOrderId) {
       dispatch(createNewOrder(type, id));
     } else {
@@ -145,10 +145,11 @@ const ItemPreviewModal = (props) => {
             </IconButton>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
               <div className={classes.largeImageWrapper}>
-                <img
-                  className={classes.largeImage}
-                  src={imgUrl}
+                <ImageWrapper
+                  imgUrl={imgUrlLg}
                   alt={`${brand} ${itemType}`}
+                  imgClass={classes.largeImage}
+                  id={itemNumber}
                 />
               </div>
             </Grid>
@@ -207,7 +208,8 @@ const ItemPreviewModal = (props) => {
                   </Typography>
                   <Typography className={classes.headerText}>
                     {`Coupon Type: ${couponType}`}
-                  </Typography><Typography className={classes.headerText}>
+                  </Typography>
+                  <Typography className={classes.headerText}>
                     {`Offer Type: ${offerType}`}
                   </Typography>
                   <br />
@@ -224,16 +226,26 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${bottleDiscount ? formatMoney(bottleDiscount, false) : "---"}`}
+                    {`Bottle Discount: ${
+                      bottleDiscount
+                        ? formatMoney(bottleDiscount, false)
+                        : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${discountAmount ? formatMoney(discountAmount, false) : "---"}`}
+                    {`Discount Amount: ${
+                      discountAmount
+                        ? formatMoney(discountAmount, false)
+                        : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${expirationDate ? expirationDate : "---"}`}
+                    {`Expiration Date: ${
+                      expirationDate ? expirationDate : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}

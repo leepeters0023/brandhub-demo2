@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import EditOrderDetailModal from "./EditOrderDetailModal";
 import DistributorSelection from "./DistributorSelection";
 import MemoInputCell from "../Utility/MemoInputCell";
@@ -79,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tableRoot: {
     borderCollapse: "inherit",
-  }
+  },
 }));
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
@@ -206,7 +208,12 @@ const OrderSetTable = (props) => {
         />
       )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
-        <Table stickyHeader={true} size="small" aria-label="pre-order-table" classes={{root: classes.tableRoot}}>
+        <Table
+          stickyHeader={true}
+          size="small"
+          aria-label="pre-order-table"
+          classes={{ root: classes.tableRoot }}
+        >
           {currentItems.length === 0 ? (
             <TableHead>
               <TableRow>
@@ -243,11 +250,13 @@ const OrderSetTable = (props) => {
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    {orderType !== "preOrder" && orderType !== "pre-order" && orderStatus !== "submitted" && (
-                      <div className={classes.headerCell}>
-                        <DistributorSelection />
-                      </div>
-                    )}
+                    {orderType !== "preOrder" &&
+                      orderType !== "pre-order" &&
+                      orderStatus !== "submitted" && (
+                        <div className={classes.headerCell}>
+                          <DistributorSelection />
+                        </div>
+                      )}
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell
@@ -266,20 +275,20 @@ const OrderSetTable = (props) => {
                             <CancelIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <img
+                        <ImageWrapper
                           id={item.id}
-                          className={classes.previewImageFloat}
-                          src={item.imgUrl}
+                          imgClass={classes.previewImageFloat}
                           alt={item.itemType}
-                          onClick={() =>
+                          imgUrl={item.imgUrlThumb}
+                          handleClick={() => {
                             handleModalOpen(
-                              item.imgUrl,
+                              item.imgUrlLg,
                               item.brand,
                               item.itemType,
                               item.itemNumber,
                               item.itemDescription
-                            )
-                          }
+                            );
+                          }}
                         />
                         <Typography className={classes.headerText} variant="h5">
                           {item.brand}
@@ -344,7 +353,7 @@ const OrderSetTable = (props) => {
                           size="small"
                           className={classes.table}
                           aria-label="item-info"
-                          classes={{root: classes.tableRoot}}
+                          classes={{ root: classes.tableRoot }}
                         >
                           <TableBody
                             style={{ position: "relative", zIndex: "10" }}

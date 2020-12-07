@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,15 +20,22 @@ const useStyles = makeStyles((theme) => ({
 const ProgramDetails = (props) => {
   const classes = useStyles();
   const {
-    program: { name, imgUrl, desc, goals, focusMonth, strategies, brand },  
+    program: { name, imgUrl, desc, goals, focusMonth, strategies, brand },
   } = props;
   return (
     <>
       <br />
       <Grid container spacing={5} justify="center" alignItems="center">
         <Grid item md={3} style={{ textAlign: "center" }}>
-          <img src={imgUrl} className={classes.programImage} alt={name} />
-          <Typography className={classes.bodyText}>{`Focus Month: ${focusMonth}`}</Typography>
+          <ImageWrapper
+            id={name}
+            imgClass={classes.programImage}
+            alt={name}
+            imgUrl={imgUrl}
+          />
+          <Typography
+            className={classes.bodyText}
+          >{`Focus Month: ${focusMonth}`}</Typography>
         </Grid>
         <Grid item md={9}>
           <Typography className={classes.headerText}>
@@ -42,7 +51,9 @@ const ProgramDetails = (props) => {
           <Typography className={classes.headerText}>Goals</Typography>
           <Typography className={classes.bodyText}>{goals}</Typography>
           <br />
-          <Typography className={classes.headerText}>Marketing Strategy</Typography>
+          <Typography className={classes.headerText}>
+            Marketing Strategy
+          </Typography>
           <Typography className={classes.bodyText}>{strategies}</Typography>
         </Grid>
       </Grid>
@@ -51,7 +62,7 @@ const ProgramDetails = (props) => {
 };
 
 ProgramDetails.propTypes = {
-  program: PropTypes.object.isRequired
-}
+  program: PropTypes.object.isRequired,
+};
 
 export default ProgramDetails;
