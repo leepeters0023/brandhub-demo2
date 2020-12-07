@@ -176,7 +176,8 @@ const OrderSetTable = (props) => {
   useEffect(() => {
     if (
       (orders && !refTable) ||
-      `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0] ||
+      (orders.length > 0 &&
+        `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
       Object.keys(refTable).length !== orders.length * currentItems.length ||
       rebuildRef
     ) {
@@ -208,7 +209,7 @@ const OrderSetTable = (props) => {
     }
   }, [itemLength, currentItems, currentItems.length]);
 
-  if (isLoading || !itemLength) {
+  if (isLoading || !itemLength || (!refTable && orders.length > 0)) {
     return <CircularProgress color="inherit" />;
   }
 

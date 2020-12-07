@@ -41,7 +41,6 @@ export const fetchOrderSetById = async (id) => {
     .get(`/api/order-sets/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -298,7 +297,7 @@ export const addMultipleOrdersToSet = async (id, distArray) => {
   return response;
 };
 
-export const addSingleOrderToSet = async (id, dist) => {
+export const addSingleOrderToSet = async (id, dist, type) => {
   const response = { status: "", error: null, data: null };
   await axios
     .post(
@@ -307,14 +306,15 @@ export const addSingleOrderToSet = async (id, dist) => {
         data: {
           type: "order",
           attributes: {
+            type: type
+          },
+          relationships: {
             distributor: {
               data: {
                 type: "distributor",
                 id: dist,
               },
             },
-          },
-          relationships: {
             "order-set": {
               data: {
                 type: "order-set",
