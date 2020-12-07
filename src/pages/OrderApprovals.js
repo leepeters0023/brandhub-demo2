@@ -94,7 +94,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleDeny = (id) => {
-    dispatch(deleteOrdSet(id, allFilters));
+    dispatch(deleteOrdSet(id, allFilters, "approval"));
   };
 
   const handleBulkApproval = () => {

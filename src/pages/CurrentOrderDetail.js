@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -94,6 +94,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const onDemandItems = useSelector(
     (state) => state.currentOrder.onDemandOrderItems
   );
+  const currentFilters = useSelector((state) => state.filters);
 
   const handleModalOpen = useCallback(
     (img, brand, itemType, itemNumber, itemDescription) => {
@@ -152,8 +153,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   };
 
   const handleDeny = () => {
-    dispatch(deleteOrdSet(orderId));
+    dispatch(deleteOrdSet(orderId, null, "approval"));
   };
+
+  const handleDeleteOrderSet = () => {
+    dispatch(deleteOrdSet(orderId, currentFilters, "order"))
+  }
 
   useRetainFiltersOnPopstate(determineOrigin(), dispatch);
 
@@ -412,6 +417,21 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
+          {orderStatus === "in-progress" && (
+            <Button
+              className={classes.largeButton}
+              style={{marginRight: "10px"}}
+              color="secondary"
+              variant="contained"
+              onClick={() => {
+                if (currentOrderType === "in-stock") {
+                  navigate("/orders/items/inStock")
+                }
+                handleDeleteOrderSet()
+                //todo navigate appropriately
+              }}
+            />
+          )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button
               className={classes.largeButton}
