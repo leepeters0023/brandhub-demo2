@@ -10,6 +10,8 @@ import {
   clearItemSelection,
 } from "../../redux/slices/itemSlice";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -164,12 +166,12 @@ const ItemCatalogTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <img
+                      <ImageWrapper
                         id={item.itemNumber}
-                        className={classes.previewImageFloat}
-                        src={item.imgUrl}
+                        imgClass={classes.previewImageFloat}
                         alt={item.itemType}
-                        onClick={() => handlePreview(item.itemNumber)}
+                        imgUrl={item.imgUrlThumb}
+                        handleClick={() => handlePreview(item.itemNumber)}
                       />
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>

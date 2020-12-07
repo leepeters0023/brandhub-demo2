@@ -13,6 +13,8 @@ import {
 } from "../../redux/slices/rfqSlice";
 import { formatDate } from "../../utility/utilityFunctions";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -380,10 +382,11 @@ const CurrentRFQ = ({ currentRFQ }) => {
           <div className={classes.squareGridItem}>
             <Paper className={classes.squarePaper}>
               <div className={classes.squareInnerPaper}>
-                <img
-                  src={currentRFQ.imgUrlOne}
+                <ImageWrapper
+                  id={currentRFQ.id}
+                  imgClass={classes.largePreview}
                   alt={`Item number ${currentRFQ.sequenceNum}`}
-                  className={classes.largePreview}
+                  imgUrl={currentRFQ.imgUrlOne}
                 />
               </div>
             </Paper>
