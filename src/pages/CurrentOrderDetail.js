@@ -157,7 +157,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   };
 
   const handleDeleteOrderSet = () => {
-    dispatch(deleteOrdSet(orderId, currentFilters, "order"))
+    dispatch(deleteOrdSet(orderId, currentFilters, "order", currentOrderType))
   }
 
   useRetainFiltersOnPopstate(determineOrigin(), dispatch);
@@ -417,7 +417,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          {orderStatus === "in-progress" && (
+          {orderStatus === "in-progress" && currentOrderType !== "pre-order" && (
             <Button
               className={classes.largeButton}
               style={{marginRight: "10px"}}
@@ -426,11 +426,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               onClick={() => {
                 if (currentOrderType === "in-stock") {
                   navigate("/orders/items/inStock")
+                } else if (currentOrderType === "on-demand") {
+                  navigate("/orders/items/onDemand")
                 }
                 handleDeleteOrderSet()
-                //todo navigate appropriately
               }}
-            />
+            >DELETE ORDER</Button>
           )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button
