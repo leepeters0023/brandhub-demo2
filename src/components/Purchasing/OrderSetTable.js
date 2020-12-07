@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 
 import { useSelector } from "react-redux";
 
-import { formatMoney, addDefaultImg } from "../../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
+
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import EditOrderDetailModal from "./EditOrderDetailModal";
 import DistributorSelection from "./DistributorSelection";
@@ -273,13 +275,12 @@ const OrderSetTable = (props) => {
                             <CancelIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <img
+                        <ImageWrapper
                           id={item.id}
-                          className={classes.previewImageFloat}
-                          src={item.imgUrlThumb}
-                          onError={addDefaultImg}
+                          imgClass={classes.previewImageFloat}
                           alt={item.itemType}
-                          onClick={() => {
+                          imgUrl={item.imgUrlThumb}
+                          handleClick={() => {
                             handleModalOpen(
                               item.imgUrlLg,
                               item.brand,

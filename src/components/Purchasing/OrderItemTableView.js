@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { addDefaultImg, formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -9,6 +9,8 @@ import {
   updateSelection,
   clearItemSelections,
 } from "../../redux/slices/currentOrderSlice";
+
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
@@ -199,13 +201,12 @@ const OrderItemTableView = ({
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <img
+                      <ImageWrapper
                         id={row.id}
-                        className={classes.previewImageFloat}
-                        src={row.imgUrlThumb}
-                        onError={addDefaultImg}
+                        imgClass={classes.previewImageFloat}
                         alt={row.itemType}
-                        onClick={() => {
+                        imgUrl={row.imgUrlThumb}
+                        handleClick={() => {
                           handlePreview(row.itemNumber);
                           setCurrentItemAdded(null);
                         }}
@@ -222,7 +223,10 @@ const OrderItemTableView = ({
                         {row.stock ? row.stock : "---"}
                       </TableCell>
                     )}
-                    <TableCell>{`${formatMoney(row.estCost, false)}`}</TableCell>
+                    <TableCell>{`${formatMoney(
+                      row.estCost,
+                      false
+                    )}`}</TableCell>
                   </TableRow>
                 );
               })}

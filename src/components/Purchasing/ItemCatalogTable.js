@@ -173,14 +173,6 @@ const ItemCatalogTable = ({
                         imgUrl={item.imgUrlThumb}
                         handleClick={() => handlePreview(item.itemNumber)}
                       />
-                      {/* <img
-                        id={item.itemNumber}
-                        className={classes.previewImageFloat}
-                        src={item.imgUrlThumb}
-                        alt={item.itemType}
-                        onError={addDefaultImg}
-                        onClick={() => handlePreview(item.itemNumber)}
-                      /> */}
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
                     <TableCell align="left">{item.program}</TableCell>

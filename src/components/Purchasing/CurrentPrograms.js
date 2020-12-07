@@ -2,7 +2,9 @@ import React from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import { formatMoney, addDefaultImg } from "../../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
+
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
@@ -87,15 +89,12 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
             >
               <Paper className={classes.singleItem}>
                 <Link to={`/program/${prog.id}#details`}>
-                  <Tooltip title="Program Details" placement="top">
-                    <img
-                      id={prog.id}
-                      className={classes.programImg}
-                      src={prog.imgUrl}
-                      onError={addDefaultImg}
-                      alt={prog.name}
-                    />
-                  </Tooltip>
+                  <ImageWrapper
+                    id={prog.id}
+                    imgClass={classes.programImg}
+                    alt={prog.name}
+                    imgUrl={prog.imgUrl}
+                  />
                 </Link>
                 <Typography className={classes.headerText}>
                   {`${prog.name} - ${prog.focusMonth}`}
@@ -106,7 +105,8 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {`Budget: ${formatMoney(
-                      Math.floor(Math.random() * 1000000 + 1000000), false
+                      Math.floor(Math.random() * 1000000 + 1000000),
+                      false
                     )}`}
                   </Typography>
                 </div>
