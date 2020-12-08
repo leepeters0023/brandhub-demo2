@@ -50,6 +50,25 @@ export const mapItems = (items) => {
   return mappedItems;
 };
 
+export const mapPublicItems = (items) => {
+  let mappedItems = items.map((item) => ({
+    id: item.id,
+    sequenceNum: item["item-number"],
+    brand: item["brand-names"].join(", "),
+    program: item["program-names"].join(", "),
+    itemType: item["item-type-description"],
+    itemDescription: item.description ? item.description : "---",
+    inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
+    imgUrlThumb: item["img-url-thumb"]
+      ? item["img-url-thumb"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlLg: item["img-url-large"]
+      ? item["img-url-large"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+  }))
+  return mappedItems;
+}
+
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
     user: item["user-name"],

@@ -5,8 +5,6 @@ import { buildFilters } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
-//TODO incorporate item type (instock vs ondemand)
-
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
@@ -60,6 +58,23 @@ export const fetchItemTypes = async () => {
   const response = { status: "", error: null, data: null };
   await axios
     .get("/api/item-types")
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const fetchPublicItems = async (ids) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/public/items?filter[ids]=${ids}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";

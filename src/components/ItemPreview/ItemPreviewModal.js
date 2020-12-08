@@ -75,6 +75,7 @@ const ItemPreviewModal = (props) => {
       id,
       itemNumber,
       brand,
+      program,
       itemType,
       itemDescription,
       estCost,
@@ -163,7 +164,7 @@ const ItemPreviewModal = (props) => {
                     {`Brand(s):  ${brand}`}
                   </Typography>
                   <Typography className={classes.headerText}>
-                    {`Program:  ${brand} Winter 2021`}
+                    {`Program:  ${program}`}
                   </Typography>
                   <Typography className={classes.headerText}>
                     {`Item Type:  ${itemType}`}
