@@ -104,7 +104,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
   const [drawerContent, setDrawerContent] = useState(null);
   const initials = useSelector((state) => state.user.initials);
   const role = useSelector((state) => state.user.role);
-  const territories = useSelector((state) => state.user.territories);
+  // const territories = useSelector((state) => state.user.territories);
 
   const inStockOrderId = useSelector(
     (state) => state.currentOrder.inStockOrderNumber
@@ -241,7 +241,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             )}
           </div>
           <div className={classes.navBreak} style={{ float: "right", marginTop: "-67px" }}>
-            {territories.length > 1 && <RegionSelector />}
+            <RegionSelector />
             <UserNav
               initials={initials}
               handleLogout={handleLogout}
