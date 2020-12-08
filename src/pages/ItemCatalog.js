@@ -15,6 +15,7 @@ import { addToFavoriteItems } from "../redux/slices/userSlice";
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
+import ItemShareModal from "../components/Utility/ItemShareModal";
 
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
@@ -49,6 +50,8 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
+  const [currentLink, setCurrentLink] = useCallback(useState(null));
+  const [isLinkModalOpen, setLinkModalOpen] = useCallback(useState(false));
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
@@ -88,6 +91,15 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     dispatch(clearItemSelection());
   };
 
+  const handleShareLink = () => {
+    const baseUrl = window.location.origin;
+    //Code will eventualy come from api and have meaning
+    let code = Math.floor(Math.random()*1000000000);
+    let urlString = `${baseUrl}/public/items/${selectedItems.join("-")}#${code}`
+    setCurrentLink(urlString);
+    setLinkModalOpen(true);
+  }
+
   useEffect(() => {
     if (catalogType && currentType !== catalogType) {
       setCurrentType(catalogType);
@@ -113,6 +125,11 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <ItemShareModal
+        modalOpen={isLinkModalOpen}
+        handleClose={setLinkModalOpen}
+        shareLink={currentLink}
+      />
       <ItemPreviewModal
         type={"catalog"}
         currentItem={currentItem}
@@ -142,6 +159,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
               variant="contained"
               color="secondary"
               disabled={selectedItems.length === 0}
+              onClick={handleShareLink}
             >
               CREATE SHARE LINK
             </Button>

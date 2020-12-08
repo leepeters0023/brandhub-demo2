@@ -27,7 +27,10 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
-import { fetchAllSuppliers, clearSuppliers } from "./redux/slices/supplierSlice";
+import {
+  fetchAllSuppliers,
+  clearSuppliers,
+} from "./redux/slices/supplierSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
@@ -59,6 +62,7 @@ import Profile from "./pages/Profile";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import ProgramNew from "./pages/ProgramNew";
+import PublicItems from "./pages/PublicItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
@@ -170,6 +174,19 @@ const App = () => {
 
   if (userError) {
     handleLogout();
+  }
+
+  if (window.location.pathname.includes("/public/items")) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <PublicItems
+            handleFiltersClosed={handleFiltersClosed}
+            path="/public/items/:itemIds"
+          />
+        </Router>
+      </MuiThemeProvider>
+    );
   }
 
   if (!loggedIn && !currentUser) {

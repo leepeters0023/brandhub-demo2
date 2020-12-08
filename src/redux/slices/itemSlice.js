@@ -11,7 +11,6 @@ notes: Items still in flux, will update when format is nailed down
 let initialState = {
   isLoading: false,
   isNextLoading: false,
-  
   orderType: null,
   itemsPerPage: 20,
   totalPages: null,
