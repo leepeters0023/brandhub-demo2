@@ -59,7 +59,6 @@ const DistributorSelection = () => {
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
-    console.log(value, orderType);
     setCurrentDistributors(value);
     dispatch(createSingleOrder(orderSetId, value[0].id, orderType))
   };
@@ -112,7 +111,6 @@ const DistributorSelection = () => {
         onInputChange={(_evt, value) => setDistributor(value)}
         onChange={(evt, value) => {
           handleDistributors(value);
-          console.log(evt.target.value);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
         getOptionLabel={(option) => option.name}

@@ -65,9 +65,9 @@ export const mapPublicItems = (items) => {
     imgUrlLg: item["img-url-large"]
       ? item["img-url-large"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-  }))
+  }));
   return mappedItems;
-}
+};
 
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
@@ -283,7 +283,9 @@ export const mapRollupItems = (items) => {
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
-      : "---",
+      : item.programs
+          .map((prog) => prog.brands.map((brand) => brand.name))
+          .join(", "),
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
@@ -301,7 +303,6 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  console.log(items);
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
