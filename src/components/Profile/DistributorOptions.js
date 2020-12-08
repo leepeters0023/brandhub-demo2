@@ -61,7 +61,7 @@ const DistributorOptions = () => {
       <Divider />
       <br />
       <Typography className={classes.titleText}>
-        FavoriteDistributors
+        Favorite Distributors
       </Typography>
       <br />
       <FavoriteDistributors />
