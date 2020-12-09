@@ -108,9 +108,10 @@ export const mapPrograms = (programs) => {
     startDate: prog["start-date"],
     endDate: prog["end-date"],
     focusMonth: monthMap[prog["start-date"].split("-")[1]],
-    imgUrl: prog.brands.length === 1
-      ? brandLogoMap[prog.brands[0].name]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrl:
+      prog.brands.length === 1
+        ? brandLogoMap[prog.brands[0].name]
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607526835/Select/multi-brand_e7vgai.png",
     items: [],
     status: false,
   }));
