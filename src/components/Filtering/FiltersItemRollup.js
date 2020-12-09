@@ -8,6 +8,7 @@ import { setClear } from "../../redux/slices/filterSlice";
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
+import BUAutoComplete from "../Utility/BUAutoComplete";
 
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
@@ -156,6 +157,16 @@ const FiltersItemRollup = ({
         </ListItem>
         <ListItem>
           <ItemTypeAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"itemRollup"}
+          />
+        </ListItem>
+        <ListItem />
+        <ListItem>
+          <BUAutoComplete
             classes={classes}
             handleChange={handleFilters}
             reset={reset}

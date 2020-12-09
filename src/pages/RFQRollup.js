@@ -31,6 +31,7 @@ const defaultFilters = {
   program: [],
   itemType: [],
   user: [],
+  bus: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",
