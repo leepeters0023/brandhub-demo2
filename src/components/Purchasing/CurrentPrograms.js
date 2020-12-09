@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "15px",
     borderRadius: "50%",
     objectFit: "cover",
-    filter: "sepia(100%)",
-    transition: "all .5s ease",
+    filter: "sepia(50%)",
+    transition: "all .25s ease",
     "&:hover": {
       cursor: "pointer",
       filter: "sepia(0%)",

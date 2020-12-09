@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   programImage: {
     width: "90%",
-    height: "auto",
+    height: "90%",
     objectFit: "cover",
     borderRadius: "50%",
   },
@@ -27,12 +27,33 @@ const ProgramDetails = (props) => {
       <br />
       <Grid container spacing={5} justify="center" alignItems="center">
         <Grid item md={3} style={{ textAlign: "center" }}>
-          <ImageWrapper
-            id={name}
-            imgClass={classes.programImage}
-            alt={name}
-            imgUrl={imgUrl}
-          />
+          <div
+            style={{
+              width: "100%",
+              paddingBottom: "100%",
+              position: "relative",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                width: "Calc(100% - 50px)",
+                height: "Calc(100% - 50px)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                padding: "25px",
+              }}
+            >
+              <ImageWrapper
+                id={name}
+                imgClass={classes.programImage}
+                alt={name}
+                imgUrl={imgUrl}
+              />
+            </div>
+          </div>
           <Typography
             className={classes.bodyText}
           >{`Focus Month: ${focusMonth}`}</Typography>
