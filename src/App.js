@@ -31,6 +31,7 @@ import {
   fetchAllSuppliers,
   clearSuppliers,
 } from "./redux/slices/supplierSlice";
+import { fetchBUs } from "./redux/slices/businessUnitSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
@@ -154,6 +155,7 @@ const App = () => {
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
+        dispatch(fetchBUs());
       } else {
         dispatch(clearPrograms());
       }

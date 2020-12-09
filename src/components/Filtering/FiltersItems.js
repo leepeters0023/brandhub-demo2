@@ -29,7 +29,7 @@ const FiltersItems = ({
 }) => {
   const dispatch = useDispatch();
 
-  const favoriteItems = useSelector(state => state.user.favoriteItems)
+  const favoriteItems = useSelector((state) => state.user.favoriteItems);
 
   return (
     <>
@@ -81,7 +81,9 @@ const FiltersItems = ({
             variant="contained"
             color="secondary"
             disabled={favoriteItems.length === 0}
-            onClick={()=>handleFilters([...favoriteItems], "favItems", "item-all")}
+            onClick={() =>
+              handleFilters([...favoriteItems], "favItems", "item-all")
+            }
           >
             FILTER FAVORITES
           </Button>
