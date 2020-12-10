@@ -105,6 +105,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
             </div>
           )}
         </div>
+        <br />
         <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
           <Typography
             variant="body2"
