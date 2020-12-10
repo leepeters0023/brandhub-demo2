@@ -24,7 +24,7 @@ let initialState = {
   poNum: null,
   program: [],
   rfqNum: null,
-  ruleType: [],
+  ruleType: null,
   sequenceNum: null,
   itemDesc: null,
   status: null,
@@ -127,7 +127,7 @@ const filterSlice = createSlice({
       state.itemDesc = null;
       state.supplier = [];
       state.rfqNum = null;
-      state.ruleType = [];
+      state.ruleType = null;
       state.status = null;
       state.tag = [];
       state.territory = [];
