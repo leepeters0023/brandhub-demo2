@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-import { units } from "../../utility/constants";
-
 const BUAutoComplete = ({
   classes,
   handleChange,
@@ -20,6 +18,7 @@ const BUAutoComplete = ({
   const [currentBUs, setCurrentBUs] = useState([]);
 
   const currentFiltersBU = useSelector((state) => state.filters.bu);
+  const units = useSelector((state) => state.businessUnits.bus);
 
   const handleBUs = (value) => {
     setCurrentBUs(value);
