@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
+const ConfirmDeleteOrder = ({ open, handleClose, handleRemove, orderId }) => {
   const classes = useStyles();
 
   return (
@@ -43,23 +43,17 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
           <br />
           <div className={classes.confirmDeleteModal}>
             <Typography className={classes.headerText}>
-              {type === "pendingCompliance"
-                ? `Are you sure you want to cancel the selected order${
-                    itemNumber.length > 1 ? "s" : ""
-                  }?`
-                : "Are you sure you want to remove this item?"}
+              Are you sure you want to delete this order?
             </Typography>
             <Button
               variant="contained"
               className={classes.largeButton}
               color="secondary"
               onClick={() => {
-                handleRemove(itemNumber);
+                handleRemove(orderId);
               }}
             >
-              {type === "pendingCompliance"
-                ? `CANCEL ORDER${itemNumber.length > 1 ? "S" : ""}`
-                : "REMOVE ITEM"}
+              DELETE ORDER
             </Button>
           </div>
         </DialogContent>
@@ -68,12 +62,11 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
   );
 };
 
-AreYouSure.propTypes = {
+ConfirmDeleteOrder.propTypes = {
   open: PropTypes.bool.isRequired,
   handleRemove: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  itemNumber: PropTypes.any,
-  type: PropTypes.string,
+  orderId: PropTypes.string,
 };
 
-export default AreYouSure;
+export default ConfirmDeleteOrder;

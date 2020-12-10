@@ -11,6 +11,7 @@ import {
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
+import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 
@@ -372,6 +373,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
 export const fetchProgramOrders = (program, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(resetPreOrderItems());
     const currentOrders = await fetchOrdersByProgram(program, userId);
     if (currentOrders.error) {
       throw currentOrders.error;
@@ -412,6 +414,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         note: note,
       })
     );
+    dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
