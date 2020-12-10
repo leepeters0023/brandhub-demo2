@@ -24,8 +24,8 @@ const StatusSelector = ({
   ];
   const complianceStatusList = [
     { status: "approved", label: "Approved" },
-    { status: "denied", label: "Denied" },
-    { status: "pending", label: "Pending" },
+    { status: "in-violation", label: "Denied" },
+    { status: "prior-approval-pending", label: "Pending" },
     { status: "all", label: "All Status" },
   ];
   const rfqStatusList = [

@@ -37,7 +37,13 @@ export const couponTypeList = [
   },
 ];
 
-export const ruleTypes = ["Prior Approval", "Item Type", "Material", "Pricing"];
+export const ruleTypes = [
+  { id: null, name: "All" },
+  { id: "prior-approval", name: "Prior Approval" },
+  { id: "item-type", name: "Item Type" },
+  { id: "material", name: "Material" },
+  { id: "price", name: "Pricing" },
+];
 
 export const units = [
   { id: "1", name: "Compass" },

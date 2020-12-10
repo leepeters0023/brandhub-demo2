@@ -1,6 +1,7 @@
 import { earliestDate } from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
+import { format } from "date-fns";
 
 /*
 Functions used to ensure data coming from api always matches
@@ -25,6 +26,13 @@ const monthMap = {
   10: "October",
   11: "November",
   12: "December",
+};
+
+const typeMap = {
+  "prior-approval": "Prior Approval",
+  price: "Price",
+  "item-type": "Item Type",
+  material: "Material",
 };
 
 export const mapItems = (items) => {
@@ -216,7 +224,9 @@ export const mapOrderItems = (items, type) => {
       totalEstCost:
         type === "order-set-item" ? 0 : item["total-estimated-cost"],
       actTotal: "---",
-      complianceStatus: item.item["compliance-status"],
+      complianceStatus: item.item["compliance-status"]
+        ? item.item["compliance-status"]
+        : "compliant",
       tracking: item.tracking ? item.tracking : "---",
     }))
     .sort((a, b) => {
@@ -371,6 +381,12 @@ export const mapPOShippingParams = (params) => {
     distributor: param.distributor ? param.distributor.name : "---",
     attn: param.attn ? param.attn : "---",
     address: formatAddress(param),
+    addressOne: param["street-address-1"],
+    addressTwo: param["street-address-2"] ? param["street-address-2"] : "---",
+    city: param.city,
+    state: param.state,
+    zip: param.zip,
+    country: param.country,
     carrier: param.carrier ? param.carrier : "---",
     method: param.method ? param.method : "---",
     actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
@@ -485,4 +501,50 @@ export const mapRFQ = (rfq) => {
 export const mapRFQHistory = (rfqs) => {
   let mappedRFQHistory = rfqs.map((rfq) => mapRFQ(rfq));
   return mappedRFQHistory;
+};
+
+export const mapRules = (rules) => {
+  let mappedRules = rules.map((rule) => ({
+    id: rule.id,
+    ruleType: typeMap[rule.type],
+    desc: rule.description,
+    itemTypeCode: rule["item-type-category-code"]
+      ? rule["item-type-category-code"]
+      : "---",
+    itemTypes:
+      rule["item-type-descriptions"].length > 0
+        ? rule["item-type-descriptions"].join(", ")
+        : "---",
+    price: rule.price ? rule.price : "---",
+    productFamilies:
+      rule["product-family-names"].length > 0
+        ? rule["product-family-names"].join(", ")
+        : "---",
+    states: rule["state-codes"].join(", "),
+  }));
+  return mappedRules;
+};
+
+export const mapCompItems = (items) => {
+  const statusMap = {
+    "prior-approval-pending": "Pending",
+    "in-violation": "Denied",
+    approved: "Approved",
+  };
+  let mappedItems = items.map((item) => ({
+    id: item.id,
+    sequenceNum: item["item-number"],
+    program: item["most-recent-program-name"],
+    itemType: item["item-type-description"],
+    ruleType: typeMap[item.rule.type],
+    ruleDesc: item.rule.description,
+    status: statusMap[item.status],
+    //These two are placeholder for now
+    active: true,
+    emailSent:
+      item.rule.type === "prior-approval"
+        ? format(new Date(), "MM/dd/yyyy")
+        : "---",
+  }));
+  return mappedItems;
 };

@@ -94,6 +94,11 @@ export const buildFilters = (
     filterObject.supplier && filterObject.supplier.length > 0
       ? `filter[supplier-ids]=${separateByComma(filterObject.supplier, "id")}`
       : "";
+  let ruleTypeString = filterObject.ruleType
+    ? filterObject.ruleType === "all"
+      ? ""
+      : `filter[type]=${filterObject.ruleType}`
+    : "";
 
   let queryArray = [
     uniqueFilter,
@@ -113,6 +118,7 @@ export const buildFilters = (
     userString,
     supplierString,
     sortString,
+    ruleTypeString,
   ];
 
   let queryStringAppend = queryArray

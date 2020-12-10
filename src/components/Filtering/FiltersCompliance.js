@@ -6,9 +6,9 @@ import { useDispatch } from "react-redux";
 import { setClear } from "../../redux/slices/filterSlice";
 
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
-import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
+//import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
-import RuleTypeAutoComplete from "../Utility/RuleTypeAutoComplete";
+import RuleTypeSelector from "../Utility/RuleTypeSelector";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
 
 import TextField from "@material-ui/core/TextField";
@@ -29,6 +29,7 @@ const FiltersCompliance = ({
 }) => {
   const dispatch = useDispatch();
   const [status, setStatus] = useCallback(useState("all"));
+  const [type, setType] = useCallback(useState("all"));
 
   return (
     <>
@@ -72,7 +73,7 @@ const FiltersCompliance = ({
                 filterType={"compliance"}
               />
             </ListItem>
-            <ListItem>
+            {/* <ListItem>
               <ProgramAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
@@ -80,7 +81,7 @@ const FiltersCompliance = ({
                 setReset={setReset}
                 filterType={"compliance"}
               />
-            </ListItem>
+            </ListItem> */}
             <ListItem>
               <BrandAutoComplete
                 classes={classes}
@@ -102,24 +103,11 @@ const FiltersCompliance = ({
           </>
         )}
         <ListItem>
-          <TextField
-            className={classes.queryField}
-            color="secondary"
-            fullWidth
-            name="tag"
-            type="text"
-            label="Tag"
-            variant="outlined"
-            size="small"
-            //TODO this will be autocomplete!
-          />
-        </ListItem>
-        <ListItem>
-          <RuleTypeAutoComplete
+          <RuleTypeSelector
             classes={classes}
-            handleChange={handleFilters}
-            reset={reset}
-            setReset={setReset}
+            handleRuleType={handleFilters}
+            setType={setType}
+            ruleType={type}
             filterType={"compliance"}
           />
         </ListItem>
