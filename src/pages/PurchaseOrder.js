@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import { CSVLink } from "react-csv";
+import { CSVReader } from "react-papaparse";
 import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +23,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
@@ -35,8 +37,10 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const csvRef = useRef(null);
 
   const [isNew, setIsNew] = useState(false);
+  const [isUploadLoading, setUploadLoading] = useState(false);
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
@@ -54,6 +58,23 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const handlePurchaserSubmit = () => {
     dispatch(submitPurchaseOrder(currentPO.id));
     navigate("/purchasing/poHistory/current");
+  };
+
+  const handleOpenDialog = (evt) => {
+    if (csvRef.current) {
+      csvRef.current.open(evt);
+    }
+  };
+
+  const handleFileUpload = (data) => {
+    //todo
+    setUploadLoading(false);
+    console.log(data);
+  };
+
+  const handleFileUploadError = (err, file, inputElem, reason) => {
+    //todo, modal?
+    console.log(err, file, inputElem, reason);
   };
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
@@ -81,6 +102,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   useEffect(() => {
     if (currentPO.id && currentCSV.data.length === 0) {
       let csvHeaders = [
+        { label: "Param Item Id", key: "paramItemId" },
         { label: "PO Number", key: "poNum" },
         { label: "Key Account (y/n)", key: "isKeyAccount" },
         { label: "Key Account Name", key: "keyAccountName" },
@@ -105,6 +127,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Package Type", key: "packageType" },
         { label: "Tracking Number", key: "trackingNum" },
         { label: "Weight", key: "weight" },
+        { label: "Tax", key: "tax" },
         { label: "Expected Arrival Date", key: "expectedArrival" },
       ];
       let csvData = [];
@@ -115,6 +138,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           );
           if (currentParamItem) {
             let dataObject = {
+              paramItemId: currentParamItem.id,
               poNum: currentPO.id,
               isKeyAccount: "* TODO *",
               keyAccountName: "* TODO *",
@@ -142,6 +166,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               packageType: "",
               trackingNum: "",
               weight: "",
+              tax: "",
               expectedArrival: "",
             };
             csvData.push(dataObject);
@@ -161,6 +186,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
+  console.log(isUploadLoading);
 
   return (
     <>
@@ -198,7 +224,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </Typography>
           </div>
           <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv}>
+            <div className={classes.innerConfigDiv} style={{alignItems: "flex-start"}}>
               {currentRole !== "supplier" && (
                 <Button
                   className={classes.largeButton}
@@ -235,14 +261,53 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   >
                     ORDER INFO
                   </Button>
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<PublishIcon />}
+                  <CSVReader
+                    ref={csvRef}
+                    onFileLoad={handleFileUpload}
+                    onError={handleFileUploadError}
+                    noClick
+                    noDrag
+                    config={{
+                      header: true,
+                      beforeFirstChunk: (_chunk) => {
+                        setUploadLoading(true);
+                      },
+                    }}
+                    noProgressBar
                   >
-                    SHIPPING
-                  </Button>
+                    {({ file }) => (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          width: "fit-content",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          className={classes.largeButton}
+                          style={{
+                            width: isUploadLoading ? "132.93px" : "auto",
+                          }}
+                          variant="contained"
+                          color="secondary"
+                          startIcon={<PublishIcon />}
+                          onClick={handleOpenDialog}
+                        >
+                          {isUploadLoading ? (
+                            <CircularProgress size={27.78} />
+                          ) : (
+                            "SHIPPING"
+                          )}
+                        </Button>
+                        {file && (
+                          <Typography variant="body2" color="textSecondary">
+                            {file.name}
+                          </Typography>
+                        )}
+                      </div>
+                    )}
+                  </CSVReader>
                 </>
               )}
             </div>
