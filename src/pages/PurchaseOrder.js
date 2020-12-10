@@ -113,37 +113,39 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           let currentParamItem = param.items.find(
             (i) => i.sequenceNum === item.sequenceNum
           );
-          let dataObject = {
-            poNum: currentPO.id,
-            isKeyAccount: "* TODO *",
-            keyAccountName: "* TODO *",
-            expectedShip: format(
-              new Date(currentPO.expectedShip),
-              "MM/dd/yyyy"
-            ),
-            abn: "* TODO *",
-            distributor: param.distributor,
-            addressOne: param.addressOne,
-            addressTwo: param.addressTwo,
-            city: param.city,
-            state: param.state,
-            zip: param.zip,
-            sequenceNum: currentParamItem.sequenceNum,
-            label: "* TODO *",
-            totalItems: currentParamItem.totalItems,
-            shipStatus: currentParamItem.shipStatus,
-            shipFromZip: "",
-            carrier: "",
-            serviceLevel: "",
-            actShipDate: "",
-            shippedQuantity: "",
-            packageCount: "",
-            packageType: "",
-            trackingNum: "",
-            weight: "",
-            expectedArrival: "",
-          };
-          csvData.push(dataObject);
+          if (currentParamItem) {
+            let dataObject = {
+              poNum: currentPO.id,
+              isKeyAccount: "* TODO *",
+              keyAccountName: "* TODO *",
+              expectedShip: format(
+                new Date(currentPO.expectedShip),
+                "MM/dd/yyyy"
+              ),
+              abn: "* TODO *",
+              distributor: param.distributor,
+              addressOne: param.addressOne,
+              addressTwo: param.addressTwo,
+              city: param.city,
+              state: param.state,
+              zip: param.zip,
+              sequenceNum: currentParamItem.sequenceNum,
+              label: "* TODO *",
+              totalItems: currentParamItem.totalItems,
+              shipStatus: currentParamItem.shipStatus,
+              shipFromZip: "",
+              carrier: "",
+              serviceLevel: "",
+              actShipDate: "",
+              shippedQuantity: "",
+              packageCount: "",
+              packageType: "",
+              trackingNum: "",
+              weight: "",
+              expectedArrival: "",
+            };
+            csvData.push(dataObject);
+          }
         });
       });
       setCurrentCSV({ data: csvData, headers: csvHeaders });
@@ -209,7 +211,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               )}
               {currentRole === "supplier" && (
                 <>
-                  <CSVLink data={currentCSV.data} headers={currentCSV.headers} style={{textDecoration: "none"}}>
+                  <CSVLink
+                    data={currentCSV.data}
+                    headers={currentCSV.headers}
+                    style={{ textDecoration: "none" }}
+                  >
                     <Button
                       className={classes.largeButton}
                       style={{ marginRight: "10px" }}
