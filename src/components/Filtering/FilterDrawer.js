@@ -28,6 +28,8 @@ import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
 import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
 import { fetchFilteredPOHistory } from "../../redux/slices/purchaseOrderHistorySlice";
+import { fetchFilteredRules } from "../../redux/slices/complianceRulesSlice";
+import { fetchFilteredTriggeredRules } from "../../redux/slices/complianceItemsSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -180,6 +182,17 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       ) {
         dispatch(fetchFilteredItems(currentFilters));
       }
+      if (
+        filterType === "compliance-rules"
+      ) {
+        dispatch(fetchFilteredRules(currentFilters));
+      }
+      if (
+        filterType === "compliance-items" &&
+        filter !== "sequenceNum"
+      ) {
+        dispatch(fetchFilteredTriggeredRules(currentFilters));
+      }
     },
     [dispatch, allFilters, filterType]
   );
@@ -247,6 +260,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "history-po") {
         dispatch(fetchFilteredPOHistory(defaultFilters));
       }
+      if (filterType === "compliance-rules") {
+        dispatch(fetchFilteredRules(defaultFilters));
+      }
+      if (filterType === "compliance-items") {
+        dispatch(fetchFilteredTriggeredRules(defaultFilters));
+      }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
@@ -305,6 +324,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     dispatch(setChips({ filterType: "itemRollup" }));
     dispatch(fetchFilteredPOItems(allFilters));
   };
+
+  const handleComplianceRulesFetch = () => {
+    dispatch(setChips({ filterType: "compliance"}));
+    dispatch(fetchFilteredTriggeredRules(allFilters));
+  }
 
   const historySearchMap = {
     orders: handleOrderHistoryFetch,
@@ -374,6 +398,12 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "itemRollup-po") {
         dispatch(fetchFilteredPOItems(allFilters));
+      }
+      if (filterType === "compliance-rules") {
+        dispatch(fetchFilteredRules(allFilters));
+      }
+      if (filterType === "compliance-items") {
+        dispatch(fetchFilteredTriggeredRules(allFilters));
       }
       if (sorted) {
         dispatch(setSorted());
@@ -456,10 +486,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               classes={classes}
               sequenceNum={sequenceNum}
               bindSequenceNum={bindSequenceNum}
-              handleSearch={
-                // TODO add search for po when api is there
-                () => console.log("Searching!")
-              }
+              handleSearch={handleComplianceRulesFetch}
               complianceType={filterType.split("-")[1]}
             />
           )}

@@ -1,19 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchAllRules, fetchNextRules } from "../../api/complianceApi";
+import { mapRules } from "../apiMaps";
 
 /*
 * Rule Model
 
-{
-  id: string (read),
-  ruleType: string (read),
-  ruleTags: array (read),
-  description: object (read)
-    {
-      detail: string (read),
-      contactName: string (read),
-      contactEmail: string (read),
-    }
-}
+todo
 
 */
 
@@ -86,3 +78,37 @@ export const {
 } = complianceRulesSlice.actions;
 
 export default complianceRulesSlice.reducer;
+
+export const fetchFilteredRules = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading())
+    let rules = await fetchAllRules(filterObject);
+    if (rules.error) {
+      throw rules.error;
+    }
+    const mappedRules = mapRules(rules.data.rules)
+    dispatch(getRulesSuccess({
+      rules: mappedRules,
+      nextLink: rules.data.nextLink ? rules.data.nextLink : null,
+    }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }))
+  }
+}
+
+export const fetchNextFilteredRules = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    let rules = await fetchNextRules(url);
+    if (rules.error) {
+      throw rules.error;
+    }
+    const mappedRules = mapRules(rules.data.rules)
+    dispatch(getRulesSuccess({
+      rules: mappedRules,
+      nextLink: rules.data.nextLink ? rules.data.nextLink : null,
+    }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }))
+  }
+}

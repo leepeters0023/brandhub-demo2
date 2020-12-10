@@ -27,9 +27,7 @@ const FilterChipList = () => {
   const handleChipClick = (type, value) => {
     let dispatchObject = { filter: type, value: null };
     if (
-      type === "month" ||
-      type === "ruleType" ||
-      type === "supplier"
+      type === "month"
     ) {
       let currentFilterArray = filterState[type].filter((f) => f !== value);
       dispatchObject.value = currentFilterArray;
@@ -41,7 +39,8 @@ const FilterChipList = () => {
       type === "brand" ||
       type === "user" ||
       type === "distributor" ||
-      type === "territory"
+      type === "territory" ||
+      type === "supplier"
     ) {
       let currentFilterArray = filterState[type].filter(
         (f) => f.name !== value
