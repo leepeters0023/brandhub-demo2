@@ -37,6 +37,8 @@ import {
   fetchTerritories,
   clearTerritories,
 } from "./redux/slices/territorySlice";
+import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
+import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -135,6 +137,8 @@ const App = () => {
     dispatch(resetNewProgram());
     dispatch(clearTerritories());
     dispatch(clearSuppliers());
+    dispatch(resetComplianceItems());
+    dispatch(resetComplianceRules());
   };
 
   useEffect(() => {

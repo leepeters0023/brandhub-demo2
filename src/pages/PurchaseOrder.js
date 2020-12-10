@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
+import { CSVLink } from "react-csv";
+import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -35,6 +37,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
 
   const [isNew, setIsNew] = useState(false);
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
@@ -74,6 +77,84 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (currentPO.id && currentCSV.data.length === 0) {
+      let csvHeaders = [
+        { label: "PO Number", key: "poNum" },
+        { label: "Key Account (y/n)", key: "isKeyAccount" },
+        { label: "Key Account Name", key: "keyAccountName" },
+        { label: "Requested Ship Date", key: "expectedShip" },
+        { label: "ABN", key: "abn" },
+        { label: "Distributor Name", key: "distributor" },
+        { label: "Address1", key: "addressOne" },
+        { label: "Address2", key: "addressTwo" },
+        { label: "City", key: "city" },
+        { label: "State", key: "state" },
+        { label: "Zip", key: "zip" },
+        { label: "Item Number", key: "sequenceNum" },
+        { label: "Labeling Info", key: "label" },
+        { label: "Total Quantity", key: "totalItems" },
+        { label: "Order Approval Status", key: "shipStatus" },
+        { label: "Ship From Zip", key: "shipFromZip" },
+        { label: "Carrier", key: "carrier" },
+        { label: "Service Level", key: "serviceLevel" },
+        { label: "Actual Ship Date", key: "actShipDate" },
+        { label: "Shipped Quantity", key: "shippedQuantity" },
+        { label: "Package Count", key: "packageCount" },
+        { label: "Package Type", key: "packageType" },
+        { label: "Tracking Number", key: "trackingNum" },
+        { label: "Weight", key: "weight" },
+        { label: "Expected Arrival Date", key: "expectedArrival" },
+      ];
+      let csvData = [];
+      currentPO.poItems.forEach((item) => {
+        currentPO.shippingParams.forEach((param) => {
+          let currentParamItem = param.items.find(
+            (i) => i.sequenceNum === item.sequenceNum
+          );
+          let dataObject = {
+            poNum: currentPO.id,
+            isKeyAccount: "* TODO *",
+            keyAccountName: "* TODO *",
+            expectedShip: format(
+              new Date(currentPO.expectedShip),
+              "MM/dd/yyyy"
+            ),
+            abn: "* TODO *",
+            distributor: param.distributor,
+            addressOne: param.addressOne,
+            addressTwo: param.addressTwo,
+            city: param.city,
+            state: param.state,
+            zip: param.zip,
+            sequenceNum: currentParamItem.sequenceNum,
+            label: "* TODO *",
+            totalItems: currentParamItem.totalItems,
+            shipStatus: currentParamItem.shipStatus,
+            shipFromZip: "",
+            carrier: "",
+            serviceLevel: "",
+            actShipDate: "",
+            shippedQuantity: "",
+            packageCount: "",
+            packageType: "",
+            trackingNum: "",
+            weight: "",
+            expectedArrival: "",
+          };
+          csvData.push(dataObject);
+        });
+      });
+      setCurrentCSV({ data: csvData, headers: csvHeaders });
+    }
+  }, [
+    currentCSV.data.length,
+    currentPO.expectedShip,
+    currentPO.id,
+    currentPO.poItems,
+    currentPO.shippingParams,
+  ]);
 
   if (isPOLoading || !currentPO.id) {
     return <Loading />;
@@ -128,18 +209,20 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               )}
               {currentRole === "supplier" && (
                 <>
+                  <CSVLink data={currentCSV.data} headers={currentCSV.headers} style={{textDecoration: "none"}}>
+                    <Button
+                      className={classes.largeButton}
+                      style={{ marginRight: "10px" }}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<GetAppIcon />}
+                    >
+                      SHIPPING
+                    </Button>
+                  </CSVLink>
                   <Button
                     className={classes.largeButton}
-                    style={{marginRight: "10px"}}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<GetAppIcon />}
-                  >
-                    SHIPPING
-                  </Button>
-                  <Button
-                    className={classes.largeButton}
-                    style={{marginRight: "10px"}}
+                    style={{ marginRight: "10px" }}
                     variant="contained"
                     color="secondary"
                     startIcon={<GetAppIcon />}

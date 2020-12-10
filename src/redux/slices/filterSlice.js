@@ -71,7 +71,7 @@ const filterSlice = createSlice({
       state.sequenceNum = null;
       state.itemDesc = null;
       state.rfqNum = null;
-      state.ruleType = [];
+      state.ruleType = null;
       state.status = null;
       state.supplier = [];
       state.tag = [];
@@ -185,7 +185,6 @@ const filterSlice = createSlice({
           "program",
           "itemType",
           "tag",
-          "ruleType",
           "sequenceNum",
         ];
       }
@@ -199,7 +198,7 @@ const filterSlice = createSlice({
       let stateObject = { ...state };
       for (let filter in stateObject) {
         if (chippable.includes(filter)) {
-          if (filter === "month" || filter === "ruleType") {
+          if (filter === "month") {
             stateObject[filter].forEach((f) =>
               filters.push({ type: filter, value: f })
             );

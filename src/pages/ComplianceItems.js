@@ -2,13 +2,12 @@ import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
-//import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import {
-  updateMultipleFilters,
-  //setSorted,
-} from "../redux/slices/filterSlice";
+import { fetchNextFilteredTriggeredRules } from "../redux/slices/complianceItemsSlice";
+
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ComplianceItemsTable from "../components/Compliance/ComplianceItemsTable";
@@ -18,20 +17,19 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
-//import LinearProgress from "@material-ui/core/LinearProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-import { complianceItems } from "../assets/mockdata/dataGenerator.js";
 
 const defaultFilters = {
   brand: [],
-  program: [],
+  //program: [],
   itemType: [],
   tag: [],
-  ruleType: [],
+  ruleType: "all",
   status: "all",
   sequenceNum: "",
   sortOrder: "asc",
@@ -50,10 +48,25 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  //TODO nextLink, handleBottomScroll, scrollRef, loading selectors
+  const currentItemRules = useSelector((state) => state.complianceItems.items);
+  const isLoading = useSelector((state) => state.complianceItems.isLoading);
+  const nextLink = useSelector((state) => state.complianceItems.nextLink);
+  const isNextLoading = useSelector(
+    (state) => state.complianceItems.isNextLoading
+  );
+
+  const handleBottomScroll = () => {
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredTriggeredRules(nextLink));
+      }
+    }
+  };
+
+  const scrollRef = useBottomScrollListener(handleBottomScroll);
 
   const handleSort = (sortObject) => {
-    //scrollRef.current.scrollTop = 0;
+    scrollRef.current.scrollTop = 0;
     dispatch(
       updateMultipleFilters({
         filterObject: {
@@ -62,7 +75,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
         },
       })
     );
-    //dispatch(setSorted());
+    dispatch(setSorted());
   };
 
   useInitialFilters(
@@ -78,7 +91,9 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Compliance Items</Typography>
+          <Typography className={classes.titleText}>
+            Compliance Items
+          </Typography>
           <div
             style={{
               display: "flex",
@@ -86,35 +101,37 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
-            {(currentUserRole === "compliance" || currentUserRole === "super") && (
-            <> 
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={!itemSelected}
-              style={{ marginRight: "20px" }}
-              onClick={() => {
-                //TODO create manual approval function
-                //navigate("/purchasing/purchaseOrder#new");
-              }}
-            >
-              APPROVE RULE
-            </Button>
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={!itemSelected}
-              style={{ marginRight: "20px" }}
-              onClick={() => {
-                //TODO create override function
-                //navigate("/purchasing/purchaseOrder#new");
-              }}
-            >
-              OVERRIDE RULE
-            </Button>
-            </> )}
+            {(currentUserRole === "compliance" ||
+              currentUserRole === "super") && (
+              <>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={!itemSelected}
+                  style={{ marginRight: "20px" }}
+                  onClick={() => {
+                    //TODO create manual approval function
+                    //navigate("/purchasing/purchaseOrder#new");
+                  }}
+                >
+                  APPROVE RULE
+                </Button>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={!itemSelected}
+                  style={{ marginRight: "20px" }}
+                  onClick={() => {
+                    //TODO create override function
+                    //navigate("/purchasing/purchaseOrder#new");
+                  }}
+                >
+                  OVERRIDE RULE
+                </Button>
+              </>
+            )}
             <Tooltip title="Print Items">
               <IconButton>
                 <PrintIcon color="secondary" />
@@ -145,19 +162,19 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
         </div>
         <br />
         <ComplianceItemsTable
-          items={complianceItems}
-          itemsLoading={false}
+          items={currentItemRules}
+          itemsLoading={isLoading}
           handleSort={handleSort}
-          // scrollRef={scrollRef}
+          scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
         />
-        {/* {isNextLoading && (
+        {isNextLoading && (
           <div style={{ width: "100%" }}>
             <LinearProgress />
           </div>
         )}
-        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>} */}
+        {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
       </Container>
       <br />
     </>
