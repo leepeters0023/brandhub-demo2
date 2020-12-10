@@ -22,6 +22,7 @@ import { formatMoney } from "../utility/utilityFunctions";
 import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
+import ConfirmDeleteOrder from "../components/Utility/ConfirmDeleteOrder";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import Loading from "../components/Utility/Loading";
@@ -76,6 +77,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
+  const [deleteOrderId, setDeleteOrderId] = useCallback(useState(null));
+  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(useState(false));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [modal, handleModal] = useCallback(useState(false));
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
@@ -112,6 +115,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
 
   const handleModalClose = () => {
     handleModal(false);
+    setConfirmDeleteOpen(false);
   };
 
   const handleOpenConfirm = useCallback(
@@ -132,8 +136,14 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     handleConfirmModal(false);
   };
 
+  const handleDeleteOrderModal = (id) => {
+    setDeleteOrderId(id);
+    setConfirmDeleteOpen(true);
+  }
+
   const handleRemoveOrder = (id) => {
     dispatch(deleteSetOrder(id));
+    setConfirmDeleteOpen(false);
   };
 
   const handleSubmit = () => {
@@ -239,6 +249,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         handleModalClose={handleModalClose}
         modal={modal}
         currentItem={currentItem}
+      />
+      <ConfirmDeleteOrder
+        open={isConfirmDeleteOpen}
+        handleClose={handleModalClose}
+        handleRemove={handleRemoveOrder}
+        orderId={deleteOrderId}
       />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
@@ -405,7 +421,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             setTableStyle={setTableStyle}
             handleModalOpen={handleModalOpen}
             handleOpenConfirm={handleOpenConfirm}
-            handleRemoveOrder={handleRemoveOrder}
+            handleRemoveOrder={handleDeleteOrderModal}
             isLoading={isLoading}
             orderId={currentOrderId}
             orderStatus={orderStatus}

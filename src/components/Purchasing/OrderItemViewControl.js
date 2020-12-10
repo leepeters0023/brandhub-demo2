@@ -24,6 +24,7 @@ const OrderItemViewControl = (props) => {
     catalogType,
     isItemsLoading,
     scrollRef,
+    addPreOrderItem,
   } = props;
   const dispatch = useDispatch();
 
@@ -59,6 +60,7 @@ const OrderItemViewControl = (props) => {
           catalogType={catalogType}
           isItemsLoading={isItemsLoading}
           scrollRef={scrollRef}
+          addPreOrderItem={addPreOrderItem}
         />
       )}
       {((currentView === "grid" && type === "catalog") ||
@@ -69,6 +71,7 @@ const OrderItemViewControl = (props) => {
           catalogType={catalogType}
           isItemsLoading={isItemsLoading}
           type={type}
+          addPreOrderItem={addPreOrderItem}
         />
       )}
       {currentView === "list" && type !== "catalog" && (

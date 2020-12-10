@@ -6,6 +6,11 @@ import {
   newFavDistList,
   updateFavDistList,
 } from "../../api/distributorApi";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 
 /*
 * Distributor Model
@@ -205,6 +210,7 @@ export const fetchFavDistributors = () => async (dispatch) => {
 export const newFavoriteDistList = (index) => async (dispatch) => {
   try {
     dispatch(setUpdateIsLoading());
+    dispatch(patchLoading());
     const newList = await newFavDistList(index + 1);
     if (newList.error) {
       throw newList.error;
@@ -215,8 +221,10 @@ export const newFavoriteDistList = (index) => async (dispatch) => {
         name: newList.data.name,
       })
     );
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
@@ -225,6 +233,7 @@ export const updateFavoriteDistributorList = (id, name, distArray) => async (
 ) => {
   try {
     dispatch(setUpdateIsLoading());
+    dispatch(patchLoading());
     const formattedDistArray = distArray.map((list) => ({
       id: list.id,
       type: "distributor",
@@ -239,20 +248,25 @@ export const updateFavoriteDistributorList = (id, name, distArray) => async (
       name: updatedList.data.name,
     };
     dispatch(updateDistributorList({ id: id, list: formattedList }));
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
 export const deleteFavoriteDistributorList = (id) => async (dispatch) => {
   try {
     dispatch(setUpdateIsLoading());
+    dispatch(patchLoading());
     const deleteStatus = await deleteFavDistList(id);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
     dispatch(deleteDistributorList({ id: id }));
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };

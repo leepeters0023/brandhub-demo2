@@ -70,14 +70,19 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-5",
   },
   root: {
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
+  },
+  colRoot: {
     width: "300px !important",
     maxWidth: "300px !important",
     minWidth: "300px !important",
   },
   noPadCell: {
-    width: "300px !important",
-    maxWidth: "300px !important",
-    minWidth: "300px !important",
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
     padding: 0,
   },
   tableRoot: {
@@ -143,6 +148,8 @@ const OrderSetTable = (props) => {
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
   const [orderNumberModal, setOrderNumber] = useState(false);
+
+  const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
   const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
 
@@ -262,17 +269,15 @@ const OrderSetTable = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.colRoot }}
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    {orderType !== "preOrder" &&
-                      orderType !== "pre-order" &&
-                      orderStatus !== "submitted" && (
-                        <div className={classes.headerCell}>
-                          <DistributorSelection />
-                        </div>
-                      )}
+                    {orderStatus !== "submitted" && (
+                      <div className={classes.headerCell}>
+                        <DistributorSelection />
+                      </div>
+                    )}
                   </TableCell>
                   {currentItems.map((item) => (
                     <TableCell
@@ -315,10 +320,10 @@ const OrderSetTable = (props) => {
                 </TableRow>
                 <TableRow>
                   <TableCell
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.colRoot }}
                     className={classes.borderRight}
                     align="right"
-                    style={{ top: 138, zIndex: "100" }}
+                    style={{ top: 137, zIndex: "100" }}
                   >
                     <div className={classes.tableControl}>
                       <Typography>Order Details</Typography>
@@ -343,7 +348,7 @@ const OrderSetTable = (props) => {
                     return (
                       <TableCell
                         classes={{ root: classes.root }}
-                        style={{ top: 138, textAlign: "center" }}
+                        style={{ top: 137, textAlign: "center" }}
                         className={classes.borderRight}
                         key={item.id}
                       >
@@ -359,7 +364,7 @@ const OrderSetTable = (props) => {
                 <TableRow>
                   <TableCell
                     classes={{ root: classes.root }}
-                    style={{ padding: 0, top: 199 }}
+                    style={{ padding: 0, top: 197 }}
                     colSpan={currentItems.length + 1}
                     className={classes[tableStyle]}
                   >
@@ -377,7 +382,7 @@ const OrderSetTable = (props) => {
                             {orderType !== "pre-order" && (
                               <TableRow className={classes.infoRow}>
                                 <TableCell
-                                  classes={{ root: classes.root }}
+                                  classes={{ root: classes.colRoot }}
                                   style={{
                                     position: "sticky",
                                     left: 0,
@@ -408,7 +413,7 @@ const OrderSetTable = (props) => {
                             )}
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -438,7 +443,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -462,7 +467,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -490,7 +495,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -562,11 +567,17 @@ const OrderSetTable = (props) => {
                           </Tooltip>
                           <div style={{ display: "flex" }}>
                             <Tooltip title="Delete Order">
-                              <IconButton
-                                onClick={() => handleRemoveOrder(ord.id)}
-                              >
-                                <CancelIcon fontSize="small" color="inherit" />
-                              </IconButton>
+                              <span>
+                                <IconButton
+                                  onClick={() => handleRemoveOrder(ord.id)}
+                                  disabled={patchLoading}
+                                >
+                                  <CancelIcon
+                                    fontSize="small"
+                                    color="inherit"
+                                  />
+                                </IconButton>
+                              </span>
                             </Tooltip>
 
                             <Tooltip title="Edit Details">
