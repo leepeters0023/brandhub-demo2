@@ -94,7 +94,7 @@ export const buildFilters = (
     filterObject.supplier && filterObject.supplier.length > 0
       ? `filter[supplier-ids]=${separateByComma(filterObject.supplier, "id")}`
       : "";
-  let ruleTypeString = filterObject.ruleType
+  let ruleTypeString = filterObject.ruleType && filterObject.ruleType.length > 0
     ? filterObject.ruleType === "all"
       ? ""
       : `filter[type]=${filterObject.ruleType}`

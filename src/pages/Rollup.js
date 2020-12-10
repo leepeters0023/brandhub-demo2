@@ -1,6 +1,7 @@
 import React from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
+import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
@@ -34,7 +35,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(new Date(), "MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
   type: "pre-order",
   user: [],
   program: [],
