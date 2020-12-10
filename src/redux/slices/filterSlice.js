@@ -177,7 +177,7 @@ const filterSlice = createSlice({
         chippable = ["month", "brand", "bu"];
       }
       if (filterType.includes("itemRollup")) {
-        chippable = ["brand", "program", "itemType", "sequenceNum"];
+        chippable = ["brand", "program", "itemType", "sequenceNum", "bu"];
       }
       if (filterType.includes("compliance")) {
         chippable = [

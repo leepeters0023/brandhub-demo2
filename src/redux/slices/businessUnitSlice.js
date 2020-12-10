@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPublicItems } from "../../api/itemApi";
-import { mapPublicItems } from "../apiMaps";
+import { fetchBusinessUnits } from "../../api/itemApi";
 
 let initialState = {
   isLoading: false,
-  items: [],
+  bus: [],
   error: null,
 };
 
@@ -18,14 +17,14 @@ const loadingFailed = (state, action) => {
   state.error = error;
 };
 
-const publicItemSlice = createSlice({
-  name: "publicItems",
+const businessUnitSlice = createSlice({
+  name: "businessUnits",
   initialState,
   reducers: {
     setIsLoading: startLoading,
-    getItemsSuccess(state, action) {
-      const { items } = action.payload;
-      state.items = items;
+    getBuSuccess(state, action) {
+      const { bus } = action.payload;
+      state.bus = bus;
       state.isLoading = false;
       state.error = null;
     },
@@ -35,21 +34,24 @@ const publicItemSlice = createSlice({
 
 export const {
   setIsLoading,
-  getItemsSuccess,
+  getBuSuccess,
   setFailure,
-} = publicItemSlice.actions;
+} = businessUnitSlice.actions;
 
-export default publicItemSlice.reducer;
+export default businessUnitSlice.reducer;
 
-export const fetchPublicItemsByIds = (ids) => async (dispatch) => {
+export const fetchBUs = () => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchPublicItems(ids);
-    if (items.error) {
-      throw items.error;
+    const bus = await fetchBusinessUnits();
+    if (bus.error) {
+      throw bus.error;
     }
-    let mappedItems = mapPublicItems(items.data);
-    dispatch(getItemsSuccess({ items: mappedItems }));
+    let mappedBus = bus.data.map((bu) => ({
+      id: bu.id,
+      name: bu.name,
+    }));
+    dispatch(getBuSuccess({ bus: mappedBus }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

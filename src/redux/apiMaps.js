@@ -1,5 +1,5 @@
 import { earliestDate } from "../utility/utilityFunctions";
-import { brandBULookup, brandLogoMap } from "../utility/constants";
+import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
 import { format } from "date-fns";
 
@@ -108,7 +108,7 @@ export const mapPrograms = (programs) => {
       prog.brands.length > 0
         ? prog.brands.map((brand) => brand.name)
         : ["BRAND"],
-    unit: prog.brands.length > 0 ? brandBULookup[prog.brands[0].name] : "UNIT",
+    unit: prog["business-unit-names"][0],
     desc:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla arcu vitae nunc rhoncus, condimentum auctor tellus ullamcorper. Nullam felis enim, hendrerit nec egestas non, convallis quis orci. Ut non maximus risus, in tempus felis. Morbi euismod blandit bibendum. Suspendisse pulvinar elit porta imperdiet porta. Pellentesque eu rhoncus lectus. Morbi ultrices molestie nisi id ultrices.",
     goals: prog.goals,

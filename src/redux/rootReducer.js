@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import brandReducer from "./slices/brandSlice";
+import businessUnitReducer from "./slices/businessUnitSlice";
 import complianceContactReducer from "./slices/complianceContactSlice";
 import complianceItemsReducer from "./slices/complianceItemsSlice";
 import complianceRulesReducer from "./slices/complianceRulesSlice";
@@ -29,6 +30,7 @@ import userReducer from "./slices/userSlice";
 
 const rootReducer = combineReducers({
   brands: brandReducer,
+  businessUnits: businessUnitReducer,
   complianceContacts: complianceContactReducer,
   complianceItems: complianceItemsReducer,
   complianceRules: complianceRulesReducer,
