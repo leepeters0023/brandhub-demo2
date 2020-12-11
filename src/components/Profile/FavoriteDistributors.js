@@ -23,11 +23,6 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-/*
-*TODO tie to api functionality, currently all logic is local, calls to api,
-loading states, and errors need to be handled when calls are available
-*/
-
 const FavoriteDistributors = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
