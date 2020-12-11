@@ -15,6 +15,7 @@ import {
   deletePOItem,
   addToPO,
   submitPO,
+  updateShippingParams
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
 
@@ -232,6 +233,11 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.error = null;
     },
+    updateParamSuccess(state) {
+      //todo
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     deletePOSuccess(state) {
       state.isUpdateLoading = false;
       state.currentPO.id = null;
@@ -314,6 +320,7 @@ export const {
   deleteItemSuccess,
   deletePOSuccess,
   submitPOSuccess,
+  updateParamSuccess,
   resetPurchaseOrder,
   setFailure,
 } = purchaseOrderSlice.actions;
@@ -362,6 +369,7 @@ export const fetchSinglePO = (id) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
+    console.log(newPO);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
@@ -531,3 +539,17 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const updateAllShippingParams = (updateArray) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const params = await (updateShippingParams(updateArray))
+    if (params.error) {
+      throw params.error
+    }
+    console.log(params);
+    dispatch(updateParamSuccess())
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
