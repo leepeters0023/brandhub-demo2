@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -11,8 +11,13 @@ import FavoriteDistributorList from "./FavoriteDistributorList";
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -26,6 +31,8 @@ loading states, and errors need to be handled when calls are available
 const FavoriteDistributors = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [lists, setLists] = useState(null);
+  const [currentList, setCurrentList] = useState(false);
 
   const currentDistributorLists = useSelector(
     (state) => state.distributors.favoriteDistributors
@@ -33,6 +40,20 @@ const FavoriteDistributors = () => {
   const isDistListLoading = useSelector(
     (state) => state.distributors.distListIsLoading
   );
+
+  const handleExpand = (id) => (evt, isExpanded) => {
+    setCurrentList(isExpanded ? id : false);
+  };
+
+  useEffect(() => {
+    if (
+      (!lists && currentDistributorLists.length > 0) ||
+      lists.length !== currentDistributorLists.length
+    ) {
+      setLists(currentDistributorLists);
+      setCurrentList(currentDistributorLists[currentDistributorLists.length - 1].id);
+    }
+  }, [lists, currentDistributorLists]);
 
   useEffect(() => {
     if (currentDistributorLists.length === 0) {
@@ -45,11 +66,28 @@ const FavoriteDistributors = () => {
     <>
       {currentDistributorLists.length > 0 &&
         currentDistributorLists.map((distList, index) => (
-          <FavoriteDistributorList
+          <Accordion
             key={distList.id}
-            id={distList.id}
-            index={index}
-          />
+            expanded={currentList === distList.id}
+            onChange={handleExpand(distList.id)}
+            style={{
+              marginBottom:
+                index === currentDistributorLists.length - 1 ? "20px" : "0px",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={distList.name}
+              id={`${distList.name}-${distList.id}`}
+            >
+              <Typography className={classes.headerText}>
+                {distList.name}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails style={{ width: "100%" }}>
+              <FavoriteDistributorList id={distList.id} />
+            </AccordionDetails>
+          </Accordion>
         ))}
       {isDistListLoading && <CircularProgress />}
       {!isDistListLoading && currentDistributorLists.length === 0 && (
