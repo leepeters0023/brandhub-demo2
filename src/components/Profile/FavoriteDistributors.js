@@ -48,7 +48,7 @@ const FavoriteDistributors = () => {
   useEffect(() => {
     if (
       (!lists && currentDistributorLists.length > 0) ||
-      lists.length !== currentDistributorLists.length
+      (lists && lists.length !== currentDistributorLists.length)
     ) {
       setLists(currentDistributorLists);
       setCurrentList(currentDistributorLists[currentDistributorLists.length - 1].id);
