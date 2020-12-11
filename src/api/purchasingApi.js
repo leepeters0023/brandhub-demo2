@@ -609,6 +609,29 @@ export const deletePO = async (id) => {
   return response;
 };
 
+//Updates shipping params on csv upload
+export const updateShippingParams = async (updateArray) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .put("/api/shipping-parameter-items/add-shipping-extras",
+      {
+        "shipping-parameter-items": updateArray
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data)
+      response.data = data;
+      response.status = "ok"
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {
   const sortMap = {

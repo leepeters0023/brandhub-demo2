@@ -12,6 +12,7 @@ import { setRetain } from "../redux/slices/filterSlice";
 import {
   fetchSinglePO,
   submitPurchaseOrder,
+  updateAllShippingParams,
 } from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
@@ -67,7 +68,22 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleFileUpload = (data) => {
-    //todo
+    const mappedData = data.map((dataPoint) => ({
+      id: dataPoint.data["Param Item Id"],
+      "ship-from-zip": dataPoint.data["Ship From Zip"],
+      carrier: dataPoint.data["Carrier"],
+      "service-level": dataPoint.data["Service Level"],
+      "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
+      "shipped-quantity": dataPoint.data["Shipped Quantity"],
+      "package-count": dataPoint.data["Package Count"],
+      "package-type": dataPoint.data["Package Type"],
+      "tracking-number": dataPoint.data["Tracking Number"],
+      tax: dataPoint.data["Tax"],
+      "expected-arrival-date": new Date(
+        dataPoint.data["Expected Arrival Date"]
+      ),
+    }));
+    dispatch(updateAllShippingParams(mappedData));
     setUploadLoading(false);
     console.log(data);
   };
@@ -126,7 +142,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Package Count", key: "packageCount" },
         { label: "Package Type", key: "packageType" },
         { label: "Tracking Number", key: "trackingNum" },
-        { label: "Weight", key: "weight" },
         { label: "Tax", key: "tax" },
         { label: "Expected Arrival Date", key: "expectedArrival" },
       ];
@@ -165,7 +180,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               packageCount: "",
               packageType: "",
               trackingNum: "",
-              weight: "",
               tax: "",
               expectedArrival: "",
             };
@@ -224,7 +238,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </Typography>
           </div>
           <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv} style={{alignItems: "flex-start"}}>
+            <div
+              className={classes.innerConfigDiv}
+              style={{ alignItems: "flex-start" }}
+            >
               {currentRole !== "supplier" && (
                 <Button
                   className={classes.largeButton}
