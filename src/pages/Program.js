@@ -6,7 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useWindowHash } from "../hooks/UtilityHooks";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
-import { fetchItems, addItemToPreOrder, addPreOrderItems } from "../redux/slices/programsSlice";
+import {
+  fetchItems,
+  addItemToPreOrder,
+  addPreOrderItems,
+} from "../redux/slices/programsSlice";
 import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 
 import { setRetain } from "../redux/slices/filterSlice";
@@ -75,7 +79,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 
   const handleAddItem = (itemId) => {
     dispatch(addItemToPreOrder(preOrderId, itemId));
-    dispatch(addPreOrderItems({ ids: [itemId]}))
+    dispatch(addPreOrderItems({ ids: [itemId] }));
   };
 
   useRetainFiltersOnPopstate("/programs", dispatch);
@@ -150,13 +154,19 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                 </>
               )}
               {userType === "field1" && (
-                <Tooltip title="Place Program Pre-Order">
-                  <IconButton
-                    component={Link}
-                    to={`/orders/open/preorder#${programId}`}
-                  >
-                    <ExitToAppIcon fontSize="large" color="inherit" />
-                  </IconButton>
+                <Tooltip title="Place Pre-Order">
+                  <span>
+                    <Button
+                      component={Link}
+                      to={`/orders/open/preorder#${programId}`}
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<ExitToAppIcon />}
+                    >
+                      ORDER
+                    </Button>
+                  </span>
                 </Tooltip>
               )}
               {value !== 1 && (

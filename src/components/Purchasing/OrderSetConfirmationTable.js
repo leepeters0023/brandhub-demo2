@@ -53,9 +53,13 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
         <TableCell align="left">{rowData.itemNumber}</TableCell>
         <TableCell align="left">{rowData.brand}</TableCell>
         <TableCell align="left">{rowData.itemType}</TableCell>
-        <TableCell align="left">{formatMoney(rowData.estCost, false)}</TableCell>
+        <TableCell align="left">
+          {formatMoney(rowData.estCost, false)}
+        </TableCell>
         <TableCell align="left">{rowData.totalItems}</TableCell>
-        <TableCell align="left">{formatMoney(rowData.totalEstCost, false)}</TableCell>
+        <TableCell align="left">
+          {formatMoney(rowData.totalEstCost, false)}
+        </TableCell>
         {type !== "pre-order" && (
           <>
             <TableCell align="left">
@@ -124,24 +128,33 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {orders.map((order) => (
-                      <TableRow key={`${rowData.id}-${order.id}`}>
-                        <TableCell align="center">{order.id}</TableCell>
-                        <TableCell align="center">
-                          {order.distributorId}
-                        </TableCell>
-                        <TableCell align="center">
-                          {order.distributorName}
-                        </TableCell>
-                        <TableCell align="center">
-                          {
-                            order.items.find(
-                              (item) => item.itemNumber === rowData.itemNumber
-                            ).totalItems
-                          }
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {orders.map((order) => {
+                      if (
+                        order.items.find(
+                          (item) => item.itemNumber === rowData.itemNumber
+                        ).totalItems > 0
+                      ) {
+                        return (
+                          <TableRow key={`${rowData.id}-${order.id}`}>
+                            <TableCell align="center">{order.id}</TableCell>
+                            <TableCell align="center">
+                              {order.distributorId}
+                            </TableCell>
+                            <TableCell align="center">
+                              {order.distributorName}
+                            </TableCell>
+                            <TableCell align="center">
+                              {
+                                order.items.find(
+                                  (item) =>
+                                    item.itemNumber === rowData.itemNumber
+                                ).totalItems
+                              }
+                            </TableCell>
+                          </TableRow>
+                        );
+                      } else return null;
+                    })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -200,15 +213,19 @@ const OrderSetConfirmationTable = ({ orders, items, type }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map((item) => (
-              <CollapseRow
-                key={item.id}
-                classes={classes}
-                rowData={item}
-                orders={orders}
-                type={type}
-              />
-            ))}
+            {items.map((item) => {
+              if (item.totalItems > 0) {
+                return (
+                  <CollapseRow
+                    key={item.id}
+                    classes={classes}
+                    rowData={item}
+                    orders={orders}
+                    type={type}
+                  />
+                );
+              } else return null;
+            })}
           </TableBody>
         </Table>
       </TableContainer>
