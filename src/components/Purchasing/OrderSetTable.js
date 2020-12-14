@@ -3,16 +3,12 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { formatMoney } from "../../utility/utilityFunctions";
 import { setRebuildRef } from "../../redux/slices/orderSetSlice";
 
-import ImageWrapper from "../Utility/ImageWrapper";
-
 import EditOrderDetailModal from "./EditOrderDetailModal";
-import DistributorSelection from "./DistributorSelection";
 import MemoInputCell from "../Utility/MemoInputCell";
+import OrderSetTableHead from "./OrderSetTableHead";
 
-import Box from "@material-ui/core/Box";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -20,15 +16,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import EditIcon from "@material-ui/icons/Edit";
 
 const useStyles = makeStyles((theme) => ({
@@ -70,14 +63,19 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-5",
   },
   root: {
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
+  },
+  colRoot: {
     width: "300px !important",
     maxWidth: "300px !important",
     minWidth: "300px !important",
   },
   noPadCell: {
-    width: "300px !important",
-    maxWidth: "300px !important",
-    minWidth: "300px !important",
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
     padding: 0,
   },
   tableRoot: {
@@ -85,47 +83,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TotalItemCell = React.memo(({ itemNumber }) => {
-  const classes = useStyles();
-  const value = useSelector((state) =>
-    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
-  );
-  return (
-    <TableCell
-      classes={{ root: classes.root }}
-      style={{ textAlign: "center" }}
-      className={classes.borderRightLight}
-    >
-      <div className={classes.infoCell}>{value ? value.totalItems : "---"}</div>
-    </TableCell>
-  );
-});
-
-const TotalEstCostCell = React.memo(({ itemNumber }) => {
-  const classes = useStyles();
-  const value = useSelector((state) =>
-    state.orderSet.items.find((item) => item.itemNumber === itemNumber)
-  );
-  return (
-    <TableCell
-      classes={{ root: classes.root }}
-      style={{ textAlign: "center" }}
-      className={classes.borderRightLight}
-    >
-      <div className={classes.infoCell}>
-        {value ? `${formatMoney(value.totalEstCost, false)}` : "---"}
-      </div>
-    </TableCell>
-  );
-});
-
 const OrderSetTable = (props) => {
   const {
     currentProgram,
-    open,
-    setOpen,
-    tableStyle,
-    setTableStyle,
     handleModalOpen,
     handleOpenConfirm,
     handleRemoveOrder,
@@ -143,6 +103,8 @@ const OrderSetTable = (props) => {
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
   const [orderNumberModal, setOrderNumber] = useState(false);
+
+  const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
   const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
 
@@ -259,266 +221,14 @@ const OrderSetTable = (props) => {
             </TableHead>
           ) : (
             <>
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    classes={{ root: classes.root }}
-                    className={classes.borderRight}
-                    style={{ zIndex: "100" }}
-                  >
-                    {orderType !== "preOrder" &&
-                      orderType !== "pre-order" &&
-                      orderStatus !== "submitted" && (
-                        <div className={classes.headerCell}>
-                          <DistributorSelection />
-                        </div>
-                      )}
-                  </TableCell>
-                  {currentItems.map((item) => (
-                    <TableCell
-                      classes={{ root: classes.root }}
-                      className={classes.borderRight}
-                      key={item.id}
-                    >
-                      <div className={classes.headerCell}>
-                        <Tooltip title="Remove from Order">
-                          <IconButton
-                            onClick={() => {
-                              handleOpenConfirm(item.itemNumber, item.id);
-                            }}
-                            style={{ position: "absolute", top: 0, right: -15 }}
-                          >
-                            <CancelIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <ImageWrapper
-                          id={item.id}
-                          imgClass={classes.previewImageFloat}
-                          alt={item.itemType}
-                          imgUrl={item.imgUrlThumb}
-                          handleClick={() => {
-                            handleModalOpen(
-                              item.imgUrlLg,
-                              item.brand,
-                              item.itemType,
-                              item.itemNumber,
-                              item.itemDescription
-                            );
-                          }}
-                        />
-                        <Typography className={classes.headerText} variant="h5">
-                          {item.brand}
-                        </Typography>
-                      </div>
-                    </TableCell>
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    classes={{ root: classes.root }}
-                    className={classes.borderRight}
-                    align="right"
-                    style={{ top: 138, zIndex: "100" }}
-                  >
-                    <div className={classes.tableControl}>
-                      <Typography>Order Details</Typography>
-                      <IconButton
-                        aria-label="expand row"
-                        onClick={() => {
-                          setOpen(!open);
-                          !open
-                            ? setTableStyle(null)
-                            : setTableStyle("tableClosed");
-                        }}
-                      >
-                        {open ? (
-                          <KeyboardArrowUpIcon />
-                        ) : (
-                          <KeyboardArrowDownIcon />
-                        )}
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                  {currentItems.map((item) => {
-                    return (
-                      <TableCell
-                        classes={{ root: classes.root }}
-                        style={{ top: 138, textAlign: "center" }}
-                        className={classes.borderRight}
-                        key={item.id}
-                      >
-                        <div className={classes.infoCell}>
-                          <Typography variant="body2" color="textSecondary">
-                            {`${item.itemType} | ${item.itemNumber}`}
-                          </Typography>
-                        </div>
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    classes={{ root: classes.root }}
-                    style={{ padding: 0, top: 199 }}
-                    colSpan={currentItems.length + 1}
-                    className={classes[tableStyle]}
-                  >
-                    <Collapse in={open} timeout="auto">
-                      <Box>
-                        <Table
-                          size="small"
-                          className={classes.table}
-                          aria-label="item-info"
-                          classes={{ root: classes.tableRoot }}
-                        >
-                          <TableBody
-                            style={{ position: "relative", zIndex: "10" }}
-                          >
-                            {orderType !== "pre-order" && (
-                              <TableRow className={classes.infoRow}>
-                                <TableCell
-                                  classes={{ root: classes.root }}
-                                  style={{
-                                    position: "sticky",
-                                    left: 0,
-                                    backgroundColor: "white",
-                                    zIndex: "100",
-                                  }}
-                                  className={classes.borderRight}
-                                >
-                                  <div style={{ zIndex: "100" }}>
-                                    <Typography className={classes.headerText}>
-                                      Lead Time
-                                    </Typography>
-                                  </div>
-                                </TableCell>
-                                {currentItems.map((item) => (
-                                  <TableCell
-                                    classes={{ root: classes.root }}
-                                    align="center"
-                                    key={item.id}
-                                    className={classes.borderRightLight}
-                                  >
-                                    <div className={classes.infoCell}>
-                                      {item.leadTime ? item.leadTime : "---"}
-                                    </div>
-                                  </TableCell>
-                                ))}
-                              </TableRow>
-                            )}
-                            <TableRow className={classes.infoRow}>
-                              <TableCell
-                                classes={{ root: classes.root }}
-                                style={{
-                                  position: "sticky",
-                                  left: 0,
-                                  backgroundColor: "white",
-                                  zIndex: "100",
-                                }}
-                                className={classes.borderRight}
-                              >
-                                <div style={{ zIndex: "100" }}>
-                                  <Typography className={classes.headerText}>
-                                    Items Per Pack
-                                  </Typography>
-                                </div>
-                              </TableCell>
-                              {currentItems.map((item) => (
-                                <TableCell
-                                  classes={{ root: classes.root }}
-                                  align="center"
-                                  key={item.id}
-                                  className={classes.borderRightLight}
-                                >
-                                  <div className={classes.infoCell}>
-                                    {item.packSize}
-                                  </div>
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                            <TableRow className={classes.infoRow}>
-                              <TableCell
-                                classes={{ root: classes.root }}
-                                style={{
-                                  position: "sticky",
-                                  left: 0,
-                                  backgroundColor: "white",
-                                  zIndex: "100",
-                                }}
-                                className={classes.borderRight}
-                              >
-                                <div style={{ zIndex: "100" }}>
-                                  <Typography className={classes.headerText}>
-                                    Total Qty of Items
-                                  </Typography>
-                                </div>
-                              </TableCell>
-                              {currentItems.map((item) => (
-                                <TotalItemCell
-                                  itemNumber={item.itemNumber}
-                                  key={item.id}
-                                />
-                              ))}
-                            </TableRow>
-                            <TableRow className={classes.infoRow}>
-                              <TableCell
-                                classes={{ root: classes.root }}
-                                style={{
-                                  position: "sticky",
-                                  left: 0,
-                                  backgroundColor: "white",
-                                  zIndex: "100",
-                                }}
-                                className={classes.borderRight}
-                              >
-                                <div style={{ zIndex: "100" }}>
-                                  <Typography className={classes.headerText}>
-                                    Item Est Cost
-                                  </Typography>
-                                </div>
-                              </TableCell>
-                              {currentItems.map((item) => (
-                                <TableCell
-                                  classes={{ root: classes.root }}
-                                  align="center"
-                                  key={item.id}
-                                  className={classes.borderRightLight}
-                                >
-                                  {`${formatMoney(item.estCost, false)}`}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                            <TableRow className={classes.infoRow}>
-                              <TableCell
-                                classes={{ root: classes.root }}
-                                style={{
-                                  position: "sticky",
-                                  left: 0,
-                                  backgroundColor: "white",
-                                  zIndex: "100",
-                                }}
-                                className={classes.borderRight}
-                              >
-                                <div style={{ zIndex: "100" }}>
-                                  <Typography className={classes.headerText}>
-                                    Total Est Cost
-                                  </Typography>
-                                </div>
-                              </TableCell>
-                              {currentItems.map((item) => (
-                                <TotalEstCostCell
-                                  itemNumber={item.itemNumber}
-                                  key={item.id}
-                                />
-                              ))}
-                            </TableRow>
-                          </TableBody>
-                        </Table>
-                      </Box>
-                    </Collapse>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
+              <OrderSetTableHead
+                classes={classes}
+                orderType={orderType}
+                orderStatus={orderStatus}
+                currentItems={currentItems}
+                handleOpenConfirm={handleOpenConfirm}
+                handleModalOpen={handleModalOpen}
+              />
               <TableBody style={{ position: "relative" }}>
                 {orders.map((ord) => (
                   <TableRow key={ord.id}>
@@ -562,11 +272,17 @@ const OrderSetTable = (props) => {
                           </Tooltip>
                           <div style={{ display: "flex" }}>
                             <Tooltip title="Delete Order">
-                              <IconButton
-                                onClick={() => handleRemoveOrder(ord.id)}
-                              >
-                                <CancelIcon fontSize="small" color="inherit" />
-                              </IconButton>
+                              <span>
+                                <IconButton
+                                  onClick={() => handleRemoveOrder(ord.id)}
+                                  disabled={patchLoading}
+                                >
+                                  <CancelIcon
+                                    fontSize="small"
+                                    color="inherit"
+                                  />
+                                </IconButton>
+                              </span>
                             </Tooltip>
 
                             <Tooltip title="Edit Details">
@@ -612,10 +328,6 @@ const OrderSetTable = (props) => {
 
 OrderSetTable.propTypes = {
   currentProgram: PropTypes.string,
-  open: PropTypes.bool.isRequired,
-  setOpen: PropTypes.func.isRequired,
-  tableStyle: PropTypes.string,
-  setTableStyle: PropTypes.func.isRequired,
   handleModalOpen: PropTypes.func.isRequired,
   handleOpenConfirm: PropTypes.func.isRequired,
   handleRemoveOrder: PropTypes.func.isRequired,

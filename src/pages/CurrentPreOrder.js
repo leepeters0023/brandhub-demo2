@@ -14,12 +14,14 @@ import {
   deleteSetOrder,
   submitOrdSet,
 } from "../redux/slices/patchOrderSlice";
+import { deletePreOrderItems } from "../redux/slices/programsSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
 import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
+import ConfirmDeleteOrder from "../components/Utility/ConfirmDeleteOrder";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
@@ -114,12 +116,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const [open, setOpen] = useCallback(useState(true));
-  const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   const [program, setProgram] = useState(undefined);
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
+  const [deleteOrderId, setDeleteOrderId] = useCallback(useState(null));
+  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(
+    useState(false)
+  );
   const [modal, handleModal] = useState(false);
   const [currentItem, setCurrentItem] = useState({});
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
@@ -133,13 +137,15 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const currentItems = useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
-  const handleModalClose = () => {
-    handleModal(false);
-  };
   const grandTotalMod = useSelector(
     (state) => state.preOrderDetails.preOrderTotalMod
   );
   const setTotal = useSelector((state) => state.orderSet.orderTotal);
+
+  const handleModalClose = () => {
+    handleModal(false);
+    setConfirmDeleteOpen(false);
+  };
 
   const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
     setCurrentItem({
@@ -167,10 +173,19 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const handleRemoveItem = (itemNum) => {
     dispatch(deleteSetItem(currentItemId, itemNum));
     handleConfirmModal(false);
+    let currentId = currentItems.find((item) => item.id === currentItemId)
+      .itemId;
+    dispatch(deletePreOrderItems({ id: currentId }));
   };
 
   const handleRemoveOrder = (id) => {
     dispatch(deleteSetOrder(id));
+    setConfirmDeleteOpen(false);
+  };
+
+  const handleDeleteOrderModal = (id) => {
+    setDeleteOrderId(id);
+    setConfirmDeleteOpen(true);
   };
 
   const handleSubmit = () => {
@@ -262,6 +277,12 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         modal={modal}
         currentItem={currentItem}
       />
+      <ConfirmDeleteOrder
+        open={isConfirmDeleteOpen}
+        handleClose={handleModalClose}
+        handleRemove={handleRemoveOrder}
+        orderId={deleteOrderId}
+      />
       <Container className={classes.mainWrapper}>
         {/* eslint-disable-next-line no-dupe-keys */}
         <Accordion style={{ backgroundColor: "#fafafa" }}>
@@ -347,24 +368,22 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           currentItems.length > 0 && (
             <OrderSetOverview setOverviewVisible={setOverviewVisible} />
           )}
-        {!overviewVisible && (preOrderStatus === "in-progress" || preOrderStatus === "inactive") && currentItems.length > 0 && (
-          <OrderSetTable
-          currentProgram={program}
-          open={open}
-          setOpen={setOpen}
-          tableStyle={tableStyle}
-          setTableStyle={setTableStyle}
-          handleModalOpen={handleModalOpen}
-          handleOpenConfirm={handleOpenConfirm}
-          handleRemoveOrder={handleRemoveOrder}
-          isLoading={isLoading}
-          orderId={preOrderId}
-          orderStatus={preOrderStatus}
-          currentItems={currentItems}
-          orders={orders}
-          orderType="preOrder"
-        />
-        )}
+        {!overviewVisible &&
+          (preOrderStatus === "in-progress" || preOrderStatus === "inactive") &&
+          currentItems.length > 0 && (
+            <OrderSetTable
+              currentProgram={program}
+              handleModalOpen={handleModalOpen}
+              handleOpenConfirm={handleOpenConfirm}
+              handleRemoveOrder={handleDeleteOrderModal}
+              isLoading={isLoading}
+              orderId={preOrderId}
+              orderStatus={preOrderStatus}
+              currentItems={currentItems}
+              orders={orders}
+              orderType="preOrder"
+            />
+          )}
         {!programsLoading && currentItems.length === 0 && (
           <Typography className={classes.headerText}>
             There are no items in this program

@@ -27,9 +27,6 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
   const strippedValue = (input) => {
     let tempMoneyAr = input.split("$").join("").split(".");
     if (tempMoneyAr[1]) {
-      // if (tempMoneyAr.length === 2 && parseInt(tempMoneyAr[1]) < 10) {
-      //   tempMoneyAr.splice(1, 1, `0${tempMoneyAr[1]}`)
-      // }
       if (ops && tempMoneyAr[1].length >= 4) {
         let newDecValue = tempMoneyAr[1].split("")
         newDecValue.splice(2,0,".")
@@ -50,9 +47,7 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
       }
       return tempMoneyAr.join("");
     } else return tempMoneyAr[0] + (ops ? "00.00" : "00")
-    // return input.split("$").join("").split(".").join("")
   }
-  //TODO handle update func call
   return {
     value,
     setValue,
@@ -75,13 +70,7 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
         let newValue = formatMoney(strippedValue(event.target.value), ops)
         setValue(newValue);
         if (updateFunc) {
-          let cleanValue = newValue.replace(/\D/g,"");
-          if (ops) {
-            let valLength = cleanValue.length;
-            let moddedValue = cleanValue.split("");
-            moddedValue.splice(valLength - 2, 0, ".")
-            cleanValue = Math.round(parseFloat(moddedValue.join("")));
-          }
+          let cleanValue = parseFloat(newValue.split("$").join("")).toString();
           dispatch(updateFunc(updateFuncArg, cleanValue))
         }
       }

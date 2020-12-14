@@ -5,6 +5,12 @@ import {
   fetchProgramItems,
   fetchProgramsByName,
 } from "../../api/programApi";
+import { addOrderSetItem } from "../../api/orderApi";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 import { mapPrograms, mapItems } from "../apiMaps";
 
 /*
@@ -36,6 +42,7 @@ let initialState = {
   itemsIsLoading: false,
   programs: [],
   programList: [],
+  currentPreOrderItems: [],
   error: null,
 };
 
@@ -124,12 +131,26 @@ const programsSlice = createSlice({
       });
       state.programs = updatedPrograms;
     },
+    addPreOrderItems(state, action) {
+      const { ids } = action.payload;
+      const newIds = state.currentPreOrderItems.concat(ids);
+      state.currentPreOrderItems = newIds;
+    },
+    deletePreOrderItems(state, action) {
+      const { id } = action.payload;
+      const newIds = state.currentPreOrderItems.filter(i => i !== id);
+      state.currentPreOrderItems = newIds;
+    },
+    resetPreOrderItems(state) {
+      state.currentPreOrderItems = [];
+    },
     clearPrograms(state) {
       state.isLoading = false;
       state.listIsLoading = false;
       state.itemsIsLoading = false;
       state.programs = [];
       state.programList = [];
+      state.currentPreOrderItems = [];
       state.error = null;
     },
     clearProgramList(state) {
@@ -149,6 +170,9 @@ export const {
   getProgramItemsSuccess,
   getProgramListSuccess,
   setProgramStatus,
+  addPreOrderItems,
+  deletePreOrderItems,
+  resetPreOrderItems,
   clearPrograms,
   clearProgramList,
   setFailure,
@@ -223,3 +247,16 @@ export const fetchProgramList = (name) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const addItemToPreOrder = (orderId, itemId) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    let orderItemStatus = await addOrderSetItem(orderId, itemId);
+    if (orderItemStatus.error) {
+      throw orderItemStatus.error
+    }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(patchFailure(({ error: err.toString() })))
+  }
+}

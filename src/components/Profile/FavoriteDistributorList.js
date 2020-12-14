@@ -59,24 +59,9 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const FavoriteDistributorList = ({ id, index }) => {
+const FavoriteDistributorList = ({ id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  let styleObject =
-    index % 2 === 0
-      ? {
-          padding: "10px",
-          boxSizing: "border-box",
-          marginBottom: "20px",
-          backgroundColor: "white",
-        }
-      : {
-          padding: "10px",
-          boxSizing: "border-box",
-          marginBottom: "20px",
-          backgroundColor: "#f2f2f2",
-        };
 
   const [open, setOpen] = useState(false);
   const [distributor, setDistributor] = useState("");
@@ -123,7 +108,13 @@ const FavoriteDistributorList = ({ id, index }) => {
   }, [currentDistributors, userDistributors]);
 
   return (
-    <div style={styleObject}>
+    <div style={{
+      padding: "10px",
+      width: "97%",
+      boxSizing: "border-box",
+      // marginBottom: "20px",
+      backgroundColor: "white",
+    }}>
       <div
         style={{
           width: "100%",

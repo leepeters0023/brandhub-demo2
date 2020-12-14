@@ -6,13 +6,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { useWindowHash } from "../hooks/UtilityHooks";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
-import { fetchItems } from "../redux/slices/programsSlice";
+import {
+  fetchItems,
+  addItemToPreOrder,
+  addPreOrderItems,
+} from "../redux/slices/programsSlice";
+import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 
 import { setRetain } from "../redux/slices/filterSlice";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -45,9 +51,11 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
   const handleChangeTab = useWindowHash(["#details", "#items"], updateValue);
 
+  const userId = useSelector((state) => state.user.id);
   const programs = useSelector((state) => state.programs.programs);
   const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
   const selectedItems = useSelector((state) => state.items.selectedItems);
+  const preOrderId = useSelector((state) => state.orderSet.orderId);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -69,7 +77,18 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
     handlePreviewModal(false);
   };
 
-  useRetainFiltersOnPopstate("/programs", dispatch)
+  const handleAddItem = (itemId) => {
+    dispatch(addItemToPreOrder(preOrderId, itemId));
+    dispatch(addPreOrderItems({ ids: [itemId] }));
+  };
+
+  useRetainFiltersOnPopstate("/programs", dispatch);
+
+  useEffect(() => {
+    if (!preOrderId) {
+      dispatch(fetchProgramOrders(programId, userId));
+    }
+  }, [preOrderId, dispatch, programId, userId]);
 
   useEffect(() => {
     handleFiltersClosed();
@@ -135,13 +154,19 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                 </>
               )}
               {userType === "field1" && (
-                <Tooltip title="Place Program Pre-Order">
-                  <IconButton
-                    component={Link}
-                    to={`/orders/open/preorder#${programId}`}
-                  >
-                    <ExitToAppIcon fontSize="large" color="inherit" />
-                  </IconButton>
+                <Tooltip title="Place Pre-Order">
+                  <span>
+                    <Button
+                      component={Link}
+                      to={`/orders/open/preorder#${programId}`}
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<ExitToAppIcon />}
+                    >
+                      ORDER
+                    </Button>
+                  </span>
                 </Tooltip>
               )}
               {value !== 1 && (
@@ -195,12 +220,14 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                 handlePreview={handlePreview}
                 items={currentProgram.items}
                 isItemsLoading={itemsLoading}
+                addPreOrderItem={handleAddItem}
               />
             )}
           </>
         )}
       </Container>
       <br />
+      <OrderPatchLoading />
     </>
   );
 };
