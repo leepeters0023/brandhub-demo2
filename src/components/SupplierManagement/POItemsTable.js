@@ -61,8 +61,8 @@ const POItemsTable = ({
   const currentRole = useSelector((state) => state.user.role);
 
   const handlePackOut = (id, value) => {
-    dispatch(setItemPackOut(id, value))
-  }
+    dispatch(setItemPackOut(id, value));
+  };
 
   return (
     <TableContainer
@@ -135,7 +135,9 @@ const POItemsTable = ({
               <TableCell align="left">{row.packSize}</TableCell>
               <TableCell align="left">{row.totalItems}</TableCell>
               {currentRole !== "supplier" && (
-                <TableCell align="left">{formatMoney(row.estCost, true)}</TableCell>
+                <TableCell align="left">
+                  {formatMoney(row.estCost, true)}
+                </TableCell>
               )}
               {currentRole !== "supplier" ? (
                 <MoneyCell
@@ -144,12 +146,19 @@ const POItemsTable = ({
                   role={currentRole}
                 />
               ) : (
-                <TableCell align="left">{formatMoney(row.actCost, true)}</TableCell>
+                <TableCell align="left">
+                  {formatMoney(row.actCost, true)}
+                </TableCell>
               )}
-              <TableCell align="left">{formatMoney(row.totalCost, true)}</TableCell>
+              <TableCell align="left">
+                {formatMoney(row.totalCost, true)}
+              </TableCell>
               {currentRole !== "supplier" && (
                 <TableCell padding="checkbox" align="center">
-                  <Checkbox checked={row.packOut} onChange={() => handlePackOut(row.id, !row.packOut)} />
+                  <Checkbox
+                    checked={row.packOut}
+                    onChange={() => handlePackOut(row.id, !row.packOut)}
+                  />
                 </TableCell>
               )}
               {currentRole === "supplier" && (
@@ -190,50 +199,51 @@ const POItemsTable = ({
                   </Tooltip>
                 </TableCell>
               </TableRow>
-              {additionalCosts.map((cost, index) => (
-                <TableRow key={index}>
-                  <TableCell className={classes.headerText}>
-                    Description:
-                  </TableCell>
-                  <TableCell colSpan={4}>
-                    <TextField
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={cost.description}
-                      onChange={(evt) => {
-                        dispatch(
-                          updateCost({
-                            key: "description",
-                            value: evt.target.value,
-                            index: index,
-                          })
-                        );
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell className={classes.headerText} align="right">
-                    Cost:
-                  </TableCell>
-                  <TableCell colSpan={2}>
-                    <TextField
-                      variant="outlined"
-                      size="small"
-                      fullWidth
-                      value={cost.cost}
-                      onChange={(evt) => {
-                        dispatch(
-                          updateCost({
-                            key: "cost",
-                            value: evt.target.value,
-                            index: index,
-                          })
-                        );
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {additionalCosts.length > 0 &&
+                additionalCosts.map((cost, index) => (
+                  <TableRow key={index}>
+                    <TableCell className={classes.headerText}>
+                      Description:
+                    </TableCell>
+                    <TableCell colSpan={6}>
+                      <TextField
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        value={cost.description}
+                        onChange={(evt) => {
+                          dispatch(
+                            updateCost({
+                              key: "description",
+                              value: evt.target.value,
+                              index: index,
+                            })
+                          );
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell className={classes.headerText} align="right">
+                      Cost:
+                    </TableCell>
+                    <TableCell colSpan={2}>
+                      <TextField
+                        variant="outlined"
+                        size="small"
+                        fullWidth
+                        value={cost.cost}
+                        onChange={(evt) => {
+                          dispatch(
+                            updateCost({
+                              key: "cost",
+                              value: evt.target.value,
+                              index: index,
+                            })
+                          );
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </>
           )}
           {currentRole === "supplier" && (

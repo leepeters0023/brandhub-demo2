@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { navigate } from "@reach/router";
 import clsx from "clsx";
 
@@ -10,6 +10,7 @@ import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 import {
   addCost,
   updateDateByType,
+  updateShipMethod,
   updateSupplierNote,
   updateKeyAccountTape,
   setDirectShip,
@@ -18,6 +19,7 @@ import {
 } from "../../redux/slices/purchaseOrderSlice";
 
 import POItemsTable from "./POItemsTable";
+import SpecDetailTable from "./SpecDetailTable";
 
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -45,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     width: "100%",
   },
+  specTableCellRoot: {
+    padding: "5px 0px",
+  },
 }));
 
 const CurrentPO = () => {
@@ -56,6 +61,7 @@ const CurrentPO = () => {
   );
   const currentRole = useSelector((state) => state.user.role);
 
+  const { value: method, bind: bindMethod } = useInput(currentPO.method);
   const { value: note, bind: bindNote } = useInput(currentPO.supplierNotes);
   const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
     currentPO.keyAcctTape
@@ -71,6 +77,10 @@ const CurrentPO = () => {
       dispatch(deletePurchaseOrder(currentPO.id));
       navigate("/purchasing/poRollup");
     }
+  };
+
+  const updateMethod = () => {
+    dispatch(updateShipMethod(currentPO.id, method));
   };
 
   const updateNote = () => {
@@ -93,12 +103,6 @@ const CurrentPO = () => {
       dispatch(setDirectShip(currentPO.id, false));
     }
   };
-
-  useEffect(() => {
-    if (additionalCosts.length === 0) {
-      dispatch(addCost({ description: "", cost: "" }));
-    }
-  }, [additionalCosts.length, dispatch]);
 
   return (
     <>
@@ -131,76 +135,38 @@ const CurrentPO = () => {
             }}
           >
             {currentRole !== "supplier" && (
-              <>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.dateField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="dueDate"
-                    label="In-Market Date"
-                    value={formatDate(currentPO.dueDate)}
-                    onChange={(value) =>
-                      dispatch(
-                        updateDateByType(
-                          currentPO.id,
-                          "in-market-date",
-                          new Date(value)
-                        )
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  color="secondary"
+                  className={classes.dateField}
+                  disableToolbar
+                  variant="inline"
+                  format="MM/dd/yyyy"
+                  margin="normal"
+                  id="dueDate"
+                  label="Delivery Date"
+                  value={formatDate(currentPO.dueDate)}
+                  onChange={(value) =>
+                    dispatch(
+                      updateDateByType(
+                        currentPO.id,
+                        "in-market-date",
+                        new Date(value)
                       )
-                    }
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
-                    color="secondary"
-                    className={classes.dateField}
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="expectedShip"
-                    label="Expected Ship"
-                    value={formatDate(currentPO.expectedShip)}
-                    onChange={(value) =>
-                      dispatch(
-                        updateDateByType(
-                          currentPO.id,
-                          "expected-ship-date",
-                          new Date(value)
-                        )
-                      )
-                    }
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </>
+                    )
+                  }
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
             )}
             {currentRole === "supplier" && (
-              <>
-                <Typography
-                  className={clsx(classes.headerText, classes.POText)}
-                >
-                  {`In-Market Date:  ${new Date(
-                    currentPO.dueDate
-                  ).toLocaleDateString()}`}
-                </Typography>
-                <Typography
-                  className={clsx(classes.headerText, classes.POText)}
-                >
-                  {`Expected Ship:  ${new Date(
-                    currentPO.expectedShip
-                  ).toLocaleDateString()}`}
-                </Typography>
-              </>
+              <Typography className={clsx(classes.headerText, classes.POText)}>
+                {`Delivery Date:  ${new Date(
+                  currentPO.dueDate
+                ).toLocaleDateString()}`}
+              </Typography>
             )}
           </div>
           <br />
@@ -237,13 +203,23 @@ const CurrentPO = () => {
             {currentRole !== "supplier" && (
               <>
                 <TextField
+                  label="Ship Method"
+                  color="secondary"
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  onBlur={updateMethod}
+                  {...bindMethod}
+                />
+                <br />
+                <TextField
                   label="Key Account Tape"
                   color="secondary"
                   multiline
                   fullWidth
                   variant="outlined"
                   size="small"
-                  rows="4"
+                  rows="3"
                   onBlur={updateTape}
                   {...bindKeyAcctTape}
                 />
@@ -264,6 +240,9 @@ const CurrentPO = () => {
             {currentRole === "supplier" && (
               <>
                 <Typography className={classes.bodyText}>
+                  {`Ship Method: ${currentPO.method}`}
+                </Typography>
+                <Typography className={classes.bodyText}>
                   {`Key Account Tape: ${currentPO.keyAcctTape}`}
                 </Typography>
                 <Typography className={classes.bodyText}>
@@ -279,11 +258,10 @@ const CurrentPO = () => {
           </Typography>
           <br />
           {currentPO.poItems.map((item, index) => {
-            let specElements = Object.keys(item.itemSpec).map((spec, i) => (
-              <Typography key={`${i}-${index}`} className={classes.bodyText}>
-                {`${spec}: ${item.itemSpec[spec]}`}
-              </Typography>
-            ));
+            let specArray = Object.keys(item.itemSpec).map((spec, i) => ({
+              spec: spec,
+              desc: item.itemSpec[spec],
+            }));
             return (
               <div
                 key={index}
@@ -293,10 +271,12 @@ const CurrentPO = () => {
                   width: "100%",
                 }}
               >
-                <Typography className={clsx(classes.bodyText, classes.POText)}>
-                  {item.sequenceNum}
+                <Typography
+                  className={clsx(classes.headerText, classes.POText)}
+                >
+                  {`Sequence Number: ${item.sequenceNum}`}
                 </Typography>
-                {specElements}
+                <SpecDetailTable classes={classes} specArray={specArray} />
                 {index !== currentPO.poItems.length - 1 && (
                   <>
                     <br />

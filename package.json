@@ -23,6 +23,7 @@
     "react-csv": "^2.0.3",
     "react-dom": "^16.13.1",
     "react-image": "^4.0.3",
+    "react-papaparse": "^3.11.0",
     "react-player": "^2.6.0",
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
