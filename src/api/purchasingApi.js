@@ -334,6 +334,36 @@ export const addToPO = async (ids, poNum) => {
   return response;
 };
 
+//Updates the method on an PO
+export const updatePOMethod = async (id, method) => {
+  const response = { status: "", error: null };
+  // await axios
+  //   .patch(
+  //     `/api/purchase-orders/${id}`,
+  //     {
+  //       data: {
+  //         type: "purchase-order",
+  //         id: id,
+  //         attributes: {
+  //           method: method,
+  //         },
+  //       },
+  //     },
+  //     writeHeaders
+  //   )
+  //   .then((_res) => {
+  //     response.status = "ok";
+  //   })
+  //   .catch((err) => {
+  //     console.log(err.toString());
+  //     response.status = "error";
+  //     response.err = err.toString();
+  //   });
+  //todo !
+  response.status = "ok"
+  return response;
+};
+
 //Updates the note on an PO
 export const updatePONote = async (id, note) => {
   const response = { status: "", error: null };
@@ -608,6 +638,29 @@ export const deletePO = async (id) => {
     });
   return response;
 };
+
+//Updates shipping params on csv upload
+export const updateShippingParams = async (updateArray) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .put("/api/shipping-parameter-items/add-shipping-extras",
+      {
+        "shipping-parameter-items": updateArray
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data)
+      response.data = data;
+      response.status = "ok"
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
 
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {

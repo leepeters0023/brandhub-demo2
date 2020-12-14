@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import { CSVLink } from "react-csv";
+import { CSVReader } from "react-papaparse";
 import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +12,7 @@ import { setRetain } from "../redux/slices/filterSlice";
 import {
   fetchSinglePO,
   submitPurchaseOrder,
+  updateAllShippingParams,
 } from "../redux/slices/purchaseOrderSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
@@ -22,6 +24,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PublishIcon from "@material-ui/icons/Publish";
@@ -35,8 +38,10 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseOrder = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const csvRef = useRef(null);
 
   const [isNew, setIsNew] = useState(false);
+  const [isUploadLoading, setUploadLoading] = useState(false);
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
@@ -56,6 +61,39 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     navigate("/purchasing/poHistory/current");
   };
 
+  const handleOpenDialog = (evt) => {
+    if (csvRef.current) {
+      csvRef.current.open(evt);
+    }
+  };
+
+  const handleFileUpload = (data) => {
+    const mappedData = data.map((dataPoint) => ({
+      id: dataPoint.data["Param Item Id"],
+      "ship-from-zip": dataPoint.data["Ship From Zip"],
+      carrier: dataPoint.data["Carrier"],
+      "service-level": dataPoint.data["Ship Method"],
+      "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
+      "shipped-quantity": dataPoint.data["Shipped Quantity"],
+      "package-count": dataPoint.data["Package Count"],
+      "package-type": dataPoint.data["Package Type"],
+      "tracking-number": dataPoint.data["Tracking Number"],
+      tax: dataPoint.data["Tax"],
+      "expected-arrival-date": new Date(
+        dataPoint.data["Expected Arrival Date"]
+      ),
+    }));
+    dispatch(updateAllShippingParams(mappedData, currentPO.id));
+    setUploadLoading(false);
+    console.log(data);
+    console.log(mappedData);
+  };
+
+  const handleFileUploadError = (err, file, inputElem, reason) => {
+    //todo, modal?
+    console.log(err, file, inputElem, reason);
+  };
+
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
   useEffect(() => {
@@ -72,15 +110,25 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   }, [currentPO.id]);
 
   useEffect(() => {
-    if (!currentPO.id && window.location.hash !== "#new") {
+    if (
+      (!currentPO.id && window.location.hash !== "#new") ||
+      (currentPO.id &&
+        window.location.hash !== "#new" &&
+        currentPO.id !== window.location.hash.slice(1))
+    ) {
       dispatch(fetchSinglePO(window.location.hash.slice(1)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currentPO.id && currentCSV.data.length === 0) {
+    if (
+      currentPO.id &&
+      currentCSV.data.length === 0 &&
+      currentPO.id === window.location.hash.slice(1)
+    ) {
       let csvHeaders = [
+        { label: "Param Item Id", key: "paramItemId" },
         { label: "PO Number", key: "poNum" },
         { label: "Key Account (y/n)", key: "isKeyAccount" },
         { label: "Key Account Name", key: "keyAccountName" },
@@ -98,13 +146,13 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Order Approval Status", key: "shipStatus" },
         { label: "Ship From Zip", key: "shipFromZip" },
         { label: "Carrier", key: "carrier" },
-        { label: "Service Level", key: "serviceLevel" },
+        { label: "Ship Method", key: "serviceLevel" },
         { label: "Actual Ship Date", key: "actShipDate" },
         { label: "Shipped Quantity", key: "shippedQuantity" },
         { label: "Package Count", key: "packageCount" },
         { label: "Package Type", key: "packageType" },
         { label: "Tracking Number", key: "trackingNum" },
-        { label: "Weight", key: "weight" },
+        { label: "Tax", key: "tax" },
         { label: "Expected Arrival Date", key: "expectedArrival" },
       ];
       let csvData = [];
@@ -114,7 +162,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             (i) => i.sequenceNum === item.sequenceNum
           );
           if (currentParamItem) {
+            console.log(currentParamItem.shipFromZip);
             let dataObject = {
+              paramItemId: currentParamItem.id,
               poNum: currentPO.id,
               isKeyAccount: "* TODO *",
               keyAccountName: "* TODO *",
@@ -133,21 +183,49 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               label: "* TODO *",
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
-              shipFromZip: "",
-              carrier: "",
-              serviceLevel: "",
-              actShipDate: "",
-              shippedQuantity: "",
-              packageCount: "",
-              packageType: "",
-              trackingNum: "",
-              weight: "",
-              expectedArrival: "",
+              shipFromZip:
+                currentParamItem.shipFromZip === "---"
+                  ? ""
+                  : currentParamItem.shipFromZip,
+              carrier:
+                currentParamItem.carrier === "---"
+                  ? ""
+                  : currentParamItem.carrier,
+              serviceLevel:
+                currentParamItem.serviceLevel === "---"
+                  ? ""
+                  : currentParamItem.serviceLevel,
+              actShipDate:
+                currentParamItem.actShipDate === "---"
+                  ? ""
+                  : currentParamItem.actShipDate,
+              shippedQuantity:
+                currentParamItem.shippedQuantity === "---"
+                  ? ""
+                  : currentParamItem.shippedQuantity,
+              packageCount:
+                currentParamItem.packageCount === "---"
+                  ? ""
+                  : currentParamItem.packageCount,
+              packageType:
+                currentParamItem.packageType === "---"
+                  ? ""
+                  : currentParamItem.packageType,
+              trackingNum:
+                currentParamItem.trackingNum === "---"
+                  ? ""
+                  : currentParamItem.trackingNum,
+              tax: currentParamItem.tax === "---" ? "" : currentParamItem.tax,
+              expectedArrival:
+                currentParamItem.expectedArrival === "---"
+                  ? ""
+                  : currentParamItem.expectedArrival,
             };
             csvData.push(dataObject);
           }
         });
       });
+      console.log(csvData);
       setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
   }, [
@@ -194,11 +272,16 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               </Tooltip>
             )}
             <Typography className={classes.titleText}>
-              {`Purchase Order #${currentPO.id}`}
+              {`Purchase Order #${currentPO.id} - ${currentPO.brand.join(
+                ", "
+              )}`}
             </Typography>
           </div>
           <div className={classes.configButtons}>
-            <div className={classes.innerConfigDiv}>
+            <div
+              className={classes.innerConfigDiv}
+              style={{ alignItems: "flex-start" }}
+            >
               {currentRole !== "supplier" && (
                 <Button
                   className={classes.largeButton}
@@ -235,14 +318,53 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   >
                     ORDER INFO
                   </Button>
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<PublishIcon />}
+                  <CSVReader
+                    ref={csvRef}
+                    onFileLoad={handleFileUpload}
+                    onError={handleFileUploadError}
+                    noClick
+                    noDrag
+                    config={{
+                      header: true,
+                      beforeFirstChunk: (_chunk) => {
+                        setUploadLoading(true);
+                      },
+                    }}
+                    noProgressBar
                   >
-                    SHIPPING
-                  </Button>
+                    {({ file }) => (
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          width: "fit-content",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          className={classes.largeButton}
+                          style={{
+                            width: isUploadLoading ? "132.93px" : "auto",
+                          }}
+                          variant="contained"
+                          color="secondary"
+                          startIcon={<PublishIcon />}
+                          onClick={handleOpenDialog}
+                        >
+                          {isUploadLoading ? (
+                            <CircularProgress size={27.78} />
+                          ) : (
+                            "SHIPPING"
+                          )}
+                        </Button>
+                        {file && (
+                          <Typography variant="body2" color="textSecondary">
+                            {file.name}
+                          </Typography>
+                        )}
+                      </div>
+                    )}
+                  </CSVReader>
                 </>
               )}
             </div>
@@ -324,7 +446,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             <br />
             <ShippingParameterTable
               classes={classes}
-              shippingInfo={currentPO.shippingParams}
             />
             <br />
             <br />
