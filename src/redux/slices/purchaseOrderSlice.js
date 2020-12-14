@@ -5,6 +5,7 @@ import {
   createPO,
   fetchPO,
   updatePODate,
+  updatePOMethod,
   updatePONote,
   updatePOTape,
   updatePODirectShip,
@@ -15,7 +16,7 @@ import {
   deletePOItem,
   addToPO,
   submitPO,
-  updateShippingParams
+  updateShippingParams,
 } from "../../api/purchasingApi";
 import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
 
@@ -29,6 +30,7 @@ let initialState = {
   selectedPOItems: [],
   currentPO: {
     id: null,
+    brand: null,
     status: null,
     accepted: false,
     dueDate: null,
@@ -40,6 +42,7 @@ let initialState = {
     email: null,
     phone: null,
     purchasedBy: null,
+    method: "",
     supplierNotes: "",
     rfqNumber: null,
     shippingLabel: null,
@@ -98,6 +101,7 @@ const purchaseOrderSlice = createSlice({
     getSinglePOSuccess(state, action) {
       const { purchaseOrder } = action.payload;
       state.currentPO.id = purchaseOrder.id;
+      state.currentPO.brand = purchaseOrder.brand;
       state.currentPO.status = purchaseOrder.status;
       state.currentPO.accepted = purchaseOrder.accepted;
       state.currentPO.dueDate = purchaseOrder.dueDate;
@@ -109,6 +113,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.email = purchaseOrder.email;
       state.currentPO.phone = purchaseOrder.phone;
       state.currentPO.purchasedBy = purchaseOrder.purchasedBy;
+      state.currentPO.method = purchaseOrder.method;
       state.currentPO.supplierNotes = purchaseOrder.supplierNotes;
       state.currentPO.shippingLabel = purchaseOrder.shippingLabel;
       state.currentPO.keyAcctTape = purchaseOrder.keyAcctTape;
@@ -162,7 +167,7 @@ const purchaseOrderSlice = createSlice({
       const { description, cost } = action.payload;
       let currentCosts =
         state.currentPO.additionalCosts.length > 0
-          ? [...state.additionalCosts]
+          ? [...state.currentPO.additionalCosts]
           : [];
       let newCost = {
         description: description,
@@ -192,6 +197,12 @@ const purchaseOrderSlice = createSlice({
         } else return item;
       });
       state.currentPO.poItems = updatedItems;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
+    updateMethod(state, action) {
+      const { value } = action.payload;
+      state.currentPO.method = value;
       state.isUpdateLoading = false;
       state.error = null;
     },
@@ -234,13 +245,13 @@ const purchaseOrderSlice = createSlice({
       state.error = null;
     },
     updateParamSuccess(state) {
-      //todo
       state.isUpdateLoading = false;
       state.error = null;
     },
     deletePOSuccess(state) {
       state.isUpdateLoading = false;
       state.currentPO.id = null;
+      state.currentPO.brand = null;
       state.currentPO.status = null;
       state.currentPO.accepted = false;
       state.currentPO.dueDate = null;
@@ -252,6 +263,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.email = null;
       state.currentPO.phone = null;
       state.currentPO.purchasedBy = null;
+      state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
       state.currentPO.keyAcctTape = "";
@@ -273,6 +285,7 @@ const purchaseOrderSlice = createSlice({
       state.poItems = [];
       state.selectedPOItems = [];
       state.currentPO.id = null;
+      state.currentPO.brand = null;
       state.currentPO.status = null;
       state.currentPO.accepted = false;
       state.currentPO.dueDate = null;
@@ -284,6 +297,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.email = null;
       state.currentPO.phone = null;
       state.currentPO.purchasedBy = null;
+      state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
       state.currentPO.keyAcctTape = "";
@@ -314,6 +328,7 @@ export const {
   addCost,
   updateCost,
   updateDate,
+  updateMethod,
   updateSupplierNotes,
   updateKeyAcctTape,
   updateDirectShip,
@@ -418,6 +433,19 @@ export const updateDateByType = (id, type, value) => async (dispatch) => {
       throw dateStatus.error;
     }
     dispatch(updateDate({ type: typeMap[type], value: value }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const updateShipMethod = (id, method) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const methodStatus = updatePOMethod(id, method);
+    if (methodStatus.error) {
+      throw methodStatus.error;
+    }
+    dispatch(updateMethod({ value: method }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
@@ -540,16 +568,25 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
   }
 };
 
-export const updateAllShippingParams = (updateArray) => async (dispatch) => {
+export const updateAllShippingParams = (updateArray, id) => async (
+  dispatch
+) => {
   try {
     dispatch(setUpdateLoading());
-    const params = await (updateShippingParams(updateArray))
+    const params = await updateShippingParams(updateArray);
     if (params.error) {
-      throw params.error
+      throw params.error;
     }
     console.log(params);
-    dispatch(updateParamSuccess())
+    const newPO = await fetchPO(id);
+    if (newPO.error) {
+      throw newPO.error;
+    }
+    console.log(newPO);
+    const formattedPO = mapPurchaseOrder(newPO.data);
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+    dispatch(updateParamSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};

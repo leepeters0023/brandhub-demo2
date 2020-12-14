@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
-import PropTypes from "prop-types";
+
+import { useSelector } from "react-redux";
 
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
@@ -92,7 +93,7 @@ const CollapseRow = ({ shippingInfo, classes }) => {
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
                         <TableCell align="center">{item.shipStatus}</TableCell>
-                        <TableCell align="center">{item.tracking}</TableCell>
+                        <TableCell align="center">{item.trackingNum}</TableCell>
                         <TableCell align="center">{item.tax}</TableCell>
                       </TableRow>
                     ))}
@@ -107,8 +108,10 @@ const CollapseRow = ({ shippingInfo, classes }) => {
   );
 };
 
-const ShippingParameterTable = ({ shippingInfo }) => {
+const ShippingParameterTable = () => {
   const classes = useStyles();
+
+  const shippingInfo = useSelector((state) => state.purchaseOrder.currentPO.shippingParams)
 
   return (
     <>
@@ -155,10 +158,5 @@ const ShippingParameterTable = ({ shippingInfo }) => {
   );
 };
 
-ShippingParameterTable.propTypes = {
-  shippingInfo: PropTypes.array.isRequired,
-};
 
-export default React.memo(ShippingParameterTable, (prev, next) => {
-  return prev.shippingInfo.length === next.shippingInfo.length
-});
+export default React.memo(ShippingParameterTable);
