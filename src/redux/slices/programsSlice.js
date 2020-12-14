@@ -194,8 +194,6 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
     if (natPrograms.error) {
       throw natPrograms.error;
     }
-    console.log(terrPrograms)
-    console.log(natPrograms)
     //const programs = terrPrograms.data.concat(natPrograms.data);
     const programArray = mapPrograms(terrPrograms.data);
     dispatch(getProgramsSuccess({ programs: programArray }));

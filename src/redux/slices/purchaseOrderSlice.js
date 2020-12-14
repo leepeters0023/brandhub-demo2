@@ -386,7 +386,6 @@ export const fetchSinglePO = (id) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
-    console.log(newPO);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
@@ -579,12 +578,10 @@ export const updateAllShippingParams = (updateArray, id) => async (
     if (params.error) {
       throw params.error;
     }
-    console.log(params);
     const newPO = await fetchPO(id);
     if (newPO.error) {
       throw newPO.error;
     }
-    console.log(newPO);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
     dispatch(updateParamSuccess());
