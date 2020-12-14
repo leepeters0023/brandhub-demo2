@@ -85,8 +85,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     }));
     dispatch(updateAllShippingParams(mappedData, currentPO.id));
     setUploadLoading(false);
-    console.log(data);
-    console.log(mappedData);
   };
 
   const handleFileUploadError = (err, file, inputElem, reason) => {

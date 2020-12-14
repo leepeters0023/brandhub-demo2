@@ -36,7 +36,6 @@ const typeMap = {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],
@@ -518,7 +517,7 @@ export const mapRules = (rules) => {
       rule["item-type-descriptions"].length > 0
         ? rule["item-type-descriptions"].join(", ")
         : "---",
-    price: rule.price ? rule.price : "---",
+    price: rule.price ? stringToCents(rule.price) : "---",
     productFamilies:
       rule["product-family-names"].length > 0
         ? rule["product-family-names"].join(", ")
