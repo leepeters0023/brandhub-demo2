@@ -72,7 +72,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       id: dataPoint.data["Param Item Id"],
       "ship-from-zip": dataPoint.data["Ship From Zip"],
       carrier: dataPoint.data["Carrier"],
-      "service-level": dataPoint.data["Service Level"],
+      "service-level": dataPoint.data["Ship Method"],
       "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
       "shipped-quantity": dataPoint.data["Shipped Quantity"],
       "package-count": dataPoint.data["Package Count"],
@@ -83,9 +83,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         dataPoint.data["Expected Arrival Date"]
       ),
     }));
-    dispatch(updateAllShippingParams(mappedData));
+    dispatch(updateAllShippingParams(mappedData, currentPO.id));
     setUploadLoading(false);
     console.log(data);
+    console.log(mappedData);
   };
 
   const handleFileUploadError = (err, file, inputElem, reason) => {
@@ -109,14 +110,23 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   }, [currentPO.id]);
 
   useEffect(() => {
-    if (!currentPO.id && window.location.hash !== "#new") {
+    if (
+      (!currentPO.id && window.location.hash !== "#new") ||
+      (currentPO.id &&
+        window.location.hash !== "#new" &&
+        currentPO.id !== window.location.hash.slice(1))
+    ) {
       dispatch(fetchSinglePO(window.location.hash.slice(1)));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (currentPO.id && currentCSV.data.length === 0) {
+    if (
+      currentPO.id &&
+      currentCSV.data.length === 0 &&
+      currentPO.id === window.location.hash.slice(1)
+    ) {
       let csvHeaders = [
         { label: "Param Item Id", key: "paramItemId" },
         { label: "PO Number", key: "poNum" },
@@ -136,7 +146,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Order Approval Status", key: "shipStatus" },
         { label: "Ship From Zip", key: "shipFromZip" },
         { label: "Carrier", key: "carrier" },
-        { label: "Service Level", key: "serviceLevel" },
+        { label: "Ship Method", key: "serviceLevel" },
         { label: "Actual Ship Date", key: "actShipDate" },
         { label: "Shipped Quantity", key: "shippedQuantity" },
         { label: "Package Count", key: "packageCount" },
@@ -152,6 +162,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             (i) => i.sequenceNum === item.sequenceNum
           );
           if (currentParamItem) {
+            console.log(currentParamItem.shipFromZip);
             let dataObject = {
               paramItemId: currentParamItem.id,
               poNum: currentPO.id,
@@ -172,21 +183,49 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               label: "* TODO *",
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
-              shipFromZip: "",
-              carrier: "",
-              serviceLevel: "",
-              actShipDate: "",
-              shippedQuantity: "",
-              packageCount: "",
-              packageType: "",
-              trackingNum: "",
-              tax: "",
-              expectedArrival: "",
+              shipFromZip:
+                currentParamItem.shipFromZip === "---"
+                  ? ""
+                  : currentParamItem.shipFromZip,
+              carrier:
+                currentParamItem.carrier === "---"
+                  ? ""
+                  : currentParamItem.carrier,
+              serviceLevel:
+                currentParamItem.serviceLevel === "---"
+                  ? ""
+                  : currentParamItem.serviceLevel,
+              actShipDate:
+                currentParamItem.actShipDate === "---"
+                  ? ""
+                  : currentParamItem.actShipDate,
+              shippedQuantity:
+                currentParamItem.shippedQuantity === "---"
+                  ? ""
+                  : currentParamItem.shippedQuantity,
+              packageCount:
+                currentParamItem.packageCount === "---"
+                  ? ""
+                  : currentParamItem.packageCount,
+              packageType:
+                currentParamItem.packageType === "---"
+                  ? ""
+                  : currentParamItem.packageType,
+              trackingNum:
+                currentParamItem.trackingNum === "---"
+                  ? ""
+                  : currentParamItem.trackingNum,
+              tax: currentParamItem.tax === "---" ? "" : currentParamItem.tax,
+              expectedArrival:
+                currentParamItem.expectedArrival === "---"
+                  ? ""
+                  : currentParamItem.expectedArrival,
             };
             csvData.push(dataObject);
           }
         });
       });
+      console.log(csvData);
       setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
   }, [
@@ -200,7 +239,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
-  console.log(isUploadLoading);
 
   return (
     <>
@@ -234,7 +272,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               </Tooltip>
             )}
             <Typography className={classes.titleText}>
-              {`Purchase Order #${currentPO.id}`}
+              {`Purchase Order #${currentPO.id} - ${currentPO.brand.join(
+                ", "
+              )}`}
             </Typography>
           </div>
           <div className={classes.configButtons}>
@@ -406,7 +446,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             <br />
             <ShippingParameterTable
               classes={classes}
-              shippingInfo={currentPO.shippingParams}
             />
             <br />
             <br />

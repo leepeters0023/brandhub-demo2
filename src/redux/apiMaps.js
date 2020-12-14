@@ -321,23 +321,7 @@ export const mapPOItems = (items) => {
     program: item["program-names"].length > 0 ? item["program-names"] : "---",
     itemType: item["item-type-description"],
     packSize: item["actual-qty-per-pack"],
-    itemSpec: {
-      "Back 4-Color": item["item-specification"]["Back 4-Color"],
-      "Back Finish": item["item-specification"]["Back Finish"],
-      "Die/Job Number": item["item-specification"]["Die/Job Number"],
-      Dieline: item["item-specification"]["Dieline"],
-      Embossing: item["item-specification"]["Embossing"],
-      "Flat Size": item["item-specification"]["Flat Size"],
-      "Front 4-Color": item["item-specification"]["Front 4-Color"],
-      "Front Finish": item["item-specification"]["Front Finish"],
-      "Hot Stamp": item["item-specification"]["Hot Stamp"],
-      "Pack Out": item["item-specification"]["Pack Out"],
-      Perf: item["item-specification"]["Perf"],
-      Score: item["item-specification"]["Score"],
-      Stock: item["item-specification"]["Stock"],
-      "Supplier Instructions":
-        item["item-specification"]["Supplier Instructions"],
-    },
+    itemSpec: item["item-specification"],
     totalItems: item.qty,
     estCost: item["item-estimated-cost"],
     actCost: item["actual-cost"],
@@ -356,8 +340,21 @@ export const mapPOShippingParamItems = (items) => {
       : "---",
     totalItems: item.qty,
     shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
-    tracking: item.tracking ? item.tracking : "---",
-    tax: item.tax ? item.tax : "---",
+    shipFromZip: item["ship-from-zip"] ? item["ship-from-zip"] : "---",
+    carrier: item.carrier ? item.carrier : "---",
+    serviceLevel: item["service-level"] ? item["service-level"] : "---",
+    actShipDate: item["actual-ship-date"] ? item["actual-ship-date"] : "---",
+    shippedQuantity: item["shipped-quantity"]
+      ? item["shipped-quantity"]
+      : "---",
+    packageCount: item["package-count"] ? item["package-count"] : "---",
+    packageType: item["package-type"] ? item["packageType"] : "---",
+    expectedArrival: item["expected-arrival-date"]
+      ? item["expected-arrival-date"]
+      : "---",
+    trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
+    //todo not a string
+    tax: item.tax ? JSON.stringify(item.tax) : "---",
   }));
   return mappedItems;
 };
@@ -376,28 +373,33 @@ export const mapPOShippingParams = (params) => {
       .filter((address) => address)
       .join(", ");
   };
-  const mappedParams = params.map((param) => ({
-    id: param.id,
-    distributor: param.distributor ? param.distributor.name : "---",
-    attn: param.attn ? param.attn : "---",
-    address: formatAddress(param),
-    addressOne: param["street-address-1"],
-    addressTwo: param["street-address-2"] ? param["street-address-2"] : "---",
-    city: param.city,
-    state: param.state,
-    zip: param.zip,
-    country: param.country,
-    carrier: param.carrier ? param.carrier : "---",
-    method: param.method ? param.method : "---",
-    actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
-    items: mapPOShippingParamItems(param["shipping-parameter-items"]),
-  }));
+  const mappedParams = params.map((param) => {
+    let paramItems = mapPOShippingParamItems(param["shipping-parameter-items"]);
+    let carriers = [...new Set(paramItems.map(item => item.carrier))].join(", ")
+    return {
+      id: param.id,
+      distributor: param.distributor ? param.distributor.name : "---",
+      attn: param.attn ? param.attn : "---",
+      address: formatAddress(param),
+      addressOne: param["street-address-1"],
+      addressTwo: param["street-address-2"] ? param["street-address-2"] : "---",
+      city: param.city,
+      state: param.state,
+      zip: param.zip,
+      country: param.country,
+      carrier: carriers,
+      method: param.method ? param.method : "---",
+      actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
+      items: paramItems,
+    };
+  });
   return mappedParams;
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
   const formattedPO = {
     id: purchaseOrder.id,
+    brand: purchaseOrder["brand-names"],
     status: purchaseOrder.status,
     accepted: false,
     dueDate: purchaseOrder["in-market-date"]
@@ -414,6 +416,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     email: purchaseOrder.supplier.email ? purchaseOrder.supplier.email : "---",
     phone: purchaseOrder.supplier.phone ? purchaseOrder.supplier.phone : "---",
     purchasedBy: purchaseOrder.purchaser.name,
+    method: purchaseOrder.method ? purchaseOrder.method : "",
     supplierNotes: purchaseOrder.note ? purchaseOrder.note : "",
     keyAcctTape: purchaseOrder["key-account-tape"]
       ? purchaseOrder["key-account-tape"]
