@@ -76,6 +76,7 @@ export const fetchAllPreOrders = async (id) => {
 //Returns order set history based on filters, paginated in groups of 20
 export const fetchAllFilteredOrderSets = async (filterObject) => {
   const response = { status: "", error: null, data: null };
+  console.log(filterObject)
   const sortMap = {
     user: "user-name",
     state: "distributor-state",
@@ -83,7 +84,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     orderDate: "submitted-at",
     dueDate: "due-date",
   };
-  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString = buildFilters(
@@ -103,6 +104,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
         queryTotal: null,
       };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       dataObject.orderCount = res.data.meta["total_entries"]
@@ -268,12 +270,54 @@ export const setOrderSetNote = async (id, note) => {
   return response;
 };
 
+export const addSingleOrderToSet = async (id, dist, type) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(
+      "/api/orders",
+      {
+        data: {
+          type: "order",
+          attributes: {
+            type: type
+          },
+          relationships: {
+            distributor: {
+              data: {
+                type: "distributor",
+                id: dist,
+              },
+            },
+            "order-set": {
+              data: {
+                type: "order-set",
+                id: id,
+              },
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 /*
-The following calls handle order set statuses.  The status of
-an order set determines whether it can move to the next step in
-the order process. Order-sets go from inactive to draft to submitted
-to approved.  An order set in draft can not jump straight to approved.
-*/
+  The following calls handle order set statuses.  The status of
+  an order set determines whether it can move to the next step in
+  the order process. Order-sets go from inactive to draft to submitted
+  to approved.  An order set in draft can not jump straight to approved.
+  */
 
 //Updates status of order set from inactive to draft status
 export const startOrderSet = async (id) => {

@@ -11,6 +11,7 @@ import {
 } from "../../redux/slices/itemSlice";
 
 import BottomScrollListener from "react-bottom-scroll-listener";
+import ImageWrapper from "../Utility/ImageWrapper";
 import Loading from "../Utility/Loading";
 
 import Checkbox from "@material-ui/core/Checkbox";
@@ -125,12 +126,12 @@ const OrderItemGridView = (props) => {
                             }}
                           />
                         )}
-                        <img
+                        <ImageWrapper
                           id={item.itemNumber}
-                          className={classes.previewImg}
-                          src={item.imgUrl}
+                          imgClass={classes.previewImg}
                           alt={item.itemType}
-                          onClick={() => handlePreview(item.itemNumber)}
+                          imgUrl={item.imgUrlThumb}
+                          handlClick={() => handlePreview(item.itemNumber)}
                         />
                       </div>
                       <br />

@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "date-fns";
 import subDays from "date-fns/subDays";
+import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 
@@ -47,7 +48,7 @@ const csvHeaders = [
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(new Date(), "MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "order",
@@ -62,7 +63,7 @@ const defaultOrderFilters = {
 
 const defaultItemFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(new Date(), "MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "item",

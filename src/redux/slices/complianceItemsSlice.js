@@ -1,21 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { fetchTriggeredRules, fetchNextTriggeredRules } from "../../api/complianceApi";
+import { mapCompItems } from "../apiMaps";
 /*
 * Item Rule Model
-notes:
 
-{
-  id: string (read);
-  active: bool (read/write);
-  sequenceNum: string (read);
-  program: string (read);
-  itemType: string (read);
-  ruleType: string (read);
-  ruleTags: array (read);
-  status: string (read);
-  emailRequired: bool (read);
-  emailSent: date string (read);
-}
+todo
 
 */
 
@@ -71,7 +60,7 @@ const complianceItemsSlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
-    resetcomplianceItems(state) {
+    resetComplianceItems(state) {
       state.isLoading = false;
       state.isNextLoading = false;
       state.isUpdateLoading = false;
@@ -91,10 +80,42 @@ export const {
   setUpdateLoading,
   getComplianceItemsSuccess,
   getNextComplianceItemsSuccess,
-  resetcomplianceItems,
+  resetComplianceItems,
   setFailure,
 } = complianceItemsSlice.actions;
 
 export default complianceItemsSlice.reducer;
 
-//TODO build async thunk calls to api to update rule being active or not
+export const fetchFilteredTriggeredRules = (filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading())
+    let triggeredRules = await fetchTriggeredRules(filterObject);
+    if (triggeredRules.error) {
+      throw triggeredRules.error;
+    }
+    const mappedCompItems = mapCompItems(triggeredRules.data.rules)
+    dispatch(getComplianceItemsSuccess({
+      items: mappedCompItems,
+      nextLink: triggeredRules.data.nextLink ? triggeredRules.data.nextLink : null,
+    }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }))
+  }
+}
+
+export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
+  try {
+    dispatch(setNextIsLoading());
+    let triggeredRules = await fetchNextTriggeredRules(url);
+    if (triggeredRules.error) {
+      throw triggeredRules.error;
+    }
+    const mappedCompItems = mapCompItems(triggeredRules.data.rules)
+    dispatch(getNextComplianceItemsSuccess({
+      items: mappedCompItems,
+      nextLink: triggeredRules.data.nextLink ? triggeredRules.data.nextLink : null,
+    }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }))
+  }
+}

@@ -39,6 +39,7 @@ const defaultFilters = {
   favItems: [],
   orderType: "on-demand",
   sequenceNum: "",
+  itemDesc: "",
 };
 
 const useStyles = makeStyles((theme) => ({

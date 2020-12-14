@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import ImageWrapper from "../Utility/ImageWrapper"
+
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
@@ -27,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
   const classes = useStyles();
-
   return (
     <>
       <div className={classes.relativeContainer}>
@@ -47,10 +48,11 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
               <CancelIcon fontSize="large" color="secondary" />
             </IconButton>
             <div className={classes.previewModal}>
-              <img
-                className={classes.cartPreviewImage}
-                src={currentItem.imgUrl}
+              <ImageWrapper
+                imgUrl={currentItem.imgUrl}
                 alt={currentItem.itemNumber}
+                imgClass={classes.cartPreviewImage}
+                id={currentItem.itemType}
               />
               <br />
               <Typography

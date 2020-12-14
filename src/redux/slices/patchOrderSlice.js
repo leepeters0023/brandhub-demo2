@@ -32,8 +32,9 @@ import {
   updateOrderDetails,
   removeGridItem,
   removeGridOrder,
+  clearOrderSet,
 } from "./orderSetSlice";
-
+import { clearOrderByType } from "./currentOrderSlice";
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
 
 let initialState = {
@@ -271,18 +272,29 @@ export const approveMultipleOrderSets = (orderSetArray, filters) => async (
 };
 
 //deletes an entire order set, and all orders and order items within it
-export const deleteOrdSet = (orderSetId, filters) => async (dispatch) => {
+export const deleteOrdSet = (orderSetId, filters, type, orderType) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     const deleteStatus = await deleteOrderSet(orderSetId);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
-    if (filters) {
+    if (filters && type === "approval") {
       dispatch(fetchFilteredOrderSets(filters));
     }
+    if (filters && type === "order") {
+      dispatch(clearOrderSet());
+      if (orderType === "in-stock") {
+        dispatch(clearOrderByType({ type: "inStock" }));
+      }
+      if (orderType === "on-demand") {
+        dispatch(clearOrderByType({ type: "onDemand" }));
+      }
+    }
     dispatch(patchSuccess());
-    if (!filters) {
+    if (!filters && type === "approval") {
       navigate("/orders/approvals");
     }
   } catch (err) {

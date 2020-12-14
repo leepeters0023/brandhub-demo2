@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { formatMoney } from "../../utility/utilityFunctions";
+import { setRebuildRef } from "../../redux/slices/orderSetSlice";
+
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import EditOrderDetailModal from "./EditOrderDetailModal";
 import DistributorSelection from "./DistributorSelection";
@@ -67,19 +70,24 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "-5",
   },
   root: {
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
+  },
+  colRoot: {
     width: "300px !important",
     maxWidth: "300px !important",
     minWidth: "300px !important",
   },
   noPadCell: {
-    width: "300px !important",
-    maxWidth: "300px !important",
-    minWidth: "300px !important",
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
     padding: 0,
   },
   tableRoot: {
     borderCollapse: "inherit",
-  }
+  },
 }));
 
 const TotalItemCell = React.memo(({ itemNumber }) => {
@@ -134,11 +142,16 @@ const OrderSetTable = (props) => {
     orderType,
   } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
   const tableRef = useRef(null);
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
   const [orderNumberModal, setOrderNumber] = useState(false);
+
+  const patchLoading = useSelector((state) => state.patchOrder.isLoading);
+
+  const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
 
   const handleKeyDown = useCallback(
     (ref, key) => {
@@ -172,10 +185,15 @@ const OrderSetTable = (props) => {
   useEffect(() => {
     if (
       (orders && !refTable) ||
-      `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0] ||
-      Object.keys(refTable).length !== orders.length * currentItems.length
+      (orders.length > 0 &&
+        `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
+      Object.keys(refTable).length !== orders.length * currentItems.length ||
+      rebuildRef
     ) {
       if (orders.length !== 0) {
+        if (rebuildRef) {
+          dispatch(setRebuildRef());
+        }
         let refs = {};
         orders.forEach((order) => {
           order.items.forEach((item) => {
@@ -185,7 +203,14 @@ const OrderSetTable = (props) => {
         setRefTable(refs);
       }
     }
-  }, [orders, refTable, orders.length, currentItems.length]);
+  }, [
+    orders,
+    refTable,
+    orders.length,
+    currentItems.length,
+    rebuildRef,
+    dispatch,
+  ]);
 
   useEffect(() => {
     if ((currentItems && !itemLength) || itemLength !== currentItems.length) {
@@ -193,7 +218,7 @@ const OrderSetTable = (props) => {
     }
   }, [itemLength, currentItems, currentItems.length]);
 
-  if (isLoading || !refTable || !itemLength) {
+  if (isLoading || !itemLength || (!refTable && orders.length > 0)) {
     return <CircularProgress color="inherit" />;
   }
 
@@ -206,7 +231,12 @@ const OrderSetTable = (props) => {
         />
       )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
-        <Table stickyHeader={true} size="small" aria-label="pre-order-table" classes={{root: classes.tableRoot}}>
+        <Table
+          stickyHeader={true}
+          size="small"
+          aria-label="pre-order-table"
+          classes={{ root: classes.tableRoot }}
+        >
           {currentItems.length === 0 ? (
             <TableHead>
               <TableRow>
@@ -239,11 +269,11 @@ const OrderSetTable = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.colRoot }}
                     className={classes.borderRight}
                     style={{ zIndex: "100" }}
                   >
-                    {orderType !== "preOrder" && orderType !== "pre-order" && orderStatus !== "submitted" && (
+                    {orderStatus !== "submitted" && (
                       <div className={classes.headerCell}>
                         <DistributorSelection />
                       </div>
@@ -266,20 +296,20 @@ const OrderSetTable = (props) => {
                             <CancelIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <img
+                        <ImageWrapper
                           id={item.id}
-                          className={classes.previewImageFloat}
-                          src={item.imgUrl}
+                          imgClass={classes.previewImageFloat}
                           alt={item.itemType}
-                          onClick={() =>
+                          imgUrl={item.imgUrlThumb}
+                          handleClick={() => {
                             handleModalOpen(
-                              item.imgUrl,
+                              item.imgUrlLg,
                               item.brand,
                               item.itemType,
                               item.itemNumber,
                               item.itemDescription
-                            )
-                          }
+                            );
+                          }}
                         />
                         <Typography className={classes.headerText} variant="h5">
                           {item.brand}
@@ -290,10 +320,10 @@ const OrderSetTable = (props) => {
                 </TableRow>
                 <TableRow>
                   <TableCell
-                    classes={{ root: classes.root }}
+                    classes={{ root: classes.colRoot }}
                     className={classes.borderRight}
                     align="right"
-                    style={{ top: 138, zIndex: "100" }}
+                    style={{ top: 137, zIndex: "100" }}
                   >
                     <div className={classes.tableControl}>
                       <Typography>Order Details</Typography>
@@ -318,7 +348,7 @@ const OrderSetTable = (props) => {
                     return (
                       <TableCell
                         classes={{ root: classes.root }}
-                        style={{ top: 138, textAlign: "center" }}
+                        style={{ top: 137, textAlign: "center" }}
                         className={classes.borderRight}
                         key={item.id}
                       >
@@ -334,7 +364,7 @@ const OrderSetTable = (props) => {
                 <TableRow>
                   <TableCell
                     classes={{ root: classes.root }}
-                    style={{ padding: 0, top: 199 }}
+                    style={{ padding: 0, top: 197 }}
                     colSpan={currentItems.length + 1}
                     className={classes[tableStyle]}
                   >
@@ -344,7 +374,7 @@ const OrderSetTable = (props) => {
                           size="small"
                           className={classes.table}
                           aria-label="item-info"
-                          classes={{root: classes.tableRoot}}
+                          classes={{ root: classes.tableRoot }}
                         >
                           <TableBody
                             style={{ position: "relative", zIndex: "10" }}
@@ -352,7 +382,7 @@ const OrderSetTable = (props) => {
                             {orderType !== "pre-order" && (
                               <TableRow className={classes.infoRow}>
                                 <TableCell
-                                  classes={{ root: classes.root }}
+                                  classes={{ root: classes.colRoot }}
                                   style={{
                                     position: "sticky",
                                     left: 0,
@@ -383,7 +413,7 @@ const OrderSetTable = (props) => {
                             )}
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -413,7 +443,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -437,7 +467,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -465,7 +495,7 @@ const OrderSetTable = (props) => {
                             </TableRow>
                             <TableRow className={classes.infoRow}>
                               <TableCell
-                                classes={{ root: classes.root }}
+                                classes={{ root: classes.colRoot }}
                                 style={{
                                   position: "sticky",
                                   left: 0,
@@ -537,11 +567,17 @@ const OrderSetTable = (props) => {
                           </Tooltip>
                           <div style={{ display: "flex" }}>
                             <Tooltip title="Delete Order">
-                              <IconButton
-                                onClick={() => handleRemoveOrder(ord.id)}
-                              >
-                                <CancelIcon fontSize="small" color="inherit" />
-                              </IconButton>
+                              <span>
+                                <IconButton
+                                  onClick={() => handleRemoveOrder(ord.id)}
+                                  disabled={patchLoading}
+                                >
+                                  <CancelIcon
+                                    fontSize="small"
+                                    color="inherit"
+                                  />
+                                </IconButton>
+                              </span>
                             </Tooltip>
 
                             <Tooltip title="Edit Details">

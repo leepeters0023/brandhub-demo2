@@ -27,13 +27,19 @@ import { resetOrderHistory } from "./redux/slices/orderHistorySlice";
 import { resetPatchOrders } from "./redux/slices/patchOrderSlice";
 import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
-import { fetchAllSuppliers, clearSuppliers } from "./redux/slices/supplierSlice";
+import {
+  fetchAllSuppliers,
+  clearSuppliers,
+} from "./redux/slices/supplierSlice";
+import { fetchBUs } from "./redux/slices/businessUnitSlice";
 import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
   clearTerritories,
 } from "./redux/slices/territorySlice";
+import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
+import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -59,6 +65,7 @@ import Profile from "./pages/Profile";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import ProgramNew from "./pages/ProgramNew";
+import PublicItems from "./pages/PublicItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
@@ -131,6 +138,8 @@ const App = () => {
     dispatch(resetNewProgram());
     dispatch(clearTerritories());
     dispatch(clearSuppliers());
+    dispatch(resetComplianceItems());
+    dispatch(resetComplianceRules());
   };
 
   useEffect(() => {
@@ -150,6 +159,7 @@ const App = () => {
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
+        dispatch(fetchBUs());
       } else {
         dispatch(clearPrograms());
       }
@@ -170,6 +180,19 @@ const App = () => {
 
   if (userError) {
     handleLogout();
+  }
+
+  if (window.location.pathname.includes("/public/items")) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <PublicItems
+            handleFiltersClosed={handleFiltersClosed}
+            path="/public/items/:itemIds"
+          />
+        </Router>
+      </MuiThemeProvider>
+    );
   }
 
   if (!loggedIn && !currentUser) {

@@ -21,15 +21,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MemoNameInput = React.memo(
-  ({ dispatch, id, currentList }) => {
+  ({ dispatch, id }) => {
     const currentValue = useSelector(
       (state) =>
         state.distributors.favoriteDistributors.find(
           (distList) => distList.id === id
         ).name
     );
+    const userDistributors = useSelector(
+      (state) =>
+        state.distributors.favoriteDistributors.find(
+          (distList) => distList.id === id
+        ).distributors
+    );
     const { value: name, bind: bindName } = useInput(currentValue);
-
     return (
       <TextField
         style={{ width: "45%" }}
@@ -42,7 +47,7 @@ const MemoNameInput = React.memo(
         value={name}
         {...bindName}
         onBlur={() =>
-          dispatch(updateFavoriteDistributorList(id, name, currentList))
+          dispatch(updateFavoriteDistributorList(id, name, userDistributors))
         }
       />
     );
@@ -54,24 +59,9 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const FavoriteDistributorList = ({ id, index }) => {
+const FavoriteDistributorList = ({ id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  let styleObject =
-    index % 2 === 0
-      ? {
-          padding: "10px",
-          boxSizing: "border-box",
-          marginBottom: "20px",
-          backgroundColor: "white",
-        }
-      : {
-          padding: "10px",
-          boxSizing: "border-box",
-          marginBottom: "20px",
-          backgroundColor: "#f2f2f2",
-        };
 
   const [open, setOpen] = useState(false);
   const [distributor, setDistributor] = useState("");
@@ -118,7 +108,13 @@ const FavoriteDistributorList = ({ id, index }) => {
   }, [currentDistributors, userDistributors]);
 
   return (
-    <div style={styleObject}>
+    <div style={{
+      padding: "10px",
+      width: "97%",
+      boxSizing: "border-box",
+      // marginBottom: "20px",
+      backgroundColor: "white",
+    }}>
       <div
         style={{
           width: "100%",
@@ -130,7 +126,6 @@ const FavoriteDistributorList = ({ id, index }) => {
         <MemoNameInput
           dispatch={dispatch}
           id={id}
-          currentList={currentDistributors}
         />
         <Autocomplete
           style={{ width: "45%" }}

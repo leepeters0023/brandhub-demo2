@@ -23,11 +23,13 @@ const FiltersItems = ({
   classes,
   sequenceNum,
   bindSequenceNum,
+  itemDesc,
+  bindItemDesc,
   handleSearch,
 }) => {
   const dispatch = useDispatch();
 
-  const favoriteItems = useSelector(state => state.user.favoriteItems)
+  const favoriteItems = useSelector((state) => state.user.favoriteItems);
 
   return (
     <>
@@ -43,6 +45,19 @@ const FiltersItems = ({
             size="small"
             value={sequenceNum}
             {...bindSequenceNum}
+          />
+        </ListItem>
+        <ListItem>
+          <TextField
+            color="secondary"
+            fullWidth
+            name="sequenceNum"
+            type="text"
+            label="Item Description"
+            variant="outlined"
+            size="small"
+            value={itemDesc}
+            {...bindItemDesc}
           />
         </ListItem>
         <ListItem>
@@ -66,7 +81,9 @@ const FiltersItems = ({
             variant="contained"
             color="secondary"
             disabled={favoriteItems.length === 0}
-            onClick={()=>handleFilters([...favoriteItems], "favItems", "item-all")}
+            onClick={() =>
+              handleFilters([...favoriteItems], "favItems", "item-all")
+            }
           >
             FILTER FAVORITES
           </Button>

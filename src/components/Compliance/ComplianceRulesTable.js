@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,9 +15,23 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
-  { id: "tags", disablePadding: false, label: "Rule Tags", sort: false },
+  { id: "ruleType", disablePadding: false, label: "Rule Type", sort: false },
   { id: "desc", disablePadding: false, label: "Description", sort: false },
+  { id: "itemTypes", disablePadding: false, label: "Item Types", sort: false },
+  {
+    id: "itemTypeCode",
+    disablePadding: false,
+    label: "Item Type Code",
+    sort: false,
+  },
+  {
+    id: "productFamilies",
+    disablePadding: false,
+    label: "Product Families",
+    sort: false,
+  },
+  { id: "price", disablePadding: false, label: "Price", sort: false },
+  { id: "states", disablePadding: false, label: "State Codes", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -147,17 +163,16 @@ const ComplianceRulesTable = ({
               rules.map((row, index) => (
                 <TableRow key={index} hover className={classes.clickableRow}>
                   <TableCell align="left">{row.ruleType}</TableCell>
-                  <TableCell align="left">{row.tags.join(", ")}</TableCell>
-                  {row.contact ? (
-                    <TableCell align="left">
-                      <div>
-                        <Typography variant="body2">{row.desc}</Typography>
-                        <Typography variant="body2">{`${row.contact} - ${row.email}`}</Typography>
-                      </div>
-                    </TableCell>
-                  ) : (
-                    <TableCell align="left">{row.desc}</TableCell>
-                  )}
+                  <TableCell align="left">{row.desc}</TableCell>
+                  <TableCell align="left">{row.itemTypes}</TableCell>
+                  <TableCell align="left">{row.itemTypeCode}</TableCell>
+                  <TableCell align="left">{row.productFamilies}</TableCell>
+                  <TableCell align="left">
+                    {row.price !== "---"
+                      ? formatMoney(row.price, false)
+                      : row.price}
+                  </TableCell>
+                  <TableCell align="left">{row.states}</TableCell>
                 </TableRow>
               ))}
             {rulesLoading && (

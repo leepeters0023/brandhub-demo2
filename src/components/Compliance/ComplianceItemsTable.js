@@ -24,7 +24,7 @@ const headCells = [
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
-  { id: "tags", disablePadding: false, label: "Rule Tags", sort: false },
+  { id: "desc", disablePadding: false, label: "Rule Description", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -262,7 +262,7 @@ const ComplianceItemsTable = ({
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
-                    <TableCell align="left">{row.tags.join(", ")}</TableCell>
+                    <TableCell align="left">{row.ruleDesc}</TableCell>
                     <TableCell align="left">
                       {row.status === "Pending" &&
                       row.ruleType === "Prior Approval" ? (

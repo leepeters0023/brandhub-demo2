@@ -38,7 +38,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
     <>
       <FormControl
         aria-label="program-selector"
-        style={{ margin: "0 5px", width: "300px" }}
+        style={{ margin: "0 5px", width: "400px" }}
         size="small"
       >
         <Select
@@ -78,7 +78,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
                     className={classes.headerText}
                     style={{ overflow: "hidden" }}
                   >
-                    {`${program.name}-${program.focusMonth}`}
+                    {`${program.brand.length === 1 ? program.brand[0] : "Multi Brand"} - ${program.name}`}
                   </Typography>
                   {(program.status === "submitted" || program.status === "approved") && (
                     <Tooltip title="Submitted">
@@ -107,7 +107,7 @@ const ProgramSelector = ({ handler, currentProgram }) => {
                 </div>
               ) : (
                 <Typography className={classes.headerText}>
-                  {`${program.name}-${program.focusMonth}`}
+                  {`${program.brand.length === 1 ? program.brand[0] : "Multi Brand"} - ${program.name}`}
                 </Typography>
               )}
             </MenuItem>

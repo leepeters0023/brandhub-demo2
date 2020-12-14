@@ -189,12 +189,16 @@ const CurrentPO = () => {
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`In-Market Date:  ${new Date(currentPO.dueDate).toLocaleDateString()}`}
+                  {`In-Market Date:  ${new Date(
+                    currentPO.dueDate
+                  ).toLocaleDateString()}`}
                 </Typography>
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`Expected Ship:  ${new Date(currentPO.expectedShip).toLocaleDateString()}`}
+                  {`Expected Ship:  ${new Date(
+                    currentPO.expectedShip
+                  ).toLocaleDateString()}`}
                 </Typography>
               </>
             )}
@@ -215,7 +219,7 @@ const CurrentPO = () => {
         container
         spacing={5}
         style={{ width: "75%", minWidth: "1000px" }}
-        alignItems="flex-end"
+        alignItems="flex-start"
       >
         <Grid item sm={6}>
           <div className={classes.fullHeightGridItem}>
@@ -239,7 +243,7 @@ const CurrentPO = () => {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  rows="2"
+                  rows="4"
                   onBlur={updateTape}
                   {...bindKeyAcctTape}
                 />
@@ -251,7 +255,7 @@ const CurrentPO = () => {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  rows="4"
+                  rows="6"
                   onBlur={updateNote}
                   {...bindNote}
                 />
@@ -271,8 +275,38 @@ const CurrentPO = () => {
         </Grid>
         <Grid item sm={6}>
           <Typography className={clsx(classes.headerText, classes.POText)}>
-            {`Spec Details: ${currentPO.specDetails}`}
+            Spec Details:
           </Typography>
+          <br />
+          {currentPO.poItems.map((item, index) => {
+            let specElements = Object.keys(item.itemSpec).map((spec, i) => (
+              <Typography key={`${i}-${index}`} className={classes.bodyText}>
+                {`${spec}: ${item.itemSpec[spec]}`}
+              </Typography>
+            ));
+            return (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
+                <Typography className={clsx(classes.bodyText, classes.POText)}>
+                  {item.sequenceNum}
+                </Typography>
+                {specElements}
+                {index !== currentPO.poItems.length - 1 && (
+                  <>
+                    <br />
+                    <Divider />
+                    <br />
+                  </>
+                )}
+              </div>
+            );
+          })}
         </Grid>
       </Grid>
       <br />

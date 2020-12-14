@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -63,11 +65,11 @@ const ItemTable = ({ items, isLoading, handleDelete }) => {
               items.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell align="left">
-                  <img
+                  <ImageWrapper
                     id={item.itemNumber}
-                    className={classes.previewImg}
-                    src={item.imgUrl}
+                    imgClass={classes.previewImg}
                     alt={item.itemType}
+                    imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
                   <TableCell align="left">

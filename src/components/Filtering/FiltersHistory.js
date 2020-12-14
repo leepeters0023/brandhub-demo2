@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import subDays from "date-fns/subDays";
+import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 
 import { useDispatch } from "react-redux";
@@ -218,7 +219,7 @@ const FiltersHistory = ({
                   margin="normal"
                   id="toDate"
                   label="Order To Date"
-                  value={toDate || format(new Date(), "MM/dd/yyyy")}
+                  value={toDate || format(addDays(new Date(), 1),"MM/dd/yyyy")}
                   onChange={(value) =>
                     handleFilters(value, "toDate", "history")
                   }

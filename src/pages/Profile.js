@@ -6,6 +6,7 @@ import { useWindowHash } from "../hooks/UtilityHooks";
 import General from "../components/Profile/General";
 import DistributorOptions from "../components/Profile/DistributorOptions";
 import FavoriteItems from "../components/Profile/FavoriteItems";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -26,11 +27,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = ({ userType, handleFiltersClosed }) => {
   const classes = useStyles();
-  const tabs = ["#general", "#favoriteDist", "#favoriteItem"]
+  const tabs = ["#general", "#favoriteDist", "#favoriteItem"];
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-
-  const handleChangeTab = useWindowHash(tabs, setSelectedIndex)
+  const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
 
   useEffect(() => {
     handleFiltersClosed();
@@ -78,12 +78,13 @@ const Profile = ({ userType, handleFiltersClosed }) => {
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
             {selectedIndex === 1 && <General />}
             {selectedIndex === 2 && <DistributorOptions />}
-            {selectedIndex === 3 && <FavoriteItems classes={classes}/>}
+            {selectedIndex === 3 && <FavoriteItems classes={classes} />}
           </Grid>
           <Grid item md={1} xs={false} />
         </Grid>
       </Container>
       <br />
+      <OrderPatchLoading />
     </>
   );
 };

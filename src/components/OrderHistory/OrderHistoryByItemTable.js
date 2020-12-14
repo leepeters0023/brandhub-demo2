@@ -5,6 +5,8 @@ import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -211,15 +213,15 @@ const OrderHistoryByItemTable = ({
                   }}
                 >
                   <TableCell align="left">
-                    <img
+                    <ImageWrapper
                       id={row.sequenceNum}
-                      className={classes.previewImageFloat}
-                      src={row.imgUrl}
+                      imgClass={classes.previewImageFloat}
                       alt={row.itemType}
-                      onClick={(evt) => {
+                      imgUrl={row.imgUrlThumb}
+                      handleClick={(evt) => {
                         evt.stopPropagation();
                         handlePreview(
-                          row.imgUrl,
+                          row.imgUrlLg,
                           row.brand.join(", "),
                           row.itemType,
                           row.sequenceNum,

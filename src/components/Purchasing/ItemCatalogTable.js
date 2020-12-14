@@ -10,6 +10,8 @@ import {
   clearItemSelection,
 } from "../../redux/slices/itemSlice";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,7 +21,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const headCells = [
   { id: "preview", label: "Preview" },
@@ -31,14 +37,24 @@ const headCells = [
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
   { id: "estCost", label: "Est. Cost" },
+  { id: "addItem", label: "Add" },
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, rowCount, onSelectAllClick, numSelected, type } = props;
+  const {
+    classes,
+    rowCount,
+    onSelectAllClick,
+    numSelected,
+    type,
+    forProgram,
+  } = props;
 
   const currentHeadCells =
     type === "in-stock"
-      ? headCells
+      ? headCells.filter((cell) => cell.id !== "addItem")
+      : !forProgram
+      ? headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addItem")
       : headCells.filter((cell) => cell.id !== "stock");
 
   return (
@@ -83,11 +99,15 @@ const ItemCatalogTable = ({
   isItemsLoading,
   catalogType,
   scrollRef,
+  addPreOrderItem,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
   const selectedItems = useSelector((state) => state.items.selectedItems);
+  const preOrderItems = useSelector((state) => state.programs.currentPreOrderItems);
+  const isPreOrderLoading = useSelector((state) => state.orderSet.isLoading);
+  const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -134,6 +154,7 @@ const ItemCatalogTable = ({
             onSelectAllClick={handleSelectAllClick}
             rowCount={currentItems.length}
             type={catalogType}
+            forProgram={addPreOrderItem ? true : false}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -146,6 +167,7 @@ const ItemCatalogTable = ({
               </TableRow>
             )}
             {!isItemsLoading &&
+              !isPreOrderLoading &&
               currentItems.length > 0 &&
               currentItems.map((item, index) => {
                 const isItemSelected = isSelected(item.id);
@@ -164,12 +186,12 @@ const ItemCatalogTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <img
+                      <ImageWrapper
                         id={item.itemNumber}
-                        className={classes.previewImageFloat}
-                        src={item.imgUrl}
+                        imgClass={classes.previewImageFloat}
                         alt={item.itemType}
-                        onClick={() => handlePreview(item.itemNumber)}
+                        imgUrl={item.imgUrlThumb}
+                        handleClick={() => handlePreview(item.itemNumber)}
                       />
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
@@ -183,13 +205,38 @@ const ItemCatalogTable = ({
                         {item.stock ? item.stock : "---"}
                       </TableCell>
                     )}
-                    <TableCell>{`${formatMoney(item.estCost, false)}`}</TableCell>
+                    <TableCell>{`${formatMoney(
+                      item.estCost,
+                      false
+                    )}`}</TableCell>
+                    {!patchLoading && addPreOrderItem && (
+                      <TableCell padding="checkbox" align="center">
+                        <Tooltip title="Add to Pre Order">
+                          <span>
+                            <IconButton
+                              onClick={() => addPreOrderItem(item.id)}
+                              disabled={
+                                isPreOrderLoading ||
+                                preOrderItems.filter((i) => i === item.id).length > 0
+                              }
+                            >
+                              <AddCircleIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      </TableCell>
+                    )}
+                    {patchLoading && addPreOrderItem && (
+                      <TableCell padding="checkbox" align="center">
+                        <CircularProgress size={25} />
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}
-            {isItemsLoading && (
+            {(isItemsLoading || isPreOrderLoading) && (
               <TableRow>
-                <TableCell align="left" colSpan={8}>
+                <TableCell align="left" colSpan={9}>
                   <CircularProgress />
                 </TableCell>
               </TableRow>

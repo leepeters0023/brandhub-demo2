@@ -14,9 +14,14 @@ export const filter = (array, filters) => {
           filtered = false;
           break;
         }
+        if (filters[i].type === "unit" && !item.unit.includes(filters[i].value.name)) {
+          filtered = false;
+          break;
+        }
         if (
           item[filters[i].type] !== filters[i].value &&
-          filters[i].type !== "brand"
+          filters[i].type !== "brand" &&
+          filters[i].type !== "unit"
         ) {
           filtered = false;
           break;
@@ -37,9 +42,9 @@ export const earliestDate = (dateArray) => {
       : !isBefore(new Date(a["start-date"]), new Date(b["start-date"]))
       ? 1
       : 0;
-  })
+  });
   return sortedDates;
-}
+};
 
 /*
 Formats integers into $00.00 format for display purposes, all incoming data
@@ -64,13 +69,13 @@ export const formatMoney = (value, ops) => {
 
 //handles incoming money values that are strings
 export const stringToCents = (numString) => {
-  return parseFloat(numString) * 100
-}
+  return parseFloat(numString) * 100;
+};
 
 //Used in order tables to ensure order numbers match pack size
 export const roundUp = (value, rounder) => {
   if (rounder === 1) {
-    return value
+    return value;
   }
   if (value % rounder === 0) {
     return value;
