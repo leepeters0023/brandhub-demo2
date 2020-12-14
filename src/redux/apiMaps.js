@@ -1,5 +1,5 @@
 import { earliestDate, stringToCents } from "../utility/utilityFunctions";
-import { brandBULookup } from "../utility/constants";
+import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
 import { format } from "date-fns";
 

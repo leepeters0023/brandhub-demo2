@@ -116,8 +116,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const [open, setOpen] = useCallback(useState(true));
-  const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
   const [program, setProgram] = useState(undefined);
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
@@ -375,10 +373,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           currentItems.length > 0 && (
             <OrderSetTable
               currentProgram={program}
-              open={open}
-              setOpen={setOpen}
-              tableStyle={tableStyle}
-              setTableStyle={setTableStyle}
               handleModalOpen={handleModalOpen}
               handleOpenConfirm={handleOpenConfirm}
               handleRemoveOrder={handleDeleteOrderModal}
