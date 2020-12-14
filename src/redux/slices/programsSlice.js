@@ -250,7 +250,6 @@ export const addItemToPreOrder = (orderId, itemId) => async (dispatch) => {
   try {
     dispatch(patchLoading());
     let orderItemStatus = await addOrderSetItem(orderId, itemId);
-    console.log(orderItemStatus);
     if (orderItemStatus.error) {
       throw orderItemStatus.error
     }

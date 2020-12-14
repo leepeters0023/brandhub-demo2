@@ -76,7 +76,6 @@ export const fetchAllPreOrders = async (id) => {
 //Returns order set history based on filters, paginated in groups of 20
 export const fetchAllFilteredOrderSets = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  console.log(filterObject)
   const sortMap = {
     user: "user-name",
     state: "distributor-state",
@@ -104,7 +103,6 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
         queryTotal: null,
       };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       dataObject.orderCount = res.data.meta["total_entries"]
