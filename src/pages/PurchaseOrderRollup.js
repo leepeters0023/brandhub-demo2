@@ -37,6 +37,7 @@ const defaultFilters = {
   brand: [],
   program: [],
   itemType: [],
+  bus: [],
   sequenceNum: "",
   sortOrder: "asc",
   sortOrderBy: "sequenceNum",

@@ -82,6 +82,10 @@ export const buildFilters = (
     filterObject.itemType && filterObject.itemType.length > 0
       ? `filter[item-type-ids]=${separateByComma(filterObject.itemType, "id")}`
       : "";
+  let buString =
+    filterObject.bu && filterObject.bu.length > 0
+      ? `filter[business-unit-ids]=${separateByComma(filterObject.bu, "id")}`
+      : "";
   let favItemString =
     filterObject.favItems && filterObject.favItems.length > 0
       ? `filter[ids]=${separateByComma(filterObject.favItems, "id")}`
@@ -90,6 +94,11 @@ export const buildFilters = (
     filterObject.supplier && filterObject.supplier.length > 0
       ? `filter[supplier-ids]=${separateByComma(filterObject.supplier, "id")}`
       : "";
+  let ruleTypeString = filterObject.ruleType && filterObject.ruleType.length > 0
+    ? filterObject.ruleType === "all"
+      ? ""
+      : `filter[type]=${filterObject.ruleType}`
+    : "";
 
   let queryArray = [
     uniqueFilter,
@@ -104,10 +113,12 @@ export const buildFilters = (
     progString,
     brandString,
     itemTypeString,
+    buString,
     favItemString,
     userString,
     supplierString,
     sortString,
+    ruleTypeString,
   ];
 
   let queryStringAppend = queryArray

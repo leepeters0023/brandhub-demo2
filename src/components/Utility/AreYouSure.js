@@ -49,9 +49,6 @@ const AreYouSure = ({ open, handleClose, handleRemove, itemNumber, type }) => {
                   }?`
                 : "Are you sure you want to remove this item?"}
             </Typography>
-            <Typography className={classes.titleText}>
-              This action cannot be undone.
-            </Typography>
             <Button
               variant="contained"
               className={classes.largeButton}

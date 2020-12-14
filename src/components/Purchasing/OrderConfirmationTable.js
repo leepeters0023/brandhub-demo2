@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -51,11 +53,11 @@ const OrderConfirmationTable = ({ items }) => {
             {items.map((item) => (
               <TableRow key={item.itemNumber}>
                 <TableCell align="left">
-                  <img
+                <ImageWrapper
                     id={item.itemNumber}
-                    className={classes.previewImg}
-                    src={item.imgUrl}
+                    imgClass={classes.previewImg}
                     alt={item.itemType}
+                    imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
                 <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>

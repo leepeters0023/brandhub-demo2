@@ -240,8 +240,11 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               </>
             )}
           </div>
-          <div className={classes.navBreak} style={{ float: "right", marginTop: "-67px" }}>
-            {territories.length > 1 && <RegionSelector />}
+          <div
+            className={classes.navBreak}
+            style={{ float: "right", marginTop: "-67px" }}
+          >
+            {territories && territories.length > 0 && <RegionSelector />}
             <UserNav
               initials={initials}
               handleLogout={handleLogout}

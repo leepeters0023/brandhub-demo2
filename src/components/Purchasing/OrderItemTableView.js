@@ -10,6 +10,8 @@ import {
   clearItemSelections,
 } from "../../redux/slices/currentOrderSlice";
 
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -199,12 +201,12 @@ const OrderItemTableView = ({
                       />
                     </TableCell>
                     <TableCell align="left">
-                      <img
+                      <ImageWrapper
                         id={row.id}
-                        className={classes.previewImageFloat}
-                        src={row.imgUrl}
+                        imgClass={classes.previewImageFloat}
                         alt={row.itemType}
-                        onClick={() => {
+                        imgUrl={row.imgUrlThumb}
+                        handleClick={() => {
                           handlePreview(row.itemNumber);
                           setCurrentItemAdded(null);
                         }}
@@ -221,7 +223,10 @@ const OrderItemTableView = ({
                         {row.stock ? row.stock : "---"}
                       </TableCell>
                     )}
-                    <TableCell>{`${formatMoney(row.estCost, false)}`}</TableCell>
+                    <TableCell>{`${formatMoney(
+                      row.estCost,
+                      false
+                    )}`}</TableCell>
                   </TableRow>
                 );
               })}

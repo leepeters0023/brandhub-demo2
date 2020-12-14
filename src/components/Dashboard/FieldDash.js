@@ -120,7 +120,14 @@ const FieldDash = ({ classes, InfoPopover }) => {
           handlePopoverClose={handlePopoverClose}
         />
       </Grid>
-      <Grid item md={3} sm={6} xs={12} component={Link} to="/orders/history">
+      <Grid
+        item
+        md={3}
+        sm={6}
+        xs={12}
+        component={Link}
+        to="/orders/history/group/byOrder"
+      >
         <div className={classes.dashboardGridItem}>
           <Paper className={classes.dashPaper}>
             <div

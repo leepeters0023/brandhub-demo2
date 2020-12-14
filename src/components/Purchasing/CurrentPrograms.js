@@ -4,12 +4,14 @@ import PropTypes from "prop-types";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
-import IconButton from "@material-ui/core/IconButton";
+import ImageWrapper from "../Utility/ImageWrapper";
+
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -29,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "15px",
     borderRadius: "50%",
     objectFit: "cover",
-    filter: "sepia(100%)",
-    transition: "all .5s ease",
+    filter: "sepia(50%)",
+    transition: "all .25s ease",
     "&:hover": {
       cursor: "pointer",
       filter: "sepia(0%)",
@@ -87,25 +89,27 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
             >
               <Paper className={classes.singleItem}>
                 <Link to={`/program/${prog.id}#details`}>
-                  <Tooltip title="Program Details" placement="top">
-                    <img
-                      id={prog.id}
-                      className={classes.programImg}
-                      src={prog.imgUrl}
-                      alt={prog.name}
-                    />
-                  </Tooltip>
+                  <ImageWrapper
+                    id={prog.id}
+                    imgClass={classes.programImg}
+                    alt={prog.name}
+                    imgUrl={prog.imgUrl}
+                  />
                 </Link>
                 <Typography className={classes.headerText}>
                   {`${prog.name} - ${prog.focusMonth}`}
                 </Typography>
                 <div>
                   <Typography variant="body2" color="textSecondary">
+                    {`Brand(s): ${prog.brand.join(", ")}`}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {`Budget: ${formatMoney(
-                      Math.floor(Math.random() * 1000000 + 1000000), false
+                      Math.floor(Math.random() * 1000000 + 1000000),
+                      false
                     )}`}
                   </Typography>
                 </div>
@@ -114,12 +118,16 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                     {userType === "field1" && (
                       <Tooltip title="Place Pre-Order">
                         <span>
-                          <IconButton
+                          <Button
                             component={Link}
                             to={`/orders/open/preorder#${prog.id}`}
+                            className={classes.largeButton}
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<ExitToAppIcon />}
                           >
-                            <ExitToAppIcon />
-                          </IconButton>
+                            ORDER
+                          </Button>
                         </span>
                       </Tooltip>
                     )}

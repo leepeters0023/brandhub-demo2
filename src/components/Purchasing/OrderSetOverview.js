@@ -98,7 +98,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       dispatch(clearCurrentOrder());
     };
   }, [orderType, orderSet, setOrderType, dispatch]);
-  
+
   return (
     <>
       <Grid container spacing={5}>
@@ -108,11 +108,22 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           </Typography>
           <Divider />
           <br />
-          <OrderSetConfirmationTable
-            orders={orderSet.orders}
-            items={orderSet.items}
-            type={orderSet.type}
-          />
+          {orderSet.items
+            .map((item) => item.totalItems)
+            .reduce((a, b) => a + b) > 0 ? (
+            <OrderSetConfirmationTable
+              orders={orderSet.orders}
+              items={orderSet.items}
+              type={orderSet.type}
+            />
+          ) : (
+            <Typography
+              className={classes.bodyText}
+              style={{ marginTop: "20px" }}
+            >
+              There are no items added to this order currently ...
+            </Typography>
+          )}
         </Grid>
         <Grid item lg={3} sm={12} xs={12}>
           <Typography className={classes.headerText}>

@@ -1,7 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchOrdersByProgram, fetchOrderSetById } from "../../api/orderApi";
+import {
+  fetchOrdersByProgram,
+  fetchOrderSetById,
+  addSingleOrderToSet,
+} from "../../api/orderApi";
 
 import { setPreOrderDetails } from "./preOrderDetailSlice";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
+import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 
@@ -55,6 +65,7 @@ single order set model:
 
 let initialState = {
   isLoading: false,
+  isOrderLoading: false,
   orderId: null,
   type: null,
   status: null,
@@ -62,6 +73,7 @@ let initialState = {
   orders: [],
   orderTotal: 0,
   orderNote: "",
+  rebuildRef: false,
   error: null,
 };
 
@@ -69,9 +81,14 @@ const startLoading = (state) => {
   state.isLoading = true;
 };
 
+const startOrderLoading = (state) => {
+  state.isOrderLoading = true;
+};
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.isOrderLoading = false;
   state.error = error;
 };
 
@@ -80,10 +97,11 @@ const orderSetSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
       const { orderId, type, orders, items, status, note } = action.payload;
+      let currentItems = [...items];
       if (orders.length !== 0) {
-        let currentItems = [...items];
         let ordTotal = 0;
         orders.forEach((ord) => {
           let orderItems = [...ord.items];
@@ -108,8 +126,13 @@ const orderSetSlice = createSlice({
         state.error = null;
       } else {
         state.orders = [];
-        state.items = [];
-        state.isLaoding = false;
+        state.orderId = orderId;
+        state.status = status;
+        state.type = type;
+        state.items = currentItems;
+        state.orderNote = note;
+        state.orderTotal = 0;
+        state.isLoading = false;
         state.error = null;
       }
     },
@@ -227,6 +250,41 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
+    setRebuildRef(state) {
+      state.rebuildRef = !state.rebuildRef;
+    },
+    addOrderSuccess(state, action) {
+      const { order } = action.payload;
+      const currentOrders = state.orders
+        .map((ord) => ({ ...ord }))
+        .concat(order);
+      currentOrders.sort((a, b) => {
+        return a.distributorName < b.distributorName
+          ? -1
+          : a.distributorName > b.distributorName
+          ? 1
+          : 0;
+      });
+      state.orders = [...currentOrders];
+      state.isOrderLoading = false;
+      state.error = null;
+    },
+    addMultipleOrdersSuccess(state, action) {
+      const { orders } = action.payload;
+      const currentOrders = state.orders
+        .map((ord) => ({ ...ord }))
+        .concat(orders);
+      currentOrders.sort((a, b) => {
+        return a.distributorName < b.distributorName
+          ? -1
+          : a.distributorName > b.distributorName
+          ? 1
+          : 0;
+      });
+      state.orders = [...currentOrders];
+      state.isOrderLoading = false;
+      state.error = null;
+    },
     clearOrderSet(state) {
       state.isLoading = false;
       state.orderId = null;
@@ -244,6 +302,7 @@ const orderSetSlice = createSlice({
 
 export const {
   setIsLoading,
+  setOrderLoading,
   buildTableFromOrders,
   setGridItem,
   setItemTotal,
@@ -253,6 +312,9 @@ export const {
   updateOrderNote,
   setOrderStatus,
   clearOrderSet,
+  setRebuildRef,
+  addOrderSuccess,
+  addMultipleOrdersSuccess,
   setFailure,
 } = orderSetSlice.actions;
 
@@ -311,6 +373,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
 export const fetchProgramOrders = (program, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(resetPreOrderItems());
     const currentOrders = await fetchOrdersByProgram(program, userId);
     if (currentOrders.error) {
       throw currentOrders.error;
@@ -351,7 +414,50 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
         note: note,
       })
     );
+    dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+export const createSingleOrder = (id, dist, type) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    const order = await addSingleOrderToSet(id, dist, type);
+    if (order.error) {
+      throw order.error;
+    }
+    const formattedOrder = mapOrderHistoryOrders([order.data]);
+    dispatch(addOrderSuccess({ order: formattedOrder }));
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
+
+export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    const orders = [];
+    await Promise.all(
+      idArray.map(async (distId) => {
+        const order = await addSingleOrderToSet(id, distId, type);
+        if (order.error) {
+          throw order.error;
+        }
+        orders.push(order.data);
+      })
+    );
+    let mappedOrders = mapOrderHistoryOrders(orders);
+    dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };

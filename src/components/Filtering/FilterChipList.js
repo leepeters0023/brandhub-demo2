@@ -27,21 +27,20 @@ const FilterChipList = () => {
   const handleChipClick = (type, value) => {
     let dispatchObject = { filter: type, value: null };
     if (
-      type === "bu" ||
-      type === "month" ||
-      type === "ruleType" ||
-      type === "supplier"
+      type === "month"
     ) {
       let currentFilterArray = filterState[type].filter((f) => f !== value);
       dispatchObject.value = currentFilterArray;
     }
     if (
+      type === "bu" ||
       type === "program" ||
       type === "itemType" ||
       type === "brand" ||
       type === "user" ||
       type === "distributor" ||
-      type === "territory"
+      type === "territory" ||
+      type === "supplier"
     ) {
       let currentFilterArray = filterState[type].filter(
         (f) => f.name !== value
@@ -57,7 +56,7 @@ const FilterChipList = () => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
       {filterState.chipList.map((filter) => (
         <Chip
           style={{ margin: "auto 2.5px" }}
