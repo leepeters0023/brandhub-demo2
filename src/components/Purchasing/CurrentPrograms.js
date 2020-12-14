@@ -6,12 +6,12 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 
-import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -118,12 +118,16 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                     {userType === "field1" && (
                       <Tooltip title="Place Pre-Order">
                         <span>
-                          <IconButton
+                          <Button
                             component={Link}
                             to={`/orders/open/preorder#${prog.id}`}
+                            className={classes.largeButton}
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<ExitToAppIcon />}
                           >
-                            <ExitToAppIcon />
-                          </IconButton>
+                            ORDER
+                          </Button>
                         </span>
                       </Tooltip>
                     )}

@@ -18,6 +18,7 @@ import {
   submitPO,
   updateShippingParams,
 } from "../../api/purchasingApi";
+import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
 
 let initialState = {
@@ -133,12 +134,13 @@ const purchaseOrderSlice = createSlice({
     },
     updateItemActualCost(state, action) {
       const { id, cost } = action.payload;
+      let fixedCost = stringToCents(cost);
       const updatedItems = state.currentPO.poItems.map((item) => {
         if (item.id === id) {
           return {
             ...item,
-            actCost: +cost,
-            totalCost: +cost * item.totalItems,
+            actCost: +fixedCost,
+            totalCost: +fixedCost * item.totalItems,
           };
         } else return item;
       });

@@ -22,9 +22,9 @@ const useStyles = makeStyles((theme) => ({
     borderRight: "1px solid #cbcbcb",
   },
   root: {
-    width: "300px !important",
-    maxWidth: "300px !important",
-    minWidth: "300px !important",
+    width: "200px !important",
+    maxWidth: "200px !important",
+    minWidth: "200px !important",
   },
 }));
 

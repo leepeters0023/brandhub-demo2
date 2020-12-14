@@ -35,7 +35,7 @@ const DistributorTable = ({ distributors, name, isLoading, id }) => {
 
   return (
     <>
-      <TableContainer className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer} style={{maxHeight: "Calc(100vh - 200px)"}}>
         <Table stickyHeader className={classes.table}>
           <TableHead>
             <TableRow>
