@@ -4,6 +4,8 @@ import { fetchAllPreOrders } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
 
+import { stringToCents } from "../../utility/utilityFunctions";
+
 /*
 * Pre Order Detail Model
 notes: This slice is responsible for managing the details of all current pre order programs
@@ -123,7 +125,7 @@ export const fetchPreOrders = (id, type, program) => async (dispatch) => {
           ? ["National"]
           : order["territory-names"].split(", "),
       totalItems: order["total-quantity"],
-      totalEstCost: order["total-estimated-cost"],
+      totalEstCost: stringToCents(order["total-estimated-cost"]),
       status: order.status,
     }));
     let totalCost = preOrders
@@ -131,7 +133,7 @@ export const fetchPreOrders = (id, type, program) => async (dispatch) => {
       .reduce((a, b) => a + b);
     let totalModCost = currentPreOrders.data.preOrders
       .filter((order) => order.program.id !== program)
-      .map((ord) => ord["total-estimated-cost"])
+      .map((ord) => stringToCents(ord["total-estimated-cost"]))
       .reduce((a, b) => a + b);
     preOrders.forEach((order) => {
       dispatch(
