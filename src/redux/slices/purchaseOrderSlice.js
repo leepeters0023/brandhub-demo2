@@ -128,7 +128,6 @@ const purchaseOrderSlice = createSlice({
     },
     updateItemActualCost(state, action) {
       const { id, cost } = action.payload;
-      console.log(cost);
       let fixedCost = stringToCents(cost);
       const updatedItems = state.currentPO.poItems.map((item) => {
         if (item.id === id) {
