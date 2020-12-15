@@ -170,8 +170,12 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
             {`Total Cost: ${formatMoney(orderSet.orderTotal, false)}`}
           </Typography>
           <br />
-          {((currentUserRoll === "super" && orderSet.status !== "approved") ||
-            (currentUserRoll === "field2" && orderSet.status !== "approved") ||
+          {((currentUserRoll === "super" &&
+            orderSet.status !== "approved" &&
+            window.location.href.includes("approval")) ||
+            (currentUserRoll === "field2" &&
+              orderSet.status !== "approved" &&
+              window.location.href.includes("approval")) ||
             (orderSet.status !== "submitted" &&
               orderSet.status !== "approved")) && (
             <Button
@@ -220,6 +224,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           {((orderSet.status === "submitted" &&
             currentUserRoll !== "super" &&
             currentUserRoll !== "field2") ||
+            (orderSet.status === "submitted" &&
+              (currentUserRoll === "super" || currentUserRoll === "field2") &&
+              !window.location.href.includes("approval")) ||
             orderSet.status === "approved") && (
             <>
               <Typography className={classes.headerText}>
