@@ -193,7 +193,9 @@ export const mapOrderHistoryItems = (items) => {
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["total-estimated-cost"]),
     actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
-    totalActCost: item["total-actual-cost"] ? stringToCents(item["total-actual-cost"]) : "---",
+    totalActCost: item["total-actual-cost"]
+      ? stringToCents(item["total-actual-cost"])
+      : "---",
     orderDate: item["order-submitted-at"],
     shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
     tracking: item["tracking-number"] ? item["tracking-number"] : "---",
@@ -222,7 +224,9 @@ export const mapOrderItems = (items, type) => {
       estCost: stringToCents(item.item["estimated-cost"]),
       totalItems: type === "order-set-item" ? 0 : item.qty,
       totalEstCost:
-        type === "order-set-item" ? 0 : stringToCents(item["total-estimated-cost"]),
+        type === "order-set-item"
+          ? 0
+          : stringToCents(item["total-estimated-cost"]),
       actTotal: "---",
       complianceStatus: item.item["compliance-status"]
         ? item.item["compliance-status"]
@@ -342,10 +346,10 @@ export const mapPOShippingParamItems = (items) => {
     shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
     shipFromZip: item["ship-from-zip"] ? item["ship-from-zip"] : "---",
     carrier: item.carrier ? item.carrier : "---",
-    serviceLevel: item["service-level"] ? item["service-level"] : "---",
+    method: item.method ? item.method : "---",
     actShipDate: item["actual-ship-date"] ? item["actual-ship-date"] : "---",
-    shippedQuantity: item["shipped-quantity"]
-      ? item["shipped-quantity"]
+    shippedQuantity: item["shipped-qty"]
+      ? item["shipped-qty"]
       : "---",
     packageCount: item["package-count"] ? item["package-count"] : "---",
     packageType: item["package-type"] ? item["packageType"] : "---",
@@ -359,6 +363,7 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
+  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]
@@ -374,7 +379,9 @@ export const mapPOShippingParams = (params) => {
   };
   const mappedParams = params.map((param) => {
     let paramItems = mapPOShippingParamItems(param["shipping-parameter-items"]);
-    let carriers = [...new Set(paramItems.map(item => item.carrier))].join(", ")
+    let carriers = [...new Set(paramItems.map((item) => item.carrier))].join(
+      ", "
+    );
     return {
       id: param.id,
       distributor: param.distributor ? param.distributor.name : "---",
