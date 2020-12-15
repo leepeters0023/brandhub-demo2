@@ -19,6 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "state", disablePadding: false, label: "State", sort: false },
   {
     id: "totalEstCost",
@@ -134,7 +135,7 @@ const RollupOverViewTable = ({
   scrollRef,
 }) => {
   const classes = useStyles();
-
+  console.log(rollupData)
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("user");
 
@@ -196,6 +197,7 @@ const RollupOverViewTable = ({
                 >
                   <TableCell align="left">{row.userName}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">{row.brand}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost, false)}
