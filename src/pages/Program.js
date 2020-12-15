@@ -12,13 +12,15 @@ import {
   addPreOrderItems,
 } from "../redux/slices/programsSlice";
 import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
-
+import { addToFavoriteItems } from "../redux/slices/userSlice";
 import { setRetain } from "../redux/slices/filterSlice";
+import { clearItemSelection } from "../redux/slices/itemSlice";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import ItemShareModal from "../components/Utility/ItemShareModal";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -33,7 +35,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
-//import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
@@ -49,6 +50,8 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentProgram, setCurrentProgram] = useCallback(useState(null));
+  const [currentLink, setCurrentLink] = useCallback(useState(null));
+  const [isLinkModalOpen, setLinkModalOpen] = useCallback(useState(false));
   const handleChangeTab = useWindowHash(["#details", "#items"], updateValue);
 
   const userId = useSelector((state) => state.user.id);
@@ -56,6 +59,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const itemsLoading = useSelector((state) => state.programs.itemsIsLoading);
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
+  const favoriteItems = useSelector((state) => state.user.favoriteItems);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -82,6 +86,27 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
     dispatch(addPreOrderItems({ ids: [itemId] }));
   };
 
+  const handleFavoriteItems = () => {
+    const uniqueArray = [
+      ...new Set(selectedItems.concat(favoriteItems.map((i) => i.id))),
+    ];
+    if (uniqueArray.length > 0) {
+      dispatch(addToFavoriteItems(uniqueArray));
+    }
+    dispatch(clearItemSelection());
+  };
+
+  const handleShareLink = () => {
+    const baseUrl = window.location.origin;
+    //Code will eventualy come from api and have meaning
+    let code = Math.floor(Math.random() * 1000000000);
+    let urlString = `${baseUrl}/public/items/${selectedItems.join(
+      "-"
+    )}#${code}`;
+    setCurrentLink(urlString);
+    setLinkModalOpen(true);
+  };
+
   useRetainFiltersOnPopstate("/programs", dispatch);
 
   useEffect(() => {
@@ -101,6 +126,11 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 
   return (
     <>
+      <ItemShareModal
+        modalOpen={isLinkModalOpen}
+        handleClose={setLinkModalOpen}
+        shareLink={currentLink}
+      />
       <ItemPreviewModal
         type="program"
         currentItem={currentItem}
@@ -139,6 +169,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                     variant="contained"
                     color="secondary"
                     disabled={selectedItems.length === 0}
+                    onClick={handleFavoriteItems}
                   >
                     ADD TO FAVORITES
                   </Button>
@@ -148,6 +179,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                     variant="contained"
                     color="secondary"
                     disabled={selectedItems.length === 0}
+                    onClick={handleShareLink}
                   >
                     CREATE SHARE LINK
                   </Button>
