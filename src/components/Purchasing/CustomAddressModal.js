@@ -25,6 +25,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
   //const dispatch = useDispatch();
 
+  const { value: name, bind: bindName, reset: resetName } = useInput("");
   const {
     value: addressOne,
     bind: bindAddressOne,
@@ -68,6 +69,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     // );
     //temp log to get rid of unused vars warning until tied to api
     console.log(
+      name,
       addressOne,
       addressTwo,
       addressThree,
@@ -77,6 +79,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
       country,
       attention
     );
+    resetName();
     resetAddressOne();
     resetAddressTwo();
     resetAddressThree();
@@ -102,7 +105,10 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
         style={{ zIndex: "15000" }}
       >
         <DialogContent>
-          <IconButton className={classes.closeButton} onClick={() => handleClose(false)}>
+          <IconButton
+            className={classes.closeButton}
+            onClick={() => handleClose(false)}
+          >
             <CancelIcon fontSize="large" color="secondary" />
           </IconButton>
           <br />
@@ -117,6 +123,16 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               {`Custom Address for ${orderType} order #${orderSetId}`}
             </Typography>
             <br />
+            <TextField
+              fullWidth
+              style={{ marginBottom: "15px" }}
+              variant="outlined"
+              color="secondary"
+              name="name"
+              type="text"
+              label="Address Name"
+              {...bindName}
+            />
             <TextField
               fullWidth
               style={{ marginBottom: "15px" }}

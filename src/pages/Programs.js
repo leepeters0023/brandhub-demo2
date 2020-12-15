@@ -90,7 +90,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>
 
-          {userType === "field1" && (
+          {userType !== "compliance" && (
             <div className={classes.configButtons}>
               <div className={classes.innerConfigDiv}>
                 <Button

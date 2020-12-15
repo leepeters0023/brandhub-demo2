@@ -102,6 +102,7 @@ const DistributorSelection = () => {
         freeSolo
         renderTags={() => null}
         fullWidth
+        disableClearable
         className={classes.queryField}
         id="distributor-auto-complete"
         open={open}

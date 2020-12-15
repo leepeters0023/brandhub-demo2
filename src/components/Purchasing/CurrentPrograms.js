@@ -113,24 +113,22 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                     )}`}
                   </Typography>
                 </div>
-                {userType === "field1" && (
+                {userType !== "compliance" && (
                   <div className={classes.itemControl}>
-                    {userType === "field1" && (
-                      <Tooltip title="Place Pre-Order">
-                        <span>
-                          <Button
-                            component={Link}
-                            to={`/orders/open/preorder#${prog.id}`}
-                            className={classes.largeButton}
-                            variant="contained"
-                            color="secondary"
-                            startIcon={<ExitToAppIcon />}
-                          >
-                            ORDER
-                          </Button>
-                        </span>
-                      </Tooltip>
-                    )}
+                    <Tooltip title="Place Pre-Order">
+                      <span>
+                        <Button
+                          component={Link}
+                          to={`/orders/open/preorder#${prog.id}`}
+                          className={classes.largeButton}
+                          variant="contained"
+                          color="secondary"
+                          startIcon={<ExitToAppIcon />}
+                        >
+                          ORDER
+                        </Button>
+                      </span>
+                    </Tooltip>
                   </div>
                 )}
               </Paper>
