@@ -73,7 +73,7 @@ const defaultItemFilters = {
   sequenceNum: "",
   status: "not-draft",
   sortOrder: "asc",
-  sortOrderBy: "orderDate",
+  sortOrderBy: "itemType",
 };
 
 const useStyles = makeStyles((theme) => ({

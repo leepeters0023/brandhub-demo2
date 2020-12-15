@@ -231,7 +231,11 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     if (defaultFilters) {
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {
-        dispatch(fetchFilteredOrderHistory(defaultFilters));
+        if (defaultFilters.groupBy === "order") {
+          dispatch(fetchFilteredOrderHistory(defaultFilters));
+        } else {
+          dispatch(fetchFilteredOrderHistoryByItem(defaultFilters));
+        }
       }
       if (
         filterType === "history-rollup" ||

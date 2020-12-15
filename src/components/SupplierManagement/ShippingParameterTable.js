@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector } from "react-redux";
 
@@ -43,8 +44,14 @@ const CollapseRow = ({ shippingInfo, classes }) => {
         <TableCell align="left">{shippingInfo.address}</TableCell>
         <TableCell align="left">{shippingInfo.attn}</TableCell>
         <TableCell align="left">{shippingInfo.carrier}</TableCell>
-        <TableCell align="left">{shippingInfo.method}</TableCell>
-        <TableCell align="left">{shippingInfo.actualShip}</TableCell>
+        <TableCell align="left">
+          {[...new Set(shippingInfo.items.map((i) => i.method))].join(", ")}
+        </TableCell>
+        <TableCell align="left">
+          {[...new Set(shippingInfo.items.map((i) => i.actShipDate))].join(
+            ", "
+          )}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
@@ -57,32 +64,32 @@ const CollapseRow = ({ shippingInfo, classes }) => {
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Sequence Number
-                            </Typography>
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Item Type
-                            </Typography>
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Total Items
-                            </Typography>
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Shipping Status
-                            </Typography>
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Tracking
-                            </Typography>
+                        </Typography>
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
                           Tax
-                            </Typography>
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -94,7 +101,11 @@ const CollapseRow = ({ shippingInfo, classes }) => {
                         <TableCell align="center">{item.totalItems}</TableCell>
                         <TableCell align="center">{item.shipStatus}</TableCell>
                         <TableCell align="center">{item.trackingNum}</TableCell>
-                        <TableCell align="center">{item.tax}</TableCell>
+                        <TableCell align="center">
+                          {item.tax === "---"
+                            ? item.tax
+                            : formatMoney(item.tax)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -111,7 +122,9 @@ const CollapseRow = ({ shippingInfo, classes }) => {
 const ShippingParameterTable = () => {
   const classes = useStyles();
 
-  const shippingInfo = useSelector((state) => state.purchaseOrder.currentPO.shippingParams)
+  const shippingInfo = useSelector(
+    (state) => state.purchaseOrder.currentPO.shippingParams
+  );
 
   return (
     <>
@@ -144,12 +157,8 @@ const ShippingParameterTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {shippingInfo.map((param, index) =>(
-              <CollapseRow 
-              key={index}
-              classes={classes}
-              shippingInfo={param}
-              />
+            {shippingInfo.map((param, index) => (
+              <CollapseRow key={index} classes={classes} shippingInfo={param} />
             ))}
           </TableBody>
         </Table>
@@ -157,6 +166,5 @@ const ShippingParameterTable = () => {
     </>
   );
 };
-
 
 export default React.memo(ShippingParameterTable);

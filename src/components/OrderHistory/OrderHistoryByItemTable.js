@@ -160,7 +160,7 @@ const OrderHistoryByItemTable = ({
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("orderDate");
+  const [orderBy, setOrderBy] = useState("itemType");
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";

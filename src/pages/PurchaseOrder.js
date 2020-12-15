@@ -72,9 +72,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       id: dataPoint.data["Param Item Id"],
       "ship-from-zip": dataPoint.data["Ship From Zip"],
       carrier: dataPoint.data["Carrier"],
-      "service-level": dataPoint.data["Ship Method"],
+      method: dataPoint.data["Ship Method"],
       "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
-      "shipped-quantity": dataPoint.data["Shipped Quantity"],
+      "shipped-qty": dataPoint.data["Shipped Quantity"],
       "package-count": dataPoint.data["Package Count"],
       "package-type": dataPoint.data["Package Type"],
       "tracking-number": dataPoint.data["Tracking Number"],
@@ -144,7 +144,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Order Approval Status", key: "shipStatus" },
         { label: "Ship From Zip", key: "shipFromZip" },
         { label: "Carrier", key: "carrier" },
-        { label: "Ship Method", key: "serviceLevel" },
+        { label: "Ship Method", key: "method" },
         { label: "Actual Ship Date", key: "actShipDate" },
         { label: "Shipped Quantity", key: "shippedQuantity" },
         { label: "Package Count", key: "packageCount" },
@@ -189,10 +189,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 currentParamItem.carrier === "---"
                   ? ""
                   : currentParamItem.carrier,
-              serviceLevel:
-                currentParamItem.serviceLevel === "---"
+              method:
+                currentParamItem.method === "---"
                   ? ""
-                  : currentParamItem.serviceLevel,
+                  : currentParamItem.method,
               actShipDate:
                 currentParamItem.actShipDate === "---"
                   ? ""
@@ -442,9 +442,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-            <ShippingParameterTable
-              classes={classes}
-            />
+            <ShippingParameterTable classes={classes} />
             <br />
             <br />
           </div>
