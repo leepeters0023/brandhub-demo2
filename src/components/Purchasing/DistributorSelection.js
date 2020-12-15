@@ -3,7 +3,11 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { fetchUserDistributors } from "../../redux/slices/distributorSlice";
-import { createSingleOrder, createMultipleOrders } from "../../redux/slices/orderSetSlice";
+import {
+  createSingleOrder,
+  createMultipleOrders,
+  createAllOrders,
+} from "../../redux/slices/orderSetSlice";
 
 import CustomAddressModal from "./CustomAddressModal";
 
@@ -20,6 +24,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
 
 const typeMap = {
   "in-stock": "In Stock",
@@ -49,18 +54,22 @@ const DistributorSelection = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
+  const isOrderLoading = useSelector((state) => state.orderSet.isOrderLoading);
   const options = useSelector((state) => state.distributors.distributorList);
   //const currentOrders = useSelector((state) => state.orderSet.orders);
   const orderSetId = useSelector((state) => state.orderSet.orderId);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
   const orderType = useSelector((state) => state.orderSet.type);
-  const favoriteLists = useSelector((state) => state.distributors.favoriteDistributors);
+  const favoriteLists = useSelector(
+    (state) => state.distributors.favoriteDistributors
+  );
   const currentRole = useSelector((state) => state.user.role);
 
   const loading = open && isLoading;
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
-    dispatch(createSingleOrder(orderSetId, value[0].id, orderType))
+    dispatch(createSingleOrder(orderSetId, value[0].id, orderType));
   };
 
   const handleClick = (event) => {
@@ -74,8 +83,12 @@ const DistributorSelection = () => {
   const handleAddFavorites = (id) => {
     let currentList = favoriteLists.find((list) => list.id === id);
     let idArray = currentList.distributors.map((dist) => dist.id);
-    dispatch(createMultipleOrders(idArray, orderSetId, orderType))
-  }
+    dispatch(createMultipleOrders(idArray, orderSetId, orderType));
+  };
+
+  const handleAddAll = () => {
+    dispatch(createAllOrders(territoryId, orderSetId, orderType));
+  };
 
   useEffect(() => {
     if (distributor.length >= 1) {
@@ -85,9 +98,9 @@ const DistributorSelection = () => {
 
   useEffect(() => {
     if (currentDistributors.length > 0) {
-      setCurrentDistributors([])
+      setCurrentDistributors([]);
     }
-  }, [currentDistributors])
+  }, [currentDistributors]);
 
   return (
     <div className={classes.distSelection}>
@@ -97,47 +110,75 @@ const DistributorSelection = () => {
         open={isModalOpen}
         handleClose={setModalOpen}
       />
-      <Autocomplete
-        multiple
-        freeSolo
-        renderTags={() => null}
-        fullWidth
-        disableClearable
-        className={classes.queryField}
-        id="distributor-auto-complete"
-        open={open}
-        onOpen={() => setOpen(true)}
-        onClose={() => setOpen(false)}
-        inputValue={distributor}
-        onInputChange={(_evt, value) => setDistributor(value)}
-        onChange={(evt, value) => {
-          handleDistributors(value);
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
-        getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
-        options={options}
-        loading={loading}
-        value={currentDistributors}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Select Distributors"
-            variant="outlined"
-            size="small"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {loading ? (
-                    <CircularProgress color="inherit" size={15} />
-                  ) : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
-          />
+      >
+        <Autocomplete
+          multiple
+          freeSolo
+          style={{
+            maxWidth: currentRole !== "field1" ? "Calc(100% - 47px)" : "100%",
+          }}
+          renderTags={() => null}
+          fullWidth
+          disableClearable
+          className={classes.queryField}
+          id="distributor-auto-complete"
+          open={open}
+          onOpen={() => setOpen(true)}
+          onClose={() => setOpen(false)}
+          inputValue={distributor}
+          onInputChange={(_evt, value) => setDistributor(value)}
+          onChange={(evt, value) => {
+            handleDistributors(value);
+          }}
+          getOptionSelected={(option, value) => option.name === value.name}
+          getOptionLabel={(option) => option.name}
+          options={options}
+          loading={loading}
+          value={currentDistributors}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Select Distributors"
+              variant="outlined"
+              size="small"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {loading ? (
+                      <CircularProgress
+                        color="inherit"
+                        size={15}
+                        style={{ marginRight: "-12px", padding: "12px" }}
+                      />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
+        />
+        {currentRole !== "field1" && (
+          <>
+            {isOrderLoading && <CircularProgress size={35} />}
+            {!isOrderLoading && (
+              <Tooltip title={"Add All Distributors"}>
+                <IconButton edge="end" onClick={handleAddAll}>
+                  <AddToPhotosIcon color="inherit" fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </>
         )}
-      />
+      </div>
       <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
         <Button
           fullWidth
@@ -179,20 +220,26 @@ const DistributorSelection = () => {
           {favoriteLists.map((fav, index) => {
             if (index !== favoriteLists.length - 1) {
               return [
-                <MenuItem key={fav.id} onClick={() => {
-                  handleClose()
-                  handleAddFavorites(fav.id)
-                }}>
+                <MenuItem
+                  key={fav.id}
+                  onClick={() => {
+                    handleClose();
+                    handleAddFavorites(fav.id);
+                  }}
+                >
                   <ListItemText primary={fav.name} />
                 </MenuItem>,
                 <Divider />,
               ];
             } else {
               return (
-                <MenuItem key={fav.id} onClick={() => {
-                  handleClose()
-                  handleAddFavorites(fav.id)
-                }}>
+                <MenuItem
+                  key={fav.id}
+                  onClick={() => {
+                    handleClose();
+                    handleAddFavorites(fav.id);
+                  }}
+                >
                   <ListItemText primary={fav.name} />
                 </MenuItem>
               );
