@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     textAlign: "center",
-    height: "275px",
+    height: "325px",
     marginBottom: "40px",
     padding: "10px",
     backgroundColor: "whitesmoke",
@@ -97,7 +97,7 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                   />
                 </Link>
                 <Typography className={classes.headerText}>
-                  {`${prog.name} - ${prog.focusMonth}`}
+                  {`${prog.brand.join(", ")} - ${prog.name}`}
                 </Typography>
                 <div>
                   <Typography variant="body2" color="textSecondary">
@@ -123,6 +123,7 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                           className={classes.largeButton}
                           variant="contained"
                           color="secondary"
+                          style={{marginBottom: "10px"}}
                           startIcon={<ExitToAppIcon />}
                         >
                           ORDER

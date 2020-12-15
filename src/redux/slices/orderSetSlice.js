@@ -4,7 +4,7 @@ import {
   fetchOrderSetById,
   addSingleOrderToSet,
 } from "../../api/orderApi";
-
+import { fetchDistributorsByTerritory } from "../../api/distributorApi";
 import { setPreOrderDetails } from "./preOrderDetailSlice";
 import {
   setIsLoading as patchLoading,
@@ -461,3 +461,33 @@ export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
     dispatch(patchFailure({ error: err.toString() }));
   }
 };
+
+export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    const distributors = await fetchDistributorsByTerritory(territoryId);
+    if (distributors.error) {
+      throw distributors.error;
+    }
+    console.log(distributors);
+    let idArray = distributors.data.map((dist) => dist.id);
+    const orders = [];
+    await Promise.all(
+      idArray.map(async (distId) => {
+        const order = await addSingleOrderToSet(id, distId, type);
+        if (order.error) {
+          throw order.error;
+        }
+        orders.push(order.data);
+      })
+    );
+    let mappedOrders = mapOrderHistoryOrders(orders);
+    dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+}
