@@ -18,6 +18,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AutorenewIcon from "@material-ui/icons/Autorenew";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
@@ -230,67 +231,79 @@ const ComplianceItemsTable = ({
                   <TableRow key={index} hover>
                     {(currentUserRole === "compliance" ||
                       currentUserRole === "super") && (
-                      <>
-                        {row.active ? (
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              inputProps={{ "aria-labelledby": labelId }}
-                              onClick={(event) => event.stopPropagation()}
-                              onChange={(event) => {
-                                handleClick(event, row.id);
-                                event.stopPropagation();
-                              }}
-                            />
-                          </TableCell>
-                        ) : (
-                          <TableCell padding="checkbox">
-                            <Tooltip title="Activate Rule">
-                              <IconButton>
-                                <AutorenewIcon
-                                  fontSize="small"
-                                  color="inherit"
-                                />
-                              </IconButton>
-                            </Tooltip>
-                          </TableCell>
-                        )}
-                      </>
-                    )}
+                        <>
+                          {row.active ? (
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                checked={isItemSelected}
+                                inputProps={{ "aria-labelledby": labelId }}
+                                onClick={(event) => event.stopPropagation()}
+                                onChange={(event) => {
+                                  handleClick(event, row.id);
+                                  event.stopPropagation();
+                                }}
+                              />
+                            </TableCell>
+                          ) : (
+                              <TableCell padding="checkbox">
+                                <Tooltip title="Activate Rule">
+                                  <IconButton>
+                                    <AutorenewIcon
+                                      fontSize="small"
+                                      color="inherit"
+                                    />
+                                  </IconButton>
+                                </Tooltip>
+                              </TableCell>
+                            )}
+                        </>
+                      )}
 
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
-                    <TableCell align="left">{row.brand}</TableCell>
+                    {row.brand.length > 1 ? (
+                      <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                        <TableCell
+                          align="left"
+                          style={{ display: "flex", alignItems: "flex-end" }}
+                        >
+                          {row.brand[0]}
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                        <TableCell align="left">{row.brand[0]}</TableCell>
+                      )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
                     <TableCell align="left">{row.ruleDesc}</TableCell>
                     <TableCell align="left">
                       {row.status === "Pending" &&
-                      row.ruleType === "Prior Approval" ? (
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography variant="body2">{row.status}</Typography>
+                        row.ruleType === "Prior Approval" ? (
                           <div
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{ display: "flex", flexDirection: "column" }}
                           >
-                            <Typography
-                              variant="body2"
-                              style={{ marginRight: "10px" }}
+                            <Typography variant="body2">{row.status}</Typography>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
                             >
-                              {`Email sent on ${row.emailSent}`}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              className={classes.emailButton}
-                            >
-                              {"(resend)"}
-                            </Typography>
+                              <Typography
+                                variant="body2"
+                                style={{ marginRight: "10px" }}
+                              >
+                                {`Email sent on ${row.emailSent}`}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                className={classes.emailButton}
+                              >
+                                {"(resend)"}
+                              </Typography>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <Typography variant="body2">{row.status}</Typography>
-                      )}
+                        ) : (
+                          <Typography variant="body2">{row.status}</Typography>
+                        )}
                     </TableCell>
                   </TableRow>
                 );
