@@ -110,10 +110,9 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   useRetainFiltersOnPopstate("/programs", dispatch);
 
   useEffect(() => {
-    if (!preOrderId) {
-      dispatch(fetchProgramOrders(programId, userId));
-    }
-  }, [preOrderId, dispatch, programId, userId]);
+    dispatch(fetchProgramOrders(programId, userId));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     handleFiltersClosed();
