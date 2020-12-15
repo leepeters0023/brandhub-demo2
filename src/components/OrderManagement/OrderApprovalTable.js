@@ -163,7 +163,6 @@ const OrderApprovalTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -264,19 +263,6 @@ const OrderApprovalTable = ({
                     <TableCell align="left">
                       {row.program ? row.program : "---"}
                     </TableCell>
-                    {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
-                      >
-                        {row.brand[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
-                    <TableCell align="left">{row.brand[0]}</TableCell>
-                  )}
                     <TableCell>{row.state}</TableCell>
                     <TableCell align="left">
                       {row.orderDate !== "---"

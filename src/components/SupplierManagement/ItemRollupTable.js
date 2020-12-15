@@ -30,8 +30,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 const headCells = [
   { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
-  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },

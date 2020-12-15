@@ -29,6 +29,7 @@ const headCells = [
   },
   { id: "state", disablePadding: false, label: "State", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
   {
@@ -140,7 +141,7 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
+  console.log(orders)
   const grouping = useSelector((state) => state.filters.groupBy);
 
   const handleRequestSort = (_event, property) => {
@@ -200,6 +201,7 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.distributorName}</TableCell>
                   <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">{row.brand}</TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")

@@ -76,7 +76,6 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
   const defaultFilters = filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters
-
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
