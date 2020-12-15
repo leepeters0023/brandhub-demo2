@@ -59,6 +59,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
   );
+
   const quarterlyRollupItems = useSelector(
     (state) => state.orderSetHistory.itemGroups
   )
