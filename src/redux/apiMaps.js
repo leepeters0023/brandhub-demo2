@@ -48,25 +48,7 @@ export const mapItems = (items) => {
     estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
-    imgUrlThumb: item["img-url-thumb"]
-      ? item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlLg: item["img-url-large"]
-      ? item["img-url-large"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-  }));
-  return mappedItems;
-};
-
-export const mapPublicItems = (items) => {
-  let mappedItems = items.map((item) => ({
-    id: item.id,
-    sequenceNum: item["item-number"],
-    brand: item["brand-names"].join(", "),
-    program: item["program-names"].join(", "),
-    itemType: item["item-type-description"],
-    itemDescription: item.description ? item.description : "---",
-    inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
+    inMarketDate: item["in-market-date"] ? format(item["in-market-date"], "MM/dd/yyyy") : "---",
     imgUrlThumb: item["img-url-thumb"]
       ? item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
@@ -348,9 +330,7 @@ export const mapPOShippingParamItems = (items) => {
     carrier: item.carrier ? item.carrier : "---",
     method: item.method ? item.method : "---",
     actShipDate: item["actual-ship-date"] ? item["actual-ship-date"] : "---",
-    shippedQuantity: item["shipped-qty"]
-      ? item["shipped-qty"]
-      : "---",
+    shippedQuantity: item["shipped-qty"] ? item["shipped-qty"] : "---",
     packageCount: item["package-count"] ? item["package-count"] : "---",
     packageType: item["package-type"] ? item["packageType"] : "---",
     expectedArrival: item["expected-arrival-date"]

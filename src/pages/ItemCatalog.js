@@ -11,6 +11,10 @@ import {
 } from "../redux/slices/itemSlice";
 import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
+import {
+  fetchSharedItemsByIds,
+  clearSharedItems,
+} from "../redux/slices/sharedItemsSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -92,13 +96,15 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleShareLink = () => {
+    dispatch(clearSharedItems());
     const baseUrl = window.location.origin;
-    //Code will eventualy come from api and have meaning
-    let code = Math.floor(Math.random()*1000000000);
-    let urlString = `${baseUrl}/public/items/${selectedItems.join("-")}#${code}`
+    let urlString = `${baseUrl}/shared/items/${selectedItems.join(
+      "-"
+    )}`;
+    dispatch(fetchSharedItemsByIds(selectedItems));
     setCurrentLink(urlString);
     setLinkModalOpen(true);
-  }
+  };
 
   useEffect(() => {
     if (catalogType && currentType !== catalogType) {
@@ -125,11 +131,13 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <ItemShareModal
-        modalOpen={isLinkModalOpen}
-        handleClose={setLinkModalOpen}
-        shareLink={currentLink}
-      />
+      {isLinkModalOpen && (
+        <ItemShareModal
+          modalOpen={isLinkModalOpen}
+          handleClose={setLinkModalOpen}
+          shareLink={currentLink}
+        />
+      )}
       <ItemPreviewModal
         type={"catalog"}
         currentItem={currentItem}

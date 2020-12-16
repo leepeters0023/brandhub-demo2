@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.itemGrid,
 }));
 
-const PublicItemGridView = ({ items, handlePreview, isItemsLoading }) => {
+const SharedItemGridView = ({ items, handlePreview, isItemsLoading }) => {
   const classes = useStyles();
 
   if (isItemsLoading) {
@@ -89,10 +89,10 @@ const PublicItemGridView = ({ items, handlePreview, isItemsLoading }) => {
   );
 };
 
-PublicItemGridView.propTypes = {
+SharedItemGridView.propTypes = {
   items: PropTypes.array,
   isItemsLoading: PropTypes.bool.isRequired,
   handlePreview: PropTypes.func.isRequired,
-}
+};
 
-export default PublicItemGridView;
+export default SharedItemGridView;

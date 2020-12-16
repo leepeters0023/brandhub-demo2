@@ -1,35 +1,40 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import PublicItemGridView from "./PublicItemGridView";
-import PublicItemTableView from './PublicItemTableView';
+import SharedItemGridView from "./SharedItemGridView";
+import SharedItemTableView from "./SharedItemTableView";
 
-const PublicItemViewControl = ({ currentView, items, handlePreview, isItemsLoading}) => {
+const SharedItemViewControl = ({
+  currentView,
+  items,
+  handlePreview,
+  isItemsLoading,
+}) => {
   return (
     <>
       {currentView === "list" && (
-        <PublicItemTableView
+        <SharedItemTableView
           items={items}
           handlePreview={handlePreview}
           isItemsLoading={isItemsLoading}
         />
       )}
       {currentView === "grid" && (
-        <PublicItemGridView
+        <SharedItemGridView
           items={items}
           handlePreview={handlePreview}
           isItemsLoading={isItemsLoading}
         />
       )}
     </>
-  )
-}
+  );
+};
 
-PublicItemViewControl.propTypes = {
+SharedItemViewControl.propTypes = {
   currentView: PropTypes.string.isRequired,
   items: PropTypes.array,
   handlePreview: PropTypes.func.isRequired,
   isItemsLoading: PropTypes.bool.isRequired,
 };
 
-export default React.memo(PublicItemViewControl);
+export default React.memo(SharedItemViewControl);
