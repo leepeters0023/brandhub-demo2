@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "@reach/router";
 //import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
@@ -8,13 +8,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrder } from "../redux/slices/orderHistorySlice";
-
+import { getTracking } from "../redux/slices/trackingSlice";
 import { setRetain } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
 import SingleOrderDetailTable from "../components/OrderHistory/SingleOrderDetailTable";
 import Loading from "../components/Utility/Loading";
+import TrackingModal from "../components/Utility/TrackingModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -36,10 +37,17 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
+
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
+
+  const handleTrackingClick = (id) => {
+    dispatch(getTracking(id));
+    setTrackingOpen(true);
+  };
 
   useRetainFiltersOnPopstate(
     `/orders/history/group/by${
@@ -69,6 +77,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
+      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -118,7 +127,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Typography className={classes.headerText}>Order Items:</Typography>
             <Divider />
             <br />
-            <SingleOrderDetailTable items={currentOrder.items} />
+            <SingleOrderDetailTable
+              items={currentOrder.items}
+              handleTrackingClick={handleTrackingClick}
+            />
           </Grid>
           <Grid item lg={3} sm={12} xs={12}>
             <Typography className={classes.headerText}>
@@ -164,7 +176,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               {`Total Items: ${currentOrder.totalItems}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Est. Cost: ${formatMoney(currentOrder.totalEstCost, false)}`}
+              {`Total Est. Cost: ${formatMoney(
+                currentOrder.totalEstCost,
+                false
+              )}`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Act. Cost: ${currentOrder.totalActCost}`}
