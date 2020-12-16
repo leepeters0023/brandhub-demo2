@@ -74,7 +74,7 @@ export const fetchItemTypes = async () => {
 export const fetchSharedItems = async (ids) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/public/items?filter[ids]=${ids}`)
+    .get(`/api/items?filter[ids]=${ids}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
