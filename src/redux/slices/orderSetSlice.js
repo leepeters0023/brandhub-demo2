@@ -250,6 +250,31 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
+    updateSetItemDate(state, action) {
+      const { id, date } = action.payload;
+      console.log(id, date)
+      const currentItems = state.items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            requiredDeliveryDate: date,
+          };
+        } else return { ...item };
+      });
+      state.items = currentItems;
+    },
+    updateSetItemRush(state, action) {
+      const { id, status } = action.payload;
+      const currentItems = state.items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            isRush: status,
+          };
+        } else return { ...item };
+      });
+      state.items = currentItems;
+    },
     setRebuildRef(state) {
       state.rebuildRef = !state.rebuildRef;
     },
@@ -313,6 +338,8 @@ export const {
   setOrderStatus,
   clearOrderSet,
   setRebuildRef,
+  updateSetItemDate,
+  updateSetItemRush,
   addOrderSuccess,
   addMultipleOrdersSuccess,
   setFailure,
@@ -490,4 +517,4 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};

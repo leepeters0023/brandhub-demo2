@@ -48,7 +48,9 @@ export const mapItems = (items) => {
     estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
-    inMarketDate: item["in-market-date"] ? format(item["in-market-date"], "MM/dd/yyyy") : "---",
+    inMarketDate: item["in-market-date"]
+      ? format(item["in-market-date"], "MM/dd/yyyy")
+      : "---",
     imgUrlThumb: item["img-url-thumb"]
       ? item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
@@ -213,6 +215,13 @@ export const mapOrderItems = (items, type) => {
       complianceStatus: item.item["compliance-status"]
         ? item.item["compliance-status"]
         : "compliant",
+      standardDeliveryDate: item["standard-delivery-date"]
+        ? item["standard-delivery-date"]
+        : "---",
+      requiredDeliveryDate: item["required-delivery-date"]
+        ? item["required-delivery-date"]
+        : "---",
+      isRush: item["is-rush"] ? item["is-rush"] : false,
       tracking: item.tracking ? item.tracking : "---",
     }))
     .sort((a, b) => {
