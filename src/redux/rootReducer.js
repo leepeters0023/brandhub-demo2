@@ -26,6 +26,7 @@ import rfqHistoryReducer from "./slices/rfqHistorySlice";
 import supplierReducer from "./slices/supplierSlice";
 import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
+import trackingReducer from "./slices/trackingSlice";
 import userReducer from "./slices/userSlice";
 
 const rootReducer = combineReducers({
@@ -55,6 +56,7 @@ const rootReducer = combineReducers({
   suppliers: supplierReducer,
   tags: tagReducer,
   territories: territoryReducer,
+  tracking: trackingReducer,
   user: userReducer,
 });
 

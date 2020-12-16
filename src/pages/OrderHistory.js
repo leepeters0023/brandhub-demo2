@@ -14,6 +14,7 @@ import {
   fetchNextOrderHistory,
   fetchNextFilteredOrderHistoryByItem,
 } from "../redux/slices/orderHistorySlice";
+import { getTracking } from "../redux/slices/trackingSlice";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
@@ -21,6 +22,7 @@ import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
 import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
 import OrderHistoryByItemTable from "../components/OrderHistory/OrderHistoryByItemTable";
+import TrackingModal from "../components/Utility/TrackingModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -48,7 +50,7 @@ const csvHeaders = [
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "order",
@@ -63,7 +65,7 @@ const defaultOrderFilters = {
 
 const defaultItemFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "item",
@@ -86,6 +88,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const [currentView, setCurrentView] = useCallback(useState(filterOption));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [modal, handleModal] = useCallback(useState(false));
+  const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
@@ -132,6 +135,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     handleModal(false);
   };
 
+  const handleTrackingClick = (id) => {
+    dispatch(getTracking(id));
+    setTrackingOpen(true);
+  };
+
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
@@ -158,13 +166,9 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
       if (filterOption === "byOrder") {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultOrderFilters })
-        );
+        dispatch(updateMultipleFilters({ filterObject: defaultOrderFilters }));
       } else {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultItemFilters })
-        );
+        dispatch(updateMultipleFilters({ filterObject: defaultItemFilters }));
       }
       dispatch(setSorted());
     }
@@ -177,6 +181,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
         modal={modal}
         currentItem={currentItem}
       />
+      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order History</Typography>
@@ -231,6 +236,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             handleSort={handleSort}
             scrollRef={scrollRef}
             handlePreview={handleModalOpen}
+            handleTrackingClick={handleTrackingClick}
           />
         )}
         {isNextLoading && (
