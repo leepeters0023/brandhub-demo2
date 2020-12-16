@@ -58,11 +58,11 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
-  );
-
+  ); // no
+  console.log(currentPreOrders)
   const quarterlyRollupItems = useSelector(
     (state) => state.orderSetHistory.itemGroups
-  )
+  ) // no
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
