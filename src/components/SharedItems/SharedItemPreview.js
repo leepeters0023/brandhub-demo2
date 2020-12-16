@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 
@@ -100,6 +101,13 @@ const SharedItemPreview = ({ open, handleClose, item }) => {
               <br />
               <Box bgcolor="primary.main" className={classes.dividerBox} />
               <br />
+              <Typography className={classes.headerText}>
+                {`Est. Cost: ${formatMoney(item.estCost, false)}`}
+              </Typography>
+              <br />
+              <Typography variant="body1" color="textSecondary">
+                {`Pack Size: ${item.packSize}`}
+              </Typography>
               <Typography variant="body1" color="textSecondary">
                 {`In Market: ${item.inMarketDate}`}
               </Typography>

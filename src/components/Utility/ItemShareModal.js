@@ -87,8 +87,8 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
         open={modalOpen}
         disableScrollLock
         onClose={() => {
-          handleClose(false)
-          setGroupedItems(null)
+          handleClose(false);
+          setGroupedItems(null);
         }}
         fullWidth
         maxWidth="sm"
@@ -98,8 +98,8 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
           <IconButton
             className={classes.closeButton}
             onClick={() => {
-              handleClose(false)
-              setGroupedItems(null)
+              handleClose(false);
+              setGroupedItems(null);
             }}
           >
             <CancelIcon fontSize="large" color="secondary" />
@@ -136,7 +136,7 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
                 </IconButton>
               )}
               {!isLoading && groupedItems && (
-                <Tooltip title="Download as PDF">
+                <Tooltip title="Download as PDF" style={{ zIndex: "16000" }}>
                   <span>
                     <PDFDownloadLink
                       document={
@@ -146,7 +146,17 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
                     >
                       {({ blob, url, loading, error }) =>
                         loading ? (
-                          <CircularProgress />
+                          <div
+                            style={{
+                              width: "58.99px",
+                              height: "58.99px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <CircularProgress />
+                          </div>
                         ) : (
                           <IconButton>
                             <PictureAsPdfIcon
