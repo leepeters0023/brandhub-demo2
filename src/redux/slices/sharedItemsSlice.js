@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchSharedItems } from "../../api/itemApi";
-import { mapSharedItems } from "../apiMaps";
+import { mapItems } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
@@ -29,6 +29,11 @@ const sharedItemSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    clearSharedItems(state) {
+      state.isLoading = false;
+      state.items = [];
+      state.error = null;
+    },
     setFailure: loadingFailed,
   },
 });
@@ -36,6 +41,7 @@ const sharedItemSlice = createSlice({
 export const {
   setIsLoading,
   getItemsSuccess,
+  clearSharedItems,
   setFailure,
 } = sharedItemSlice.actions;
 
@@ -48,7 +54,7 @@ export const fetchSharedItemsByIds = (ids) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapSharedItems(items.data);
+    let mappedItems = mapItems(items.data);
     dispatch(getItemsSuccess({ items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

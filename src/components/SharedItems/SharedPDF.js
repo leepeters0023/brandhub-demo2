@@ -9,6 +9,8 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 
+import { formatMoney } from "../../utility/utilityFunctions";
+
 Font.register({
   family: "Roboto",
   src: "/fonts/Roboto-Regular.ttf",
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Roboto",
-    fontSize: 12,
+    fontSize: 10,
   },
   section: {
     display: "flex",
@@ -33,13 +35,16 @@ const styles = StyleSheet.create({
     height: 225,
   },
   imageSection: {
-    width: 360,
+    width: 300,
+    padding: 20,
   },
   image: {
     objectFit: "contain",
   },
   textSection: {
-    width: 240,
+    width: 300,
+    height: 225,
+    padding: 20,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -57,7 +62,8 @@ const SharedPDF = ({ items }) => {
               <View style={styles.imageSection}>
                 <Image
                   source={{
-                    uri: item.imgUrlLg,
+                    //uri: item.imgUrlLg,
+                    uri: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100946/Select/110016179_Large_1-Necker_puyulf.jpg",
                     method: "get",
                     headers: {
                       "Access-Control-Allow-Origin": "*",
@@ -70,16 +76,22 @@ const SharedPDF = ({ items }) => {
                 />
               </View>
               <View style={styles.textSection}>
-                <Text style={styles.text}>{`#${item.sequenceNum}`}</Text>
+                <Text style={styles.text}>{`#${item.itemNumber}`}</Text>
                 <Text style={styles.text}>{`Brand(s):  ${item.brand}`}</Text>
                 <Text style={styles.text}>
-                  {`Program:  ${item.program} Winter 2021`}
+                  {`Program:  ${item.program}`}
                 </Text>
                 <Text style={styles.text}>
                   {`Item Type:  ${item.itemType}`}
                 </Text>
                 <Text style={styles.text}>
                   {`Item Description:  ${item.itemDescription}`}
+                </Text>
+                <Text style={styles.text}>
+                  {`Pack Size: ${item.packSize}`}
+                </Text>
+                <Text style={styles.text}>
+                  {`Est Cost: ${formatMoney(item.estCost)}`}
                 </Text>
                 <Text style={styles.text}>
                   {`In Market: ${item.inMarketDate}`}

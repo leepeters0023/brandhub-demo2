@@ -40,6 +40,7 @@ import {
 } from "./redux/slices/territorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
+import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
 
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
@@ -140,6 +141,7 @@ const App = () => {
     dispatch(clearSuppliers());
     dispatch(resetComplianceItems());
     dispatch(resetComplianceRules());
+    dispatch(clearSharedItems());
   };
 
   useEffect(() => {
@@ -180,19 +182,6 @@ const App = () => {
 
   if (userError) {
     handleLogout();
-  }
-
-  if (window.location.pathname.includes("/public/items")) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <Router>
-          <SharedItems
-            handleFiltersClosed={handleFiltersClosed}
-            path="/public/items/:itemIds"
-          />
-        </Router>
-      </MuiThemeProvider>
-    );
   }
 
   if (!loggedIn && !currentUser) {
@@ -255,6 +244,10 @@ const App = () => {
             path="/"
             userType={role}
             handleFiltersClosed={handleFiltersClosed}
+          />
+          <SharedItems
+            handleFiltersClosed={handleFiltersClosed}
+            path="/shared/items/:itemIds"
           />
           {handleAuth(
             <Programs

@@ -77,7 +77,6 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
   useEffect(() => {
     if (!groupedItems && !isLoading && items.length > 0) {
       let currentItems = groupByThree(items);
-      console.log(currentItems);
       setGroupedItems(currentItems);
     }
   }, [groupedItems, items, isLoading, setGroupedItems]);
