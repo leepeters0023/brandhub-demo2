@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 10,
   },
+  sectionWrapper: {
+    display: "flex",
+    flexDirection: "column",
+    width: 600,
+    heigth: 230,
+    alignItems: "center",
+  },
   section: {
     display: "flex",
     flexDirection: "row",
@@ -50,6 +57,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
   },
+  pageBreak: {
+    width: 600,
+    height: 2,
+    marginTop: 10,
+    backgroundColor: "black",
+  },
 });
 
 const SharedPDF = ({ items }) => {
@@ -58,45 +71,47 @@ const SharedPDF = ({ items }) => {
       {items.map((group, index) => (
         <Page key={index} size="LETTER" style={styles.page}>
           {group.map((item, i) => (
-            <View key={`${index}-${i}`} style={styles.section}>
-              <View style={styles.imageSection}>
-                <Image
-                  source={{
-                    //uri: item.imgUrlLg,
-                    uri: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100946/Select/110016179_Large_1-Necker_puyulf.jpg",
-                    method: "get",
-                    headers: {
-                      "Access-Control-Allow-Origin": "*",
-                      crossOrigin: "anonymous",
-                    },
-                  }}
-                  cache="reload"
-                  allowDangerousPaths={true}
-                  style={styles.image}
-                />
+            <View key={`${index}-${i}`} style={styles.sectionWrapper}>
+              <View style={styles.section}>
+                <View style={styles.imageSection}>
+                  <Image
+                    source={{
+                      //uri: item.imgUrlLg,
+                      uri:
+                        "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100946/Select/110016179_Large_1-Necker_puyulf.jpg",
+                      method: "get",
+                      headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        crossOrigin: "anonymous",
+                      },
+                    }}
+                    cache="reload"
+                    allowDangerousPaths={true}
+                    style={styles.image}
+                  />
+                </View>
+                <View style={styles.textSection}>
+                  <Text style={styles.text}>{`#${item.itemNumber}`}</Text>
+                  <Text style={styles.text}>{`Brand(s):  ${item.brand}`}</Text>
+                  <Text style={styles.text}>{`Program:  ${item.program}`}</Text>
+                  <Text style={styles.text}>
+                    {`Item Type:  ${item.itemType}`}
+                  </Text>
+                  <Text style={styles.text}>
+                    {`Item Description:  ${item.itemDescription}`}
+                  </Text>
+                  <Text style={styles.text}>
+                    {`Pack Size: ${item.packSize}`}
+                  </Text>
+                  <Text style={styles.text}>
+                    {`Est Cost: ${formatMoney(item.estCost)}`}
+                  </Text>
+                  <Text style={styles.text}>
+                    {`In Market: ${item.inMarketDate}`}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.textSection}>
-                <Text style={styles.text}>{`#${item.itemNumber}`}</Text>
-                <Text style={styles.text}>{`Brand(s):  ${item.brand}`}</Text>
-                <Text style={styles.text}>
-                  {`Program:  ${item.program}`}
-                </Text>
-                <Text style={styles.text}>
-                  {`Item Type:  ${item.itemType}`}
-                </Text>
-                <Text style={styles.text}>
-                  {`Item Description:  ${item.itemDescription}`}
-                </Text>
-                <Text style={styles.text}>
-                  {`Pack Size: ${item.packSize}`}
-                </Text>
-                <Text style={styles.text}>
-                  {`Est Cost: ${formatMoney(item.estCost)}`}
-                </Text>
-                <Text style={styles.text}>
-                  {`In Market: ${item.inMarketDate}`}
-                </Text>
-              </View>
+              {i !== group.length - 1 && <View style={styles.pageBreak} />}
             </View>
           ))}
         </Page>
