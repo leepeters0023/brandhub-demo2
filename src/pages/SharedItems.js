@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPublicItemsByIds } from "../redux/slices/publicItemsSlice";
+import { fetchSharedItemsByIds } from "../redux/slices/sharedItemsSlice";
 
-import PublicItemPreview from "../components/PublicItems/PublicItemPreview";
-import PublicItemViewControl from "../components/PublicItems/PublicItemViewControl";
-import PublicFooter from "../components/PublicItems/PublicFooter";
+import SharedItemPreview from "../components/SharedItems/SharedItemPreview";
+import SharedItemViewControl from "../components/SharedItems/SharedItemViewControl";
+import PublicFooter from "../components/SharedItems/SharedFooter";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -21,15 +21,15 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PublicItems = ({ handleFiltersClosed, itemIds }) => {
+const SharedItems = ({ handleFiltersClosed, itemIds }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState(null));
 
-  const isLoading = useSelector((state) => state.publicItems.isLoading);
-  const items = useSelector((state) => state.publicItems.items);
+  const isLoading = useSelector((state) => state.sharedItems.isLoading);
+  const items = useSelector((state) => state.sharedItems.items);
 
   const handleModalOpen = (id) => {
     let item = items.find((item) => item.id === id);
@@ -48,13 +48,13 @@ const PublicItems = ({ handleFiltersClosed, itemIds }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchPublicItemsByIds(itemIds.split("-").join(",")));
+    dispatch(fetchSharedItemsByIds(itemIds.split("-").join(",")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <PublicItemPreview
+      <SharedItemPreview
         open={previewModal}
         handleClose={handleModalClose}
         item={currentItem}
@@ -92,7 +92,7 @@ const PublicItems = ({ handleFiltersClosed, itemIds }) => {
           </div>
         </div>
         <br />
-        <PublicItemViewControl
+        <SharedItemViewControl
           currentView={currentView}
           items={items}
           handlePreview={handleModalOpen}
@@ -104,9 +104,9 @@ const PublicItems = ({ handleFiltersClosed, itemIds }) => {
   );
 };
 
-PublicItems.propTypes = {
+SharedItems.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
   itemIds: PropTypes.string,
-}
+};
 
-export default PublicItems;
+export default SharedItems;

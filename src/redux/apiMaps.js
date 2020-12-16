@@ -58,7 +58,7 @@ export const mapItems = (items) => {
   return mappedItems;
 };
 
-export const mapPublicItems = (items) => {
+export const mapSharedItems = (items) => {
   let mappedItems = items.map((item) => ({
     id: item.id,
     sequenceNum: item["item-number"],
@@ -348,9 +348,7 @@ export const mapPOShippingParamItems = (items) => {
     carrier: item.carrier ? item.carrier : "---",
     method: item.method ? item.method : "---",
     actShipDate: item["actual-ship-date"] ? item["actual-ship-date"] : "---",
-    shippedQuantity: item["shipped-qty"]
-      ? item["shipped-qty"]
-      : "---",
+    shippedQuantity: item["shipped-qty"] ? item["shipped-qty"] : "---",
     packageCount: item["package-count"] ? item["package-count"] : "---",
     packageType: item["package-type"] ? item["packageType"] : "---",
     expectedArrival: item["expected-arrival-date"]
