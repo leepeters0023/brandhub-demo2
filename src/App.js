@@ -65,7 +65,7 @@ import Profile from "./pages/Profile";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import ProgramNew from "./pages/ProgramNew";
-import PublicItems from "./pages/PublicItems";
+import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
@@ -186,7 +186,7 @@ const App = () => {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-          <PublicItems
+          <SharedItems
             handleFiltersClosed={handleFiltersClosed}
             path="/public/items/:itemIds"
           />

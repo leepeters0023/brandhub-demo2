@@ -11,6 +11,7 @@ import {
 } from "../redux/slices/itemSlice";
 import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
+import { fetchSharedItemsByIds } from "../redux/slices/sharedItemsSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -96,6 +97,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     //Code will eventualy come from api and have meaning
     let code = Math.floor(Math.random()*1000000000);
     let urlString = `${baseUrl}/public/items/${selectedItems.join("-")}#${code}`
+    dispatch(fetchSharedItemsByIds(selectedItems));
     setCurrentLink(urlString);
     setLinkModalOpen(true);
   }

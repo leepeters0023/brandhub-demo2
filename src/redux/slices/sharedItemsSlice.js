@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPublicItems } from "../../api/itemApi";
-import { mapPublicItems } from "../apiMaps";
+import { fetchSharedItems } from "../../api/itemApi";
+import { mapSharedItems } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
@@ -18,8 +18,8 @@ const loadingFailed = (state, action) => {
   state.error = error;
 };
 
-const publicItemSlice = createSlice({
-  name: "publicItems",
+const sharedItemSlice = createSlice({
+  name: "sharedItems",
   initialState,
   reducers: {
     setIsLoading: startLoading,
@@ -37,18 +37,18 @@ export const {
   setIsLoading,
   getItemsSuccess,
   setFailure,
-} = publicItemSlice.actions;
+} = sharedItemSlice.actions;
 
-export default publicItemSlice.reducer;
+export default sharedItemSlice.reducer;
 
-export const fetchPublicItemsByIds = (ids) => async (dispatch) => {
+export const fetchSharedItemsByIds = (ids) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchPublicItems(ids);
+    const items = await fetchSharedItems(ids);
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapPublicItems(items.data);
+    let mappedItems = mapSharedItems(items.data);
     dispatch(getItemsSuccess({ items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

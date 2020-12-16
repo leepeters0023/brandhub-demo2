@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PublicItemPreview = ({ open, handleClose, item }) => {
+const SharedItemPreview = ({ open, handleClose, item }) => {
   const classes = useStyles();
 
   if (!item) {
-    return null
+    return null;
   }
 
   return (
@@ -111,10 +111,10 @@ const PublicItemPreview = ({ open, handleClose, item }) => {
   );
 };
 
-PublicItemPreview.propTypes = {
+SharedItemPreview.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   item: PropTypes.object,
 };
 
-export default PublicItemPreview;
+export default SharedItemPreview;
