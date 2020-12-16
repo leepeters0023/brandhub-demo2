@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PublicItemTableView = ({ items, handlePreview, isItemsLoading }) => {
+const SharedItemTableView = ({ items, handlePreview, isItemsLoading }) => {
   const classes = useStyles();
 
   return (
@@ -95,10 +95,10 @@ const PublicItemTableView = ({ items, handlePreview, isItemsLoading }) => {
   );
 };
 
-PublicItemTableView.propTypes = {
+SharedItemTableView.propTypes = {
   items: PropTypes.array,
   handlePreview: PropTypes.func.isRequired,
   isItemsLoading: PropTypes.bool.isRequired,
 };
 
-export default PublicItemTableView;
+export default SharedItemTableView;

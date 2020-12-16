@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 
@@ -49,11 +50,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PublicItemPreview = ({ open, handleClose, item }) => {
+const SharedItemPreview = ({ open, handleClose, item }) => {
   const classes = useStyles();
 
   if (!item) {
-    return null
+    return null;
   }
 
   return (
@@ -100,6 +101,13 @@ const PublicItemPreview = ({ open, handleClose, item }) => {
               <br />
               <Box bgcolor="primary.main" className={classes.dividerBox} />
               <br />
+              <Typography className={classes.headerText}>
+                {`Est. Cost: ${formatMoney(item.estCost, false)}`}
+              </Typography>
+              <br />
+              <Typography variant="body1" color="textSecondary">
+                {`Pack Size: ${item.packSize}`}
+              </Typography>
               <Typography variant="body1" color="textSecondary">
                 {`In Market: ${item.inMarketDate}`}
               </Typography>
@@ -111,10 +119,10 @@ const PublicItemPreview = ({ open, handleClose, item }) => {
   );
 };
 
-PublicItemPreview.propTypes = {
+SharedItemPreview.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   item: PropTypes.object,
 };
 
-export default PublicItemPreview;
+export default SharedItemPreview;

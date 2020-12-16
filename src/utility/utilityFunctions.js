@@ -102,3 +102,22 @@ export const formatDate = (date) => {
   let tempDate = new Date(date);
   return new Date(tempDate.getTime() + tempDate.getTimezoneOffset() * 60000);
 };
+
+export const groupByThree = (array) => {
+  let groupedArray = [];
+  let tempArray = [];
+  for (let i = 1; i <= array.length; i++) {
+    if (i%3 !== 0) {
+      tempArray.push(array[i-1])
+      if (i === array.length) {
+        groupedArray.push(tempArray);
+        tempArray = [];
+      }
+    } else {
+      tempArray.push(array[i-1])
+      groupedArray.push(tempArray);
+      tempArray = []
+    }
+  }
+  return groupedArray;
+}

@@ -175,7 +175,7 @@ const ItemPreviewModal = (props) => {
                   <br />
                   <Box bgcolor="primary.main" className={classes.dividerBox} />
                   <br />
-                  <Typography className={classes.headerText} variant="h5">
+                  <Typography className={classes.headerText}>
                     {`Est. Cost: ${formatMoney(estCost, false)}`}
                   </Typography>
                   <br />
@@ -201,7 +201,7 @@ const ItemPreviewModal = (props) => {
                     {`Brand(s): ${brand}`}
                   </Typography>
                   <Typography className={classes.headerText}>
-                    {`Program: ${brand} Winter 2021`}
+                    {`Program: ${program}`}
                   </Typography>
                   <Typography className={classes.headerText}>
                     {/* {`Item Type: ${itemType}`} */}

@@ -18,7 +18,7 @@ import orderSetReducer from "./slices/orderSetSlice";
 import patchOrderReducer from "./slices/patchOrderSlice";
 import preOrderDetailReducer from "./slices/preOrderDetailSlice";
 import programsReducer from "./slices/programsSlice";
-import publicItemsReducer from "./slices/publicItemsSlice";
+import sharedItemsReducer from "./slices/sharedItemsSlice";
 import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
 import rfqReducer from "./slices/rfqSlice";
@@ -47,7 +47,7 @@ const rootReducer = combineReducers({
   patchOrder: patchOrderReducer,
   preOrderDetails: preOrderDetailReducer,
   programs: programsReducer,
-  publicItems: publicItemsReducer,
+  sharedItems: sharedItemsReducer,
   purchaseOrder: purchaseOrderReducer,
   purchaseOrderHistory: purchaseOrderHistoryReducer,
   rfq: rfqReducer,

@@ -8,7 +8,7 @@ const dataFormatter = new Jsona();
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  const queryString = buildFilters(filterObject,"", "", "/api/items");
+  const queryString = buildFilters(filterObject, "", "", "/api/items");
   await axios
     .get(queryString)
     .then((res) => {
@@ -51,7 +51,7 @@ export const fetchNextItems = async (url) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 //Returns item types and returns an array of all available item types
 export const fetchItemTypes = async () => {
@@ -69,12 +69,12 @@ export const fetchItemTypes = async () => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
-export const fetchPublicItems = async (ids) => {
+export const fetchSharedItems = async (ids) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/public/items?filter[ids]=${ids}`)
+    .get(`/api/items?filter[ids]=${ids}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -86,10 +86,10 @@ export const fetchPublicItems = async (ids) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const fetchBusinessUnits = async () => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
     .get("/api/business-units")
     .then((res) => {
@@ -103,4 +103,4 @@ export const fetchBusinessUnits = async () => {
       response.error = err.toString();
     });
   return response;
-}
+};
