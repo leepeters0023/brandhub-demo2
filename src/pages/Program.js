@@ -129,11 +129,13 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 
   return (
     <>
-      <ItemShareModal
-        modalOpen={isLinkModalOpen}
-        handleClose={setLinkModalOpen}
-        shareLink={currentLink}
-      />
+      {isLinkModalOpen && (
+        <ItemShareModal
+          modalOpen={isLinkModalOpen}
+          handleClose={setLinkModalOpen}
+          shareLink={currentLink}
+        />
+      )}
       <ItemPreviewModal
         type="program"
         currentItem={currentItem}
