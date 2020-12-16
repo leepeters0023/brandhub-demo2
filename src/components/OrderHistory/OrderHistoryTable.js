@@ -140,7 +140,6 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
   const grouping = useSelector((state) => state.filters.groupBy);
 
   const handleRequestSort = (_event, property) => {
@@ -186,7 +185,7 @@ const OrderHistoryTable = ({
             )}
             {!isOrdersLoading &&
               orders.length > 0 &&
-              orders.map((row) => (
+              orders.map((row, i) => (
                 <TableRow
                   key={row.id}
                   hover
@@ -200,6 +199,9 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.distributorName}</TableCell>
                   <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  {[
+                  ...new Set(row.items.map((x, i) => (<TableCell key={i} align="left">{x.brand}</TableCell>)))
+                  ]}
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
