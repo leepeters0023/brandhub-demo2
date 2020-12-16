@@ -229,6 +229,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -500,6 +501,54 @@ export const addOrderSetItem = async (id, item) => {
     });
   return response;
 };
+
+export const updateOrderSetItemDate = async (id, date) => {
+  const response = { status: "", error: null }
+  await axios
+    .patch(`/api/order-set-items/${id}`,
+    {
+      data: {
+        type: "order-set-item",
+        id: id,
+        attributes: {
+          "required-delivery-date": date
+        }
+      }
+    }, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const updateOrderSetItemRush = async (id, status) => {
+  const response = { status: "", error: null }
+  await axios
+    .patch(`/api/order-set-items/${id}`,
+    {
+      data: {
+        type: "order-set-item",
+        id: id,
+        attributes: {
+          "is-rush": status
+        }
+      }
+    }, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
 
 // ------------ Single Order Calls ------------ //
 

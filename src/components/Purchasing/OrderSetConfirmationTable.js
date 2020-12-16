@@ -1,9 +1,11 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
-import addDays from "date-fns/addDays";
+import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { useDispatch } from "react-redux";
+
+import { setSetDate, setRush } from "../../redux/slices/patchOrderSlice";
 
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollapseRow = ({ classes, rowData, orders, type }) => {
+const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
   const [open, setOpen] = useCallback(useState(false));
 
   return (
@@ -63,7 +65,7 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
         {type !== "pre-order" && (
           <>
             <TableCell align="left">
-              {format(addDays(new Date(), 28), "MM/dd/yyyy")}
+              {format(formatDate(rowData.standardDeliveryDate), "MM/dd/yyyy")}
             </TableCell>
             <TableCell align="left">
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -76,8 +78,11 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
                   margin="normal"
                   id={`${rowData.id}-req-date`}
                   label=""
-                  value={format(addDays(new Date(), 28), "MM/dd/yyyy")}
-                  //onChange={(value) => handle this function!}
+                  value={format(
+                    formatDate(rowData.requiredDeliveryDate),
+                    "MM/dd/yyyy"
+                  )}
+                  onChange={(value) => dispatch(setSetDate(rowData.id, new Date(value)))}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -85,7 +90,12 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
               </MuiPickersUtilsProvider>
             </TableCell>
             <TableCell padding="checkbox">
-              <Checkbox />
+              <Checkbox 
+                checked={rowData.isRush}
+                onChange={() => {
+                  dispatch(setRush(rowData.id, !rowData.isRush))
+                }}
+              />
             </TableCell>
           </>
         )}
@@ -168,6 +178,7 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
 
 const OrderSetConfirmationTable = ({ orders, items, type }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -222,6 +233,7 @@ const OrderSetConfirmationTable = ({ orders, items, type }) => {
                     rowData={item}
                     orders={orders}
                     type={type}
+                    dispatch={dispatch}
                   />
                 );
               } else return null;
