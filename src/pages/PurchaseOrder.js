@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import { CSVLink } from "react-csv";
@@ -14,10 +14,12 @@ import {
   submitPurchaseOrder,
   updateAllShippingParams,
 } from "../redux/slices/purchaseOrderSlice";
+import { getTracking } from "../redux/slices/trackingSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import Loading from "../components/Utility/Loading";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
+import TrackingModal from "../components/Utility/TrackingModal";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -43,6 +45,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const [isNew, setIsNew] = useState(false);
   const [isUploadLoading, setUploadLoading] = useState(false);
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
@@ -65,6 +68,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     if (csvRef.current) {
       csvRef.current.open(evt);
     }
+  };
+
+  const handleTrackingClick = (id) => {
+    dispatch(getTracking(id));
+    setTrackingOpen(true);
   };
 
   const handleFileUpload = (data) => {
@@ -240,6 +248,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
+      <TrackingModal
+        open={isTrackingOpen}
+        handleClose={setTrackingOpen}
+      />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -442,7 +454,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-            <ShippingParameterTable classes={classes} />
+            <ShippingParameterTable
+              handleTrackingClick={handleTrackingClick}
+            />
             <br />
             <br />
           </div>

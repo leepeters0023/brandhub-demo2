@@ -129,7 +129,7 @@ const orderTypeMap = {
   "on-demand": "On Demand",
   "in-stock": "In Stock",
   "pre-order": "Pre Order",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -149,6 +149,12 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  clickableCell: {
+    "&:hover": {
+      backgroundColor: "#737373",
+      color: "white",
+    },
+  },
 }));
 
 const OrderHistoryByItemTable = ({
@@ -157,6 +163,7 @@ const OrderHistoryByItemTable = ({
   isOrdersLoading,
   scrollRef,
   handlePreview,
+  handleTrackingClick,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -231,7 +238,9 @@ const OrderHistoryByItemTable = ({
                     />
                   </TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{orderTypeMap[row.orderType]}</TableCell>
+                  <TableCell align="left">
+                    {orderTypeMap[row.orderType]}
+                  </TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
@@ -274,7 +283,24 @@ const OrderHistoryByItemTable = ({
                       ? format(new Date(row.shipDate), "MM/dd/yyyy")
                       : row.shipDate}
                   </TableCell>
-                  <TableCell align="left">{row.tracking}</TableCell>
+                  <TableCell
+                    align="center"
+                    className={
+                      row.tracking !== "---" && row.trackingId
+                        ? classes.clickableCell
+                        : null
+                    }
+                    onClick={
+                      row.tracking !== "---" && row.trackingId
+                        ? (evt) => {
+                            evt.stopPropagation();
+                            handleTrackingClick(row.trackingId);
+                          }
+                        : null
+                    }
+                  >
+                    {row.tracking}
+                  </TableCell>
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>

@@ -48,7 +48,9 @@ export const mapItems = (items) => {
     estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
     stock: Math.floor(Math.random() * 25 + 26),
-    inMarketDate: item["in-market-date"] ? format(item["in-market-date"], "MM/dd/yyyy") : "---",
+    inMarketDate: item["in-market-date"]
+      ? format(item["in-market-date"], "MM/dd/yyyy")
+      : "---",
     imgUrlThumb: item["img-url-thumb"]
       ? item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
@@ -180,7 +182,16 @@ export const mapOrderHistoryItems = (items) => {
       : "---",
     orderDate: item["order-submitted-at"],
     shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
-    tracking: item["tracking-number"] ? item["tracking-number"] : "---",
+    tracking: item["shipping-parameter-item"]
+      ? item["shipping-parameter-item"]["tracking-number"]
+        ? item["shipping-parameter-item"]["tracking-number"]
+        : "---"
+      : "---",
+    trackingId: item["shipping-parameter-item"]
+    ? item["shipping-parameter-item"].id
+      ? item["shipping-parameter-item"].id
+      : null
+    : null,
     status: item["order-status"],
     orderId: item.order.id,
   }));
@@ -213,7 +224,16 @@ export const mapOrderItems = (items, type) => {
       complianceStatus: item.item["compliance-status"]
         ? item.item["compliance-status"]
         : "compliant",
-      tracking: item.tracking ? item.tracking : "---",
+        tracking: item["shipping-parameter-item"]
+        ? item["shipping-parameter-item"]["tracking-number"]
+          ? item["shipping-parameter-item"]["tracking-number"]
+          : "---"
+        : "---",
+      trackingId: item["shipping-parameter-item"]
+      ? item["shipping-parameter-item"].id
+        ? item["shipping-parameter-item"].id
+        : null
+      : null,
     }))
     .sort((a, b) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)

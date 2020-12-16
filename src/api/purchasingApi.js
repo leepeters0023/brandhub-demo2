@@ -662,6 +662,24 @@ export const updateShippingParams = async (updateArray) => {
   return response;
 }
 
+//Tracks package
+export const trackItem = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/shipping-parameter-items/${id}/track`)
+    .then((res) => {
+      console.log(res.data)
+      response.data = res.data["api_response"];
+      response.status = "ok"
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {
   const sortMap = {
