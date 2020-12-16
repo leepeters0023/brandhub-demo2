@@ -15,6 +15,10 @@ import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
 import { setRetain } from "../redux/slices/filterSlice";
 import { clearItemSelection } from "../redux/slices/itemSlice";
+import {
+  fetchSharedItemsByIds,
+  clearSharedItems,
+} from "../redux/slices/sharedItemsSlice";
 
 import ProgramDetails from "../components/Purchasing/ProgramDetails";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -97,12 +101,12 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   };
 
   const handleShareLink = () => {
+    dispatch(clearSharedItems());
     const baseUrl = window.location.origin;
-    //Code will eventualy come from api and have meaning
-    let code = Math.floor(Math.random() * 1000000000);
-    let urlString = `${baseUrl}/public/items/${selectedItems.join(
+    let urlString = `${baseUrl}/shared/items/${selectedItems.join(
       "-"
-    )}#${code}`;
+    )}`;
+    dispatch(fetchSharedItemsByIds(selectedItems));
     setCurrentLink(urlString);
     setLinkModalOpen(true);
   };
