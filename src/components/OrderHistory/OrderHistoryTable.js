@@ -202,17 +202,9 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.distributorName}</TableCell>
                   <TableCell align="left">{row.distributorState}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  {row.items.length > 1 ? (
-                    [...new Set(row.items.map((item, i) => item.brand))].map((brand, i) =>
-                      <TableCell key={i} align="left">
-                        {brand}
-                        <Tooltip title={brand}>
-                          <MoreHorizIcon fontSize="small" color="inherit" />
-                        </Tooltip>
-                      </TableCell>
-                    )) : (
-                      <TableCell align="left">{row.items[0].brand}</TableCell>
-                    )}
+                  {[
+                  ...new Set(row.items.map((x, i) => (<TableCell key={i} align="left">{x.brand}</TableCell>)))
+                  ]}
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
