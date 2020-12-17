@@ -25,7 +25,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "preview", label: "Preview" },
-  { id: "sequenceNum", label: "Sequence #" },
+  { id: "itemNumber", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
   { id: "itemDescription", label: "Item Desc." },

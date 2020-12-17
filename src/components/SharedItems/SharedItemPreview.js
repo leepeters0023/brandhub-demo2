@@ -84,7 +84,7 @@ const SharedItemPreview = ({ open, handleClose, item }) => {
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               <Typography variant="body1" color="textSecondary">
-                {`#${item.sequenceNum}`}
+                {`#${item.itemNumber}`}
               </Typography>
               <Typography className={classes.headerText}>
                 {`Brand(s):  ${item.brand}`}

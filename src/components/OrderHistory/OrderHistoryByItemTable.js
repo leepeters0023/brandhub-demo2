@@ -23,7 +23,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "preview", disablePadding: false, label: "Preview", sort: false },
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
@@ -221,7 +221,7 @@ const OrderHistoryByItemTable = ({
                 >
                   <TableCell align="left">
                     <ImageWrapper
-                      id={row.sequenceNum}
+                      id={row.itemNumber}
                       imgClass={classes.previewImageFloat}
                       alt={row.itemType}
                       imgUrl={row.imgUrlThumb}
@@ -231,13 +231,13 @@ const OrderHistoryByItemTable = ({
                           row.imgUrlLg,
                           row.brand.join(", "),
                           row.itemType,
-                          row.sequenceNum,
+                          row.itemNumber,
                           row.itemDescription
                         );
                       }}
                     />
                   </TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">
                     {orderTypeMap[row.orderType]}
                   </TableCell>

@@ -35,7 +35,7 @@ single order set model:
 order set item model
 {
   user: string (read),
-  sequenceNum: string (read),
+  itemNumber: string (read),
   program: string (read),
   itemType: string (read),
   state: string (read),
@@ -206,7 +206,7 @@ export const fetchFilteredOrderSetItems = (filterObject) => async (
     if (orderSetItems.error) {
       throw orderSetItems.error;
     }
-    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items);
     dispatch(
       getOrderSetItemsSuccess({
         itemGroups: mappedItems,
@@ -220,16 +220,14 @@ export const fetchFilteredOrderSetItems = (filterObject) => async (
   }
 };
 
-export const fetchNextFilteredOrderSetItems = (url) => async (
-  dispatch
-) => {
+export const fetchNextFilteredOrderSetItems = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
     let orderSetItems = await fetchNextOrderSetItems(url);
     if (orderSetItems.error) {
       throw orderSetItems.error;
     }
-    let mappedItems = mapOrderSetItems(orderSetItems.data.items)
+    let mappedItems = mapOrderSetItems(orderSetItems.data.items);
     dispatch(
       getNextOrderSetItemsSuccess({
         itemGroups: mappedItems,

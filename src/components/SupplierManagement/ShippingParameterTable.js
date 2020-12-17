@@ -108,7 +108,7 @@ const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
                   <TableBody>
                     {shippingInfo.items.map((item) => (
                       <TableRow key={`${item.id}`}>
-                        <TableCell align="center">{item.sequenceNum}</TableCell>
+                        <TableCell align="center">{item.itemNumber}</TableCell>
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
                         <TableCell align="center">{item.shipStatus}</TableCell>

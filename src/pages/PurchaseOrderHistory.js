@@ -28,7 +28,7 @@ const defaultCurrentFilters = {
   itemType: [],
   status: "submitted",
   poNum: "",
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "poNum",
 };
@@ -40,7 +40,7 @@ const defaultHistoryFilters = {
   itemType: [],
   status: "all",
   poNum: "",
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "poNum",
 };

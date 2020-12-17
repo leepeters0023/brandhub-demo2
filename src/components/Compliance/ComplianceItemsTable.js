@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector/*, useDispatch*/ } from "react-redux";
+import { useSelector /*, useDispatch*/ } from "react-redux";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -20,7 +20,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 
 const headCells = [
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
@@ -42,7 +42,7 @@ const EnhancedTableHead = (props) => {
     onRequestSort(event, property);
   };
   const currentUserRole = useSelector((state) => state.user.role);
-  
+
   return (
     <TableHead>
       <TableRow>
@@ -137,7 +137,7 @@ const ComplianceItemsTable = ({
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("sequenceNum");
+  const [orderBy, setOrderBy] = useState("itemNumber");
   const [selected, setSelected] = useState([]);
   const currentUserRole = useSelector((state) => state.user.role);
   const handleRequestSort = (_event, property) => {
@@ -258,7 +258,7 @@ const ComplianceItemsTable = ({
                       </>
                     )}
 
-                    <TableCell align="left">{row.sequenceNum}</TableCell>
+                    <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
