@@ -669,7 +669,6 @@ export const trackItem = async (id) => {
   await axios
     .get(`/api/shipping-parameter-items/${id}/track`)
     .then((res) => {
-      console.log(res.data);
       response.data = res.data["api_response"];
       response.status = "ok";
     })

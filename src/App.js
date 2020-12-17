@@ -70,6 +70,7 @@ import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
+import ReportWrapUp from "./pages/ReportWrapUp";
 import RFQ from "./pages/RFQ";
 import RFQHistory from "./pages/RFQHistory";
 import RFQRollup from "./pages/RFQRollup";
@@ -517,6 +518,15 @@ const App = () => {
             />,
             "/settings",
             ["field1", "field2", "compliance", "purchaser", "super"],
+            role
+          )}
+          {handleAuth(
+            <ReportWrapUp
+              path="/reports/wrap-up"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/reports/wrap-up",
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(

@@ -62,7 +62,6 @@ export const mapItems = (items) => {
 };
 
 export const mapOrderSetItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
     itemNumber: item["sequence-number"],
@@ -119,7 +118,6 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
-  console.log(order);
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
@@ -201,13 +199,13 @@ export const mapOrderHistoryItems = (items) => {
         : null
       : null,
     status: item["order-status"],
+    user: item["order-user-name"],
     orderId: item.order.id,
   }));
   return mappedItems;
 };
 
 export const mapOrderItems = (items, type) => {
-  console.log(items);
   let mappedItems = items
     .map((item) => {
       return {
@@ -388,7 +386,6 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
-  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]

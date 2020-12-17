@@ -59,7 +59,9 @@ const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
           {[
             ...new Set(
               shippingInfo.items.map((i) =>
-                format(new Date(i.actShipDate), "MM/dd/yyyy")
+                i.actShipDate !== "---"
+                  ? format(new Date(i.actShipDate), "MM/dd/yyyy")
+                  : "---"
               )
             ),
           ].join(", ")}

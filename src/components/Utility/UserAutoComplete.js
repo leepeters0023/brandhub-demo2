@@ -12,6 +12,7 @@ const UserAutoComplete = ({
   reset,
   setReset,
   filterType,
+  id,
 }) => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
@@ -60,7 +61,7 @@ const UserAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
-        id="field-auto-complete"
+        id={id ? id : "field-auto-complete"}
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
@@ -99,6 +100,7 @@ UserAutoComplete.propTypes = {
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
   filterType: PropTypes.string.isRequired,
+  id: PropTypes.string,
 };
 
 export default UserAutoComplete;

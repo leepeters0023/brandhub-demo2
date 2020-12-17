@@ -331,9 +331,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       currentOrders.data["order-set-items"],
       "order-set-item"
     );
-    console.log(currentItems);
     let orders = mapOrderHistoryOrders(currentOrders.data.orders);
-    console.log(orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
         ? -1
@@ -472,7 +470,6 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     if (distributors.error) {
       throw distributors.error;
     }
-    console.log(distributors);
     let idArray = distributors.data.map((dist) => dist.id);
     const orders = [];
     await Promise.all(
