@@ -253,8 +253,8 @@ const OrderHistoryByItemTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                    <TableCell align="left">{row.brand[0]}</TableCell>
-                  )}
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
