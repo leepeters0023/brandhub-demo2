@@ -243,15 +243,15 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
                   {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                    <TableCell align="left">
+                      <Typography variant="body2">{row.brand[0]}</Typography>
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
                       >
-                        {row.brand[0]}
                         <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
+                      </Tooltip>
+                    </TableCell>
                   ) : (
                     <TableCell align="left">{row.brand[0]}</TableCell>
                   )}
