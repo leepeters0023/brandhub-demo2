@@ -57,7 +57,6 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       currentCSV.data.length === 0 &&
       currentSuppliers.length > 0
     ) {
-      console.log(orderSet);
       let csvHeaders = [
         { label: "Ordered By", key: "user" },
         { label: "Market", key: "state" },
