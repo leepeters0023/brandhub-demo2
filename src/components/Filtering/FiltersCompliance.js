@@ -22,7 +22,7 @@ const FiltersCompliance = ({
   setReset,
   handleFilters,
   classes,
-  sequenceNum,
+  itemNumber,
   bindSequenceNum,
   handleSearch,
   complianceType,
@@ -44,7 +44,7 @@ const FiltersCompliance = ({
                 name="sequenceNumber"
                 type="text"
                 label="Sequence #"
-                value={sequenceNum}
+                value={itemNumber}
                 {...bindSequenceNum}
                 variant="outlined"
                 size="small"
@@ -136,7 +136,7 @@ FiltersCompliance.propTypes = {
   setReset: PropTypes.func.isRequired,
   handleFilters: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  sequenceNum: PropTypes.string.isRequired,
+  itemNumber: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };

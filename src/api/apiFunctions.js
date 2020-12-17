@@ -48,8 +48,8 @@ export const buildFilters = (
         }]=${filterObject.fromDate} - ${filterObject.toDate}`
       : "";
   let seqString =
-    filterObject.sequenceNum && filterObject.sequenceNum.length > 0
-      ? `filter[item-number]=${filterObject.sequenceNum}`
+    filterObject.itemNumber && filterObject.itemNumber.length > 0
+      ? `filter[item-number]=${filterObject.itemNumber}`
       : "";
   let rfqString =
     filterObject.rfqNum && filterObject.rfqNum.length > 0
@@ -94,11 +94,12 @@ export const buildFilters = (
     filterObject.supplier && filterObject.supplier.length > 0
       ? `filter[supplier-ids]=${separateByComma(filterObject.supplier, "id")}`
       : "";
-  let ruleTypeString = filterObject.ruleType && filterObject.ruleType.length > 0
-    ? filterObject.ruleType === "all"
-      ? ""
-      : `filter[type]=${filterObject.ruleType}`
-    : "";
+  let ruleTypeString =
+    filterObject.ruleType && filterObject.ruleType.length > 0
+      ? filterObject.ruleType === "all"
+        ? ""
+        : `filter[type]=${filterObject.ruleType}`
+      : "";
 
   let queryArray = [
     uniqueFilter,

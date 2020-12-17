@@ -23,7 +23,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "preview", disablePadding: false, label: "Preview", sort: false },
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
@@ -221,7 +221,7 @@ const OrderHistoryByItemTable = ({
                 >
                   <TableCell align="left">
                     <ImageWrapper
-                      id={row.sequenceNum}
+                      id={row.itemNumber}
                       imgClass={classes.previewImageFloat}
                       alt={row.itemType}
                       imgUrl={row.imgUrlThumb}
@@ -231,27 +231,27 @@ const OrderHistoryByItemTable = ({
                           row.imgUrlLg,
                           row.brand.join(", "),
                           row.itemType,
-                          row.sequenceNum,
+                          row.itemNumber,
                           row.itemDescription
                         );
                       }}
                     />
                   </TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">
                     {orderTypeMap[row.orderType]}
                   </TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
                   {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                    <TableCell align="left">
+                      <Typography variant="body2">{row.brand[0]}</Typography>
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
                       >
-                        {row.brand[0]}
                         <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
+                      </Tooltip>
+                    </TableCell>
                   ) : (
                     <TableCell align="left">{row.brand[0]}</TableCell>
                   )}

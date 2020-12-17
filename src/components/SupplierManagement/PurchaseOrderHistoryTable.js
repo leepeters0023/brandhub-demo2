@@ -23,7 +23,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 const headCells = [
   { id: "poNum", disablePadding: false, label: "PO #", sort: true },
   {
-    id: "sequenceNum",
+    id: "itemNumber",
     disablePadding: false,
     label: "Sequence #",
     sort: false,
@@ -152,7 +152,7 @@ const PurchaseOrderHistoryTable = ({
   const classes = useStyles();
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("sequenceNum");
+  const [orderBy, setOrderBy] = useState("itemNumber");
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -206,7 +206,7 @@ const PurchaseOrderHistoryTable = ({
                   }}
                 >
                   <TableCell align="left">{row.poNum}</TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.projectNum}</TableCell>
                   {role !== "supplier" && (
                     <TableCell align="left">{row.supplier}</TableCell>
@@ -236,7 +236,9 @@ const PurchaseOrderHistoryTable = ({
                       {formatMoney(row.estCost, true)}
                     </TableCell>
                   )}
-                  <TableCell align="left">{formatMoney(row.actCost, true)}</TableCell>
+                  <TableCell align="left">
+                    {formatMoney(row.actCost, true)}
+                  </TableCell>
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>

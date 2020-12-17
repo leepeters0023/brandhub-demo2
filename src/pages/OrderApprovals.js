@@ -34,13 +34,13 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   user: [],
   distributor: [],
   program: [],
   brand: [],
   itemType: [],
-  sequenceNum: "",
+  itemNumber: "",
   groupBy: "order",
   type: "not-pre-order",
   status: "submitted",

@@ -38,9 +38,9 @@ const defaultFilters = {
   program: [],
   itemType: [],
   bus: [],
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "itemNumber",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -181,7 +181,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         itemType: [],
         status: "draft",
         poNum: "",
-        sequenceNum: "",
+        itemNumber: "",
         sortOrder: "asc",
         sortOrderBy: "poNum",
       })

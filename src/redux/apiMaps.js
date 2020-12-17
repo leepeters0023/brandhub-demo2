@@ -64,7 +64,7 @@ export const mapItems = (items) => {
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
-    sequenceNum: item["sequence-number"],
+    itemNumber: item["sequence-number"],
     program: item["program-name"],
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -120,6 +120,7 @@ export const mapPrograms = (programs) => {
 export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
+    user: order.user.name,
     distributorId: order.distributor.id,
     distributorName: order.distributor.name,
     distributorCity: order.distributor.city,
@@ -158,7 +159,7 @@ export const mapOrderHistoryOrders = (orders) => {
 
 export const mapOrderHistoryItems = (items) => {
   let mappedItems = items.map((item) => ({
-    sequenceNum: item["item-number"],
+    itemNumber: item["item-number"],
     imgUrlThumb: item.item["img-url-thumb"]
       ? item.item["img-url-thumb"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
@@ -167,10 +168,15 @@ export const mapOrderHistoryItems = (items) => {
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
     orderType: item.item["order-type"],
     brand: item.item.brands.map((brand) => brand.name),
+    brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
     program: item["program-names"].join(", "),
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
+    unit: [
+      ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
+    ].join(", "),
     distributor: item["distributor-name"],
+    supplierId: item.item.supplier.id,
     state: item.state ? item.state : "---",
     packSize: item["qty-per-pack"],
     totalItems: item.qty,
@@ -188,11 +194,12 @@ export const mapOrderHistoryItems = (items) => {
         : "---"
       : "---",
     trackingId: item["shipping-parameter-item"]
-    ? item["shipping-parameter-item"].id
       ? item["shipping-parameter-item"].id
-      : null
-    : null,
+        ? item["shipping-parameter-item"].id
+        : null
+      : null,
     status: item["order-status"],
+    user: item["order-user-name"],
     orderId: item.order.id,
   }));
   return mappedItems;
@@ -200,41 +207,57 @@ export const mapOrderHistoryItems = (items) => {
 
 export const mapOrderItems = (items, type) => {
   let mappedItems = items
-    .map((item) => ({
-      id: item.id,
-      itemId: item.item.id,
-      itemNumber: item.item["item-number"],
-      imgUrlThumb: item.item["img-url-thumb"]
-        ? item.item["img-url-thumb"]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-      imgUrlLg: item.item["img-url-large"]
-        ? item.item["img-url-large"]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-      brand: item.item.brands.map((brand) => brand.name).join(", "),
-      itemType: item.item.type,
-      itemDescription: item.item.description ? item.item.description : "---",
-      packSize: item.item["qty-per-pack"],
-      estCost: stringToCents(item.item["estimated-cost"]),
-      totalItems: type === "order-set-item" ? 0 : item.qty,
-      totalEstCost:
-        type === "order-set-item"
-          ? 0
-          : stringToCents(item["total-estimated-cost"]),
-      actTotal: "---",
-      complianceStatus: item.item["compliance-status"]
-        ? item.item["compliance-status"]
-        : "compliant",
+    .map((item) => {
+      return {
+        id: item.id,
+        itemId: item.item.id,
+        itemNumber: item.item["item-number"],
+        imgUrlThumb: item.item["img-url-thumb"]
+          ? item.item["img-url-thumb"]
+          : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+        imgUrlLg: item.item["img-url-large"]
+          ? item.item["img-url-large"]
+          : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+        brand: item.item.brands.map((brand) => brand.name).join(", "),
+        brandCode: item.item.brands
+          .map((brand) => brand["external-id"])
+          .join(", "),
+        program: item["program-names"]
+          ? item["program-names"].join(", ")
+          : item.item.programs.map((prog) => prog.name).join(", "),
+        itemType: item.item.type,
+        itemDescription: item.item.description ? item.item.description : "---",
+        unit: [
+          ...new Set(
+            item.item.brands.map((brand) => brand["business-unit"].name)
+          ),
+        ].join(", "),
+        packSize: item.item["qty-per-pack"],
+        supplierId: item.item.supplier.id,
+        state: type === "order-set-item" ? "---" : item.order.distributor.state,
+        estCost: stringToCents(item.item["estimated-cost"]),
+        totalItems: type === "order-set-item" ? 0 : item.qty,
+        totalEstCost:
+          type === "order-set-item"
+            ? 0
+            : stringToCents(item["total-estimated-cost"]),
+        actTotal: "---",
+        complianceStatus: item.item["compliance-status"]
+          ? item.item["compliance-status"]
+          : "compliant",
+        orderType: item.item["order-type"],
         tracking: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"]["tracking-number"]
           ? item["shipping-parameter-item"]["tracking-number"]
-          : "---"
-        : "---",
-      trackingId: item["shipping-parameter-item"]
-      ? item["shipping-parameter-item"].id
-        ? item["shipping-parameter-item"].id
-        : null
-      : null,
-    }))
+            ? item["shipping-parameter-item"]["tracking-number"]
+            : "---"
+          : "---",
+        trackingId: item["shipping-parameter-item"]
+          ? item["shipping-parameter-item"].id
+            ? item["shipping-parameter-item"].id
+            : null
+          : null,
+      };
+    })
     .sort((a, b) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
@@ -294,7 +317,7 @@ export const mapRollupItems = (items) => {
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
-    sequenceNum: item["item-number"],
+    itemNumber: item["item-number"],
     projectNum: item["project-number"] ? item["project-number"] : "---",
     territory:
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
@@ -323,7 +346,7 @@ export const mapPOItems = (items) => {
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
-    sequenceNum: item["item-number"],
+    itemNumber: item["item-number"],
     program: item["program-names"].length > 0 ? item["program-names"] : "---",
     itemType: item["item-type-description"],
     packSize: item["actual-qty-per-pack"],
@@ -340,7 +363,7 @@ export const mapPOItems = (items) => {
 export const mapPOShippingParamItems = (items) => {
   const mappedItems = items.map((item) => ({
     id: item.id,
-    sequenceNum: item["item-number"] ? item["item-number"] : "---",
+    itemNumber: item["item-number"] ? item["item-number"] : "---",
     itemType: item["item-type-description"]
       ? item["item-type-description"]
       : "---",
@@ -363,7 +386,6 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
-  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]
@@ -449,7 +471,7 @@ export const mapPOHistoryItems = (items) => {
     id: item.id,
     itemId: item.item.id,
     poNum: item["purchase-order"].id,
-    sequenceNum: item["item-number"],
+    itemNumber: item["item-number"],
     projectNum: item["project-number"] ? item["project-number"] : "---",
     supplier: item["supplier-name"] ? item["supplier-name"] : "---",
     itemType: item["item-type-description"],
@@ -485,7 +507,7 @@ export const mapRFQ = (rfq) => {
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),
     itemType: rfq.item.type,
     itemDescription: rfq.item.description ? rfq.item.description : "---",
-    sequenceNum: rfq.item["item-number"],
+    itemNumber: rfq.item["item-number"],
     totalItems: rfq.qty,
     estCost: stringToCents(rfq.item["estimated-cost"]),
     totalEstCost: rfq.qty * stringToCents(rfq.item["estimated-cost"]),
@@ -542,7 +564,7 @@ export const mapCompItems = (items) => {
   };
   let mappedItems = items.map((item) => ({
     id: item.id,
-    sequenceNum: item["item-number"],
+    itemNumber: item["item-number"],
     program: item["most-recent-program-name"],
     itemType: item["item-type-description"],
     ruleType: typeMap[item.rule.type],

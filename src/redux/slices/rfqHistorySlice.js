@@ -10,7 +10,7 @@ import { mapRFQHistory } from "../apiMaps";
 {
   id: string (read),
   rfqNum: string (read),
-  sequenceNum: string (read),
+  itemNumber: string (read),
   program: string (read),
   itemType: string (read),
   totalOrdered: int (read),

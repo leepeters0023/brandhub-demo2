@@ -115,7 +115,7 @@ const POItemsTable = ({
         <TableBody>
           {items.map((row) => (
             <TableRow key={row.id}>
-              <TableCell align="left">{row.sequenceNum}</TableCell>
+              <TableCell align="left">{row.itemNumber}</TableCell>
               {row.program !== "---" && row.program.length > 1 ? (
                 <Tooltip placement="left" title={`${row.program.join(", ")}`}>
                   <TableCell
