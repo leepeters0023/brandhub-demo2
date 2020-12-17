@@ -119,8 +119,10 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
+  console.log(order);
   let formattedOrder = {
     id: order.id,
+    user: order.user.name,
     distributorId: order.distributor.id,
     distributorName: order.distributor.name,
     distributorCity: order.distributor.city,

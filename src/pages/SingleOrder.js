@@ -42,8 +42,6 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
 
   const currentOrder = useSelector((state) => state.orderHistory.singleOrder);
   const currentUserRole = useSelector((state) => state.user.role);
-  const firstName = useSelector((state) => state.user.firstName);
-  const lastName = useSelector((state) => state.user.lastName);
   const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
@@ -96,7 +94,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
       currentOrder.items.forEach((item) => {
         let supName = currentSuppliers.find((sup) => sup.id === item.supplierId).name
         let dataObject = {
-          user: `${firstName} ${lastName}`,
+          user: currentOrder.user,
           state: item.state,
           brandCode: item.brandCode,
           unit: item.unit,
@@ -116,11 +114,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
     }
   }, [
     currentOrder.items,
+    currentOrder.user,
     currentOrder.orderNumber,
     currentCSV.data.length,
     currentSuppliers,
-    firstName,
-    lastName,
     orderId,
   ]);
 
