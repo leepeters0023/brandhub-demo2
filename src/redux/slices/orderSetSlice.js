@@ -252,12 +252,12 @@ const orderSetSlice = createSlice({
     },
     updateSetItemDate(state, action) {
       const { id, date } = action.payload;
-      console.log(id, date)
+      console.log(id, date);
       const currentItems = state.items.map((item) => {
         if (item.id === id) {
           return {
             ...item,
-            requiredDeliveryDate: date,
+            inMarketDate: date,
           };
         } else return { ...item };
       });

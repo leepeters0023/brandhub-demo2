@@ -1,7 +1,7 @@
 import { earliestDate, stringToCents } from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
-import { format } from "date-fns";
+import format from "date-fns/format"
 
 /*
 Functions used to ensure data coming from api always matches
@@ -157,6 +157,7 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     sequenceNum: item["item-number"],
     imgUrlThumb: item.item["img-url-thumb"]
@@ -218,7 +219,7 @@ export const mapOrderItems = (items, type) => {
       standardDeliveryDate: item["standard-delivery-date"]
         ? item["standard-delivery-date"]
         : "---",
-      requiredDeliveryDate: item["required-delivery-date"]
+      inMarketDate: item["required-delivery-date"]
         ? item["required-delivery-date"]
         : "---",
       isRush: item["is-rush"] ? item["is-rush"] : false,

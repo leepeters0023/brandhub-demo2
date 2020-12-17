@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
+import isBefore from "date-fns/isBefore";
 import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import { useDispatch } from "react-redux";
@@ -78,11 +79,10 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
                   margin="normal"
                   id={`${rowData.id}-req-date`}
                   label=""
-                  value={format(
-                    formatDate(rowData.requiredDeliveryDate),
-                    "MM/dd/yyyy"
-                  )}
-                  onChange={(value) => dispatch(setSetDate(rowData.id, new Date(value)))}
+                  value={format(formatDate(rowData.inMarketDate), "MM/dd/yyyy")}
+                  onChange={(value) =>
+                    dispatch(setSetDate(rowData.id, new Date(value)))
+                  }
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
@@ -90,10 +90,14 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
               </MuiPickersUtilsProvider>
             </TableCell>
             <TableCell padding="checkbox">
-              <Checkbox 
+              <Checkbox
+                disabled={!isBefore(
+                  new Date(rowData.inMarketDate),
+                  new Date(rowData.standardDeliveryDate)
+                )}
                 checked={rowData.isRush}
                 onChange={() => {
-                  dispatch(setRush(rowData.id, !rowData.isRush))
+                  dispatch(setRush(rowData.id, !rowData.isRush));
                 }}
               />
             </TableCell>
