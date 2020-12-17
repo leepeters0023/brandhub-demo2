@@ -7,7 +7,7 @@ have not deleted yet as it may be repurposed for the rollup by item view when vi
 the quarterly rollup as field2 or super user.
 {
   id: string (read),
-  sequenceNum: string (read),
+  itemNumber: string (read),
   territory: string (read),
   program: string (read),
   itemType: string (read),

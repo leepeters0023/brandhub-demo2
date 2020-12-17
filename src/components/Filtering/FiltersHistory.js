@@ -36,7 +36,7 @@ const FiltersHistory = ({
   setReset,
   handleFilters,
   classes,
-  sequenceNum,
+  itemNumber,
   bindSequenceNum,
   rfqNum,
   bindRfqNum,
@@ -51,7 +51,7 @@ const FiltersHistory = ({
   );
 
   const currentUserRole = useSelector((state) => state.user.role);
-  const currentGrouping = useSelector((state) => state.filters.groupBy)
+  const currentGrouping = useSelector((state) => state.filters.groupBy);
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
   const [value, setValue] = useCallback(useState("order"));
@@ -60,7 +60,7 @@ const FiltersHistory = ({
     if (currentGrouping !== value) {
       setValue(currentGrouping);
     }
-  }, [currentGrouping, value, setValue])
+  }, [currentGrouping, value, setValue]);
 
   return (
     <>
@@ -129,7 +129,7 @@ const FiltersHistory = ({
             name="sequenceNumber"
             type="text"
             label="Sequence #"
-            value={sequenceNum}
+            value={itemNumber}
             {...bindSequenceNum}
             variant="outlined"
             size="small"
@@ -219,7 +219,7 @@ const FiltersHistory = ({
                   margin="normal"
                   id="toDate"
                   label="Order To Date"
-                  value={toDate || format(addDays(new Date(), 1),"MM/dd/yyyy")}
+                  value={toDate || format(addDays(new Date(), 1), "MM/dd/yyyy")}
                   onChange={(value) =>
                     handleFilters(value, "toDate", "history")
                   }
@@ -335,7 +335,7 @@ FiltersHistory.propTypes = {
   setReset: PropTypes.func.isRequired,
   handleFilters: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  sequenceNum: PropTypes.string.isRequired,
+  itemNumber: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
   handleSearch: PropTypes.func.isRequired,
 };

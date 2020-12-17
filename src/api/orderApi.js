@@ -157,7 +157,7 @@ export const fetchNextOrderSets = async (url) => {
 export const fetchOrderSetItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     program: "program-name",
     itemType: "item-type-description",
     user: "user-name",
@@ -277,7 +277,7 @@ export const addSingleOrderToSet = async (id, dist, type) => {
         data: {
           type: "order",
           attributes: {
-            type: type
+            type: type,
           },
           relationships: {
             distributor: {
@@ -566,7 +566,7 @@ export const fetchNextHistory = async (url) => {
 
 export const fetchOrderHistoryByItem = async (filterObject) => {
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     distributor: "distributor-name",
     itemType: "item-type-description",
     orderNum: "order-id",

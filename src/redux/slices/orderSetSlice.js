@@ -331,7 +331,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       currentOrders.data["order-set-items"],
       "order-set-item"
     );
+    console.log(currentItems);
     let orders = mapOrderHistoryOrders(currentOrders.data.orders);
+    console.log(orders);
     orders.sort((a, b) => {
       return a.distributorName < b.distributorName
         ? -1

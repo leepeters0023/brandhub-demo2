@@ -708,7 +708,7 @@ export const complianceItems = [
   {
     id: "1",
     active: false,
-    sequenceNum: "110000010",
+    itemNumber: "110000010",
     itemType: "Shelf Talker",
     program: "New Amsterdam Holiday",
     ruleType: "Prior Approval",
@@ -719,7 +719,7 @@ export const complianceItems = [
   {
     id: "2",
     active: true,
-    sequenceNum: "110000011",
+    itemNumber: "110000011",
     itemType: "Carton Rider",
     program: "Barefoot June Focs 2021",
     ruleType: "Prior Approval",
@@ -730,7 +730,7 @@ export const complianceItems = [
   {
     id: "3",
     active: true,
-    sequenceNum: "110000012",
+    itemNumber: "110000012",
     itemType: "Structure",
     program: "Whitehaven Summer Splash",
     ruleType: "Price",
@@ -741,7 +741,7 @@ export const complianceItems = [
   {
     id: "4",
     active: true,
-    sequenceNum: "110000013",
+    itemNumber: "110000013",
     itemType: "Shelf Talker",
     program: "La Marca Winter 2021",
     ruleType: "Item Type",
@@ -752,7 +752,7 @@ export const complianceItems = [
   {
     id: "5",
     active: true,
-    sequenceNum: "110000014",
+    itemNumber: "110000014",
     itemType: "Structure",
     program: "Whitehaven Summer Splash",
     ruleType: "Price",
@@ -763,7 +763,7 @@ export const complianceItems = [
   {
     id: "6",
     active: true,
-    sequenceNum: "110000015",
+    itemNumber: "110000015",
     itemType: "Shelf Talker",
     program: "Whitehaven Summer Splash",
     ruleType: "Prior Approval",
@@ -774,7 +774,7 @@ export const complianceItems = [
   {
     id: "7",
     active: true,
-    sequenceNum: "110000016",
+    itemNumber: "110000016",
     itemType: "Drinkware",
     program: "New Amsterdam Holiday",
     ruleType: "Item Type",
@@ -785,7 +785,7 @@ export const complianceItems = [
   {
     id: "8",
     active: true,
-    sequenceNum: "110000017",
+    itemNumber: "110000017",
     itemType: "Drinkware",
     program: "New Amsterdam Holiday",
     ruleType: "Price",

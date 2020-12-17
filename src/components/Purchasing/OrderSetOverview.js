@@ -21,12 +21,9 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import GetAppIcon from "@material-ui/icons/GetApp";
-import PrintIcon from "@material-ui/icons/Print";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -42,6 +39,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
   const orderSet = useSelector((state) => state.orderSet);
   const programId = useSelector((state) => state.preOrderDetails.programId);
   const currentUserRoll = useSelector((state) => state.user.role);
+  const firstName = useSelector((state) => state.user.firstName);
+  const lastName = useSelector((state) => state.user.lastName);
+  const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
 
   const handleEditOrder = () => {
     dispatch(restartOrdSet(programId, "in-progress", orderSet.orderId));
@@ -52,32 +52,61 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
   };
 
   useEffect(() => {
-    if (orderSet && currentCSV.data.length === 0) {
-      let orderHeaders = [
-        { label: "Order Number", key: "orderNum" },
-        { label: "Distributor", key: "distributorName" },
-        { label: "Total Items", key: "totalItems" },
-        { label: "Est. Cost", key: "totalEstCost" },
+    if (
+      orderSet &&
+      currentCSV.data.length === 0 &&
+      currentSuppliers.length > 0
+    ) {
+      console.log(orderSet);
+      let csvHeaders = [
+        { label: "Ordered By", key: "user" },
+        { label: "Market", key: "state" },
+        { label: "Brand", key: "brandCode" },
+        { label: "BU", key: "unit" },
+        { label: "Month in Market", key: "inMarketDate" },
+        { label: "Tactic", key: "tactic" },
+        { label: "Vendor", key: "supplier" },
+        { label: "Estimated Cost", key: "totalEstCost" },
+        { label: "Qty Ordered", key: "totalItems" },
+        { label: "Hold Type", key: "holdType" },
+        { label: "Seq #", key: "itemNumber" },
+        { label: "Program", key: "program" },
+        { label: "Order Type", key: "orderType" },
       ];
-      let itemHeaders = orderSet.items.map((item) => ({
-        label: item.itemNumber,
-        key: item.itemNumber,
-      }));
-      let headers = orderHeaders.concat(itemHeaders);
-      let orderData = orderSet.orders.map((order) => {
-        let dataObject = {};
-        dataObject.orderNum = order.orderNumber;
-        dataObject.distributorName = order.distributorName;
-        dataObject.totalItems = order.totalItems;
-        dataObject.totalEstCost = formatMoney(order.totalEstCost, false);
-        order.items.forEach((item) => {
-          dataObject[item.itemNumber] = item.totalItems;
+      let csvData = [];
+      orderSet.orders.forEach((ord) => {
+        ord.items.forEach((item) => {
+          let supName = currentSuppliers.find(
+            (sup) => sup.id === item.supplierId
+          ).name;
+          let dataObject = {
+            user: `${firstName} ${lastName}`,
+            state: item.state,
+            brandCode: item.brandCode,
+            unit: item.unit,
+            inMarketDate: /*TODO*/ "---",
+            tactic: /*TODO*/ "---",
+            supplier: supName,
+            totalEstCost: formatMoney(item.totalEstCost),
+            totalItems: item.totalItems,
+            holdType: /*TODO*/ "---",
+            itemNumber: item.itemNumber,
+            program: item.program,
+            orderType: item.orderType,
+          };
+          csvData.push(dataObject);
         });
-        return dataObject;
       });
-      setCurrentCSV({ data: orderData, headers: headers });
+      csvData.sort((a, b) => {
+        return parseInt(a.itemNumber) < parseInt(b.itemNumber)
+          ? -1
+          : parseInt(a.itemNumber) > parseInt(b.itemNumber)
+          ? 1
+          : 0;
+      });
+      setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
-  }, [currentCSV.data, orderSet]);
+  }, [currentCSV.data, orderSet, currentSuppliers, firstName, lastName]);
 
   useEffect(() => {
     if (orderType.length === 0 && orderSet.type) {
@@ -134,22 +163,24 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <div
             style={{
               display: "flex",
-              width: "100px",
+              width: "100%",
               justifyContent: "flex-end",
             }}
           >
-            <Tooltip title="Print Order">
-              <IconButton>
-                <PrintIcon color="secondary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Export CSV">
-              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
-                <IconButton>
-                  <GetAppIcon color="secondary" />
-                </IconButton>
-              </CSVLink>
-            </Tooltip>
+            <CSVLink
+              data={currentCSV.data}
+              headers={currentCSV.headers}
+              style={{ textDecoration: "none" }}
+            >
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                startIcon={<GetAppIcon />}
+              >
+                WRAP UP
+              </Button>
+            </CSVLink>
           </div>
           <br />
           <Typography className={classes.headerText}>
