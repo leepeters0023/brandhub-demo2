@@ -38,7 +38,7 @@ const defaultFilters = {
   program: [],
   favItems: [],
   orderType: "in-stock",
-  sequenceNum: "",
+  itemNumber: "",
   itemDesc: "",
 };
 

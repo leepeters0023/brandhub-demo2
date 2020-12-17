@@ -29,7 +29,7 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const headCells = [
   { id: "preview", label: "Preview" },
-  { id: "sequenceNum", label: "Sequence #" },
+  { id: "itemNumber", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
   { id: "itemDescription", label: "Item Desc." },
@@ -105,7 +105,9 @@ const ItemCatalogTable = ({
   const dispatch = useDispatch();
 
   const selectedItems = useSelector((state) => state.items.selectedItems);
-  const preOrderItems = useSelector((state) => state.programs.currentPreOrderItems);
+  const preOrderItems = useSelector(
+    (state) => state.programs.currentPreOrderItems
+  );
   const isPreOrderLoading = useSelector((state) => state.orderSet.isLoading);
   const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
@@ -217,7 +219,8 @@ const ItemCatalogTable = ({
                               onClick={() => addPreOrderItem(item.id)}
                               disabled={
                                 isPreOrderLoading ||
-                                preOrderItems.filter((i) => i === item.id).length > 0
+                                preOrderItems.filter((i) => i === item.id)
+                                  .length > 0
                               }
                             >
                               <AddCircleIcon />

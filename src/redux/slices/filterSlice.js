@@ -25,7 +25,7 @@ let initialState = {
   program: [],
   rfqNum: null,
   ruleType: null,
-  sequenceNum: null,
+  itemNumber: null,
   itemDesc: null,
   status: null,
   supplier: [],
@@ -68,7 +68,7 @@ const filterSlice = createSlice({
       state.orderType = null;
       state.poNum = null;
       state.program = [];
-      state.sequenceNum = null;
+      state.itemNumber = null;
       state.itemDesc = null;
       state.rfqNum = null;
       state.ruleType = null;
@@ -123,7 +123,7 @@ const filterSlice = createSlice({
       state.orderType = null;
       state.poNum = null;
       state.program = [];
-      state.sequenceNum = null;
+      state.itemNumber = null;
       state.itemDesc = null;
       state.supplier = [];
       state.rfqNum = null;
@@ -151,7 +151,7 @@ const filterSlice = createSlice({
           "itemType",
           "favItems",
           "program",
-          "sequenceNum",
+          "itemNumber",
           "itemDesc",
         ];
       }
@@ -166,7 +166,7 @@ const filterSlice = createSlice({
           "distributor",
           "itemType",
           "program",
-          "sequenceNum",
+          "itemNumber",
           "user",
           "rfqNum",
           "poNum",
@@ -177,16 +177,10 @@ const filterSlice = createSlice({
         chippable = ["month", "brand", "bu"];
       }
       if (filterType.includes("itemRollup")) {
-        chippable = ["brand", "program", "itemType", "sequenceNum", "bu"];
+        chippable = ["brand", "program", "itemType", "itemNumber", "bu"];
       }
       if (filterType.includes("compliance")) {
-        chippable = [
-          "brand",
-          "program",
-          "itemType",
-          "tag",
-          "sequenceNum",
-        ];
+        chippable = ["brand", "program", "itemType", "tag", "itemNumber"];
       }
       if (filterType.includes("budget")) {
         chippable = ["brand", "user", "territory"];

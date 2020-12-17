@@ -19,7 +19,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
@@ -200,7 +200,7 @@ const RollupOverviewByItemTable = ({
                   }}
                 >
                   <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}

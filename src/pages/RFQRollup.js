@@ -32,9 +32,9 @@ const defaultFilters = {
   itemType: [],
   user: [],
   bus: [],
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "itemNumber",
 };
 
 const useStyles = makeStyles((theme) => ({

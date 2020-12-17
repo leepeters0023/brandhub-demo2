@@ -30,7 +30,7 @@ const defaultFilters = {
   itemType: [],
   bu: [],
   program: [],
-  sequenceNum: "",
+  itemNumber: "",
   filterType: "item-all",
 };
 

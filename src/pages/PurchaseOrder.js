@@ -146,7 +146,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "City", key: "city" },
         { label: "State", key: "state" },
         { label: "Zip", key: "zip" },
-        { label: "Item Number", key: "sequenceNum" },
+        { label: "Item Number", key: "itemNumber" },
         { label: "Labeling Info", key: "label" },
         { label: "Total Quantity", key: "totalItems" },
         { label: "Order Approval Status", key: "shipStatus" },
@@ -165,10 +165,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       currentPO.poItems.forEach((item) => {
         currentPO.shippingParams.forEach((param) => {
           let currentParamItem = param.items.find(
-            (i) => i.sequenceNum === item.sequenceNum
+            (i) => i.itemNumber === item.itemNumber
           );
           if (currentParamItem) {
-            console.log(currentParamItem.shipFromZip);
             let dataObject = {
               paramItemId: currentParamItem.id,
               poNum: currentPO.id,
@@ -185,7 +184,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               city: param.city,
               state: param.state,
               zip: param.zip,
-              sequenceNum: currentParamItem.sequenceNum,
+              itemNumber: currentParamItem.itemNumber,
               label: "* TODO *",
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
@@ -231,7 +230,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }
         });
       });
-      console.log(csvData);
       setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
   }, [
@@ -248,10 +246,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <TrackingModal
-        open={isTrackingOpen}
-        handleClose={setTrackingOpen}
-      />
+      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
@@ -454,9 +449,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             </div>
             <br />
             <br />
-            <ShippingParameterTable
-              handleTrackingClick={handleTrackingClick}
-            />
+            <ShippingParameterTable handleTrackingClick={handleTrackingClick} />
             <br />
             <br />
           </div>

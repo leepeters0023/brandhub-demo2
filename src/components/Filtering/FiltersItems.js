@@ -21,7 +21,7 @@ const FiltersItems = ({
   setReset,
   handleFilters,
   classes,
-  sequenceNum,
+  itemNumber,
   bindSequenceNum,
   itemDesc,
   bindItemDesc,
@@ -38,12 +38,12 @@ const FiltersItems = ({
           <TextField
             color="secondary"
             fullWidth
-            name="sequenceNum"
+            name="itemNumber"
             type="text"
             label="Sequence #"
             variant="outlined"
             size="small"
-            value={sequenceNum}
+            value={itemNumber}
             {...bindSequenceNum}
           />
         </ListItem>
@@ -51,7 +51,7 @@ const FiltersItems = ({
           <TextField
             color="secondary"
             fullWidth
-            name="sequenceNum"
+            name="itemNumber"
             type="text"
             label="Item Description"
             variant="outlined"
@@ -149,7 +149,7 @@ FiltersItems.propTypes = {
   setReset: PropTypes.func.isRequired,
   handleFilters: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  sequenceNum: PropTypes.string.isRequired,
+  itemNumber: PropTypes.string.isRequired,
   bindSequenceNum: PropTypes.object.isRequired,
 };
 

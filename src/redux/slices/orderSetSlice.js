@@ -470,7 +470,6 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     if (distributors.error) {
       throw distributors.error;
     }
-    console.log(distributors);
     let idArray = distributors.data.map((dist) => dist.id);
     const orders = [];
     await Promise.all(

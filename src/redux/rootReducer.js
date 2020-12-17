@@ -21,6 +21,7 @@ import programsReducer from "./slices/programsSlice";
 import sharedItemsReducer from "./slices/sharedItemsSlice";
 import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
+import reportReducer from "./slices/reportSlice";
 import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
 import supplierReducer from "./slices/supplierSlice";
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   sharedItems: sharedItemsReducer,
   purchaseOrder: purchaseOrderReducer,
   purchaseOrderHistory: purchaseOrderHistoryReducer,
+  reports: reportReducer,
   rfq: rfqReducer,
   rfqHistory: rfqHistoryReducer,
   suppliers: supplierReducer,

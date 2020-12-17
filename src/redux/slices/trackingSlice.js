@@ -14,6 +14,7 @@ const startLoading = (state) => {
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.tracking = null;
   state.error = error;
 };
 

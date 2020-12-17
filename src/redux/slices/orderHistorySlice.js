@@ -55,6 +55,7 @@ let initialState = {
   items: [],
   singleOrder: {
     orderNumber: null,
+    user: null,
     distributorName: null,
     distributorId: null,
     distributorAddress: null,
@@ -95,6 +96,7 @@ const orderHistorySlice = createSlice({
     getSingleOrderSuccess(state, action) {
       const { order, items } = action.payload;
       state.singleOrder.orderNumber = order.id;
+      state.singleOrder.user = order.user;
       state.singleOrder.distributorName = order.distributorName;
       state.singleOrder.distributorId = order.distributorId;
       state.singleOrder.distributorAddress = `${order.distributorAddressOne}, ${
@@ -158,6 +160,7 @@ const orderHistorySlice = createSlice({
       state.items = [];
       state.singleOrder = {
         orderNumber: null,
+        user: null,
         distributorName: null,
         distributorId: null,
         type: null,
@@ -236,7 +239,6 @@ export const fetchOrder = (id) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
     let formattedOrder = mapSingleOrder(order.data);
     let formattedItems = mapOrderItems(order.data["order-items"]);
     dispatch(

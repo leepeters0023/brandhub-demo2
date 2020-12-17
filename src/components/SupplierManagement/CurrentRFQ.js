@@ -202,7 +202,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                 noWrap
                 className={clsx(classes.headerText, classes.bidText)}
               >
-                {currentRFQ.sequenceNum}
+                {currentRFQ.itemNumber}
               </Typography>
               <Typography
                 noWrap
@@ -385,7 +385,7 @@ const CurrentRFQ = ({ currentRFQ }) => {
                 <ImageWrapper
                   id={currentRFQ.id}
                   imgClass={classes.largePreview}
-                  alt={`Item number ${currentRFQ.sequenceNum}`}
+                  alt={`Item number ${currentRFQ.itemNumber}`}
                   imgUrl={currentRFQ.imgUrlOne}
                 />
               </div>
