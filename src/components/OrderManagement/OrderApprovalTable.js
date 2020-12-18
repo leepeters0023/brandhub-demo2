@@ -263,6 +263,19 @@ const OrderApprovalTable = ({
                     <TableCell align="left">
                       {row.program ? row.program : "---"}
                     </TableCell>
+                    {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                     <TableCell>{row.state}</TableCell>
                     <TableCell align="left">
                       {row.orderDate !== "---"
