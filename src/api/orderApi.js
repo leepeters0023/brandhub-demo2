@@ -310,6 +310,48 @@ export const addSingleOrderToSet = async (id, dist, type) => {
   return response;
 };
 
+export const addCustomAddressOrderToSet = async (id, addId, type) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(
+      "/api/orders",
+      {
+        data: {
+          type: "order",
+          attributes: {
+            type: type,
+          },
+          relationships: {
+            address: {
+              data: {
+                type: "address",
+                id: addId,
+              },
+            },
+            "order-set": {
+              data: {
+                type: "order-set",
+                id: id,
+              },
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 /*
   The following calls handle order set statuses.  The status of
   an order set determines whether it can move to the next step in
