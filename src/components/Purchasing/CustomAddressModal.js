@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { addCustomAddressOrder } from "../../redux/slices/orderSetSlice";
 
@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -21,9 +22,17 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
+const orderTypeMap = {
+  "On Demand": "on-demand",
+  "In Stock": "in-stock",
+  "Pre Order": "pre-order",
+}
+
 const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const warehouseId = useSelector((state) => state.addresses.warehouseAddress.id)
 
   const { value: name, bind: bindName, reset: resetName } = useInput("");
   const {
@@ -43,6 +52,11 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     ""
   );
 
+  const handleCDC = () => {
+    dispatch(addCustomAddressOrder(null, orderSetId, orderTypeMap[orderType], warehouseId));
+    handleClose(false);
+  }
+
   const handleSubmit = () => {
     const address = {
       name: name,
@@ -53,7 +67,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
       zip: zip,
       country: country,
     }
-    dispatch(addCustomAddressOrder(address, orderSetId, orderType, null))
+    dispatch(addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null))
     resetName();
     resetAddressOne();
     resetAddressTwo();
@@ -92,6 +106,25 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               width: "100%",
             }}
           >
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={() => handleCDC()}
+              >
+                SHIP TO CDC
+              </Button>
+            </div>
+            <br />
+            <Divider />
+            <br />
             <Typography className={classes.headerText}>
               {`Custom Address for ${orderType} order #${orderSetId}`}
             </Typography>
@@ -170,7 +203,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               style={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
               }}
             >
               <Button
