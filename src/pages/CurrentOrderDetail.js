@@ -459,6 +459,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               color="secondary"
               variant="contained"
               onClick={() => setOverviewVisible(true)}
+              disabled={orders.length === 0}
             >
               ORDER OVERVIEW
             </Button>
