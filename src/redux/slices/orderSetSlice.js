@@ -327,6 +327,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data["order-set-items"],
       "order-set-item"
@@ -424,10 +425,12 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
+    console.log(id, dist, type)
     const order = await addSingleOrderToSet(id, dist, type);
     if (order.error) {
       throw order.error;
     }
+    console.log(order);
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     console.log(formattedOrder);
     dispatch(addOrderSuccess({ order: formattedOrder }));
