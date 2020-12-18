@@ -278,7 +278,7 @@ export const addSingleOrderToSet = async (id, dist, type) => {
         data: {
           type: "order",
           attributes: {
-            type: type
+            type: type,
           },
           relationships: {
             distributor: {
@@ -503,18 +503,21 @@ export const addOrderSetItem = async (id, item) => {
 };
 
 export const updateOrderSetItemDate = async (id, date) => {
-  const response = { status: "", error: null }
+  const response = { status: "", error: null };
   await axios
-    .patch(`/api/order-set-items/${id}`,
-    {
-      data: {
-        type: "order-set-item",
-        id: id,
-        attributes: {
-          "required-delivery-date": date
-        }
-      }
-    }, writeHeaders)
+    .patch(
+      `/api/order-set-items/${id}`,
+      {
+        data: {
+          type: "order-set-item",
+          id: id,
+          attributes: {
+            "in-market-date": date,
+          },
+        },
+      },
+      writeHeaders
+    )
     .then((_res) => {
       response.status = "ok";
     })
@@ -524,21 +527,24 @@ export const updateOrderSetItemDate = async (id, date) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const updateOrderSetItemRush = async (id, status) => {
-  const response = { status: "", error: null }
+  const response = { status: "", error: null };
   await axios
-    .patch(`/api/order-set-items/${id}`,
-    {
-      data: {
-        type: "order-set-item",
-        id: id,
-        attributes: {
-          "is-rush": status
-        }
-      }
-    }, writeHeaders)
+    .patch(
+      `/api/order-set-items/${id}`,
+      {
+        data: {
+          type: "order-set-item",
+          id: id,
+          attributes: {
+            "is-rush": status,
+          },
+        },
+      },
+      writeHeaders
+    )
     .then((_res) => {
       response.status = "ok";
     })
@@ -548,7 +554,7 @@ export const updateOrderSetItemRush = async (id, status) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 // ------------ Single Order Calls ------------ //
 
