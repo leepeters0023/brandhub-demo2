@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-//import { useDispatch } from "react-redux";
-//TODO write this Thunk!
-//import { addCustomAddress } from "../../redux/slices/patchOrderSlice";
+import { useDispatch } from "react-redux";
+
+import { addCustomAddressOrder } from "../../redux/slices/orderSetSlice";
 
 import { useInput } from "../../hooks/InputHooks";
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const { value: name, bind: bindName, reset: resetName } = useInput("");
   const {
@@ -36,58 +36,31 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     bind: bindAddressTwo,
     reset: resetAddressTwo,
   } = useInput("");
-  const {
-    value: addressThree,
-    bind: bindAddressThree,
-    reset: resetAddressThree,
-  } = useInput("");
   const { value: city, bind: bindCity, reset: resetCity } = useInput("");
   const { value: state, bind: bindState, reset: resetState } = useInput("");
   const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
   const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
     ""
   );
-  const {
-    value: attention,
-    bind: bindAttention,
-    reset: resetAttention,
-  } = useInput("");
 
   const handleSubmit = () => {
-    // dispatch(
-    //   addCustomAddress(
-    //     orderSetId,
-    //     addressOne,
-    //     addressTwo,
-    //     addressThree,
-    //     city,
-    //     state,
-    //     zip,
-    //     country,
-    //     attention
-    //   )
-    // );
-    //temp log to get rid of unused vars warning until tied to api
-    console.log(
-      name,
-      addressOne,
-      addressTwo,
-      addressThree,
-      city,
-      state,
-      zip,
-      country,
-      attention
-    );
+    const address = {
+      name: name,
+      addressOne: addressOne,
+      addressTwo: addressTwo,
+      city: city,
+      state: state,
+      zip: zip,
+      country: country,
+    }
+    dispatch(addCustomAddressOrder(address, orderSetId, orderType, null))
     resetName();
     resetAddressOne();
     resetAddressTwo();
-    resetAddressThree();
     resetCity();
     resetState();
     resetZip();
     resetCountry();
-    resetAttention();
     handleClose(false);
   };
 
@@ -158,16 +131,6 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               style={{ marginBottom: "15px" }}
               variant="outlined"
               color="secondary"
-              name="address-three"
-              type="text"
-              label="Address Line Three"
-              {...bindAddressThree}
-            />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
               name="city"
               type="text"
               label="City"
@@ -202,16 +165,6 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               type="text"
               label="Country"
               {...bindCountry}
-            />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
-              name="attention"
-              type="text"
-              label="Attention"
-              {...bindAttention}
             />
             <div
               style={{

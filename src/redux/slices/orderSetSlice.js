@@ -3,8 +3,10 @@ import {
   fetchOrdersByProgram,
   fetchOrderSetById,
   addSingleOrderToSet,
+  addCustomAddressOrderToSet
 } from "../../api/orderApi";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
+import { addAddress } from "../../api/addressApi"
 import { setPreOrderDetails } from "./preOrderDetailSlice";
 import {
   setIsLoading as patchLoading,
@@ -483,6 +485,32 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     );
     let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+}
+
+export const addCustomAddressOrder = (address, id, type, addId) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    let addressId = addId ? addId : null;
+    if (!addressId) {
+      const newAddress = await addAddress(address);
+      if (newAddress.error) {
+        throw newAddress.error
+      }
+      addressId = newAddress.data.id
+    }
+    const order = await addCustomAddressOrderToSet(id, addressId, type);
+    if (order.error) {
+      throw order.error;
+    }
+    const formattedOrder = mapOrderHistoryOrders([order.data]);
+    dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
   } catch (err) {
