@@ -205,7 +205,7 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.sequenceNum}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  {row.brands.length > 1 ? (
+                  {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
                         align="left"
