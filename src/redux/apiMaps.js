@@ -278,6 +278,7 @@ export const mapOrderSet = (order) => {
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
     program: order.program ? order.program.name : "---",
+    brands: order.program.brands.map((brand) => brand.name).join(", "), // how to test for length > 1? 
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
     status: order.status,
@@ -293,10 +294,11 @@ export const mapOrderSet = (order) => {
 };
 
 export const mapOrderSetHistory = (orders) => {
-  let mappedOrders = orders.map((order) => {
+  let mappedOrders = orders.map((order, i) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;
   });
+  console.log(mappedOrders)
   return mappedOrders;
 };
 

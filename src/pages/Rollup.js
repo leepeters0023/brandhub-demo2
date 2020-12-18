@@ -58,15 +58,9 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
-  ); // no
-  console.log(currentPreOrders)
-  const quarterlyRollupItems = useSelector(
-    (state) => state.orderSetHistory.itemGroups
-<<<<<<< HEAD
   );
-=======
-  ) // no
->>>>>>> a6cdb81 (pulls brand from orderhistory table nested data but renders 3x)
+  
+  const quarterlyRollupItems = useSelector((state) => state.orderSetHistory.itemGroup);
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
