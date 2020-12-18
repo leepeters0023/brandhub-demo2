@@ -63,7 +63,7 @@ export const fetchWarehouse = () => async (dispatch) => {
     if (address.error) {
       throw address.error;
     }
-    dispatch(getWarehouseSuccess({ address: address.data }));
+    dispatch(getWarehouseSuccess({ address: address.data[0] }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
