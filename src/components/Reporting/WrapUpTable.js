@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const WrapUpTable = ({ report, orderTypeMap }) => {
+const WrapUpTable = ({ report, orderTypeMap, currentSuppliers }) => {
   const classes = useStyles();
 
   return (
@@ -62,8 +62,15 @@ const WrapUpTable = ({ report, orderTypeMap }) => {
               <TableCell align="left">{item.unit}</TableCell>
               <TableCell align="left">{"---"}</TableCell>
               <TableCell align="left">{"---"}</TableCell>
-              <TableCell align="left">{item.supName}</TableCell>
-              <TableCell align="left">{formatMoney(item.totalEstCost)}</TableCell>
+              <TableCell align="left">
+                {
+                  currentSuppliers.find((sup) => sup.id === item.supplierId)
+                    .name
+                }
+              </TableCell>
+              <TableCell align="left">
+                {formatMoney(item.totalEstCost)}
+              </TableCell>
               <TableCell align="left">{item.totalItems}</TableCell>
               <TableCell align="left">{"---"}</TableCell>
               <TableCell align="left">{item.itemNumber}</TableCell>
@@ -80,6 +87,6 @@ const WrapUpTable = ({ report, orderTypeMap }) => {
 WrapUpTable.propTypes = {
   report: PropTypes.array,
   orderTypeMap: PropTypes.object.isRequired,
-}
+};
 
 export default WrapUpTable;
