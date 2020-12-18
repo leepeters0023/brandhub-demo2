@@ -118,6 +118,7 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
+  console.log(order);
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
@@ -144,7 +145,11 @@ export const mapSingleOrder = (order) => {
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
-    attn: order.attn ? order.attn : "---",
+    attn: order.distributor["current-user-attn"]
+    ? order.distributor["current-user-attn"]
+    : order.distributor["default-attn"]
+    ? order.distributor["default-attn"]
+    : "---",
   };
   return formattedOrder;
 };
