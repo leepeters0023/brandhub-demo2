@@ -429,6 +429,7 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
       throw order.error;
     }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
+    console.log(formattedOrder);
     dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
     dispatch(patchSuccess());

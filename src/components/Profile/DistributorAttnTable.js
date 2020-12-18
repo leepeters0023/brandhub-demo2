@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { useDispatch } from "react-redux";
 
-import { updateAttentionLine } from "../../redux/slices/userSlice";
+import { setCustomAttention } from "../../redux/slices/distributorSlice";
 
 import EditAttnModal from "./EditAttnModal";
 
@@ -33,7 +33,7 @@ const DistributorAttnTable = ({ distributors, isLoading }) => {
   const [isEditOpen, setEditOpen] = useCallback(useState(false));
 
   const handleEdit = (id, value) => {
-    dispatch(updateAttentionLine({ id: id, attn: value }));
+    dispatch(setCustomAttention(id, value));
   };
 
   const handleEditOpen = (id, value, name) => {
