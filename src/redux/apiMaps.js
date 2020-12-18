@@ -278,7 +278,7 @@ export const mapOrderSet = (order) => {
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
     program: order.program ? order.program.name : "---",
-    brands: order.program.brands.map((brand) => brand.name).join(", "), // how to test for length > 1? 
+    brand: order.program.brands.map((brand) => brand.name),
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
     status: order.status,
@@ -325,8 +325,7 @@ export const mapRollupItems = (items) => {
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
-      : item.programs
-          .map((prog) => prog.brands.map((brand) => brand.name))
+      : item.programs.map((prog) => prog.brands.map((brand) => brand.name))
           .join(", "),
     program: determineProgram(item),
     programs: item.programs,
