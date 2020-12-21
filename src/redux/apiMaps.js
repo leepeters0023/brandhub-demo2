@@ -134,7 +134,8 @@ export const mapSingleOrder = (order) => {
         ? order["program-names"].join(", ")
         : "---",
     type: orderTypeMap[order.type],
-    items: mapOrderItems(order["order-items"], "history"),
+    brand: null,//need brands here
+    items: mapOrderItems(order["order-items"], "history"), //brands are inside order items.[i].items.brands[i].name
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
@@ -151,7 +152,7 @@ export const mapSingleOrder = (order) => {
 
 export const mapOrderHistoryOrders = (orders) => {
   let mappedOrders = orders.map((order) => {
-    let formattedOrder = mapSingleOrder(order);
+    let formattedOrder = mapSingleOrder(order.items);
     return formattedOrder;
   });
   return mappedOrders;
