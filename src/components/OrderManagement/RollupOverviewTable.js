@@ -20,7 +20,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
-
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
