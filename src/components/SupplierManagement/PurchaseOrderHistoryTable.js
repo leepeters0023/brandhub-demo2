@@ -46,8 +46,13 @@ const EnhancedTableHead = (props) => {
   const currentHeadCells =
     role === "supplier"
       ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
+<<<<<<< HEAD
       : headCells.filter((cell) => cell.id !== "");
 
+=======
+      : headCells.filter((cell) => cell.id !== "itemDesc");
+        
+>>>>>>> 87df363 (updates PO history table)
   return (
     <TableHead>
       <TableRow>
@@ -183,7 +188,7 @@ const PurchaseOrderHistoryTable = ({
                     handleRowClick(row.poNum);
                   }}
                 >
-                  <TableCell align="left">{row.itemNumber}</TableCell>
+                   <TableCell align="left">Placeholder Seq Num</TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
@@ -198,13 +203,11 @@ const PurchaseOrderHistoryTable = ({
                       <TableCell align="left">{row.brand[0]}</TableCell>
                     )}
                   <TableCell align="left">{row.projectNum}</TableCell>
-                  <TableCell align="left">{row.itemDesc}</TableCell>
-                  {role !== "supplier" && (
-                    <>
-                      <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">
-                        {formatMoney(row.estCost, true)}
-                      </TableCell>
+                  {role === "supplier" ? (<TableCell align="left">{row.itemDesc}</TableCell>) : ( <>
+                    <TableCell align="left">{row.supplier}</TableCell>
+                    <TableCell align="left">
+                      {formatMoney(row.estCost, true)}
+                    </TableCell>
                     </>
                   )}
                   <TableCell align="left">{row.totalItems}</TableCell>
