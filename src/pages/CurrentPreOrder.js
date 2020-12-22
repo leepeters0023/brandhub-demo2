@@ -153,6 +153,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
       brand: brand,
       itemType: itemType,
       itemNumber: itemNumber,
+      //add new data here 
     });
     handleModal(true);
   }, []);
