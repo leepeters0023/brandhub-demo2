@@ -46,13 +46,8 @@ const EnhancedTableHead = (props) => {
   const currentHeadCells =
     role === "supplier"
       ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
-<<<<<<< HEAD
       : headCells.filter((cell) => cell.id !== "");
 
-=======
-      : headCells.filter((cell) => cell.id !== "itemDesc");
-        
->>>>>>> 87df363 (updates PO history table)
   return (
     <TableHead>
       <TableRow>
