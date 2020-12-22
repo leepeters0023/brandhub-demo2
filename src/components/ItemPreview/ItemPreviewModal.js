@@ -90,16 +90,15 @@ const ItemPreviewModal = (props) => {
       discountAmount,
       startDate,
       expirationDate,
+      specification,
     },
     handleClose,
     previewModal,
   } = props;
-
+ 
   // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
-
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
-
   // const handleChangeTab = (_evt, newValue) => {
   //   setValue(newValue);
   // };
@@ -123,7 +122,7 @@ const ItemPreviewModal = (props) => {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
   }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type]);
-
+  console.log(specification)
   return (
     <div className={classes.relativeContainer}>
       <Dialog
@@ -185,19 +184,10 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Product specs`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Paper – size, & Finish`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Structure – Website description`}
-                  </Typography>
-                  {type === "inStock" && (
-                    <Typography variant="body1" color="textSecondary">
-                      {`Amount Available: ${stock}`}
-                    </Typography>
+                  {specification && (
+                    Object.keys(specification).map((keyName, i) => (
+                      <Typography variant="body1" color="textSecondary" key={i}>{`${keyName} - ${specification[keyName]}`}</Typography>
+                    ))
                   )}
                 </>
               )}

@@ -44,6 +44,7 @@ export const mapItems = (items) => {
       ? item.programs.map((prog) => prog.name).join(", ")
       : "---",
     itemType: item.type,
+    specification: item.specification,
     itemDescription: item.description ? item.description : "---",
     estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
