@@ -21,39 +21,21 @@ import Tooltip from "@material-ui/core/Tooltip";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
-  { id: "poNum", disablePadding: false, label: "PO #", sort: true },
-  {
-    id: "itemNumber",
-    disablePadding: false,
-    label: "Sequence #",
-    sort: false,
-  },
-  { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
+  { id: "seqNum", disablePadding: false, label: "Seq. #", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: true },
+  { id: "projectNum", disablePadding: false, label: "Project #", sort: true },
+  { id: "itemDesc", disablePadding: false, label: "Item Description", sort: true },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: true },
-  { id: "itemType", disablePadding: false, label: "Item Type", sort: false },
-  { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: false },
-  { id: "brand", disablePadding: false, label: "Brand", sort: false },
-  {
-    id: "totalItems",
-    disablePadding: false,
-    label: "Quantity",
-    sort: false,
-  },
-  {
-    id: "estCost",
-    disablePadding: false,
-    label: "Est. Cost/Unit",
-    sort: false,
-  },
-  {
-    id: "actCost",
-    disablePadding: false,
-    label: "Act. Cost/Unit",
-    sort: false,
-  },
+  { id: "quantity", disablePadding: false, label: "Quantity", sort: true },
+  { id: "estCost", disablePadding: false, label: "Est. Cost/Unit", sort: true },
+  { id: "actCost", disablePadding: false, label: "Act. Cost/Unit", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
-];
+  { id: "submittedDate", disablePadding: false, label: "Submitted Date", sort: true },
+  { id: "poCreator", disablePadding: false, label: "PO Creator", sort: true },
+  { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
+]
+
+// Toggle to On Demand or Pre Order – What if we don’t toggle and add a column for this?  Like we do in Order History
 
 const EnhancedTableHead = (props) => {
   const { classes, order, orderBy, onRequestSort, role } = props;
@@ -62,14 +44,10 @@ const EnhancedTableHead = (props) => {
   };
 
   const currentHeadCells =
-    role !== "supplier"
-      ? headCells.filter(
-          (cell) => cell.id !== "itemDesc" && cell.id !== "itemType"
-        )
-      : headCells.filter(
-          (cell) => cell.id !== "supplier" && cell.id !== "estCost"
-        );
-
+    role === "supplier"
+      ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
+      : headCells.filter((cell) => cell.id !== "itemDesc");
+        
   return (
     <TableHead>
       <TableRow>
@@ -153,7 +131,6 @@ const PurchaseOrderHistoryTable = ({
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
-
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -205,18 +182,7 @@ const PurchaseOrderHistoryTable = ({
                     handleRowClick(row.poNum);
                   }}
                 >
-                  <TableCell align="left">{row.poNum}</TableCell>
-                  <TableCell align="left">{row.itemNumber}</TableCell>
-                  <TableCell align="left">{row.projectNum}</TableCell>
-                  {role !== "supplier" && (
-                    <TableCell align="left">{row.supplier}</TableCell>
-                  )}
-                  {role === "supplier" && (
-                    <>
-                      <TableCell align="left">{row.itemType}</TableCell>
-                      <TableCell align="left">{row.itemDesc}</TableCell>
-                    </>
-                  )}
+                   <TableCell align="left">Placeholder Seq Num</TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
@@ -228,21 +194,26 @@ const PurchaseOrderHistoryTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                    <TableCell align="left">{row.brand[0]}</TableCell>
-                  )}
-                  <TableCell align="left">{row.totalItems}</TableCell>
-                  {role !== "supplier" && (
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
+                  <TableCell align="left">{row.projectNum}</TableCell>
+                  {role === "supplier" ? (<TableCell align="left">{row.itemDesc}</TableCell>) : ( <>
+                    <TableCell align="left">{row.supplier}</TableCell>
                     <TableCell align="left">
                       {formatMoney(row.estCost, true)}
                     </TableCell>
+                    </>
                   )}
+                  <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.actCost, true)}
                   </TableCell>
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
-                  <TableCell align="left">{row.dueDate}</TableCell>
+                  <TableCell align="left">Placeholder Submitted Date</TableCell>
+                  <TableCell align="left">Placeholder PO Creator</TableCell>
+                  <TableCell align="left">CDC or Direct Ship</TableCell>
                 </TableRow>
               ))}
             {posLoading && (
