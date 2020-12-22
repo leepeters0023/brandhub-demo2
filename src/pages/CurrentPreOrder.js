@@ -148,12 +148,25 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     setConfirmDeleteOpen(false);
   };
 
+<<<<<<< HEAD
   const handleModalOpen = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
     console.log(item)
     setCurrentItem(item);
     handlePreviewModal(true);
   };
+=======
+  const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
+    setCurrentItem({
+      imgUrl: img,
+      brand: brand,
+      itemType: itemType,
+      itemNumber: itemNumber,
+      //add new data here 
+    });
+    handleModal(true);
+  }, []);
+>>>>>>> 213fa60 (adds specs to item preview modal)
 
   const handleCloseConfirm = useCallback(() => {
     handleConfirmModal(false);
