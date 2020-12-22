@@ -195,10 +195,26 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
+<<<<<<< HEAD
                   {specification && (
                     Object.keys(specification).map((keyName, i) => (
                       <Typography variant="body1" color="textSecondary" key={i}>{`${keyName}: ${specification[keyName]}`}</Typography> // doing this here as opposed to apiMaps because specifications can apparently vary quite a bit so would be hard to standardize maps elsewhere
                     ))
+=======
+                  <Typography variant="body1" color="textSecondary">
+                    {`Product specs`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Paper – size, & Finish`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Structure – Website description`}
+                  </Typography>
+                  {type === "inStock" && (
+                    <Typography variant="body1" color="textSecondary">
+                      {`Amount Available: ${stock}`}
+                    </Typography>
+>>>>>>> edcea5a (adds itemNumber to poHistortyTable)
                   )}
                 </>
               )}

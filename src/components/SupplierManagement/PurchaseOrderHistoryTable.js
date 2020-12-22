@@ -183,7 +183,7 @@ const PurchaseOrderHistoryTable = ({
                     handleRowClick(row.poNum);
                   }}
                 >
-                   <TableCell align="left">Placeholder Seq Num</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
