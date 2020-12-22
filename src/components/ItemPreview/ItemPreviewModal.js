@@ -185,6 +185,15 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Product specs`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Paper – size, & Finish`}
+                  </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {`Structure – Website description`}
+                  </Typography>
                   {type === "inStock" && (
                     <Typography variant="body1" color="textSecondary">
                       {`Amount Available: ${stock}`}
