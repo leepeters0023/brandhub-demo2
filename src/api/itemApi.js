@@ -27,7 +27,6 @@ export const fetchItems = async (filterObject) => {
       response.status = "error";
       response.error = err.toString();
     });
-    console.log(response)
   return response;
 };
 

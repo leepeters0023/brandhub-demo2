@@ -70,27 +70,29 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  let mappedItems = items.map((item) => {
-    const images = handleImages(item.images);
-    return {
-      id: item.id,
-      itemNumber: item["item-number"],
-      brand: item.brands.map((brand) => brand.name).join(", "),
-      program: item.programs
-        ? item.programs.map((prog) => prog.name).join(", ")
-        : "---",
-      itemType: item.type,
-      itemDescription: item.description ? item.description : "---",
-      estCost: stringToCents(item["estimated-cost"]),
-      packSize: item["qty-per-pack"],
-      stock: Math.floor(Math.random() * 25 + 26),
-      inMarketDate: item["in-market-date"]
-        ? format(item["in-market-date"], "MM/dd/yyyy")
-        : "---",
-      imgUrlThumb: images.imgUrlThumb,
-      imgUrlLg: images.imgUrlLg,
-    };
-  });
+  let mappedItems = items.map((item) => ({
+    id: item.id,
+    itemNumber: item["item-number"],
+    brand: item.brands.map((brand) => brand.name).join(", "),
+    program: item.programs
+      ? item.programs.map((prog) => prog.name).join(", ")
+      : "---",
+    itemType: item.type,
+    specification: item.specification,
+    itemDescription: item.description ? item.description : "---",
+    estCost: stringToCents(item["estimated-cost"]),
+    packSize: item["qty-per-pack"],
+    stock: Math.floor(Math.random() * 25 + 26),
+    inMarketDate: item["in-market-date"]
+      ? format(item["in-market-date"], "MM/dd/yyyy")
+      : "---",
+    imgUrlThumb: item["img-url-thumb"]
+      ? item["img-url-thumb"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlLg: item["img-url-large"]
+      ? item["img-url-large"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+  }));
   return mappedItems;
 };
 
