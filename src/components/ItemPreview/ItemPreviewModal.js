@@ -123,7 +123,7 @@ const ItemPreviewModal = (props) => {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
   }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type]);
-  console.log(specification)
+
   return (
     <div className={classes.relativeContainer}>
       <Dialog
@@ -197,7 +197,7 @@ const ItemPreviewModal = (props) => {
                   </Typography>
                   {specification && (
                     Object.keys(specification).map((keyName, i) => (
-                      <Typography variant="body1" color="textSecondary" key={i}>{`${keyName} - ${specification[keyName]}`}</Typography>
+                      <Typography variant="body1" color="textSecondary" key={i}>{`${keyName}: ${specification[keyName]}`}</Typography> // doing this here as opposed to apiMaps because specifications can apparently vary quite a bit so would be hard to standardize maps elsewhere
                     ))
                   )}
                 </>
