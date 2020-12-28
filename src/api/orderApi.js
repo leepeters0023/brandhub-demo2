@@ -320,14 +320,9 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
           type: "order",
           attributes: {
             type: type,
+            "custom-address-id": addId,
           },
           relationships: {
-            address: {
-              data: {
-                type: "address",
-                id: addId
-              },
-            },
             "order-set": {
               data: {
                 type: "order-set",
