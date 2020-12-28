@@ -143,10 +143,6 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-<<<<<<< HEAD
-=======
-  console.log(orders)
->>>>>>> fcc7d2b (successfully pulls and renders multiple brands on order history table.)
   const grouping = useSelector((state) => state.filters.groupBy);
 
   const handleRequestSort = (_event, property) => {
