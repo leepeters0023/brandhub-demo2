@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import ImageWrapper from "../Utility/ImageWrapper"
+import ImageWrapper from "../Utility/ImageWrapper";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import Carousel from "react-material-ui-carousel";
 
 import CancelIcon from "@material-ui/icons/Cancel";
 
@@ -22,9 +23,12 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   cartPreviewImage: {
-    width: "60%",
+    width: "100%",
     height: "auto",
   },
+  prevCarousel: {
+    width: "60%"
+  }
 }));
 
 const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
@@ -48,12 +52,26 @@ const OrderItemPreview = ({ handleModalClose, modal, currentItem }) => {
               <CancelIcon fontSize="large" color="secondary" />
             </IconButton>
             <div className={classes.previewModal}>
-              <ImageWrapper
-                imgUrl={currentItem.imgUrl}
-                alt={currentItem.itemNumber}
-                imgClass={classes.cartPreviewImage}
-                id={currentItem.itemType}
-              />
+              <Carousel
+                autoPlay=""
+                navButtonsAlwaysInvisible={
+                  currentItem.imgUrl && currentItem.imgUrl.length === 1
+                    ? true
+                    : false
+                }
+                classes={{root: classes.prevCarousel}}
+              >
+                {currentItem.imgUrl &&
+                  currentItem.imgUrl.map((url, index) => (
+                    <ImageWrapper
+                      key={index}
+                      imgUrl={url}
+                      alt={currentItem.itemNumber}
+                      imgClass={classes.cartPreviewImage}
+                      id={currentItem.itemType}
+                    />
+                  ))}
+              </Carousel>
               <br />
               <Typography
                 className={classes.bodyText}
