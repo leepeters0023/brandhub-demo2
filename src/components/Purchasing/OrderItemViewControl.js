@@ -31,6 +31,7 @@ const OrderItemViewControl = (props) => {
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
+  const territoryId = useSelector((state) => state.user.currentTerritory)
 
   const handleAddItem = useCallback(
     (item, remove) => {
@@ -43,12 +44,12 @@ const OrderItemViewControl = (props) => {
 
       setCurrentItemAdded(newItem);
       if (!currentOrderId) {
-        dispatch(createNewOrder(type, item.id));
+        dispatch(createNewOrder(type, item.id, territoryId));
       } else {
         dispatch(addNewOrderItem(currentOrderId, item.id, type));
       }
     },
-    [dispatch, setCurrentItemAdded, currentOrderId, type]
+    [dispatch, setCurrentItemAdded, currentOrderId, type, territoryId]
   );
 
   return (

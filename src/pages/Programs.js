@@ -36,7 +36,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const dispatch = useDispatch();
   const [programFilters, setProgramFilters] = useCallback(useState([]));
 
-  let activePrograms = useSelector((state) => state.programs.programs);
+  const activePrograms = useSelector((state) => state.programs.programs);
   const isLoading = useSelector((state) => state.programs.isLoading);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const sortOption = useSelector((state) => state.filters.sortProgramsBy);
@@ -44,6 +44,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const monthFilters = useSelector((state) => state.filters.month);
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const isPrograms = useSelector((state) => state.programs.isPrograms);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -52,10 +53,15 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   );
 
   useEffect(() => {
-    if (activePrograms.length === 0 && userType && currentTerritory) {
+    if (
+      activePrograms.length === 0 &&
+      !isPrograms &&
+      userType &&
+      currentTerritory
+    ) {
       dispatch(fetchInitialPrograms(currentTerritory));
     }
-  }, [userType, dispatch, activePrograms, currentTerritory]);
+  }, [userType, dispatch, activePrograms, currentTerritory, isPrograms]);
 
   useInitialFilters(
     "program",
@@ -100,7 +106,9 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
                   startIcon={<ExitToAppIcon />}
                   component={Link}
                   to="/orders/open/preorder"
-                >PLACE ORDERS</Button>
+                >
+                  PLACE ORDERS
+                </Button>
               </div>
             </div>
           )}
