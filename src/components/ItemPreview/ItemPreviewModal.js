@@ -21,6 +21,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Collapse from "@material-ui/core/Collapse";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
@@ -33,6 +34,8 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +115,7 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(null);
     handleClose();
   };
-
+  const [open, setOpen] = useCallback(useState(true));
   const handleAddItem = useCallback(() => {
     let newItem = {
       brand: brand,
@@ -199,6 +202,16 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
+                  <Typography variant="body1" color="textSecondary">Specifications: </Typography>
+                  <IconButton
+                    aria-label="expand row"
+                    onClick={() => {
+                      setOpen(!open);
+                    }}
+                  >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </IconButton>
+                  <Collapse in={open}>
                   <Table>
                     <TableBody>
                       {specification && (
@@ -210,6 +223,7 @@ const ItemPreviewModal = (props) => {
                         )))}
                     </TableBody>
                   </Table>
+                  </Collapse>
                 </>
               )}
               {coupon && (
