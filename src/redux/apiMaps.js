@@ -260,6 +260,7 @@ export const mapOrderItems = (items, type) => {
           ? item["program-names"].join(", ")
           : item.item.programs.map((prog) => prog.name).join(", "),
         itemType: item.item.type,
+        // this goes to quarterly preorder
         itemDescription: item.item.description ? item.item.description : "---",
         unit: [
           ...new Set(
