@@ -5,6 +5,7 @@ import {
   getFavDistributors,
   newFavDistList,
   updateFavDistList,
+  editCustomAttentionLine,
 } from "../../api/distributorApi";
 import {
   setIsLoading as patchLoading,
@@ -132,6 +133,20 @@ const distributorSlice = createSlice({
       state.favoriteDistributors = updatedDistributors;
       state.updateIsLoading = false;
     },
+    updateAttnSuccess(state, action) {
+      const { id, attn } = action.payload;
+      let updatedDistributors = state.editAttnList.map((dist) => {
+        if (dist.id === id) {
+          return {
+            ...dist,
+            attn: attn
+          }
+        } else return {...dist}
+      })
+      state.editAttnList = updatedDistributors;
+      state.isLoading = false;
+      state.error = null;
+    },
     clearDistributors(state) {
       state.isLoading = false;
       state.distListIsLoading = false;
@@ -157,6 +172,7 @@ export const {
   updateDistributorList,
   deleteSingleDistributor,
   deleteDistributorList,
+  updateAttnSuccess,
   clearDistributors,
   setFailure,
 } = distributorSlice.actions;
@@ -179,7 +195,11 @@ export const fetchUserDistributors = (name, attn = false) => async (
     //for mock data, will update when fields are there
     let mappedDistributors = distributors.data.map((dist) => ({
       ...dist,
-      attn: "Firstname Lastname",
+      attn: dist["current-user-attn"]
+        ? dist["current-user-attn"]
+        : dist["default-attn"]
+        ? dist["default-attn"]
+        : "---",
     }));
     dispatch(
       getDistributorsSuccess({ distributors: mappedDistributors, attn: attn })
@@ -264,6 +284,22 @@ export const deleteFavoriteDistributorList = (id) => async (dispatch) => {
       throw deleteStatus.error;
     }
     dispatch(deleteDistributorList({ id: id }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
+
+export const setCustomAttention = (id, attn) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    dispatch(patchLoading());
+    const updatedDist = await editCustomAttentionLine(id, attn);
+    if (updatedDist.error) {
+      throw updatedDist.error;
+    }
+    dispatch(updateAttnSuccess({ id, attn }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
