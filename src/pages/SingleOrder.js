@@ -92,7 +92,8 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
       ];
       let csvData = [];
       currentOrder.items.forEach((item) => {
-        let supName = currentSuppliers.find((sup) => sup.id === item.supplierId).name
+        let supName = currentSuppliers.find((sup) => sup.id === item.supplierId)
+          .name;
         let dataObject = {
           user: currentOrder.user,
           state: item.state,
@@ -216,10 +217,22 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               }`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Shipping Location: ${currentOrder.distributorName} - ${currentOrder.distributorId}`}
+              {`Shipping Location: ${
+                currentOrder.distributorName
+                  ? currentOrder.distributorName
+                  : currentOrder.customAddressName
+              } - ${
+                currentOrder.distributorId
+                  ? currentOrder.distributorId
+                  : currentOrder.customAddressId
+              }`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Address: ${currentOrder.distributorAddress}`}
+              {`Address: ${
+                currentOrder.distributorAddress
+                  ? currentOrder.distributorAddress
+                  : currentOrder.customAddressAddress
+              }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Attention: ${currentOrder.attn}`}

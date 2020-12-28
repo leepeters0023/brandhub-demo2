@@ -320,7 +320,6 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
           type: "order",
           attributes: {
             type: type,
-            "custom-address-id": addId,
           },
           relationships: {
             "order-set": {
@@ -329,6 +328,12 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
                 id: id,
               },
             },
+            "custom-address": {
+              data: {
+                type: "address",
+                id: addId,
+              }
+            }
           },
         },
       },
@@ -469,7 +474,7 @@ export const deleteOrderSet = async (id) => {
 };
 
 //Creates a new order set and returns the new order set
-export const createOrderSet = async (type) => {
+export const createOrderSet = async (type, territoryId) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
@@ -481,6 +486,14 @@ export const createOrderSet = async (type) => {
           attributes: {
             type: formattedType,
           },
+          relationships: {
+            territory: {
+              data: {
+                type: "territory",
+                id: territoryId,
+              }
+            }
+          }
         },
       },
       writeHeaders

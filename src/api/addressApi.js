@@ -28,7 +28,6 @@ export const fetchWarehouseAddress = async () => {
 }
 
 export const addAddress = async (address) => {
-  console.log(address);
   const response = { status: "", error: null, data: null }
   await axios
     .post("/api/addresses",
@@ -48,7 +47,7 @@ export const addAddress = async (address) => {
           state: {
             data: {
               type: "state",
-              code: address.state
+              id: address.state
             }
           }
         }

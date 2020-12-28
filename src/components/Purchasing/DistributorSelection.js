@@ -166,17 +166,14 @@ const DistributorSelection = () => {
             />
           )}
         />
-        {currentRole !== "field1" && (
-          <>
-            {isOrderLoading && <CircularProgress size={35} />}
-            {!isOrderLoading && (
-              <Tooltip title={"Add All Distributors"}>
-                <IconButton edge="end" onClick={handleAddAll}>
-                  <AddToPhotosIcon color="inherit" fontSize="large" />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
+
+        {isOrderLoading && <CircularProgress size={35} />}
+        {!isOrderLoading && (
+          <Tooltip title={"Add All Distributors"}>
+            <IconButton edge="end" onClick={handleAddAll}>
+              <AddToPhotosIcon color="inherit" fontSize="large" />
+            </IconButton>
+          </Tooltip>
         )}
       </div>
       <div style={{ width: "100%", display: "flex", alignItems: "center" }}>
@@ -192,13 +189,12 @@ const DistributorSelection = () => {
         >
           {favoriteLists.length > 0 ? "USE FAVORITES" : "NO FAVORITES SET"}
         </Button>
-        {currentRole !== "field1" && (
-          <Tooltip title={"Add Custom Address"}>
-            <IconButton edge="end" onClick={() => setModalOpen(true)}>
-              <AddCircleIcon color="inherit" fontSize="large" />
-            </IconButton>
-          </Tooltip>
-        )}
+
+        <Tooltip title={"Add Custom Address"}>
+          <IconButton edge="end" onClick={() => setModalOpen(true)}>
+            <AddCircleIcon color="inherit" fontSize="large" />
+          </IconButton>
+        </Tooltip>
       </div>
       {favoriteLists.length > 0 && (
         <Menu

@@ -264,10 +264,30 @@ const OrderSetTable = (props) => {
                         >
                           <Tooltip
                             placement="right"
-                            title={`${ord.distributorCity}, ${ord.distributorState}`}
+                            title={`${
+                              ord.distributorCity
+                                ? ord.distributorCity
+                                : ord.customAddressCity
+                            }, ${
+                              ord.distributorState
+                                ? ord.distributorState
+                                : ord.customAddressState
+                            }`}
                           >
                             <Typography className={classes.headerText} noWrap>
-                              {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
+                              {`${
+                                ord.distributorName
+                                  ? ord.distributorName
+                                  : ord.customAddressName
+                              }: ${
+                                ord.distributorCity
+                                  ? ord.distributorCity
+                                  : ord.customAddressCity
+                              }, ${
+                                ord.distributorState
+                                  ? ord.distributorState
+                                  : ord.customAddressState
+                              }`}
                             </Typography>
                           </Tooltip>
                           <div style={{ display: "flex" }}>
