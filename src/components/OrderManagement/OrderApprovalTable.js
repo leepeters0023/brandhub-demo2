@@ -20,12 +20,14 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: false },
   { id: "type", disablePadding: false, label: "Type", sort: false },
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   {
@@ -161,7 +163,6 @@ const OrderApprovalTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -262,6 +263,19 @@ const OrderApprovalTable = ({
                     <TableCell align="left">
                       {row.program ? row.program : "---"}
                     </TableCell>
+                    {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                     <TableCell>{row.state}</TableCell>
                     <TableCell align="left">
                       {row.orderDate !== "---"
