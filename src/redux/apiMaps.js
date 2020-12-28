@@ -35,29 +35,62 @@ const typeMap = {
   material: "Material",
 };
 
+const handleImages = (images) => {
+  if (images.length === 0) {
+    return {
+      imgUrlThumb:
+        "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+      imgUrlLg: [
+        "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+      ],
+    };
+  } else {
+    let thumb = images.find((img) => img.type === "thumbnail");
+    let largeArray = images
+      .filter((img) => img.type === "large")
+      .sort((a, b) => {
+        return a.position < b.position ? -1 : a.position > b.position ? 1 : 0;
+      })
+      .map(
+        (i) =>
+          `https://res.cloudinary.com/brandhub/image/upload/${i["cloudinary-id"]}`
+      );
+    if (largeArray.length === 0) {
+      largeArray = [
+        "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+      ];
+    }
+    return {
+      imgUrlThumb: thumb
+        ? `https://res.cloudinary.com/brandhub/image/upload/${thumb["cloudinary-id"]}`
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+      imgUrlLg: largeArray,
+    };
+  }
+};
+
 export const mapItems = (items) => {
-  let mappedItems = items.map((item) => ({
-    id: item.id,
-    itemNumber: item["item-number"],
-    brand: item.brands.map((brand) => brand.name).join(", "),
-    program: item.programs
-      ? item.programs.map((prog) => prog.name).join(", ")
-      : "---",
-    itemType: item.type,
-    itemDescription: item.description ? item.description : "---",
-    estCost: stringToCents(item["estimated-cost"]),
-    packSize: item["qty-per-pack"],
-    stock: Math.floor(Math.random() * 25 + 26),
-    inMarketDate: item["in-market-date"]
-      ? format(item["in-market-date"], "MM/dd/yyyy")
-      : "---",
-    imgUrlThumb: item["img-url-thumb"]
-      ? item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlLg: item["img-url-large"]
-      ? item["img-url-large"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-  }));
+  let mappedItems = items.map((item) => {
+    const images = handleImages(item.images);
+    return {
+      id: item.id,
+      itemNumber: item["item-number"],
+      brand: item.brands.map((brand) => brand.name).join(", "),
+      program: item.programs
+        ? item.programs.map((prog) => prog.name).join(", ")
+        : "---",
+      itemType: item.type,
+      itemDescription: item.description ? item.description : "---",
+      estCost: stringToCents(item["estimated-cost"]),
+      packSize: item["qty-per-pack"],
+      stock: Math.floor(Math.random() * 25 + 26),
+      inMarketDate: item["in-market-date"]
+        ? format(item["in-market-date"], "MM/dd/yyyy")
+        : "---",
+      imgUrlThumb: images.imgUrlThumb,
+      imgUrlLg: images.imgUrlLg,
+    };
+  });
   return mappedItems;
 };
 
@@ -121,14 +154,42 @@ export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
-    distributorId: order.distributor.id,
-    distributorName: order.distributor.name,
-    distributorCity: order.distributor.city,
-    distributorState: order.distributor.state,
-    distributorCountry: order.distributor.country,
-    distributorAddressOne: order.distributor["street-address-1"],
-    distributorAddressTwo: order.distributor["street-address-2"],
-    distributorZip: order.distributor.zip,
+    distributorId: order.distributor ? order.distributor.id : null,
+    distributorName: order.distributor ? order.distributor.name : null,
+    distributorCity: order.distributor ? order.distributor.city : null,
+    distributorState: order.distributor ? order.distributor.state : null,
+    distributorCountry: order.distributor ? order.distributor.country : null,
+    distributorAddressOne: order.distributor
+      ? order.distributor["street-address-1"]
+      : null,
+    distributorAddressTwo: order.distributor
+      ? order.distributor["street-address-2"]
+      : null,
+    distributorZip: order.distributor ? order.distributor.zip : null,
+    customAddressId: order["custom-address"]
+      ? order["custom-address"].id
+      : null,
+    customAddressName: order["custom-address"]
+      ? order["custom-address"].name
+      : null,
+    customAddressCity: order["custom-address"]
+      ? order["custom-address"].city
+      : null,
+    customAddressState: order["custom-address"]
+      ? order["custom-address"].state.code
+      : null,
+    customAddressCountry: order["custom-address"]
+      ? order["custom-address"].country
+      : null,
+    customAddressAddressOne: order["custom-address"]
+      ? order["custom-address"]["street-address-1"]
+      : null,
+    customAddressAddressTwo: order["custom-address"]
+      ? order["custom-address"]["street-address-2"]
+      : null,
+    customAddressZip: order["custom-address"]
+      ? order["custom-address"].zip
+      : null,
     program:
       order["program-names"] && order["program-names"].length > 0
         ? order["program-names"].join(", ")
@@ -145,7 +206,11 @@ export const mapSingleOrder = (order) => {
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
-    attn: order.attn ? order.attn : "---",
+    attn: order.distributor["current-user-attn"]
+      ? order.distributor["current-user-attn"]
+      : order.distributor["default-attn"]
+      ? order.distributor["default-attn"]
+      : "---",
   };
   return formattedOrder;
 };
@@ -159,66 +224,66 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
-  let mappedItems = items.map((item) => ({
-    itemNumber: item["item-number"],
-    imgUrlThumb: item.item["img-url-thumb"]
-      ? item.item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlLg: item.item["img-url-large"]
-      ? item.item["img-url-large"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    orderType: item.item["order-type"],
-    brand: item.item.brands.map((brand) => brand.name),
-    brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
-    program: item["program-names"].join(", "),
-    itemType: item["item-type-description"],
-    itemDescription: item.description ? item.description : "---",
-    unit: [
-      ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
-    ].join(", "),
-    distributor: item["distributor-name"],
-    supplierId: item.item.supplier.id,
-    state: item.state ? item.state : "---",
-    packSize: item["qty-per-pack"],
-    totalItems: item.qty,
-    estCost: stringToCents(item["estimated-cost"]),
-    totalEstCost: stringToCents(item["total-estimated-cost"]),
-    actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
-    totalActCost: item["total-actual-cost"]
-      ? stringToCents(item["total-actual-cost"])
-      : "---",
-    orderDate: item["order-submitted-at"],
-    shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
-    tracking: item["shipping-parameter-item"]
-      ? item["shipping-parameter-item"]["tracking-number"]
+  let mappedItems = items.map((item) => {
+    const images = handleImages(item.item.images);
+    return {
+      itemNumber: item["item-number"],
+      imgUrlThumb: images.imgUrlThumb,
+      imgUrlLg: images.imgUrlLg,
+      orderType: item.item["order-type"],
+      brand: item.item.brands.map((brand) => brand.name),
+      brandCode: item.item.brands
+        .map((brand) => brand["external-id"])
+        .join(", "),
+      program: item["program-names"].join(", "),
+      itemType: item["item-type-description"],
+      itemDescription: item.description ? item.description : "---",
+      unit: [
+        ...new Set(
+          item.item.brands.map((brand) => brand["business-unit"].name)
+        ),
+      ].join(", "),
+      distributor: item["distributor-name"],
+      supplierId: item.item.supplier.id,
+      state: item.state ? item.state : "---",
+      packSize: item["qty-per-pack"],
+      totalItems: item.qty,
+      estCost: stringToCents(item["estimated-cost"]),
+      totalEstCost: stringToCents(item["total-estimated-cost"]),
+      actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
+      totalActCost: item["total-actual-cost"]
+        ? stringToCents(item["total-actual-cost"])
+        : "---",
+      orderDate: item["order-submitted-at"],
+      shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
+      tracking: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["tracking-number"]
-        : "---"
-      : "---",
-    trackingId: item["shipping-parameter-item"]
-      ? item["shipping-parameter-item"].id
+          ? item["shipping-parameter-item"]["tracking-number"]
+          : "---"
+        : "---",
+      trackingId: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"].id
-        : null
-      : null,
-    status: item["order-status"],
-    user: item["order-user-name"],
-    orderId: item.order.id,
-  }));
+          ? item["shipping-parameter-item"].id
+          : null
+        : null,
+      status: item["order-status"],
+      user: item["order-user-name"],
+      orderId: item.order.id,
+    };
+  });
   return mappedItems;
 };
 
 export const mapOrderItems = (items, type) => {
   let mappedItems = items
     .map((item) => {
+      const images = handleImages(item.item.images);
       return {
         id: item.id,
         itemId: item.item.id,
         itemNumber: item.item["item-number"],
-        imgUrlThumb: item.item["img-url-thumb"]
-          ? item.item["img-url-thumb"]
-          : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-        imgUrlLg: item.item["img-url-large"]
-          ? item.item["img-url-large"]
-          : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+        imgUrlThumb: images.imgUrlThumb,
+        imgUrlLg: images.imgUrlLg,
         brand: item.item.brands.map((brand) => brand.name).join(", "),
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
@@ -235,7 +300,12 @@ export const mapOrderItems = (items, type) => {
         ].join(", "),
         packSize: item.item["qty-per-pack"],
         supplierId: item.item.supplier.id,
-        state: type === "order-set-item" ? "---" : item.order.distributor.state,
+        state:
+          type === "order-set-item"
+            ? "---"
+            : item.order.distributor
+            ? item.order.distributor.state
+            : item.order["custom-address"].state.code,
         estCost: stringToCents(item.item["estimated-cost"]),
         totalItems: type === "order-set-item" ? 0 : item.qty,
         totalEstCost:
@@ -498,7 +568,7 @@ export const mapRFQ = (rfq) => {
       price: bid.price ? stringToCents(bid.price) : "---",
     }));
   };
-
+  const images = handleImages([rfq.item.images]);
   let mappedRFQ = {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",
@@ -517,15 +587,18 @@ export const mapRFQ = (rfq) => {
     //TODO not sure about this line, as we don't know what the spec will look like yet
     itemSpec: rfq.item.spec ? rfq.item.spec : null,
     //TODO currently just getting the one image, need to update when we get more
-    imgUrlThumbOne: rfq.item["img-url-thumb"]
-      ? rfq.item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlThumbTwo: rfq.item["img-url-thumb"]
-      ? rfq.item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlThumbThree: rfq.item["img-url-thumb"]
-      ? rfq.item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlThumbOne:
+      images.imgUrlLg.length > 0 ?? images.imgUrlLg[0]
+        ? images.imgUrlLg[0]
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlThumbTwo:
+      images.imgUrlLg.length > 0 ?? images.imgUrlLg[1]
+        ? images.imgUrlLg[1]
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlThumbThree:
+      images.imgUrlLg.length > 0 ?? images.imgUrlLg[2]
+        ? images.imgUrlLg[2]
+        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
   };
 
   return mappedRFQ;

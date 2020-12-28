@@ -285,8 +285,8 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
             <CircularProgress size={100} style={{ marginTop: "50px" }} />
           </div>
         )}
-        {!isLoading && report.length > 0 && (
-          <WrapUpTable report={report} orderTypeMap={orderTypeMap} />
+        {!isLoading && report.length > 0 && currentSuppliers.length > 0 && (
+          <WrapUpTable report={report} orderTypeMap={orderTypeMap} currentSuppliers={currentSuppliers} />
         )}
       </Container>
     </>

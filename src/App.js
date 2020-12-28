@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
 
+import { fetchWarehouse, resetAddresses } from "./redux/slices/addressSlice";
 import { removeUser, fetchUser } from "./redux/slices/userSlice";
 import {
   fetchInitialPrograms,
@@ -36,6 +37,7 @@ import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
+  fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
@@ -143,6 +145,7 @@ const App = () => {
     dispatch(resetComplianceItems());
     dispatch(resetComplianceRules());
     dispatch(clearSharedItems());
+    dispatch(resetAddresses());
   };
 
   useEffect(() => {
@@ -162,7 +165,9 @@ const App = () => {
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
+        dispatch(fetchStates());
         dispatch(fetchBUs());
+        dispatch(fetchWarehouse());
       } else {
         dispatch(clearPrograms());
       }
