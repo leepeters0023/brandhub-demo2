@@ -76,9 +76,7 @@ const SharedPDF = ({ items }) => {
                 <View style={styles.imageSection}>
                   <Image
                     source={{
-                      //uri: item.imgUrlLg,
-                      uri:
-                        "https://res.cloudinary.com/joshdowns-dev/image/upload/v1600100946/Select/110016179_Large_1-Necker_puyulf.jpg",
+                      uri: item.imgUrlLg[0],
                       method: "get",
                       headers: {
                         "Access-Control-Allow-Origin": "*",
