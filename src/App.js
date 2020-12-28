@@ -37,6 +37,7 @@ import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
+  fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
@@ -164,6 +165,7 @@ const App = () => {
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
+        dispatch(fetchStates());
         dispatch(fetchBUs());
         dispatch(fetchWarehouse());
       } else {

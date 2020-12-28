@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCustomAddressOrder } from "../../redux/slices/orderSetSlice";
 
 import { useInput } from "../../hooks/InputHooks";
+
+import StateSelector from "../Utility/StateSelector";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -26,13 +28,16 @@ const orderTypeMap = {
   "On Demand": "on-demand",
   "In Stock": "in-stock",
   "Pre Order": "pre-order",
-}
+};
 
 const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const warehouseId = useSelector((state) => state.addresses.warehouseAddress.id)
+  const warehouseId = useSelector(
+    (state) => state.addresses.warehouseAddress.id
+  );
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const { value: name, bind: bindName, reset: resetName } = useInput("");
   const {
@@ -46,16 +51,24 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     reset: resetAddressTwo,
   } = useInput("");
   const { value: city, bind: bindCity, reset: resetCity } = useInput("");
-  const { value: state, bind: bindState, reset: resetState } = useInput("");
   const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
   const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
     ""
   );
 
+  const [state, setState] = useState("");
+
   const handleCDC = () => {
-    dispatch(addCustomAddressOrder(null, orderSetId, orderTypeMap[orderType], warehouseId));
+    dispatch(
+      addCustomAddressOrder(
+        null,
+        orderSetId,
+        orderTypeMap[orderType],
+        warehouseId
+      )
+    );
     handleClose(false);
-  }
+  };
 
   const handleSubmit = () => {
     const address = {
@@ -63,16 +76,17 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
       addressOne: addressOne,
       addressTwo: addressTwo,
       city: city,
-      state: state,
+      state: state.id,
       zip: zip,
       country: country,
-    }
-    dispatch(addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null))
+    };
+    dispatch(
+      addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null)
+    );
     resetName();
     resetAddressOne();
     resetAddressTwo();
     resetCity();
-    resetState();
     resetZip();
     resetCountry();
     handleClose(false);
@@ -106,25 +120,29 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               width: "100%",
             }}
           >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              <Button
-                className={classes.largeButton}
-                variant="contained"
-                color="secondary"
-                onClick={() => handleCDC()}
-              >
-                SHIP TO CDC
-              </Button>
-            </div>
-            <br />
-            <Divider />
-            <br />
+            {currentUserRole !== "field1" && (
+              <>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleCDC()}
+                  >
+                    SHIP TO CDC
+                  </Button>
+                </div>
+                <br />
+                <Divider />
+                <br />
+              </>
+            )}
             <Typography className={classes.headerText}>
               {`Custom Address for ${orderType} order #${orderSetId}`}
             </Typography>
@@ -169,16 +187,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               label="City"
               {...bindCity}
             />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
-              name="state-province"
-              type="text"
-              label="State / Province"
-              {...bindState}
-            />
+            <StateSelector handleState={setState} currentState={state} />
             <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
