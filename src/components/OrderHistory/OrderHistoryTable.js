@@ -14,9 +14,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: true },
@@ -29,6 +32,7 @@ const headCells = [
   },
   { id: "state", disablePadding: false, label: "State", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
   {
@@ -140,7 +144,6 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
   const grouping = useSelector((state) => state.filters.groupBy);
 
   const handleRequestSort = (_event, property) => {
@@ -186,7 +189,7 @@ const OrderHistoryTable = ({
             )}
             {!isOrdersLoading &&
               orders.length > 0 &&
-              orders.map((row) => (
+              orders.map((row, i) => (
                 <TableRow
                   key={row.id}
                   hover
@@ -208,6 +211,18 @@ const OrderHistoryTable = ({
                       : row.customAddressState}
                   </TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  <TableCell align="left">Some brands here</TableCell>
+                  {/* {row.items.length > 1 ? (
+                    [...new Set(row.items.map((item, i) => item.brand))].map((brand, i) =>
+                      <TableCell key={i} align="left">
+                        {brand}
+                        <Tooltip title={brand}>
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </Tooltip>
+                      </TableCell>
+                    )) : (
+                      <TableCell align="left">{row.items[0].brand}</TableCell>
+                    )} */}
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
@@ -252,3 +267,4 @@ OrderHistoryTable.propTypes = {
 };
 
 export default OrderHistoryTable;
+

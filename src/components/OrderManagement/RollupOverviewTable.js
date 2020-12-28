@@ -12,13 +12,18 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
+
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "state", disablePadding: false, label: "State", sort: false },
   {
     id: "totalEstCost",
@@ -134,10 +139,8 @@ const RollupOverViewTable = ({
   scrollRef,
 }) => {
   const classes = useStyles();
-
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("user");
-
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -196,6 +199,19 @@ const RollupOverViewTable = ({
                 >
                   <TableCell align="left">{row.userName}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost, false)}

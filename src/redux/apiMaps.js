@@ -195,7 +195,8 @@ export const mapSingleOrder = (order) => {
         ? order["program-names"].join(", ")
         : "---",
     type: orderTypeMap[order.type],
-    items: mapOrderItems(order["order-items"], "history"),
+    brand: null,//need brands here
+    items: mapOrderItems(order["order-items"], "history"), //brands are inside order items.[i].items.brands[i].name
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
@@ -216,7 +217,7 @@ export const mapSingleOrder = (order) => {
 
 export const mapOrderHistoryOrders = (orders) => {
   let mappedOrders = orders.map((order) => {
-    let formattedOrder = mapSingleOrder(order);
+    let formattedOrder = mapSingleOrder(order.items);
     return formattedOrder;
   });
   return mappedOrders;
@@ -348,6 +349,7 @@ export const mapOrderSet = (order) => {
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
     program: order.program ? order.program.name : "---",
+    brand: order.program.brands.map((brand) => brand.name),
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
     status: order.status,
@@ -363,10 +365,11 @@ export const mapOrderSet = (order) => {
 };
 
 export const mapOrderSetHistory = (orders) => {
-  let mappedOrders = orders.map((order) => {
+  let mappedOrders = orders.map((order, i) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;
   });
+  console.log(mappedOrders)
   return mappedOrders;
 };
 
@@ -393,8 +396,7 @@ export const mapRollupItems = (items) => {
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
-      : item.programs
-          .map((prog) => prog.brands.map((brand) => brand.name))
+      : item.programs.map((prog) => prog.brands.map((brand) => brand.name))
           .join(", "),
     program: determineProgram(item),
     programs: item.programs,
