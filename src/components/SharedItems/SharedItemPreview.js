@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import Carousel from "react-material-ui-carousel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -73,14 +74,24 @@ const SharedItemPreview = ({ open, handleClose, item }) => {
         <DialogContent>
           <Grid container spacing={5} className={classes.dialogGrid}>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
-              <div className={classes.largeImageWrapper}>
-                <ImageWrapper
-                  imgUrl={item.imgUrlLg}
-                  alt={`${item.brand} ${item.itemType}`}
-                  imgClass={classes.largeImage}
-                  id={item.id}
-                />
-              </div>
+            <Carousel
+                autoPlay=""
+                navButtonsAlwaysInvisible={
+                  item.imgUrlLg && item.imgUrlLg.length === 1 ? true : false
+                }
+              >
+                {item.imgUrlLg &&
+                  item.imgUrlLg.map((url, index) => (
+                    <div className={classes.largeImageWrapper} key={index}>
+                      <ImageWrapper
+                        imgUrl={url}
+                        alt={`${item.brand} ${item.itemType}`}
+                        imgClass={classes.largeImage}
+                        id={item.id}
+                      />
+                    </div>
+                  ))}
+              </Carousel>
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               <Typography variant="body1" color="textSecondary">
