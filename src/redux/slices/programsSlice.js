@@ -43,6 +43,7 @@ let initialState = {
   programs: [],
   programList: [],
   currentPreOrderItems: [],
+  isPrograms: false,
   error: null,
 };
 
@@ -73,10 +74,14 @@ const programsSlice = createSlice({
     setListLoading: startListLoading,
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
+      if (programs.length === 0) {
+        state.isPrograms = false;
+      }
       if (state.programs.length === 0) {
         //console.log(programs);
         state.programs = [...programs];
         state.initialLoading = false;
+        state.isPrograms = true;
       } else {
         const currentPrograms = [...state.programs];
         const natPrograms = currentPrograms.filter(
@@ -93,6 +98,7 @@ const programsSlice = createSlice({
         //TODO return to normal when out of testing and fetching appropriately
         //console.log(newProgramArray)
         //state.programs = [...newProgramArray];
+        //state.isPrograms = true;
       }
       state.isLoading = false;
       state.error = null;
@@ -151,6 +157,7 @@ const programsSlice = createSlice({
       state.programs = [];
       state.programList = [];
       state.currentPreOrderItems = [];
+      state.isPrograms = false;
       state.error = null;
     },
     clearProgramList(state) {
@@ -194,6 +201,7 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
     if (natPrograms.error) {
       throw natPrograms.error;
     }
+    console.log(terrPrograms.data);
     //const programs = terrPrograms.data.concat(natPrograms.data);
     const programArray = mapPrograms(terrPrograms.data);
     dispatch(getProgramsSuccess({ programs: programArray }));
