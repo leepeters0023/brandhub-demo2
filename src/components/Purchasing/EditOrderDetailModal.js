@@ -52,7 +52,7 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
         onClose={() => handleClose(false)}
         fullWidth
         maxWidth="md"
-        style={{zIndex: "15000"}}
+        style={{ zIndex: "15000" }}
       >
         <DialogContent>
           <IconButton className={classes.closeButton} onClick={handleClose}>
@@ -67,7 +67,19 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
             }}
           >
             <Typography className={classes.headerText}>
-              {`${orderNumber} - ${currentOrder.distributorName} - ${currentOrder.distributorCity}, ${currentOrder.distributorState}`}
+              {`${orderNumber} - ${
+                currentOrder.distributorName
+                  ? currentOrder.distributorName
+                  : currentOrder.customAddressName
+              } - ${
+                currentOrder.distributorCity
+                  ? currentOrder.distributorCity
+                  : currentOrder.customAddressCity
+              }, ${
+                currentOrder.distributorState
+                  ? currentOrder.distributorState
+                  : currentOrder.customAddressState
+              }`}
             </Typography>
             <br />
             <TextField

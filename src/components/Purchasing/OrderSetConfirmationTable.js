@@ -51,7 +51,7 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
           </IconButton>
         </TableCell>
         <TableCell align="left">{rowData.itemNumber}</TableCell>
-        <TableCell align="left">{rowData.brand}</TableCell>
+        <TableCell align="left">{rowData.program}</TableCell>
         <TableCell align="left">{rowData.itemType}</TableCell>
         <TableCell align="left">
           {formatMoney(rowData.estCost, false)}
@@ -117,7 +117,7 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Distributor Name
+                          Distributor
                         </Typography>
                       </TableCell>
                       <TableCell align="center">
@@ -138,10 +138,10 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
                           <TableRow key={`${rowData.id}-${order.id}`}>
                             <TableCell align="center">{order.id}</TableCell>
                             <TableCell align="center">
-                              {order.distributorId}
+                              {order.distributorId ? order.distributorId : "---"}
                             </TableCell>
                             <TableCell align="center">
-                              {order.distributorName}
+                              {order.distributorName ? order.distributorName : "---"}
                             </TableCell>
                             <TableCell align="center">
                               {

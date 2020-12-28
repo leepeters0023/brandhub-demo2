@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-//import { useDispatch } from "react-redux";
-//TODO write this Thunk!
-//import { addCustomAddress } from "../../redux/slices/patchOrderSlice";
+import { useDispatch, useSelector } from "react-redux";
+
+import { addCustomAddressOrder } from "../../redux/slices/orderSetSlice";
 
 import { useInput } from "../../hooks/InputHooks";
+
+import StateSelector from "../Utility/StateSelector";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -13,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -21,9 +24,20 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
+const orderTypeMap = {
+  "On Demand": "on-demand",
+  "In Stock": "in-stock",
+  "Pre Order": "pre-order",
+};
+
 const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  const warehouseId = useSelector(
+    (state) => state.addresses.warehouseAddress.id
+  );
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const { value: name, bind: bindName, reset: resetName } = useInput("");
   const {
@@ -36,58 +50,45 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     bind: bindAddressTwo,
     reset: resetAddressTwo,
   } = useInput("");
-  const {
-    value: addressThree,
-    bind: bindAddressThree,
-    reset: resetAddressThree,
-  } = useInput("");
   const { value: city, bind: bindCity, reset: resetCity } = useInput("");
-  const { value: state, bind: bindState, reset: resetState } = useInput("");
   const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
   const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
     ""
   );
-  const {
-    value: attention,
-    bind: bindAttention,
-    reset: resetAttention,
-  } = useInput("");
+
+  const [state, setState] = useState("");
+
+  const handleCDC = () => {
+    dispatch(
+      addCustomAddressOrder(
+        null,
+        orderSetId,
+        orderTypeMap[orderType],
+        warehouseId
+      )
+    );
+    handleClose(false);
+  };
 
   const handleSubmit = () => {
-    // dispatch(
-    //   addCustomAddress(
-    //     orderSetId,
-    //     addressOne,
-    //     addressTwo,
-    //     addressThree,
-    //     city,
-    //     state,
-    //     zip,
-    //     country,
-    //     attention
-    //   )
-    // );
-    //temp log to get rid of unused vars warning until tied to api
-    console.log(
-      name,
-      addressOne,
-      addressTwo,
-      addressThree,
-      city,
-      state,
-      zip,
-      country,
-      attention
+    const address = {
+      name: name,
+      addressOne: addressOne,
+      addressTwo: addressTwo,
+      city: city,
+      state: state.id,
+      zip: zip,
+      country: country,
+    };
+    dispatch(
+      addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null)
     );
     resetName();
     resetAddressOne();
     resetAddressTwo();
-    resetAddressThree();
     resetCity();
-    resetState();
     resetZip();
     resetCountry();
-    resetAttention();
     handleClose(false);
   };
 
@@ -119,6 +120,29 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               width: "100%",
             }}
           >
+            {currentUserRole !== "field1" && (
+              <>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleCDC()}
+                  >
+                    SHIP TO CDC
+                  </Button>
+                </div>
+                <br />
+                <Divider />
+                <br />
+              </>
+            )}
             <Typography className={classes.headerText}>
               {`Custom Address for ${orderType} order #${orderSetId}`}
             </Typography>
@@ -158,31 +182,12 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               style={{ marginBottom: "15px" }}
               variant="outlined"
               color="secondary"
-              name="address-three"
-              type="text"
-              label="Address Line Three"
-              {...bindAddressThree}
-            />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
               name="city"
               type="text"
               label="City"
               {...bindCity}
             />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
-              name="state-province"
-              type="text"
-              label="State / Province"
-              {...bindState}
-            />
+            <StateSelector handleState={setState} currentState={state} />
             <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
@@ -203,21 +208,11 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               label="Country"
               {...bindCountry}
             />
-            <TextField
-              fullWidth
-              style={{ marginBottom: "15px" }}
-              variant="outlined"
-              color="secondary"
-              name="attention"
-              type="text"
-              label="Attention"
-              {...bindAttention}
-            />
             <div
               style={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
               }}
             >
               <Button

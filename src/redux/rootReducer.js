@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import addressReducer from "./slices/addressSlice";
 import brandReducer from "./slices/brandSlice";
 import businessUnitReducer from "./slices/businessUnitSlice";
 import complianceContactReducer from "./slices/complianceContactSlice";
@@ -31,6 +32,7 @@ import trackingReducer from "./slices/trackingSlice";
 import userReducer from "./slices/userSlice";
 
 const rootReducer = combineReducers({
+  addresses: addressReducer,
   brands: brandReducer,
   businessUnits: businessUnitReducer,
   complianceContacts: complianceContactReducer,
