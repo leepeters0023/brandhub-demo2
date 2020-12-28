@@ -23,7 +23,6 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 // import Tabs from "@material-ui/core/Tabs";
@@ -203,16 +202,14 @@ const ItemPreviewModal = (props) => {
                   <Table>
                     <TableBody>
                       {specification && (
-                        Object.keys(specification).map((keyName, i) => (
+                        specification.map((spec) => (
                           <TableRow>
-                            <TableCell variant="body1" color="textSecondary" key={i}>{keyName}</TableCell>
-                            <TableCell>{specification[keyName]}</TableCell> 
+                            <TableCell variant="body1" color="textSecondary">{spec.key}</TableCell>
+                            <TableCell>{spec.value}</TableCell>
                           </TableRow>
-                        ))
-                      )}
+                        )))}
                     </TableBody>
                   </Table>
-
                 </>
               )}
               {coupon && (
@@ -251,14 +248,14 @@ const ItemPreviewModal = (props) => {
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Bottle Discount: ${bottleDiscount
-                        ? formatMoney(bottleDiscount, false)
-                        : "---"
+                      ? formatMoney(bottleDiscount, false)
+                      : "---"
                       }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Discount Amount: ${discountAmount
-                        ? formatMoney(discountAmount, false)
-                        : "---"
+                      ? formatMoney(discountAmount, false)
+                      : "---"
                       }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
