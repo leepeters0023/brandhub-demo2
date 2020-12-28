@@ -80,7 +80,7 @@ export const mapItems = (items) => {
       ? item.programs.map((prog) => prog.name).join(", ")
       : "---",
     itemType: item.type,
-    specification: item.specification,
+    specification: mapSpecifications(item.specification),
     itemDescription: item.description ? item.description : "---",
     estCost: stringToCents(item["estimated-cost"]),
     packSize: item["qty-per-pack"],
@@ -96,16 +96,15 @@ export const mapItems = (items) => {
 };
 
 export const mapSpecifications = (specs) => {
-  Object.keys(specs).map((keyName) => {
+  const mappedSpecs = Object.keys(specs).map((keyName) => {
     if (specs[keyName] !== "") {
-     let mappedSpecs = {
-       key: keyName,
-       value: specs[keyName]
-     }
-     console.log(mappedSpecs)
-     return mappedSpecs;
+      return {
+      key: keyName,
+      value: specs[keyName]
+       }
     } 
   });
+  return mappedSpecs;
 }
 
 export const mapOrderSetItems = (items) => {
@@ -263,7 +262,7 @@ export const mapOrderItems = (items, type) => {
         imgUrlThumb: images.imgUrlThumb,
         imgUrlLg: images.imgUrlLg,
         brand: item.item.brands.map((brand) => brand.name).join(", "),
-        specification: item.item.specification,
+        specification: mapSpecifications(item.item.specification),
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
