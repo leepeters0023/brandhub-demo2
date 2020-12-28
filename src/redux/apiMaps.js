@@ -144,7 +144,11 @@ export const mapSingleOrder = (order) => {
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
-    attn: order.attn ? order.attn : "---",
+    attn: order.distributor["current-user-attn"]
+    ? order.distributor["current-user-attn"]
+    : order.distributor["default-attn"]
+    ? order.distributor["default-attn"]
+    : "---",
   };
   return formattedOrder;
 };

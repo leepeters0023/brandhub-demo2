@@ -11,7 +11,7 @@ const writeHeaders = {
 };
 
 export const fetchDistributorsByTerritory = async (id) => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
     .get(`/api/distributors?filter[territory-id]=${id}`)
     .then((res) => {
@@ -25,7 +25,7 @@ export const fetchDistributorsByTerritory = async (id) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 //Returns a filtered array of distributors based on partial matches to their name
 export const fetchDistributors = async (name) => {
@@ -34,6 +34,7 @@ export const fetchDistributors = async (name) => {
     .get(`/api/distributors?filter[name]=${name}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -129,6 +130,29 @@ export const deleteFavDistList = async (id) => {
     .delete(`/api/distributor-favorite-sets/${id}`)
     .then((_res) => {
       response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const editCustomAttentionLine = async (id, attn) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .patch(
+      `/api/distributors/${id}/current-user-attn`,
+      {
+        "user-attn": attn,
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
     })
     .catch((err) => {
       console.log(err.toString());
