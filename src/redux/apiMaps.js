@@ -172,6 +172,7 @@ export const mapOrderHistoryItems = (items) => {
       ? item.item["img-url-large"]
       : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
     orderType: item.item["order-type"],
+    specification: item.specification,
     brand: item.item.brands.map((brand) => brand.name),
     brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
     program: item["program-names"].join(", "),
@@ -224,6 +225,7 @@ export const mapOrderItems = (items, type) => {
           ? item.item["img-url-large"]
           : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
         brand: item.item.brands.map((brand) => brand.name).join(", "),
+        specification: item.item.specification,
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
@@ -231,6 +233,7 @@ export const mapOrderItems = (items, type) => {
           ? item["program-names"].join(", ")
           : item.item.programs.map((prog) => prog.name).join(", "),
         itemType: item.item.type,
+        // this goes to quarterly preorder
         itemDescription: item.item.description ? item.item.description : "---",
         unit: [
           ...new Set(
