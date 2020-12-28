@@ -118,7 +118,6 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
-  console.log(order);
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
@@ -211,7 +210,6 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
-  console.log(items);
   let mappedItems = items
     .map((item) => {
       return {

@@ -3,6 +3,7 @@ import {
   fetchOrdersByProgram,
   fetchOrderSetById,
   addSingleOrderToSet,
+  setOrderDetail,
 } from "../../api/orderApi";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
 import { setPreOrderDetails } from "./preOrderDetailSlice";
@@ -327,7 +328,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data["order-set-items"],
       "order-set-item"
@@ -431,6 +431,13 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
       throw order.error;
     }
     console.log(order);
+    if (order.data.distributor["current-user-attn"]) {
+      const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
+      if (attnStatus.error) {
+        throw attnStatus.error;
+      }
+      order.data.attn = order.data.distributor["current-user-attn"]
+    }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     console.log(formattedOrder);
     dispatch(addOrderSuccess({ order: formattedOrder }));
@@ -452,6 +459,13 @@ export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
         const order = await addSingleOrderToSet(id, distId, type);
         if (order.error) {
           throw order.error;
+        }
+        if (order.data.distributor["current-user-attn"]) {
+          const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
+          if (attnStatus.error) {
+            throw attnStatus.error;
+          }
+          order.data.attn = order.data.distributor["current-user-attn"]
         }
         orders.push(order.data);
       })
