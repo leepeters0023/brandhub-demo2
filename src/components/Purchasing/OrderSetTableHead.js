@@ -111,9 +111,17 @@ const OrderSetTableHead = ({
                   );
                 }}
               />
-              <Typography className={classes.headerText} variant="h5">
-                {item.brand}
-              </Typography>
+              {item.brand.split(", ").length > 1 ? (
+                <Tooltip title={item.brand}>
+                  <Typography className={classes.headerText} variant="h5">
+                    {`${item.brand.split(", ")[0]} ...`}
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography className={classes.headerText} variant="h5">
+                  {item.brand}
+                </Typography>
+              )}
             </div>
           </TableCell>
         ))}

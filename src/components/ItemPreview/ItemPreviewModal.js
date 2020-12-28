@@ -23,6 +23,7 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 // import Tabs from "@material-ui/core/Tabs";
 // import Tab from "@material-ui/core/Tab";
+import Carousel from "react-material-ui-carousel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -46,11 +47,11 @@ const useStyles = makeStyles((theme) => ({
   largeImageWrapper: {
     display: "flex",
     alignItems: "center",
-    margin: "25px 0"
+    margin: "25px 0",
   },
   largeImage: {
     maxHeight: "500px",
-    objectFit: "contain"
+    objectFit: "contain",
   },
   itemTitle: {
     display: "flex",
@@ -99,6 +100,7 @@ const ItemPreviewModal = (props) => {
   const [currentItem, setCurrentItem] = useState(null);
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
 
   // const handleChangeTab = (_evt, newValue) => {
   //   setValue(newValue);
@@ -118,11 +120,11 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(newItem);
 
     if (!currentOrderId) {
-      dispatch(createNewOrder(type, id));
+      dispatch(createNewOrder(type, id, territoryId));
     } else {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
-  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type]);
+  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type, territoryId]);
 
   return (
     <div className={classes.relativeContainer}>
@@ -145,14 +147,24 @@ const ItemPreviewModal = (props) => {
               <CancelIcon fontSize="large" color="secondary" />
             </IconButton>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
-              <div className={classes.largeImageWrapper}>
-                <ImageWrapper
-                  imgUrl={imgUrlLg}
-                  alt={`${brand} ${itemType}`}
-                  imgClass={classes.largeImage}
-                  id={itemNumber}
-                />
-              </div>
+              <Carousel
+                autoPlay=""
+                navButtonsAlwaysInvisible={
+                  imgUrlLg && imgUrlLg.length === 1 ? true : false
+                }
+              >
+                {imgUrlLg &&
+                  imgUrlLg.map((url, index) => (
+                    <div className={classes.largeImageWrapper} key={index}>
+                      <ImageWrapper
+                        imgUrl={url}
+                        alt={`${brand} ${itemType}`}
+                        imgClass={classes.largeImage}
+                        id={itemNumber}
+                      />
+                    </div>
+                  ))}
+              </Carousel>
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               {!coupon && (

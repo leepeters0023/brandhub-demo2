@@ -200,8 +200,16 @@ const OrderHistoryTable = ({
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
-                  <TableCell align="left">{row.distributorName}</TableCell>
-                  <TableCell align="left">{row.distributorState}</TableCell>
+                  <TableCell align="left">
+                    {row.distributorName
+                      ? row.distributorName
+                      : "---"}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.distributorState
+                      ? row.distributorState
+                      : row.customAddressState}
+                  </TableCell>
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left">Some brands here</TableCell>
                   {/* {row.items.length > 1 ? (

@@ -3,8 +3,11 @@ import {
   fetchOrdersByProgram,
   fetchOrderSetById,
   addSingleOrderToSet,
+  addCustomAddressOrderToSet,
+  setOrderDetail,
 } from "../../api/orderApi";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
+import { addAddress } from "../../api/addressApi";
 import { setPreOrderDetails } from "./preOrderDetailSlice";
 import {
   setIsLoading as patchLoading,
@@ -14,54 +17,6 @@ import {
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
-
-/*
-* Order Set Model
-
-item model:
-
-{
-  id: string (read),
-  itemId: string (read),
-  itemNumber: string (read),
-  imgUrl: string (read),
-  brand: array -> converted to string (read),
-  itemType: string (read),
-  packSize: int (read),
-  estCost: int (read),
-  totalItems: int (read, write),
-  totalEstCost: int (read, calculated when item totals are updated),
-  complianceStatus: string (read, editable by compliance users in a different view),
-  tracking: string (read, write (editable in supplier portal))
-}
-
-single order set model:
-{
-  id: string (read),
-  distributorId: string (read),
-  distributorName: string (read),
-  distributorCity: string (read),
-  distributorState: string (read),
-  distributorCountry: string (read),
-  distributorAddressOne: string (read),
-  distributorAddressTwo: string (read),
-  distributorZip: string (read),
-  program: string (read),
-  type: string (read),
-  items: array (read),
-  status: string (read, write),
-  orderDate: string (read, (created upon order from api)),
-  approvedDate: string (read, write (only field2 or higher can approve)),
-  shipDate: string (read, updated via supplier portal),
-  trackingNum: string (read, updated via supplier portal, might remove this field as it is potentially only ever on order-items),
-  totalItems: int (read),
-  totalEstCost: int (read),
-  totalActCost: int (read, updated when actual cost is set in PO process),
-  note: string (read, write (editable when placing order)),
-  attn: string (read, write (editable when placing order))
-}
-
-*/
 
 let initialState = {
   isLoading: false,
@@ -333,11 +288,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     );
     let orders = mapOrderHistoryOrders(currentOrders.data.orders);
     orders.sort((a, b) => {
-      return a.distributorName < b.distributorName
-        ? -1
-        : a.distributorName > b.distributorName
-        ? 1
-        : 0;
+      let aName = a.distributorName ? a.distributorName : a.customAddressName;
+      let bName = b.distributorName ? b.distributorName : b.customAddressName;
+      return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
 
     let type = currentOrders.data.type;
@@ -384,11 +337,9 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     );
     let orders = mapOrderHistoryOrders(currentOrders.data[0].orders);
     orders.sort((a, b) => {
-      return a.distributorName < b.distributorName
-        ? -1
-        : a.distributorName > b.distributorName
-        ? 1
-        : 0;
+      let aName = a.distributorName ? a.distributorName : a.customAddressName;
+      let bName = b.distributorName ? b.distributorName : b.customAddressName;
+      return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
@@ -424,11 +375,21 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
+    console.log(id, dist, type)
     const order = await addSingleOrderToSet(id, dist, type);
     if (order.error) {
       throw order.error;
     }
+    console.log(order);
+    if (order.data.distributor["current-user-attn"]) {
+      const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
+      if (attnStatus.error) {
+        throw attnStatus.error;
+      }
+      order.data.attn = order.data.distributor["current-user-attn"]
+    }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
+    console.log(formattedOrder);
     dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
@@ -448,6 +409,13 @@ export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
         const order = await addSingleOrderToSet(id, distId, type);
         if (order.error) {
           throw order.error;
+        }
+        if (order.data.distributor["current-user-attn"]) {
+          const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
+          if (attnStatus.error) {
+            throw attnStatus.error;
+          }
+          order.data.attn = order.data.distributor["current-user-attn"]
         }
         orders.push(order.data);
       })
@@ -489,4 +457,32 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
+
+export const addCustomAddressOrder = (address, id, type, addId) => async (
+  dispatch
+) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    let addressId = addId ? addId : null;
+    if (!addressId) {
+      const newAddress = await addAddress(address);
+      if (newAddress.error) {
+        throw newAddress.error;
+      }
+      addressId = newAddress.data.id;
+    }
+    const order = await addCustomAddressOrderToSet(id, addressId, type);
+    if (order.error) {
+      throw order.error;
+    }
+    const formattedOrder = mapOrderHistoryOrders([order.data]);
+    dispatch(addOrderSuccess({ order: formattedOrder }));
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
