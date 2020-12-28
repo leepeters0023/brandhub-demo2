@@ -197,55 +197,49 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
-  let mappedItems = items.map((item) => {
-    const images = handleImages(item.item.images);
-    return {
-      itemNumber: item["item-number"],
-      imgUrlThumb: images.imgUrlThumb,
-      imgUrlLg: images.imgUrlLg,
-      orderType: item.item["order-type"],
-      brand: item.item.brands.map((brand) => brand.name),
-      brandCode: item.item.brands
-        .map((brand) => brand["external-id"])
-        .join(", "),
-      program: item["program-names"].join(", "),
-      itemType: item["item-type-description"],
-      itemDescription: item.description ? item.description : "---",
-      unit: [
-        ...new Set(
-          item.item.brands.map((brand) => brand["business-unit"].name)
-        ),
-      ].join(", "),
-      distributor: item["distributor-name"],
-      supplierId: item.item.supplier.id,
-      state: item.state ? item.state : "---",
-      packSize: item["qty-per-pack"],
-      totalItems: item.qty,
-      estCost: stringToCents(item["estimated-cost"]),
-      totalEstCost: stringToCents(item["total-estimated-cost"]),
-      actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
-      totalActCost: item["total-actual-cost"]
-        ? stringToCents(item["total-actual-cost"])
-        : "---",
-      orderDate: item["order-submitted-at"],
-      shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
-      tracking: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"]["tracking-number"]
-          ? item["shipping-parameter-item"]["tracking-number"]
-          : "---"
-        : "---",
+  let mappedItems = items.map((item) => ({
+    itemNumber: item["item-number"],
+    imgUrlThumb: item.item["img-url-thumb"]
+      ? item.item["img-url-thumb"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    imgUrlLg: item.item["img-url-large"]
+      ? item.item["img-url-large"]
+      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    orderType: item.item["order-type"],
+    specification: item.specification,
+    brand: item.item.brands.map((brand) => brand.name),
+    brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
+    program: item["program-names"].join(", "),
+    itemType: item["item-type-description"],
+    itemDescription: item.description ? item.description : "---",
+    unit: [
+      ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
+    ].join(", "),
+    distributor: item["distributor-name"],
+    supplierId: item.item.supplier.id,
+    state: item.state ? item.state : "---",
+    packSize: item["qty-per-pack"],
+    totalItems: item.qty,
+    estCost: stringToCents(item["estimated-cost"]),
+    totalEstCost: stringToCents(item["total-estimated-cost"]),
+    actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
+    totalActCost: item["total-actual-cost"]
+      ? stringToCents(item["total-actual-cost"])
+      : "---",
+    orderDate: item["order-submitted-at"],
+    shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
+    tracking: item["shipping-parameter-item"]
+      ? item["shipping-parameter-item"]["tracking-number"]
+          : "---",
       trackingId: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"].id
-          ? item["shipping-parameter-item"].id
-          : null
         : null,
       status: item["order-status"],
       user: item["order-user-name"],
       orderId: item.order.id,
-    };
-  });
-  return mappedItems;
-};
+    }));
+    return mappedItems;
+  };
 
 export const mapOrderItems = (items, type) => {
   let mappedItems = items
@@ -258,6 +252,7 @@ export const mapOrderItems = (items, type) => {
         imgUrlThumb: images.imgUrlThumb,
         imgUrlLg: images.imgUrlLg,
         brand: item.item.brands.map((brand) => brand.name).join(", "),
+        specification: item.item.specification,
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
