@@ -21,6 +21,11 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 // import Tabs from "@material-ui/core/Tabs";
 // import Tab from "@material-ui/core/Tab";
 import Carousel from "react-material-ui-carousel";
@@ -96,7 +101,7 @@ const ItemPreviewModal = (props) => {
     handleClose,
     previewModal,
   } = props;
- 
+
   // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
@@ -195,11 +200,19 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
-                  {specification && (
-                    Object.keys(specification).map((keyName, i) => (
-                      <Typography variant="body1" color="textSecondary" key={i}>{`${keyName}: ${specification[keyName]}`}</Typography> // doing this here as opposed to apiMaps because specifications can apparently vary quite a bit so would be hard to standardize maps elsewhere
-                    ))
-                  )}
+                  <Table>
+                    <TableBody>
+                      {specification && (
+                        Object.keys(specification).map((keyName, i) => (
+                          <TableRow>
+                            <TableCell variant="body1" color="textSecondary" key={i}>{keyName}</TableCell>
+                            <TableCell>{specification[keyName]}</TableCell> 
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+
                 </>
               )}
               {coupon && (
@@ -237,26 +250,23 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${
-                      bottleDiscount
+                    {`Bottle Discount: ${bottleDiscount
                         ? formatMoney(bottleDiscount, false)
                         : "---"
-                    }`}
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${
-                      discountAmount
+                    {`Discount Amount: ${discountAmount
                         ? formatMoney(discountAmount, false)
                         : "---"
-                    }`}
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${
-                      expirationDate ? expirationDate : "---"
-                    }`}
+                    {`Expiration Date: ${expirationDate ? expirationDate : "---"
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}

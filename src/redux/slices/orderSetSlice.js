@@ -376,7 +376,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     dispatch(setIsLoading());
     dispatch(resetPreOrderItems());
     const currentOrders = await fetchOrdersByProgram(program, userId);
-    console.log(currentOrders);
+  
     if (currentOrders.error) {
       throw currentOrders.error;
     }
