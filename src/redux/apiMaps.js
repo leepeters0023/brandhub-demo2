@@ -70,7 +70,9 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  let mappedItems = items.map((item) => ({
+  let mappedItems = items.map((item) => {
+    const images = handleImages(item.images);
+    return {
     id: item.id,
     itemNumber: item["item-number"],
     brand: item.brands.map((brand) => brand.name).join(", "),
@@ -86,15 +88,25 @@ export const mapItems = (items) => {
     inMarketDate: item["in-market-date"]
       ? format(item["in-market-date"], "MM/dd/yyyy")
       : "---",
-    imgUrlThumb: item["img-url-thumb"]
-      ? item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlLg: item["img-url-large"]
-      ? item["img-url-large"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-  }));
+    imgUrlThumb: images.imgUrlThumb,
+    imgUrlLg: images.imgUrlLg,
+    }
+    });
   return mappedItems;
 };
+
+export const mapSpecifications = (specs) => {
+  Object.keys(specs).map((keyName) => {
+    if (specs[keyName] !== "") {
+     let mappedSpecs = {
+       key: keyName,
+       value: specs[keyName]
+     }
+     console.log(mappedSpecs)
+     return mappedSpecs;
+    } 
+  });
+}
 
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
@@ -197,14 +209,12 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
-  let mappedItems = items.map((item) => ({
-    itemNumber: item["item-number"],
-    imgUrlThumb: item.item["img-url-thumb"]
-      ? item.item["img-url-thumb"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlLg: item.item["img-url-large"]
-      ? item.item["img-url-large"]
-      : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+  let mappedItems = items.map((item) => {
+    const images = handleImages(item.item.images)
+    return {
+      itemNumber: item["item-number"],
+    imgUrlThumb: images.imgUrlThumb,
+    imgUrlLg: images.imgUrlLg,
     orderType: item.item["order-type"],
     specification: item.specification,
     brand: item.item.brands.map((brand) => brand.name),
@@ -237,7 +247,8 @@ export const mapOrderHistoryItems = (items) => {
       status: item["order-status"],
       user: item["order-user-name"],
       orderId: item.order.id,
-    }));
+  }
+    });
     return mappedItems;
   };
 
@@ -260,7 +271,6 @@ export const mapOrderItems = (items, type) => {
           ? item["program-names"].join(", ")
           : item.item.programs.map((prog) => prog.name).join(", "),
         itemType: item.item.type,
-        // this goes to quarterly preorder
         itemDescription: item.item.description ? item.item.description : "---",
         unit: [
           ...new Set(

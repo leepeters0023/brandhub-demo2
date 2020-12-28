@@ -135,7 +135,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const preOrderStatus = useSelector((state) => state.orderSet.status);
   const currentItems = useSelector((state) => state.orderSet.items);
-  console.log(currentItems)
   const orders = useSelector((state) => state.orderSet.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
   const grandTotalMod = useSelector(
@@ -150,7 +149,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   const handleModalOpen = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
-    console.log(item)
     setCurrentItem(item);
     handlePreviewModal(true);
   };
@@ -271,9 +269,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         type="order"
       />
       <ItemPreviewModal
-        handleModalClose={handleModalClose}
+        handleClose={handleModalClose}
         previewModal={previewModal}
         currentItem={currentItem}
+        type={"catalog"}
       />
       <ConfirmDeleteOrder
         open={isConfirmDeleteOpen}
