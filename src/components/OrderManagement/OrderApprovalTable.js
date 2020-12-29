@@ -260,20 +260,36 @@ const OrderApprovalTable = ({
                     <TableCell align="left">{row.id}</TableCell>
                     <TableCell align="left">{row.type}</TableCell>
                     <TableCell align="left">{row.userName}</TableCell>
-                    <TableCell align="left">
-                      {row.program ? row.program : "---"}
-                    </TableCell>
-                    {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                    {row.program.length > 1 ? (
+                      <Tooltip
+                        placement="left"
+                        title={`${row.program.join(", ")}`}
                       >
-                        {row.brand[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
+                        <TableCell
+                          align="left"
+                          style={{ display: "flex", alignItems: "flex-end" }}
+                        >
+                          {row.program[0]}
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                      <TableCell align="left">{row.program[0]}</TableCell>
+                    )}
+                    {row.brand.length > 1 ? (
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
+                      >
+                        <TableCell
+                          align="left"
+                          style={{ display: "flex", alignItems: "flex-end" }}
+                        >
+                          {row.brand[0]}
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
                       <TableCell align="left">{row.brand[0]}</TableCell>
                     )}
                     <TableCell>{row.state}</TableCell>

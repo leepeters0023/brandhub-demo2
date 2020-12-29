@@ -179,7 +179,6 @@ const OrderHistoryByItemTable = ({
   const handleRowClick = (orderNum) => {
     navigate(`/orders/history/${orderNum}`);
   };
-  console.log(items);
 
   return (
     <>
