@@ -151,10 +151,11 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
+  console.log(order)
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
-    distributorId: order.distributor ? order.distributor.id : null,
+    distributorId: order.distributor ? order.distributor["external-source-id"] : null,
     distributorName: order.distributor ? order.distributor.name : null,
     distributorCity: order.distributor ? order.distributor.city : null,
     distributorState: order.distributor ? order.distributor.state : null,
