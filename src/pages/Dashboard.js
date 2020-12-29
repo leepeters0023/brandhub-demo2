@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   dashPaper: {
     backgroundColor: "whitesmoke",
     width: "100%",
+    height: "150px",
     paddingBottom: "100%",
     position: "relative",
   },
