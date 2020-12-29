@@ -201,9 +201,7 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
                   <TableCell align="left">
-                    {row.distributorName
-                      ? row.distributorName
-                      : "---"}
+                    {row.distributorName ? row.distributorName : "---"}
                   </TableCell>
                   <TableCell align="left">
                     {row.distributorState
@@ -211,18 +209,19 @@ const OrderHistoryTable = ({
                       : row.customAddressState}
                   </TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">Some brands here</TableCell>
-                  {/* {row.items.length > 1 ? (
-                    [...new Set(row.items.map((item, i) => item.brand))].map((brand, i) =>
-                      <TableCell key={i} align="left">
-                        {brand}
-                        <Tooltip title={brand}>
-                          <MoreHorizIcon fontSize="small" color="inherit" />
-                        </Tooltip>
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
                       </TableCell>
-                    )) : (
-                      <TableCell align="left">{row.items[0].brand}</TableCell>
-                    )} */}
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
@@ -267,4 +266,3 @@ OrderHistoryTable.propTypes = {
 };
 
 export default OrderHistoryTable;
-

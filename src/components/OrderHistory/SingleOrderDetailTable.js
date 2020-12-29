@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
   const classes = useStyles();
-  console.log(items);
   return (
     <>
       <TableContainer className={classes.tableContainer}>

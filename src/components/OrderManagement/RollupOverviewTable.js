@@ -17,7 +17,6 @@ import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
@@ -198,7 +197,22 @@ const RollupOverViewTable = ({
                   }}
                 >
                   <TableCell align="left">{row.userName}</TableCell>
-                  <TableCell align="left">{row.program}</TableCell>
+                  {row.program.length > 1 ? (
+                    <Tooltip
+                      placement="left"
+                      title={`${row.program.join(", ")}`}
+                    >
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.program[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.program[0]}</TableCell>
+                  )}
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
@@ -210,8 +224,8 @@ const RollupOverViewTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                      <TableCell align="left">{row.brand[0]}</TableCell>
-                    )}
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost, false)}

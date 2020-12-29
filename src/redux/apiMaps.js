@@ -195,8 +195,17 @@ export const mapSingleOrder = (order) => {
         ? order["program-names"].join(", ")
         : "---",
     type: orderTypeMap[order.type],
-    brand: null,//need brands here
-    items: mapOrderItems(order["order-items"], "history"), //brands are inside order items.[i].items.brands[i].name
+    brand: [
+      ...new Set(
+        [].concat.apply(
+          [],
+          order["order-items"].map((item) =>
+            item.item.brands.map((brand) => brand.name)
+          )
+        )
+      ),
+    ],
+    items: mapOrderItems(order["order-items"], "history"),
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
@@ -206,18 +215,14 @@ export const mapSingleOrder = (order) => {
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
-    attn: order.distributor["current-user-attn"]
-      ? order.distributor["current-user-attn"]
-      : order.distributor["default-attn"]
-      ? order.distributor["default-attn"]
-      : "---",
+    attn: order.attn ? order.attn : "---",
   };
   return formattedOrder;
 };
 
 export const mapOrderHistoryOrders = (orders) => {
   let mappedOrders = orders.map((order) => {
-    let formattedOrder = mapSingleOrder(order.items);
+    let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
   });
   return mappedOrders;
@@ -348,10 +353,42 @@ export const mapOrderSet = (order) => {
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
-    program: order.program ? order.program.name : "---",
-    brand: order.program.brands.map((brand) => brand.name),
+    program: order.program
+      ? [order.program.name]
+      : [
+          ...new Set(
+            [].concat.apply(
+              [],
+              order["order-set-items"].map((item) =>
+                item.item.programs.map((prog) => prog.name)
+              )
+            )
+          ),
+        ],
+    brand: order.program
+      ? order.program.brands.map((brand) => brand.name)
+      : [
+          ...new Set(
+            [].concat.apply(
+              [],
+              order["order-set-items"].map((item) =>
+                item.item.brands.map((brand) => brand.name)
+              )
+            )
+          ),
+        ],
     territories: order["territory-names"] ? order["territory-names"] : "---",
-    state: order["random-order-state"] ? order["random-order-state"] : "---",
+    state: [
+      ...new Set(
+        order.orders.map((ord) => {
+          if (ord.distributor) {
+            return ord.distributor.state;
+          } else {
+            return ord["custom-address"].state.code;
+          }
+        })
+      ),
+    ].join(", "),
     status: order.status,
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
@@ -369,7 +406,7 @@ export const mapOrderSetHistory = (orders) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;
   });
-  console.log(mappedOrders)
+  console.log(mappedOrders);
   return mappedOrders;
 };
 
@@ -396,7 +433,8 @@ export const mapRollupItems = (items) => {
       item["territory-name"].length === 0 ? "National" : item["territory-name"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
-      : item.programs.map((prog) => prog.brands.map((brand) => brand.name))
+      : item.programs
+          .map((prog) => prog.brands.map((brand) => brand.name))
           .join(", "),
     program: determineProgram(item),
     programs: item.programs,
