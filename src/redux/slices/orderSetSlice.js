@@ -26,6 +26,7 @@ let initialState = {
   status: null,
   items: [],
   orders: [],
+  stateFilter: null,
   orderTotal: 0,
   orderNote: "",
   rebuildRef: false,
@@ -240,6 +241,10 @@ const orderSetSlice = createSlice({
       state.isOrderLoading = false;
       state.error = null;
     },
+    setStateFilter(state, action) {
+      const { stateCode } = action.payload;
+      state.stateFilter = stateCode;
+    },
     clearOrderSet(state) {
       state.isLoading = false;
       state.orderId = null;
@@ -247,6 +252,7 @@ const orderSetSlice = createSlice({
       state.status = null;
       state.items = [];
       state.orders = [];
+      state.stateFilter = null;
       state.orderTotal = 0;
       state.orderNote = "";
       state.error = null;
@@ -270,6 +276,7 @@ export const {
   setRebuildRef,
   addOrderSuccess,
   addMultipleOrdersSuccess,
+  setStateFilter,
   setFailure,
 } = orderSetSlice.actions;
 

@@ -10,7 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-const StateSelector = ({ handleState, currentState }) => {
+const StateSelector = ({ handleState, currentState, type }) => {
   const states = useSelector((state) => state.territories.stateList);
   const isLoading = useSelector((state) => state.territories.isStatesLoading);
 
@@ -27,7 +27,9 @@ const StateSelector = ({ handleState, currentState }) => {
     fullWidth
     variant="outlined"
     style={{
-      marginBottom: "15px"
+      marginBottom: type === "grid" ? "0" : "15px",
+      maxWidth: type === "grid" ? "100px" : "100%",
+      minWidth: "100px",
     }}
     >
       <InputLabel id="state-select">State</InputLabel>
