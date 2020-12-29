@@ -112,7 +112,7 @@ const CollapseRow = ({ classes, rowData, orders, type }) => {
                       </TableCell>
                       <TableCell align="center">
                         <Typography className={classes.bodyText}>
-                          Distributor ID
+                          Distributor ABN
                         </Typography>
                       </TableCell>
                       <TableCell align="center">

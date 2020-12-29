@@ -150,7 +150,7 @@ const FavoriteDistributorList = ({ id }) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Add Distributor"
+              label="Add Distributor (Name / ABN)"
               variant="outlined"
               size="small"
               InputProps={{

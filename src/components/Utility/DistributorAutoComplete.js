@@ -81,7 +81,7 @@ const DistributorAutoComplete = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Distributor"
+            label="Distributor Name / ABN"
             variant="outlined"
             size="small"
             InputProps={{
