@@ -202,7 +202,7 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">Specifications: </Typography>
+                  <Typography className={classes.headerText}>Specifications: </Typography>
                   <IconButton
                     aria-label="expand row"
                     onClick={() => {
@@ -212,17 +212,21 @@ const ItemPreviewModal = (props) => {
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                   </IconButton>
                   <Collapse in={open}>
-                  <Table>
-                    <TableBody>
-                      {specification && (
-                        specification.map((spec) => (
-                          <TableRow>
-                            <TableCell variant="body1" color="textSecondary">{spec.key}</TableCell>
-                            <TableCell>{spec.value}</TableCell>
-                          </TableRow>
-                        )))}
-                    </TableBody>
-                  </Table>
+                    <Table>
+                      <TableBody>
+                        {specification && (
+                          specification.map((spec) => (
+                            <TableRow>
+                              <TableCell color="textSecondary">
+                                <Typography variant="body1" color="textSecondary">{spec.key}</Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Typography variant="body1" color="textSecondary">{spec.value}</Typography>
+                              </TableCell>
+                            </TableRow>
+                          )))}
+                      </TableBody>
+                    </Table>
                   </Collapse>
                 </>
               )}
