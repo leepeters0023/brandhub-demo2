@@ -97,12 +97,10 @@ export const mapItems = (items) => {
 
 export const mapSpecifications = (specs) => {
   const mappedSpecs = Object.keys(specs).map((keyName) => {
-    if (specs[keyName] !== "") {
       return {
-      key: keyName,
-      value: specs[keyName]
+      key: keyName, 
+      value: specs[keyName].length > 1 ? specs[keyName] : "N/A",
        }
-    } 
   });
   return mappedSpecs;
 }
@@ -215,7 +213,7 @@ export const mapOrderHistoryItems = (items) => {
     imgUrlThumb: images.imgUrlThumb,
     imgUrlLg: images.imgUrlLg,
     orderType: item.item["order-type"],
-    specification: item.specification,
+    specification: mapSpecifications(item.specification),
     brand: item.item.brands.map((brand) => brand.name),
     brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
     program: item["program-names"].join(", "),
