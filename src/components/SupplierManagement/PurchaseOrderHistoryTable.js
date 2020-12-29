@@ -46,7 +46,7 @@ const EnhancedTableHead = (props) => {
   const currentHeadCells =
     role === "supplier"
       ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
-      : headCells.filter((cell) => cell.id !== "itemDesc");
+      : headCells.filter((cell) => cell.id !== "");
 
   return (
     <TableHead>
@@ -128,7 +128,6 @@ const PurchaseOrderHistoryTable = ({
   scrollRef,
 }) => {
   const classes = useStyles();
-  console.log(pos)
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
@@ -138,7 +137,6 @@ const PurchaseOrderHistoryTable = ({
     setOrderBy(property);
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
-
   const handleRowClick = (poNum) => {
     navigate(`/purchasing/purchaseOrder#${poNum}`);
   };
@@ -213,9 +211,9 @@ const PurchaseOrderHistoryTable = ({
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
-                  <TableCell align="left">Placeholder Submitted Date</TableCell>
-                  <TableCell align="left">Placeholder PO Creator</TableCell>
-                  <TableCell align="left">CDC or Direct Ship</TableCell>
+                  <TableCell align="left">{row.submittedDate}</TableCell>
+                  <TableCell align="left">{row.purchasedBy}</TableCell>
+                  <TableCell align="left">{row.allocated}</TableCell>
                 </TableRow>
               ))}
             {posLoading && (
