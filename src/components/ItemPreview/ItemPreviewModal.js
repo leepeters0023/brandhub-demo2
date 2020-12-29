@@ -202,26 +202,28 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
+                  <br />
+                  <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}} >
                   <Typography className={classes.headerText}>Specifications: </Typography>
-                  <IconButton
-                    aria-label="expand row"
-                    onClick={() => {
-                      setOpen(!open);
-                    }}
-                  >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                  </IconButton>
+                    <IconButton
+                      aria-label="expand row"
+                      onClick={() => {
+                        setOpen(!open);
+                      }}
+                    >
+                      {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                  </div>
+                    
                   <Collapse in={open}>
                     <Table>
                       <TableBody>
                         {specification && (
-                          specification.map((spec) => (
-                            <TableRow>
-                              <TableCell color="textSecondary">
-                                <Typography variant="body1" color="textSecondary">{spec.key}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography variant="body1" color="textSecondary">{spec.value}</Typography>
+                          specification.map((spec, index) => (
+                            <TableRow key={index}>
+                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.headerText}>{spec.key}</TableCell>
+                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.bodyText}>
+                                {spec.value}
                               </TableCell>
                             </TableRow>
                           )))}
