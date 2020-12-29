@@ -242,7 +242,18 @@ export const mapOrderSet = (order) => {
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
-    program: order.program ? order.program.name : "---",
+    program: order.program
+      ? order.program.name
+      : [
+          ...new Set(
+            [].concat.apply(
+              [],
+              order["order-set-items"].map((item) =>
+                item.item.programs.map((prog) => prog.name)
+              )
+            )
+          ),
+        ].join(", "),
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
     status: order.status,
@@ -253,6 +264,8 @@ export const mapOrderSet = (order) => {
       ? stringToCents(order["total-actual-cost"])
       : "---",
     budget: order.budget ? stringToCents(order.budget) : "$25,000.00",
+    hasRush:
+      order["order-set-items"].filter((item) => item["is-rush"]).length > 0,
   };
   return formattedOrder;
 };
@@ -351,7 +364,6 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
-  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]

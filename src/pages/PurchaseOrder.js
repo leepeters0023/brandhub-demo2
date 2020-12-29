@@ -160,7 +160,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             (i) => i.sequenceNum === item.sequenceNum
           );
           if (currentParamItem) {
-            console.log(currentParamItem.shipFromZip);
             let dataObject = {
               paramItemId: currentParamItem.id,
               poNum: currentPO.id,
@@ -223,7 +222,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           }
         });
       });
-      console.log(csvData);
       setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
   }, [
