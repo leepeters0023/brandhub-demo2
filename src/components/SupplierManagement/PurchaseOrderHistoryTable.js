@@ -46,7 +46,7 @@ const EnhancedTableHead = (props) => {
   const currentHeadCells =
     role === "supplier"
       ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
-      : headCells.filter((cell) => cell.id !== "");
+      : headCells.filter((cell) => cell.id !== "itemDesc");
 
   return (
     <TableHead>
@@ -198,7 +198,8 @@ const PurchaseOrderHistoryTable = ({
                       <TableCell align="left">{row.brand[0]}</TableCell>
                     )}
                   <TableCell align="left">{row.projectNum}</TableCell>
-                  {role === "supplier" ? (<TableCell align="left">{row.itemDesc}</TableCell>) : ( <>
+                  <TableCell align="left">{row.itemDesc}</TableCell>
+                  {role !== "supplier" && ( <>
                     <TableCell align="left">{row.supplier}</TableCell>
                     <TableCell align="left">
                       {formatMoney(row.estCost, true)}
