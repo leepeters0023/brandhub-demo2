@@ -375,12 +375,10 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    console.log(id, dist, type)
     const order = await addSingleOrderToSet(id, dist, type);
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
     if (order.data.distributor["current-user-attn"]) {
       const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
       if (attnStatus.error) {
@@ -389,7 +387,6 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
       order.data.attn = order.data.distributor["current-user-attn"]
     }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
-    console.log(formattedOrder);
     dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
