@@ -99,6 +99,7 @@ const OrderItemTableView = ({
   type,
   currentItems,
   handlePreview,
+  handleAddInvOpen,
   setCurrentItemAdded,
   isItemsLoading,
   scrollRef,
@@ -245,7 +246,7 @@ const OrderItemTableView = ({
                             variant="contained"
                             className={classes.largeButton}
                             color="secondary"
-                            onClick={() => console.log("TODO")}
+                            onClick={() => handleAddInvOpen(row.id)}
                             classes={{label: classes.buttonText}}
                           >
                             ADD INV.
@@ -273,6 +274,7 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
+  handleAddInvOpen: PropTypes.func,
   handleAddItem: PropTypes.func.isRequired,
   setCurrentItemAdded: PropTypes.func.isRequired,
 };
