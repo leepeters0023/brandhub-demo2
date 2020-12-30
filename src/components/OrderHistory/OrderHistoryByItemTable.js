@@ -228,11 +228,7 @@ const OrderHistoryByItemTable = ({
                       handleClick={(evt) => {
                         evt.stopPropagation();
                         handlePreview(
-                          row.imgUrlLg,
-                          row.brand.join(", "),
-                          row.itemType,
-                          row.itemNumber,
-                          row.itemDescription
+                          row.itemNumber
                         );
                       }}
                     />
@@ -293,9 +289,9 @@ const OrderHistoryByItemTable = ({
                     onClick={
                       row.tracking !== "---" && row.trackingId
                         ? (evt) => {
-                            evt.stopPropagation();
-                            handleTrackingClick(row.trackingId);
-                          }
+                          evt.stopPropagation();
+                          handleTrackingClick(row.trackingId);
+                        }
                         : null
                     }
                   >
