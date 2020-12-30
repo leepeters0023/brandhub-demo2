@@ -223,7 +223,7 @@ export const mapOrderHistoryItems = (items) => {
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
       orderType: item.item["order-type"],
-      specification: mapSpecifications(item.specification),
+      specification: mapSpecifications(item.item.specification),
       brand: item.item.brands.map((brand) => brand.name),
       brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
       program: item["program-names"].join(", "),
