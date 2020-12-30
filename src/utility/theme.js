@@ -123,6 +123,20 @@ export default {
       fontSize: "1rem",
       color: "white",
     },
+    headerListItem: {
+      color: "white",
+      "&:hover": {
+        textDecoration: "underline"
+      }
+    },
+    headerListItemNew: {
+      color: "white",
+      border: "solid white .5px",
+      padding: "7px",
+      "&:hover": {
+        backgroundColor: "#8397B0 "
+      }
+    },
     bodyText: {
       fontSize: ".9rem",
       color: "#4C4C4C",
