@@ -145,7 +145,7 @@ const OrderHistoryTable = ({
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
   const grouping = useSelector((state) => state.filters.groupBy);
-
+  
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
