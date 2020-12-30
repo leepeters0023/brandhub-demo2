@@ -202,27 +202,33 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">Specifications: </Typography>
-                  <IconButton
-                    aria-label="expand row"
-                    onClick={() => {
-                      setOpen(!open);
-                    }}
-                  >
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                  </IconButton>
+                  <br />
+                  <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}} >
+                  <Typography className={classes.headerText}>Specifications: </Typography>
+                    <IconButton
+                      aria-label="expand row"
+                      onClick={() => {
+                        setOpen(!open);
+                      }}
+                    >
+                      {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                  </div>
+                    
                   <Collapse in={open}>
-                  <Table>
-                    <TableBody>
-                      {specification && (
-                        specification.map((spec) => (
-                          <TableRow>
-                            <TableCell variant="body1" color="textSecondary">{spec.key}</TableCell>
-                            <TableCell>{spec.value}</TableCell>
-                          </TableRow>
-                        )))}
-                    </TableBody>
-                  </Table>
+                    <Table>
+                      <TableBody>
+                        {specification && (
+                          specification.map((spec, index) => (
+                            <TableRow key={index}>
+                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.headerText}>{spec.key}</TableCell>
+                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.bodyText}>
+                                {spec.value}
+                              </TableCell>
+                            </TableRow>
+                          )))}
+                      </TableBody>
+                    </Table>
                   </Collapse>
                 </>
               )}

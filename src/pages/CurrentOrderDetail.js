@@ -23,7 +23,7 @@ import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import ConfirmDeleteOrder from "../components/Utility/ConfirmDeleteOrder";
-import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import Loading from "../components/Utility/Loading";
 
@@ -78,7 +78,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [deleteOrderId, setDeleteOrderId] = useCallback(useState(null));
   const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(useState(false));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
-  const [modal, handleModal] = useCallback(useState(false));
+  const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
@@ -96,23 +96,15 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
   const currentFilters = useSelector((state) => state.filters);
-
-  const handleModalOpen = useCallback(
-    (img, brand, itemType, itemNumber, itemDescription) => {
-      setCurrentItem({
-        imgUrl: img,
-        brand: brand,
-        itemType: itemType,
-        itemNumber: itemNumber,
-        itemDescription: itemDescription,
-      });
-      handleModal(true);
-    },
-    [handleModal, setCurrentItem]
-  );
-
+ 
+  const handleModalOpen = (itemNumber) => {
+      let item = currentItems.find((item) => item.itemNumber === itemNumber);
+      setCurrentItem(item);
+      handlePreviewModal(true);
+    } // useCallback() was causing currentItems to not be passed in to this function
+    
   const handleModalClose = () => {
-    handleModal(false);
+    handlePreviewModal(false);
     setConfirmDeleteOpen(false);
   };
 
@@ -243,10 +235,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         itemNumber={currentItemNum}
         type="item"
       />
-      <OrderItemPreview
-        handleModalClose={handleModalClose}
-        modal={modal}
+      <ItemPreviewModal
+        handleClose={handleModalClose}
+        previewModal={previewModal}
         currentItem={currentItem}
+        type={"catalog"}
       />
       <ConfirmDeleteOrder
         open={isConfirmDeleteOpen}
@@ -372,16 +365,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 {decodeURIComponent(window.location.hash.slice(1)).includes(
                   "approval"
                 ) && (
-                  <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton
-                      component={Link}
-                      to="/orders/approvals"
-                      onClick={() => dispatch(setRetain({ value: true }))}
-                    >
-                      <ArrowBackIcon fontSize="large" color="secondary" />
-                    </IconButton>
-                  </Tooltip>
-                )}
+                    <Tooltip title="Back to Approvals" placement="bottom-start">
+                      <IconButton
+                        component={Link}
+                        to="/orders/approvals"
+                        onClick={() => dispatch(setRetain({ value: true }))}
+                      >
+                        <ArrowBackIcon fontSize="large" color="secondary" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
@@ -405,32 +398,32 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {overviewVisible ||
-        ((orderStatus === "approved" || orderStatus === "submitted") &&
-          (currentUserRole === "field1" ||
-            (!window.location.hash.includes("approval") &&
-              !window.location.href.includes("rollup")))) ? (
-          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-        ) : (
-          <OrderSetTable
-            currentProgram={undefined}
-            handleModalOpen={handleModalOpen}
-            handleOpenConfirm={handleOpenConfirm}
-            handleRemoveOrder={handleDeleteOrderModal}
-            isLoading={isLoading}
-            orderId={currentOrderId}
-            orderStatus={orderStatus}
-            currentItems={currentItems}
-            orders={orders}
-            orderType={currentOrderType}
-          />
-        )}
+          ((orderStatus === "approved" || orderStatus === "submitted") &&
+            (currentUserRole === "field1" ||
+              (!window.location.hash.includes("approval") &&
+                !window.location.href.includes("rollup")))) ? (
+            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+          ) : (
+            <OrderSetTable
+              currentProgram={undefined}
+              handleModalOpen={handleModalOpen}
+              handleOpenConfirm={handleOpenConfirm}
+              handleRemoveOrder={handleDeleteOrderModal}
+              isLoading={isLoading}
+              orderId={currentOrderId}
+              orderStatus={orderStatus}
+              currentItems={currentItems}
+              orders={orders}
+              orderType={currentOrderType}
+            />
+          )}
         <br />
         <br />
         <div className={classes.orderControl}>
           {orderStatus === "in-progress" && currentOrderType !== "pre-order" && (
             <Button
               className={classes.largeButton}
-              style={{marginRight: "10px"}}
+              style={{ marginRight: "10px" }}
               color="secondary"
               variant="contained"
               onClick={() => {
