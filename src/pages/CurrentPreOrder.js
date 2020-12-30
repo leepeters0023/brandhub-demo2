@@ -22,7 +22,7 @@ import OrderSetTable from "../components/Purchasing/OrderSetTable";
 import OrderSetOverview from "../components/Purchasing/OrderSetOverview";
 import AreYouSure from "../components/Utility/AreYouSure";
 import ConfirmDeleteOrder from "../components/Utility/ConfirmDeleteOrder";
-import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import ProgramSelector from "../components/Utility/ProgramSelector";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import PreOrderSummary from "../components/Purchasing/PreOrderSummary";
@@ -124,7 +124,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(
     useState(false)
   );
-  const [modal, handleModal] = useState(false);
+  const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, setCurrentItem] = useState({});
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
   const [switched, setSwitched] = useCallback(useState(false));
@@ -143,19 +143,15 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const setTotal = useSelector((state) => state.orderSet.orderTotal);
 
   const handleModalClose = () => {
-    handleModal(false);
+    handlePreviewModal(false);
     setConfirmDeleteOpen(false);
   };
 
-  const handleModalOpen = useCallback((img, brand, itemType, itemNumber) => {
-    setCurrentItem({
-      imgUrl: img,
-      brand: brand,
-      itemType: itemType,
-      itemNumber: itemNumber,
-    });
-    handleModal(true);
-  }, []);
+  const handleModalOpen = (itemNumber) => {
+    let item = currentItems.find((item) => item.itemNumber === itemNumber);
+    setCurrentItem(item);
+    handlePreviewModal(true);
+  };
 
   const handleCloseConfirm = useCallback(() => {
     handleConfirmModal(false);
@@ -272,10 +268,11 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         itemNumber={currentItemNum}
         type="order"
       />
-      <OrderItemPreview
-        handleModalClose={handleModalClose}
-        modal={modal}
+      <ItemPreviewModal
+        handleClose={handleModalClose}
+        previewModal={previewModal}
         currentItem={currentItem}
+        type={"catalog"}
       />
       <ConfirmDeleteOrder
         open={isConfirmDeleteOpen}

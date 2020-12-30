@@ -123,13 +123,7 @@ const OrderSetTableHead = ({
                 alt={item.itemType}
                 imgUrl={item.imgUrlThumb}
                 handleClick={() => {
-                  handleModalOpen(
-                    item.imgUrlLg,
-                    item.brand,
-                    item.itemType,
-                    item.itemNumber,
-                    item.itemDescription
-                  );
+                  handleModalOpen(item.itemNumber);
                 }}
               />
               {item.brand.split(", ").length > 1 ? (

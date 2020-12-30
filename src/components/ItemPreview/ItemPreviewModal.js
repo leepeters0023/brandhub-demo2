@@ -21,6 +21,10 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 // import Tabs from "@material-ui/core/Tabs";
 // import Tab from "@material-ui/core/Tab";
 import Carousel from "react-material-ui-carousel";
@@ -44,6 +48,18 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
     },
   },
+  scrollDiv: {
+    margin: "5% 0",
+    width: "100%",
+    maxHeight: "90%",
+    overflowY: "scroll",
+    paddingRight: "20px",
+    [theme.breakpoints.down("sm")]: {
+      overflowY: "visible",
+      height: "fit-content",
+      paddingRight: "0px",
+    },
+  },
   largeImageWrapper: {
     display: "flex",
     alignItems: "center",
@@ -64,6 +80,24 @@ const useStyles = makeStyles((theme) => ({
     width: "75px",
     height: "5px",
     margin: "10px 0",
+  },
+  dialogPaper: {
+    minHeight: "80vh",
+    maxHeight: "80vh",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  specTableCellRoot: {
+    padding: "5px 0px",
+  },
+  specTableCellRootDesc: {
+    padding: "5px 10px",
+  },
+  carouselRoot: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "100%",
+    },
   },
 }));
 
@@ -91,6 +125,7 @@ const ItemPreviewModal = (props) => {
       discountAmount,
       startDate,
       expirationDate,
+      specification,
     },
     handleClose,
     previewModal,
@@ -98,7 +133,6 @@ const ItemPreviewModal = (props) => {
 
   // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
-
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
   const territoryId = useSelector((state) => state.user.currentTerritory);
 
@@ -110,7 +144,6 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(null);
     handleClose();
   };
-
   const handleAddItem = useCallback(() => {
     let newItem = {
       brand: brand,
@@ -135,6 +168,7 @@ const ItemPreviewModal = (props) => {
         fullWidth
         maxWidth="lg"
         style={{ zIndex: "15000" }}
+        classes={{ paper: classes.dialogPaper }}
       >
         <DialogContent>
           <Grid container spacing={5} className={classes.dialogGrid}>
@@ -148,6 +182,7 @@ const ItemPreviewModal = (props) => {
             </IconButton>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
               <Carousel
+                classes={{ root: classes.carouselRoot }}
                 autoPlay=""
                 navButtonsAlwaysInvisible={
                   imgUrlLg && imgUrlLg.length === 1 ? true : false
@@ -168,41 +203,95 @@ const ItemPreviewModal = (props) => {
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               {!coupon && (
-                <>
-                  <Typography variant="body1" color="textSecondary">
-                    {`#${itemNumber}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Brand(s):  ${brand}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Program:  ${program}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Item Type:  ${itemType}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Item Description:  ${itemDescription}`}
-                  </Typography>
-                  <br />
-                  <Box bgcolor="primary.main" className={classes.dividerBox} />
-                  <br />
-                  <Typography className={classes.headerText}>
-                    {`Est. Cost: ${formatMoney(estCost, false)}`}
-                  </Typography>
-                  <br />
-                  <Typography variant="body1" color="textSecondary">
-                    {`Pack Size: ${packSize}`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Available to Order: 10/01/2020 - 12/01/2020`}
-                  </Typography>
-                  {type === "inStock" && (
+                <div style={{ display: "flex", height: "Calc(100vh - 300px)", alignItems: "center" }}>
+                  <div className={classes.scrollDiv}>
                     <Typography variant="body1" color="textSecondary">
-                      {`Amount Available: ${stock}`}
+                      {`#${itemNumber}`}
                     </Typography>
-                  )}
-                </>
+                    <Typography className={classes.headerText}>
+                      {`Brand(s):  ${brand}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Program:  ${program}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Item Type:  ${itemType}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Item Description:  ${itemDescription}`}
+                    </Typography>
+                    <br />
+                    <Box
+                      bgcolor="primary.main"
+                      className={classes.dividerBox}
+                    />
+                    <br />
+                    <Typography className={classes.headerText}>
+                      {`Est. Cost: ${formatMoney(estCost, false)}`}
+                    </Typography>
+                    <br />
+                    <Typography variant="body1" color="textSecondary">
+                      {`Pack Size: ${packSize}`}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      {`Available to Order: 10/01/2020 - 12/01/2020`}
+                    </Typography>
+                    <br />
+                    {type && type !== "program" && type !== "catalog" && (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className={classes.largeButton}
+                          style={{
+                            width: "150px",
+                            marginTop: "10px",
+                          }}
+                          onClick={handleAddItem}
+                        >
+                          ADD TO ORDER
+                        </Button>
+                        <br />
+                        <br />
+                        <Box
+                          bgcolor="primary.main"
+                          className={classes.dividerBox}
+                        />
+                        <br />
+                        <br />
+                      </>
+                    )}
+                    <Typography className={classes.headerText}>
+                      Specifications:{" "}
+                    </Typography>
+                    <br />
+                    <Table size="small">
+                      <TableBody>
+                        {specification &&
+                          specification.map((spec, index) => (
+                            <TableRow key={index}>
+                              <TableCell
+                                classes={{ root: classes.specTableCellRoot }}
+                                align="left"
+                                className={classes.headerText}
+                              >
+                                {spec.key}
+                              </TableCell>
+                              <TableCell
+                                classes={{
+                                  root: classes.specTableCellRootDesc,
+                                }}
+                                align="left"
+                                className={classes.bodyText}
+                              >
+                                {spec.value}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
               )}
               {coupon && (
                 <>
@@ -268,29 +357,6 @@ const ItemPreviewModal = (props) => {
                       {`Amount Available: ${stock}`}
                     </Typography>
                   )}
-                </>
-              )}
-              {type && (
-                <>
-                  <br />
-                  <Box bgcolor="primary.main" className={classes.dividerBox} />
-                  <br />
-                </>
-              )}
-              {type && type !== "program" && type !== "catalog" && (
-                <>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.largeButton}
-                    style={{
-                      width: "150px",
-                      marginTop: "10px",
-                    }}
-                    onClick={handleAddItem}
-                  >
-                    ADD TO ORDER
-                  </Button>
                 </>
               )}
             </Grid>

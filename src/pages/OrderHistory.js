@@ -20,7 +20,7 @@ import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
-import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import OrderHistoryByItemTable from "../components/OrderHistory/OrderHistoryByItemTable";
 import TrackingModal from "../components/Utility/TrackingModal";
 
@@ -87,7 +87,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const dispatch = useDispatch();
   const [currentView, setCurrentView] = useCallback(useState(filterOption));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
-  const [modal, handleModal] = useCallback(useState(false));
+  const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
@@ -116,23 +116,15 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const defaultFilters =
     filterOption === "byOrder" ? defaultOrderFilters : defaultItemFilters;
-
-  const handleModalOpen = useCallback(
-    (img, brand, itemType, itemNumber, itemDescription) => {
-      setCurrentItem({
-        imgUrl: img,
-        brand: brand,
-        itemType: itemType,
-        itemNumber: itemNumber,
-        itemDescription: itemDescription,
-      });
-      handleModal(true);
-    },
-    [handleModal, setCurrentItem]
-  );
-
+  
+    const handleModalOpen = (itemNumber) => {
+      let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
+      setCurrentItem(item);
+      handlePreviewModal(true);
+    }
+   
   const handleModalClose = () => {
-    handleModal(false);
+    handlePreviewModal(false);
   };
 
   const handleTrackingClick = (id) => {
@@ -176,9 +168,10 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
-      <OrderItemPreview
-        handleModalClose={handleModalClose}
-        modal={modal}
+      <ItemPreviewModal
+        type={"catalog"}
+        handleClose={handleModalClose}
+        previewModal={previewModal}
         currentItem={currentItem}
       />
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
