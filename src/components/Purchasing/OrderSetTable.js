@@ -103,12 +103,18 @@ const OrderSetTable = (props) => {
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
-  const [orderNumberModal, setOrderNumber] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [currentOrderNumber, setCurrentOrderNumber] = useState(null);
 
   const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
   const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
   const stateFilter = useSelector((state) => state.orderSet.stateFilter);
+
+  const handleEditClose = () => {
+    setEditOpen(false)
+    setCurrentOrderNumber(null);
+  }
 
   const handleKeyDown = useCallback(
     (ref, key) => {
@@ -202,10 +208,11 @@ const OrderSetTable = (props) => {
 
   return (
     <>
-      {orderNumberModal && (
+      {isEditOpen && currentOrderNumber && (
         <EditOrderDetailModal
-          orderNumber={orderNumberModal}
-          handleClose={setOrderNumber}
+          open={isEditOpen}
+          handleClose={handleEditClose}
+          orderNumber={currentOrderNumber}
         />
       )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
@@ -342,7 +349,8 @@ const OrderSetTable = (props) => {
                               <Tooltip title="Edit Details">
                                 <IconButton
                                   onClick={() => {
-                                    setOrderNumber(ord.id);
+                                    setEditOpen(true);
+                                    setCurrentOrderNumber(ord.id)
                                   }}
                                 >
                                   <EditIcon fontSize="small" color="inherit" />
