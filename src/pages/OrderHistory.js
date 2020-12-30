@@ -116,10 +116,9 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const defaultFilters =
     filterOption === "byOrder" ? defaultOrderFilters : defaultItemFilters;
-  console.log(currentOrderItems)
+  
     const handleModalOpen = (itemNumber) => {
       let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
-      console.log(itemNumber)
       setCurrentItem(item);
       handlePreviewModal(true);
     }

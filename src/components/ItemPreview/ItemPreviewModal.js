@@ -72,6 +72,13 @@ const useStyles = makeStyles((theme) => ({
     height: "5px",
     margin: "10px 0",
   },
+  dialogPaper: {
+    minHeight: '80vh',
+    maxHeight: '80vh',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
 }));
 
 const ItemPreviewModal = (props) => {
@@ -140,6 +147,7 @@ const ItemPreviewModal = (props) => {
         fullWidth
         maxWidth="lg"
         style={{ zIndex: "15000" }}
+        classes={{ paper: classes.dialogPaper }}
       >
         <DialogContent>
           <Grid container spacing={5} className={classes.dialogGrid}>
@@ -173,64 +181,65 @@ const ItemPreviewModal = (props) => {
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               {!coupon && (
-                <>
-                  <Typography variant="body1" color="textSecondary">
-                    {`#${itemNumber}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Brand(s):  ${brand}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Program:  ${program}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Item Type:  ${itemType}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Item Description:  ${itemDescription}`}
-                  </Typography>
-                  <br />
-                  <Box bgcolor="primary.main" className={classes.dividerBox} />
-                  <br />
-                  <Typography className={classes.headerText}>
-                    {`Est. Cost: ${formatMoney(estCost, false)}`}
-                  </Typography>
-                  <br />
-                  <Typography variant="body1" color="textSecondary">
-                    {`Pack Size: ${packSize}`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Available to Order: 10/01/2020 - 12/01/2020`}
-                  </Typography>
-                  <br />
-                  <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}} >
-                  <Typography className={classes.headerText}>Specifications: </Typography>
-                    <IconButton
-                      aria-label="expand row"
-                      onClick={() => {
-                        setOpen(!open);
-                      }}
-                    >
-                      {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
+                <div style={{display: "flex", height: "Calc(100vh - 300px)"}}>
+                  <div style={{height: "95%", overflowY: "scroll"}}>
+                    <Typography variant="body1" color="textSecondary">
+                      {`#${itemNumber}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Brand(s):  ${brand}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Program:  ${program}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Item Type:  ${itemType}`}
+                    </Typography>
+                    <Typography className={classes.headerText}>
+                      {`Item Description:  ${itemDescription}`}
+                    </Typography>
+                    <br />
+                    <Box bgcolor="primary.main" className={classes.dividerBox} />
+                    <br />
+                    <Typography className={classes.headerText}>
+                      {`Est. Cost: ${formatMoney(estCost, false)}`}
+                    </Typography>
+                    <br />
+                    <Typography variant="body1" color="textSecondary">
+                      {`Pack Size: ${packSize}`}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      {`Available to Order: 10/01/2020 - 12/01/2020`}
+                    </Typography>
+                    <br />
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }} >
+                      <Typography className={classes.headerText}>Specifications: </Typography>
+                      <IconButton
+                        aria-label="expand row"
+                        onClick={() => {
+                          setOpen(!open);
+                        }}
+                      >
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      </IconButton>
+                    </div>
+                    <Collapse in={open}>
+                      <Table>
+                        <TableBody>
+                          {specification && (
+                            specification.map((spec, index) => (
+                              <TableRow key={index}>
+                                <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.headerText}>{spec.key}</TableCell>
+                                <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.bodyText}>
+                                  {spec.value}
+                                </TableCell>
+                              </TableRow>
+                            )))}
+                        </TableBody>
+                      </Table>
+                    </Collapse>
                   </div>
-                    
-                  <Collapse in={open}>
-                    <Table>
-                      <TableBody>
-                        {specification && (
-                          specification.map((spec, index) => (
-                            <TableRow key={index}>
-                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.headerText}>{spec.key}</TableCell>
-                              <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.bodyText}>
-                                {spec.value}
-                              </TableCell>
-                            </TableRow>
-                          )))}
-                      </TableBody>
-                    </Table>
-                  </Collapse>
-                </>
+                  </div>
               )}
               {coupon && (
                 <>
@@ -295,13 +304,7 @@ const ItemPreviewModal = (props) => {
                   )}
                 </>
               )}
-              {type && (
-                <>
-                  <br />
-                  <Box bgcolor="primary.main" className={classes.dividerBox} />
-                  <br />
-                </>
-              )}
+
               {type && type !== "program" && type !== "catalog" && (
                 <>
                   <Button
@@ -347,7 +350,7 @@ const ItemPreviewModal = (props) => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 };
 
