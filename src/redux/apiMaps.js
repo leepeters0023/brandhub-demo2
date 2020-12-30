@@ -205,16 +205,6 @@ export const mapSingleOrder = (order) => {
       order["program-names"] && order["program-names"].length > 0
         ? order["program-names"].join(", ")
         : "---",
-    brand: [
-      ...new Set(
-        [].concat.apply(
-          [],
-          order["order-items"].map((item) =>
-            item.item.brands.map((brand) => brand.name)
-          )
-        )
-      ),
-    ],
     type: orderTypeMap[order.type],
     brand: [
       ...new Set(
