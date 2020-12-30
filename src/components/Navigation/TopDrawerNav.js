@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "10000",
   },
   drawerOpen: {
+    backgroundColor: "black",
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -74,6 +75,7 @@ const useStyles = makeStyles((theme) => ({
   },
   navigationText: {
     fontWeight: 500,
+    color: "white",
     margin: "0 20px",
     "&&:hover": {
       cursor: "pointer",
@@ -81,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selectedNavigationText: {
     textDecoration: "underline",
-    textDecorationColor: theme.palette.primary.dark,
+    textDecorationColor: theme.palette.primary.light,
   },
   navBreak: {
     display: "flex",
@@ -93,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
   navList: {
     paddingLeft: "20px",
     marginTop: "-20px",
+    color: "white",
   },
 }));
 
@@ -150,6 +153,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             width: "Calc(100% - 50px)",
             padding: "10px 25px",
             alignItems: "center",
+            backgroundColor: "black",
           }}
         >
           <div className={classes.navBreak}>

@@ -121,7 +121,7 @@ export default {
     headerText: {
       fontWeight: "600",
       fontSize: "1rem",
-      color: "#4C4C4C",
+      color: "white",
     },
     bodyText: {
       fontSize: ".9rem",
