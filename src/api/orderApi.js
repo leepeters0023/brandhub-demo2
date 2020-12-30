@@ -17,6 +17,7 @@ const writeHeaders = {
 //Returns all orders in an order set based on the program and current user's territory
 export const fetchOrdersByProgram = async (program, userId) => {
   const response = { status: "", error: null, data: null };
+  //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
     .get(
       `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}`
@@ -55,6 +56,7 @@ export const fetchOrderSetById = async (id) => {
 //Returns all pre-order order sets based on current user's territory
 export const fetchAllPreOrders = async (id) => {
   const response = { status: "", error: null, data: null };
+  //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
     .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}`)
     .then((res) => {
