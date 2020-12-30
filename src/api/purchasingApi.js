@@ -306,6 +306,7 @@ export const createPO = async (ids) => {
       response.status = "error";
       response.err = err.toString();
     });
+    // how to consistently console.log(response) here?
   return response;
 };
 

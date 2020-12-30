@@ -80,6 +80,7 @@ export const mapItems = (items) => {
         ? item.programs.map((prog) => prog.name).join(", ")
         : "---",
       itemType: item.type,
+      specification: mapSpecifications(item.specification),
       itemDescription: item.description ? item.description : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
@@ -89,10 +90,20 @@ export const mapItems = (items) => {
         : "---",
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
-    };
+    }
   });
   return mappedItems;
 };
+
+export const mapSpecifications = (specs) => {
+  const mappedSpecs = Object.keys(specs).map((keyName) => {
+    return {
+      key: keyName,
+      value: specs[keyName].length > 1 ? specs[keyName] : "N/A",
+    }
+  });
+  return mappedSpecs;
+}
 
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
@@ -144,8 +155,8 @@ export const mapPrograms = (programs) => {
     return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
       ? -1
       : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-      ? 1
-      : 0;
+        ? 1
+        : 0;
   });
   return programArray;
 };
@@ -194,6 +205,16 @@ export const mapSingleOrder = (order) => {
       order["program-names"] && order["program-names"].length > 0
         ? order["program-names"].join(", ")
         : "---",
+    brand: [
+      ...new Set(
+        [].concat.apply(
+          [],
+          order["order-items"].map((item) =>
+            item.item.brands.map((brand) => brand.name)
+          )
+        )
+      ),
+    ],
     type: orderTypeMap[order.type],
     brand: [
       ...new Set(
@@ -230,23 +251,20 @@ export const mapOrderHistoryOrders = (orders) => {
 
 export const mapOrderHistoryItems = (items) => {
   let mappedItems = items.map((item) => {
-    const images = handleImages(item.item.images);
+    const images = handleImages(item.item.images)
     return {
       itemNumber: item["item-number"],
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
       orderType: item.item["order-type"],
+      specification: mapSpecifications(item.item.specification),
       brand: item.item.brands.map((brand) => brand.name),
-      brandCode: item.item.brands
-        .map((brand) => brand["external-id"])
-        .join(", "),
+      brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
       program: item["program-names"].join(", "),
       itemType: item["item-type-description"],
       itemDescription: item.description ? item.description : "---",
       unit: [
-        ...new Set(
-          item.item.brands.map((brand) => brand["business-unit"].name)
-        ),
+        ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
       ].join(", "),
       distributor: item["distributor-name"],
       supplierId: item.item.supplier.id,
@@ -263,18 +281,14 @@ export const mapOrderHistoryItems = (items) => {
       shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
       tracking: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["tracking-number"]
-          ? item["shipping-parameter-item"]["tracking-number"]
-          : "---"
         : "---",
       trackingId: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"].id
-          ? item["shipping-parameter-item"].id
-          : null
         : null,
       status: item["order-status"],
       user: item["order-user-name"],
       orderId: item.order.id,
-    };
+    }
   });
   return mappedItems;
 };
@@ -290,6 +304,7 @@ export const mapOrderItems = (items, type) => {
         imgUrlThumb: images.imgUrlThumb,
         imgUrlLg: images.imgUrlLg,
         brand: item.item.brands.map((brand) => brand.name).join(", "),
+        specification: mapSpecifications(item.item.specification),
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
@@ -338,8 +353,8 @@ export const mapOrderItems = (items, type) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
         : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-        ? 1
-        : 0;
+          ? 1
+          : 0;
     });
   return mappedItems;
 };
@@ -433,8 +448,8 @@ export const mapRollupItems = (items) => {
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
       : item.programs
-          .map((prog) => prog.brands.map((brand) => brand.name))
-          .join(", "),
+        .map((prog) => prog.brands.map((brand) => brand.name))
+        .join(", "),
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
@@ -577,6 +592,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 
 export const mapPOHistoryItems = (items) => {
   const mappedItems = items.map((item) => ({
+    allocated: item["purchase-order"]["is-direct-ship"] ? "Direct Ship" : "CDC",
     id: item.id,
     itemId: item.item.id,
     poNum: item["purchase-order"].id,
@@ -587,10 +603,12 @@ export const mapPOHistoryItems = (items) => {
     itemDesc: item["item-description"] ? item["item-description"] : "---",
     brand: item["brand-names"],
     program: item["program-names"],
+    purchasedBy: item["purchase-order"].purchaser ? item["purchase-order"].purchaser.name : "---",
     totalItems: item.qty,
     estCost: stringToCents(item["item-estimated-cost"]),
     actCost: stringToCents(item["actual-cost"]),
     status: item["po-status"],
+    submittedDate: item["purchase-order"]["submitted-date"] ? item["purchase-order"]["submitted-date"] : "---",
     dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
   }));
   return mappedItems;
