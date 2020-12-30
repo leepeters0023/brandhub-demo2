@@ -14,37 +14,6 @@ import {
   mapOrderHistoryItems,
 } from "../apiMaps";
 
-/*
-* Order History Model
-TODO: Create single item model, api call not available yet
-
-single order model:
-{
-  id: string (read),
-  distributorId: string (read),
-  distributorName: string (read),
-  distributorCity: string (read),
-  distributorState: string (read),
-  distributorCountry: string (read),
-  distributorAddressOne: string (read),
-  distributorAddressTwo: string (read),
-  distributorZip: string (read),
-  program: string (read),
-  type: string (read),
-  items: array (read),
-  status: string (read, write),
-  orderDate: string (read, (created upon order from api)),
-  approvedDate: string (read, write (only field2 or higher can approve)),
-  shipDate: string (read, updated via supplier portal),
-  trackingNum: string (read, updated via supplier portal, might remove this field as it is potentially only ever on order-items),
-  totalItems: int (read),
-  totalEstCost: int (read),
-  totalActCost: int (read, updated when actual cost is set in PO process),
-  note: string (read, write (editable when placing order)),
-  attn: string (read, write (editable when placing order))
-}
-*/
-
 let initialState = {
   isLoading: false,
   isNextLoading: false,
@@ -59,6 +28,9 @@ let initialState = {
     distributorName: null,
     distributorId: null,
     distributorAddress: null,
+    customAddressName: null,
+    customAddressId: null,
+    customAddressAddress: null,
     type: null,
     status: null,
     orderDate: null,
@@ -99,11 +71,18 @@ const orderHistorySlice = createSlice({
       state.singleOrder.user = order.user;
       state.singleOrder.distributorName = order.distributorName;
       state.singleOrder.distributorId = order.distributorId;
-      state.singleOrder.distributorAddress = `${order.distributorAddressOne}, ${
+      state.singleOrder.distributorAddress = order.distributorId ? `${order.distributorAddressOne}, ${
         order.distributorAddressTwo ? `${order.distributorAddressTwo}, ` : ""
       } ${order.distributorCity} ${order.distributorState} ${
         order.distributorZip
-      }`;
+      }` : null;
+      state.singleOrder.customAddressName = order.customAddressName;
+      state.singleOrder.customAddressId = order.customAddressId;
+      state.singleOrder.customAddressAddress = order.customAddressId ? `${order.customAddressAddressOne}, ${
+        order.customAddressAddressTwo ? `${order.customAddressAddressTwo}, ` : ""
+      } ${order.customAddressCity} ${order.customAddressState} ${
+        order.customAddressZip
+      }` : "---";
       state.singleOrder.type = order.type;
       state.singleOrder.status = order.status;
       state.singleOrder.items = [...items];
@@ -163,6 +142,10 @@ const orderHistorySlice = createSlice({
         user: null,
         distributorName: null,
         distributorId: null,
+        distributorAddress: null,
+        customAddressName: null,
+        customAddressId: null,
+        customAddressAddress: null,
         type: null,
         status: null,
         orderDate: null,

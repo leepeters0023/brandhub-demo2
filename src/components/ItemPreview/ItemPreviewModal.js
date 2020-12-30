@@ -134,6 +134,8 @@ const ItemPreviewModal = (props) => {
   // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
+
   // const handleChangeTab = (_evt, newValue) => {
   //   setValue(newValue);
   // };
@@ -151,11 +153,11 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(newItem);
 
     if (!currentOrderId) {
-      dispatch(createNewOrder(type, id));
+      dispatch(createNewOrder(type, id, territoryId));
     } else {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
-  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type]);
+  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type, territoryId]);
 
   return (
     <div className={classes.relativeContainer}>

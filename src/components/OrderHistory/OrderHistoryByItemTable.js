@@ -256,7 +256,7 @@ const OrderHistoryByItemTable = ({
                     {row.itemType}
                   </TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
+                  <TableCell align="left">{row.distributor.length > 0 ? row.distributor : "---"}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">

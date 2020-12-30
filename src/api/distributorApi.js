@@ -34,7 +34,6 @@ export const fetchDistributors = async (name) => {
     .get(`/api/distributors?filter[name]=${name}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })

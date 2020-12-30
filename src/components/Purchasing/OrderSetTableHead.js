@@ -2,9 +2,15 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { formatMoney } from "../../utility/utilityFunctions";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  setStateFilter,
+  setRebuildRef,
+} from "../../redux/slices/orderSetSlice";
 
 import DistributorSelection from "./DistributorSelection";
+import StateSelector from "../Utility/StateSelector";
 import ImageWrapper from "../Utility/ImageWrapper";
 
 import Box from "@material-ui/core/Box";
@@ -21,6 +27,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CancelIcon from "@material-ui/icons/Cancel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import BackspaceIcon from "@material-ui/icons/Backspace";
 
 const TotalItemCell = React.memo(({ itemNumber, classes }) => {
   const value = useSelector((state) =>
@@ -62,8 +69,22 @@ const OrderSetTableHead = ({
   handleOpenConfirm,
   handleModalOpen,
 }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useCallback(useState(true));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
+  const [currentState, setCurrentState] = useCallback(useState(""));
+
+  const handleSetStateFilter = (value) => {
+    setCurrentState(value);
+    dispatch(setStateFilter({ stateCode: value.code }));
+    dispatch(setRebuildRef());
+  };
+
+  const handleClearStateFilter = () => {
+    setCurrentState("");
+    dispatch(setStateFilter({ stateCode: null }));
+    dispatch(setRebuildRef());
+  };
 
   return (
     <TableHead>
@@ -105,9 +126,17 @@ const OrderSetTableHead = ({
                   handleModalOpen(item.itemNumber);
                 }}
               />
-              <Typography className={classes.headerText} variant="h5">
-                {item.brand}
-              </Typography>
+              {item.brand.split(", ").length > 1 ? (
+                <Tooltip title={item.brand}>
+                  <Typography className={classes.headerText} variant="h5">
+                    {`${item.brand.split(", ")[0]} ...`}
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography className={classes.headerText} variant="h5">
+                  {item.brand}
+                </Typography>
+              )}
             </div>
           </TableCell>
         ))}
@@ -130,6 +159,31 @@ const OrderSetTableHead = ({
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+                width: "auto",
+              }}
+            >
+              <StateSelector
+                handleState={handleSetStateFilter}
+                currentState={currentState}
+                type="grid"
+              />
+              <Tooltip title={"Clear State Filter"}>
+                <span>
+                  <IconButton
+                    onClick={handleClearStateFilter}
+                    disabled={currentState === ""}
+                    style={{ marginRight: "-8px" }}
+                  >
+                    <BackspaceIcon color="inherit" />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </div>
           </div>
         </TableCell>
         {currentItems.map((item) => {
