@@ -379,7 +379,6 @@ export const mapRollupItems = (items) => {
     }
   };
   let mappedItems = items.map((item) => ({
-    allocated: item["purchase-order"]["is-direct-ship"] ? "Direct Ship" : "CDC",
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
@@ -393,14 +392,12 @@ export const mapRollupItems = (items) => {
         .join(", "),
     program: determineProgram(item),
     programs: item.programs,
-    purchasedBy: item["purchase-order"].purchaser.name ? item["purchase-order"].purchaser.name : "---",
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
     totalItems: item["total-ordered"],
     orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["not-compliant-count"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
-    submittedDate: item["purchase-order"]["submitted-date"] ? item["purchase-order"]["submitted-date"] : "---",
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
     dueDate: item["order-due-date"] ? item["order-due-date"] : "---",
@@ -546,7 +543,7 @@ export const mapPOHistoryItems = (items) => {
     itemDesc: item["item-description"] ? item["item-description"] : "---",
     brand: item["brand-names"],
     program: item["program-names"],
-    purchasedBy: item["purchase-order"].purchaser.name ? item["purchase-order"].purchaser.name : "---",
+    purchasedBy: item["purchase-order"].purchaser ? item["purchase-order"].purchaser.name : "---",
     totalItems: item.qty,
     estCost: stringToCents(item["item-estimated-cost"]),
     actCost: stringToCents(item["actual-cost"]),
