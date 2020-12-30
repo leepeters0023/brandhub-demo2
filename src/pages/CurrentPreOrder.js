@@ -135,7 +135,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const preOrderStatus = useSelector((state) => state.orderSet.status);
   const currentItems = useSelector((state) => state.orderSet.items);
-  console.log(currentItem)
   const orders = useSelector((state) => state.orderSet.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
   const grandTotalMod = useSelector(
