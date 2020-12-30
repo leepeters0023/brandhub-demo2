@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
+const EditOrderDetailModal = ({ orderNumber, handleClose, open }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -36,20 +36,8 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
 
   const handleChanges = (note, attn) => {
     dispatch(setOrderDetails(orderNumber, note, attn, "pre-order"));
-    handleClose(false);
+    handleClose();
   };
-
-  useEffect(() => {
-    if (currentOrder && currentOrder.attn !== attn) {
-      setAttn(currentOrder.attn);
-    }
-  }, [currentOrder, attn]);
-
-  useEffect(() => {
-    if (currentOrder && currentOrder.note !== note) {
-      setNote(currentOrder.note);
-    }
-  }, [currentOrder, note]);
 
   if (!currentOrder) {
     return null;
@@ -58,9 +46,9 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
   return (
     <div className={classes.relativeContainer}>
       <Dialog
-        open={orderNumber !== false}
+        open={open}
         onClose={() => {
-          handleClose(false);
+          handleClose();
         }}
         fullWidth
         maxWidth="md"

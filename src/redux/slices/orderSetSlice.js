@@ -4,7 +4,6 @@ import {
   fetchOrderSetById,
   addSingleOrderToSet,
   addCustomAddressOrderToSet,
-  setOrderDetail,
 } from "../../api/orderApi";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
 import { addAddress } from "../../api/addressApi";
@@ -386,13 +385,6 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    if (order.data.distributor["current-user-attn"]) {
-      const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
-      if (attnStatus.error) {
-        throw attnStatus.error;
-      }
-      order.data.attn = order.data.distributor["current-user-attn"]
-    }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());
@@ -413,13 +405,6 @@ export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
         const order = await addSingleOrderToSet(id, distId, type);
         if (order.error) {
           throw order.error;
-        }
-        if (order.data.distributor["current-user-attn"]) {
-          const attnStatus = await setOrderDetail(order.data.id, null, order.data.distributor["current-user-attn"])
-          if (attnStatus.error) {
-            throw attnStatus.error;
-          }
-          order.data.attn = order.data.distributor["current-user-attn"]
         }
         orders.push(order.data);
       })
