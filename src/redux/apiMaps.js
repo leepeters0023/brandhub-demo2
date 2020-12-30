@@ -73,34 +73,34 @@ export const mapItems = (items) => {
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     return {
-    id: item.id,
-    itemNumber: item["item-number"],
-    brand: item.brands.map((brand) => brand.name).join(", "),
-    program: item.programs
-      ? item.programs.map((prog) => prog.name).join(", ")
-      : "---",
-    itemType: item.type,
-    specification: mapSpecifications(item.specification),
-    itemDescription: item.description ? item.description : "---",
-    estCost: stringToCents(item["estimated-cost"]),
-    packSize: item["qty-per-pack"],
-    stock: Math.floor(Math.random() * 25 + 26),
-    inMarketDate: item["in-market-date"]
-      ? format(item["in-market-date"], "MM/dd/yyyy")
-      : "---",
-    imgUrlThumb: images.imgUrlThumb,
-    imgUrlLg: images.imgUrlLg,
+      id: item.id,
+      itemNumber: item["item-number"],
+      brand: item.brands.map((brand) => brand.name).join(", "),
+      program: item.programs
+        ? item.programs.map((prog) => prog.name).join(", ")
+        : "---",
+      itemType: item.type,
+      specification: mapSpecifications(item.specification),
+      itemDescription: item.description ? item.description : "---",
+      estCost: stringToCents(item["estimated-cost"]),
+      packSize: item["qty-per-pack"],
+      stock: Math.floor(Math.random() * 25 + 26),
+      inMarketDate: item["in-market-date"]
+        ? format(item["in-market-date"], "MM/dd/yyyy")
+        : "---",
+      imgUrlThumb: images.imgUrlThumb,
+      imgUrlLg: images.imgUrlLg,
     }
-    });
+  });
   return mappedItems;
 };
 
 export const mapSpecifications = (specs) => {
   const mappedSpecs = Object.keys(specs).map((keyName) => {
-      return {
-      key: keyName, 
+    return {
+      key: keyName,
       value: specs[keyName].length > 1 ? specs[keyName] : "N/A",
-       }
+    }
   });
   return mappedSpecs;
 }
@@ -155,8 +155,8 @@ export const mapPrograms = (programs) => {
     return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
       ? -1
       : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-      ? 1
-      : 0;
+        ? 1
+        : 0;
   });
   return programArray;
 };
@@ -177,6 +177,16 @@ export const mapSingleOrder = (order) => {
       order["program-names"] && order["program-names"].length > 0
         ? order["program-names"].join(", ")
         : "---",
+    brand: [
+      ...new Set(
+        [].concat.apply(
+          [],
+          order["order-items"].map((item) =>
+            item.item.brands.map((brand) => brand.name)
+          )
+        )
+      ),
+    ],
     type: orderTypeMap[order.type],
     items: mapOrderItems(order["order-items"], "history"),
     status: order.status === "submitted" ? "Pending" : order.status,
@@ -191,8 +201,8 @@ export const mapSingleOrder = (order) => {
     attn: order.distributor["current-user-attn"]
       ? order.distributor["current-user-attn"]
       : order.distributor["default-attn"]
-      ? order.distributor["default-attn"]
-      : "---",
+        ? order.distributor["default-attn"]
+        : "---",
   };
   return formattedOrder;
 };
@@ -210,44 +220,44 @@ export const mapOrderHistoryItems = (items) => {
     const images = handleImages(item.item.images)
     return {
       itemNumber: item["item-number"],
-    imgUrlThumb: images.imgUrlThumb,
-    imgUrlLg: images.imgUrlLg,
-    orderType: item.item["order-type"],
-    specification: mapSpecifications(item.specification),
-    brand: item.item.brands.map((brand) => brand.name),
-    brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
-    program: item["program-names"].join(", "),
-    itemType: item["item-type-description"],
-    itemDescription: item.description ? item.description : "---",
-    unit: [
-      ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
-    ].join(", "),
-    distributor: item["distributor-name"],
-    supplierId: item.item.supplier.id,
-    state: item.state ? item.state : "---",
-    packSize: item["qty-per-pack"],
-    totalItems: item.qty,
-    estCost: stringToCents(item["estimated-cost"]),
-    totalEstCost: stringToCents(item["total-estimated-cost"]),
-    actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
-    totalActCost: item["total-actual-cost"]
-      ? stringToCents(item["total-actual-cost"])
-      : "---",
-    orderDate: item["order-submitted-at"],
-    shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
-    tracking: item["shipping-parameter-item"]
-      ? item["shipping-parameter-item"]["tracking-number"]
-          : "---",
+      imgUrlThumb: images.imgUrlThumb,
+      imgUrlLg: images.imgUrlLg,
+      orderType: item.item["order-type"],
+      specification: mapSpecifications(item.specification),
+      brand: item.item.brands.map((brand) => brand.name),
+      brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
+      program: item["program-names"].join(", "),
+      itemType: item["item-type-description"],
+      itemDescription: item.description ? item.description : "---",
+      unit: [
+        ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
+      ].join(", "),
+      distributor: item["distributor-name"],
+      supplierId: item.item.supplier.id,
+      state: item.state ? item.state : "---",
+      packSize: item["qty-per-pack"],
+      totalItems: item.qty,
+      estCost: stringToCents(item["estimated-cost"]),
+      totalEstCost: stringToCents(item["total-estimated-cost"]),
+      actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
+      totalActCost: item["total-actual-cost"]
+        ? stringToCents(item["total-actual-cost"])
+        : "---",
+      orderDate: item["order-submitted-at"],
+      shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
+      tracking: item["shipping-parameter-item"]
+        ? item["shipping-parameter-item"]["tracking-number"]
+        : "---",
       trackingId: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"].id
         : null,
       status: item["order-status"],
       user: item["order-user-name"],
       orderId: item.order.id,
-  }
-    });
-    return mappedItems;
-  };
+    }
+  });
+  return mappedItems;
+};
 
 export const mapOrderItems = (items, type) => {
   let mappedItems = items
@@ -304,8 +314,8 @@ export const mapOrderItems = (items, type) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
         : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-        ? 1
-        : 0;
+          ? 1
+          : 0;
     });
   return mappedItems;
 };
@@ -320,6 +330,18 @@ export const mapOrderSet = (order) => {
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
     program: order.program ? order.program.name : "---",
+    brand: order.program
+      ? order.program.brands.map((brand) => brand.name)
+      : [
+        ...new Set(
+          [].concat.apply(
+            [],
+            order["order-set-items"].map((item) =>
+              item.item.brands.map((brand) => brand.name)
+            )
+          )
+        ),
+      ],
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: order["random-order-state"] ? order["random-order-state"] : "---",
     status: order.status,
@@ -367,8 +389,8 @@ export const mapRollupItems = (items) => {
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
       : item.programs
-          .map((prog) => prog.brands.map((brand) => brand.name))
-          .join(", "),
+        .map((prog) => prog.brands.map((brand) => brand.name))
+        .join(", "),
     program: determineProgram(item),
     programs: item.programs,
     purchasedBy: item["purchase-order"].purchaser.name ? item["purchase-order"].purchaser.name : "---",
