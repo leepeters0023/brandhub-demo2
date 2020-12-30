@@ -475,7 +475,7 @@ export const updatePODirectShip = async (id, value) => {
 };
 
 //Adds additional line items (like a set up fee) to a po
-export const addAdditionalPOCost = async (id, name, cost) => {
+export const addAdditionalPOCost = async (id, desc, cost) => {
   const response = { status: "", errror: null };
   await axios
     .post(
@@ -484,8 +484,8 @@ export const addAdditionalPOCost = async (id, name, cost) => {
         data: {
           type: "purchase-order-item",
           attributes: {
-            "item-type-description": "Additional PO Cost",
-            name: name,
+            "is-direct-cost": true,
+            desc: desc,
             cost: cost,
           },
           relationships: {
