@@ -30,7 +30,7 @@ const DrawerOrdersNav = ({
                 5
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="New" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New" />
           </ListItem>
         </List>
       </Grid>

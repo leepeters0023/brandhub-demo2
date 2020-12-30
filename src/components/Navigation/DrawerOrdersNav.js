@@ -27,7 +27,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/open/preorder"
               >
-                <ListItemText primary="+ Quarterly Pre-Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew}} primary="+ Quarterly Pre-Order" />
               </ListItem>
               <ListItem
                 button
@@ -35,7 +35,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/items/onDemand"
               >
-                <ListItemText primary="+ New On-Demand Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New On-Demand Order" />
               </ListItem>
               <ListItem
                 button
@@ -43,7 +43,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/items/inStock"
               >
-                <ListItemText primary="+ New Inventory Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New Inventory Order" />
               </ListItem>
               {role !== "field1" && (
                 <ListItem
@@ -53,7 +53,7 @@ const DrawerOrdersNav = ({
                     handleCouponModal()
                   }}
                 >
-                  <ListItemText
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} 
                     primary="+ New Coupon"
                   />
                 </ListItem>

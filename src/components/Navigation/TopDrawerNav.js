@@ -25,7 +25,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   drawer: {
-    height: "325px",
+    height: "350px",
     flexShrink: 0,
     whiteSpace: "nowrap",
     position: "fixed",
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    height: "325px",
+    height: "365px",
     overflowY: "hidden",
   },
   drawerSupplierOpen: {
