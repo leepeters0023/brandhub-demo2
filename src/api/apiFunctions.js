@@ -23,6 +23,7 @@ export const buildFilters = (
   urlBase,
   type
 ) => {
+  console.log(type);
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
@@ -34,9 +35,18 @@ export const buildFilters = (
           }]=${filterObject.status}`
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
-  let orderTypeString = filterObject.orderType
-    ? `filter[order-type]=${filterObject.orderType}`
-    : "";
+  let orderTypeString =
+    type && type === "item" && filterObject.orderType
+      ? filterObject.orderType === "in-stock"
+        ? "filter[is-in-stock]=true"
+        : "filter[is-on-demand]=true"
+      : type && type === "rollup" && filterObject.orderType
+      ? filterObject.orderType === "on-demand"
+        ? "filter[is-on-demand]=true"
+        : "filter[is-on-demand]=false"
+      : filterObject.orderType
+      ? `filter[order-type]=${filterObject.orderType}`
+      : "";
   let dateString =
     filterObject.fromDate &&
     filterObject.toDate &&
@@ -128,5 +138,6 @@ export const buildFilters = (
   let filterPreCursor = queryStringAppend.length !== 0 ? "?" : "";
 
   let queryString = urlBase + filterPreCursor + queryStringAppend;
+  console.log(queryString);
   return queryString;
 };

@@ -7,7 +7,7 @@ const dataFormatter = new Jsona();
 export const fetchProgramsByTerritory = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/programs?filter[territory_id]=${id}&filter[item-order-type]=pre-order`)
+    .get(`/api/programs?filter[territory_id]=${id}&filter[is-pre-order]=true`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -24,7 +24,7 @@ export const fetchProgramsByTerritory = async (id) => {
 export const fetchNationalPrograms = async () => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/programs?filter[type]=National&filter[item-order-type]=pre-order`)
+    .get(`/api/programs?filter[type]=National&filter[is-pre-order]=true`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
