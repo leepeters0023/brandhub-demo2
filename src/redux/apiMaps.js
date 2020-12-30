@@ -90,7 +90,7 @@ export const mapItems = (items) => {
         : "---",
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
-    }
+    };
   });
   return mappedItems;
 };
@@ -100,10 +100,10 @@ export const mapSpecifications = (specs) => {
     return {
       key: keyName,
       value: specs[keyName].length > 1 ? specs[keyName] : "N/A",
-    }
+    };
   });
   return mappedSpecs;
-}
+};
 
 export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
@@ -155,8 +155,8 @@ export const mapPrograms = (programs) => {
     return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
       ? -1
       : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-        ? 1
-        : 0;
+      ? 1
+      : 0;
   });
   return programArray;
 };
@@ -165,7 +165,9 @@ export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
-    distributorId: order.distributor ? order.distributor["external-source-id"] : null,
+    distributorId: order.distributor
+      ? order.distributor["external-source-id"]
+      : null,
     distributorName: order.distributor ? order.distributor.name : null,
     distributorCity: order.distributor ? order.distributor.city : null,
     distributorState: order.distributor ? order.distributor.state : null,
@@ -241,7 +243,7 @@ export const mapOrderHistoryOrders = (orders) => {
 
 export const mapOrderHistoryItems = (items) => {
   let mappedItems = items.map((item) => {
-    const images = handleImages(item.item.images)
+    const images = handleImages(item.item.images);
     return {
       itemNumber: item["item-number"],
       imgUrlThumb: images.imgUrlThumb,
@@ -249,12 +251,16 @@ export const mapOrderHistoryItems = (items) => {
       orderType: item.item["order-type"],
       specification: mapSpecifications(item.item.specification),
       brand: item.item.brands.map((brand) => brand.name),
-      brandCode: item.item.brands.map((brand) => brand["external-id"]).join(", "),
+      brandCode: item.item.brands
+        .map((brand) => brand["external-id"])
+        .join(", "),
       program: item["program-names"].join(", "),
       itemType: item["item-type-description"],
       itemDescription: item.description ? item.description : "---",
       unit: [
-        ...new Set(item.item.brands.map((brand) => brand["business-unit"].name)),
+        ...new Set(
+          item.item.brands.map((brand) => brand["business-unit"].name)
+        ),
       ].join(", "),
       distributor: item["distributor-name"],
       supplierId: item.item.supplier.id,
@@ -278,12 +284,13 @@ export const mapOrderHistoryItems = (items) => {
       status: item["order-status"],
       user: item["order-user-name"],
       orderId: item.order.id,
-    }
+    };
   });
   return mappedItems;
 };
 
 export const mapOrderItems = (items, type) => {
+  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
@@ -309,6 +316,7 @@ export const mapOrderItems = (items, type) => {
           ),
         ].join(", "),
         packSize: item.item["qty-per-pack"],
+        leadTime: item.item["lead-time-in-days"],
         supplierId: item.item.supplier.id,
         state:
           type === "order-set-item"
@@ -343,8 +351,8 @@ export const mapOrderItems = (items, type) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
         : parseInt(a.itemNumber) > parseInt(b.itemNumber)
-          ? 1
-          : 0;
+        ? 1
+        : 0;
     });
   return mappedItems;
 };
@@ -438,8 +446,8 @@ export const mapRollupItems = (items) => {
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
       : item.programs
-        .map((prog) => prog.brands.map((brand) => brand.name))
-        .join(", "),
+          .map((prog) => prog.brands.map((brand) => brand.name))
+          .join(", "),
     program: determineProgram(item),
     programs: item.programs,
     itemType: item["item-type-description"],
@@ -593,12 +601,16 @@ export const mapPOHistoryItems = (items) => {
     itemDesc: item["item-description"] ? item["item-description"] : "---",
     brand: item["brand-names"],
     program: item["program-names"],
-    purchasedBy: item["purchase-order"].purchaser ? item["purchase-order"].purchaser.name : "---",
+    purchasedBy: item["purchase-order"].purchaser
+      ? item["purchase-order"].purchaser.name
+      : "---",
     totalItems: item.qty,
     estCost: stringToCents(item["item-estimated-cost"]),
     actCost: stringToCents(item["actual-cost"]),
     status: item["po-status"],
-    submittedDate: item["purchase-order"]["submitted-date"] ? item["purchase-order"]["submitted-date"] : "---",
+    submittedDate: item["purchase-order"]["submitted-date"]
+      ? item["purchase-order"]["submitted-date"]
+      : "---",
     dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
   }));
   return mappedItems;

@@ -245,7 +245,7 @@ const OrderSetTableHead = ({
                           className={classes.borderRightLight}
                         >
                           <div className={classes.infoCell}>
-                            {item.leadTime ? item.leadTime : "---"}
+                            {item.leadTime ? `${item.leadTime} days` : "---"}
                           </div>
                         </TableCell>
                       ))}

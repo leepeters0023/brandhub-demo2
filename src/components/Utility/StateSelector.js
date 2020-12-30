@@ -26,6 +26,7 @@ const StateSelector = ({ handleState, currentState, type }) => {
     <FormControl
     fullWidth
     variant="outlined"
+    size={type === "grid" ? "small" : "medium"}
     style={{
       marginBottom: type === "grid" ? "0" : "15px",
       maxWidth: type === "grid" ? "100px" : "100%",
