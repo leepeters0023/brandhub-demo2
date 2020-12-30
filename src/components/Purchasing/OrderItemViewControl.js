@@ -20,6 +20,7 @@ const OrderItemViewControl = (props) => {
     type,
     currentView,
     handlePreview,
+    handleAddInvOpen,
     items,
     catalogType,
     isItemsLoading,
@@ -80,6 +81,7 @@ const OrderItemViewControl = (props) => {
           type={type}
           currentItems={items}
           handlePreview={handlePreview}
+          handleAddInvOpen={handleAddInvOpen}
           handleAddItem={handleAddItem}
           setCurrentItemAdded={setCurrentItemAdded}
           isItemsLoading={isItemsLoading}
@@ -109,6 +111,7 @@ OrderItemViewControl.propTypes = {
   type: PropTypes.string.isRequired,
   currentView: PropTypes.string.isRequired,
   handlePreview: PropTypes.func.isRequired,
+  handleAddInvOpen: PropTypes.func,
   items: PropTypes.array,
   isItemsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
