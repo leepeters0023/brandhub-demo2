@@ -46,7 +46,7 @@ const DistributorOptions = () => {
         </Typography>
         <TextField
           size="small"
-          label="Distributor Name"
+          label="Distributor Name / ABN"
           variant="outlined"
           value={distName}
           {...bindDistName}

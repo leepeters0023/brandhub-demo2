@@ -165,14 +165,42 @@ export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
-    distributorId: order.distributor.id,
-    distributorName: order.distributor.name,
-    distributorCity: order.distributor.city,
-    distributorState: order.distributor.state,
-    distributorCountry: order.distributor.country,
-    distributorAddressOne: order.distributor["street-address-1"],
-    distributorAddressTwo: order.distributor["street-address-2"],
-    distributorZip: order.distributor.zip,
+    distributorId: order.distributor ? order.distributor["external-source-id"] : null,
+    distributorName: order.distributor ? order.distributor.name : null,
+    distributorCity: order.distributor ? order.distributor.city : null,
+    distributorState: order.distributor ? order.distributor.state : null,
+    distributorCountry: order.distributor ? order.distributor.country : null,
+    distributorAddressOne: order.distributor
+      ? order.distributor["street-address-1"]
+      : null,
+    distributorAddressTwo: order.distributor
+      ? order.distributor["street-address-2"]
+      : null,
+    distributorZip: order.distributor ? order.distributor.zip : null,
+    customAddressId: order["custom-address"]
+      ? order["custom-address"].id
+      : null,
+    customAddressName: order["custom-address"]
+      ? order["custom-address"].name
+      : null,
+    customAddressCity: order["custom-address"]
+      ? order["custom-address"].city
+      : null,
+    customAddressState: order["custom-address"]
+      ? order["custom-address"].state.code
+      : null,
+    customAddressCountry: order["custom-address"]
+      ? order["custom-address"].country
+      : null,
+    customAddressAddressOne: order["custom-address"]
+      ? order["custom-address"]["street-address-1"]
+      : null,
+    customAddressAddressTwo: order["custom-address"]
+      ? order["custom-address"]["street-address-2"]
+      : null,
+    customAddressZip: order["custom-address"]
+      ? order["custom-address"].zip
+      : null,
     program:
       order["program-names"] && order["program-names"].length > 0
         ? order["program-names"].join(", ")
@@ -188,6 +216,16 @@ export const mapSingleOrder = (order) => {
       ),
     ],
     type: orderTypeMap[order.type],
+    brand: [
+      ...new Set(
+        [].concat.apply(
+          [],
+          order["order-items"].map((item) =>
+            item.item.brands.map((brand) => brand.name)
+          )
+        )
+      ),
+    ],
     items: mapOrderItems(order["order-items"], "history"),
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
@@ -198,11 +236,7 @@ export const mapSingleOrder = (order) => {
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
-    attn: order.distributor["current-user-attn"]
-      ? order.distributor["current-user-attn"]
-      : order.distributor["default-attn"]
-        ? order.distributor["default-attn"]
-        : "---",
+    attn: order.attn ? order.attn : "---",
   };
   return formattedOrder;
 };
@@ -286,7 +320,12 @@ export const mapOrderItems = (items, type) => {
         ].join(", "),
         packSize: item.item["qty-per-pack"],
         supplierId: item.item.supplier.id,
-        state: type === "order-set-item" ? "---" : item.order.distributor.state,
+        state:
+          type === "order-set-item"
+            ? "---"
+            : item.order.distributor
+            ? item.order.distributor.state
+            : item.order["custom-address"].state.code,
         estCost: stringToCents(item.item["estimated-cost"]),
         totalItems: type === "order-set-item" ? 0 : item.qty,
         totalEstCost:
@@ -329,21 +368,42 @@ export const mapOrderSet = (order) => {
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
     dueDate: order["due-date"] ? order["due-date"] : "---",
     type: orderTypeMap[order.type],
-    program: order.program ? order.program.name : "---",
+    program: order.program
+      ? [order.program.name]
+      : [
+          ...new Set(
+            [].concat.apply(
+              [],
+              order["order-set-items"].map((item) =>
+                item.item.programs.map((prog) => prog.name)
+              )
+            )
+          ),
+        ],
     brand: order.program
       ? order.program.brands.map((brand) => brand.name)
       : [
-        ...new Set(
-          [].concat.apply(
-            [],
-            order["order-set-items"].map((item) =>
-              item.item.brands.map((brand) => brand.name)
+          ...new Set(
+            [].concat.apply(
+              [],
+              order["order-set-items"].map((item) =>
+                item.item.brands.map((brand) => brand.name)
+              )
             )
-          )
-        ),
-      ],
+          ),
+        ],
     territories: order["territory-names"] ? order["territory-names"] : "---",
-    state: order["random-order-state"] ? order["random-order-state"] : "---",
+    state: [
+      ...new Set(
+        order.orders.map((ord) => {
+          if (ord.distributor) {
+            return ord.distributor.state;
+          } else {
+            return ord["custom-address"].state.code;
+          }
+        })
+      ),
+    ].join(", "),
     status: order.status,
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
@@ -357,7 +417,7 @@ export const mapOrderSet = (order) => {
 };
 
 export const mapOrderSetHistory = (orders) => {
-  let mappedOrders = orders.map((order) => {
+  let mappedOrders = orders.map((order, i) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;
   });

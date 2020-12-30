@@ -202,10 +202,10 @@ export const {
 
 export default currentOrderSlice.reducer;
 
-export const createNewOrder = (type, itemNumber) => async (dispatch) => {
+export const createNewOrder = (type, itemNumber, territoryId) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    let newOrder = await createOrderSet(type);
+    let newOrder = await createOrderSet(type, territoryId);
     if (newOrder.error) {
       throw newOrder.error;
     }
@@ -228,10 +228,10 @@ export const createNewOrder = (type, itemNumber) => async (dispatch) => {
   }
 };
 
-export const createNewBulkItemOrder = (type, itemArray) => async (dispatch) => {
+export const createNewBulkItemOrder = (type, itemArray, territoryId) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    let newOrder = await createOrderSet(type);
+    let newOrder = await createOrderSet(type, territoryId);
     if (newOrder.error) {
       throw newOrder.error;
     }

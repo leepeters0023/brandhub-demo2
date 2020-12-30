@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
   const classes = useStyles();
-
   return (
     <>
       <TableContainer className={classes.tableContainer}>
@@ -37,10 +36,16 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                 Preview
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item
+                Sequence #
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item #
+                Program
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Brand
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Item Type
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Qty / Pack
@@ -73,8 +78,10 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                     imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
-                <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
+                <TableCell align="left">{item.program}</TableCell>
+                <TableCell align="left">{item.brand}</TableCell>
+                <TableCell align="left">{item.itemType}</TableCell>
                 <TableCell align="left">{item.packSize}</TableCell>
                 <TableCell align="left">{`${formatMoney(
                   item.estCost,

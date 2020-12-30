@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   tableControl: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   orderControl: {
     display: "flex",
@@ -102,11 +103,18 @@ const OrderSetTable = (props) => {
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
-  const [orderNumberModal, setOrderNumber] = useState(false);
+  const [isEditOpen, setEditOpen] = useState(false);
+  const [currentOrderNumber, setCurrentOrderNumber] = useState(null);
 
   const patchLoading = useSelector((state) => state.patchOrder.isLoading);
 
   const rebuildRef = useSelector((state) => state.orderSet.rebuildRef);
+  const stateFilter = useSelector((state) => state.orderSet.stateFilter);
+
+  const handleEditClose = () => {
+    setEditOpen(false)
+    setCurrentOrderNumber(null);
+  }
 
   const handleKeyDown = useCallback(
     (ref, key) => {
@@ -138,11 +146,30 @@ const OrderSetTable = (props) => {
   );
 
   useEffect(() => {
+    let filteredOrders;
+    if (stateFilter) {
+      filteredOrders = orders.filter((ord) => {
+        let currentState = ord.distributorId
+          ? ord.distributorState
+          : ord.customAddressState;
+        return stateFilter === currentState;
+      });
+    } else filteredOrders = orders;
     if (
       (orders && !refTable) ||
-      (orders.length > 0 &&
+      (stateFilter &&
+        filteredOrders.length > 0 &&
+        Object.keys(refTable).length > 0 &&
+        `${filteredOrders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
+      (!stateFilter &&
+        orders.length > 0 &&
+        Object.keys(refTable).length > 0 &&
         `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
-      Object.keys(refTable).length !== orders.length * currentItems.length ||
+      (stateFilter &&
+        Object.keys(refTable).length !==
+          filteredOrders.length * currentItems.length) ||
+      (!stateFilter &&
+        Object.keys(refTable).length !== orders.length * currentItems.length) ||
       rebuildRef
     ) {
       if (orders.length !== 0) {
@@ -150,7 +177,8 @@ const OrderSetTable = (props) => {
           dispatch(setRebuildRef());
         }
         let refs = {};
-        orders.forEach((order) => {
+
+        filteredOrders.forEach((order) => {
           order.items.forEach((item) => {
             refs[`${order.id}-${item.itemNumber}`] = React.createRef(null);
           });
@@ -164,6 +192,7 @@ const OrderSetTable = (props) => {
     orders.length,
     currentItems.length,
     rebuildRef,
+    stateFilter,
     dispatch,
   ]);
 
@@ -179,10 +208,11 @@ const OrderSetTable = (props) => {
 
   return (
     <>
-      {orderNumberModal && (
+      {isEditOpen && currentOrderNumber && (
         <EditOrderDetailModal
-          orderNumber={orderNumberModal}
-          handleClose={setOrderNumber}
+          open={isEditOpen}
+          handleClose={handleEditClose}
+          orderNumber={currentOrderNumber}
         />
       )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
@@ -230,93 +260,125 @@ const OrderSetTable = (props) => {
                 handleModalOpen={handleModalOpen}
               />
               <TableBody style={{ position: "relative" }}>
-                {orders.map((ord) => (
-                  <TableRow key={ord.id}>
-                    <TableCell
-                      classes={{ root: classes.noPadCell }}
-                      className={classes.borderRight}
-                      style={{
-                        position: "sticky",
-                        left: 0,
-                        backgroundColor: "#cbcbcb",
-                        zIndex: "1",
-                      }}
-                    >
-                      <div
+                {orders
+                  .filter((order) => {
+                    if (!stateFilter) {
+                      return order;
+                    } else {
+                      let currentState = order.distributorId
+                        ? order.distributorState
+                        : order.customAddressState;
+                      return stateFilter === currentState;
+                    }
+                  })
+                  .map((ord) => (
+                    <TableRow key={ord.id}>
+                      <TableCell
+                        classes={{ root: classes.noPadCell }}
+                        className={classes.borderRight}
                         style={{
-                          position: "relative",
-                          width: "100%",
-                          height: "fit-content",
+                          position: "sticky",
+                          left: 0,
+                          backgroundColor: "#cbcbcb",
+                          zIndex: "1",
                         }}
                       >
                         <div
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "Calc(100% - 8px)",
-                            position: "absolute",
-                            top: "0",
-                            left: "0",
-                            height: "100%",
-                            padding: "0px 2px 0px 6px",
+                            position: "relative",
+                            width: "100%",
+                            height: "fit-content",
                           }}
                         >
-                          <Tooltip
-                            placement="right"
-                            title={`${ord.distributorCity}, ${ord.distributorState}`}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "Calc(100% - 8px)",
+                              position: "absolute",
+                              top: "0",
+                              left: "0",
+                              height: "100%",
+                              padding: "0px 2px 0px 6px",
+                            }}
                           >
-                            <Typography className={classes.headerText} noWrap>
-                              {`${ord.distributorName}: ${ord.distributorCity}, ${ord.distributorState}`}
-                            </Typography>
-                          </Tooltip>
-                          <div style={{ display: "flex" }}>
-                            <Tooltip title="Delete Order">
-                              <span>
-                                <IconButton
-                                  onClick={() => handleRemoveOrder(ord.id)}
-                                  disabled={patchLoading}
-                                >
-                                  <CancelIcon
-                                    fontSize="small"
-                                    color="inherit"
-                                  />
-                                </IconButton>
-                              </span>
+                            <Tooltip
+                              placement="right"
+                              title={`${
+                                ord.distributorCity
+                                  ? ord.distributorCity
+                                  : ord.customAddressCity
+                              }, ${
+                                ord.distributorState
+                                  ? ord.distributorState
+                                  : ord.customAddressState
+                              }`}
+                            >
+                              <Typography className={classes.headerText} noWrap>
+                                {`${
+                                  ord.distributorName
+                                    ? ord.distributorName
+                                    : ord.customAddressName
+                                }: ${
+                                  ord.distributorCity
+                                    ? ord.distributorCity
+                                    : ord.customAddressCity
+                                }, ${
+                                  ord.distributorState
+                                    ? ord.distributorState
+                                    : ord.customAddressState
+                                }`}
+                              </Typography>
                             </Tooltip>
+                            <div style={{ display: "flex" }}>
+                              <Tooltip title="Delete Order">
+                                <span>
+                                  <IconButton
+                                    onClick={() => handleRemoveOrder(ord.id)}
+                                    disabled={patchLoading}
+                                  >
+                                    <CancelIcon
+                                      fontSize="small"
+                                      color="inherit"
+                                    />
+                                  </IconButton>
+                                </span>
+                              </Tooltip>
 
-                            <Tooltip title="Edit Details">
-                              <IconButton
-                                onClick={() => {
-                                  setOrderNumber(ord.id);
-                                }}
-                              >
-                                <EditIcon fontSize="small" color="inherit" />
-                              </IconButton>
-                            </Tooltip>
+                              <Tooltip title="Edit Details">
+                                <IconButton
+                                  onClick={() => {
+                                    setEditOpen(true);
+                                    setCurrentOrderNumber(ord.id)
+                                  }}
+                                >
+                                  <EditIcon fontSize="small" color="inherit" />
+                                </IconButton>
+                              </Tooltip>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    {ord.items.map((item, index) => (
-                      <MemoInputCell
-                        key={item.id}
-                        compliance={item.complianceStatus}
-                        orderNumber={ord.id}
-                        itemNumber={item.itemNumber}
-                        itemId={item.id}
-                        index={index}
-                        orderStatus={orderStatus}
-                        orderId={orderId}
-                        program={currentProgram}
-                        cellRef={refTable[`${ord.id}-${item.itemNumber}`]}
-                        handleKeyDown={handleKeyDown}
-                        packSize={item.packSize}
-                        ref={tableRef}
-                      />
-                    ))}
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      {ord.items.map((item, index) => (
+                        <MemoInputCell
+                          key={item.id}
+                          compliance={item.complianceStatus}
+                          orderNumber={ord.id}
+                          itemNumber={item.itemNumber}
+                          itemId={item.id}
+                          index={index}
+                          orderStatus={orderStatus}
+                          orderId={orderId}
+                          program={currentProgram}
+                          cellRef={refTable[`${ord.id}-${item.itemNumber}`]}
+                          handleKeyDown={handleKeyDown}
+                          packSize={item.packSize}
+                          ref={tableRef}
+                        />
+                      ))}
+                    </TableRow>
+                  ))}
               </TableBody>
             </>
           )}

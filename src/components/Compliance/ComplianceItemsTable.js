@@ -22,6 +22,7 @@ import AutorenewIcon from "@material-ui/icons/Autorenew";
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
   { id: "desc", disablePadding: false, label: "Rule Description", sort: false },
@@ -42,7 +43,7 @@ const EnhancedTableHead = (props) => {
     onRequestSort(event, property);
   };
   const currentUserRole = useSelector((state) => state.user.role);
-
+  
   return (
     <TableHead>
       <TableRow>
@@ -146,7 +147,6 @@ const ComplianceItemsTable = ({
     setOrderBy(property);
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
-
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = items.map((item) => item.id);
@@ -260,6 +260,7 @@ const ComplianceItemsTable = ({
 
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
+                    <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
                     <TableCell align="left">{row.ruleDesc}</TableCell>

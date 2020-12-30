@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { setOrderDetails } from "../../redux/slices/patchOrderSlice";
-
-import { useInput } from "../../hooks/InputHooks";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
+const EditOrderDetailModal = ({ orderNumber, handleClose, open }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -29,16 +27,16 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
     state.orderSet.orders.find((ord) => ord.id === orderNumber)
   );
 
-  const { value: attn, bind: bindAttn } = useInput(
-    currentOrder ? currentOrder.attn : ""
+  const [attn, setAttn] = useState(
+    currentOrder && currentOrder.attn ? currentOrder.attn : ""
   );
-  const { value: note, bind: bindNote } = useInput(
-    currentOrder ? currentOrder.note : ""
+  const [note, setNote] = useState(
+    currentOrder && currentOrder.note ? currentOrder.note : ""
   );
 
   const handleChanges = (note, attn) => {
     dispatch(setOrderDetails(orderNumber, note, attn, "pre-order"));
-    handleClose(false);
+    handleClose();
   };
 
   if (!currentOrder) {
@@ -48,11 +46,13 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
   return (
     <div className={classes.relativeContainer}>
       <Dialog
-        open={orderNumber !== false}
-        onClose={() => handleClose(false)}
+        open={open}
+        onClose={() => {
+          handleClose();
+        }}
         fullWidth
         maxWidth="md"
-        style={{zIndex: "15000"}}
+        style={{ zIndex: "15000" }}
       >
         <DialogContent>
           <IconButton className={classes.closeButton} onClick={handleClose}>
@@ -67,7 +67,19 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
             }}
           >
             <Typography className={classes.headerText}>
-              {`${orderNumber} - ${currentOrder.distributorName} - ${currentOrder.distributorCity}, ${currentOrder.distributorState}`}
+              {`${orderNumber} - ${
+                currentOrder.distributorName
+                  ? currentOrder.distributorName
+                  : currentOrder.customAddressName
+              } - ${
+                currentOrder.distributorCity
+                  ? currentOrder.distributorCity
+                  : currentOrder.customAddressCity
+              }, ${
+                currentOrder.distributorState
+                  ? currentOrder.distributorState
+                  : currentOrder.customAddressState
+              }`}
             </Typography>
             <br />
             <TextField
@@ -78,7 +90,8 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
               name="attn"
               type="text"
               label="Attention"
-              {...bindAttn}
+              value={attn}
+              onChange={(evt) => setAttn(evt.target.value)}
             />
             <TextField
               fullWidth
@@ -90,7 +103,8 @@ const EditOrderDetailModal = ({ orderNumber, handleClose }) => {
               name="note"
               type="text"
               label="Order Notes"
-              {...bindNote}
+              value={note}
+              onChange={(evt) => setNote(evt.target.value)}
             />
             <div
               style={{
