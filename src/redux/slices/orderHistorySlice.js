@@ -67,7 +67,6 @@ const orderHistorySlice = createSlice({
     setNextIsLoading: startNextLoading,
     getSingleOrderSuccess(state, action) {
       const { order, items } = action.payload;
-      console.log(order);
       state.singleOrder.orderNumber = order.id;
       state.singleOrder.user = order.user;
       state.singleOrder.distributorName = order.distributorName;

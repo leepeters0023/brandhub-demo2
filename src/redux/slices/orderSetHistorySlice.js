@@ -154,7 +154,6 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     if (orderSets.error) {
       throw orderSets.error;
     }
-    console.log(orderSets);
     let mappedOrderSets = mapOrderSetHistory(orderSets.data.orders);
     dispatch(
       getOrderSetsSuccess({
