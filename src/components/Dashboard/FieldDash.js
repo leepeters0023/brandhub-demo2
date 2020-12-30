@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
-
+import Divider from '@material-ui/core/Divider';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -57,7 +57,42 @@ const FieldDash = ({ classes, InfoPopover }) => {
       link: "/programs",
       info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
     },
+    {
+      titleText: "Q1 Ordering",
+      ariaOwnsState: preOrderOpen,
+      ariaOwnsText: "pre-order",
+      id: "pre-order-parent",
+      link: "/programs",
+      info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+    },
+    {
+      titleText: "Q1 Ordering",
+      ariaOwnsState: preOrderOpen,
+      ariaOwnsText: "pre-order",
+      id: "pre-order-parent",
+      link: "/programs",
+      info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+    },
+    {
+      titleText: "Q1 Ordering",
+      ariaOwnsState: preOrderOpen,
+      ariaOwnsText: "pre-order",
+      id: "pre-order-parent",
+      link: "/programs",
+      info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+    },
+      {
+      titleText: "Q1 Ordering",
+      ariaOwnsState: preOrderOpen,
+      ariaOwnsText: "pre-order",
+      id: "pre-order-parent",
+      link: "/programs",
+      info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+    },
   ]
+
+  // meeting with Carlton 12/30 cards to include: current preorder (newicon, element of time is good), ondemand order (use ad-hoc icon currently in use), instock order (newicon), order history (newicon question mark, person thinking?), 
+  // current item catalog, archive, item rules, report
   return (
     <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
       {cardData.map((data) => (
@@ -71,10 +106,11 @@ const FieldDash = ({ classes, InfoPopover }) => {
                 aria-haspopup="true"
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
-              >
+              > 
                 <Typography className={classes.titleText}>{data.titleText}</Typography>
               </div>
             </Paper>
+           
           </div>
           <InfoPopover
             id={data.id}
