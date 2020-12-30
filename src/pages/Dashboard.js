@@ -21,11 +21,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   dashPaper: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "white",
     width: "100%",
     height: "150px",
     paddingBottom: "100%",
     position: "relative",
+    display: "flex",
+    flexDirection: "column"
   },
   innerPaper: {
     position: "absolute",
