@@ -21,7 +21,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Collapse from "@material-ui/core/Collapse";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
@@ -34,8 +33,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +46,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
+    },
+  },
+  scrollDiv: {
+    margin: "5% 0",
+    width: "100%",
+    maxHeight: "90%",
+    overflowY: "scroll",
+    paddingRight: "20px",
+    [theme.breakpoints.down("sm")]: {
+      overflowY: "visible",
+      height: "fit-content",
+      paddingRight: "0px",
     },
   },
   largeImageWrapper: {
@@ -73,11 +82,22 @@ const useStyles = makeStyles((theme) => ({
     margin: "10px 0",
   },
   dialogPaper: {
-    minHeight: '80vh',
-    maxHeight: '80vh',
+    minHeight: "80vh",
+    maxHeight: "80vh",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  specTableCellRoot: {
+    padding: "5px 0px",
+  },
+  specTableCellRootDesc: {
+    padding: "5px 10px",
+  },
+  carouselRoot: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: "100%",
+    },
   },
 }));
 
@@ -122,7 +142,6 @@ const ItemPreviewModal = (props) => {
     setCurrentItem(null);
     handleClose();
   };
-  const [open, setOpen] = useCallback(useState(true));
   const handleAddItem = useCallback(() => {
     let newItem = {
       brand: brand,
@@ -161,6 +180,7 @@ const ItemPreviewModal = (props) => {
             </IconButton>
             <Grid item className={classes.previewGrid} md={7} xs={12}>
               <Carousel
+                classes={{ root: classes.carouselRoot }}
                 autoPlay=""
                 navButtonsAlwaysInvisible={
                   imgUrlLg && imgUrlLg.length === 1 ? true : false
@@ -181,8 +201,8 @@ const ItemPreviewModal = (props) => {
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               {!coupon && (
-                <div style={{display: "flex", height: "Calc(100vh - 300px)"}}>
-                  <div style={{height: "95%", overflowY: "scroll"}}>
+                <div style={{ display: "flex", height: "Calc(100vh - 300px)", alignItems: "center" }}>
+                  <div className={classes.scrollDiv}>
                     <Typography variant="body1" color="textSecondary">
                       {`#${itemNumber}`}
                     </Typography>
@@ -199,7 +219,10 @@ const ItemPreviewModal = (props) => {
                       {`Item Description:  ${itemDescription}`}
                     </Typography>
                     <br />
-                    <Box bgcolor="primary.main" className={classes.dividerBox} />
+                    <Box
+                      bgcolor="primary.main"
+                      className={classes.dividerBox}
+                    />
                     <br />
                     <Typography className={classes.headerText}>
                       {`Est. Cost: ${formatMoney(estCost, false)}`}
@@ -212,34 +235,61 @@ const ItemPreviewModal = (props) => {
                       {`Available to Order: 10/01/2020 - 12/01/2020`}
                     </Typography>
                     <br />
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }} >
-                      <Typography className={classes.headerText}>Specifications: </Typography>
-                      <IconButton
-                        aria-label="expand row"
-                        onClick={() => {
-                          setOpen(!open);
-                        }}
-                      >
-                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                      </IconButton>
-                    </div>
-                    <Collapse in={open}>
-                      <Table>
-                        <TableBody>
-                          {specification && (
-                            specification.map((spec, index) => (
-                              <TableRow key={index}>
-                                <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.headerText}>{spec.key}</TableCell>
-                                <TableCell classes={{ root: classes.specTableCellRoot }} align="left" className={classes.bodyText}>
-                                  {spec.value}
-                                </TableCell>
-                              </TableRow>
-                            )))}
-                        </TableBody>
-                      </Table>
-                    </Collapse>
+                    {type && type !== "program" && type !== "catalog" && (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className={classes.largeButton}
+                          style={{
+                            width: "150px",
+                            marginTop: "10px",
+                          }}
+                          onClick={handleAddItem}
+                        >
+                          ADD TO ORDER
+                        </Button>
+                        <br />
+                        <br />
+                        <Box
+                          bgcolor="primary.main"
+                          className={classes.dividerBox}
+                        />
+                        <br />
+                        <br />
+                      </>
+                    )}
+                    <Typography className={classes.headerText}>
+                      Specifications:{" "}
+                    </Typography>
+                    <br />
+                    <Table size="small">
+                      <TableBody>
+                        {specification &&
+                          specification.map((spec, index) => (
+                            <TableRow key={index}>
+                              <TableCell
+                                classes={{ root: classes.specTableCellRoot }}
+                                align="left"
+                                className={classes.headerText}
+                              >
+                                {spec.key}
+                              </TableCell>
+                              <TableCell
+                                classes={{
+                                  root: classes.specTableCellRootDesc,
+                                }}
+                                align="left"
+                                className={classes.bodyText}
+                              >
+                                {spec.value}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
                   </div>
-                  </div>
+                </div>
               )}
               {coupon && (
                 <>
@@ -276,23 +326,26 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${bottleDiscount
-                      ? formatMoney(bottleDiscount, false)
-                      : "---"
-                      }`}
+                    {`Bottle Discount: ${
+                      bottleDiscount
+                        ? formatMoney(bottleDiscount, false)
+                        : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${discountAmount
-                      ? formatMoney(discountAmount, false)
-                      : "---"
-                      }`}
+                    {`Discount Amount: ${
+                      discountAmount
+                        ? formatMoney(discountAmount, false)
+                        : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${expirationDate ? expirationDate : "---"
-                      }`}
+                    {`Expiration Date: ${
+                      expirationDate ? expirationDate : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
@@ -302,23 +355,6 @@ const ItemPreviewModal = (props) => {
                       {`Amount Available: ${stock}`}
                     </Typography>
                   )}
-                </>
-              )}
-
-              {type && type !== "program" && type !== "catalog" && (
-                <>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={classes.largeButton}
-                    style={{
-                      width: "150px",
-                      marginTop: "10px",
-                    }}
-                    onClick={handleAddItem}
-                  >
-                    ADD TO ORDER
-                  </Button>
                 </>
               )}
             </Grid>
@@ -350,7 +386,7 @@ const ItemPreviewModal = (props) => {
           )}
         </DialogContent>
       </Dialog>
-    </div >
+    </div>
   );
 };
 
