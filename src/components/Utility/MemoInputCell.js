@@ -8,7 +8,7 @@ import { startOrdSet } from "../../redux/slices/patchOrderSlice";
 
 import { patchItem } from "../../redux/slices/patchOrderSlice";
 
-import {roundUp} from "../../utility/utilityFunctions";
+import { roundUp } from "../../utility/utilityFunctions";
 
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
@@ -42,7 +42,7 @@ const MemoInputCell = React.memo(
         program,
         cellRef,
         handleKeyDown,
-        packSize
+        packSize,
       },
       ref
     ) => {
@@ -50,11 +50,10 @@ const MemoInputCell = React.memo(
       const numArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
       const dispatch = useDispatch();
       const [change, setChange] = useState(false);
-      const value = useSelector(
-        (state) =>
-          state.orderSet.orders
-            .find((ord) => ord.id === orderNumber)
-            .items.find((item) => item.itemNumber === itemNumber)
+      const value = useSelector((state) =>
+        state.orderSet.orders
+          .find((ord) => ord.id === orderNumber)
+          .items.find((item) => item.itemNumber === itemNumber)
       );
       const loading = useSelector((state) =>
         state.patchOrder.cellsLoading.find(
@@ -146,28 +145,29 @@ const MemoInputCell = React.memo(
 
                     dispatch(patchItem(itemId, 0, orderNumber));
                   } else {
-                    if (parseInt(evt.target.value)%packSize === 0) {
-                      dispatch(patchItem(itemId, evt.target.value, orderNumber));
+                    if (parseInt(evt.target.value) % packSize === 0) {
+                      dispatch(
+                        patchItem(itemId, evt.target.value, orderNumber)
+                      );
                     } else {
-                      let rounded = roundUp(parseInt(evt.target.value), packSize)
+                      let rounded = roundUp(
+                        parseInt(evt.target.value),
+                        packSize
+                      );
                       dispatch(
                         setGridItem({
                           itemNumber: `${itemNumber}`,
                           orderNumber: orderNumber,
-                          value: rounded
+                          value: rounded,
                         })
-                      )
+                      );
                       dispatch(setItemTotal({ itemNumber: `${itemNumber}` }));
                       dispatch(patchItem(itemId, rounded, orderNumber));
                     }
                   }
                   setChange(false);
                   if (orderStatus === "inactive") {
-                    if (program) {
-                      dispatch(
-                        startOrdSet(program, "in-progress", orderId)
-                      );
-                    }
+                    dispatch(startOrdSet(program, "in-progress", orderId));
                   }
                 }
               }}

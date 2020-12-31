@@ -224,7 +224,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   useEffect(() => {
     if (program) {
       dispatch(fetchPreOrders(currentUserId, "summary", program, currentTerritory));
-      dispatch(fetchProgramOrders(program, currentUserId));
+      dispatch(fetchProgramOrders(program, currentUserId, currentTerritory));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
         setProgramName({

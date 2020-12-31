@@ -15,12 +15,12 @@ const writeHeaders = {
 // ------------ Order Set Calls ------------ //
 
 //Returns all orders in an order set based on the program and current user's territory
-export const fetchOrdersByProgram = async (program, userId) => {
+export const fetchOrdersByProgram = async (program, userId, terrId) => {
   const response = { status: "", error: null, data: null };
   //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
     .get(
-      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}`
+      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}&filter[territory-ids]=${terrId}`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -56,10 +56,8 @@ export const fetchOrderSetById = async (id) => {
 //Returns all pre-order order sets based on current user's territory
 export const fetchAllPreOrders = async (id, terrId) => {
   const response = { status: "", error: null, data: null };
-  //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
-    //.get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}`)
-    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}`)
+    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);

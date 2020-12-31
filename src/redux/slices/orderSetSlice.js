@@ -329,11 +329,11 @@ export const fetchOrderSet = (id) => async (dispatch) => {
   }
 };
 
-export const fetchProgramOrders = (program, userId) => async (dispatch) => {
+export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     dispatch(resetPreOrderItems());
-    const currentOrders = await fetchOrdersByProgram(program, userId);
+    const currentOrders = await fetchOrdersByProgram(program, userId, terrId);
     if (currentOrders.error) {
       throw currentOrders.error;
     }

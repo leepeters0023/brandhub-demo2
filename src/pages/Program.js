@@ -64,6 +64,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
+  const currentTerritory = useSelector((state) => state.user.currentTerritory)
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -114,7 +115,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   useRetainFiltersOnPopstate("/programs", dispatch);
 
   useEffect(() => {
-    dispatch(fetchProgramOrders(programId, userId));
+    dispatch(fetchProgramOrders(programId, userId, currentTerritory));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
