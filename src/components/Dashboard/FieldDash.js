@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-const FieldDash = ({ classes, InfoPopover }) => {
+const FieldDash = ({ classes, name, InfoPopover }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handlePopoverOpen = (event) => {
@@ -23,7 +23,12 @@ const FieldDash = ({ classes, InfoPopover }) => {
   const historyOpen = anchorEl ? anchorEl.id === "history-parent" : false;
 
   return (
-    <Grid container spacing={6} justify="center" style={{ width: "95%" }}>
+    <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
+      <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
+        <Typography className={classes.titleText}>
+          {`Welcome back ${name}!`}
+        </Typography>
+      </div>
       <Grid item md={3} sm={6} xs={12} component={Link} to="/programs">
         <div className={classes.dashboardGridItem}>
           <Paper className={classes.dashPaper}>
