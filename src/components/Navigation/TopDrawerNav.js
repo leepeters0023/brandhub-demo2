@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logo from "../../assets/RTA_Logo_Stacked.png";
+import Logo from "../../assets/RTA_Logo_Stacked_White.png";
 import { Link } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   logoLink: {
-    filter: "brightness(0%)",
+    filter: "brightness(100%)",
     height: "58px",
     width: "auto",
     marginLeft: "20px",
@@ -101,9 +101,6 @@ const useStyles = makeStyles((theme) => ({
   regionText: {
     color: "white"
   },
-  regionTextOpen: {
-    color: "black"
-  }
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
@@ -170,7 +167,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                   src={Logo}
                   alt="Logo"
                   className={classes.logoLink}
-                  style={{ filter: "brightness(0%)" }}
+                  style={{ filter: "brightness(100%)" }}
                   onClick={handleDrawerClose}
                 />
               </Link>
