@@ -51,7 +51,7 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
   return {
     value,
     setValue,
-    reset: () => setValue(""),
+    reset: () => setValue(ops ? "$0.0000": "$0.00"),
     bind: {
       value,
       onChange: (event) => {

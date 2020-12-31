@@ -20,7 +20,7 @@ import {
   addAdditionalPOCost,
 } from "../../api/purchasingApi";
 import { stringToCents } from "../../utility/utilityFunctions";
-import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
+import { mapRollupItems, mapPurchaseOrder, mapPOItems } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
@@ -51,7 +51,6 @@ let initialState = {
     keyAcctTape: "",
     specDetails: null,
     poItems: [],
-    additionalCosts: [],
     totalCost: null,
     directShip: null,
     shippingParams: [],
@@ -122,7 +121,6 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.rfqNumber = purchaseOrder.rfqNumber;
       state.currentPO.specDetails = purchaseOrder.specDetails;
       state.currentPO.poItems = purchaseOrder.poItems;
-      state.currentPO.additionalCosts = purchaseOrder.additionalCosts;
       state.currentPO.totalCost = purchaseOrder.totalCost;
       state.currentPO.directShip = purchaseOrder.directShip;
       state.currentPO.shippingParams = purchaseOrder.shippingParams;
@@ -167,27 +165,11 @@ const purchaseOrderSlice = createSlice({
       state.error = null;
     },
     addCost(state, action) {
-      const { description, cost } = action.payload;
-      let currentCosts =
-        state.currentPO.additionalCosts.length > 0
-          ? [...state.currentPO.additionalCosts]
-          : [];
-      let newCost = {
-        description: description,
-        cost: cost,
-      };
-      currentCosts.push(newCost);
-      state.currentPO.additionalCosts = currentCosts;
-    },
-    updateCost(state, action) {
-      const { key, value, index } = action.payload;
-      let currentCosts = state.currentPO.additionalCosts.map((cost, i) => {
-        if (index === i) {
-          return { [`${key}`]: value };
-        } else return cost;
-      });
-      state.currentPO.additionalCosts = currentCosts;
-      //TODO update total cost
+      const { item } = action.payload;
+      let currentItems = state.currentPO.poItems.concat(item);
+      state.currentPO.poItems = currentItems;
+      state.isUpdateLoading = false;
+      state.error = null;
     },
     updateItemPackout(state, action) {
       const { id, packOut } = action.payload;
@@ -273,7 +255,6 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
-      state.currentPO.additionalCosts = [];
       state.currentPO.totalCost = null;
       state.currentPO.directShip = null;
       state.currentPO.shippingParams = [];
@@ -307,7 +288,6 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
-      state.currentPO.additionalCosts = [];
       state.currentPO.totalCost = null;
       state.currentPO.directShip = null;
       state.currentPO.shippingParams = [];
@@ -329,7 +309,6 @@ export const {
   updateItemPackout,
   updateItemPackSize,
   addCost,
-  updateCost,
   updateDate,
   updateMethod,
   updateSupplierNotes,
@@ -545,7 +524,18 @@ export const deleteItem = (id) => async (dispatch) => {
 };
 
 export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
-  //Todo
+  try {
+    dispatch(setUpdateLoading());
+    const newPOItem = await addAdditionalPOCost(id, desc, cost);
+    if (newPOItem.error) {
+      throw newPOItem.error;
+    }
+    console.log(newPOItem);
+    let mappedItem = mapPOItems([newPOItem.data]);
+    dispatch(addCost({ item: mappedItem }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
 }
 
 export const deletePurchaseOrder = (id) => async (dispatch) => {

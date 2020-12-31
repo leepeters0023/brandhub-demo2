@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { navigate } from "@reach/router";
 import clsx from "clsx";
 
@@ -8,7 +8,6 @@ import { useInput } from "../../hooks/InputHooks";
 import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import {
-  addCost,
   updateDateByType,
   updateShipMethod,
   updateSupplierNote,
@@ -20,6 +19,7 @@ import {
 
 import POItemsTable from "./POItemsTable";
 import SpecDetailTable from "./SpecDetailTable";
+import SetUpFeeModal from "./SetUpFeeModal";
 
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -55,6 +55,11 @@ const useStyles = makeStyles((theme) => ({
 const CurrentPO = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [isSetUpFeeModalOpen, setSetUpFeeModalOpen] = useCallback(
+    useState(false)
+  );
+
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
   const additionalCosts = useSelector(
     (state) => state.purchaseOrder.currentPO.additionalCosts
@@ -91,8 +96,12 @@ const CurrentPO = () => {
     dispatch(updateKeyAccountTape(currentPO.id, keyAcctTape));
   };
 
-  const addNewCost = () => {
-    dispatch(addCost({ description: "", cost: "" }));
+  const handleSetUpFee = () => {
+    setSetUpFeeModalOpen(true);
+  };
+
+  const handleCloseSetUpFee = () => {
+    setSetUpFeeModalOpen(false);
   };
 
   const handleRadioChange = (event) => {
@@ -106,6 +115,13 @@ const CurrentPO = () => {
 
   return (
     <>
+      {isSetUpFeeModalOpen && (
+        <SetUpFeeModal
+          id={currentPO.id}
+          open={isSetUpFeeModalOpen}
+          handleClose={handleCloseSetUpFee}
+        />
+      )}
       <Grid
         container
         spacing={5}
@@ -296,7 +312,7 @@ const CurrentPO = () => {
       <POItemsTable
         items={currentPO.poItems}
         classes={classes}
-        addNewCost={addNewCost}
+        handleSetUpFee={handleSetUpFee}
         additionalCosts={additionalCosts}
         handleDelete={deletePOItem}
       />
