@@ -207,7 +207,6 @@ const orderSetSlice = createSlice({
     },
     updateSetItemDate(state, action) {
       const { id, date } = action.payload;
-      console.log(id, date);
       const currentItems = state.items.map((item) => {
         if (item.id === id) {
           return {
@@ -315,7 +314,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data["order-set-items"],
       "order-set-item"
@@ -413,7 +411,6 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     dispatch(addOrderSuccess({ order: formattedOrder }));
     dispatch(setRebuildRef());

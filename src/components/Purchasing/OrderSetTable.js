@@ -104,7 +104,6 @@ const OrderSetTable = (props) => {
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
-  const [orderNumberModal, setOrderNumber] = useState(false);
   const [isRushModalOpen, setRushModalOpen] = useCallback(useState(false));
   const [currentItem, setCurrentItem] = useCallback(useState(null));
   const [isEditOpen, setEditOpen] = useState(false);

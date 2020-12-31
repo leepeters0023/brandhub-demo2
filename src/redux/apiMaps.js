@@ -335,10 +335,10 @@ export const mapOrderItems = (items, type) => {
           : "compliant",
         orderType: item.item["order-type"],
         standardDeliveryDate: item["standard-delivery-date"]
-        ? item["standard-delivery-date"]
-        : "---",
-      inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
-      isRush: item["is-rush"] ? item["is-rush"] : false,
+          ? item["standard-delivery-date"]
+          : "---",
+        inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
+        isRush: item["is-rush"] ? item["is-rush"] : false,
         tracking: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["tracking-number"]
             ? item["shipping-parameter-item"]["tracking-number"]
