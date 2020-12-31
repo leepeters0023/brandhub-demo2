@@ -159,7 +159,7 @@ const App = () => {
       setRole(currentRole);
       if (currentRole !== "supplier") {
         dispatch(fetchInitialPrograms(currentTerritory.id));
-        dispatch(fetchPreOrders(currentUserId, "initial"));
+        dispatch(fetchPreOrders(currentUserId, "initial", null, currentTerritory.id));
         dispatch(fetchCurrentOrderByType("inStock", currentUserId));
         dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
         dispatch(fetchAllItemTypes());

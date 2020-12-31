@@ -54,10 +54,11 @@ export const fetchOrderSetById = async (id) => {
 };
 
 //Returns all pre-order order sets based on current user's territory
-export const fetchAllPreOrders = async (id) => {
+export const fetchAllPreOrders = async (id, terrId) => {
   const response = { status: "", error: null, data: null };
   //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
+    //.get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}`)
     .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
