@@ -30,13 +30,13 @@ const DrawerOrdersNav = ({
                 8
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="New" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
@@ -47,13 +47,13 @@ const DrawerOrdersNav = ({
                 15
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="In Progress" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
@@ -64,19 +64,24 @@ const DrawerOrdersNav = ({
                 25
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Awarded" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
-            <ListItemText primary="History" />
+            <ListItemAvatar>
+              <Avatar>
+                0
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>
       </Grid>
