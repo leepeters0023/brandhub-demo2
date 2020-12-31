@@ -38,7 +38,7 @@ const defaultFilters = {
   program: [],
   favItems: [],
   orderType: "on-demand",
-  sequenceNum: "",
+  itemNumber: "",
   itemDesc: "",
 };
 
@@ -67,6 +67,7 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);
   const selectedItems = useSelector(
     (state) => state.currentOrder.selectedOnDemandItems
@@ -91,7 +92,7 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   const handleAddToOrder = () => {
     if (currentOrder.onDemandOrderItems.length === 0) {
-      dispatch(createNewBulkItemOrder("onDemand", selectedItems));
+      dispatch(createNewBulkItemOrder("onDemand", selectedItems, territoryId));
     } else
       dispatch(
         addBulkOrderItems(currentOrder.orderId, selectedItems, "onDemand")

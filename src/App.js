@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
 
+import { fetchWarehouse, resetAddresses } from "./redux/slices/addressSlice";
 import { removeUser, fetchUser } from "./redux/slices/userSlice";
 import {
   fetchInitialPrograms,
@@ -36,6 +37,7 @@ import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
+  fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
@@ -70,6 +72,7 @@ import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
+import ReportWrapUp from "./pages/ReportWrapUp";
 import RFQ from "./pages/RFQ";
 import RFQHistory from "./pages/RFQHistory";
 import RFQRollup from "./pages/RFQRollup";
@@ -142,6 +145,7 @@ const App = () => {
     dispatch(resetComplianceItems());
     dispatch(resetComplianceRules());
     dispatch(clearSharedItems());
+    dispatch(resetAddresses());
   };
 
   useEffect(() => {
@@ -155,13 +159,15 @@ const App = () => {
       setRole(currentRole);
       if (currentRole !== "supplier") {
         dispatch(fetchInitialPrograms(currentTerritory.id));
-        dispatch(fetchPreOrders(currentUserId, "initial"));
+        dispatch(fetchPreOrders(currentUserId, "initial", null, currentTerritory.id));
         dispatch(fetchCurrentOrderByType("inStock", currentUserId));
         dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
+        dispatch(fetchStates());
         dispatch(fetchBUs());
+        dispatch(fetchWarehouse());
       } else {
         dispatch(clearPrograms());
       }
@@ -517,6 +523,15 @@ const App = () => {
             />,
             "/settings",
             ["field1", "field2", "compliance", "purchaser", "super"],
+            role
+          )}
+          {handleAuth(
+            <ReportWrapUp
+              path="/reports/wrap-up"
+              handleFiltersClosed={handleFiltersClosed}
+            />,
+            "/reports/wrap-up",
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(

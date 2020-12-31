@@ -84,7 +84,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     (value, filter, type) => {
       let currentFilters = { ...allFilters };
       if (
-        filter === "sequenceNum" ||
+        filter === "itemNumber" ||
         filter === "rfqNum" ||
         filter === "poNum" ||
         filter === "tag" ||
@@ -108,7 +108,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(updateSingleFilter({ filter: filter, value: value }));
         currentFilters[filter] = value;
         if (
-          filter !== "sequenceNum" &&
+          filter !== "itemNumber" &&
           filter !== "rfqNum" &&
           filter !== "poNum" &&
           filter !== "itemDesc"
@@ -126,7 +126,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (
         filterType === "history-orders" &&
-        filter !== "sequenceNum" &&
+        filter !== "itemNumber" &&
         filter !== "rfqNum" &&
         filter !== "poNum" &&
         filter !== "itemDesc"
@@ -140,7 +140,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (
         (filterType === "history-rollup" ||
           filterType === "history-approvals") &&
-        filter !== "sequenceNum" &&
+        filter !== "itemNumber" &&
         filter !== "rfqNum" &&
         filter !== "poNum" &&
         filter !== "itemDesc"
@@ -151,15 +151,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
           dispatch(fetchFilteredOrderSetItems(currentFilters));
         }
       }
-      if (filterType === "itemRollup-rfq" && filter !== "sequenceNum") {
+      if (filterType === "itemRollup-rfq" && filter !== "itemNumber") {
         dispatch(fetchFilteredRFQItems(currentFilters));
       }
-      if (filterType === "itemRollup-po" && filter !== "sequenceNum") {
+      if (filterType === "itemRollup-po" && filter !== "itemNumber") {
         dispatch(fetchFilteredPOItems(currentFilters));
       }
       if (
         filterType === "history-rfq" &&
-        filter !== "sequenceNum" &&
+        filter !== "itemNumber" &&
         filter !== "rfqNum" &&
         filter !== "itemDesc"
       ) {
@@ -167,7 +167,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (
         filterType === "history-po" &&
-        filter !== "sequenceNum" &&
+        filter !== "itemNumber" &&
         filter !== "poNum" &&
         filter !== "itemDesc"
       ) {
@@ -177,20 +177,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         (filterType === "item-all" ||
           filterType === "item-inStock" ||
           filterType === "item-onDemand") &&
-        filter !== "sequenceNum" &&
+        filter !== "itemNumber" &&
         filter !== "itemDesc"
       ) {
         dispatch(fetchFilteredItems(currentFilters));
       }
-      if (
-        filterType === "compliance-rules"
-      ) {
+      if (filterType === "compliance-rules") {
         dispatch(fetchFilteredRules(currentFilters));
       }
-      if (
-        filterType === "compliance-items" &&
-        filter !== "sequenceNum"
-      ) {
+      if (filterType === "compliance-items" && filter !== "itemNumber") {
         dispatch(fetchFilteredTriggeredRules(currentFilters));
       }
     },
@@ -198,10 +193,10 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   );
 
   const {
-    value: sequenceNum,
+    value: itemNumber,
     bind: bindSequenceNum,
     reset: resetSequenceNum,
-  } = useDetailedInput("", handleFilters, "sequenceNum", filterType);
+  } = useDetailedInput("", handleFilters, "itemNumber", filterType);
   const { value: poNum, bind: bindPoNum, reset: resetPoNum } = useDetailedInput(
     "",
     handleFilters,
@@ -330,9 +325,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   };
 
   const handleComplianceRulesFetch = () => {
-    dispatch(setChips({ filterType: "compliance"}));
+    dispatch(setChips({ filterType: "compliance" }));
     dispatch(fetchFilteredTriggeredRules(allFilters));
-  }
+  };
 
   const historySearchMap = {
     orders: handleOrderHistoryFetch,
@@ -459,7 +454,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              sequenceNum={sequenceNum}
+              itemNumber={itemNumber}
               bindSequenceNum={bindSequenceNum}
               itemDesc={itemDesc}
               bindItemDesc={bindItemDesc}
@@ -472,7 +467,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              sequenceNum={sequenceNum}
+              itemNumber={itemNumber}
               bindSequenceNum={bindSequenceNum}
               rfqNum={rfqNum}
               bindRfqNum={bindRfqNum}
@@ -488,7 +483,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              sequenceNum={sequenceNum}
+              itemNumber={itemNumber}
               bindSequenceNum={bindSequenceNum}
               handleSearch={handleComplianceRulesFetch}
               complianceType={filterType.split("-")[1]}
@@ -508,7 +503,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
               setReset={setReset}
               handleFilters={handleFilters}
               classes={classes}
-              sequenceNum={sequenceNum}
+              itemNumber={itemNumber}
               bindSequenceNum={bindSequenceNum}
               handleSearch={
                 filterType.split("-")[1] === "rfq"

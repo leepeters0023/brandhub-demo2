@@ -15,7 +15,7 @@ const writeHeaders = {
 //Returns rollup items for the rfq and po process based on filters and the view, paginated in groups of 20
 export const fetchRollupItems = async (filterObject, type) => {
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     program: "order-program-name",
     itemType: "item-type-description",
     dueDate: "order-due-date",
@@ -201,7 +201,7 @@ export const sendBidRequests = async (idArray, rfqId) => {
 //Returns rfqs based on filters, paginated in groups of 20
 export const fetchRFQHistory = async (filterObject) => {
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     rfqNum: "id",
     program: "program-name",
     itemType: "item-type-description",
@@ -306,6 +306,7 @@ export const createPO = async (ids) => {
       response.status = "error";
       response.err = err.toString();
     });
+    // how to consistently console.log(response) here?
   return response;
 };
 
@@ -360,7 +361,7 @@ export const updatePOMethod = async (id, method) => {
   //     response.err = err.toString();
   //   });
   //todo !
-  response.status = "ok"
+  response.status = "ok";
   return response;
 };
 
@@ -417,7 +418,7 @@ export const updatePOTape = async (id, tape) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 //Updates date fields on the PO
 export const updatePODate = async (id, dateType, date) => {
@@ -472,10 +473,10 @@ export const updatePODirectShip = async (id, value) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 //Adds additional line items (like a set up fee) to a po
-export const addAdditionalPOCost = async (id, name, cost) => {
+export const addAdditionalPOCost = async (id, desc, cost) => {
   const response = { status: "", errror: null };
   await axios
     .post(
@@ -484,8 +485,8 @@ export const addAdditionalPOCost = async (id, name, cost) => {
         data: {
           type: "purchase-order-item",
           attributes: {
-            "item-type-description": "Additional PO Cost",
-            name: name,
+            "is-direct-cost": true,
+            desc: desc,
             cost: cost,
           },
           relationships: {
@@ -591,7 +592,7 @@ export const updatePOItemPackOut = async (id, value) => {
       response.err = err.toString();
     });
   return response;
-}
+};
 
 export const deletePOItem = async (id) => {
   const response = { status: "", error: null };
@@ -643,16 +644,17 @@ export const deletePO = async (id) => {
 export const updateShippingParams = async (updateArray) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .put("/api/shipping-parameter-items/add-shipping-extras",
+    .put(
+      "/api/shipping-parameter-items/add-shipping-extras",
       {
-        "shipping-parameter-items": updateArray
+        "shipping-parameter-items": updateArray,
       },
       writeHeaders
     )
     .then((res) => {
-      let data = dataFormatter.deserialize(res.data)
+      let data = dataFormatter.deserialize(res.data);
       response.data = data;
-      response.status = "ok"
+      response.status = "ok";
     })
     .catch((err) => {
       console.log(err.toString());
@@ -660,7 +662,24 @@ export const updateShippingParams = async (updateArray) => {
       response.error = err.toString();
     });
   return response;
-}
+};
+
+//Tracks package
+export const trackItem = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/shipping-parameter-items/${id}/track`)
+    .then((res) => {
+      response.data = res.data["api_response"];
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
 
 //Returns po items based on filters, paginated in groups of 20
 export const fetchPOHistory = async (filterObject) => {

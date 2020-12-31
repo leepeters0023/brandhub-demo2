@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import addressReducer from "./slices/addressSlice";
 import brandReducer from "./slices/brandSlice";
 import businessUnitReducer from "./slices/businessUnitSlice";
 import complianceContactReducer from "./slices/complianceContactSlice";
@@ -21,14 +22,17 @@ import programsReducer from "./slices/programsSlice";
 import sharedItemsReducer from "./slices/sharedItemsSlice";
 import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
+import reportReducer from "./slices/reportSlice";
 import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
 import supplierReducer from "./slices/supplierSlice";
 import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
+import trackingReducer from "./slices/trackingSlice";
 import userReducer from "./slices/userSlice";
 
 const rootReducer = combineReducers({
+  addresses: addressReducer,
   brands: brandReducer,
   businessUnits: businessUnitReducer,
   complianceContacts: complianceContactReducer,
@@ -50,11 +54,13 @@ const rootReducer = combineReducers({
   sharedItems: sharedItemsReducer,
   purchaseOrder: purchaseOrderReducer,
   purchaseOrderHistory: purchaseOrderHistoryReducer,
+  reports: reportReducer,
   rfq: rfqReducer,
   rfqHistory: rfqHistoryReducer,
   suppliers: supplierReducer,
   tags: tagReducer,
   territories: territoryReducer,
+  tracking: trackingReducer,
   user: userReducer,
 });
 

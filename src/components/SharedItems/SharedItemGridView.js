@@ -72,7 +72,7 @@ const SharedItemGridView = ({ items, handlePreview, isItemsLoading }) => {
                   {item.itemType}
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
-                  {`#${item.sequenceNum}`}
+                  {`#${item.itemNumber}`}
                 </Typography>
                 <br />
                 <Typography className={classes.bodyText}>

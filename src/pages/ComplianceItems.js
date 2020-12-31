@@ -23,7 +23,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-
 const defaultFilters = {
   brand: [],
   //program: [],
@@ -31,9 +30,9 @@ const defaultFilters = {
   tag: [],
   ruleType: "all",
   status: "all",
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
-  sortOrderBy: "sequenceNum",
+  sortOrderBy: "itemNumber",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +48,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentItemRules = useSelector((state) => state.complianceItems.items);
+ 
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
   const nextLink = useSelector((state) => state.complianceItems.nextLink);
   const isNextLoading = useSelector(

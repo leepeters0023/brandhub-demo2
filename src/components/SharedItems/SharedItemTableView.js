@@ -15,7 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
   { id: "preview", label: "Preview" },
-  { id: "sequenceNum", label: "Sequence #" },
+  { id: "itemNumber", label: "Sequence #" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
   { id: "itemDescription", label: "Item Desc." },
@@ -66,14 +66,14 @@ const SharedItemTableView = ({ items, handlePreview, isItemsLoading }) => {
                 <TableRow key={index} hover>
                   <TableCell align="left">
                     <ImageWrapper
-                      id={item.sequenceNum}
+                      id={item.itemNumber}
                       imgClass={classes.previewImageFloat}
                       alt={item.itemType}
                       imgUrl={item.imgUrlThumb}
                       handleClick={() => handlePreview(item.id)}
                     />
                   </TableCell>
-                  <TableCell align="left">{item.sequenceNum}</TableCell>
+                  <TableCell align="left">{item.itemNumber}</TableCell>
                   <TableCell align="left">{item.program}</TableCell>
                   <TableCell align="left">{item.itemType}</TableCell>
                   <TableCell align="left">{item.itemDescription}</TableCell>

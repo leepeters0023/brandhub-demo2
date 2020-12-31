@@ -121,7 +121,7 @@ const ComplianceRulesTable = ({
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("sequenceNum");
+  const [orderBy, setOrderBy] = useState("itemNumber");
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";

@@ -14,13 +14,15 @@ import {
   fetchNextOrderHistory,
   fetchNextFilteredOrderHistoryByItem,
 } from "../redux/slices/orderHistorySlice";
+import { getTracking } from "../redux/slices/trackingSlice";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderHistoryTable from "../components/OrderHistory/OrderHistoryTable";
-import OrderItemPreview from "../components/Purchasing/OrderItemPreview";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import OrderHistoryByItemTable from "../components/OrderHistory/OrderHistoryByItemTable";
+import TrackingModal from "../components/Utility/TrackingModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -48,14 +50,14 @@ const csvHeaders = [
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "order",
   brand: [],
   program: [],
   itemType: [],
-  sequenceNum: "",
+  itemNumber: "",
   status: "not-draft",
   sortOrder: "asc",
   sortOrderBy: "orderDate",
@@ -63,14 +65,14 @@ const defaultOrderFilters = {
 
 const defaultItemFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   user: [],
   distributor: [],
   groupBy: "item",
   brand: [],
   program: [],
   itemType: [],
-  sequenceNum: "",
+  itemNumber: "",
   status: "not-draft",
   sortOrder: "asc",
   sortOrderBy: "itemType",
@@ -85,7 +87,8 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const dispatch = useDispatch();
   const [currentView, setCurrentView] = useCallback(useState(filterOption));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
-  const [modal, handleModal] = useCallback(useState(false));
+  const [previewModal, handlePreviewModal] = useCallback(useState(false));
+  const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
@@ -113,23 +116,20 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const defaultFilters =
     filterOption === "byOrder" ? defaultOrderFilters : defaultItemFilters;
-
-  const handleModalOpen = useCallback(
-    (img, brand, itemType, itemNumber, itemDescription) => {
-      setCurrentItem({
-        imgUrl: img,
-        brand: brand,
-        itemType: itemType,
-        itemNumber: itemNumber,
-        itemDescription: itemDescription,
-      });
-      handleModal(true);
-    },
-    [handleModal, setCurrentItem]
-  );
-
+  
+    const handleModalOpen = (itemNumber) => {
+      let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
+      setCurrentItem(item);
+      handlePreviewModal(true);
+    }
+   
   const handleModalClose = () => {
-    handleModal(false);
+    handlePreviewModal(false);
+  };
+
+  const handleTrackingClick = (id) => {
+    dispatch(getTracking(id));
+    setTrackingOpen(true);
   };
 
   const handleSort = (sortObject) => {
@@ -158,13 +158,9 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
       if (filterOption === "byOrder") {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultOrderFilters })
-        );
+        dispatch(updateMultipleFilters({ filterObject: defaultOrderFilters }));
       } else {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultItemFilters })
-        );
+        dispatch(updateMultipleFilters({ filterObject: defaultItemFilters }));
       }
       dispatch(setSorted());
     }
@@ -172,11 +168,13 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
-      <OrderItemPreview
-        handleModalClose={handleModalClose}
-        modal={modal}
+      <ItemPreviewModal
+        type={"catalog"}
+        handleClose={handleModalClose}
+        previewModal={previewModal}
         currentItem={currentItem}
       />
+      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order History</Typography>
@@ -231,6 +229,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             handleSort={handleSort}
             scrollRef={scrollRef}
             handlePreview={handleModalOpen}
+            handleTrackingClick={handleTrackingClick}
           />
         )}
         {isNextLoading && (

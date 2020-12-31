@@ -34,7 +34,7 @@ let initialState = {
     program: null,
     brand: null,
     itemType: null,
-    sequenceNum: null,
+    itemNumber: null,
     totalItems: null,
     supplierNote: "",
     itemSpec: null,
@@ -96,7 +96,7 @@ const rfqSlice = createSlice({
       state.currentRFQ.program = rfq.program;
       state.currentRFQ.brand = rfq.brand;
       state.currentRFQ.itemType = rfq.itemType;
-      state.currentRFQ.sequenceNum = rfq.sequenceNum;
+      state.currentRFQ.itemNumber = rfq.itemNumber;
       state.currentRFQ.totalItems = rfq.totalItems;
       state.currentRFQ.supplierNote = rfq.supplierNote;
       state.currentRFQ.itemSpec = rfq.itemSpec ? { ...rfq.itemSpec } : null;
@@ -146,7 +146,7 @@ const rfqSlice = createSlice({
       state.currentRFQ.program = null;
       state.currentRFQ.brand = null;
       state.currentRFQ.itemType = null;
-      state.currentRFQ.sequenceNum = null;
+      state.currentRFQ.itemNumber = null;
       state.currentRFQ.totalItems = null;
       state.currentRFQ.supplierNote = "";
       state.currentRFQ.itemSpec = null;

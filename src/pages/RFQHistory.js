@@ -5,12 +5,9 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
-import { fetchNextFilteredRFQHistory } from "../redux/slices/rfqHistorySlice"
+import { fetchNextFilteredRFQHistory } from "../redux/slices/rfqHistorySlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import RFQHistoryTable from "../components/SupplierManagement/RFQHistoryTable";
@@ -31,7 +28,7 @@ const defaultCurrentFilters = {
   itemType: [],
   status: "not-awarded",
   rfqNum: "",
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "rfqNum",
 };
@@ -42,10 +39,10 @@ const defaultHistoryFilters = {
   itemType: [],
   status: "all",
   rfqNum: "",
-  sequenceNum: "",
+  itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "rfqNum",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -55,9 +52,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.rfqHistory.nextLink);
-  const isNextLoading = useSelector(
-    (state) => state.rfqHistory.isNextLoading
-  );
+  const isNextLoading = useSelector((state) => state.rfqHistory.isNextLoading);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -75,8 +70,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
-  const defaultFilters = filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters
-
+  const defaultFilters =
+    filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters;
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
@@ -103,13 +98,17 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
       if (filterOption === "current") {
-        dispatch(updateMultipleFilters({filterObject: defaultCurrentFilters}))
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultCurrentFilters })
+        );
       } else {
-        dispatch(updateMultipleFilters({ filterObject: defaultHistoryFilters}))
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultHistoryFilters })
+        );
       }
       dispatch(setSorted());
     }
-  }, [currentView, setCurrentView, filterOption, dispatch])
+  }, [currentView, setCurrentView, filterOption, dispatch]);
 
   return (
     <>

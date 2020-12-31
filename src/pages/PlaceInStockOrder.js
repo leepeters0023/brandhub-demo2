@@ -38,7 +38,7 @@ const defaultFilters = {
   program: [],
   favItems: [],
   orderType: "in-stock",
-  sequenceNum: "",
+  itemNumber: "",
   itemDesc: "",
 };
 
@@ -73,6 +73,7 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const currentOrder = useSelector((state) => state.currentOrder);
   const userId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
+  const territoryId = useSelector((state) => state.user.currentTerritory)
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
@@ -91,7 +92,7 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   const handleAddToOrder = () => {
     if (currentOrder.inStockOrderItems.length === 0) {
-      dispatch(createNewBulkItemOrder("inStock", selectedItems));
+      dispatch(createNewBulkItemOrder("inStock", selectedItems, territoryId));
     } else
       dispatch(
         addBulkOrderItems(currentOrder.orderId, selectedItems, "inStock")
