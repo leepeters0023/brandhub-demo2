@@ -552,6 +552,60 @@ export const addOrderSetItem = async (id, item) => {
   return response;
 };
 
+export const updateOrderSetItemDate = async (id, date) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/order-set-items/${id}`,
+      {
+        data: {
+          type: "order-set-item",
+          id: id,
+          attributes: {
+            "in-market-date": date,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const updateOrderSetItemRush = async (id, status) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/order-set-items/${id}`,
+      {
+        data: {
+          type: "order-set-item",
+          id: id,
+          attributes: {
+            "is-rush": status,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 // ------------ Single Order Calls ------------ //
 
 //Returns all single orders based on filters, paginated in groups of 20
@@ -641,6 +695,7 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";

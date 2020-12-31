@@ -1,7 +1,7 @@
 import { earliestDate, stringToCents } from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
-import { format } from "date-fns";
+import format from "date-fns/format";
 
 /*
 Functions used to ensure data coming from api always matches
@@ -334,6 +334,11 @@ export const mapOrderItems = (items, type) => {
           ? item.item["compliance-status"]
           : "compliant",
         orderType: item.item["order-type"],
+        standardDeliveryDate: item["standard-delivery-date"]
+        ? item["standard-delivery-date"]
+        : "---",
+      inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
+      isRush: item["is-rush"] ? item["is-rush"] : false,
         tracking: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["tracking-number"]
             ? item["shipping-parameter-item"]["tracking-number"]
@@ -346,6 +351,7 @@ export const mapOrderItems = (items, type) => {
           : null,
       };
     })
+
     .sort((a, b) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
@@ -409,6 +415,8 @@ export const mapOrderSet = (order) => {
       ? stringToCents(order["total-actual-cost"])
       : "---",
     budget: order.budget ? stringToCents(order.budget) : "$25,000.00",
+    hasRush:
+      order["order-set-items"].filter((item) => item["is-rush"]).length > 0,
   };
   return formattedOrder;
 };

@@ -24,6 +24,8 @@ import {
   approveOrderSet,
   deleteOrderSet,
   setOrderDetail,
+  updateOrderSetItemDate,
+  updateOrderSetItemRush,
 } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
@@ -33,6 +35,8 @@ import {
   removeGridItem,
   removeGridOrder,
   clearOrderSet,
+  updateSetItemDate,
+  updateSetItemRush,
 } from "./orderSetSlice";
 import { clearOrderByType } from "./currentOrderSlice";
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
@@ -159,6 +163,34 @@ export const deleteSetOrder = (id) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const setSetDate = (id, date) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const dateStatus = await updateOrderSetItemDate(id, date);
+    if (dateStatus.error) {
+      throw dateStatus.error
+    }
+    dispatch(updateSetItemDate({id: id, date: date}))
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const setRush = (id, status) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const rushStatus = await updateOrderSetItemRush(id, status);
+    if (rushStatus.error) {
+      throw rushStatus.error;
+    }
+    dispatch(updateSetItemRush({id: id, status: status}))
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 //Updates status on order set from inactive to in-progress
 export const startOrdSet = (programId, value, orderSetId) => async (
