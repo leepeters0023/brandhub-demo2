@@ -486,9 +486,8 @@ export const addAdditionalPOCost = async (id, desc, cost) => {
           type: "purchase-order-item",
           attributes: {
             "is-direct-cost": true,
-            description: desc,
+            "direct-cost-desc": desc,
             "actual-cost": cost,
-            qty: 1,
           },
           relationships: {
             "purchase-order": {
