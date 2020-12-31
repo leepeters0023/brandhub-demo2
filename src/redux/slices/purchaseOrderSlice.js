@@ -17,6 +17,7 @@ import {
   addToPO,
   submitPO,
   updateShippingParams,
+  addAdditionalPOCost,
 } from "../../api/purchasingApi";
 import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder } from "../apiMaps";
@@ -542,6 +543,10 @@ export const deleteItem = (id) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
+  //Todo
+}
 
 export const deletePurchaseOrder = (id) => async (dispatch) => {
   try {
