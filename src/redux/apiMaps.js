@@ -290,7 +290,6 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
-  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);

@@ -334,7 +334,6 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     dispatch(setIsLoading());
     dispatch(resetPreOrderItems());
     const currentOrders = await fetchOrdersByProgram(program, userId);
-  
     if (currentOrders.error) {
       throw currentOrders.error;
     }
@@ -352,7 +351,7 @@ export const fetchProgramOrders = (program, userId) => async (dispatch) => {
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
     let territories =
-      currentOrders.data[0]["territory-names"].length === 0
+      currentOrders.data[0].program.type === "National"
         ? ["National"]
         : currentOrders.data[0]["territory-names"].split(", ");
     let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : "";

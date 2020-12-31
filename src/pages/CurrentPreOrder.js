@@ -130,6 +130,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [switched, setSwitched] = useCallback(useState(false));
 
   const currentUserId = useSelector((state) => state.user.id);
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
@@ -222,7 +223,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (program) {
-      dispatch(fetchPreOrders(currentUserId, "summary", program));
+      dispatch(fetchPreOrders(currentUserId, "summary", program, currentTerritory));
       dispatch(fetchProgramOrders(program, currentUserId));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(

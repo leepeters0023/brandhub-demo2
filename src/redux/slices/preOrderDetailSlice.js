@@ -106,14 +106,14 @@ export const {
 
 export default preOrderDetailSlice.reducer;
 
-export const fetchPreOrders = (id, type, program) => async (dispatch) => {
+export const fetchPreOrders = (id, type, program, terrId) => async (dispatch) => {
   try {
     if (type === "initial") {
       dispatch(setInitialPreOrdersLoading());
     } else {
       dispatch(setSummaryLoading());
     }
-    const currentPreOrders = await fetchAllPreOrders(id);
+    const currentPreOrders = await fetchAllPreOrders(id, terrId);
     if (currentPreOrders.error) {
       throw currentPreOrders.error;
     }
@@ -121,7 +121,7 @@ export const fetchPreOrders = (id, type, program) => async (dispatch) => {
       preOrderId: order.id,
       programId: order.program.id,
       territories:
-        order["territory-names"].length === 0
+        order.program.type === "National"
           ? ["National"]
           : order["territory-names"].split(", "),
       totalItems: order["total-quantity"],
