@@ -21,7 +21,8 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   avatar: {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: "white",
+    color: "black"
   },
 }));
 

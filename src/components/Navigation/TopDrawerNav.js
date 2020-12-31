@@ -98,6 +98,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "-20px",
     color: "white",
   },
+  regionText: {
+    color: "white"
+  },
+  regionTextOpen: {
+    color: "black"
+  }
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
@@ -249,7 +255,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             className={classes.navBreak}
             style={{ float: "right", marginTop: "-67px" }}
           >
-            {territories && territories.length > 0 && <RegionSelector />}
+            {territories && territories.length > 0 && <RegionSelector classes={classes}/>}
             <UserNav
               initials={initials}
               handleLogout={handleLogout}
