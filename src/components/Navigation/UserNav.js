@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   avatar: {
     backgroundColor: "white",
-    color: "black"
+    color: "black",
   },
 }));
 
