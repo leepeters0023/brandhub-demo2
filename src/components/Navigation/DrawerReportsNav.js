@@ -31,7 +31,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to="/orders/history/group/byOrder"
               >
-                <ListItemText primary="By Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Order" />
               </ListItem>
               <ListItem
                 
@@ -40,7 +40,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to="/orders/history/group/byItem"
               >
-                <ListItemText primary="By Item" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Item" />
               </ListItem>
             </List>
           </Grid>
@@ -60,11 +60,11 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to="/reports/wrap-up"
               >
-                <ListItemText primary="Wrap Up" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Wrap Up" />
               </ListItem>
           <ListItem button onClick={handleDrawerClose} component={Link} to="">
             <Box fontStyle="italic">
-              <ListItemText primary="*TBD" />
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
             </Box>
           </ListItem>
         </List>
@@ -85,7 +85,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to="/budgets/ytod"
               >
-                <ListItemText primary="Budget vs Spend" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Budget vs Spend" />
               </ListItem>
               <ListItem
                 button
@@ -94,7 +94,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 to=""
               >
                 <Box fontStyle="italic">
-                  <ListItemText primary="*TBD" />
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
                 </Box>
               </ListItem>
             </List>

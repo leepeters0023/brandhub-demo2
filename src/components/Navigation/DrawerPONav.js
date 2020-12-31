@@ -36,7 +36,7 @@ const DrawerOrdersNav = ({
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
@@ -47,13 +47,13 @@ const DrawerOrdersNav = ({
                 10
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="In Progress" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
@@ -64,19 +64,24 @@ const DrawerOrdersNav = ({
                 2
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Shipping Hold" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Shipping Hold" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/poHistory/all"
           >
-            <ListItemText primary="History" />
+           <ListItemAvatar>
+              <Avatar>
+                0
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>
       </Grid>
