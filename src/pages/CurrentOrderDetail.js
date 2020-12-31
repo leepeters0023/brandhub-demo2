@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
+import isBefore from "date-fns/isBefore";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -25,6 +26,7 @@ import AreYouSure from "../components/Utility/AreYouSure";
 import ConfirmDeleteOrder from "../components/Utility/ConfirmDeleteOrder";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
+import NeedRushItemModal from "../components/Utility/NeedRushItemModal";
 import Loading from "../components/Utility/Loading";
 
 import Button from "@material-ui/core/Button";
@@ -76,10 +78,14 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
   const [currentItemId, setCurrentItemId] = useCallback(useState(null));
   const [deleteOrderId, setDeleteOrderId] = useCallback(useState(null));
-  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(useState(false));
+  const [isConfirmDeleteOpen, setConfirmDeleteOpen] = useCallback(
+    useState(false)
+  );
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
+  const [isRushUpdateOpen, setRushUpdateOpen] = useCallback(useState(false));
+  const [needRushItems, setNeedRushItems] = useCallback(useState([]));
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const currentOrderType = useSelector((state) => state.orderSet.type);
@@ -129,7 +135,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const handleDeleteOrderModal = (id) => {
     setDeleteOrderId(id);
     setConfirmDeleteOpen(true);
-  }
+  };
 
   const handleRemoveOrder = (id) => {
     dispatch(deleteSetOrder(id));
@@ -144,8 +150,28 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     ) {
       role = null;
     }
-    //TODO send due date and rush status as well when available on api
-    dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
+    if (currentOrderType !== "pre-order") {
+      let needsRush = false;
+      let rushItems = [];
+      currentItems.forEach((item) => {
+        if (
+          isBefore(
+            new Date(item.inMarketDate),
+            new Date(item.standardDeliveryDate)
+          ) &&
+          !item.isRush
+        ) {
+          needsRush = true;
+          rushItems.push(item.itemNumber);
+        }
+      });
+      if (needsRush) {
+        setRushUpdateOpen(true);
+        setNeedRushItems(rushItems);
+      } else {
+        dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
+      }
+    } else dispatch(submitOrdSet(null, "submitted", currentOrderId, role));
   };
 
   const handleApproval = () => {
@@ -157,8 +183,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   };
 
   const handleDeleteOrderSet = () => {
-    dispatch(deleteOrdSet(orderId, currentFilters, "order", currentOrderType))
-  }
+    dispatch(deleteOrdSet(orderId, currentFilters, "order", currentOrderType));
+  };
 
   useRetainFiltersOnPopstate(determineOrigin(), dispatch);
 
@@ -228,25 +254,38 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
-      <AreYouSure
-        open={confirmModal}
-        handleRemove={handleRemoveItem}
-        handleClose={handleCloseConfirm}
-        itemNumber={currentItemNum}
-        type="item"
-      />
-      <ItemPreviewModal
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-        currentItem={currentItem}
-        type={"catalog"}
-      />
-      <ConfirmDeleteOrder
-        open={isConfirmDeleteOpen}
-        handleClose={handleModalClose}
-        handleRemove={handleRemoveOrder}
-        orderId={deleteOrderId}
-      />
+      {confirmModal && (
+        <AreYouSure
+          open={confirmModal}
+          handleRemove={handleRemoveItem}
+          handleClose={handleCloseConfirm}
+          itemNumber={currentItemNum}
+          type="item"
+        />
+      )}
+      {isConfirmDeleteOpen && (
+        <ConfirmDeleteOrder
+          open={isConfirmDeleteOpen}
+          handleClose={handleModalClose}
+          handleRemove={handleRemoveOrder}
+          orderId={deleteOrderId}
+        />
+      )}
+      {isRushUpdateOpen && (
+        <NeedRushItemModal
+          open={isRushUpdateOpen}
+          handleClose={setRushUpdateOpen}
+          rushItems={needRushItems}
+        />
+      )}
+      {previewModal && (
+        <ItemPreviewModal
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+          currentItem={currentItem}
+          type={"catalog"}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           {currentOrderType === "in-stock" && orderStatus === "in-progress" && (
@@ -266,7 +305,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       Total:
                     </Typography>
                     <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal, false
+                      currentTotal,
+                      false
                     )}`}</Typography>
                   </div>
                   <Button
@@ -303,7 +343,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                       Total:
                     </Typography>
                     <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal, false
+                      currentTotal,
+                      false
                     )}`}</Typography>
                   </div>
                   <Button
@@ -354,7 +395,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   Total:
                 </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
-                  currentTotal, false
+                  currentTotal,
+                  false
                 )}`}</Typography>
               </div>
             </>
@@ -390,7 +432,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                   Total:
                 </Typography>
                 <Typography className={classes.titleText}>{`${formatMoney(
-                  currentTotal, false
+                  currentTotal,
+                  false
                 )}`}</Typography>
               </div>
             </>
@@ -428,13 +471,15 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               variant="contained"
               onClick={() => {
                 if (currentOrderType === "in-stock") {
-                  navigate("/orders/items/inStock")
+                  navigate("/orders/items/inStock");
                 } else if (currentOrderType === "on-demand") {
-                  navigate("/orders/items/onDemand")
+                  navigate("/orders/items/onDemand");
                 }
-                handleDeleteOrderSet()
+                handleDeleteOrderSet();
               }}
-            >DELETE ORDER</Button>
+            >
+              DELETE ORDER
+            </Button>
           )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button

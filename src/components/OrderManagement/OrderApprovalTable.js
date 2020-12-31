@@ -20,7 +20,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+import WarningIcon from "@material-ui/icons/Warning";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: false },
@@ -257,7 +259,21 @@ const OrderApprovalTable = ({
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.id}</TableCell>
+                    <TableCell align="left">
+                      {row.hasRush ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Tooltip title="Has Item on Rush Status">
+                            <WarningIcon
+                              fontSize="small"
+                              style={{ margin: "0 5px 0 0" }}
+                            />
+                          </Tooltip>
+                          {row.id}
+                        </div>
+                      ) : (
+                        row.id
+                      )}
+                    </TableCell>
                     <TableCell align="left">{row.type}</TableCell>
                     <TableCell align="left">{row.userName}</TableCell>
                     {row.program.length > 1 ? (

@@ -8,6 +8,7 @@ import { setRebuildRef } from "../../redux/slices/orderSetSlice";
 import EditOrderDetailModal from "./EditOrderDetailModal";
 import MemoInputCell from "../Utility/MemoInputCell";
 import OrderSetTableHead from "./OrderSetTableHead";
+import UpdateRushStatusModal from "./UpdateRushStatusModal";
 
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -103,6 +104,9 @@ const OrderSetTable = (props) => {
 
   const [refTable, setRefTable] = useState(null);
   const [itemLength, setItemLength] = useState(null);
+  const [orderNumberModal, setOrderNumber] = useState(false);
+  const [isRushModalOpen, setRushModalOpen] = useCallback(useState(false));
+  const [currentItem, setCurrentItem] = useCallback(useState(null));
   const [isEditOpen, setEditOpen] = useState(false);
   const [currentOrderNumber, setCurrentOrderNumber] = useState(null);
 
@@ -114,6 +118,11 @@ const OrderSetTable = (props) => {
   const handleEditClose = () => {
     setEditOpen(false)
     setCurrentOrderNumber(null);
+  }
+
+  const handleRushModalClose = () => {
+    setCurrentItem(null)
+    setRushModalOpen(false);
   }
 
   const handleKeyDown = useCallback(
@@ -215,6 +224,13 @@ const OrderSetTable = (props) => {
           orderNumber={currentOrderNumber}
         />
       )}
+      {isRushModalOpen && currentItem && (
+      <UpdateRushStatusModal
+        open={isRushModalOpen}
+        item={currentItem}
+        handleClose={handleRushModalClose}
+      />
+    )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
         <Table
           stickyHeader={true}
@@ -255,9 +271,10 @@ const OrderSetTable = (props) => {
                 classes={classes}
                 orderType={orderType}
                 orderStatus={orderStatus}
-                currentItems={currentItems}
                 handleOpenConfirm={handleOpenConfirm}
                 handleModalOpen={handleModalOpen}
+                setRushModalOpen={setRushModalOpen}
+                setCurrentItem={setCurrentItem}
               />
               <TableBody style={{ position: "relative" }}>
                 {orders
