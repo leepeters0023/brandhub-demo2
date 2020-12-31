@@ -23,7 +23,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "preview", disablePadding: false, label: "Preview", sort: false },
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
@@ -129,7 +129,7 @@ const orderTypeMap = {
   "on-demand": "On Demand",
   "in-stock": "In Stock",
   "pre-order": "Pre Order",
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -149,6 +149,12 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  clickableCell: {
+    "&:hover": {
+      backgroundColor: "#737373",
+      color: "white",
+    },
+  },
 }));
 
 const OrderHistoryByItemTable = ({
@@ -157,6 +163,7 @@ const OrderHistoryByItemTable = ({
   isOrdersLoading,
   scrollRef,
   handlePreview,
+  handleTrackingClick,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -214,44 +221,42 @@ const OrderHistoryByItemTable = ({
                 >
                   <TableCell align="left">
                     <ImageWrapper
-                      id={row.sequenceNum}
+                      id={row.itemNumber}
                       imgClass={classes.previewImageFloat}
                       alt={row.itemType}
                       imgUrl={row.imgUrlThumb}
                       handleClick={(evt) => {
                         evt.stopPropagation();
                         handlePreview(
-                          row.imgUrlLg,
-                          row.brand.join(", "),
-                          row.itemType,
-                          row.sequenceNum,
-                          row.itemDescription
+                          row.itemNumber
                         );
                       }}
                     />
                   </TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
-                  <TableCell align="left">{orderTypeMap[row.orderType]}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
+                  <TableCell align="left">
+                    {orderTypeMap[row.orderType]}
+                  </TableCell>
                   <TableCell align="left">{row.orderId}</TableCell>
                   {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                    <TableCell align="left">
+                      <Typography variant="body2">{row.brand[0]}</Typography>
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
                       >
-                        {row.brand[0]}
                         <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
+                      </Tooltip>
+                    </TableCell>
                   ) : (
-                    <TableCell align="left">{row.brand[0]}</TableCell>
-                  )}
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
                   </TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
-                  <TableCell align="left">{row.distributor}</TableCell>
+                  <TableCell align="left">{row.distributor.length > 0 ? row.distributor : "---"}</TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
@@ -274,7 +279,24 @@ const OrderHistoryByItemTable = ({
                       ? format(new Date(row.shipDate), "MM/dd/yyyy")
                       : row.shipDate}
                   </TableCell>
-                  <TableCell align="left">{row.tracking}</TableCell>
+                  <TableCell
+                    align="center"
+                    className={
+                      row.tracking !== "---" && row.trackingId
+                        ? classes.clickableCell
+                        : null
+                    }
+                    onClick={
+                      row.tracking !== "---" && row.trackingId
+                        ? (evt) => {
+                          evt.stopPropagation();
+                          handleTrackingClick(row.trackingId);
+                        }
+                        : null
+                    }
+                  >
+                    {row.tracking}
+                  </TableCell>
                   <TableCell align="left">
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>

@@ -274,7 +274,7 @@ const CurrentPO = () => {
                 <Typography
                   className={clsx(classes.headerText, classes.POText)}
                 >
-                  {`Sequence Number: ${item.sequenceNum}`}
+                  {`Sequence Number: ${item.itemNumber}`}
                 </Typography>
                 <SpecDetailTable classes={classes} specArray={specArray} />
                 {index !== currentPO.poItems.length - 1 && (

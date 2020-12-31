@@ -106,11 +106,6 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
-    updateAttentionLine(state, action) {
-      const { id, attn } = action.payload
-      //TODO
-      console.log(id, attn);
-    },
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
@@ -139,7 +134,6 @@ export const {
   getUserSuccess,
   setLoginSuccess,
   updateFavoriteItems,
-  updateAttentionLine,
   updateCurrentTerritory,
   removeUser,
   setLogInFailure,

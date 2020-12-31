@@ -15,7 +15,7 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
 
   return (
     <Grid container spacing={2} justify="space-around">
-       {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
+      {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
         <>
           <Grid item sm={3} xs={12}>
             <List className={classes.navList}>
@@ -45,28 +45,29 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
           </Grid>
         </>
       )}
-      {currentUserRole !== "field1" && (
-        <>
-          <Grid item sm={3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
-                  primary="Reporting:"
-                />
-              </ListItem>
-              <ListItem
+      <Grid item sm={3} xs={12}>
+        <List className={classes.navList}>
+          <ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerText }}
+              primary="Reporting:"
+            />
+          </ListItem>
+          <ListItem
                 button
                 onClick={handleDrawerClose}
                 component={Link}
-                to=""
+                to="/reports/wrap-up"
               >
-                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
+                <ListItemText primary="Wrap Up" />
               </ListItem>
-            </List>
-          </Grid>
-        </>
-      )}
+          <ListItem button onClick={handleDrawerClose} component={Link} to="">
+            <Box fontStyle="italic">
+              <ListItemText primary="*TBD" />
+            </Box>
+          </ListItem>
+        </List>
+      </Grid>
       {currentUserRole !== "compliance" && (
         <>
           <Grid item sm={3} xs={12}>
@@ -91,7 +92,9 @@ const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
                 component={Link}
                 to=""
               >
-                <Box fontStyle="italic"><ListItemText primary="*TBD" /></Box>
+                <Box fontStyle="italic">
+                  <ListItemText primary="*TBD" />
+                </Box>
               </ListItem>
             </List>
           </Grid>

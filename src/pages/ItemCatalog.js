@@ -39,7 +39,7 @@ const defaultFilters = {
   program: [],
   favItems: [],
   orderType: "",
-  sequenceNum: "",
+  itemNumber: "",
   itemDesc: "",
 };
 
@@ -98,9 +98,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const handleShareLink = () => {
     dispatch(clearSharedItems());
     const baseUrl = window.location.origin;
-    let urlString = `${baseUrl}/shared/items/${selectedItems.join(
-      "-"
-    )}`;
+    let urlString = `${baseUrl}/shared/items/${selectedItems.join("-")}`;
     dispatch(fetchSharedItemsByIds(selectedItems));
     setCurrentLink(urlString);
     setLinkModalOpen(true);

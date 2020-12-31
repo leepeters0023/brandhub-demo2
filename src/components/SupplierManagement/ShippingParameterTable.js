@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import format from "date-fns/format";
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector } from "react-redux";
@@ -24,9 +25,16 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: "unset",
     },
   },
+  clickableCell: {
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#737373",
+      color: "white",
+    },
+  },
 }));
 
-const CollapseRow = ({ shippingInfo, classes }) => {
+const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
   const [open, setOpen] = useCallback(useState(false));
   return (
     <>
@@ -48,9 +56,15 @@ const CollapseRow = ({ shippingInfo, classes }) => {
           {[...new Set(shippingInfo.items.map((i) => i.method))].join(", ")}
         </TableCell>
         <TableCell align="left">
-          {[...new Set(shippingInfo.items.map((i) => i.actShipDate))].join(
-            ", "
-          )}
+          {[
+            ...new Set(
+              shippingInfo.items.map((i) =>
+                i.actShipDate !== "---"
+                  ? format(new Date(i.actShipDate), "MM/dd/yyyy")
+                  : "---"
+              )
+            ),
+          ].join(", ")}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -96,11 +110,25 @@ const CollapseRow = ({ shippingInfo, classes }) => {
                   <TableBody>
                     {shippingInfo.items.map((item) => (
                       <TableRow key={`${item.id}`}>
-                        <TableCell align="center">{item.sequenceNum}</TableCell>
+                        <TableCell align="center">{item.itemNumber}</TableCell>
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
                         <TableCell align="center">{item.shipStatus}</TableCell>
-                        <TableCell align="center">{item.trackingNum}</TableCell>
+                        <TableCell
+                          align="center"
+                          className={
+                            item.trackingNum !== "---"
+                              ? classes.clickableCell
+                              : null
+                          }
+                          onClick={
+                            item.trackingNum !== "---"
+                              ? () => handleTrackingClick(item.id)
+                              : null
+                          }
+                        >
+                          {item.trackingNum}
+                        </TableCell>
                         <TableCell align="center">
                           {item.tax === "---"
                             ? item.tax
@@ -119,7 +147,7 @@ const CollapseRow = ({ shippingInfo, classes }) => {
   );
 };
 
-const ShippingParameterTable = () => {
+const ShippingParameterTable = ({ handleTrackingClick }) => {
   const classes = useStyles();
 
   const shippingInfo = useSelector(
@@ -158,7 +186,12 @@ const ShippingParameterTable = () => {
           </TableHead>
           <TableBody>
             {shippingInfo.map((param, index) => (
-              <CollapseRow key={index} classes={classes} shippingInfo={param} />
+              <CollapseRow
+                key={index}
+                classes={classes}
+                shippingInfo={param}
+                handleTrackingClick={handleTrackingClick}
+              />
             ))}
           </TableBody>
         </Table>

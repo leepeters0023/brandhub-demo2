@@ -3,9 +3,15 @@ import PropTypes from "prop-types";
 import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 import format from "date-fns/format";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  setStateFilter,
+  setRebuildRef,
+} from "../../redux/slices/orderSetSlice";
 
 import DistributorSelection from "./DistributorSelection";
+import StateSelector from "../Utility/StateSelector";
 import ImageWrapper from "../Utility/ImageWrapper";
 
 import Box from "@material-ui/core/Box";
@@ -23,6 +29,7 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import WarningIcon from "@material-ui/icons/Warning";
+import BackspaceIcon from "@material-ui/icons/Backspace";
 
 const TotalItemCell = React.memo(({ itemNumber, classes }) => {
   const value = useSelector((state) =>
@@ -65,8 +72,22 @@ const OrderSetTableHead = ({
   setRushModalOpen,
   setCurrentItem,
 }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useCallback(useState(true));
   const [tableStyle, setTableStyle] = useCallback(useState("tableOpen"));
+  const [currentState, setCurrentState] = useCallback(useState(""));
+
+  const handleSetStateFilter = (value) => {
+    setCurrentState(value);
+    dispatch(setStateFilter({ stateCode: value.code }));
+    dispatch(setRebuildRef());
+  };
+
+  const handleClearStateFilter = () => {
+    setCurrentState("");
+    dispatch(setStateFilter({ stateCode: null }));
+    dispatch(setRebuildRef());
+  };
 
   const currentItems = useSelector((state) => state.orderSet.items);
 
@@ -128,18 +149,20 @@ const OrderSetTableHead = ({
                 alt={item.itemType}
                 imgUrl={item.imgUrlThumb}
                 handleClick={() => {
-                  handleModalOpen(
-                    item.imgUrlLg,
-                    item.brand,
-                    item.itemType,
-                    item.itemNumber,
-                    item.itemDescription
-                  );
+                  handleModalOpen(item.itemNumber);
                 }}
               />
-              <Typography className={classes.headerText} variant="h5">
-                {item.brand}
-              </Typography>
+              {item.brand.split(", ").length > 1 ? (
+                <Tooltip title={item.brand}>
+                  <Typography className={classes.headerText} variant="h5">
+                    {`${item.brand.split(", ")[0]} ...`}
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography className={classes.headerText} variant="h5">
+                  {item.brand}
+                </Typography>
+              )}
             </div>
           </TableCell>
         ))}
@@ -162,6 +185,31 @@ const OrderSetTableHead = ({
             >
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+                width: "auto",
+              }}
+            >
+              <StateSelector
+                handleState={handleSetStateFilter}
+                currentState={currentState}
+                type="grid"
+              />
+              <Tooltip title={"Clear State Filter"}>
+                <span>
+                  <IconButton
+                    onClick={handleClearStateFilter}
+                    disabled={currentState === ""}
+                    style={{ marginRight: "-8px" }}
+                  >
+                    <BackspaceIcon color="inherit" />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </div>
           </div>
         </TableCell>
         {currentItems.map((item) => {
@@ -223,7 +271,7 @@ const OrderSetTableHead = ({
                           className={classes.borderRightLight}
                         >
                           <div className={classes.infoCell}>
-                            {item.leadTime ? item.leadTime : "---"}
+                            {item.leadTime ? `${item.leadTime} days` : "---"}
                           </div>
                         </TableCell>
                       ))}

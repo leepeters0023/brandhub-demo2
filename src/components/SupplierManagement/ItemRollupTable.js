@@ -28,10 +28,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const headCells = [
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
-  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "projectNum", disablePadding: false, label: "Project #", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   { id: "itemDesc", disablePadding: false, label: "Item Desc.", sort: true },
@@ -181,7 +181,7 @@ const ItemRollupTable = ({
   const classes = useStyles();
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("sequenceNum");
+  const [orderBy, setOrderBy] = useState("itemNumber");
   const [selected, setSelected] = useState([]);
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
   const [currentId, setCurrentId] = useCallback(useState(null));
@@ -336,7 +336,7 @@ const ItemRollupTable = ({
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.sequenceNum}</TableCell>
+                    <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.territory}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
@@ -368,7 +368,7 @@ const ItemRollupTable = ({
                         align="left"
                         className={classes.clickableCell}
                         onClick={() => {
-                          handleComplianceClick(row.id, row.sequenceNum);
+                          handleComplianceClick(row.id, row.itemNumber);
                         }}
                       >
                         {row.totalNotCompliant}

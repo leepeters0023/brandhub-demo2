@@ -7,12 +7,12 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
-import { fetchNextFilteredOrderSets, fetchNextFilteredOrderSetItems } from "../redux/slices/orderSetHistorySlice";
-
 import {
-  updateMultipleFilters,
-  setSorted,
-} from "../redux/slices/filterSlice";
+  fetchNextFilteredOrderSets,
+  fetchNextFilteredOrderSetItems,
+} from "../redux/slices/orderSetHistorySlice";
+
+import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -35,14 +35,14 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
-  toDate: format(addDays(new Date(), 1),"MM/dd/yyyy"),
+  toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
   type: "pre-order",
   user: [],
   program: [],
   brand: [],
   itemType: [],
   groupBy: "order",
-  sequenceNum: "",
+  itemNumber: "",
   status: "submitted",
   sortOrder: "asc",
   sortOrderBy: "user",
@@ -59,9 +59,10 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
   );
+  
   const quarterlyRollupItems = useSelector(
     (state) => state.orderSetHistory.itemGroups
-  )
+  ) 
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
@@ -78,7 +79,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
       if (scrollRef.current.scrollTop !== 0) {
-        if(currentGrouping === "order") {
+        if (currentGrouping === "order") {
           dispatch(fetchNextFilteredOrderSets(nextLink));
         } else {
           dispatch(fetchNextFilteredOrderSetItems(nextLink));

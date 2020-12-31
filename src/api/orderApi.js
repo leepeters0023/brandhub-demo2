@@ -15,11 +15,12 @@ const writeHeaders = {
 // ------------ Order Set Calls ------------ //
 
 //Returns all orders in an order set based on the program and current user's territory
-export const fetchOrdersByProgram = async (program, userId) => {
+export const fetchOrdersByProgram = async (program, userId, terrId) => {
   const response = { status: "", error: null, data: null };
+  //TODO add filter[territory-ids]=${territoryId} to filter when available in api
   await axios
     .get(
-      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}`
+      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}&filter[territory-ids]=${terrId}`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -53,10 +54,10 @@ export const fetchOrderSetById = async (id) => {
 };
 
 //Returns all pre-order order sets based on current user's territory
-export const fetchAllPreOrders = async (id) => {
+export const fetchAllPreOrders = async (id, terrId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}`)
+    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
@@ -157,7 +158,7 @@ export const fetchNextOrderSets = async (url) => {
 export const fetchOrderSetItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     program: "program-name",
     itemType: "item-type-description",
     user: "user-name",
@@ -310,6 +311,48 @@ export const addSingleOrderToSet = async (id, dist, type) => {
   return response;
 };
 
+export const addCustomAddressOrderToSet = async (id, addId, type) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(
+      "/api/orders",
+      {
+        data: {
+          type: "order",
+          attributes: {
+            type: type,
+          },
+          relationships: {
+            "order-set": {
+              data: {
+                type: "order-set",
+                id: id,
+              },
+            },
+            "custom-address": {
+              data: {
+                type: "address",
+                id: addId,
+              }
+            }
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 /*
   The following calls handle order set statuses.  The status of
   an order set determines whether it can move to the next step in
@@ -432,7 +475,7 @@ export const deleteOrderSet = async (id) => {
 };
 
 //Creates a new order set and returns the new order set
-export const createOrderSet = async (type) => {
+export const createOrderSet = async (type, territoryId) => {
   const response = { status: "", error: null, data: null };
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
@@ -444,6 +487,14 @@ export const createOrderSet = async (type) => {
           attributes: {
             type: formattedType,
           },
+          relationships: {
+            territory: {
+              data: {
+                type: "territory",
+                id: territoryId,
+              }
+            }
+          }
         },
       },
       writeHeaders
@@ -620,7 +671,7 @@ export const fetchNextHistory = async (url) => {
 
 export const fetchOrderHistoryByItem = async (filterObject) => {
   const sortMap = {
-    sequenceNum: "item-number",
+    itemNumber: "item-number",
     distributor: "distributor-name",
     itemType: "item-type-description",
     orderNum: "order-id",
@@ -726,6 +777,7 @@ export const patchOrderItem = async (id, qty) => {
 
 //Updates the note and attention line on an order
 export const setOrderDetail = async (id, note, attn) => {
+  console.log(id, attn)
   const response = { status: "", error: null };
   await axios
     .patch(
@@ -743,6 +795,7 @@ export const setOrderDetail = async (id, note, attn) => {
       writeHeaders
     )
     .then((res) => {
+      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {

@@ -17,10 +17,13 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
-  { id: "sequenceNum", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
     id: "itemDescription",
@@ -200,8 +203,21 @@ const RollupOverviewByItemTable = ({
                   }}
                 >
                   <TableCell align="left">{row.user}</TableCell>
-                  <TableCell align="left">{row.sequenceNum}</TableCell>
+                  <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
                   </TableCell>
@@ -211,14 +227,13 @@ const RollupOverviewByItemTable = ({
                       title={`${row.state.split(", ").splice(1).join(", ")}`}
                     >
                       <TableCell align="left">
-                        <Typography variant="body2">{`${
-                          row.state.split(", ")[0]
-                        }...`}</Typography>
+                        <Typography variant="body2">{`${row.state.split(", ")[0]
+                          }...`}</Typography>
                       </TableCell>
                     </Tooltip>
                   ) : (
-                    <TableCell align="left">{row.state}</TableCell>
-                  )}
+                      <TableCell align="left">{row.state}</TableCell>
+                    )}
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">

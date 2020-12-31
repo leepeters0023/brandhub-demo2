@@ -14,9 +14,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: true },
@@ -29,6 +32,7 @@ const headCells = [
   },
   { id: "state", disablePadding: false, label: "State", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
   {
@@ -140,9 +144,8 @@ const OrderHistoryTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
-
   const grouping = useSelector((state) => state.filters.groupBy);
-
+  
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -186,7 +189,7 @@ const OrderHistoryTable = ({
             )}
             {!isOrdersLoading &&
               orders.length > 0 &&
-              orders.map((row) => (
+              orders.map((row, i) => (
                 <TableRow
                   key={row.id}
                   hover
@@ -197,9 +200,28 @@ const OrderHistoryTable = ({
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
-                  <TableCell align="left">{row.distributorName}</TableCell>
-                  <TableCell align="left">{row.distributorState}</TableCell>
+                  <TableCell align="left">
+                    {row.distributorName ? row.distributorName : "---"}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.distributorState
+                      ? row.distributorState
+                      : row.customAddressState}
+                  </TableCell>
                   <TableCell align="left">{row.program}</TableCell>
+                  {row.brand.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.brand[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")

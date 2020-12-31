@@ -15,11 +15,17 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  clickableCell: {
+    "&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#737373",
+      color: "white",
+    },
+  },
 }));
 
-const SingleOrderDetailTable = ({ items }) => {
+const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
   const classes = useStyles();
-
   return (
     <>
       <TableContainer className={classes.tableContainer}>
@@ -30,10 +36,16 @@ const SingleOrderDetailTable = ({ items }) => {
                 Preview
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item
+                Sequence #
               </TableCell>
               <TableCell className={classes.headerText} align="left">
-                Item #
+                Program
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Brand
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Item Type
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Qty / Pack
@@ -66,18 +78,39 @@ const SingleOrderDetailTable = ({ items }) => {
                     imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
-                <TableCell align="left">{`${item.brand} ${item.itemType}`}</TableCell>
                 <TableCell align="left">{item.itemNumber}</TableCell>
+                <TableCell align="left">{item.program}</TableCell>
+                <TableCell align="left">{item.brand}</TableCell>
+                <TableCell align="left">{item.itemType}</TableCell>
                 <TableCell align="left">{item.packSize}</TableCell>
                 <TableCell align="left">{`${formatMoney(
-                  item.estCost, false
+                  item.estCost,
+                  false
                 )}`}</TableCell>
                 <TableCell align="left">{item.totalItems}</TableCell>
                 <TableCell align="left">{`${formatMoney(
-                  item.totalEstCost, false
+                  item.totalEstCost,
+                  false
                 )}`}</TableCell>
-                <TableCell align="left">---</TableCell>
-                <TableCell align="left">---</TableCell>
+                <TableCell align="left">{item.actTotal}</TableCell>
+                <TableCell
+                  align="center"
+                  className={
+                    item.tracking !== "---" && item.trackingId
+                      ? classes.clickableCell
+                      : null
+                  }
+                  onClick={
+                    item.tracking !== "---" && item.trackingId
+                      ? (evt) => {
+                          evt.stopPropagation();
+                          handleTrackingClick(item.trackingId);
+                        }
+                      : null
+                  }
+                >
+                  {item.tracking}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

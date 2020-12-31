@@ -41,9 +41,7 @@ const WarningModal = ({ open, handleClose, message }) => {
           </IconButton>
           <br />
           <div className={classes.warningModal}>
-            <Typography className={classes.headerText}>
-              {message}
-            </Typography>
+            <Typography className={classes.headerText}>{message}</Typography>
           </div>
         </DialogContent>
       </Dialog>
