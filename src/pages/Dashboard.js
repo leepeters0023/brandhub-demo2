@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   dashPaper: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "white",
     width: "100%",
     paddingBottom: "100%",
     position: "relative",
@@ -44,11 +44,22 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   landingImage: {
-    height: "550px",
+    height: "625px",
     top: "10px",
-    right: "100px",
+    right: "73px",
     position: "fixed",
     opacity: ".9",
+      [theme.breakpoints.down("md")]: {
+        height: "350px",
+        right: "0px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "250px",
+      right: "0px",
+  },
+    [theme.breakpoints.down("xs")]: {
+        display: "none"
+    },
   },
 }));
 
