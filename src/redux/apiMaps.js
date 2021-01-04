@@ -537,6 +537,7 @@ export const mapPOShippingParams = (params) => {
     return {
       id: param.id,
       distributor: param.distributor ? param.distributor.name : "---",
+      name: param.name ? param.name : "---",
       attn: param.attn ? param.attn : "---",
       address: formatAddress(param),
       addressOne: param["street-address-1"],
@@ -555,7 +556,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const formattedPO = {
     id: purchaseOrder.id,
     brand: purchaseOrder["brand-names"],
@@ -598,7 +598,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 };
 
 export const mapPOHistoryItems = (items) => {
-  console.log(items);
   const mappedItems = items.map((item) => ({
     allocated: item["po-is-direct-ship"] ? "Direct Ship" : "CDC",
     id: item.id,
