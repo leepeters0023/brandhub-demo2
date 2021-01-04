@@ -58,7 +58,7 @@ const SharedItemGridView = ({ items, handlePreview, isItemsLoading }) => {
                     imgClass={classes.previewImg}
                     alt={item.itemType}
                     imgUrl={item.imgUrlThumb}
-                    handlClick={() => handlePreview(item.id)}
+                    handleClick={() => handlePreview(item.id)}
                   />
                 </div>
                 <br />
