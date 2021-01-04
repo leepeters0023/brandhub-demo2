@@ -27,7 +27,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/open/preorder"
               >
-                <ListItemText primary="+ Quarterly Pre-Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew}} primary="+ Quarterly Pre-Order" />
               </ListItem>
               <ListItem
                 button
@@ -35,7 +35,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/items/onDemand"
               >
-                <ListItemText primary="+ New On-Demand Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New On-Demand Order" />
               </ListItem>
               <ListItem
                 button
@@ -43,7 +43,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/items/inStock"
               >
-                <ListItemText primary="+ New Inventory Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New Inventory Order" />
               </ListItem>
               {role !== "field1" && (
                 <ListItem
@@ -53,7 +53,7 @@ const DrawerOrdersNav = ({
                     handleCouponModal()
                   }}
                 >
-                  <ListItemText
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} 
                     primary="+ New Coupon"
                   />
                 </ListItem>
@@ -79,7 +79,7 @@ const DrawerOrdersNav = ({
                     : "/orders/open/onDemand"
                 }
               >
-                <ListItemText primary="On-Demand" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="On-Demand" />
               </ListItem>
               <ListItem
                 button
@@ -92,7 +92,7 @@ const DrawerOrdersNav = ({
                     : "/orders/open/inStock"
                 }
               >
-                <ListItemText primary="In-Stock" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In-Stock" />
               </ListItem>
             </List>
           </Grid>
@@ -111,7 +111,7 @@ const DrawerOrdersNav = ({
                   component={Link}
                   to="/rollup"
                 >
-                  <ListItemText primary="Quarterly Rollup" />
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Quarterly Rollup" />
                 </ListItem>
                 <ListItem
                   button
@@ -119,7 +119,7 @@ const DrawerOrdersNav = ({
                   component={Link}
                   to="/orders/approvals"
                 >
-                  <ListItemText primary="On Demand / Inventory Order" />
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="On Demand / Inventory Order" />
                 </ListItem>
               </List>
             </Grid>
@@ -140,7 +140,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/poRollup"
               >
-                <ListItemText primary="+ New Purchase Order" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }}primary="+ New Purchase Order" />
               </ListItem>
               <ListItem
                 button
@@ -148,7 +148,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/poHistory/current"
               >
-                <ListItemText primary="Current" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
               </ListItem>
               <ListItem
                 button
@@ -156,7 +156,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/poHistory/all"
               >
-                <ListItemText primary="History" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
               </ListItem>
             </List>
           </Grid>
@@ -174,7 +174,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/rfqRollup"
               >
-                <ListItemText primary="+ New RFQ" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }}primary="+ New RFQ" />
               </ListItem>
               <ListItem
                 button
@@ -182,7 +182,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/rfqHistory/current"
               >
-                <ListItemText primary="Current" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
               </ListItem>
               <ListItem
                 button
@@ -190,7 +190,7 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/purchasing/rfqHistory/all"
               >
-                <ListItemText primary="History" />
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
               </ListItem>
             </List>
           </Grid>

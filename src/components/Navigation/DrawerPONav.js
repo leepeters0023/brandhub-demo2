@@ -26,57 +26,62 @@ const DrawerOrdersNav = ({
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 5
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="New" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 10
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="In Progress" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 2
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Shipping Hold" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Shipping Hold" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/poHistory/all"
           >
-            <ListItemText primary="History" />
+           <ListItemAvatar>
+              <Avatar className={classes.avatar}>
+                0
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>
       </Grid>

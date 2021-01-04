@@ -24,7 +24,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/items/all"
           >
-            <ListItemText primary="Current" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
           </ListItem>
           <ListItem
             button
@@ -33,7 +33,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             to="/items/all"
             //to="/items/archive"
           >
-            <ListItemText primary="Archive" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
           </ListItem>
         </List>
       </Grid>
@@ -52,7 +52,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               component={Link}
               to="/programs/new"
             >
-              <ListItemText primary="Create Ad Hoc Program" />
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
             </ListItem>
           )}
           <ListItem
@@ -61,7 +61,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/programs"
           >
-            <ListItemText primary="Pre-Order Programs" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
           </ListItem>
         </List>
       </Grid>
@@ -80,7 +80,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               to="/compliance/items"
               // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="Item Rules" />
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
             </ListItem>
             <ListItem
               button
@@ -89,7 +89,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               to="/compliance/rules"
              // accurate that we should be showing this to all users?
             >
-              <ListItemText primary="General Rules" />
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
             </ListItem>
             {(userType === "compliance" || userType === "super") && (
               <ListItem
@@ -98,7 +98,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               component={Link}
               to="/compliance/contacts"
             >
-              <ListItemText primary="Contacts" />
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
             </ListItem>
             )}
           </List>

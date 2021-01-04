@@ -10,14 +10,15 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-const RegionSelector = () => {
+
+const RegionSelector = ({classes}) => {
   const dispatch = useDispatch();
 
   const regions = useSelector((state) => state.user.territories);
   const currentRegion = useSelector((state) => state.user.currentTerritory);
 
   const [region, updateRegion] = useState("");
-
+ 
   const handleChangeSelect = (evt) => {
       window.location.hash = ""
       updateRegion(evt.target.value);
@@ -44,11 +45,11 @@ const RegionSelector = () => {
           width: "103.5px",
           height: "41px",
           margin: "0 5px",
-          border: "1px solid #cbcbcb",
+          backgroundColor: "white",
           borderRadius: "5px",
         }}
       >
-        <Typography variant="body2">{regions[0].name}</Typography>
+        <Typography className={classes.regionText} variant="body2">{regions[0].name}</Typography>
       </div>
     );
   } else
@@ -57,7 +58,11 @@ const RegionSelector = () => {
         <FormControl
           variant="outlined"
           size="small"
-          style={{ margin: "0 5px" }}
+          style={{ 
+          margin: "0 5px", 
+          borderRadius: "5px", 
+          backgroundColor: "white",
+        }}
         >
           <Select
             name="regions"

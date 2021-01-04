@@ -121,7 +121,21 @@ export default {
     headerText: {
       fontWeight: "600",
       fontSize: "1rem",
-      color: "#4C4C4C",
+      color: "white",
+    },
+    headerListItem: {
+      color: "white",
+      "&:hover": {
+        textDecoration: "underline"
+      }
+    },
+    headerListItemNew: {
+      color: "white",
+      border: "solid white .5px",
+      padding: "7px",
+      "&:hover": {
+        backgroundColor: "#8397B0 "
+      }
     },
     bodyText: {
       fontSize: ".9rem",
