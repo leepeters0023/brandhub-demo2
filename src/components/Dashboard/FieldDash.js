@@ -34,6 +34,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "pre-order-parent",
       link: "/programs",
       info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
     },
     {
       titleText: "Place On-Demand Order",
@@ -42,6 +43,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "on-demand-parent",
       link: "/orders/items/onDemand",
       info: "Place orders for items that will need to be produced for your order",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
     },
     {
       titleText: "Place In-Stock Order",
@@ -50,6 +52,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "in-stock-parent",
       link: "/orders/items/inStock",
       info: "Place orders for items that are currently available in our inventory",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/in-stock-order_e2ljoa.png",
     },
     {
       titleText: "Order History",
@@ -58,6 +61,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "history-parent",
       link: "/orders/history/group/byOrder",
       info: "View order history grouped by item or order & get tracking information",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
     },
     {
       titleText: "Item Catalog: Current",
@@ -66,6 +70,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "catalog-current-parent",
       link: "/items/all",
       info: "View catalog of and details about currently available items",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-current_bpu1tl.png",
     },
     {
       titleText: "Item Catalog: Archive",
@@ -75,6 +80,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/items/all",
       //link: "/items/archive"
       info: "View archive of and details about currently available items",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
     },
     {
       titleText: "Item Rules",
@@ -83,6 +89,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "item-rules-parent",
       link: "/compliance/items",
       info: "View details about regional item compliance",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-rules_vzkm5t.png",
     },
     {
       titleText: "Wrap Up Report",
@@ -91,19 +98,9 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "wrap-report-parent",
       link: "/reports/wrap-up",
       info: "View wrap up report",
+      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/wrap-up-report_ryrffh.png",
     },
-
-  ]
-
-  // meeting with Carlton 12/30 cards to include: 
-  // x current preorder (newicon, element of time is good), 
-  // x ondemand order (use ad-hoc icon currently in use), 
-  // x instock order (newicon), 
-  // x order history (newicon question mark, person thinking?), 
-  // x current item catalog
-  // x archive
-  // item rules
-  // report
+  ];
   return (
     <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
       <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
@@ -124,6 +121,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
                 onMouseLeave={handlePopoverClose}
               >
                 <Typography className={classes.titleText}>{data.titleText}</Typography>
+                <Divider className={classes.divider}/> 
+                <img className={classes.icon} src={data.icon} />
               </div>
             </Paper>
 

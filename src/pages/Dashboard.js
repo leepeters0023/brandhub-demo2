@@ -27,17 +27,22 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "100%",
     position: "relative",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    alignItems: "center",
+    "&:hover": {
+      transition: "all .3s ease-in-out",
+      transform: "scale(1.1)"
+    },
   },
   innerPaper: {
     position: "absolute",
     width: "Calc(100% - 50px)",
     height: "Calc(100% - 50px)",
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    padding: "25px",
   },
   popover: {
     pointerEvents: "none",
@@ -64,6 +69,15 @@ const useStyles = makeStyles((theme) => ({
         display: "none"
     },
   },
+  icon: {
+    height: "auto",
+    width: "80%",
+  }, 
+  divider: {
+    width: "100%",
+    marginTop: "20px",
+    marginBottom: "50px",
+  }
 }));
 
 const InfoPopover = ({
