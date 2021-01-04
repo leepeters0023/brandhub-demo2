@@ -15,6 +15,8 @@ const DrawerOrdersNav = ({
   handleDrawerClose,
   classes,
 }) => {
+
+
   return (
     <Grid container spacing={2} justify="space-around">
       <Grid item sm={3} xs={12}>
@@ -26,7 +28,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/rfqHistory/current"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 8
               </Avatar>
             </ListItemAvatar>
@@ -43,7 +45,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/rfqHistory/current"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 15
               </Avatar>
             </ListItemAvatar>
@@ -60,7 +62,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/rfqHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 25
               </Avatar>
             </ListItemAvatar>
@@ -77,7 +79,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/rfqHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 0
               </Avatar>
             </ListItemAvatar>
