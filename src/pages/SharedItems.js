@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSharedItemsByIds } from "../redux/slices/sharedItemsSlice";
 
-import SharedItemPreview from "../components/SharedItems/SharedItemPreview";
+import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
 import SharedItemViewControl from "../components/SharedItems/SharedItemViewControl";
 import PublicFooter from "../components/SharedItems/SharedFooter";
 
@@ -54,11 +54,14 @@ const SharedItems = ({ handleFiltersClosed, itemIds }) => {
 
   return (
     <>
-      <SharedItemPreview
-        open={previewModal}
-        handleClose={handleModalClose}
-        item={currentItem}
-      />
+      {currentItem && previewModal && (
+        <ItemPreviewModal
+          type="catalog"
+          previewModal={previewModal}
+          handleClose={handleModalClose}
+          currentItem={currentItem}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
