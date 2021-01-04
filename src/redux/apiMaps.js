@@ -472,6 +472,7 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
+  console.log(items);
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -554,6 +555,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder);
   const formattedPO = {
     id: purchaseOrder.id,
     brand: purchaseOrder["brand-names"],
@@ -590,14 +592,18 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       .map((item) => item.totalCost)
       .reduce((a, b) => a + b),
     directShip: purchaseOrder["is-direct-ship"],
+    submittedDate: purchaseOrder["submitted-at"]
+      ? format(new Date(purchaseOrder["submitted-at"]), "MM/dd/yyyy")
+      : "---",
     shippingParams: mapPOShippingParams(purchaseOrder["shipping-parameters"]),
   };
   return formattedPO;
 };
 
 export const mapPOHistoryItems = (items) => {
+  console.log(items);
   const mappedItems = items.map((item) => ({
-    allocated: item["purchase-order"]["is-direct-ship"] ? "Direct Ship" : "CDC",
+    allocated: item["po-is-direct-ship"] ? "Direct Ship" : "CDC",
     id: item.id,
     itemId: item.item.id,
     poNum: item["purchase-order"].id,
@@ -608,15 +614,13 @@ export const mapPOHistoryItems = (items) => {
     itemDesc: item["item-description"] ? item["item-description"] : "---",
     brand: item["brand-names"],
     program: item["program-names"],
-    purchasedBy: item["purchase-order"].purchaser
-      ? item["purchase-order"].purchaser.name
-      : "---",
+    purchasedBy: item["po-purchaser-name"] ? item["po-purchaser-name"] : "---",
     totalItems: item.qty,
     estCost: stringToCents(item["item-estimated-cost"]),
     actCost: stringToCents(item["actual-cost"]),
     status: item["po-status"],
-    submittedDate: item["purchase-order"]["submitted-date"]
-      ? item["purchase-order"]["submitted-date"]
+    submittedDate: item["po-submitted-at"]
+      ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
       : "---",
     dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
   }));

@@ -24,16 +24,26 @@ const headCells = [
   { id: "seqNum", disablePadding: false, label: "Seq. #", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "projectNum", disablePadding: false, label: "Project #", sort: true },
-  { id: "itemDesc", disablePadding: false, label: "Item Description", sort: true },
+  {
+    id: "itemDesc",
+    disablePadding: false,
+    label: "Item Description",
+    sort: true,
+  },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: true },
   { id: "quantity", disablePadding: false, label: "Quantity", sort: true },
   { id: "estCost", disablePadding: false, label: "Est. Cost/Unit", sort: true },
   { id: "actCost", disablePadding: false, label: "Act. Cost/Unit", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
-  { id: "submittedDate", disablePadding: false, label: "Submitted Date", sort: true },
+  {
+    id: "submittedDate",
+    disablePadding: false,
+    label: "Submitted Date",
+    sort: true,
+  },
   { id: "poCreator", disablePadding: false, label: "PO Creator", sort: true },
   { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
-]
+];
 
 // Toggle to On Demand or Pre Order – What if we don’t toggle and add a column for this?  Like we do in Order History
 
@@ -45,7 +55,9 @@ const EnhancedTableHead = (props) => {
 
   const currentHeadCells =
     role === "supplier"
-      ? headCells.filter((cell) => cell.id !== "supplier" && cell.id !== "estCost")
+      ? headCells.filter(
+          (cell) => cell.id !== "supplier" && cell.id !== "estCost"
+        )
       : headCells.filter((cell) => cell.id !== "");
 
   return (
@@ -193,18 +205,19 @@ const PurchaseOrderHistoryTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                      <TableCell align="left">{row.brand[0]}</TableCell>
-                    )}
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">{row.projectNum}</TableCell>
                   <TableCell align="left">{row.itemDesc}</TableCell>
-                  {role !== "supplier" && ( <>
+                  {role !== "supplier" && (
                     <TableCell align="left">{row.supplier}</TableCell>
+                  )}
+                  <TableCell align="left">{row.totalItems}</TableCell>
+                  {role !== "supplier" && (
                     <TableCell align="left">
                       {formatMoney(row.estCost, true)}
                     </TableCell>
-                    </>
                   )}
-                  <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
                     {formatMoney(row.actCost, true)}
                   </TableCell>
