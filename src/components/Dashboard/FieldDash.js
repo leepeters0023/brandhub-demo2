@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
-import Divider from '@material-ui/core/Divider';
+
+import ImageWrapper from "../Utility/ImageWrapper";
+
+import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -21,10 +24,16 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
   const inStockOpen = anchorEl ? anchorEl.id === "in-stock-parent" : false;
   const onDemandOpen = anchorEl ? anchorEl.id === "on-demand-parent" : false;
   const historyOpen = anchorEl ? anchorEl.id === "history-parent" : false;
-  const catalogCurrentOpen = anchorEl ? anchorEl.id === "catalog-current-parent" : false;
-  const catalogArchiveOpen = anchorEl ? anchorEl.id === "catalog-archive-parent" : false;
+  const catalogCurrentOpen = anchorEl
+    ? anchorEl.id === "catalog-current-parent"
+    : false;
+  const catalogArchiveOpen = anchorEl
+    ? anchorEl.id === "catalog-archive-parent"
+    : false;
   const itemRulesOpen = anchorEl ? anchorEl.id === "item-rules-parent" : false;
-  const wrapReportOpen = anchorEl ? anchorEl.id === "wrap-report-parent" : false;
+  const wrapReportOpen = anchorEl
+    ? anchorEl.id === "wrap-report-parent"
+    : false;
 
   const cardData = [
     {
@@ -33,26 +42,32 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       ariaOwnsText: "pre-order",
       id: "pre-order-parent",
       link: "/programs",
-      info: "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
+      info:
+        "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
     },
     {
-      titleText: "Place On-Demand Order",
+      titleText: "On-Demand Order",
       ariaOwnsState: onDemandOpen,
       ariaOwnsText: "on-demand",
       id: "on-demand-parent",
       link: "/orders/items/onDemand",
-      info: "Place orders for items that will need to be produced for your order",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
+      info:
+        "Place orders for items that will need to be produced for your order",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
     },
     {
-      titleText: "Place In-Stock Order",
+      titleText: "In-Stock Order",
       ariaOwnsState: inStockOpen,
       ariaOwnsText: "in-stock",
       id: "in-stock-parent",
       link: "/orders/items/inStock",
-      info: "Place orders for items that are currently available in our inventory",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/in-stock-order_e2ljoa.png",
+      info:
+        "Place orders for items that are currently available in our inventory",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/in-stock-order_e2ljoa.png",
     },
     {
       titleText: "Order History",
@@ -60,8 +75,10 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       ariaOwnsText: "order-history",
       id: "history-parent",
       link: "/orders/history/group/byOrder",
-      info: "View order history grouped by item or order & get tracking information",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
+      info:
+        "View order history grouped by item or order & get tracking information",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
     },
     {
       titleText: "Item Catalog: Current",
@@ -70,7 +87,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "catalog-current-parent",
       link: "/items/all",
       info: "View catalog of and details about currently available items",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-current_bpu1tl.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-current_bpu1tl.png",
     },
     {
       titleText: "Item Catalog: Archive",
@@ -80,7 +98,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/items/all",
       //link: "/items/archive"
       info: "View archive of and details about currently available items",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
     },
     {
       titleText: "Item Rules",
@@ -89,7 +108,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "item-rules-parent",
       link: "/compliance/items",
       info: "View details about regional item compliance",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-rules_vzkm5t.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-rules_vzkm5t.png",
     },
     {
       titleText: "Wrap Up Report",
@@ -98,7 +118,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "wrap-report-parent",
       link: "/reports/wrap-up",
       info: "View wrap up report",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/wrap-up-report_ryrffh.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/wrap-up-report_ryrffh.png",
     },
   ];
   return (
@@ -108,10 +129,19 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
           {`Welcome back ${name}!`}
         </Typography>
       </div>
-      {cardData.map((data) => (
-        <Grid item lg={3} md={5} sm={7} xs={12} component={Link} to={data.link}>
+      {cardData.map((data, index) => (
+        <Grid
+          item
+          lg={3}
+          md={5}
+          sm={7}
+          xs={12}
+          component={Link}
+          to={data.link}
+          key={index}
+        >
           <div className={classes.dashboardGridItem}>
-            <Paper className={classes.dashPaper}>
+            <Paper className={classes.dashPaper} elevation={5}>
               <div
                 id={data.id}
                 className={classes.innerPaper}
@@ -120,12 +150,31 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
               >
-                <Typography className={classes.titleText}>{data.titleText}</Typography>
-                 <Divider className={classes.divider}/> 
-                <img className={classes.icon} src={data.icon} />
+                <div
+                  style={{
+                    width: "100%",
+                    height: "30%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography className={classes.titleText}>
+                    {data.titleText}
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+                <ImageWrapper
+                  imgUrl={data.icon}
+                  alt={data.titleText}
+                  imgClass={classes.icon}
+                  id={`${data.id}-image`}
+                  handleClick={null}
+                />
+                {/* <img className={classes.icon} src={data.icon} /> */}
               </div>
             </Paper>
-
           </div>
           <InfoPopover
             id={data.id}
@@ -136,7 +185,6 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
             handlePopoverClose={handlePopoverClose}
           />
         </Grid>
-
       ))}
     </Grid>
   );

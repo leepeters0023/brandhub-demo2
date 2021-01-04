@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   }, 
   divider: {
     width: "100%",
-    marginTop: "20px",
+    marginTop: "10px",
     marginBottom: "50px",
   }
 }));
@@ -91,6 +91,7 @@ const InfoPopover = ({
         onClose={handlePopoverClose}
         marginThreshold={25}
         disableRestoreFocus
+        disableScrollLock
       >
         <Typography className={classes.bodyText}>{info}</Typography>
       </Popover>
@@ -130,6 +131,7 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
           <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} />
         )}
       </Container>
+      <br />
       <br />
     </>
   );

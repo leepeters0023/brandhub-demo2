@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
-import Divider from '@material-ui/core/Divider';
+
+import ImageWrapper from "../Utility/ImageWrapper";
+
+import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -17,8 +20,12 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
     setAnchorEl(null);
   };
 
-  const currentQuotesOpen = anchorEl ? anchorEl.id === "current-quote-parent" : false;
-  const quoteHistoryOpen = anchorEl ? anchorEl.id === "quote-history-parent" : false;
+  const currentQuotesOpen = anchorEl
+    ? anchorEl.id === "current-quote-parent"
+    : false;
+  const quoteHistoryOpen = anchorEl
+    ? anchorEl.id === "quote-history-parent"
+    : false;
   const currentPOsOpen = anchorEl ? anchorEl.id === "current-po-parent" : false;
   const poHistoryOpen = anchorEl ? anchorEl.id === "po-history-parent" : false;
 
@@ -30,7 +37,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "current-quote-parent",
       link: "/purchasing/rfqHistory/current",
       info: "New and Pending Quotes",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
     },
     {
       titleText: "Quote History",
@@ -39,7 +47,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "quote-history-parent",
       link: "/purchasing/rfqHistory/all",
       info: "All Quotes",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
     },
     {
       titleText: "Current Purchase Orders",
@@ -48,7 +57,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "current-po-parent",
       link: "/purchasing/poHistory#current",
       info: "New and Pending Purchase Orders",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
     },
     {
       titleText: "Purchase Order History",
@@ -57,7 +67,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "po-history-parent",
       link: "/purchasing/poHistory#all",
       info: "All Purchase Orders",
-      icon: "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
+      icon:
+        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
     },
   ];
   return (
@@ -67,17 +78,19 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
           {`Welcome back ${name}!`}
         </Typography>
       </div>
-      {cardData.map((data) => (
+      {cardData.map((data, index) => (
         <Grid
           item
-          md={3}
-          sm={6}
+          lg={3}
+          md={5}
+          sm={7}
           xs={12}
           component={Link}
           to={data.link}
+          key={index}
         >
           <div className={classes.dashboardGridItem}>
-            <Paper className={classes.dashPaper}>
+            <Paper className={classes.dashPaper} elevation={5}>
               <div
                 id={data.id}
                 className={classes.innerPaper}
@@ -86,9 +99,29 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
               >
-                <Typography className={classes.titleText}>{data.titleText}</Typography>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "30%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography className={classes.titleText}>
+                    {data.titleText}
+                  </Typography>
+                </div>
                 <Divider className={classes.divider} />
-                <img className={classes.icon} src={data.icon} />
+                <ImageWrapper
+                  imgUrl={data.icon}
+                  alt={data.titleText}
+                  imgClass={classes.icon}
+                  id={`${data.id}-image`}
+                  handleClick={null}
+                />
+                {/* <img className={classes.icon} src={data.icon} /> */}
               </div>
             </Paper>
           </div>
