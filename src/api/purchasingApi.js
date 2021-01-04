@@ -110,6 +110,7 @@ export const createRFQ = async (item, program) => {
     });
   return response;
 };
+//todo add attribute of qty for inventory order
 
 //Updates the note on an RFQ
 export const updateRFQNote = async (id, note) => {
@@ -309,6 +310,38 @@ export const createPO = async (ids) => {
     // how to consistently console.log(response) here?
   return response;
 };
+
+export const createInvPO = async (id, qty, warehouse) => {
+  const response = { status: "", error: null, data: null };
+  let requestBody = {
+    data: {
+      type: "purchase-order",
+      attributes: warehouse ? {
+        "item-id": id,
+        qty: qty,
+        warehouse: warehouse,
+        type: "in-stock",
+      } : {
+        "item-id": id,
+        qty: qty,
+        type: "in-stock",
+      },
+    },
+  };
+  await axios
+    .post("/api/purchase-orders", requestBody, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
 
 export const addToPO = async (ids, poNum) => {
   const response = { status: "", error: null, data: null };
