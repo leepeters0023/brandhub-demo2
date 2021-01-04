@@ -64,7 +64,7 @@ const DrawerOrdersNav = ({
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
+                  primaryTypographyProps={{ className: classes.navHeaderText }}
                   primary="Draft Orders:"
                 />
               </ListItem>
@@ -101,7 +101,7 @@ const DrawerOrdersNav = ({
               <List className={classes.navList}>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{ className: classes.headerText }}
+                    primaryTypographyProps={{ className: classes.navHeaderText }}
                     primary="Order Review:"
                   />
                 </ListItem>
@@ -130,7 +130,7 @@ const DrawerOrdersNav = ({
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
+                  primaryTypographyProps={{ className: classes.navHeaderText }}
                   primary="Purchase Orders:"
                 />
               </ListItem>
@@ -164,7 +164,7 @@ const DrawerOrdersNav = ({
             <List className={classes.navList}>
               <ListItem>
                 <ListItemText
-                  primaryTypographyProps={{ className: classes.headerText }}
+                  primaryTypographyProps={{ className: classes.navHeaderText }}
                   primary="Request for Quotes:"
                 />
               </ListItem>

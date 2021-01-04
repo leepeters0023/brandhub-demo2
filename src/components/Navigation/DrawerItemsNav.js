@@ -14,7 +14,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
         <List className={classes.navList}>
           <ListItem>
             <ListItemText
-              primaryTypographyProps={{ className: classes.headerText }}
+              primaryTypographyProps={{ className: classes.navHeaderText }}
               primary="Item Catalog:"
             />
           </ListItem>
@@ -41,7 +41,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
         <List className={classes.navList}>
           <ListItem>
             <ListItemText
-              primaryTypographyProps={{ className: classes.headerText }}
+              primaryTypographyProps={{ className: classes.navHeaderText }}
               primary="Programs:"
             />
           </ListItem>
@@ -69,7 +69,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           <List className={classes.navList}>
             <ListItem>
               <ListItemText
-                primaryTypographyProps={{ className: classes.headerText }}
+                primaryTypographyProps={{ className: classes.navHeaderText }}
                 primary="Compliance:"
               />
             </ListItem>

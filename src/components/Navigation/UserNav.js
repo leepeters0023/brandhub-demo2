@@ -98,7 +98,7 @@ const UserNavMenu = ({
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </MenuItem>,
-          <Divider key="divider1"/>,
+          <Divider key="divider1" />,
           <MenuItem
             key="settings"
             component={Link}
