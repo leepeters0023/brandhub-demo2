@@ -25,146 +25,87 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
     : false;
   const currentPOsOpen = anchorEl ? anchorEl.id === "current-po-parent" : false;
   const poHistoryOpen = anchorEl ? anchorEl.id === "po-history-parent" : false;
- // 12/30 meeting with Carlton keep with 4 exisiting cards
+
+  const cardData = [
+    {
+      titleText: "Current Quotes",
+      ariaOwnsState: quoteHistoryOpen,
+      ariaOwnsText: "current-quotes",
+      id: "current-quote-parent",
+      link: "/purchasing/rfqHistory/current",
+      info: "New and Pending Quotes",
+      icon: null,
+    },
+    {
+      titleText: "Quote History",
+      ariaOwnsState: currentQuotesOpen,
+      ariaOwnsText: "quote-history",
+      id: "quote-history-parent",
+      link: "/purchasing/rfqHistory/all",
+      info: "All Quotes",
+      icon: null,
+    },
+    {
+      titleText: "Current Purchase Orders",
+      ariaOwnsState: currentPOsOpen,
+      ariaOwnsText: "current-po",
+      id: "current-po-parent",
+      link: "/purchasing/poHistory#current",
+      info: "New and Pending Purchase Orders",
+      icon: null,
+    },
+    {
+      titleText: "Purchase Order History",
+      ariaOwnsState: poHistoryOpen,
+      ariaOwnsText: "po-history",
+      id: "po-history-parent",
+      link: "/purchasing/poHistory#all",
+      info: "All Purchase Orders",
+      icon: null,
+    },
+  ];
   return (
     <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
-    <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
-    <Typography className={classes.titleText}>
-      {`Welcome back ${name}!`}
-    </Typography>
-    </div>
-      <Grid
-        item
-        md={3}
-        sm={6}
-        xs={12}
-        component={Link}
-        to="/purchasing/rfqHistory/current"
-      >
-        <div className={classes.dashboardGridItem}>
-          <Paper className={classes.dashPaper}>
-            <div
-              id="current-quote-parent"
-              className={classes.innerPaper}
-              aria-owns={currentQuotesOpen ? "current-quotes" : undefined}
-              aria-haspopup="true"
-              onMouseEnter={handlePopoverOpen}
-              onMouseLeave={handlePopoverClose}
-            >
-              <Typography className={classes.titleText}>
-                Current Quotes
-              </Typography>
-            </div>
-          </Paper>
-        </div>
-        <InfoPopover
-          id={"current-quotes"}
-          info={"New and Pending Quotes"}
-          classes={classes}
-          open={currentQuotesOpen}
-          anchorEl={anchorEl}
-          handlePopoverClose={handlePopoverClose}
-        />
-      </Grid>
-      <Grid
-        item
-        md={3}
-        sm={6}
-        xs={12}
-        component={Link}
-        to="/purchasing/rfqHistory/all"
-      >
-        <div className={classes.dashboardGridItem}>
-          <Paper className={classes.dashPaper}>
-            <div
-              id="quote-history-parent"
-              className={classes.innerPaper}
-              aria-owns={quoteHistoryOpen ? "quote-history" : undefined}
-              aria-haspopup="true"
-              onMouseEnter={handlePopoverOpen}
-              onMouseLeave={handlePopoverClose}
-            >
-              <Typography className={classes.titleText}>
-                Quote History
-              </Typography>
-            </div>
-          </Paper>
-        </div>
-        <InfoPopover
-          id={"quote-history"}
-          info={"All Quotes"}
-          classes={classes}
-          open={quoteHistoryOpen}
-          anchorEl={anchorEl}
-          handlePopoverClose={handlePopoverClose}
-        />
-      </Grid>
-      <Grid
-        item
-        md={3}
-        sm={6}
-        xs={12}
-        component={Link}
-        to="/purchasing/poHistory#current"
-      >
-        <div className={classes.dashboardGridItem}>
-          <Paper className={classes.dashPaper}>
-            <div
-              id="current-po-parent"
-              className={classes.innerPaper}
-              aria-owns={currentPOsOpen ? "current-po" : undefined}
-              aria-haspopup="true"
-              onMouseEnter={handlePopoverOpen}
-              onMouseLeave={handlePopoverClose}
-            >
-              <Typography className={classes.titleText}>
-                Current Purchase Orders
-              </Typography>
-            </div>
-          </Paper>
-        </div>
-        <InfoPopover
-          id={"current-po"}
-          info={"New and Pending Purchase Orders"}
-          classes={classes}
-          open={currentPOsOpen}
-          anchorEl={anchorEl}
-          handlePopoverClose={handlePopoverClose}
-        />
-      </Grid>
-      <Grid
-        item
-        md={3}
-        sm={6}
-        xs={12}
-        component={Link}
-        to="/purchasing/poHistory#all"
-      >
-        <div className={classes.dashboardGridItem}>
-          <Paper className={classes.dashPaper}>
-            <div
-              id="po-history-parent"
-              className={classes.innerPaper}
-              aria-owns={poHistoryOpen ? "po-history" : undefined}
-              aria-haspopup="true"
-              onMouseEnter={handlePopoverOpen}
-              onMouseLeave={handlePopoverClose}
-            >
-              <Typography className={classes.titleText}>
-                Purchase Order History
-              </Typography>
-            </div>
-          </Paper>
-        </div>
-        <InfoPopover
-          id={"pre-order"}
-          info={"All Purchase Orders"}
-          classes={classes}
-          open={poHistoryOpen}
-          anchorEl={anchorEl}
-          handlePopoverClose={handlePopoverClose}
-        />
-      </Grid>
+      <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
+        <Typography className={classes.titleText}>
+          {`Welcome back ${name}!`}
+        </Typography>
+      </div>
+      {cardData.map((data) => (
+        <Grid
+          item
+          md={3}
+          sm={6}
+          xs={12}
+          component={Link}
+          to={data.link}
+        >
+          <div className={classes.dashboardGridItem}>
+            <Paper className={classes.dashPaper}>
+              <div
+                id={data.id}
+                className={classes.innerPaper}
+                aria-owns={data.ariaOwnsState ? data.ariaOwnsText : undefined}
+                aria-haspopup="true"
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
+              >
+                <Typography className={classes.titleText}>
+                  {data.titleText}
+                </Typography>
+              </div>
+            </Paper>
+          </div>
+          <InfoPopover
+            id={data.id}
+            info={data.info}
+            classes={classes}
+            open={data.ariaOwnsState}
+            anchorEl={anchorEl}
+            handlePopoverClose={handlePopoverClose}
+          />
+        </Grid>
+      ))}
     </Grid>
   );
 };

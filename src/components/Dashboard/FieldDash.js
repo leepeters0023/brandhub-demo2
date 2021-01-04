@@ -92,7 +92,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/reports/wrap-up",
       info: "View wrap up report",
     },
-    
+
   ]
 
   // meeting with Carlton 12/30 cards to include: 
@@ -106,6 +106,11 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
   // report
   return (
     <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
+      <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
+        <Typography className={classes.titleText}>
+          {`Welcome back ${name}!`}
+        </Typography>
+      </div>
       {cardData.map((data) => (
         <Grid item md={3} sm={6} xs={12} component={Link} to={data.link}>
           <div className={classes.dashboardGridItem}>
@@ -117,11 +122,11 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
                 aria-haspopup="true"
                 onMouseEnter={handlePopoverOpen}
                 onMouseLeave={handlePopoverClose}
-              > 
+              >
                 <Typography className={classes.titleText}>{data.titleText}</Typography>
               </div>
             </Paper>
-           
+
           </div>
           <InfoPopover
             id={data.id}
