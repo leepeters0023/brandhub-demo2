@@ -21,20 +21,28 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   dashPaper: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: "white",
     width: "100%",
+    height: "150px",
     paddingBottom: "100%",
     position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    "&:hover": {
+      transition: "all .3s ease-in-out",
+      transform: "scale(1.1)"
+    },
   },
   innerPaper: {
     position: "absolute",
     width: "Calc(100% - 50px)",
     height: "Calc(100% - 50px)",
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    padding: "25px",
   },
   popover: {
     pointerEvents: "none",
@@ -43,6 +51,15 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
   },
+  icon: {
+    height: "auto",
+    width: "80%",
+  }, 
+  divider: {
+    width: "100%",
+    marginTop: "10px",
+    marginBottom: "50px",
+  }
 }));
 
 const InfoPopover = ({
@@ -74,6 +91,7 @@ const InfoPopover = ({
         onClose={handlePopoverClose}
         marginThreshold={25}
         disableRestoreFocus
+        disableScrollLock
       >
         <Typography className={classes.bodyText}>{info}</Typography>
       </Popover>
@@ -102,21 +120,18 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
           alignItems: "center",
         }}
       >
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <Typography className={classes.titleText}>
-            {`Welcome back ${name}!`}
-          </Typography>
-        </div>
+        <br />
         <br />
         <br />
         <br />
         {userType === "supplier" && (
-          <SupplierDash classes={classes} InfoPopover={InfoPopover} />
+          <SupplierDash name={name} classes={classes} InfoPopover={InfoPopover} />
         )}
         {userType !== "supplier" && (
-          <FieldDash classes={classes} InfoPopover={InfoPopover} />
+          <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} />
         )}
       </Container>
+      <br />
       <br />
     </>
   );

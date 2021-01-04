@@ -139,7 +139,8 @@ export default {
       border: "solid white .5px",
       padding: "7px",
       "&:hover": {
-        backgroundColor: "#8397B0 "
+        color: "black",
+        backgroundColor: "white "
       }
     },
     bodyText: {
@@ -155,6 +156,7 @@ export default {
       fontSize: "1rem",
       textAlign: "center",
       color: "#FFFFFF",
+      backgroundColor: "#8397B0",
     },
     tabContainer: {
       display: "flex",
