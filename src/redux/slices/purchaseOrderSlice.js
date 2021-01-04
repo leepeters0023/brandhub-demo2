@@ -526,7 +526,8 @@ export const deleteItem = (id) => async (dispatch) => {
 export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    const newPOItem = await addAdditionalPOCost(id, desc, cost);
+    const formattedCost = parseFloat(cost).toString();
+    const newPOItem = await addAdditionalPOCost(id, desc, formattedCost);
     if (newPOItem.error) {
       throw newPOItem.error;
     }
