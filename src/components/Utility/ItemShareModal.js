@@ -136,7 +136,11 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
                 </IconButton>
               )}
               {!isLoading && groupedItems && (
-                <Tooltip title="Download as PDF" style={{ zIndex: "16000" }}>
+                <Tooltip
+                  title="Download as PDF"
+                  PopperProps={{ style: { zIndex: "16000" } }}
+                  placement="right"
+                >
                   <span>
                     <PDFDownloadLink
                       document={

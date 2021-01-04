@@ -14,7 +14,10 @@ export const filter = (array, filters) => {
           filtered = false;
           break;
         }
-        if (filters[i].type === "unit" && !item.unit.includes(filters[i].value.name)) {
+        if (
+          filters[i].type === "unit" &&
+          !item.unit.includes(filters[i].value.name)
+        ) {
           filtered = false;
           break;
         }
@@ -106,18 +109,33 @@ export const formatDate = (date) => {
 export const groupByThree = (array) => {
   let groupedArray = [];
   let tempArray = [];
-  for (let i = 1; i <= array.length; i++) {
-    if (i%3 !== 0) {
-      tempArray.push(array[i-1])
-      if (i === array.length) {
+  let progGroupObj = array.reduce((group, item) => {
+    let groupName = item.program;
+    group[groupName] = group[groupName] || [];
+    group[groupName].push(item);
+    return group;
+  }, {});
+  const sortedArray = Object.values(progGroupObj)
+    .sort((a, b) => {
+      return a[0].brand.toLowerCase()[0] < b[0].brand.toLowerCase()[0]
+        ? -1
+        : a[0].brand.toLowerCase()[0] > b[0].brand.toLowerCase()[0]
+        ? 1
+        : 0;
+    })
+    .reduce((a, b) => a.concat(b));
+  for (let i = 1; i <= sortedArray.length; i++) {
+    if (i % 3 !== 0) {
+      tempArray.push(sortedArray[i - 1]);
+      if (i === sortedArray.length) {
         groupedArray.push(tempArray);
         tempArray = [];
       }
     } else {
-      tempArray.push(array[i-1])
+      tempArray.push(sortedArray[i - 1]);
       groupedArray.push(tempArray);
-      tempArray = []
+      tempArray = [];
     }
   }
   return groupedArray;
-}
+};
