@@ -45,7 +45,7 @@ const RegionSelector = ({classes}) => {
           width: "103.5px",
           height: "41px",
           margin: "0 5px",
-          border: "1px solid white",
+          backgroundColor: "white",
           borderRadius: "5px",
         }}
       >

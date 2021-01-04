@@ -99,7 +99,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
   regionText: {
-    color: "white"
+    color: "black"
   },
   avatar: {
     backgroundColor: "white",
