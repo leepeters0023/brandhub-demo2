@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logo from "../../assets/RTA_Logo_Stacked.png";
+import Logo from "../../assets/RTA_Logo_Stacked_White.png";
 import { Link } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +25,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   drawer: {
-    height: "325px",
+    height: "350px",
     flexShrink: 0,
     whiteSpace: "nowrap",
     position: "fixed",
@@ -33,14 +33,16 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "10000",
   },
   drawerOpen: {
+    backgroundColor: "black",
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    height: "325px",
+    height: "365px",
     overflowY: "hidden",
   },
   drawerSupplierOpen: {
+    backgroundColor: "black",
     transition: theme.transitions.create("height", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -62,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   logoLink: {
-    filter: "brightness(0%)",
+    filter: "brightness(100%)",
     height: "58px",
     width: "auto",
     marginLeft: "20px",
@@ -74,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
   navigationText: {
     fontWeight: 500,
+    color: "white",
     margin: "0 20px",
     "&&:hover": {
       cursor: "pointer",
@@ -81,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selectedNavigationText: {
     textDecoration: "underline",
-    textDecorationColor: theme.palette.primary.dark,
+    textDecorationColor: theme.palette.primary.light,
   },
   navBreak: {
     display: "flex",
@@ -93,6 +96,14 @@ const useStyles = makeStyles((theme) => ({
   navList: {
     paddingLeft: "20px",
     marginTop: "-20px",
+    color: "white",
+  },
+  regionText: {
+    color: "black"
+  },
+  avatar: {
+    backgroundColor: "white",
+    color: "black",
   },
 }));
 
@@ -150,6 +161,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             width: "Calc(100% - 50px)",
             padding: "10px 25px",
             alignItems: "center",
+            backgroundColor: "black",
           }}
         >
           <div className={classes.navBreak}>
@@ -159,7 +171,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                   src={Logo}
                   alt="Logo"
                   className={classes.logoLink}
-                  style={{ filter: "brightness(0%)" }}
+                  style={{ filter: "brightness(100%)" }}
                   onClick={handleDrawerClose}
                 />
               </Link>
@@ -244,7 +256,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             className={classes.navBreak}
             style={{ float: "right", marginTop: "-67px" }}
           >
-            {territories && territories.length > 0 && <RegionSelector />}
+            {territories && territories.length > 0 && <RegionSelector classes={classes}/>}
             <UserNav
               initials={initials}
               handleLogout={handleLogout}

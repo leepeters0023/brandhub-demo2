@@ -15,6 +15,8 @@ const DrawerOrdersNav = ({
   handleDrawerClose,
   classes,
 }) => {
+
+
   return (
     <Grid container spacing={2} justify="space-around">
       <Grid item sm={3} xs={12}>
@@ -26,57 +28,62 @@ const DrawerOrdersNav = ({
             to="/purchasing/rfqHistory/current"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 8
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="New" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/rfqHistory/current"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 15
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="In Progress" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 25
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary="Awarded" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded" />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
         <List className={classes.navList}>
-        <ListItem
+          <ListItem
             button
             onClick={handleDrawerClose}
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
-            <ListItemText primary="History" />
+            <ListItemAvatar>
+              <Avatar className={classes.avatar}>
+                0
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>
       </Grid>
