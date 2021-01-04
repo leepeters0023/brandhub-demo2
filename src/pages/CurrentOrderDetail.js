@@ -463,7 +463,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <br />
         <br />
         <div className={classes.orderControl}>
-          {orderStatus === "in-progress" && currentOrderType !== "pre-order" && (
+          {(orderStatus === "in-progress" || orderStatus === "inactive") && currentOrderType !== "pre-order" && (
             <Button
               className={classes.largeButton}
               style={{ marginRight: "10px" }}

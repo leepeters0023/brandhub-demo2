@@ -6,7 +6,6 @@ import { formatMoney } from "../../utility/utilityFunctions";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  updateCost,
   setItemActCost,
   setItemPackOut,
 } from "../../redux/slices/purchaseOrderSlice";
@@ -53,9 +52,8 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
 const POItemsTable = ({
   items,
   classes,
-  addNewCost,
-  additionalCosts,
   handleDelete,
+  handleSetUpFee,
 }) => {
   const dispatch = useDispatch();
   const currentRole = useSelector((state) => state.user.role);
@@ -183,7 +181,7 @@ const POItemsTable = ({
           {currentRole !== "supplier" && (
             <>
               <TableRow>
-                <TableCell className={classes.headerText}>
+                <TableCell colSpan={2} className={classes.headerText}>
                   Set Up Fee:
                 </TableCell>
                 <TableCell colSpan={8} align="left">
@@ -191,7 +189,7 @@ const POItemsTable = ({
                     <IconButton
                       onClick={(event) => {
                         event.stopPropagation();
-                        addNewCost();
+                        handleSetUpFee();
                       }}
                     >
                       <AddCircleIcon color="inherit" />
@@ -199,51 +197,6 @@ const POItemsTable = ({
                   </Tooltip>
                 </TableCell>
               </TableRow>
-              {additionalCosts.length > 0 &&
-                additionalCosts.map((cost, index) => (
-                  <TableRow key={index}>
-                    <TableCell className={classes.headerText}>
-                      Description:
-                    </TableCell>
-                    <TableCell colSpan={6}>
-                      <TextField
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={cost.description}
-                        onChange={(evt) => {
-                          dispatch(
-                            updateCost({
-                              key: "description",
-                              value: evt.target.value,
-                              index: index,
-                            })
-                          );
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.headerText} align="right">
-                      Cost:
-                    </TableCell>
-                    <TableCell colSpan={2}>
-                      <TextField
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={cost.cost}
-                        onChange={(evt) => {
-                          dispatch(
-                            updateCost({
-                              key: "cost",
-                              value: evt.target.value,
-                              index: index,
-                            })
-                          );
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
             </>
           )}
           {currentRole === "supplier" && (
@@ -271,8 +224,8 @@ const POItemsTable = ({
 POItemsTable.propTypes = {
   items: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,
-  addNewCost: PropTypes.func.isRequired,
-  additionalCosts: PropTypes.array,
+  handleSetUpFee: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 
 export default React.memo(POItemsTable);
