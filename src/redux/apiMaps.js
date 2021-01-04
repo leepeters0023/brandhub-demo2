@@ -585,9 +585,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["rfq-number"]
       : "---",
     poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
-    additionalCosts: purchaseOrder["extra-costs"]
-      ? purchaseOrder["extra-costs"]
-      : [],
     totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
       .map((item) => item.totalCost)
       .reduce((a, b) => a + b),
