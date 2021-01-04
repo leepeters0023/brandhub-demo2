@@ -26,7 +26,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 5
               </Avatar>
             </ListItemAvatar>
@@ -43,7 +43,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 10
               </Avatar>
             </ListItemAvatar>
@@ -60,7 +60,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/poHistory/all"
           >
             <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 2
               </Avatar>
             </ListItemAvatar>
@@ -77,7 +77,7 @@ const DrawerOrdersNav = ({
             to="/purchasing/poHistory/all"
           >
            <ListItemAvatar>
-              <Avatar>
+              <Avatar className={classes.avatar}>
                 0
               </Avatar>
             </ListItemAvatar>

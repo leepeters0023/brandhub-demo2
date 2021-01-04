@@ -101,6 +101,10 @@ const useStyles = makeStyles((theme) => ({
   regionText: {
     color: "white"
   },
+  avatar: {
+    backgroundColor: "white",
+    color: "black",
+  },
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
