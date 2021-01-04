@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Roboto",
-    fontSize: 10,
+    fontSize: 8,
   },
   sectionWrapper: {
     display: "flex",
@@ -42,24 +42,24 @@ const styles = StyleSheet.create({
     height: 225,
   },
   imageSection: {
-    width: 300,
+    width: 250,
     padding: 20,
   },
   image: {
     objectFit: "contain",
   },
   textSection: {
-    width: 300,
+    width: 175,
     height: 225,
-    padding: 20,
+    padding: 10,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-around",
   },
   pageBreak: {
     width: 600,
-    height: 2,
+    height: 1,
     marginTop: 10,
     backgroundColor: "black",
   },
@@ -107,6 +107,13 @@ const SharedPDF = ({ items }) => {
                   <Text style={styles.text}>
                     {`In Market: ${item.inMarketDate}`}
                   </Text>
+                </View>
+                <View style={styles.textSection}>
+                  {item.specification.map((spec, index) => (
+                    <Text style={styles.text} key={index}>
+                      {`${spec.key}:  ${spec.value}`}
+                    </Text>
+                  ))}
                 </View>
               </View>
               {i !== group.length - 1 && <View style={styles.pageBreak} />}
