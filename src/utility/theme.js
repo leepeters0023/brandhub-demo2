@@ -121,6 +121,11 @@ export default {
     headerText: {
       fontWeight: "600",
       fontSize: "1rem",
+      color: "#4C4C4C",
+    },
+    navHeaderText: {
+      fontWeight: "600",
+      fontSize: "1rem",
       color: "white",
     },
     headerListItem: {
