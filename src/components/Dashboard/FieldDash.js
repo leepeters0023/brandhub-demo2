@@ -109,7 +109,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
         </Typography>
       </div>
       {cardData.map((data) => (
-        <Grid item md={3} sm={6} xs={12} component={Link} to={data.link}>
+        <Grid item lg={3} md={5} sm={7} xs={12} component={Link} to={data.link}>
           <div className={classes.dashboardGridItem}>
             <Paper className={classes.dashPaper}>
               <div
@@ -121,7 +121,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
                 onMouseLeave={handlePopoverClose}
               >
                 <Typography className={classes.titleText}>{data.titleText}</Typography>
-                <Divider className={classes.divider}/> 
+                 <Divider className={classes.divider}/> 
                 <img className={classes.icon} src={data.icon} />
               </div>
             </Paper>
