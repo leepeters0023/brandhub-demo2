@@ -46,6 +46,24 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
   },
+  landingImage: {
+    height: "625px",
+    top: "10px",
+    right: "73px",
+    position: "fixed",
+    opacity: ".9",
+      [theme.breakpoints.down("md")]: {
+        height: "350px",
+        right: "0px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "250px",
+      right: "0px",
+  },
+    [theme.breakpoints.down("xs")]: {
+        display: "none"
+    },
+  },
 }));
 
 const InfoPopover = ({
@@ -105,19 +123,16 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
           alignItems: "center",
         }}
       >
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <Typography className={classes.titleText}>
-            {`Welcome back ${name}!`}
-          </Typography>
-        </div>
+        <img className={classes.landingImage} src={'https://res.cloudinary.com/joshdowns-dev/image/upload/v1609430770/Select/RTA-landing-image-cropped_yztbhc.png'}/>
+        <br />
         <br />
         <br />
         <br />
         {userType === "supplier" && (
-          <SupplierDash classes={classes} InfoPopover={InfoPopover} />
+          <SupplierDash name={name} classes={classes} InfoPopover={InfoPopover} />
         )}
         {userType !== "supplier" && (
-          <FieldDash classes={classes} InfoPopover={InfoPopover} />
+          <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} />
         )}
       </Container>
       <br />
