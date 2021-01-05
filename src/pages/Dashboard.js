@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     "&:hover": {
       transition: "all .3s ease-in-out",
-      transform: "scale(1.1)"
+      transform: "scale(1.1)",
     },
   },
   innerPaper: {
@@ -54,12 +54,12 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     height: "auto",
     width: "80%",
-  }, 
+  },
   divider: {
     width: "100%",
     marginTop: "10px",
     marginBottom: "50px",
-  }
+  },
 }));
 
 const InfoPopover = ({
@@ -125,7 +125,11 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
         <br />
         <br />
         {userType === "supplier" && (
-          <SupplierDash name={name} classes={classes} InfoPopover={InfoPopover} />
+          <SupplierDash
+            name={name}
+            classes={classes}
+            InfoPopover={InfoPopover}
+          />
         )}
         {userType !== "supplier" && (
           <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} />
