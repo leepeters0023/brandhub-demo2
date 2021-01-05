@@ -49,12 +49,7 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
   );
 };
 
-const POItemsTable = ({
-  items,
-  classes,
-  handleDelete,
-  handleSetUpFee,
-}) => {
+const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
   const dispatch = useDispatch();
   const currentRole = useSelector((state) => state.user.role);
 
@@ -126,7 +121,9 @@ const POItemsTable = ({
                 </Tooltip>
               ) : (
                 <TableCell align="left">
-                  {row.program[0] || row.program}
+                  {row.program === "---"
+                    ? row.program
+                    : row.program[0] || row.program}
                 </TableCell>
               )}
               <TableCell align="left">{row.itemType}</TableCell>
@@ -134,7 +131,9 @@ const POItemsTable = ({
               <TableCell align="left">{row.totalItems}</TableCell>
               {currentRole !== "supplier" && (
                 <TableCell align="left">
-                  {formatMoney(row.estCost, true)}
+                  {row.estCost !== "---"
+                    ? formatMoney(row.estCost, true)
+                    : "---"}
                 </TableCell>
               )}
               {currentRole !== "supplier" ? (
@@ -153,10 +152,14 @@ const POItemsTable = ({
               </TableCell>
               {currentRole !== "supplier" && (
                 <TableCell padding="checkbox" align="center">
-                  <Checkbox
-                    checked={row.packOut}
-                    onChange={() => handlePackOut(row.id, !row.packOut)}
-                  />
+                  {row.itemType === "Set Up Fee" ? (
+                    "---"
+                  ) : (
+                    <Checkbox
+                      checked={row.packOut}
+                      onChange={() => handlePackOut(row.id, !row.packOut)}
+                    />
+                  )}
                 </TableCell>
               )}
               {currentRole === "supplier" && (
