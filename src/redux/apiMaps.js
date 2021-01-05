@@ -485,6 +485,7 @@ export const mapPOItems = (items) => {
         totalItems: item.qty,
         estCost: "---",
         actCost: stringToCents(item["actual-cost"]),
+        totalCost: stringToCents(item["actual-cost"]) * item.qty,
         packout: false,
       };
     } else {
