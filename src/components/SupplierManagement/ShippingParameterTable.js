@@ -48,7 +48,11 @@ const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="left">{shippingInfo.distributor}</TableCell>
+        <TableCell align="left">
+          {shippingInfo.distributor !== "---"
+            ? shippingInfo.distributor
+            : shippingInfo.name}
+        </TableCell>
         <TableCell align="left">{shippingInfo.address}</TableCell>
         <TableCell align="left">{shippingInfo.attn}</TableCell>
         <TableCell align="left">{shippingInfo.carrier}</TableCell>
@@ -165,7 +169,7 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
             <TableRow>
               <TableCell />
               <TableCell className={classes.headerText} align="left">
-                Distributor:
+                Name:
               </TableCell>
               <TableCell className={classes.headerText} align="left">
                 Ship To:

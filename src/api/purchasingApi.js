@@ -787,7 +787,6 @@ export const fetchPO = async (id) => {
   await axios
     .get(`/api/purchase-orders/${id}`)
     .then((res) => {
-      console.log(res);
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
