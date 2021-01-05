@@ -75,12 +75,12 @@ export const mapItems = (items) => {
     return {
       id: item.id,
       itemNumber: item["item-number"],
-      brand: item.brands.map((brand) => brand.name).join(", "),
-      program: item.programs
+      brand: item.brands.length > 0 ? item.brands.map((brand) => brand.name).join(", ") : "---",
+      program: item.programs && item.programs.length > 0
         ? item.programs.map((prog) => prog.name).join(", ")
         : "---",
       itemType: item.type,
-      specification: mapSpecifications(item.specification),
+      specification: item.specification ? mapSpecifications(item.specification) : "---",
       itemDescription: item.description ? item.description : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
@@ -88,6 +88,8 @@ export const mapItems = (items) => {
       inMarketDate: item["in-market-date"]
         ? format(item["in-market-date"], "MM/dd/yyyy")
         : "---",
+      warehouse: item.warehouse,
+      supplierId: item.supplier.id,
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
     };
