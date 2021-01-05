@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
 
-<<<<<<< HEAD
 import { fetchWarehouse, resetAddresses } from "./redux/slices/addressSlice";
-=======
->>>>>>> 2ec841da4dbd1061d3d1b111bbb1b1aff704151f
 import {
   removeUser,
   fetchUser,
@@ -45,17 +42,12 @@ import { clearOrderSet } from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
-<<<<<<< HEAD
   fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
-=======
-  clearTerritories,
-} from "./redux/slices/territorySlice";
->>>>>>> 2ec841da4dbd1061d3d1b111bbb1b1aff704151f
 
 import AuthOLanding from "./pages/AuthOLanding";
 import BudgetVsSpend from "./pages/BudgetVsSpend";

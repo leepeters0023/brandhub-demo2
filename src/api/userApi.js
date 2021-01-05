@@ -90,12 +90,7 @@ export const logoutUser = async () => {
   delete axios.defaults.headers.common["Authorization"];
   await axios
     .get(
-      `https://dev-bz51h7r4.us.auth0.com/v2/logout?client_id=dF47mW4gMqWUtNBHdt0JcTsNUAOPA1oG&returnTo=${redirectUrl}`,
-      {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
+      `https://dev-bz51h7r4.us.auth0.com/v2/logout?client_id=dF47mW4gMqWUtNBHdt0JcTsNUAOPA1oG&returnTo=${redirectUrl}`
     )
     .then((res) => {
       console.log(res);
