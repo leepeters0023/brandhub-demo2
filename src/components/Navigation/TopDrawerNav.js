@@ -13,6 +13,7 @@ import DrawerOrdersNav from "./DrawerOrdersNav";
 import DrawerReportsNav from "./DrawerReportsNav";
 import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import Drawer from "@material-ui/core/Drawer";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -105,6 +106,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     color: "black",
   },
+  expandMoreIcon: {
+    color: "white",
+  }
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
@@ -164,18 +168,23 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             backgroundColor: "black",
           }}
         >
-          <div className={classes.navBreak}>
-            <Tooltip title="Home">
-              <Link to="/">
-                <img
-                  src={Logo}
-                  alt="Logo"
-                  className={classes.logoLink}
-                  style={{ filter: "brightness(100%)" }}
-                  onClick={handleDrawerClose}
-                />
-              </Link>
-            </Tooltip>
+          <Tooltip title="Home">
+            <Link to="/">
+              <img
+                src={Logo}
+                alt="Logo"
+                className={classes.logoLink}
+                style={{ filter: "brightness(100%)" }}
+                onClick={handleDrawerClose}
+              />
+            </Link>
+          </Tooltip>
+          <br></br>
+          <div
+            className={classes.navBreak}
+            style={{ float: "right", marginTop: "-67px" }}
+          >
+            <div style={{display: "flex", flexDirectin: "row", paddingRight: "80px"}}>
             {role === "supplier" && (
               <>
                 <Typography
@@ -190,6 +199,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 >
                   Quotes
                 </Typography>
+                <ExpandMoreIcon className={classes.expandMoreIcon} fontSize="large" />
                 <Typography
                   variant="h5"
                   className={clsx(classes.titleText, classes.navigationText, {
@@ -202,6 +212,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 >
                   Purchase Orders
                 </Typography>
+                <ExpandMoreIcon className={classes.expandMoreIcon} fontSize="large" />
               </>
             )}
             {role !== "supplier" && (
@@ -219,50 +230,54 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 >
                   Items
                 </Typography>
-                <Typography
-                  variant="h5"
-                  className={clsx(classes.titleText, classes.navigationText, {
-                    [classes.selectedNavigationText]:
-                      drawerContent === "orders",
-                  })}
-                  onMouseEnter={() => {
-                    handleDrawerOpen();
-                    setDrawerContent("orders");
-                  }}
-                >
-                  Order
-                </Typography>
-                {role !== "purchasing" && (
+                <ExpandMoreIcon className={classes.expandMoreIcon} fontSize="large" />
+                <>
                   <Typography
                     variant="h5"
                     className={clsx(classes.titleText, classes.navigationText, {
                       [classes.selectedNavigationText]:
-                        drawerContent === "purchasing",
-                      //TODO figure out drawerContent and change to Reports
+                        drawerContent === "orders",
                     })}
                     onMouseEnter={() => {
                       handleDrawerOpen();
-                      setDrawerContent("purchasing");
-                      //TODO figure out drawerContent and change to Reports
+                      setDrawerContent("orders");
                     }}
                   >
-                    Reports
+                    Order
+                </Typography>
+                  <ExpandMoreIcon className={classes.expandMoreIcon} fontSize="large" />
+                </>
+                {role !== "purchasing" && (
+                  <>
+                    <Typography
+                      variant="h5"
+                      className={clsx(classes.titleText, classes.navigationText, {
+                        [classes.selectedNavigationText]:
+                          drawerContent === "purchasing",
+                        //TODO figure out drawerContent and change to Reports
+                      })}
+                      onMouseEnter={() => {
+                        handleDrawerOpen();
+                        setDrawerContent("purchasing");
+                        //TODO figure out drawerContent and change to Reports
+                      }}
+                    >
+                      Reports
                   </Typography>
+                    <ExpandMoreIcon className={classes.expandMoreIcon} fontSize="large" />
+                  </>
                 )}
               </>
             )}
-          </div>
-          <div
-            className={classes.navBreak}
-            style={{ float: "right", marginTop: "-67px" }}
-          >
-            {territories && territories.length > 0 && <RegionSelector classes={classes}/>}
+            </div>
+            {territories && territories.length > 0 && <RegionSelector classes={classes} />}
             <UserNav
               initials={initials}
               handleLogout={handleLogout}
               handleDrawerClose={handleDrawerClose}
               userType={role}
             />
+
           </div>
         </div>
         <br />
