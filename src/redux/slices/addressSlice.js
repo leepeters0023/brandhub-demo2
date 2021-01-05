@@ -4,7 +4,8 @@ import { fetchWarehouseAddress } from "../../api/addressApi";
 let initialState = {
   isLoading: false,
   customAddressList: [],
-  warehouseAddress: null,
+  rapidAddress: null,
+  championAddress: null,
   error: null,
 };
 
@@ -31,15 +32,17 @@ const addressSlice = createSlice({
       state.error = null;
     },
     getWarehouseSuccess(state, action) {
-      const { address } = action.payload;
-      state.warehouseAddress = address;
+      const { rapid, champion } = action.payload;
+      state.rapidAddress = rapid;
+      state.championAddress = champion;
       state.isLoading = null;
       state.error = false;
     },
     resetAddresses(state) {
       state.isLoading = false;
       state.customAddressList = [];
-      state.warehouseAddress = null;
+      state.rapidAddress = null;
+      state.championAddress = null;
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -63,7 +66,9 @@ export const fetchWarehouse = () => async (dispatch) => {
     if (address.error) {
       throw address.error;
     }
-    dispatch(getWarehouseSuccess({ address: address.data[0] }));
+    const rapid = address.data.find((add) => add.name === "Rapid Displays");
+    const champion = address.data.find((add) => add.name === "Champion Logistics");
+    dispatch(getWarehouseSuccess({ rapid: rapid, champion: champion }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

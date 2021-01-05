@@ -34,9 +34,8 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const warehouseId = useSelector(
-    (state) => state.addresses.warehouseAddress.id
-  );
+  const rapidId = useSelector((state) => state.addresses.rapidAddress.id);
+  const championId = useSelector((state) => state.addresses.championAddress.id);
   const currentUserRole = useSelector((state) => state.user.role);
 
   const { value: name, bind: bindName, reset: resetName } = useInput("");
@@ -58,17 +57,19 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
 
   const [state, setState] = useState("");
 
-  const handleCDC = () => {
+  const handleShipToRapid = () => {
     dispatch(
-      addCustomAddressOrder(
-        null,
-        orderSetId,
-        orderTypeMap[orderType],
-        warehouseId
-      )
+      addCustomAddressOrder(null, orderSetId, orderTypeMap[orderType], rapidId)
     );
     handleClose(false);
   };
+
+  const handleShipToChampion = () => {
+    dispatch(
+      addCustomAddressOrder(null, orderSetId, orderTypeMap[orderType], championId)
+    );
+    handleClose(false);
+  }
 
   const handleSubmit = () => {
     const address = {
@@ -126,16 +127,24 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
                   style={{
                     width: "100%",
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "space-around",
                   }}
                 >
                   <Button
                     className={classes.largeButton}
                     variant="contained"
                     color="secondary"
-                    onClick={() => handleCDC()}
+                    onClick={() => handleShipToRapid()}
                   >
-                    SHIP TO CDC
+                    SHIP TO RAPID
+                  </Button>
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleShipToChampion()}
+                  >
+                    SHIP TO CHAMPION
                   </Button>
                 </div>
                 <br />

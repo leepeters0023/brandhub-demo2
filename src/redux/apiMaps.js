@@ -472,7 +472,6 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  console.log(items);
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -556,6 +555,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder);
   const formattedPO = {
     id: purchaseOrder.id,
     brand: purchaseOrder["brand-names"],

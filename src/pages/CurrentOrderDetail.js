@@ -102,13 +102,13 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
   const currentFilters = useSelector((state) => state.filters);
- 
+
   const handleModalOpen = (itemNumber) => {
-      let item = currentItems.find((item) => item.itemNumber === itemNumber);
-      setCurrentItem(item);
-      handlePreviewModal(true);
-    } // useCallback() was causing currentItems to not be passed in to this function
-    
+    let item = currentItems.find((item) => item.itemNumber === itemNumber);
+    setCurrentItem(item);
+    handlePreviewModal(true);
+  }; // useCallback() was causing currentItems to not be passed in to this function
+
   const handleModalClose = () => {
     handlePreviewModal(false);
     setConfirmDeleteOpen(false);
@@ -288,82 +288,94 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          {currentOrderType === "in-stock" && orderStatus === "in-progress" && (
-            <>
-              <Typography className={classes.titleText} variant="h5">
-                Current In-Stock Order
-              </Typography>
-              <div className={classes.configButtons}>
-                <div className={classes.innerConfigDiv}>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Typography
-                      className={classes.titleText}
-                      style={{ marginRight: "10px" }}
+          {currentOrderType === "in-stock" &&
+            (orderStatus === "inactive" || orderStatus === "in-progress") && (
+              <>
+                <Typography className={classes.titleText} variant="h5">
+                  Current In-Stock Order
+                </Typography>
+                <div className={classes.configButtons}>
+                  <div className={classes.innerConfigDiv}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      Total:
-                    </Typography>
-                    <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal,
-                      false
-                    )}`}</Typography>
-                  </div>
-                  <Button
-                    className={classes.largeButton}
-                    style={{ marginLeft: "20px" }}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={
-                      <ExitToAppIcon style={{ transform: "rotate(180deg)" }} />
-                    }
-                    component={Link}
-                    to={"/orders/items/inStock"}
-                  >
-                    ADD ITEMS
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-          {currentOrderType === "on-demand" && orderStatus === "in-progress" && (
-            <>
-              <Typography className={classes.titleText} variant="h5">
-                Current On-Demand Order
-              </Typography>
-              <div className={classes.configButtons}>
-                <div className={classes.innerConfigDiv}>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Typography
-                      className={classes.titleText}
-                      style={{ marginRight: "10px" }}
+                      <Typography
+                        className={classes.titleText}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Total:
+                      </Typography>
+                      <Typography className={classes.titleText}>{`${formatMoney(
+                        currentTotal,
+                        false
+                      )}`}</Typography>
+                    </div>
+                    <Button
+                      className={classes.largeButton}
+                      style={{ marginLeft: "20px" }}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={
+                        <ExitToAppIcon
+                          style={{ transform: "rotate(180deg)" }}
+                        />
+                      }
+                      component={Link}
+                      to={"/orders/items/inStock"}
                     >
-                      Total:
-                    </Typography>
-                    <Typography className={classes.titleText}>{`${formatMoney(
-                      currentTotal,
-                      false
-                    )}`}</Typography>
+                      ADD ITEMS
+                    </Button>
                   </div>
-                  <Button
-                    className={classes.largeButton}
-                    style={{ marginLeft: "20px" }}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={
-                      <ExitToAppIcon style={{ transform: "rotate(180deg)" }} />
-                    }
-                    component={Link}
-                    to={"/orders/items/onDemand"}
-                  >
-                    ADD ITEMS
-                  </Button>
                 </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          {currentOrderType === "on-demand" &&
+            (orderStatus === "inactive" || orderStatus === "in-progress") && (
+              <>
+                <Typography className={classes.titleText} variant="h5">
+                  Current On-Demand Order
+                </Typography>
+                <div className={classes.configButtons}>
+                  <div className={classes.innerConfigDiv}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography
+                        className={classes.titleText}
+                        style={{ marginRight: "10px" }}
+                      >
+                        Total:
+                      </Typography>
+                      <Typography className={classes.titleText}>{`${formatMoney(
+                        currentTotal,
+                        false
+                      )}`}</Typography>
+                    </div>
+                    <Button
+                      className={classes.largeButton}
+                      style={{ marginLeft: "20px" }}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={
+                        <ExitToAppIcon
+                          style={{ transform: "rotate(180deg)" }}
+                        />
+                      }
+                      component={Link}
+                      to={"/orders/items/onDemand"}
+                    >
+                      ADD ITEMS
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
           {window.location.href.includes("rollup") && (
             <>
               <div className={classes.titleImage}>
@@ -407,16 +419,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 {decodeURIComponent(window.location.hash.slice(1)).includes(
                   "approval"
                 ) && (
-                    <Tooltip title="Back to Approvals" placement="bottom-start">
-                      <IconButton
-                        component={Link}
-                        to="/orders/approvals"
-                        onClick={() => dispatch(setRetain({ value: true }))}
-                      >
-                        <ArrowBackIcon fontSize="large" color="secondary" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Back to Approvals" placement="bottom-start">
+                    <IconButton
+                      component={Link}
+                      to="/orders/approvals"
+                      onClick={() => dispatch(setRetain({ value: true }))}
+                    >
+                      <ArrowBackIcon fontSize="large" color="secondary" />
+                    </IconButton>
+                  </Tooltip>
+                )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
@@ -441,46 +453,47 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {overviewVisible ||
-          ((orderStatus === "approved" || orderStatus === "submitted") &&
-            (currentUserRole === "field1" ||
-              (!window.location.hash.includes("approval") &&
-                !window.location.href.includes("rollup")))) ? (
-            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-          ) : (
-            <OrderSetTable
-              currentProgram={undefined}
-              handleModalOpen={handleModalOpen}
-              handleOpenConfirm={handleOpenConfirm}
-              handleRemoveOrder={handleDeleteOrderModal}
-              isLoading={isLoading}
-              orderId={currentOrderId}
-              orderStatus={orderStatus}
-              currentItems={currentItems}
-              orders={orders}
-              orderType={currentOrderType}
-            />
-          )}
+        ((orderStatus === "approved" || orderStatus === "submitted") &&
+          (currentUserRole === "field1" ||
+            (!window.location.hash.includes("approval") &&
+              !window.location.href.includes("rollup")))) ? (
+          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+        ) : (
+          <OrderSetTable
+            currentProgram={undefined}
+            handleModalOpen={handleModalOpen}
+            handleOpenConfirm={handleOpenConfirm}
+            handleRemoveOrder={handleDeleteOrderModal}
+            isLoading={isLoading}
+            orderId={currentOrderId}
+            orderStatus={orderStatus}
+            currentItems={currentItems}
+            orders={orders}
+            orderType={currentOrderType}
+          />
+        )}
         <br />
         <br />
         <div className={classes.orderControl}>
-          {(orderStatus === "in-progress" || orderStatus === "inactive") && currentOrderType !== "pre-order" && (
-            <Button
-              className={classes.largeButton}
-              style={{ marginRight: "10px" }}
-              color="secondary"
-              variant="contained"
-              onClick={() => {
-                if (currentOrderType === "in-stock") {
-                  navigate("/orders/items/inStock");
-                } else if (currentOrderType === "on-demand") {
-                  navigate("/orders/items/onDemand");
-                }
-                handleDeleteOrderSet();
-              }}
-            >
-              DELETE ORDER
-            </Button>
-          )}
+          {(orderStatus === "in-progress" || orderStatus === "inactive") &&
+            currentOrderType !== "pre-order" && (
+              <Button
+                className={classes.largeButton}
+                style={{ marginRight: "10px" }}
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  if (currentOrderType === "in-stock") {
+                    navigate("/orders/items/inStock");
+                  } else if (currentOrderType === "on-demand") {
+                    navigate("/orders/items/onDemand");
+                  }
+                  handleDeleteOrderSet();
+                }}
+              >
+                DELETE ORDER
+              </Button>
+            )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button
               className={classes.largeButton}
