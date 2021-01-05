@@ -35,7 +35,9 @@ export const buildFilters = (
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
   let orderTypeString = filterObject.orderType
-    ? `filter[order-type]=${filterObject.orderType}`
+    ? type && type === "item" && filterObject.orderType === "in-stock"
+      ? "filter[is-in-stock]=true"
+      : `filter[order-type]=${filterObject.orderType}`
     : "";
   let dateString =
     filterObject.fromDate &&

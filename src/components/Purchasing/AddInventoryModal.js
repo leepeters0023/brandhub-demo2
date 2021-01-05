@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
-import { /*useDispatch,*/ useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useNumberOnlyInput } from "../../hooks/InputHooks";
+
 import { roundUp } from "../../utility/utilityFunctions";
+
+import { createInventoryPO } from "../../redux/slices/purchaseOrderSlice";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddInventoryModal = ({ itemId, handleClose, open }) => {
   const classes = useStyles();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [currentWarehouse, setCurrentWarehouse] = useState("rapid");
 
@@ -39,10 +42,16 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
   } = useNumberOnlyInput("0");
 
   const handleAddInventory = () => {
-    //TODO  ..  dispatch create po, navigate to po
-    console.log(qty);
+    dispatch(createInventoryPO(itemId, qty, currentWarehouse));
     resetQty();
+    navigate("/purchasing/purchaseOrder#new");
   };
+
+  useEffect(() => {
+    if (currentItem.warehouse && currentItem.warehouse !== currentWarehouse) {
+      setCurrentWarehouse(currentItem.warehouse);
+    }
+  }, [currentItem, currentWarehouse])
 
   if (!itemId) {
     return null;
@@ -82,6 +91,7 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
               fullWidth
               color="secondary"
               aria-label="warehouse-group"
+              disabled={currentItem.warehouse}
             >
               <Button
                 className={
@@ -129,7 +139,8 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
                   parseInt(evt.target.value) % currentItem.packSize !== 0
                 ) {
                   let rounded = roundUp(
-                    parseInt(evt.target.value), currentItem.packSize
+                    parseInt(evt.target.value),
+                    currentItem.packSize
                   );
                   setQty(`${rounded}`);
                 }
@@ -156,7 +167,7 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
 AddInventoryModal.propTypes = {
   itemId: PropTypes.string,
   handleClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired
-}
+  open: PropTypes.bool.isRequired,
+};
 
 export default React.memo(AddInventoryModal);
