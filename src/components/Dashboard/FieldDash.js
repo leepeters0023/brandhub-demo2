@@ -133,8 +133,8 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
         <Grid
           item
           lg={3}
-          md={5}
-          sm={7}
+          md={4}
+          sm={6}
           xs={12}
           component={Link}
           to={data.link}
