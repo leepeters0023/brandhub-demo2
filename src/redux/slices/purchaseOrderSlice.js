@@ -385,7 +385,6 @@ export const createNewPO = (idArray) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
-    console.log(newPO);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
