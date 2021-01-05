@@ -34,6 +34,12 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
     state.items.items.find((item) => item.id === itemId)
   );
 
+  const currentItemSupplier = useSelector((state) =>
+    state.suppliers.supplierList.find(
+      (sup) => sup.id === currentItem.supplierId
+    )
+  );
+
   const {
     value: qty,
     bind: bindQty,
@@ -52,7 +58,7 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
     if (currentItem.warehouse && currentItem.warehouse !== currentWarehouse) {
       setCurrentWarehouse(currentItem.warehouse);
     }
-  }, [currentItem, currentWarehouse])
+  }, [currentItem, currentWarehouse]);
 
   if (!itemId) {
     return null;
@@ -83,48 +89,60 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
             }}
           >
             <Typography className={classes.headerText}>
-              {`Adding Inventory for Item #${currentItem.itemNumber}`}
+              {`${
+                currentItemSupplier.name === "Select Print Buyer"
+                  ? "Creating Request for Quote"
+                  : "Creating Purchase Order "
+              } for Item #${currentItem.itemNumber}`}
             </Typography>
             <br />
-            <Typography className={classes.bodyText}>Ship To:</Typography>
-            <ButtonGroup
-              orientation="horizontal"
-              fullWidth
-              color="secondary"
-              aria-label="warehouse-group"
-              disabled={currentItem.warehouse}
-            >
-              <Button
-                className={
-                  currentWarehouse === "rapid"
-                    ? classes.largeButton
-                    : classes.selectedButton
-                }
-                variant={
-                  currentWarehouse === "rapid" ? "contained" : "outlined"
-                }
-                onClick={() => {
-                  setCurrentWarehouse("rapid");
-                }}
-              >
-                RAPID
-              </Button>
-              <Button
-                className={
-                  currentWarehouse === "champion"
-                    ? classes.largeButton
-                    : classes.selectedButton
-                }
-                variant={
-                  currentWarehouse === "champion" ? "contained" : "outlined"
-                }
-                onClick={() => {
-                  setCurrentWarehouse("champion");
-                }}
-              >
-                CHAMPION
-              </Button>
-            </ButtonGroup>
+            {currentItem.warehouse ? (
+              <Typography className={classes.bodyText}>{`Ship To: ${
+                currentItem.warehouse === "rapid" ? "Rapid" : "Champion"
+              }`}</Typography>
+            ) : (
+              <>
+                <Typography className={classes.bodyText}>Ship To:</Typography>
+                <ButtonGroup
+                  orientation="horizontal"
+                  fullWidth
+                  color="secondary"
+                  aria-label="warehouse-group"
+                  disabled={currentItem.warehouse}
+                >
+                  <Button
+                    className={
+                      currentWarehouse === "rapid"
+                        ? classes.largeButton
+                        : classes.selectedButton
+                    }
+                    variant={
+                      currentWarehouse === "rapid" ? "contained" : "outlined"
+                    }
+                    onClick={() => {
+                      setCurrentWarehouse("rapid");
+                    }}
+                  >
+                    RAPID
+                  </Button>
+                  <Button
+                    className={
+                      currentWarehouse === "champion"
+                        ? classes.largeButton
+                        : classes.selectedButton
+                    }
+                    variant={
+                      currentWarehouse === "champion" ? "contained" : "outlined"
+                    }
+                    onClick={() => {
+                      setCurrentWarehouse("champion");
+                    }}
+                  >
+                    CHAMPION
+                  </Button>
+                </ButtonGroup>
+              </>
+            )}
             <br />
             <TextField
               fullWidth
