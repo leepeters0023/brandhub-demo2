@@ -41,6 +41,7 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
     reset: resetQty,
   } = useNumberOnlyInput("0");
 
+  //TODO add RFQ flow when items show up with correct supplier
   const handleAddInventory = () => {
     dispatch(createInventoryPO(itemId, qty, currentWarehouse));
     resetQty();
