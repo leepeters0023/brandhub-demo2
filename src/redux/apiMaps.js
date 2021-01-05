@@ -472,20 +472,39 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  const mappedItems = items.map((item) => ({
-    id: item.id,
-    itemId: item.item.id,
-    itemNumber: item["item-number"],
-    program: item["program-names"].length > 0 ? item["program-names"] : "---",
-    itemType: item["item-type-description"],
-    packSize: item["actual-qty-per-pack"],
-    itemSpec: item["item-specification"],
-    totalItems: item.qty,
-    estCost: stringToCents(item["item-estimated-cost"]),
-    actCost: stringToCents(item["actual-cost"]),
-    totalCost: stringToCents(item["actual-cost"]) * item.qty,
-    packOut: item["has-packout"] ? item["has-packout"] : false,
-  }));
+  const mappedItems = items.map((item) => {
+    if (item["is-direct-cost"]) {
+      return {
+        id: item.id,
+        itemId: "---",
+        itemNumber: "---",
+        program: "---",
+        itemType: "Set Up Fee",
+        packSize: "1",
+        itemSpec: "---",
+        totalItems: item.qty,
+        estCost: "---",
+        actCost: stringToCents(item["actual-cost"]),
+        packout: false,
+      };
+    } else {
+      return {
+        id: item.id,
+        itemId: item.item.id,
+        itemNumber: item["item-number"],
+        program:
+          item["program-names"].length > 0 ? item["program-names"] : "---",
+        itemType: item["item-type-description"],
+        packSize: item["actual-qty-per-pack"],
+        itemSpec: item["item-specification"],
+        totalItems: item.qty,
+        estCost: stringToCents(item["item-estimated-cost"]),
+        actCost: stringToCents(item["actual-cost"]),
+        totalCost: stringToCents(item["actual-cost"]) * item.qty,
+        packOut: item["has-packout"] ? item["has-packout"] : false,
+      };
+    }
+  });
   return mappedItems;
 };
 
@@ -597,28 +616,58 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 };
 
 export const mapPOHistoryItems = (items) => {
-  const mappedItems = items.map((item) => ({
-    allocated: item["po-is-direct-ship"] ? "Direct Ship" : "CDC",
-    id: item.id,
-    itemId: item.item.id,
-    poNum: item["purchase-order"].id,
-    itemNumber: item["item-number"],
-    projectNum: item["project-number"] ? item["project-number"] : "---",
-    supplier: item["supplier-name"] ? item["supplier-name"] : "---",
-    itemType: item["item-type-description"],
-    itemDesc: item["item-description"] ? item["item-description"] : "---",
-    brand: item["brand-names"],
-    program: item["program-names"],
-    purchasedBy: item["po-purchaser-name"] ? item["po-purchaser-name"] : "---",
-    totalItems: item.qty,
-    estCost: stringToCents(item["item-estimated-cost"]),
-    actCost: stringToCents(item["actual-cost"]),
-    status: item["po-status"],
-    submittedDate: item["po-submitted-at"]
-      ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
-      : "---",
-    dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
-  }));
+  const mappedItems = items.map((item) => {
+    if (item["is-direct-cost"]) {
+      return {
+        id: item.id,
+        allocated: item["po-is-direct-ship"] ? "Direct Ship" : "CDC",
+        itemId: "---",
+        poNum: item["purchase-order"].id,
+        itemNumber: "---",
+        projectNum: "---",
+        supplier: "---",
+        program: "---",
+        itemType: "Set Up Fee",
+        itemDesc: "---",
+        brand: "---",
+        packSize: "1",
+        itemSpec: "---",
+        totalItems: item.qty,
+        estCost: "---",
+        actCost: stringToCents(item["actual-cost"]),
+        status: item["po-status"],
+        submittedDate: item["po-submitted-at"]
+          ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
+          : "---",
+        dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+      };
+    } else {
+      return {
+        id: item.id,
+        allocated: item["po-is-direct-ship"] ? "Direct Ship" : "CDC",
+        itemId: item.item.id,
+        poNum: item["purchase-order"].id,
+        itemNumber: item["item-number"],
+        projectNum: item["project-number"] ? item["project-number"] : "---",
+        supplier: item["supplier-name"] ? item["supplier-name"] : "---",
+        itemType: item["item-type-description"],
+        itemDesc: item["item-description"] ? item["item-description"] : "---",
+        brand: item["brand-names"],
+        program: item["program-names"],
+        purchasedBy: item["po-purchaser-name"]
+          ? item["po-purchaser-name"]
+          : "---",
+        totalItems: item.qty,
+        estCost: stringToCents(item["item-estimated-cost"]),
+        actCost: stringToCents(item["actual-cost"]),
+        status: item["po-status"],
+        submittedDate: item["po-submitted-at"]
+          ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
+          : "---",
+        dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+      };
+    }
+  });
   return mappedItems;
 };
 

@@ -274,6 +274,9 @@ const CurrentPO = () => {
           </Typography>
           <br />
           {currentPO.poItems.map((item, index) => {
+            if (item.itemType === "Set Up Fee") {
+              return null;
+            }
             let specArray = Object.keys(item.itemSpec).map((spec, i) => ({
               spec: spec,
               desc: item.itemSpec[spec],
