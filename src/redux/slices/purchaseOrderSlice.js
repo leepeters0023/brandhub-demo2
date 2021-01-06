@@ -52,6 +52,7 @@ let initialState = {
     specDetails: null,
     poItems: [],
     totalCost: null,
+    totalTax: null,
     directShip: null,
     shippingParams: [],
   },
@@ -122,6 +123,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.specDetails = purchaseOrder.specDetails;
       state.currentPO.poItems = purchaseOrder.poItems;
       state.currentPO.totalCost = purchaseOrder.totalCost;
+      state.currentPO.totalTax = purchaseOrder.totalTax;
       state.currentPO.directShip = purchaseOrder.directShip;
       state.currentPO.shippingParams = purchaseOrder.shippingParams;
       state.error = null;
@@ -256,6 +258,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
       state.currentPO.totalCost = null;
+      state.currentPO.totalTax = null;
       state.currentPO.directShip = null;
       state.currentPO.shippingParams = [];
       state.error = null;
@@ -289,6 +292,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
       state.currentPO.totalCost = null;
+      state.currentPO.totalTax = null;
       state.currentPO.directShip = null;
       state.currentPO.shippingParams = [];
       state.error = null;

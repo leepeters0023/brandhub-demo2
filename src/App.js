@@ -502,7 +502,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/budgets/ytod",
-            ["field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super"],
             role
           )}
           {handleAuth(

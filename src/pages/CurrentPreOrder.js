@@ -223,7 +223,9 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (program) {
-      dispatch(fetchPreOrders(currentUserId, "summary", program, currentTerritory));
+      dispatch(
+        fetchPreOrders(currentUserId, "summary", program, currentTerritory)
+      );
       dispatch(fetchProgramOrders(program, currentUserId, currentTerritory));
       let currentProg = userPrograms.find((prog) => prog.id === program);
       dispatch(
@@ -401,7 +403,11 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                     setSwitched(false);
                     setOverviewVisible(true);
                   }}
-                  disabled={currentItems.length === 0}
+                  disabled={
+                    currentItems.length === 0 ||
+                    setTotal === 0 ||
+                    preOrderStatus === "inactive"
+                  }
                 >
                   ORDER OVERVIEW
                 </Button>
