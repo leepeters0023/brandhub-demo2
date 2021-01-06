@@ -200,7 +200,7 @@ const PurchaseOrderHistoryTable = ({
                         align="left"
                         style={{ display: "flex", alignItems: "flex-end" }}
                       >
-                        {row.brands[0]}
+                        {row.brand[0]}
                         <MoreHorizIcon fontSize="small" color="inherit" />
                       </TableCell>
                     </Tooltip>

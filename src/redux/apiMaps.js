@@ -443,14 +443,12 @@ export const mapRollupItems = (items) => {
       }
     }
   };
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
     projectNum: item["project-number"] ? item["project-number"] : "---",
-    territory:
-      item["territory-name"].length === 0 ? "National" : item["territory-name"],
+    territory: item["territory-names"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
       : item.programs
@@ -554,12 +552,18 @@ export const mapPOShippingParams = (params) => {
     let carriers = [...new Set(paramItems.map((item) => item.carrier))].join(
       ", "
     );
-    let paramTaxArray = paramItems.map((item) => item.tax).filter((tax) => tax !== "---");
-    let totalParamTax = paramTaxArray.length > 0 ? paramTaxArray.reduce((a,b) => a + b) : 0;
+    let paramTaxArray = paramItems
+      .map((item) => item.tax)
+      .filter((tax) => tax !== "---");
+    let totalParamTax =
+      paramTaxArray.length > 0 ? paramTaxArray.reduce((a, b) => a + b) : 0;
 
     return {
       id: param.id,
       distributor: param.distributor ? param.distributor.name : "---",
+      distributorId: param.distributor
+        ? param.distributor["external-source-id"]
+        : "---",
       name: param.name ? param.name : "---",
       attn: param.attn ? param.attn : "---",
       address: formatAddress(param),
@@ -580,7 +584,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder)
+  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
@@ -620,7 +624,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? format(new Date(purchaseOrder["submitted-at"]), "MM/dd/yyyy")
       : "---",
     shippingParams: params,
-    totalTax: params.map((param) => param.tax).reduce((a,b) => a + b),
+    totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
   };
   return formattedPO;
 };

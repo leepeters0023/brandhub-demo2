@@ -72,6 +72,7 @@ const UserNavMenu = ({
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        onMouseLeave={handleClose}
       >
         <MenuItem
           onClick={() => {
