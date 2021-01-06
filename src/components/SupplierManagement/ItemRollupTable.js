@@ -26,6 +26,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteIcon from "@material-ui/icons/Delete";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
@@ -337,7 +338,19 @@ const ItemRollupTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">{row.itemNumber}</TableCell>
-                    <TableCell align="left">{row.territory}</TableCell>
+                    {row.territory.length > 1 ? (
+                    <Tooltip placement="left" title={`${row.territory.join(", ")}`}>
+                      <TableCell
+                        align="left"
+                        style={{ display: "flex", alignItems: "flex-end" }}
+                      >
+                        {row.territory[0]}
+                        <MoreHorizIcon fontSize="small" color="inherit" />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{row.territory[0]}</TableCell>
+                  )}
                     <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>

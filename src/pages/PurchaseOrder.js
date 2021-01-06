@@ -133,6 +133,8 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       currentCSV.data.length === 0 &&
       currentPO.id === window.location.hash.slice(1)
     ) {
+      //Add attention, change dist name to dist / add name
+      //remove ship from zip, remove package type, expected arrival date
       let csvHeaders = [
         { label: "Param Item Id", key: "paramItemId" },
         { label: "PO Number", key: "poNum" },
@@ -143,6 +145,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Distributor Name", key: "distributor" },
         { label: "Address1", key: "addressOne" },
         { label: "Address2", key: "addressTwo" },
+        { label: "Attention", key: "attn" },
         { label: "City", key: "city" },
         { label: "State", key: "state" },
         { label: "Zip", key: "zip" },
@@ -150,16 +153,13 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Labeling Info", key: "label" },
         { label: "Total Quantity", key: "totalItems" },
         { label: "Order Approval Status", key: "shipStatus" },
-        { label: "Ship From Zip", key: "shipFromZip" },
         { label: "Carrier", key: "carrier" },
         { label: "Ship Method", key: "method" },
         { label: "Actual Ship Date", key: "actShipDate" },
         { label: "Shipped Quantity", key: "shippedQuantity" },
         { label: "Package Count", key: "packageCount" },
-        { label: "Package Type", key: "packageType" },
         { label: "Tracking Number", key: "trackingNum" },
         { label: "Tax", key: "tax" },
-        { label: "Expected Arrival Date", key: "expectedArrival" },
       ];
       let csvData = [];
       currentPO.poItems.forEach((item) => {
@@ -177,10 +177,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 new Date(currentPO.expectedShip),
                 "MM/dd/yyyy"
               ),
-              abn: "* TODO *",
-              distributor: param.distributor,
+              abn: param.distributorId ? param.distributorId : "---",
+              distributor: param.distributor ? param.distributor : param.name,
               addressOne: param.addressOne,
               addressTwo: param.addressTwo,
+              attn: param.attn ? param.attn : "---",
               city: param.city,
               state: param.state,
               zip: param.zip,
@@ -188,10 +189,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               label: "* TODO *",
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
-              shipFromZip:
-                currentParamItem.shipFromZip === "---"
-                  ? ""
-                  : currentParamItem.shipFromZip,
               carrier:
                 currentParamItem.carrier === "---"
                   ? ""
@@ -212,19 +209,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 currentParamItem.packageCount === "---"
                   ? ""
                   : currentParamItem.packageCount,
-              packageType:
-                currentParamItem.packageType === "---"
-                  ? ""
-                  : currentParamItem.packageType,
               trackingNum:
                 currentParamItem.trackingNum === "---"
                   ? ""
                   : currentParamItem.trackingNum,
               tax: currentParamItem.tax === "---" ? "" : currentParamItem.tax,
-              expectedArrival:
-                currentParamItem.expectedArrival === "---"
-                  ? ""
-                  : currentParamItem.expectedArrival,
             };
             csvData.push(dataObject);
           }
