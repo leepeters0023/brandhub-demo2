@@ -30,6 +30,7 @@ let initialState = {
   status: "",
   supplier: [],
   tag: [],
+  stateIds: [],
   territory: [],
   type: null,
   user: [],
@@ -75,6 +76,7 @@ const filterSlice = createSlice({
       state.status = "";
       state.supplier = [];
       state.tag = [];
+      state.stateIds = [];
       state.territory = [];
       state.type = null;
       state.user = [];
@@ -130,6 +132,7 @@ const filterSlice = createSlice({
       state.ruleType = null;
       state.status = "";
       state.tag = [];
+      state.stateIds = [];
       state.territory = [];
       state.type = null;
       state.user = [];
@@ -183,7 +186,7 @@ const filterSlice = createSlice({
         chippable = ["brand", "program", "itemType", "tag", "itemNumber"];
       }
       if (filterType.includes("budget")) {
-        chippable = ["brand", "user", "territory"];
+        chippable = ["brand", "user", "territory", "stateIds"];
       }
       if (filterType === "user-settings") {
         chippable = ["user"];
@@ -210,6 +213,10 @@ const filterSlice = createSlice({
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });
             });
+          } else if (filter === "stateIds") {
+            stateObject[filter].forEach((f) => {
+              filters.push({ type: filter, value: f.code })
+            })
           } else if (filter === "favItems") {
             if (stateObject[filter].length > 0) {
               filters.push({ type: filter, value: "Favorite Items" });

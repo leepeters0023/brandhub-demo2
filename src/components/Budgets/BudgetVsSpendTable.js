@@ -15,13 +15,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "user", disablePadding: false, label: "Person", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "territory", disablePadding: false, label: "Region / Key Acct.", sort: true },
-  { id: "budget", disablePadding: false, label: "Budget", sort: false },
-  { id: "onHold", disablePadding: false, label: "Pending", sort: false },
-  { id: "committed", disablePadding: false, label: "Committed", sort: false },
-  { id: "spent", disablePadding: false, label: "Paid", sort: false },
+  { id: "state", disablePadding: false, label: "State", sort: true },
+  { id: "budget", disablePadding: false, label: "Starting Budget", sort: false },
+  { id: "inProcess", disablePadding: false, label: "In Process", sort: false },
+  { id: "shipped", disablePadding: false, label: "Shipped", sort: false },
   { id: "remaining", disablePadding: false, label: "Remaining", sort: false },
 ];
 
@@ -86,11 +85,6 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  clickableRow: {
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
   visuallyHidden: {
     border: 0,
     clip: "rect(0 0 0 0)",
@@ -125,7 +119,7 @@ const BudgetVsSpendTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 375px)" }}
+        style={{ maxHeight: "Calc(100vh - 250px)" }}
         ref={scrollRef}
       >
         <Table
@@ -165,21 +159,17 @@ const BudgetVsSpendTable = ({
               <TableCell align="left">
               $155,000.00
               </TableCell>
-              <TableCell align="left">
-              $155,000.00
-              </TableCell>
             </TableRow>
             {!budgetsLoading &&
               budgets.length > 0 &&
               budgets.map((row, index) => (
-                <TableRow key={index} hover className={classes.clickableRow}>
-                  <TableCell align="left">{row.user}</TableCell>
+                <TableRow key={index} hover>
                   <TableCell align="left">{row.brand}</TableCell>
                   <TableCell align="left">{row.territory}</TableCell>
+                  <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{formatMoney(row.budget, false)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.onHold, false)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.committed, false)}</TableCell>
-                  <TableCell align="left">{formatMoney(row.spent, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.inProcess, false)}</TableCell>
+                  <TableCell align="left">{formatMoney(row.shipped, false)}</TableCell>
                   <TableCell align="left">{formatMoney(row.remaining, false)}</TableCell>
                 </TableRow>
               ))}
