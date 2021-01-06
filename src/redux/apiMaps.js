@@ -154,7 +154,9 @@ export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
-    distributorId: order.distributor ? order.distributor["external-source-id"] : null,
+    distributorId: order.distributor
+      ? order.distributor["external-source-id"]
+      : null,
     distributorName: order.distributor ? order.distributor.name : null,
     distributorCity: order.distributor ? order.distributor.city : null,
     distributorState: order.distributor ? order.distributor.state : null,
@@ -410,6 +412,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -428,8 +431,7 @@ export const mapRollupItems = (items) => {
     itemId: item.item.id,
     itemNumber: item["item-number"],
     projectNum: item["project-number"] ? item["project-number"] : "---",
-    territory:
-      item["territory-name"].length === 0 ? "National" : item["territory-name"],
+    territory: item["territory-names"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
       : item.programs
