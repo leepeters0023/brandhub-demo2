@@ -52,6 +52,7 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
 const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
   const dispatch = useDispatch();
   const currentRole = useSelector((state) => state.user.role);
+  const totalTax = useSelector((state) => state.purchaseOrder.currentPO.totalTax);
 
   const handlePackOut = (id, value) => {
     dispatch(setItemPackOut(id, value));
@@ -214,7 +215,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                 <TableCell colSpan={6} className={classes.headerText}>
                   Total Tax:
                 </TableCell>
-                <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
+                <TableCell colSpan={2}>{formatMoney(totalTax)}</TableCell>
               </TableRow>
             </>
           )}

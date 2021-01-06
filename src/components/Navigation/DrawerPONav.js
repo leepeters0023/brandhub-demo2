@@ -76,11 +76,6 @@ const DrawerOrdersNav = ({
             component={Link}
             to="/purchasing/poHistory/all"
           >
-           <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                0
-              </Avatar>
-            </ListItemAvatar>
             <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>

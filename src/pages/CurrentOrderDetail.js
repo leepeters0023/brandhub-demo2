@@ -504,17 +504,22 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
               SUBMIT ORDER
             </Button>
           )}
-          {orderStatus === "in-progress" && !overviewVisible && (
-            <Button
-              className={classes.largeButton}
-              color="secondary"
-              variant="contained"
-              onClick={() => setOverviewVisible(true)}
-              disabled={orders.length === 0}
-            >
-              ORDER OVERVIEW
-            </Button>
-          )}
+          {(orderStatus === "inactive" || orderStatus === "in-progress") &&
+            !overviewVisible && (
+              <Button
+                className={classes.largeButton}
+                color="secondary"
+                variant="contained"
+                onClick={() => setOverviewVisible(true)}
+                disabled={
+                  orders.length === 0 ||
+                  orderStatus === "inactive" ||
+                  currentTotal === 0
+                }
+              >
+                ORDER OVERVIEW
+              </Button>
+            )}
           {window.location.hash.includes("approval") && (
             <>
               <Button

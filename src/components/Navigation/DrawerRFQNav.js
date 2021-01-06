@@ -78,11 +78,6 @@ const DrawerOrdersNav = ({
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                0
-              </Avatar>
-            </ListItemAvatar>
             <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
           </ListItem>
         </List>

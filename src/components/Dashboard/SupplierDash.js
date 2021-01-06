@@ -55,7 +55,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       ariaOwnsState: currentPOsOpen,
       ariaOwnsText: "current-po",
       id: "current-po-parent",
-      link: "/purchasing/poHistory#current",
+      link: "/purchasing/poHistory/current",
       info: "New and Pending Purchase Orders",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
@@ -65,7 +65,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       ariaOwnsState: poHistoryOpen,
       ariaOwnsText: "po-history",
       id: "po-history-parent",
-      link: "/purchasing/poHistory#all",
+      link: "/purchasing/poHistory/all",
       info: "All Purchase Orders",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
