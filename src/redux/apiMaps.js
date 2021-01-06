@@ -575,6 +575,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder)
   const formattedPO = {
     id: purchaseOrder.id,
     brand: purchaseOrder["brand-names"],
