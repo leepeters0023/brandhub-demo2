@@ -15,9 +15,16 @@ import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import Drawer from "@material-ui/core/Drawer";
-import Tooltip from "@material-ui/core/Tooltip";
+import AppBar from '@material-ui/core/AppBar';
 import Backdrop from "@material-ui/core/Backdrop";
+import Button from '@material-ui/core/Button';
+import Drawer from "@material-ui/core/Drawer";
+import IconButton from '@material-ui/core/IconButton';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuIcon from '@material-ui/icons/Menu';
+import Tooltip from "@material-ui/core/Tooltip";
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from "@material-ui/core/Typography";
 
 import clsx from "clsx";
@@ -25,6 +32,24 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  appBar: {
+    height: "87px",
+    backgroundColor: "black",
+    justifyItems: "center",
+    zIndex: "1500",
+  },
+  title: {
+    flexGrow: 1,
+  },
+  logoLink: {
+    filter: "brightness(100%)",
+    height: "58px",
+    width: "auto",
+    marginLeft: "120px",
+    "&&:hover": {
+      cursor: "pointer",
+    },
+  },
   drawer: {
     height: "350px",
     flexShrink: 0,
@@ -64,17 +89,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "5px 25px",
     display: "flex",
   },
-  logoLink: {
-    filter: "brightness(100%)",
-    height: "58px",
-    width: "auto",
-    marginLeft: "20px",
-    marginRight: "20px",
-    marginTop: "5px",
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
   navigationText: {
     fontWeight: 500,
     color: "white",
@@ -89,9 +103,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "0",
   },
   navList: {
-    paddingLeft: "20px",
-    marginTop: "-20px",
-    color: "white",
+    backgroundColor: "black",
+    overFlow: "hidden"
   },
   regionText: {
     color: "black"
@@ -116,6 +129,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
   const [drawerContent, setDrawerContent] = useState(null);
   const initials = useSelector((state) => state.user.initials);
   const role = useSelector((state) => state.user.role);
+  const [anchor, setAnchorEl] = useState(null);
   const territories = useSelector((state) => state.user.territories);
 
   const inStockOrderId = useSelector(
@@ -137,9 +151,58 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
     }
   };
 
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+  };
+
   return (
     <>
-      {open && <Backdrop style={{ zIndex: "9999" }} open={true} />}
+      <AppBar className={classes.appBar} position="fixed">
+        <Toolbar>
+          <Tooltip title="Home">
+            <Link to="/">
+              <img
+                src={Logo}
+                alt="Logo"
+                className={classes.logoLink}
+                onClick={handleDrawerClose}
+              />
+            </Link>
+          </Tooltip>
+          <>
+            <Typography variant="h5" className={clsx(classes.titleText, classes.navigationText)}>
+              Items
+            </Typography>
+            <DrawerItemsNav
+                  anchorEl={anchor}
+                  handleDrawerClose={handleDrawerClose}
+                  userType={role}
+                  classes={classes}
+                />
+            {/* <ExpandMoreIcon
+              className={clsx(classes.expandMoreIcon, drawerContent === "assets")}
+              fontSize="large"
+              onMouseEnter={(evt) => {
+                handleOpen(evt);
+                handleDrawerClose();
+                handleDrawerOpen();
+                setDrawerContent("assets");
+              }}
+            /> */}
+
+            {territories && territories.length > 0 && <RegionSelector classes={classes} />}
+            <UserNav
+              initials={initials}
+              handleLogout={handleLogout}
+              handleDrawerClose={handleDrawerClose}
+              userType={role}
+            />
+            
+          </>
+        </Toolbar>
+      </AppBar>
+
+      {/* {open && <Backdrop style={{ zIndex: "9999" }} open={true} />}
       <Drawer
         variant="permanent"
         anchor="top"
@@ -251,6 +314,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 </>
               )}
             </div>
+
             {territories && territories.length > 0 && <RegionSelector classes={classes} />}
             <UserNav
               initials={initials}
@@ -299,7 +363,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             />
           )}
         </div>
-      </Drawer>
+      </Drawer> */}
     </>
   );
 };
