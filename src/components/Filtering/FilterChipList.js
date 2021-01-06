@@ -47,6 +47,12 @@ const FilterChipList = () => {
       );
       dispatchObject.value = currentFilterArray;
     }
+    if (type === "stateIds") {
+      let currentFilterArray = filterState[type].filter(
+        (f) => f.code !== value
+      );
+      dispatchObject.value = currentFilterArray;
+    }
     if (type === "favItems") {
       dispatchObject.value = [];
     }

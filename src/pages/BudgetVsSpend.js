@@ -29,6 +29,7 @@ const defaultFilters = {
   brand: [],
   user: [],
   territory: [],
+  stateIds: [],
   sortOrder: "asc",
   sortOrderBy: "user",
 };
