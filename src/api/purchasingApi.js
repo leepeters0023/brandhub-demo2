@@ -338,28 +338,29 @@ export const addToPO = async (ids, poNum) => {
 //Updates the method on an PO
 export const updatePOMethod = async (id, method) => {
   const response = { status: "", error: null };
-  // await axios
-  //   .patch(
-  //     `/api/purchase-orders/${id}`,
-  //     {
-  //       data: {
-  //         type: "purchase-order",
-  //         id: id,
-  //         attributes: {
-  //           method: method,
-  //         },
-  //       },
-  //     },
-  //     writeHeaders
-  //   )
-  //   .then((_res) => {
-  //     response.status = "ok";
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.toString());
-  //     response.status = "error";
-  //     response.err = err.toString();
-  //   });
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            method: method,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      console.log(res);
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
   //todo !
   response.status = "ok";
   return response;
