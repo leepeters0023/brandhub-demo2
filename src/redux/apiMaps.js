@@ -612,6 +612,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["key-account-tape"]
       : "",
     shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
+    additionalFile: purchaseOrder["additional-file"] ? purchaseOrder["additional-file"] : null,
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
       : "---",

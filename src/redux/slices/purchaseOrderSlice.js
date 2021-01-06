@@ -48,6 +48,7 @@ let initialState = {
     supplierNotes: "",
     rfqNumber: null,
     shippingLabel: null,
+    additionalFile: null,
     keyAcctTape: "",
     specDetails: null,
     poItems: [],
@@ -118,6 +119,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = purchaseOrder.method;
       state.currentPO.supplierNotes = purchaseOrder.supplierNotes;
       state.currentPO.shippingLabel = purchaseOrder.shippingLabel;
+      state.currentPO.additionalFile = purchaseOrder.additionalFile;
       state.currentPO.keyAcctTape = purchaseOrder.keyAcctTape;
       state.currentPO.rfqNumber = purchaseOrder.rfqNumber;
       state.currentPO.specDetails = purchaseOrder.specDetails;
@@ -253,6 +255,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
+      state.currentPO.additionalFile = null;
       state.currentPO.keyAcctTape = "";
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
@@ -287,6 +290,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
+      state.currentPO.additionalFile = null;
       state.currentPO.keyAcctTape = "";
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
