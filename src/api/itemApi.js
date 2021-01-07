@@ -8,7 +8,7 @@ const dataFormatter = new Jsona();
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  const queryString = buildFilters(filterObject, "", "", "/api/items");
+  const queryString = buildFilters(filterObject, "", "", "/api/items", "item");
   await axios
     .get(queryString)
     .then((res) => {

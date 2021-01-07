@@ -561,7 +561,6 @@ export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
     if (newPOItem.error) {
       throw newPOItem.error;
     }
-    console.log(newPOItem);
     let mappedItem = mapPOItems([newPOItem.data]);
     dispatch(addCost({ item: mappedItem }))
   } catch (err) {
