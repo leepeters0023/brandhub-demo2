@@ -51,8 +51,23 @@ const orderHeaders = [
 ];
 
 const itemHeaders = [
-  { label: "Sequence #", key: "itemNumber"},
-]
+  { label: "Sequence #", key: "itemNumber" },
+  { label: "Order Type", key: "orderType" },
+  { label: "Order Number", key: "orderNum" },
+  { label: "Brand", key: "brand" },
+  { label: "Program", key: "program" },
+  { label: "Item Type", key: "itemType" },
+  { label: "Item Description", key: "itemDesc" },
+  { label: "Distributor / Address Name", key: "name" },
+  { label: "State", key: "state" },
+  { label: "Total Qty", key: "totalItems" },
+  { label: "Est. Cost/Unit", key: "estCost" },
+  { label: "Act. Cost/Unit", key: "actCost" },
+  { label: "Order Date", key: "orderDate" },
+  { label: "Ship Date", key: "shipDate" },
+  { label: "Tracking #", key: "tracking" },
+  { label: "Status", key: "status" },
+];
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -99,6 +114,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
+  const [currentCSVData, setCurrentCSVData] = useState({
+    data: [],
+    headers: [],
+    group: filterOption === "byOrder" ? "order" : "item",
+  });
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const nextLink = useSelector((state) => state.orderHistory.nextLink);
   const isNextLoading = useSelector(
@@ -183,6 +203,32 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);
+
+  useEffect(() => {
+    if (
+      (currentGrouping && currentCSVData.group !== currentGrouping) ||
+      currentCSVData.data.length === 0
+    ) {
+      let dataObject = {
+        data: [],
+        headers: [],
+        group: currentGrouping
+          ? currentGrouping
+          : currentCSVData.group
+      };
+      dataObject.headers = dataObject.group === "order" ? orderHeaders : itemHeaders;
+      // dataObject.data = dataObject.group === "order"
+      //   ? currentOrders.map((order) => ({
+      //     orderNum: order.id,
+      //     type: order.type,
+      //     name: order.distributorName ? order.distributorName : "---",
+      //     state: order.distributorState ? order.distributorState : order.customAddressState,
+      //     brand: order.brand.join(", "),
+      //     orderDate: format(new Date(row.orderDate), "MM/dd/yyyy"),
+
+      //   }))
+    }
+  });
 
   return (
     <>
