@@ -95,12 +95,10 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 20px",
 
   },
-  navBreak: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    width: "fit-content",
-    margin: "0",
+  navHeaderText: {
+    fontWeight: "600",
+    fontSize: "1rem",
+    color: "white",
   },
   navList: {
     backgroundColor: "black",

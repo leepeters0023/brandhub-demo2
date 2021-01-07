@@ -8,8 +8,19 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { makeStyles } from "@material-ui/core/styles";
 
-const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+  avatar: {
+    backgroundColor: "white",
+    color: "black",
+  },
+}));
+
+const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
+  
+  const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -24,14 +35,12 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
   return (
     <>
       <IconButton
-        aria-owns={anchorEl ? "notifications" : undefined}
-        aria-haspopup="true"
         onClick={(evt) => {
           handleOpen(evt);
           handleDrawerClose();
         }}
       >
-        <ExpandMoreIcon />
+        <ExpandMoreIcon className={classes.avatar} />
       </IconButton>
       <Menu
         disableScrollLock
@@ -45,8 +54,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           horizontal: "right",
         }}
         style={{
-          marginTop: "10px", zIndex: "10001", backGroundColor: "primary",
-          borderRadius: "0",
+          marginTop: "10px", zIndex: "10001", borderRadius: "0px"
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -61,7 +69,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           </MenuItem>
           <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/items/all"
           >
@@ -69,7 +77,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           </MenuItem>
           <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/items/all"
           //to="/items/archive"
@@ -87,7 +95,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           {(userType === "field2" || userType === "super") && (
             <MenuItem
               button
-              onClick={handleDrawerClose}
+              onClick={handleClose}
               component={Link}
               to="/programs/new"
             >
@@ -96,7 +104,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           )}
           <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/programs"
           >
@@ -112,7 +120,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           </MenuItem>
           <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/compliance/items"
           // accurate that we should be showing this to all users?
@@ -121,7 +129,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           </MenuItem>
           <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/compliance/rules"
           // accurate that we should be showing this to all users?
@@ -131,7 +139,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
           {(userType === "compliance" || userType === "super") && (
             <MenuItem
               button
-              onClick={handleDrawerClose}
+              onClick={handleClose}
               component={Link}
               to="/compliance/contacts"
             >
