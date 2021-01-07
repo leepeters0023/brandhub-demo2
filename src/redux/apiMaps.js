@@ -611,8 +611,8 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["key-account-tape"]
       : "",
     shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
-    additionalFile: purchaseOrder["additional-file-cloudinary-url"]
-      ? purchaseOrder["additional-file-cloudinary-url"]
+    additionalFile: purchaseOrder["additional-file-cloudinary-id"]
+      ? purchaseOrder["additional-file-cloudinary-id"]
       : null,
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
