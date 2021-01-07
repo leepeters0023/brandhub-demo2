@@ -48,6 +48,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const [isNew, setIsNew] = useState(false);
   const [isUploadLoading, setUploadLoading] = useState(false);
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [currentFile, setCurrentFile] = useState(null);
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
@@ -58,22 +59,22 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     const options = {
       cloudName: "brandhub",
       uploadPreset: "jyehcpv4",
-      showUploadMoreButton: false
+      showUploadMoreButton: false,
     };
     openUploadWidget(options, (error, file) => {
       if (!error) {
-        if(file.event === "success") {
-         let rawUrl = file.info.url;
-         let urlArray = rawUrl.split("/upload/");
-         urlArray[1] = "fl_attachment/" + urlArray[1];
-         let modUrl = urlArray.join("/upload/");
-         console.log(modUrl);
+        if (file.event === "success") {
+          setCurrentFile(file.info.original_filename);
+          let rawUrl = file.info.url;
+          let urlArray = rawUrl.split("/upload/");
+          urlArray[1] = "fl_attachment/" + urlArray[1];
+          let modUrl = urlArray.join("/upload/");
         }
       } else {
-        console.log(error.toString())
+        console.log(error.toString());
       }
-    })
-  }
+    });
+  };
 
   const handleSupplierSubmit = () => {
     //TODO
@@ -302,15 +303,29 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 style={{ alignItems: "flex-start" }}
               >
                 {currentRole !== "supplier" && (
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<PublishIcon />}
-                    onClick={uploadToCloudinary}
-                  >
-                    ORDER INFO
-                  </Button>
+                  <div style={{ position: "relative" }}>
+                    <Button
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<PublishIcon />}
+                      onClick={uploadToCloudinary}
+                    >
+                      ORDER INFO
+                    </Button>
+                    {currentFile && (
+                      <Typography
+                        style={{
+                          position: "absolute",
+                          top: "Calc(100% + 5px)",
+                        }}
+                        variant="body2"
+                        color="textSecondary"
+                      >
+                        {`File: ${currentFile}`}
+                      </Typography>
+                    )}
+                  </div>
                 )}
                 {currentRole === "supplier" && (
                   <>
@@ -357,14 +372,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                       noProgressBar
                     >
                       {({ file }) => (
-                        <div
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            width: "fit-content",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div style={{ position: "relative" }}>
                           <Button
                             className={classes.largeButton}
                             style={{
@@ -382,7 +390,14 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                             )}
                           </Button>
                           {file && (
-                            <Typography variant="body2" color="textSecondary">
+                            <Typography
+                              style={{
+                                position: "absolute",
+                                top: "Calc(100% + 5px)",
+                              }}
+                              variant="body2"
+                              color="textSecondary"
+                            >
                               {file.name}
                             </Typography>
                           )}
