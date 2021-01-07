@@ -42,8 +42,8 @@ export const buildFilters = (
         : "filter[is-on-demand]=true"
       : type && type === "rollup" && filterObject.orderType
       ? filterObject.orderType === "on-demand"
-        ? "filter[is-on-demand]=true"
-        : "filter[is-pre-order]=true"
+        ? "filter[order-set-type]=on-demand"
+        : "filter[order-set-type]=pre-order"
       : filterObject.orderType
       ? `filter[order-type]=${filterObject.orderType}`
       : "";
