@@ -23,7 +23,6 @@ export const buildFilters = (
   urlBase,
   type
 ) => {
-  console.log(type);
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
@@ -138,6 +137,5 @@ export const buildFilters = (
   let filterPreCursor = queryStringAppend.length !== 0 ? "?" : "";
 
   let queryString = urlBase + filterPreCursor + queryStringAppend;
-  console.log(queryString);
   return queryString;
 };

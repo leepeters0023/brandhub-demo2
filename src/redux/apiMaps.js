@@ -70,7 +70,6 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     return {
@@ -432,7 +431,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -587,7 +585,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
@@ -633,7 +630,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 };
 
 export const mapPOHistoryItems = (items) => {
-  console.log(items)
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
