@@ -244,6 +244,7 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.item.images);
     return {
