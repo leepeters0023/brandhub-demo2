@@ -15,6 +15,7 @@ import {
   fetchSinglePO,
   submitPurchaseOrder,
   updateAllShippingParams,
+  addAdditionalFile,
 } from "../redux/slices/purchaseOrderSlice";
 import { getTracking } from "../redux/slices/trackingSlice";
 
@@ -69,6 +70,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
           let urlArray = rawUrl.split("/upload/");
           urlArray[1] = "fl_attachment/" + urlArray[1];
           let modUrl = urlArray.join("/upload/");
+          dispatch(addAdditionalFile(currentPO.id, modUrl))
         }
       } else {
         console.log(error.toString());

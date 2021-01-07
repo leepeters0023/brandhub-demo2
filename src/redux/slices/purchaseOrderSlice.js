@@ -8,6 +8,7 @@ import {
   updatePOMethod,
   updatePONote,
   updatePOTape,
+  updatePOFile,
   updatePODirectShip,
   updatePOItemPackOut,
   updatePOItemCost,
@@ -219,6 +220,12 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.error = null;
     },
+    updateAdditionalFile(state, action) {
+      const { file } = action.payload;
+      state.currentPO.additionalFile = file;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     deleteItemSuccess(state, action) {
       const { id } = action.payload;
       const currentItems = state.currentPO.poItems.filter(
@@ -322,6 +329,7 @@ export const {
   updateSupplierNotes,
   updateKeyAcctTape,
   updateDirectShip,
+  updateAdditionalFile,
   deleteItemSuccess,
   deletePOSuccess,
   submitPOSuccess,
@@ -465,6 +473,20 @@ export const updateKeyAccountTape = (id, tape) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const addAdditionalFile = (id, file) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const fileURL = await updatePOFile(id, file);
+    if (fileURL.error) {
+      throw fileURL.error;
+    }
+    console.log(fileURL)
+    dispatch(updateAdditionalFile({file: file}))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 export const setDirectShip = (id, value) => async (dispatch) => {
   try {

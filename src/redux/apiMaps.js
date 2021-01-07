@@ -584,7 +584,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
@@ -612,7 +611,9 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["key-account-tape"]
       : "",
     shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
-    additionalFile: purchaseOrder["additional-file"] ? purchaseOrder["additional-file"] : null,
+    additionalFile: purchaseOrder["additional-file-cloudinary-url"]
+      ? purchaseOrder["additional-file-cloudinary-url"]
+      : null,
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
       : "---",
