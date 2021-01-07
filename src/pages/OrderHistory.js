@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import "date-fns";
 import subDays from "date-fns/subDays";
@@ -9,6 +9,7 @@ import { CSVLink } from "react-csv";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+import { useReactToPrint } from "react-to-print";
 
 import {
   fetchNextOrderHistory,
@@ -34,19 +35,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
-const csvHeaders = [
+const orderHeaders = [
   { label: "Order Number", key: "orderNum" },
-  { label: "Distributor", key: "distributor" },
+  { label: "Order Type", key: "type" },
+  { label: "Distributor / Address Name", key: "name" },
   { label: "State", key: "state" },
   { label: "Program", key: "program" },
+  { label: "Brand", key: "brand" },
   { label: "Order Date", key: "orderDate" },
   { label: "Ship Date", key: "shipDate" },
-  { label: "Tracking", key: "trackingNum" },
   { label: "Total Items", key: "totalItems" },
   { label: "Est. Total", key: "totalEstCost" },
   { label: "Act. Total", key: "actTotal" },
   { label: "Status", key: "orderStatus" },
 ];
+
+const itemHeaders = [
+  { label: "Sequence #", key: "itemNumber"},
+]
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -85,6 +91,10 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const orderRef = useRef(null);
+  const itemRef = useRef(null);
+
   const [currentView, setCurrentView] = useCallback(useState(filterOption));
   const [currentItem, setCurrentItem] = useCallback(useState({}));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
@@ -94,6 +104,14 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
   );
+
+  const handlePrintOrderTable = useReactToPrint({
+    content: () => orderRef.current,
+  });
+
+  const handlePrintItemTable = useReactToPrint({
+    content: () => itemRef.current,
+  });
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -116,13 +134,13 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const defaultFilters =
     filterOption === "byOrder" ? defaultOrderFilters : defaultItemFilters;
-  
-    const handleModalOpen = (itemNumber) => {
-      let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
-      setCurrentItem(item);
-      handlePreviewModal(true);
-    }
-   
+
+  const handleModalOpen = (itemNumber) => {
+    let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
+    setCurrentItem(item);
+    handlePreviewModal(true);
+  };
+
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
@@ -186,12 +204,29 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             }}
           >
             <Tooltip title="Print Order History">
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  if (currentGrouping === "order") {
+                    handlePrintOrderTable();
+                  } else {
+                    handlePrintItemTable();
+                  }
+                }}
+              >
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              <CSVLink data={currentOrders} headers={csvHeaders}>
+              <CSVLink
+                data={
+                  currentGrouping === "order"
+                    ? currentOrders
+                    : currentOrderItems
+                }
+                headers={
+                  currentGrouping === "order" ? orderHeaders : itemHeaders
+                }
+              >
                 <IconButton>
                   <GetAppIcon color="secondary" />
                 </IconButton>
@@ -220,6 +255,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             isOrdersLoading={isOrdersLoading}
             handleSort={handleSort}
             scrollRef={scrollRef}
+            orderRef={orderRef}
           />
         )}
         {currentGrouping === "item" && (
@@ -228,6 +264,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             isOrdersLoading={isOrdersLoading}
             handleSort={handleSort}
             scrollRef={scrollRef}
+            itemRef={itemRef}
             handlePreview={handleModalOpen}
             handleTrackingClick={handleTrackingClick}
           />
