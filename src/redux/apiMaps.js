@@ -70,6 +70,7 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     return {
@@ -81,6 +82,7 @@ export const mapItems = (items) => {
         : "---",
       itemType: item.type,
       specification: mapSpecifications(item.specification),
+      projectNum: item["at-task-project-id"] ? item["at-task-project-id"] : "---",
       itemDescription: item.description ? item.description : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
@@ -430,6 +432,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -447,7 +450,7 @@ export const mapRollupItems = (items) => {
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
-    projectNum: item["project-number"] ? item["project-number"] : "---",
+    projectNum: item.item["at-task-project-id"] ? item.item["at-task-project-id"] : "---",
     territory: item["territory-names"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
@@ -630,6 +633,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 };
 
 export const mapPOHistoryItems = (items) => {
+  console.log(items)
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
@@ -662,7 +666,7 @@ export const mapPOHistoryItems = (items) => {
         itemId: item.item.id,
         poNum: item["purchase-order"].id,
         itemNumber: item["item-number"],
-        projectNum: item["project-number"] ? item["project-number"] : "---",
+        projectNum: item.item["at-task-project-id"] ? item.item["at-task-project-id"] : "---",
         supplier: item["supplier-name"] ? item["supplier-name"] : "---",
         itemType: item["item-type-description"],
         itemDesc: item["item-description"] ? item["item-description"] : "---",
