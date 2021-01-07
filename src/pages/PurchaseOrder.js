@@ -66,11 +66,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       if (!error) {
         if (file.event === "success") {
           setCurrentFile(file.info.original_filename);
-          let rawUrl = file.info.url;
-          let urlArray = rawUrl.split("/upload/");
-          urlArray[1] = "fl_attachment/" + urlArray[1];
-          let modUrl = urlArray.join("/upload/");
-          dispatch(addAdditionalFile(currentPO.id, modUrl))
+          dispatch(addAdditionalFile(currentPO.id, file.info.public_id));
         }
       } else {
         console.log(error.toString());
@@ -354,7 +350,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                       startIcon={<GetAppIcon />}
                       component={MuiLink}
                       target="_blank"
-                      href={currentPO.additionalFile}
+                      href={`https://res.cloudinary.com/brandhub/image/upload/fl_attachment/${currentPO.additionalFile}`}
                       disabled={!currentPO.additionalFile}
                     >
                       ORDER INFO

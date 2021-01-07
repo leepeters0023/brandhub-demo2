@@ -375,7 +375,7 @@ export const updatePOFile = async (id, file) => {
           type: "purchase-order",
           id: id,
           attributes: {
-            "additional-file-cloudinary-url": file,
+            "additional-file-cloudinary-id": file,
           },
         },
       },
