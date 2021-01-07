@@ -162,6 +162,7 @@ const OrderHistoryByItemTable = ({
   handleSort,
   isOrdersLoading,
   scrollRef,
+  itemRef,
   handlePreview,
   handleTrackingClick,
 }) => {
@@ -191,6 +192,7 @@ const OrderHistoryByItemTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={itemRef}
         >
           <EnhancedTableHead
             classes={classes}
