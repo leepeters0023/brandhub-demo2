@@ -10,7 +10,6 @@ export const fetchProgramsByTerritory = async (id) => {
     .get(`/api/programs?filter[territory-id]=${id}&filter[is-pre-order]=true`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
