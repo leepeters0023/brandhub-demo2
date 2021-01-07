@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import { CSVLink } from "react-csv";
 import { CSVReader } from "react-papaparse";
+import { CloudinaryContext } from "cloudinary-react";
+import { openUploadWidget } from "../utility/cloudinary";
 import format from "date-fns/format";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +15,7 @@ import {
   fetchSinglePO,
   submitPurchaseOrder,
   updateAllShippingParams,
+  addAdditionalFile,
 } from "../redux/slices/purchaseOrderSlice";
 import { getTracking } from "../redux/slices/trackingSlice";
 
@@ -21,6 +24,7 @@ import Loading from "../components/Utility/Loading";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
 import TrackingModal from "../components/Utility/TrackingModal";
 
+import MuiLink from "@material-ui/core/Link";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -45,11 +49,30 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const [isNew, setIsNew] = useState(false);
   const [isUploadLoading, setUploadLoading] = useState(false);
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [currentFile, setCurrentFile] = useState(null);
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
   const currentRole = useSelector((state) => state.user.role);
+
+  const uploadToCloudinary = () => {
+    const options = {
+      cloudName: "brandhub",
+      uploadPreset: "jyehcpv4",
+      showUploadMoreButton: false,
+    };
+    openUploadWidget(options, (error, file) => {
+      if (!error) {
+        if (file.event === "success") {
+          setCurrentFile(file.info.original_filename);
+          dispatch(addAdditionalFile(currentPO.id, file.info.public_id));
+        }
+      } else {
+        console.log(error.toString());
+      }
+    });
+  };
 
   const handleSupplierSubmit = () => {
     //TODO
@@ -236,216 +259,239 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   return (
     <>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
-      <Container className={classes.mainWrapper}>
-        <div className={classes.titleBar}>
-          <div className={classes.titleImage}>
-            {!isNew && (
-              <Tooltip title="Back to PO History" placement="bottom-start">
-                <IconButton
-                  component={Link}
-                  to="/purchasing/poHistory/current"
-                  onClick={() => {
-                    dispatch(setRetain({ value: true }));
-                  }}
-                >
-                  <ArrowBackIcon fontSize="large" color="secondary" />
-                </IconButton>
-              </Tooltip>
-            )}
-            {isNew && (
-              <Tooltip title="Back to PO Rollup" placement="bottom-start">
-                <IconButton
-                  component={Link}
-                  to="/purchasing/poRollup"
-                  onClick={() => {
-                    dispatch(setRetain({ value: true }));
-                  }}
-                >
-                  <ArrowBackIcon fontSize="large" color="secondary" />
-                </IconButton>
-              </Tooltip>
-            )}
-            <Typography className={classes.titleText}>
-              {`Purchase Order #${currentPO.id} - ${currentPO.brand.join(
-                ", "
-              )}`}
-            </Typography>
-          </div>
-          <div className={classes.configButtons}>
-            <div
-              className={classes.innerConfigDiv}
-              style={{ alignItems: "flex-start" }}
-            >
-              {currentRole !== "supplier" && (
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<PublishIcon />}
-                >
-                  ORDER INFO
-                </Button>
-              )}
-              {currentRole === "supplier" && (
-                <>
-                  <CSVLink
-                    data={currentCSV.data}
-                    headers={currentCSV.headers}
-                    style={{ textDecoration: "none" }}
+      <CloudinaryContext cloudName="brandhub">
+        <Container className={classes.mainWrapper}>
+          <div className={classes.titleBar}>
+            <div className={classes.titleImage}>
+              {!isNew && (
+                <Tooltip title="Back to PO History" placement="bottom-start">
+                  <IconButton
+                    component={Link}
+                    to="/purchasing/poHistory/current"
+                    onClick={() => {
+                      dispatch(setRetain({ value: true }));
+                    }}
                   >
+                    <ArrowBackIcon fontSize="large" color="secondary" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {isNew && (
+                <Tooltip title="Back to PO Rollup" placement="bottom-start">
+                  <IconButton
+                    component={Link}
+                    to="/purchasing/poRollup"
+                    onClick={() => {
+                      dispatch(setRetain({ value: true }));
+                    }}
+                  >
+                    <ArrowBackIcon fontSize="large" color="secondary" />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Typography className={classes.titleText}>
+                {`Purchase Order #${currentPO.id} - ${currentPO.brand.join(
+                  ", "
+                )}`}
+              </Typography>
+            </div>
+            <div className={classes.configButtons}>
+              <div
+                className={classes.innerConfigDiv}
+                style={{ alignItems: "flex-start" }}
+              >
+                {currentRole !== "supplier" && (
+                  <div style={{ position: "relative" }}>
+                    <Button
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<PublishIcon />}
+                      onClick={uploadToCloudinary}
+                    >
+                      ORDER INFO
+                    </Button>
+                    {currentFile && (
+                      <Typography
+                        style={{
+                          position: "absolute",
+                          top: "Calc(100% + 5px)",
+                        }}
+                        variant="body2"
+                        color="textSecondary"
+                      >
+                        {`File: ${currentFile}`}
+                      </Typography>
+                    )}
+                  </div>
+                )}
+                {currentRole === "supplier" && (
+                  <>
+                    <CSVLink
+                      data={currentCSV.data}
+                      headers={currentCSV.headers}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        className={classes.largeButton}
+                        style={{ marginRight: "10px" }}
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<GetAppIcon />}
+                      >
+                        SHIPPING
+                      </Button>
+                    </CSVLink>
                     <Button
                       className={classes.largeButton}
                       style={{ marginRight: "10px" }}
                       variant="contained"
                       color="secondary"
                       startIcon={<GetAppIcon />}
+                      component={MuiLink}
+                      target="_blank"
+                      href={`https://res.cloudinary.com/brandhub/image/upload/fl_attachment/${currentPO.additionalFile}`}
+                      disabled={!currentPO.additionalFile}
                     >
-                      SHIPPING
+                      ORDER INFO
                     </Button>
-                  </CSVLink>
-                  <Button
-                    className={classes.largeButton}
-                    style={{ marginRight: "10px" }}
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<GetAppIcon />}
-                  >
-                    ORDER INFO
-                  </Button>
-                  <CSVReader
-                    ref={csvRef}
-                    onFileLoad={handleFileUpload}
-                    onError={handleFileUploadError}
-                    noClick
-                    noDrag
-                    config={{
-                      header: true,
-                      beforeFirstChunk: (_chunk) => {
-                        setUploadLoading(true);
-                      },
-                    }}
-                    noProgressBar
-                  >
-                    {({ file }) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          width: "fit-content",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Button
-                          className={classes.largeButton}
-                          style={{
-                            width: isUploadLoading ? "132.93px" : "auto",
-                          }}
-                          variant="contained"
-                          color="secondary"
-                          startIcon={<PublishIcon />}
-                          onClick={handleOpenDialog}
-                        >
-                          {isUploadLoading ? (
-                            <CircularProgress size={27.78} />
-                          ) : (
-                            "SHIPPING"
+                    <CSVReader
+                      ref={csvRef}
+                      onFileLoad={handleFileUpload}
+                      onError={handleFileUploadError}
+                      noClick
+                      noDrag
+                      config={{
+                        header: true,
+                        beforeFirstChunk: (_chunk) => {
+                          setUploadLoading(true);
+                        },
+                      }}
+                      noProgressBar
+                    >
+                      {({ file }) => (
+                        <div style={{ position: "relative" }}>
+                          <Button
+                            className={classes.largeButton}
+                            style={{
+                              width: isUploadLoading ? "132.93px" : "auto",
+                            }}
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<PublishIcon />}
+                            onClick={handleOpenDialog}
+                          >
+                            {isUploadLoading ? (
+                              <CircularProgress size={27.78} />
+                            ) : (
+                              "SHIPPING"
+                            )}
+                          </Button>
+                          {file && (
+                            <Typography
+                              style={{
+                                position: "absolute",
+                                top: "Calc(100% + 5px)",
+                              }}
+                              variant="body2"
+                              color="textSecondary"
+                            >
+                              {file.name}
+                            </Typography>
                           )}
-                        </Button>
-                        {file && (
-                          <Typography variant="body2" color="textSecondary">
-                            {file.name}
-                          </Typography>
-                        )}
-                      </div>
-                    )}
-                  </CSVReader>
-                </>
-              )}
+                        </div>
+                      )}
+                    </CSVReader>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <br />
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <CurrentPO currentPO={currentPO} />
-          <br />
-          {currentRole !== "supplier" && (
-            <>
-              {(isNew || currentPO.status === "draft") && (
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handlePurchaserSubmit}
-                >
-                  SUBMIT PURCHASE ORDER
-                </Button>
-              )}
-              {currentPO.status === "submitted" && (
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                >
-                  SUBMIT EDITS
-                </Button>
-              )}
-            </>
-          )}
-          {currentRole === "supplier" && !currentPO.accepted && (
-            <div style={{ display: "flex" }}>
-              <Button
-                style={{ marginRight: "10px" }}
-                className={classes.largeButton}
-                variant="contained"
-                color="secondary"
-                onClick={() => {
-                  handleSupplierSubmit();
-                }}
-              >
-                Accept
-              </Button>
-              <Button
-                className={classes.largeButton}
-                variant="contained"
-                color="secondary"
-                onClick={() => {
-                  handleSupplierDecline();
-                }}
-              >
-                Decline
-              </Button>
-            </div>
-          )}
           <br />
           <div
             style={{
-              width: "75%",
-              minWidth: "1000px",
-              padding: "10px 20px",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <div className={classes.titleBar}>
-              <Typography className={classes.titleText}>
-                Shipping Info
-              </Typography>
+            <CurrentPO currentPO={currentPO} />
+            <br />
+            {currentRole !== "supplier" && (
+              <>
+                {(isNew || currentPO.status === "draft") && (
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handlePurchaserSubmit}
+                  >
+                    SUBMIT PURCHASE ORDER
+                  </Button>
+                )}
+                {currentPO.status === "submitted" && (
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    SUBMIT EDITS
+                  </Button>
+                )}
+              </>
+            )}
+            {currentRole === "supplier" && !currentPO.accepted && (
+              <div style={{ display: "flex" }}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    handleSupplierSubmit();
+                  }}
+                >
+                  Accept
+                </Button>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    handleSupplierDecline();
+                  }}
+                >
+                  Decline
+                </Button>
+              </div>
+            )}
+            <br />
+            <div
+              style={{
+                width: "75%",
+                minWidth: "1000px",
+                padding: "10px 20px",
+              }}
+            >
+              <div className={classes.titleBar}>
+                <Typography className={classes.titleText}>
+                  Shipping Info
+                </Typography>
+              </div>
+              <br />
+              <br />
+              <ShippingParameterTable
+                handleTrackingClick={handleTrackingClick}
+              />
+              <br />
+              <br />
             </div>
-            <br />
-            <br />
-            <ShippingParameterTable handleTrackingClick={handleTrackingClick} />
-            <br />
-            <br />
           </div>
-        </div>
-        <br />
-        <br />
-      </Container>
+          <br />
+          <br />
+        </Container>
+      </CloudinaryContext>
     </>
   );
 };
