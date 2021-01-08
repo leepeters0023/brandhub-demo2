@@ -434,14 +434,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             marginTop: "84px",
           }}
         >
-          <Tooltip title="Close Filters">
-            <IconButton
-              onClick={handleDrawerClose}
-              style={{ position: "absolute", top: "10px", right: "0" }}
-            >
-              <ChevronLeftIcon color="inherit" />
-            </IconButton>
-          </Tooltip>
           <Typography
             className={classes.titleText}
             style={{ fontWeight: "500" }}
