@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { CSVLink } from "react-csv";
 
+import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useReactToPrint } from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+
 import {
   fetchNextFilteredOrderSets,
   fetchNextFilteredOrderSetItems,
@@ -33,6 +36,36 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
+const orderHeaders = [
+  { label: "Person", key: "user" },
+  { label: "Program", key: "program" },
+  { label: "Brand", key: "brand" },
+  { label: "State", key: "state" },
+  { label: "Est. Cost", key: "totalEstCost" },
+  { label: "Budget Shipped", key: "shippedBudget" },
+  { label: "Budget Rem.", key: "remainingBudget" },
+  { label: "Order Submitted", key: "orderDate" },
+  { label: "Order Due", key: "dueDate" },
+  { label: "Status", key: "status" },
+];
+
+const itemHeaders = [
+  { label: "Person", key: "user" },
+  { label: "Sequence #", key: "itemNumber" },
+  { label: "Program", key: "program" },
+  { label: "Brand", key: "brand" },
+  { label: "Item Type", key: "itemType" },
+  { label: "Item Desc.", key: "itemDescription" },
+  { label: "State", key: "state" },
+  { label: "Qty / Pack", key: "packSize" },
+  { label: "Total Items", key: "totalItems" },
+  { label: "Est. Cost", key: "estCost" },
+  { label: "Est. Total", key: "totalEstCost" },
+  { label: "Order Submitted", key: "orderDate" },
+  { label: "In-Market Date", key: "dueDate" },
+  { label: "Status", key: "status" },
+];
+
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
   toDate: format(addDays(new Date(), 1), "MM/dd/yyyy"),
@@ -56,13 +89,21 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const orderRef = useRef(null);
+  const itemRef = useRef(null);
+
+  const [currentCSVData, setCurrentCSVData] = useState({
+    data: [],
+    headers: [],
+    group: "order",
+  });
+
   const currentPreOrders = useSelector(
     (state) => state.orderSetHistory.orderSets
   );
-  
   const quarterlyRollupItems = useSelector(
     (state) => state.orderSetHistory.itemGroups
-  ) 
+  );
   const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
   const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
@@ -75,6 +116,26 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+
+  const handlePrintOrderTable = useReactToPrint({
+    content: () => orderRef.current,
+  });
+
+  const handlePrintItemTable = useReactToPrint({
+    content: () => itemRef.current,
+  });
+
+  const statusConverter = (status) => {
+    if (status === "inactive") {
+      return "Not Started";
+    } else if (status === "in-progress") {
+      return "In Progress";
+    } else if (status === "submitted") {
+      return "Order Submitted";
+    } else {
+      return "Error";
+    }
+  };
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
@@ -111,6 +172,82 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (
+      (currentGrouping && currentCSVData.group !== currentGrouping) ||
+      currentCSVData.data.length === 0 ||
+      (currentGrouping &&
+        currentGrouping === "order" &&
+        currentCSVData.data.length !== currentPreOrders.length) ||
+      (currentGrouping &&
+        currentGrouping === "item" &&
+        currentCSVData.data.length !== quarterlyRollupItems.length)
+    ) {
+      let dataObject = {
+        data: [],
+        headers: [],
+        group: currentGrouping ? currentGrouping : currentCSVData.group,
+      };
+      dataObject.headers =
+        dataObject.group === "order" ? orderHeaders : itemHeaders;
+      dataObject.data =
+        dataObject.group === "order"
+          ? currentPreOrders.map((order) => ({
+              user: order.userName,
+              program: order.program.join(", "),
+              brand: order.brand.join(", "),
+              state: order.state,
+              totalEstCost: formatMoney(order.totalEstCost, false),
+              shippedBudget: /*TODO*/ "---",
+              remainingBudget: order.budget,
+              orderDate:
+                order.orderDate !== "---"
+                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                  : order.orderDate,
+              dueDate:
+                order.dueDate !== "---"
+                  ? format(new Date(order.dueDate), "MM/dd/yyyy")
+                  : order.dueDate,
+              status: statusConverter(order.status),
+            }))
+          : quarterlyRollupItems.map((item) => ({
+              user: item.user,
+              itemNumber: item.itemNumber,
+              program: item.program,
+              brand: item.brand,
+              itemType: item.itemType,
+              itemDescription: item.itemDescription,
+              state: item.state,
+              packSize: item.packSize,
+              totalItems: item.totalItems,
+              estCost:
+                item.estCost !== "---"
+                  ? formatMoney(item.estCost, false)
+                  : item.estCost,
+              totalEstCost:
+                item.totalEstCost !== "---"
+                  ? formatMoney(item.totalEstCost, false)
+                  : item.totalEstCost,
+              orderDate:
+                item.orderDate !== "---"
+                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                  : item.orderDate,
+              dueDate:
+                item.orderDue !== "---"
+                  ? format(new Date(item.orderDue), "MM/dd/yyyy")
+                  : item.orderDue,
+              status: statusConverter(item.status),
+            }));
+      setCurrentCSVData(dataObject);
+    }
+  }, [
+    currentCSVData.data.length,
+    currentCSVData.group,
+    currentGrouping,
+    currentPreOrders,
+    quarterlyRollupItems,
+  ]);
 
   return (
     <>
@@ -159,16 +296,27 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
               </FormControl>
             )}
             <Tooltip title="Print Order History">
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  if (currentGrouping === "order") {
+                    handlePrintOrderTable();
+                  } else {
+                    handlePrintItemTable();
+                  }
+                }}
+              >
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
+              <CSVLink
+                data={currentCSVData.data}
+                headers={currentCSVData.headers}
+              >
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -193,6 +341,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
             handleSort={handleSort}
             isRollupLoading={isPreOrdersLoading}
             scrollRef={scrollRef}
+            orderRef={orderRef}
           />
         )}
         {currentGrouping === "item" && (
@@ -201,6 +350,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
             handleSort={handleSort}
             isRollupLoading={isPreOrdersLoading}
             scrollRef={scrollRef}
+            itemRef={itemRef}
           />
         )}
         {isNextPreOrdersLoading && (
