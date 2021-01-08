@@ -122,7 +122,7 @@ const DrawerOrdersNav = ({
               </ListItem>
             </List>
           </Grid>
-          {(role === "field2" || role === "super") && (
+          {(role === "field2" || role === "super" || role === "view-only") && (
             <Grid item sm={role === "super" ? 2 : 3} xs={12}>
               <List className={classes.navList}>
                 <ListItem>

@@ -48,6 +48,7 @@ const EnhancedTableHead = (props) => {
     numSelected,
     type,
     forProgram,
+    role,
   } = props;
 
   const currentHeadCells =
@@ -55,7 +56,11 @@ const EnhancedTableHead = (props) => {
       ? headCells.filter((cell) => cell.id !== "addItem")
       : !forProgram
       ? headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addItem")
-      : headCells.filter((cell) => cell.id !== "stock");
+      : role !== "view-only"
+      ? headCells.filter((cell) => cell.id !== "stock")
+      : headCells.filter(
+          (cell) => cell.id !== "stock" && cell.id !== "addItem"
+        );
 
   return (
     <TableHead>
@@ -110,6 +115,7 @@ const ItemCatalogTable = ({
   );
   const isPreOrderLoading = useSelector((state) => state.orderSet.isLoading);
   const patchLoading = useSelector((state) => state.patchOrder.isLoading);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -157,6 +163,7 @@ const ItemCatalogTable = ({
             rowCount={currentItems.length}
             type={catalogType}
             forProgram={addPreOrderItem ? true : false}
+            role={currentUserRole}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -211,24 +218,26 @@ const ItemCatalogTable = ({
                       item.estCost,
                       false
                     )}`}</TableCell>
-                    {!patchLoading && addPreOrderItem && (
-                      <TableCell padding="checkbox" align="center">
-                        <Tooltip title="Add to Pre Order">
-                          <span>
-                            <IconButton
-                              onClick={() => addPreOrderItem(item.id)}
-                              disabled={
-                                isPreOrderLoading ||
-                                preOrderItems.filter((i) => i === item.id)
-                                  .length > 0
-                              }
-                            >
-                              <AddCircleIcon />
-                            </IconButton>
-                          </span>
-                        </Tooltip>
-                      </TableCell>
-                    )}
+                    {!patchLoading &&
+                      addPreOrderItem &&
+                      currentUserRole !== "view-only" && (
+                        <TableCell padding="checkbox" align="center">
+                          <Tooltip title="Add to Pre Order">
+                            <span>
+                              <IconButton
+                                onClick={() => addPreOrderItem(item.id)}
+                                disabled={
+                                  isPreOrderLoading ||
+                                  preOrderItems.filter((i) => i === item.id)
+                                    .length > 0
+                                }
+                              >
+                                <AddCircleIcon />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                        </TableCell>
+                      )}
                     {patchLoading && addPreOrderItem && (
                       <TableCell padding="checkbox" align="center">
                         <CircularProgress size={25} />
