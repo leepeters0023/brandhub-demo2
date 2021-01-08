@@ -159,9 +159,13 @@ const App = () => {
       setRole(currentRole);
       if (currentRole !== "supplier") {
         dispatch(fetchInitialPrograms(currentTerritory.id));
-        dispatch(fetchPreOrders(currentUserId, "initial", null, currentTerritory.id));
-        dispatch(fetchCurrentOrderByType("inStock", currentUserId));
-        dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+        if (currentRole !== "view-only") {
+          dispatch(
+            fetchPreOrders(currentUserId, "initial", null, currentTerritory.id)
+          );
+          dispatch(fetchCurrentOrderByType("inStock", currentUserId));
+          dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+        }
         dispatch(fetchAllItemTypes());
         dispatch(fetchAllSuppliers());
         dispatch(fetchTerritories());
@@ -314,7 +318,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/inStock",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -325,7 +329,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -414,7 +418,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/approvals",
-            ["field2", "purchaser", "super"],
+            ["field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -453,7 +457,14 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/items",
-            ["field1", "field2", "compliance", "purchaser", "super", "view-only"],
+            [
+              "field1",
+              "field2",
+              "compliance",
+              "purchaser",
+              "super",
+              "view-only",
+            ],
             role
           )}
           {handleAuth(
