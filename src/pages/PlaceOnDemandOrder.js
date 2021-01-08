@@ -139,33 +139,38 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={selectedItems.length === 0}
-              onClick={handleAddToOrder}
-              style={{ marginRight: "20px" }}
-            >
-              ADD TO ORDER
-            </Button>
-            <Button
-              component={Link}
-              disabled={
-                isUpdateLoading || currentOrder.onDemandOrderItems.length === 0
-              }
-              to={
-                currentOrder.onDemandOrderItems.length > 0
-                  ? `/orders/open/${currentOrder.onDemandOrderNumber}`
-                  : "/orders/open/onDemand"
-              }
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "20px" }}
-            >
-              VIEW ORDER
-            </Button>
+            {currentUserRole !== "view-only" && (
+              <>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={selectedItems.length === 0}
+                  onClick={handleAddToOrder}
+                  style={{ marginRight: "20px" }}
+                >
+                  ADD TO ORDER
+                </Button>
+                <Button
+                  component={Link}
+                  disabled={
+                    isUpdateLoading ||
+                    currentOrder.onDemandOrderItems.length === 0
+                  }
+                  to={
+                    currentOrder.onDemandOrderItems.length > 0
+                      ? `/orders/open/${currentOrder.onDemandOrderNumber}`
+                      : "/orders/open/onDemand"
+                  }
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  style={{ marginRight: "20px" }}
+                >
+                  VIEW ORDER
+                </Button>
+              </>
+            )}
             <Tooltip title="View List">
               <IconButton
                 onClick={() => {

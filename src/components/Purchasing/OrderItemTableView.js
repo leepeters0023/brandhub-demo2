@@ -43,6 +43,7 @@ const EnhancedTableHead = (props) => {
     numSelected,
     orderLength,
     type,
+    role,
   } = props;
 
   const currentHeadCells =
@@ -53,14 +54,16 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount - orderLength}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all items" }}
-          />
-        </TableCell>
+        {role !== "view-only" && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount - orderLength}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </TableCell>
+        )}
         {currentHeadCells.map((headCell) => (
           <TableCell
             className={classes.headerText}
@@ -105,6 +108,7 @@ const OrderItemTableView = ({
   const currentOrderItems = useSelector(
     (state) => state.currentOrder[`${type}OrderItems`]
   );
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -166,6 +170,7 @@ const OrderItemTableView = ({
             rowCount={currentItems.length}
             orderLength={currentOrderItems.length}
             type={type}
+            role={currentUserRole}
           />
           <TableBody>
             {!isItemsLoading && currentItems.length === 0 && (
@@ -180,26 +185,29 @@ const OrderItemTableView = ({
             {!isItemsLoading &&
               currentItems.length > 0 &&
               currentItems.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected =
+                  currentUserRole !== "view-only" ? isSelected(row.id) : null;
                 const labelId = `item-Checkbox-${index}`;
                 return (
                   <TableRow key={row.id} hover>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                        onClick={(event) => event.stopPropagation()}
-                        disabled={
-                          currentOrderItems.filter(
-                            (item) => item.itemNumber === row.itemNumber
-                          ).length !== 0
-                        }
-                        onChange={(event) => {
-                          handleClick(event, row.id);
-                          event.stopPropagation();
-                        }}
-                      />
-                    </TableCell>
+                    {currentUserRole !== "view-only" && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                          onClick={(event) => event.stopPropagation()}
+                          disabled={
+                            currentOrderItems.filter(
+                              (item) => item.itemNumber === row.itemNumber
+                            ).length !== 0
+                          }
+                          onChange={(event) => {
+                            handleClick(event, row.id);
+                            event.stopPropagation();
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell align="left">
                       <ImageWrapper
                         id={row.id}
