@@ -23,6 +23,7 @@ import Loading from "../components/Utility/Loading";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import TuneIcon from '@material-ui/icons/Tune';
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -192,17 +193,20 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+        <div
+          className={classes.hoverText}
+          style={{ display: "flex", alignItems: "center", height: "32px" }}
+          onClick={() => {
+            handleFilterDrawer(!filtersOpen);
+          }}
+        >
+          <TuneIcon fontSize="small" color="secondary" />
           <Typography
             variant="body2"
             color="textSecondary"
-            className={classes.hoverText}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              handleFilterDrawer(!filtersOpen);
-            }}
+            style={{ margin: "10px 10px" }}
           >
-            Filters
+            {filtersOpen ? "Hide Filters" : "Show Filters"}
           </Typography>
           <FilterChipList classes={classes} />
         </div>
