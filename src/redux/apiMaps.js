@@ -113,6 +113,7 @@ export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
     itemNumber: item["sequence-number"],
+    brand: "---",
     program: item["program-name"],
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",

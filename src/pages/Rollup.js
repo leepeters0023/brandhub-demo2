@@ -47,11 +47,24 @@ const orderHeaders = [
   { label: "Order Submitted", key: "orderDate" },
   { label: "Order Due", key: "dueDate" },
   { label: "Status", key: "status" },
-]
+];
 
 const itemHeaders = [
-
-]
+  { label: "Person", key: "user" },
+  { label: "Sequence #", key: "itemNumber" },
+  { label: "Program", key: "program" },
+  { label: "Brand", key: "brand" },
+  { label: "Item Type", key: "itemType" },
+  { label: "Item Desc.", key: "itemDescription" },
+  { label: "State", key: "state" },
+  { label: "Qty / Pack", key: "packSize" },
+  { label: "Total Items", key: "totalItems" },
+  { label: "Est. Cost", key: "estCost" },
+  { label: "Est. Total", key: "totalEstCost" },
+  { label: "Order Submitted", key: "orderDate" },
+  { label: "In-Market Date", key: "dueDate" },
+  { label: "Status", key: "status" },
+];
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -112,6 +125,18 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     content: () => itemRef.current,
   });
 
+  const statusConverter = (status) => {
+    if (status === "inactive") {
+      return "Not Started";
+    } else if (status === "in-progress") {
+      return "In Progress";
+    } else if (status === "submitted") {
+      return "Order Submitted";
+    } else {
+      return "Error";
+    }
+  };
+
   const handleBottomScroll = () => {
     if (nextLink && !isNextPreOrdersLoading) {
       if (scrollRef.current.scrollTop !== 0) {
@@ -147,6 +172,82 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (
+      (currentGrouping && currentCSVData.group !== currentGrouping) ||
+      currentCSVData.data.length === 0 ||
+      (currentGrouping &&
+        currentGrouping === "order" &&
+        currentCSVData.data.length !== currentPreOrders.length) ||
+      (currentGrouping &&
+        currentGrouping === "item" &&
+        currentCSVData.data.length !== quarterlyRollupItems.length)
+    ) {
+      let dataObject = {
+        data: [],
+        headers: [],
+        group: currentGrouping ? currentGrouping : currentCSVData.group,
+      };
+      dataObject.headers =
+        dataObject.group === "order" ? orderHeaders : itemHeaders;
+      dataObject.data =
+        dataObject.group === "order"
+          ? currentPreOrders.map((order) => ({
+              user: order.userName,
+              program: order.program.join(", "),
+              brand: order.brand.join(", "),
+              state: order.state,
+              totalEstCost: formatMoney(order.totalEstCost, false),
+              shippedBudget: /*TODO*/ "---",
+              remainingBudget: order.budget,
+              orderDate:
+                order.orderDate !== "---"
+                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                  : order.orderDate,
+              dueDate:
+                order.dueDate !== "---"
+                  ? format(new Date(order.dueDate), "MM/dd/yyyy")
+                  : order.dueDate,
+              status: statusConverter(order.status),
+            }))
+          : quarterlyRollupItems.map((item) => ({
+              user: item.user,
+              itemNumber: item.itemNumber,
+              program: item.program,
+              brand: item.brand,
+              itemType: item.itemType,
+              itemDescription: item.itemDescription,
+              state: item.state,
+              packSize: item.packSize,
+              totalItems: item.totalItems,
+              estCost:
+                item.estCost !== "---"
+                  ? formatMoney(item.estCost, false)
+                  : item.estCost,
+              totalEstCost:
+                item.totalEstCost !== "---"
+                  ? formatMoney(item.totalEstCost, false)
+                  : item.totalEstCost,
+              orderDate:
+                item.orderDate !== "---"
+                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                  : item.orderDate,
+              dueDate:
+                item.orderDue !== "---"
+                  ? format(new Date(item.orderDue), "MM/dd/yyyy")
+                  : item.orderDue,
+              status: statusConverter(item.status),
+            }));
+      setCurrentCSVData(dataObject);
+    }
+  }, [
+    currentCSVData.data.length,
+    currentCSVData.group,
+    currentGrouping,
+    currentPreOrders,
+    quarterlyRollupItems,
+  ]);
 
   return (
     <>
