@@ -59,6 +59,7 @@ import Help from "./pages/Help";
 import ItemCatalog from "./pages/ItemCatalog";
 import Loading from "./components/Utility/Loading";
 import LogIn from "./components/Login";
+import NewUser from "./pages/NewUser";
 import OrderApprovals from "./pages/OrderApprovals";
 import OrderHistory from "./pages/OrderHistory";
 import PendingCompliance from "./pages/PendingCompliance";
@@ -104,6 +105,7 @@ const App = () => {
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
   const userError = useSelector((state) => state.user.error);
+  const territories = useSelector((state) => state.user.territories);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
   const isLoading = useSelector((state) => state.user.isLoading);
   const isPreOrdersLoading = useSelector(
@@ -158,20 +160,29 @@ const App = () => {
     if (currentUser && currentRole.length > 0) {
       setRole(currentRole);
       if (currentRole !== "supplier") {
-        dispatch(fetchInitialPrograms(currentTerritory.id));
-        if (currentRole !== "view-only") {
-          dispatch(
-            fetchPreOrders(currentUserId, "initial", null, currentTerritory.id)
-          );
-          dispatch(fetchCurrentOrderByType("inStock", currentUserId));
-          dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+        if (currentRole === "view-only" && territories.length > 0) {
+          dispatch(fetchInitialPrograms(currentTerritory.id));
+          if (currentRole !== "view-only") {
+            dispatch(
+              fetchPreOrders(
+                currentUserId,
+                "initial",
+                null,
+                currentTerritory.id
+              )
+            );
+            dispatch(fetchCurrentOrderByType("inStock", currentUserId));
+            dispatch(fetchCurrentOrderByType("onDemand", currentUserId));
+          }
+          dispatch(fetchAllItemTypes());
+          dispatch(fetchAllSuppliers());
+          dispatch(fetchTerritories());
+          dispatch(fetchStates());
+          dispatch(fetchBUs());
+          dispatch(fetchWarehouse());
+        } else {
+          dispatch(clearPrograms());
         }
-        dispatch(fetchAllItemTypes());
-        dispatch(fetchAllSuppliers());
-        dispatch(fetchTerritories());
-        dispatch(fetchStates());
-        dispatch(fetchBUs());
-        dispatch(fetchWarehouse());
       } else {
         dispatch(clearPrograms());
       }
@@ -226,6 +237,16 @@ const App = () => {
     );
   }
 
+  if (currentRole === "view-only" && territories.length === 0) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <NewUser handleFiltersClosed={handleFiltersClosed} path="/newUser" />
+        </Router>
+      </MuiThemeProvider>
+    );
+  }
+
   return (
     <MuiThemeProvider theme={theme}>
       {loggedIn && (
@@ -248,7 +269,9 @@ const App = () => {
         style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
       >
         {window.location.pathname === "/login" && <Redirect noThrow to="/" />}
-
+        {role === "view-only" && territories.length === 0 && (
+          <Redirect noThrow to="/newUser" />
+        )}
         <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
           <Dashboard
             path="/"
@@ -268,7 +291,8 @@ const App = () => {
             />,
             "/programs",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ProgramNew
@@ -279,7 +303,8 @@ const App = () => {
             />,
             "/programs",
             ["field1", "field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Program
@@ -289,7 +314,8 @@ const App = () => {
             />,
             "/program",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <CurrentPreOrder
@@ -298,7 +324,8 @@ const App = () => {
             />,
             "/orders/open/preorder",
             ["field1", "field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <CurrentOrderDetail
@@ -308,7 +335,8 @@ const App = () => {
             />,
             "/orders/open",
             ["field1", "field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PlaceInStockOrder
@@ -319,7 +347,8 @@ const App = () => {
             />,
             "/orders/items/inStock",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PlaceOnDemandOrder
@@ -330,7 +359,8 @@ const App = () => {
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <RFQRollup
@@ -340,7 +370,8 @@ const App = () => {
             />,
             "/purchasing/rfqRollup",
             ["field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <RFQ
@@ -349,7 +380,8 @@ const App = () => {
             />,
             "/purchasing/rfq",
             ["field2", "purchaser", "super", "supplier"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <RFQHistory
@@ -359,7 +391,8 @@ const App = () => {
             />,
             "/purchasing/rfqHistory",
             ["field2", "purchaser", "super", "supplier"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PurchaseOrderRollup
@@ -369,7 +402,8 @@ const App = () => {
             />,
             "/purchasing/poRollup",
             ["field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PurchaseOrder
@@ -378,7 +412,8 @@ const App = () => {
             />,
             "/purchasing/purchaseOrder",
             ["field2", "purchaser", "super", "supplier"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PurchaseOrderHistory
@@ -388,7 +423,8 @@ const App = () => {
             />,
             "/purchasing/poHistory",
             ["field2", "purchaser", "super", "supplier"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <SingleOrder
@@ -397,7 +433,8 @@ const App = () => {
             />,
             "/orders/history",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <OrderHistory
@@ -408,7 +445,8 @@ const App = () => {
             />,
             "/orders/history",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <OrderApprovals
@@ -419,7 +457,8 @@ const App = () => {
             />,
             "/orders/approvals",
             ["field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Rollup
@@ -429,7 +468,8 @@ const App = () => {
             />,
             "/rollup",
             ["field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <CurrentOrderDetail
@@ -438,7 +478,8 @@ const App = () => {
             />,
             "/rollup/detail",
             ["field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Coupons
@@ -447,7 +488,8 @@ const App = () => {
             />,
             "/coupons",
             ["field1", "field2", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ItemCatalog
@@ -465,7 +507,8 @@ const App = () => {
               "super",
               "view-only",
             ],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <PendingCompliance
@@ -474,7 +517,8 @@ const App = () => {
             />,
             "/compliance/pending",
             ["field2", "compliance", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ComplianceContacts
@@ -484,7 +528,8 @@ const App = () => {
             />,
             "/compliance/contacts",
             ["field2", "compliance", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ComplianceItems
@@ -494,7 +539,8 @@ const App = () => {
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "compliance", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ComplianceRules
@@ -504,7 +550,8 @@ const App = () => {
             />,
             "/orders/items/onDemand",
             ["field1", "field2", "compliance", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <BudgetVsSpend
@@ -514,7 +561,8 @@ const App = () => {
             />,
             "/budgets/ytod",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Profile
@@ -524,7 +572,8 @@ const App = () => {
             />,
             "/profile",
             ["field1", "field2", "compliance", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Settings
@@ -534,7 +583,8 @@ const App = () => {
             />,
             "/settings",
             ["field1", "field2", "compliance", "purchaser", "super"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <ReportWrapUp
@@ -543,13 +593,15 @@ const App = () => {
             />,
             "/reports/wrap-up",
             ["field1", "field2", "purchaser", "super", "view-only"],
-            role
+            role,
+            territories
           )}
           {handleAuth(
             <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
             "/help",
             [],
-            role
+            role,
+            territories
           )}
           <FourOhFour default path="/whoops" />
         </Router>
@@ -560,7 +612,10 @@ const App = () => {
 
 export default App;
 
-const handleAuth = (component, path, users, role) => {
+const handleAuth = (component, path, users, role, territories) => {
+  if (role === "view-only" && territories.length === 0) {
+    return <Redirect noThrow from={path} to="/newUser" />;
+  }
   if (users.length === 0) {
     return component;
   } else if (users.includes(role)) {
