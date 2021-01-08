@@ -34,6 +34,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import { formatMoney } from "../utility/utilityFunctions";
 
 const orderHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -46,8 +47,8 @@ const orderHeaders = [
   { label: "Ship Date", key: "shipDate" },
   { label: "Total Items", key: "totalItems" },
   { label: "Est. Total", key: "totalEstCost" },
-  { label: "Act. Total", key: "actTotal" },
-  { label: "Status", key: "orderStatus" },
+  { label: "Act. Total", key: "totalActCost" },
+  { label: "Status", key: "status" },
 ];
 
 const itemHeaders = [
@@ -68,6 +69,12 @@ const itemHeaders = [
   { label: "Tracking #", key: "tracking" },
   { label: "Status", key: "status" },
 ];
+
+const orderTypeMap = {
+  "on-demand": "On Demand",
+  "in-stock": "In Stock",
+  "pre-order": "Pre Order",
+};
 
 const defaultOrderFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -212,23 +219,76 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       let dataObject = {
         data: [],
         headers: [],
-        group: currentGrouping
-          ? currentGrouping
-          : currentCSVData.group
+        group: currentGrouping ? currentGrouping : currentCSVData.group,
       };
-      dataObject.headers = dataObject.group === "order" ? orderHeaders : itemHeaders;
-      // dataObject.data = dataObject.group === "order"
-      //   ? currentOrders.map((order) => ({
-      //     orderNum: order.id,
-      //     type: order.type,
-      //     name: order.distributorName ? order.distributorName : "---",
-      //     state: order.distributorState ? order.distributorState : order.customAddressState,
-      //     brand: order.brand.join(", "),
-      //     orderDate: format(new Date(row.orderDate), "MM/dd/yyyy"),
-
-      //   }))
+      dataObject.headers =
+        dataObject.group === "order" ? orderHeaders : itemHeaders;
+      dataObject.data =
+        dataObject.group === "order"
+          ? currentOrders.map((order) => ({
+              orderNum: order.id,
+              type: order.type,
+              name: order.distributorName ? order.distributorName : "---",
+              state: order.distributorState
+                ? order.distributorState
+                : order.customAddressState,
+              program: order.program,
+              brand: order.brand.join(", "),
+              orderDate: format(new Date(order.orderDate), "MM/dd/yyyy"),
+              shipDate:
+                order.shipDate !== "---"
+                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                  : order.shipDate,
+              totalItems: order.totalItems,
+              totalEstCost:
+                order.totalEstCost !== "---"
+                  ? formatMoney(order.totalEstCost, false)
+                  : order.totalEstCost,
+              totalActCost:
+                order.totalActCost !== "---"
+                  ? formatMoney(order.totalActCost, false)
+                  : order.totalActCost,
+              status: order.status[0].toUpperCase() + order.status.slice(1),
+            }))
+          : currentOrderItems.map((item) => ({
+              itemNumber: item.itemNumber,
+              orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
+              orderNum: item.orderId,
+              brand: item.brand.join(", "),
+              program: item.program,
+              itemType: item.itemType,
+              itemDesc: item.itemDescription,
+              name: item.distributor.length > 0 ? item.distributor : "---",
+              state: item.state,
+              totalItems: item.totalItems,
+              estCost:
+                item.estCost !== "---"
+                  ? formatMoney(item.estCost, false)
+                  : item.estCost,
+              actCost:
+                item.actCost !== "---"
+                  ? formatMoney(item.actCost, false)
+                  : item.actCost,
+              orderDate:
+                item.orderDate !== "---"
+                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                  : item.orderDate,
+              shipDate:
+                item.shipDate !== "---"
+                  ? format(new Date(item.shipDate), "MM/dd/yyyy")
+                  : item.shipDate,
+              tracking: item.tracking,
+              status: item.status[0].toUpperCase() + item.status.slice(1),
+            }));
+      setCurrentCSVData(dataObject);
     }
-  });
+  }, [
+    currentCSVData.data.length,
+    currentCSVData.group,
+    currentGrouping,
+    currentOrders,
+    currentOrderItems,
+  ]);
 
   return (
     <>
@@ -264,14 +324,8 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             </Tooltip>
             <Tooltip title="Export CSV">
               <CSVLink
-                data={
-                  currentGrouping === "order"
-                    ? currentOrders
-                    : currentOrderItems
-                }
-                headers={
-                  currentGrouping === "order" ? orderHeaders : itemHeaders
-                }
+                data={currentCSVData.data}
+                headers={currentCSVData.headers}
               >
                 <IconButton>
                   <GetAppIcon color="secondary" />
