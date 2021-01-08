@@ -284,9 +284,9 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                     marginTop: "10px",
                     marginBottom: "0px",
                     width: `Calc(${queryTotal && orderCount
-                        ? queryTotal.toString().length +
-                        orderCount.toString().length
-                        : 0
+                      ? queryTotal.toString().length +
+                      orderCount.toString().length
+                      : 0
                       }*15px + 50px)`,
                     minWidth: "100px",
                     readonly: "readonly",
@@ -321,8 +321,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
           </div>
         </div>
         <div
-          className={classes.hoverText}
-          style={{ display: "flex", alignItems: "center", height: "32px" }}
+          className={classes.showHideFilters}
           onClick={() => {
             handleFilterDrawer(!filtersOpen);
           }}

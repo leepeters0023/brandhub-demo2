@@ -209,5 +209,14 @@ export default {
       zIndex: 1250,
       color: "#fff",
     },
+    showHideFilters: {
+      display: "flex", 
+      alignItems: "center", 
+      height: "32px", 
+      width: "150px",
+      "&:hover": {
+        cursor: "pointer",
+      },
+    }
   },
 };
