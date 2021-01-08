@@ -198,13 +198,12 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
         </div>
         <>
           <div
-            className={classes.hoverText}
-            style={{ display: "flex", alignItems: "center", height: "32px" }}
+            className={classes.showHideFilters}
             onClick={() => {
               handleFilterDrawer(!filtersOpen);
             }}
           >
-            <TuneIcon fontSize="small" color="secondary"/>
+            <TuneIcon fontSize="small" color="secondary" />
             <Typography
               variant="body2"
               color="textSecondary"

@@ -148,8 +148,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           </div>
         </div>
         <div
-          className={classes.hoverText}
-          style={{ display: "flex", alignItems: "center", height: "32px" }}
+          className={classes.showHideFilters}
           onClick={() => {
             handleFilterDrawer(!filtersOpen);
           }}
