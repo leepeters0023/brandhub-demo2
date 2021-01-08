@@ -44,6 +44,7 @@ const OrderItemGridView = (props) => {
   );
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -107,7 +108,8 @@ const OrderItemGridView = (props) => {
             )}
             {currentItems.length > 0 &&
               currentItems.map((item, index) => {
-                const isItemSelected = isSelected(item.id);
+                const isItemSelected =
+                  currentUserRole !== "view-only" ? isSelected(item.id) : null;
                 const labelId = `item-Checkbox-${index}`;
 
                 return (
@@ -122,21 +124,23 @@ const OrderItemGridView = (props) => {
                   >
                     <Paper className={classes.paperWrapper}>
                       <div className={classes.singleItemWrapper}>
-                        <Checkbox
-                          className={classes.checkbox}
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                          onClick={(event) => event.stopPropagation()}
-                          disabled={
-                            currentOrderItems.filter(
-                              (i) => i.itemNumber === item.itemNumber
-                            ).length !== 0
-                          }
-                          onChange={(event) => {
-                            handleClick(event, item.id);
-                            event.stopPropagation();
-                          }}
-                        />
+                        {currentUserRole !== "view-only" && (
+                          <Checkbox
+                            className={classes.checkbox}
+                            checked={isItemSelected}
+                            inputProps={{ "aria-labelledby": labelId }}
+                            onClick={(event) => event.stopPropagation()}
+                            disabled={
+                              currentOrderItems.filter(
+                                (i) => i.itemNumber === item.itemNumber
+                              ).length !== 0
+                            }
+                            onChange={(event) => {
+                              handleClick(event, item.id);
+                              event.stopPropagation();
+                            }}
+                          />
+                        )}
                         <ImageWrapper
                           id={item.itemNumber}
                           imgClass={classes.previewImg}

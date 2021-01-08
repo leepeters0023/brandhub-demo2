@@ -149,16 +149,18 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-            <Button
-              className={classes.largeButton}
-              style={{ marginRight: "20px" }}
-              variant="contained"
-              color="secondary"
-              disabled={selectedItems.length === 0}
-              onClick={handleFavoriteItems}
-            >
-              ADD TO FAVORITES
-            </Button>
+            {currentUserRole !== "view-only" && (
+              <Button
+                className={classes.largeButton}
+                style={{ marginRight: "20px" }}
+                variant="contained"
+                color="secondary"
+                disabled={selectedItems.length === 0}
+                onClick={handleFavoriteItems}
+              >
+                ADD TO FAVORITES
+              </Button>
+            )}
             <Button
               className={classes.largeButton}
               style={{ marginRight: "20px" }}

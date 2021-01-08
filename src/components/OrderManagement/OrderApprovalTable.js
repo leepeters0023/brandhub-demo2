@@ -5,6 +5,8 @@ import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
+import { useSelector } from "react-redux";
+
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -22,7 +24,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import CancelIcon from "@material-ui/icons/Cancel";
 import WarningIcon from "@material-ui/icons/Warning";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
-
 
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: false },
@@ -67,23 +68,31 @@ const EnhancedTableHead = (props) => {
     onRequestSort,
     onSelectAllClick,
     numSelected,
+    role,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
+  const headers =
+    role !== "view-only"
+      ? headCells
+      : headCells.filter((cell) => cell.id !== "actions");
+
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all items" }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => {
+        {role !== "view-only" && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </TableCell>
+        )}
+        {headers.map((headCell) => {
           if (!headCell.sort) {
             return (
               <TableCell
@@ -131,6 +140,9 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  numSelected: PropTypes.number,
+  role: PropTypes.string.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -165,6 +177,9 @@ const OrderApprovalTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
+
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -204,7 +219,9 @@ const OrderApprovalTable = ({
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const handleRowClick = (id) => {
-    navigate(`/orders/open/${id}#approval`);
+    if (currentUserRole !== "view-only") {
+      navigate(`/orders/open/${id}#approval`);
+    }
   };
 
   return (
@@ -223,6 +240,7 @@ const OrderApprovalTable = ({
             onRequestSort={handleRequestSort}
             onSelectAllClick={handleSelectAllClick}
             rowCount={orders.length}
+            role={currentUserRole}
           />
           <TableBody>
             {!isOrdersLoading && orders.length === 0 && (
@@ -237,28 +255,35 @@ const OrderApprovalTable = ({
             {!isOrdersLoading &&
               orders.length > 0 &&
               orders.map((row, index) => {
-                const isOrderSelected = isSelected(row.id);
+                const isOrderSelected =
+                  currentUserRole !== "view-only" ? isSelected(row.id) : null;
                 const labelId = `approvals-Checkbox-${index}`;
                 return (
                   <TableRow
                     key={row.id}
                     hover
-                    className={classes.orderHistoryRow}
+                    className={
+                      currentUserRole !== "view-only"
+                        ? classes.orderHistoryRow
+                        : ""
+                    }
                     onClick={() => {
                       handleRowClick(row.id);
                     }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isOrderSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => {
-                          event.stopPropagation();
-                          handleClick(event, row.id);
-                        }}
-                      />
-                    </TableCell>
+                    {currentUserRole !== "view-only" && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isOrderSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                          onClick={(event) => event.stopPropagation()}
+                          onChange={(event) => {
+                            event.stopPropagation();
+                            handleClick(event, row.id);
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell align="left">
                       {row.hasRush ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
@@ -321,20 +346,22 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell>$5,000.00</TableCell>
                     <TableCell>$25,000.00</TableCell>
-                    <TableCell align="right">
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <Tooltip title="Deny">
-                          <IconButton
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleDeny(row.id);
-                            }}
-                          >
-                            <CancelIcon color="inherit" />
-                          </IconButton>
-                        </Tooltip>
-                      </div>
-                    </TableCell>
+                    {currentUserRole !== "view-only" && (
+                      <TableCell align="right">
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Tooltip title="Deny">
+                            <IconButton
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleDeny(row.id);
+                              }}
+                            >
+                              <CancelIcon color="inherit" />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      </TableCell>
+                    )}
                   </TableRow>
                 );
               })}

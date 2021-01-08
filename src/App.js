@@ -263,7 +263,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/programs",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -284,7 +284,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/program",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -335,7 +335,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/purchasing/rfqRollup",
-            ["field2", "purchaser", "super"],
+            ["field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -392,7 +392,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/orders/history",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -403,7 +403,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/history",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -424,7 +424,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/rollup",
-            ["field2", "purchaser", "super"],
+            ["field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -453,7 +453,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/items",
-            ["field1", "field2", "compliance", "purchaser", "super"],
+            ["field1", "field2", "compliance", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -462,7 +462,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/compliance/pending",
-            ["field2", "compliance", "purchaser", "super"],
+            ["field2", "compliance", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -472,7 +472,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/compliance/contacts",
-            ["field2", "compliance", "purchaser", "super"],
+            ["field2", "compliance", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -482,7 +482,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field1", "field2", "compliance", "super"],
+            ["field1", "field2", "compliance", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -492,7 +492,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/orders/items/onDemand",
-            ["field1", "field2", "compliance", "super"],
+            ["field1", "field2", "compliance", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -502,7 +502,7 @@ const App = () => {
               filtersOpen={filtersOpen}
             />,
             "/budgets/ytod",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(
@@ -531,7 +531,7 @@ const App = () => {
               handleFiltersClosed={handleFiltersClosed}
             />,
             "/reports/wrap-up",
-            ["field1", "field2", "purchaser", "super"],
+            ["field1", "field2", "purchaser", "super", "view-only"],
             role
           )}
           {handleAuth(

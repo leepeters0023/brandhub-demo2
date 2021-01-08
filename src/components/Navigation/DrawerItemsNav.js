@@ -91,7 +91,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             >
               <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
             </ListItem>
-            {(userType === "compliance" || userType === "super") && (
+            {(userType === "compliance" || userType === "super" || userType === "view-only") && (
               <ListItem
               button
               onClick={handleDrawerClose}

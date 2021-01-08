@@ -84,7 +84,7 @@ const UserNavMenu = ({
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
-        {userType !== "supplier" && [
+        {userType !== "supplier" && userType !== "view-only" && [
           <MenuItem
             key="profile"
             component={Link}
