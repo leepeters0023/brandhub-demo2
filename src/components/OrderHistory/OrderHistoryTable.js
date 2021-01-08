@@ -140,6 +140,7 @@ const OrderHistoryTable = ({
   handleSort,
   isOrdersLoading,
   scrollRef,
+  orderRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -170,6 +171,7 @@ const OrderHistoryTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={orderRef}
         >
           <EnhancedTableHead
             classes={classes}
