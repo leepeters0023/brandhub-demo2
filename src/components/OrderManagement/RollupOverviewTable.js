@@ -48,7 +48,7 @@ const headCells = [
     label: "Order Submitted",
     sort: true,
   },
-  { id: "dueDate", disablePadding: false, label: "Order Due", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 

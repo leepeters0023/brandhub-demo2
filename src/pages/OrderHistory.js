@@ -217,10 +217,10 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       currentCSVData.data.length === 0 ||
       (currentGrouping &&
         currentGrouping === "order" &&
-        currentCSVData.length !== currentOrders.length) ||
+        currentCSVData.data.length !== currentOrders.length) ||
       (currentGrouping &&
         currentGrouping === "item" &&
-        currentCSVData.length !== currentOrderItems.length)
+        currentCSVData.data.length !== currentOrderItems.length)
     ) {
       let dataObject = {
         data: [],
@@ -291,7 +291,6 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   }, [
     currentCSVData.data.length,
     currentCSVData.group,
-    currentCSVData.length,
     currentGrouping,
     currentOrders,
     currentOrderItems,

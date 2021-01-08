@@ -46,7 +46,7 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
+  { id: "orderDate", disablePadding: false, label: "Order Submitted", sort: true },
   { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
@@ -207,7 +207,7 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">---</TableCell>
+                  <TableCell align="left">{row.brand}</TableCell>
                   {/* {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
