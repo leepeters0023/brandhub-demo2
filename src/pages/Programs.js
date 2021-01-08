@@ -16,6 +16,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
+import TuneIcon from '@material-ui/icons/Tune';
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -114,17 +115,20 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
           )}
         </div>
         <br />
-        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+        <div
+          className={classes.hoverText}
+          style={{ display: "flex", alignItems: "center", height: "32px" }}
+          onClick={() => {
+            handleFilterDrawer(!filtersOpen);
+          }}
+        >
+          <TuneIcon fontSize="small" color="secondary" />
           <Typography
             variant="body2"
             color="textSecondary"
-            className={classes.hoverText}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              handleFilterDrawer(!filtersOpen);
-            }}
+            style={{ margin: "10px 10px" }}
           >
-            Filters
+            {filtersOpen ? "Hide Filters" : "Show Filters"}
           </Typography>
           <FilterChipList classes={classes} />
         </div>
@@ -132,12 +136,12 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         {isLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-          <CurrentPrograms
-            userType={userType}
-            currentPrograms={currentPrograms}
-            filtersOpen={filtersOpen}
-          />
-        )}
+            <CurrentPrograms
+              userType={userType}
+              currentPrograms={currentPrograms}
+              filtersOpen={filtersOpen}
+            />
+          )}
       </Container>
     </>
   );

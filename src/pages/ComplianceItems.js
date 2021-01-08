@@ -16,6 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
+import TuneIcon from '@material-ui/icons/Tune';
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
@@ -48,7 +49,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentItemRules = useSelector((state) => state.complianceItems.items);
- 
+
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
   const nextLink = useSelector((state) => state.complianceItems.nextLink);
   const isNextLoading = useSelector(
@@ -103,35 +104,35 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           >
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
-              <>
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create manual approval function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
-                >
-                  APPROVE RULE
+                <>
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!itemSelected}
+                    style={{ marginRight: "20px" }}
+                    onClick={() => {
+                      //TODO create manual approval function
+                      //navigate("/purchasing/purchaseOrder#new");
+                    }}
+                  >
+                    APPROVE RULE
                 </Button>
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create override function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
-                >
-                  OVERRIDE RULE
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!itemSelected}
+                    style={{ marginRight: "20px" }}
+                    onClick={() => {
+                      //TODO create override function
+                      //navigate("/purchasing/purchaseOrder#new");
+                    }}
+                  >
+                    OVERRIDE RULE
                 </Button>
-              </>
-            )}
+                </>
+              )}
             <Tooltip title="Print Items">
               <IconButton>
                 <PrintIcon color="secondary" />
@@ -146,17 +147,20 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+        <div
+          className={classes.hoverText}
+          style={{ display: "flex", alignItems: "center", height: "32px" }}
+          onClick={() => {
+            handleFilterDrawer(!filtersOpen);
+          }}
+        >
+          <TuneIcon fontSize="small" color="secondary" />
           <Typography
             variant="body2"
             color="textSecondary"
-            className={classes.hoverText}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              handleFilterDrawer(!filtersOpen);
-            }}
+            style={{ margin: "10px 10px" }}
           >
-            Filters
+            {filtersOpen ? "Hide Filters" : "Show Filters"}
           </Typography>
           <FilterChipList classes={classes} />
         </div>
