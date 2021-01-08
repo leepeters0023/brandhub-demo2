@@ -56,14 +56,12 @@ const DistributorSelection = () => {
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const isOrderLoading = useSelector((state) => state.orderSet.isOrderLoading);
   const options = useSelector((state) => state.distributors.distributorList);
-  //const currentOrders = useSelector((state) => state.orderSet.orders);
   const orderSetId = useSelector((state) => state.orderSet.orderId);
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const orderType = useSelector((state) => state.orderSet.type);
   const favoriteLists = useSelector(
     (state) => state.distributors.favoriteDistributors
   );
-  const currentRole = useSelector((state) => state.user.role);
 
   const loading = open && isLoading;
 
@@ -122,7 +120,7 @@ const DistributorSelection = () => {
           multiple
           freeSolo
           style={{
-            maxWidth: currentRole !== "field1" ? "Calc(100% - 47px)" : "100%",
+            maxWidth: "Calc(100% - 47px)",
           }}
           renderTags={() => null}
           fullWidth
