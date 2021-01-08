@@ -4,6 +4,7 @@ import "date-fns";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
+import { formatMoney } from "../utility/utilityFunctions";
 import { CSVLink } from "react-csv";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -34,7 +35,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { formatMoney } from "../utility/utilityFunctions";
 
 const orderHeaders = [
   { label: "Order Number", key: "orderNum" },
@@ -214,7 +214,13 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   useEffect(() => {
     if (
       (currentGrouping && currentCSVData.group !== currentGrouping) ||
-      currentCSVData.data.length === 0
+      currentCSVData.data.length === 0 ||
+      (currentGrouping &&
+        currentGrouping === "order" &&
+        currentCSVData.length !== currentOrders.length) ||
+      (currentGrouping &&
+        currentGrouping === "item" &&
+        currentCSVData.length !== currentOrderItems.length)
     ) {
       let dataObject = {
         data: [],
@@ -285,6 +291,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   }, [
     currentCSVData.data.length,
     currentCSVData.group,
+    currentCSVData.length,
     currentGrouping,
     currentOrders,
     currentOrderItems,

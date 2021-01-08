@@ -17,7 +17,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+//import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
@@ -135,6 +135,7 @@ const RollupOverviewByItemTable = ({
   handleSort,
   isRollupLoading,
   scrollRef,
+  itemRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -174,6 +175,7 @@ const RollupOverviewByItemTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={itemRef}
         >
           <EnhancedTableHead
             classes={classes}
@@ -205,7 +207,8 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  {row.brand.length > 1 ? (
+                  <TableCell align="left">---</TableCell>
+                  {/* {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
                         align="left"
@@ -217,7 +220,7 @@ const RollupOverviewByItemTable = ({
                     </Tooltip>
                   ) : (
                       <TableCell align="left">{row.brand[0]}</TableCell>
-                    )}
+                    )} */}
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
                   </TableCell>

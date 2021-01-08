@@ -136,6 +136,7 @@ const RollupOverViewTable = ({
   handleSort,
   isRollupLoading,
   scrollRef,
+  orderRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -166,7 +167,7 @@ const RollupOverViewTable = ({
         style={{ maxHeight: "Calc(100vh - 300px)" }}
         ref={scrollRef}
       >
-        <Table stickyHeader className={classes.table}>
+        <Table stickyHeader className={classes.table} ref={orderRef}>
           <EnhancedTableHead
             classes={classes}
             order={order}
