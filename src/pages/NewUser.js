@@ -8,6 +8,8 @@ import Logo from "../assets/RTA_Logo_Stacked.png";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,9 +39,14 @@ const useStyles = makeStyles((theme) => ({
     height: "auto",
     filter: "brightness(0%)",
   },
+  logout: {
+    position: "fixed",
+    top: "20px",
+    right: "20px",
+  },
 }));
 
-const NewUser = ({ handleFiltersClosed }) => {
+const NewUser = ({ handleFiltersClosed, handleLogout }) => {
   const classes = useStyles();
 
   const firstName = useSelector((state) => state.user.firstName);
@@ -53,6 +60,14 @@ const NewUser = ({ handleFiltersClosed }) => {
   return (
     <div className={classes.newUserWrapper}>
       <img src={Logo} className={classes.logo} alt="Logo" />
+      <Button
+        className={clsx(classes.logout, classes.largeButton)}
+        variant="contained"
+        color="secondary"
+        onClick={handleLogout}
+      >
+        LOGOUT
+      </Button>
       <Container className={classes.infoWrapper}>
         <div
           style={{
@@ -92,6 +107,7 @@ const NewUser = ({ handleFiltersClosed }) => {
 
 NewUser.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
+  handleLogout: PropTypes.func.isRequired,
 };
 
 export default NewUser;

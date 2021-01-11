@@ -241,7 +241,11 @@ const App = () => {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-          <NewUser handleFiltersClosed={handleFiltersClosed} path="/newUser" />
+          <NewUser
+            handleFiltersClosed={handleFiltersClosed}
+            handleLogout={handleLogout}
+            path="/newUser"
+          />
         </Router>
       </MuiThemeProvider>
     );
