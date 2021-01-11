@@ -3,6 +3,7 @@ import {
   fetchRollupItems,
   fetchNextRollupItems,
   createPO,
+  createInvPO,
   fetchPO,
   updatePODate,
   updatePOMethod,
@@ -402,6 +403,20 @@ export const createNewPO = (idArray) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const createInventoryPO = (itemId, qty, warehouse) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const newPO = await createInvPO(itemId, qty, warehouse);
+    if (newPO.error) {
+      throw newPO.error;
+    }
+    const formattedPO = mapPurchaseOrder(newPO.data);
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
   try {
