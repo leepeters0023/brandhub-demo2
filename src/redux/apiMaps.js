@@ -252,6 +252,7 @@ export const mapSingleOrder = (order) => {
 };
 
 export const mapOrderHistoryOrders = (orders) => {
+  console.log(orders)
   let mappedOrders = orders.map((order) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
@@ -308,6 +309,7 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
+  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);

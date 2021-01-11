@@ -16,6 +16,7 @@ import {
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
+import { stringToCents } from "../../utility/utilityFunctions";
 
 let initialState = {
   isLoading: false,
@@ -27,7 +28,9 @@ let initialState = {
   items: [],
   orders: [],
   stateFilter: null,
+  totalEstItemCost: 0,
   orderTotal: 0,
+  totalEstFreight: 0,
   orderNote: "",
   rebuildRef: false,
   error: null,
@@ -55,7 +58,7 @@ const orderSetSlice = createSlice({
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, type, orders, items, status, isComplete, note } = action.payload;
+      const { orderId, type, orders, items, status, isComplete, note, totalEstFreight } = action.payload;
       let currentItems = [...items];
       if (orders.length !== 0) {
         let ordTotal = 0;
@@ -78,7 +81,9 @@ const orderSetSlice = createSlice({
         state.items = currentItems;
         state.orders = [...orders];
         state.orderNote = note;
-        state.orderTotal = ordTotal;
+        state.totalEstItemCost = ordTotal;
+        state.orderTotal = ordTotal + totalEstFreight;
+        state.totalEstFreight = totalEstFreight;
         state.isLoading = false;
         state.error = null;
       } else {
@@ -89,7 +94,9 @@ const orderSetSlice = createSlice({
         state.type = type;
         state.items = currentItems;
         state.orderNote = note;
+        state.totalEstItemCost = 0;
         state.orderTotal = 0;
+        state.totalEstFreight = 0;
         state.isLoading = false;
         state.error = null;
       }
@@ -284,7 +291,9 @@ const orderSetSlice = createSlice({
       state.items = [];
       state.orders = [];
       state.stateFilter = null;
+      state.totalEstItemCost = 0;
       state.orderTotal = 0;
+      state.totalEstFreight = 0;
       state.orderNote = "";
       state.error = null;
     },
@@ -323,6 +332,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data["order-set-items"],
       "order-set-item"
@@ -338,6 +348,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
     let complete = currentOrders.data["is-work-complete"];
+    let totalEstFreight = stringToCents(currentOrders.data["total-estimated-shipping-cost"])
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
@@ -359,6 +370,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         status: orderStatus,
         isComplete: complete,
         note: note,
+        totalEstFreight: totalEstFreight,
       })
     );
   } catch (err) {
@@ -388,6 +400,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
     let complete = currentOrders.data[0]["is-work-complete"];
+    let totalEstFreight = stringToCents(currentOrders.data[0]["total-estimated-shipping-cost"])
     let territories =
       currentOrders.data[0].program.type === "National"
         ? ["National"]
@@ -408,6 +421,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
         status: orderStatus,
         isComplete: complete,
         note: note,
+        totalEstFreight: totalEstFreight
       })
     );
     dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
