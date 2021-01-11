@@ -307,7 +307,6 @@ export const createPO = async (ids) => {
       response.status = "error";
       response.err = err.toString();
     });
-    // how to consistently console.log(response) here?
   return response;
 };
 
@@ -385,8 +384,37 @@ export const updatePOMethod = async (id, method) => {
       },
       writeHeaders
     )
-    .then((res) => {
-      console.log(res);
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  //todo !
+  response.status = "ok";
+  return response;
+};
+
+//Updates the additionalFile on an PO
+export const updatePOFile = async (id, file) => {
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/purchase-orders/${id}`,
+      {
+        data: {
+          type: "purchase-order",
+          id: id,
+          attributes: {
+            "additional-file-cloudinary-id": file,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((_res) => {
       response.status = "ok";
     })
     .catch((err) => {

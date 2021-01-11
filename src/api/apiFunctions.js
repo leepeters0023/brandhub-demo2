@@ -34,11 +34,18 @@ export const buildFilters = (
           }]=${filterObject.status}`
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
-  let orderTypeString = filterObject.orderType
-    ? type && type === "item" && filterObject.orderType === "in-stock"
-      ? "filter[is-in-stock]=true"
-      : `filter[order-type]=${filterObject.orderType}`
-    : "";
+  let orderTypeString =
+    type && type === "item" && filterObject.orderType
+      ? filterObject.orderType === "in-stock"
+        ? "filter[is-in-stock]=true"
+        : "filter[is-on-demand]=true"
+      : type && type === "rollup" && filterObject.orderType
+      ? filterObject.orderType === "on-demand"
+        ? "filter[order-set-type]=on-demand"
+        : "filter[order-set-type]=pre-order"
+      : filterObject.orderType
+      ? `filter[order-type]=${filterObject.orderType}`
+      : "";
   let dateString =
     filterObject.fromDate &&
     filterObject.toDate &&

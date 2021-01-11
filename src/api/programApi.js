@@ -7,7 +7,7 @@ const dataFormatter = new Jsona();
 export const fetchProgramsByTerritory = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/programs?filter[territory_id]=${id}&filter[item-order-type]=pre-order`)
+    .get(`/api/programs?filter[territory-id]=${id}&filter[is-pre-order]=true`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -24,7 +24,7 @@ export const fetchProgramsByTerritory = async (id) => {
 export const fetchNationalPrograms = async () => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/programs?filter[type]=National&filter[item-order-type]=pre-order`)
+    .get(`/api/programs?filter[type]=National&filter[is-pre-order]=true`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -56,7 +56,7 @@ export const fetchProgramItems = async (id) => {
 
 //Returns an array of programs based on partial matches to the submitted name
 export const fetchProgramsByName = async (name) => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
     .get(`/api/programs?filter[name]=${name}`)
     .then((res) => {
@@ -66,8 +66,8 @@ export const fetchProgramsByName = async (name) => {
     })
     .catch((err) => {
       console.log(err.toString());
-      response.status = "error"
+      response.status = "error";
       response.error = err.toString();
-    })
+    });
   return response;
-}
+};

@@ -9,6 +9,7 @@ import {
   updatePOMethod,
   updatePONote,
   updatePOTape,
+  updatePOFile,
   updatePODirectShip,
   updatePOItemPackOut,
   updatePOItemCost,
@@ -49,6 +50,7 @@ let initialState = {
     supplierNotes: "",
     rfqNumber: null,
     shippingLabel: null,
+    additionalFile: null,
     keyAcctTape: "",
     specDetails: null,
     poItems: [],
@@ -119,6 +121,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = purchaseOrder.method;
       state.currentPO.supplierNotes = purchaseOrder.supplierNotes;
       state.currentPO.shippingLabel = purchaseOrder.shippingLabel;
+      state.currentPO.additionalFile = purchaseOrder.additionalFile;
       state.currentPO.keyAcctTape = purchaseOrder.keyAcctTape;
       state.currentPO.rfqNumber = purchaseOrder.rfqNumber;
       state.currentPO.specDetails = purchaseOrder.specDetails;
@@ -218,6 +221,12 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.error = null;
     },
+    updateAdditionalFile(state, action) {
+      const { file } = action.payload;
+      state.currentPO.additionalFile = file;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     deleteItemSuccess(state, action) {
       const { id } = action.payload;
       const currentItems = state.currentPO.poItems.filter(
@@ -254,6 +263,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
+      state.currentPO.additionalFile = null;
       state.currentPO.keyAcctTape = "";
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
@@ -288,6 +298,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.method = "";
       state.currentPO.supplierNotes = "";
       state.currentPO.shippingLabel = null;
+      state.currentPO.additionalFile = null;
       state.currentPO.keyAcctTape = "";
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
@@ -319,6 +330,7 @@ export const {
   updateSupplierNotes,
   updateKeyAcctTape,
   updateDirectShip,
+  updateAdditionalFile,
   deleteItemSuccess,
   deletePOSuccess,
   submitPOSuccess,
@@ -477,6 +489,20 @@ export const updateKeyAccountTape = (id, tape) => async (dispatch) => {
   }
 };
 
+export const addAdditionalFile = (id, file) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const fileURL = await updatePOFile(id, file);
+    if (fileURL.error) {
+      throw fileURL.error;
+    }
+    console.log(fileURL)
+    dispatch(updateAdditionalFile({file: file}))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
 export const setDirectShip = (id, value) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
@@ -550,7 +576,6 @@ export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
     if (newPOItem.error) {
       throw newPOItem.error;
     }
-    console.log(newPOItem);
     let mappedItem = mapPOItems([newPOItem.data]);
     dispatch(addCost({ item: mappedItem }))
   } catch (err) {

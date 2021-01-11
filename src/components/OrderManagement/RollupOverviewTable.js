@@ -48,7 +48,7 @@ const headCells = [
     label: "Order Submitted",
     sort: true,
   },
-  { id: "dueDate", disablePadding: false, label: "Order Due", sort: true },
+  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -136,6 +136,7 @@ const RollupOverViewTable = ({
   handleSort,
   isRollupLoading,
   scrollRef,
+  orderRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -166,7 +167,7 @@ const RollupOverViewTable = ({
         style={{ maxHeight: "Calc(100vh - 300px)" }}
         ref={scrollRef}
       >
-        <Table stickyHeader className={classes.table}>
+        <Table stickyHeader className={classes.table} ref={orderRef}>
           <EnhancedTableHead
             classes={classes}
             order={order}
