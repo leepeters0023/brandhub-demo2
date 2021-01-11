@@ -56,3 +56,21 @@ export const fetchAllStates = async () => {
     });
   return response;
 }
+
+export const fetchFilteredStates = async (ids) => {
+  console.log(ids.join(", "));
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/states?filter[territory-id]=${ids.join(",")}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error"
+      response.error = err.toString();
+    });
+  return response;
+}

@@ -141,7 +141,7 @@ export const useInitialFilters = (
         })
       );
     }
-    handleFilterDrawer(true);
+    handleFilterDrawer && handleFilterDrawer(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
