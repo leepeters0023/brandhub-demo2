@@ -695,7 +695,6 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     .then((res) => {
       let dataObject = { items: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.items = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
       response.status = "ok";
@@ -777,7 +776,6 @@ export const patchOrderItem = async (id, qty) => {
 
 //Updates the note and attention line on an order
 export const setOrderDetail = async (id, note, attn) => {
-  console.log(id, attn)
   const response = { status: "", error: null };
   await axios
     .patch(
@@ -795,7 +793,6 @@ export const setOrderDetail = async (id, note, attn) => {
       writeHeaders
     )
     .then((res) => {
-      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {

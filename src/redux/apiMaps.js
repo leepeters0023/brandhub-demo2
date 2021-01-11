@@ -70,7 +70,6 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     return {
@@ -110,9 +109,11 @@ export const mapSpecifications = (specs) => {
 };
 
 export const mapOrderSetItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
     itemNumber: item["sequence-number"],
+    brand: "---",
     program: item["program-name"],
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -121,7 +122,9 @@ export const mapOrderSetItems = (items) => {
     totalItems: item["total-item-qty"],
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["total-estimated-cost"]),
-    orderDate: item["order-set-submitted-at"],
+    orderDate: item["order-set-submitted-at"]
+      ? item["order-set-submitted-at"]
+      : "---",
     orderDue: item["program-order-due-date"]
       ? item["program-order-due-date"]
       : "---",
@@ -246,6 +249,7 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.item.images);
     return {
@@ -434,7 +438,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items);
   const determineProgram = (i) => {
     if (i["order-program"]) {
       return i["order-program"];
@@ -452,7 +455,9 @@ export const mapRollupItems = (items) => {
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
-    projectNum: item.item["at-task-project-id"] ? item.item["at-task-project-id"] : "---",
+    projectNum: item.item["at-task-project-id"]
+      ? item.item["at-task-project-id"]
+      : "---",
     territory: item["territory-names"],
     brand: item.brands
       ? item.brands.map((brand) => brand.name).join(", ")
@@ -589,7 +594,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
@@ -617,6 +621,9 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["key-account-tape"]
       : "",
     shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
+    additionalFile: purchaseOrder["additional-file-cloudinary-id"]
+      ? purchaseOrder["additional-file-cloudinary-id"]
+      : null,
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
       : "---",
@@ -635,7 +642,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
 };
 
 export const mapPOHistoryItems = (items) => {
-  console.log(items)
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
@@ -668,7 +674,9 @@ export const mapPOHistoryItems = (items) => {
         itemId: item.item.id,
         poNum: item["purchase-order"].id,
         itemNumber: item["item-number"],
-        projectNum: item.item["at-task-project-id"] ? item.item["at-task-project-id"] : "---",
+        projectNum: item.item["at-task-project-id"]
+          ? item.item["at-task-project-id"]
+          : "---",
         supplier: item["supplier-name"] ? item["supplier-name"] : "---",
         itemType: item["item-type-description"],
         itemDesc: item["item-description"] ? item["item-description"] : "---",

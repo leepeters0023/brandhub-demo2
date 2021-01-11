@@ -78,7 +78,6 @@ const programsSlice = createSlice({
         state.isPrograms = false;
       }
       if (state.programs.length === 0) {
-        //console.log(programs);
         state.programs = [...programs];
         state.initialLoading = false;
         state.isPrograms = true;
@@ -96,7 +95,6 @@ const programsSlice = createSlice({
             : 0;
         });
         //TODO return to normal when out of testing and fetching appropriately
-        //console.log(newProgramArray)
         //state.programs = [...newProgramArray];
         //state.isPrograms = true;
       }
