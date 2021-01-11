@@ -256,7 +256,7 @@ const ItemPreviewModal = (props) => {
                     {type &&
                       type !== "program" &&
                       type !== "catalog" &&
-                      currentUserRole !== "view-only" && (
+                      currentUserRole !== "read-only" && (
                         <>
                           <Button
                             variant="contained"

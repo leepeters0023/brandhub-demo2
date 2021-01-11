@@ -116,28 +116,28 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                     )}`}
                   </Typography>
                 </div>
-                {currentUserRole !== "compliance" && currentUserRole !== "view-only" && (
-                  <div className={classes.itemControl}>
-                    <Tooltip title="Place Pre-Order">
-                      <span>
-                        <Button
-                          component={Link}
-                          to={`/orders/open/preorder#${prog.id}`}
-                          className={classes.largeButton}
-                          variant="contained"
-                          color="secondary"
-                          style={{marginBottom: "10px"}}
-                          startIcon={<ExitToAppIcon />}
-                        >
-                          ORDER
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </div>
-                )}
-                {(currentUserRole === "compliance" || currentUserRole === "view-only") && (
-                  <div></div>
-                )}
+                {currentUserRole !== "compliance" &&
+                  currentUserRole !== "read-only" && (
+                    <div className={classes.itemControl}>
+                      <Tooltip title="Place Pre-Order">
+                        <span>
+                          <Button
+                            component={Link}
+                            to={`/orders/open/preorder#${prog.id}`}
+                            className={classes.largeButton}
+                            variant="contained"
+                            color="secondary"
+                            style={{ marginBottom: "10px" }}
+                            startIcon={<ExitToAppIcon />}
+                          >
+                            ORDER
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    </div>
+                  )}
+                {(currentUserRole === "compliance" ||
+                  currentUserRole === "read-only") && <div></div>}
               </Paper>
             </Grid>
           ))}

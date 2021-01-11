@@ -98,7 +98,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>
 
-          {currentUserRole !== "compliance" && currentUserRole !== "view-only" && (
+          {currentUserRole !== "compliance" && currentUserRole !== "read-only" && (
             <div className={classes.configButtons}>
               <div className={classes.innerConfigDiv}>
                 <Button

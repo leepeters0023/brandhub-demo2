@@ -139,7 +139,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-            {currentUserRole !== "view-only" && (
+            {currentUserRole !== "read-only" && (
               <>
                 <Button
                   className={classes.largeButton}

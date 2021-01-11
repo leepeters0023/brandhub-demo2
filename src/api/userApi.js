@@ -38,7 +38,6 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -54,7 +53,6 @@ export const getLoginURL = async () => {
   await axios
     .get("/oauth/login_url")
     .then((res) => {
-      console.log(res);
       response.status = "ok";
       response.data = res.data;
     })
@@ -70,7 +68,6 @@ export const loginUserWithAuthO = async (code) => {
   await axios
     .get(`/oauth/${code}`)
     .then((res) => {
-      console.log(res.data);
       setAuthToken(res.data);
       response.data = res.data;
       response.status = "ok";

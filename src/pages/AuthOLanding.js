@@ -12,23 +12,22 @@ const AuthOLanding = ({ code }) => {
   const link = useSelector((state) => state.user.redirectLink)
   const currentRole = useSelector((state) => state.user.role);
   const isLinkLoading = useSelector((state) => state.user.authIsLoading);
-  console.log(link);
   
   useEffect(() => {
-    if (!link && !code && !isLinkLoading) {
+    if (!currentRole && !link && !code && !isLinkLoading) {
       dispatch(getRedirect());
     }
-  }, [link, isLinkLoading, code, dispatch])
+  }, [link, isLinkLoading, code, dispatch, currentRole])
 
   useEffect(() => {
-    if (link && !code) {
+    if (!currentRole && link && !code) {
       //window.open(link);
       window.location = link;
     }
-  }, [link, code])
+  }, [link, code, currentRole])
 
   useEffect(() => {
-    if (code) {
+    if (code && !currentRole) {
       dispatch(loginWithCode(code))
     }
   })
@@ -38,8 +37,6 @@ const AuthOLanding = ({ code }) => {
       navigate("/dashboard");
     }
   }, [currentRole])
-
-  console.log(code)
 
   return (
     <Loading />

@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     width: "75%",
     height: "auto",
     minWidth: "500px",
-  }
+  },
 }));
 
 const Landing = () => {
@@ -39,11 +39,14 @@ const Landing = () => {
               <br />
               <br />
               <Typography className={classes.bodyText}>
-                Maybe we could have some sort of description here? Make a nice info page for anyone who happens upon our generic url?
+                Maybe we could have some sort of description here? Make a nice
+                info page for anyone who happens upon our generic url?
               </Typography>
               <br />
               <br />
-              <Button component={Link} to="/oauth">LOG IN</Button>
+              <Button component={Link} to="/oauth">
+                LOG IN
+              </Button>
             </Grid>
             <Grid item sm={2} xs={1} />
           </Grid>
