@@ -402,6 +402,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   onClick={() => {
                     setSwitched(false);
                     setOverviewVisible(true);
+                    dispatch(fetchProgramOrders(program, currentUserId, currentTerritory))
                   }}
                   disabled={
                     currentItems.length === 0 ||

@@ -188,7 +188,10 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
               .reduce((a, b) => a + b)}`}
           </Typography>
           <Typography className={classes.headerText}>
-            {`Est. Freight Charge: ---`}
+            {`Total Est. Item Cost: ${formatMoney(orderSet.totalEstItemCost, false)}`}
+          </Typography>
+          <Typography className={classes.headerText}>
+            {`Est. Freight Charge: ${formatMoney(orderSet.totalEstFreight, false)}`}
           </Typography>
           <Typography
             className={classes.headerText}
