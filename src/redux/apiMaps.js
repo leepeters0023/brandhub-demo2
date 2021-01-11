@@ -474,7 +474,7 @@ export const mapRollupItems = (items) => {
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
-    dueDate: item["order-due-date"] ? item["order-due-date"] : "---",
+    dueDate: item["in-market-date"] ? item["in-market-date"] : "---",
   }));
 
   return mappedItems;

@@ -18,7 +18,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     itemNumber: "item-number",
     program: "order-program-name",
     itemType: "item-type-description",
-    dueDate: "order-due-date",
+    dueDate: "in-market-date",
   };
 
   let typeBool = `filter[is-for-rfq]=${type === "rfq" ? true : false}`;
