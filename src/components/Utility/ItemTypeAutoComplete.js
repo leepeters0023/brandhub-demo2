@@ -72,14 +72,7 @@ const ItemTypeAutoComplete = ({
               ...params.InputProps,
               autoComplete: "new-password",
               endAdornment: <>
-                <InputAdornment>
-                  <ExpandMoreIcon // not married to the idea of this being here as it's hard to position with "X" clear icon https://github.com/mui-org/material-ui/issues/17799
-                    className={classes.hoverText}
-                    color="secondary"
-                    onMouseEnter={() => setOpen(true)}
-                   />
-                   {params.InputProps.endAdornment}
-                </InputAdornment>
+                {params.InputProps.endAdornment}
               </>,
             }}
           />
