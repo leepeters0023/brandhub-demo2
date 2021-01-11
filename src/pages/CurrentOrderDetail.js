@@ -510,7 +510,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 className={classes.largeButton}
                 color="secondary"
                 variant="contained"
-                onClick={() => setOverviewVisible(true)}
+                onClick={() => {
+                  setOverviewVisible(true)
+                  dispatch(fetchOrderSet(orderId))
+                }}
                 disabled={
                   orders.length === 0 ||
                   orderStatus === "inactive" ||
