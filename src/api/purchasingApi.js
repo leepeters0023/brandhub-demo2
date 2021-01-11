@@ -18,7 +18,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     itemNumber: "item-number",
     program: "order-program-name",
     itemType: "item-type-description",
-    dueDate: "order-due-date",
+    dueDate: "in-market-date",
   };
 
   let typeBool = `filter[is-for-rfq]=${type === "rfq" ? true : false}`;
@@ -285,13 +285,14 @@ export const fetchRFQ = async (id) => {
 };
 
 //Creates a new PO based on an item and it's associated program
-export const createPO = async (ids) => {
+export const createPO = async (ids, orderType) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
       type: "purchase-order",
       attributes: {
         "order-item-ids": ids,
+        "order-type": orderType,
       },
     },
   };

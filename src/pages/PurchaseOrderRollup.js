@@ -125,7 +125,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
           }
         });
       });
-      dispatch(createNewPO(idArray));
+      dispatch(createNewPO(idArray, currentOrderType));
       navigate("/purchasing/purchaseOrder#new");
     } else {
       setWarningOpen(true);

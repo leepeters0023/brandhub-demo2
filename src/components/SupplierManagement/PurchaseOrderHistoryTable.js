@@ -15,10 +15,11 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import { makeStyles } from "@material-ui/core/styles";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import WarningIcon from "@material-ui/icons/Warning";
 
 const headCells = [
   { id: "seqNum", disablePadding: false, label: "Seq. #", sort: true },
@@ -40,6 +41,12 @@ const headCells = [
     disablePadding: false,
     label: "Submitted Date",
     sort: true,
+  },
+  {
+    id: "inMarketDate",
+    disablePadding: false,
+    label: "In Market Date",
+    sort: false,
   },
   { id: "poCreator", disablePadding: false, label: "PO Creator", sort: true },
   { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
@@ -193,7 +200,21 @@ const PurchaseOrderHistoryTable = ({
                     handleRowClick(row.poNum);
                   }}
                 >
-                  <TableCell align="left">{row.itemNumber}</TableCell>
+                  <TableCell align="left">
+                    {row.isRush ? (
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <Tooltip title="Order On Rush Status">
+                          <WarningIcon
+                            fontSize="small"
+                            style={{ margin: "0 5px 0 0" }}
+                          />
+                        </Tooltip>
+                        {row.itemNumber}
+                      </div>
+                    ) : (
+                      row.itemNumber
+                    )}
+                  </TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
@@ -225,6 +246,7 @@ const PurchaseOrderHistoryTable = ({
                     {row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
                   <TableCell align="left">{row.submittedDate}</TableCell>
+                  <TableCell align="left">{row.dueDate}</TableCell>
                   <TableCell align="left">{row.purchasedBy}</TableCell>
                   <TableCell align="left">{row.allocated}</TableCell>
                 </TableRow>

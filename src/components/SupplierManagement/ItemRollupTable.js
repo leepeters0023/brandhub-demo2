@@ -27,6 +27,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import WarningIcon from "@material-ui/icons/Warning";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
@@ -337,7 +338,21 @@ const ItemRollupTable = ({
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.itemNumber}</TableCell>
+                    <TableCell align="left">
+                      {row.isRush ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Tooltip title="Order On Rush Status">
+                            <WarningIcon
+                              fontSize="small"
+                              style={{ margin: "0 5px 0 0" }}
+                            />
+                          </Tooltip>
+                          {row.itemNumber}
+                        </div>
+                      ) : (
+                        row.itemNumber
+                      )}
+                    </TableCell>
                     {row.territory.length > 1 ? (
                     <Tooltip placement="left" title={`${row.territory.join(", ")}`}>
                       <TableCell
