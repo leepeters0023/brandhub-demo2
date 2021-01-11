@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Router, Redirect } from "@reach/router";
 import axios from "axios";
-
+import Helmet from 'react-helmet';
 import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
@@ -224,6 +224,16 @@ const App = () => {
 
   return (
     <MuiThemeProvider theme={theme}>
+      <Helmet>
+        <html lang="en" />
+        <meta charset="utf-8" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <meta name="insight-app-sec-validation" content="aced815d-d550-4d28-87ed-4b8d32c32430" />
+      </Helmet>
       {loggedIn && (
         <TopDrawerNav
           userType={role}
