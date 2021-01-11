@@ -1,4 +1,8 @@
-import { earliestDate, stringToCents } from "../utility/utilityFunctions";
+import {
+  earliestDate,
+  stringToCents,
+  formatDate,
+} from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
@@ -75,13 +79,21 @@ export const mapItems = (items) => {
     return {
       id: item.id,
       itemNumber: item["item-number"],
-      brand: item.brands.length > 0 ? item.brands.map((brand) => brand.name).join(", ") : "---",
-      program: item.programs && item.programs.length > 0
-        ? item.programs.map((prog) => prog.name).join(", ")
-        : "---",
+      brand:
+        item.brands.length > 0
+          ? item.brands.map((brand) => brand.name).join(", ")
+          : "---",
+      program:
+        item.programs && item.programs.length > 0
+          ? item.programs.map((prog) => prog.name).join(", ")
+          : "---",
       itemType: item.type,
-      projectNum: item["at-task-project-id"] ? item["at-task-project-id"] : "---",
-      specification: item.specification ? mapSpecifications(item.specification) : "---",
+      projectNum: item["at-task-project-id"]
+        ? item["at-task-project-id"]
+        : "---",
+      specification: item.specification
+        ? mapSpecifications(item.specification)
+        : "---",
       itemDescription: item.description ? item.description : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
@@ -474,7 +486,10 @@ export const mapRollupItems = (items) => {
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
-    dueDate: item["in-market-date"] ? item["in-market-date"] : "---",
+    isRush: item["is-rush"] ? true : false,
+    dueDate: item["in-market-date"]
+      ? format(formatDate(new Date(item["in-market-date"])), "MM/dd/yyyy")
+      : "---",
   }));
 
   return mappedItems;
@@ -633,7 +648,10 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       .reduce((a, b) => a + b),
     directShip: purchaseOrder["is-direct-ship"],
     submittedDate: purchaseOrder["submitted-at"]
-      ? format(new Date(purchaseOrder["submitted-at"]), "MM/dd/yyyy")
+      ? format(
+          formatDate(new Date(purchaseOrder["submitted-at"])),
+          "MM/dd/yyyy"
+        )
       : "---",
     shippingParams: params,
     totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
@@ -662,10 +680,16 @@ export const mapPOHistoryItems = (items) => {
         estCost: "---",
         actCost: stringToCents(item["actual-cost"]),
         status: item["po-status"],
+        isRush: item["is-rush"] ? true : false,
         submittedDate: item["po-submitted-at"]
-          ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
+          ? format(formatDate(new Date(item["po-submitted-at"])), "MM/dd/yyyy")
           : "---",
-        dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+        dueDate: item["po-in-market-date"]
+          ? format(
+              formatDate(new Date(item["po-in-market-date"])),
+              "MM/dd/yyyy"
+            )
+          : "---",
       };
     } else {
       return {
@@ -689,10 +713,16 @@ export const mapPOHistoryItems = (items) => {
         estCost: stringToCents(item["item-estimated-cost"]),
         actCost: stringToCents(item["actual-cost"]),
         status: item["po-status"],
+        isRush: item["is-rush"] ? true : false,
         submittedDate: item["po-submitted-at"]
-          ? format(new Date(item["po-submitted-at"]), "MM/dd/yyyy")
+          ? format(formatDate(new Date(item["po-submitted-at"])), "MM/dd/yyyy")
           : "---",
-        dueDate: item["po-in-market-date"] ? item["po-in-market-date"] : "---",
+        dueDate: item["po-in-market-date"]
+          ? format(
+              formatDate(new Date(item["po-in-market-date"])),
+              "MM/dd/yyyy"
+            )
+          : "---",
       };
     }
   });
