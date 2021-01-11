@@ -166,7 +166,6 @@ const App = () => {
     };
 
     if (currentUser && currentRole.length > 0) {
-      //setRole(currentRole);
       if (currentRole !== "supplier") {
         if (currentRole === "view-only" && territories.length > 0) {
           dispatch(fetchInitialPrograms(currentTerritory.id));
