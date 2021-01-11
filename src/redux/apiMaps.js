@@ -243,6 +243,8 @@ export const mapSingleOrder = (order) => {
     shipDate: order["shipped-at"] ? order["shipped-at"] : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
+    totalEstFreight: stringToCents(order["total-estimated-shipping-cost"]),
+    totalActFreight: "---",
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
