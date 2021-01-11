@@ -164,7 +164,6 @@ const FiltersItemRollup = ({
             filterType={"itemRollup"}
           />
         </ListItem>
-        <ListItem />
         <ListItem>
           <BUAutoComplete
             classes={classes}
