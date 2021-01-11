@@ -390,10 +390,10 @@ export const fetchSinglePO = (id) => async (dispatch) => {
   }
 };
 
-export const createNewPO = (idArray) => async (dispatch) => {
+export const createNewPO = (idArray, orderType) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const newPO = await createPO(idArray);
+    const newPO = await createPO(idArray, orderType);
     if (newPO.error) {
       throw newPO.error;
     }
