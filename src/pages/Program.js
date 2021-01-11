@@ -168,7 +168,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
             <div className={classes.innerConfigDiv}>
               {value !== 1 && (
                 <>
-                  {currentUserRole !== "view-only" && (
+                  {currentUserRole !== "read-only" && (
                     <Button
                       className={classes.largeButton}
                       style={{ marginRight: "20px" }}

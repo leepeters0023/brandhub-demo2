@@ -149,7 +149,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-            {currentUserRole !== "view-only" && (
+            {currentUserRole !== "read-only" && (
               <Button
                 className={classes.largeButton}
                 style={{ marginRight: "20px" }}

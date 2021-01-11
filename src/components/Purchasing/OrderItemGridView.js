@@ -109,7 +109,7 @@ const OrderItemGridView = (props) => {
             {currentItems.length > 0 &&
               currentItems.map((item, index) => {
                 const isItemSelected =
-                  currentUserRole !== "view-only" ? isSelected(item.id) : null;
+                  currentUserRole !== "read-only" ? isSelected(item.id) : null;
                 const labelId = `item-Checkbox-${index}`;
 
                 return (
@@ -124,7 +124,7 @@ const OrderItemGridView = (props) => {
                   >
                     <Paper className={classes.paperWrapper}>
                       <div className={classes.singleItemWrapper}>
-                        {currentUserRole !== "view-only" && (
+                        {currentUserRole !== "read-only" && (
                           <Checkbox
                             className={classes.checkbox}
                             checked={isItemSelected}

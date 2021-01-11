@@ -112,7 +112,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order Approvals</Typography>
-          {currentUserRole !== "view-only" ? (
+          {currentUserRole !== "read-only" ? (
             <div
               style={{
                 display: "flex",

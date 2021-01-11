@@ -21,7 +21,7 @@ const DrawerOrdersNav = ({
         <Grid container spacing={1} justify="space-around">
           <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
-              {role !== "view-only" && (
+              {role !== "read-only" && (
                 <ListItem
                   button
                   onClick={handleDrawerClose}
@@ -62,7 +62,7 @@ const DrawerOrdersNav = ({
                   primary="+ New Inventory Order"
                 />
               </ListItem>
-              {role !== "field1" && role !== "view-only" && (
+              {role !== "field1" && role !== "read-only" && (
                 <ListItem
                   button
                   onClick={() => {
@@ -122,7 +122,7 @@ const DrawerOrdersNav = ({
               </ListItem>
             </List>
           </Grid>
-          {(role === "field2" || role === "super" || role === "view-only") && (
+          {(role === "field2" || role === "super" || role === "read-only") && (
             <Grid item sm={role === "super" ? 2 : 3} xs={12}>
               <List className={classes.navList}>
                 <ListItem>

@@ -75,14 +75,14 @@ const EnhancedTableHead = (props) => {
   };
 
   const headers =
-    role !== "view-only"
+    role !== "read-only"
       ? headCells
       : headCells.filter((cell) => cell.id !== "actions");
 
   return (
     <TableHead>
       <TableRow>
-        {role !== "view-only" && (
+        {role !== "read-only" && (
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -219,7 +219,7 @@ const OrderApprovalTable = ({
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const handleRowClick = (id) => {
-    if (currentUserRole !== "view-only") {
+    if (currentUserRole !== "read-only") {
       navigate(`/orders/open/${id}#approval`);
     }
   };
@@ -256,14 +256,14 @@ const OrderApprovalTable = ({
               orders.length > 0 &&
               orders.map((row, index) => {
                 const isOrderSelected =
-                  currentUserRole !== "view-only" ? isSelected(row.id) : null;
+                  currentUserRole !== "read-only" ? isSelected(row.id) : null;
                 const labelId = `approvals-Checkbox-${index}`;
                 return (
                   <TableRow
                     key={row.id}
                     hover
                     className={
-                      currentUserRole !== "view-only"
+                      currentUserRole !== "read-only"
                         ? classes.orderHistoryRow
                         : ""
                     }
@@ -271,7 +271,7 @@ const OrderApprovalTable = ({
                       handleRowClick(row.id);
                     }}
                   >
-                    {currentUserRole !== "view-only" && (
+                    {currentUserRole !== "read-only" && (
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isOrderSelected}
@@ -346,7 +346,7 @@ const OrderApprovalTable = ({
                     </TableCell>
                     <TableCell>$5,000.00</TableCell>
                     <TableCell>$25,000.00</TableCell>
-                    {currentUserRole !== "view-only" && (
+                    {currentUserRole !== "read-only" && (
                       <TableCell align="right">
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <Tooltip title="Deny">

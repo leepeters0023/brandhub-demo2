@@ -169,7 +169,7 @@ const RollupOverviewByItemTable = ({
   };
 
   const handleRowClick = (id, userName, program) => {
-    if (currentUserRole !== "view-only") {
+    if (currentUserRole !== "read-only") {
       navigate(`/rollup/detail/${id}#${userName} - ${program}`);
     }
   };
@@ -210,7 +210,7 @@ const RollupOverviewByItemTable = ({
                   key={index}
                   hover
                   className={
-                    currentUserRole !== "view-only"
+                    currentUserRole !== "read-only"
                       ? classes.orderHistoryRow
                       : ""
                   }

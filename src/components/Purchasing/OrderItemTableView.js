@@ -54,7 +54,7 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        {role !== "view-only" && (
+        {role !== "read-only" && (
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -186,11 +186,11 @@ const OrderItemTableView = ({
               currentItems.length > 0 &&
               currentItems.map((row, index) => {
                 const isItemSelected =
-                  currentUserRole !== "view-only" ? isSelected(row.id) : null;
+                  currentUserRole !== "read-only" ? isSelected(row.id) : null;
                 const labelId = `item-Checkbox-${index}`;
                 return (
                   <TableRow key={row.id} hover>
-                    {currentUserRole !== "view-only" && (
+                    {currentUserRole !== "read-only" && (
                       <TableCell padding="checkbox">
                         <Checkbox
                           checked={isItemSelected}

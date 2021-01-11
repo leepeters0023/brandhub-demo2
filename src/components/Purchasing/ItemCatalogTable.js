@@ -56,7 +56,7 @@ const EnhancedTableHead = (props) => {
       ? headCells.filter((cell) => cell.id !== "addItem")
       : !forProgram
       ? headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addItem")
-      : role !== "view-only"
+      : role !== "read-only"
       ? headCells.filter((cell) => cell.id !== "stock")
       : headCells.filter(
           (cell) => cell.id !== "stock" && cell.id !== "addItem"
@@ -220,7 +220,7 @@ const ItemCatalogTable = ({
                     )}`}</TableCell>
                     {!patchLoading &&
                       addPreOrderItem &&
-                      currentUserRole !== "view-only" && (
+                      currentUserRole !== "read-only" && (
                         <TableCell padding="checkbox" align="center">
                           <Tooltip title="Add to Pre Order">
                             <span>

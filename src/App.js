@@ -151,12 +151,13 @@ const App = () => {
     dispatch(resetComplianceRules());
     dispatch(clearSharedItems());
     dispatch(resetAddresses());
+    navigate("/");
   }, [dispatch]);
 
   const handleTimeout = useCallback(() => {
     handleLogout();
     navigate("/");
-  }, [handleLogout])
+  }, [handleLogout]);
 
   useEffect(() => {
     const fetchCurrentUser = async (token) => {
@@ -167,9 +168,9 @@ const App = () => {
 
     if (currentUser && currentRole.length > 0) {
       if (currentRole !== "supplier") {
-        if (currentRole === "view-only" && territories.length > 0) {
+        if (currentRole === "read-only" && territories.length > 0) {
           dispatch(fetchInitialPrograms(currentTerritory.id));
-          if (currentRole !== "view-only") {
+          if (currentRole !== "read-only") {
             dispatch(
               fetchPreOrders(
                 currentUserId,
@@ -194,7 +195,6 @@ const App = () => {
         dispatch(clearPrograms());
       }
     } else if (currentUser && JSON.parse(currentUser).access_token) {
-      console.log(new Date(JSON.parse(currentUser).expires_in).toDateString());
       if (new Date(JSON.parse(currentUser).expires_in) < new Date()) {
         handleLogout();
         navigate("/oauth");
@@ -235,7 +235,6 @@ const App = () => {
     }
 
     return () => {
-      console.log("clearing");
       clearTimeout(logoutTimeout);
     };
   }, [
@@ -254,7 +253,9 @@ const App = () => {
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
-        {/* <Redirect noThrow to="/login" /> */}
+        {!window.location.pathname.includes("/oauth") && (
+          <Redirect noThrow to="/" />
+        )}
         {/* {!link && <Redirect noThrow to="/oauth/initial" />} */}
         <Router>
           {/* <LogIn setAuth={handleLogIn} path="/login" /> */}
@@ -264,17 +265,13 @@ const App = () => {
         </Router>
       </MuiThemeProvider>
     );
-  }
-
-  if (isLoading || isPreOrdersLoading) {
+  } else if (currentUser && (isLoading || isPreOrdersLoading)) {
     return (
       <MuiThemeProvider theme={theme}>
         <Loading partial={false} />;
       </MuiThemeProvider>
     );
-  }
-
-  if (programsIsLoading) {
+  } else if (currentUser && programsIsLoading) {
     return (
       <MuiThemeProvider theme={theme}>
         <TopDrawerNav
@@ -285,11 +282,16 @@ const App = () => {
         <Loading partial={true} />
       </MuiThemeProvider>
     );
-  }
-
-  if (currentRole === "view-only" && territories.length === 0) {
+  } else if (
+    currentUser &&
+    currentRole === "read-only" &&
+    territories.length === 0
+  ) {
     return (
       <MuiThemeProvider theme={theme}>
+        {currentRole === "read-only" && territories.length === 0 && (
+          <Redirect noThrow to="/newUser" />
+        )}
         <Router>
           <NewUser
             handleFiltersClosed={handleFiltersClosed}
@@ -299,379 +301,395 @@ const App = () => {
         </Router>
       </MuiThemeProvider>
     );
-  }
-
-  return (
-    <MuiThemeProvider theme={theme}>
-      {loggedIn && (
-        <TopDrawerNav
-          userType={currentRole}
-          handleLogout={handleLogout}
-          handleCouponModal={handleCouponModal}
-        />
-      )}
-      <FilterDrawer
-        open={filtersOpen}
-        handleDrawerClose={handleFiltersClosed}
-      />
-      <CouponsModal
-        handleCouponModal={handleCouponModal}
-        couponsOpen={couponsOpen}
-      />
-      <div
-        id="main-container"
-        style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
-      >
-        {currentRole === "view-only" && territories.length === 0 && (
-          <Redirect noThrow to="/newUser" />
-        )}
-        {window.location.pathname.includes("/oauth") && (
-          <Redirect noThrow to="/dashboard" />
-        )}
-
-        <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
-          <Landing path="/" />
-          <Dashboard
-            path="/dashboard"
+  } else if (currentRole) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        {loggedIn && (
+          <TopDrawerNav
             userType={currentRole}
-            handleFiltersClosed={handleFiltersClosed}
+            handleLogout={handleLogout}
+            handleCouponModal={handleCouponModal}
           />
-          <SharedItems
-            handleFiltersClosed={handleFiltersClosed}
-            path="/shared/items/:itemIds"
-          />
-          {handleAuth(
-            <Programs
-              path="/programs"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/programs",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
+        )}
+        <FilterDrawer
+          open={filtersOpen}
+          handleDrawerClose={handleFiltersClosed}
+        />
+        <CouponsModal
+          handleCouponModal={handleCouponModal}
+          couponsOpen={couponsOpen}
+        />
+        <div
+          id="main-container"
+          style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
+        >
+          {currentRole === "read-only" && territories.length === 0 && (
+            <Redirect noThrow to="/newUser" />
           )}
-          {handleAuth(
-            <ProgramNew
-              path="/programs/new"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/programs",
-            ["field1", "field2", "purchaser", "super"],
-            currentRole,
-            territories
+          {window.location.pathname.includes("/oauth") && (
+            <Redirect noThrow to="/dashboard" />
           )}
-          {handleAuth(
-            <Program
-              path="/program/:programId"
-              userType={currentRole}
+
+          <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
+            <Landing path="/" />
+            {handleAuth(
+              <Dashboard
+                path="/dashboard"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/dashboard",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            <SharedItems
               handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/program",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <CurrentPreOrder
-              path="/orders/open/preorder"
+              path="/shared/items/:itemIds"
+            />
+            <NewUser
               handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/orders/open/preorder",
-            ["field1", "field2", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <CurrentOrderDetail
-              path="/orders/open/:orderId"
-              userType={currentRole}
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/orders/open",
-            ["field1", "field2", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PlaceInStockOrder
-              path="/orders/items/inStock"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/items/inStock",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PlaceOnDemandOrder
-              path="/orders/items/onDemand"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/items/onDemand",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <RFQRollup
-              path="/purchasing/rfqRollup"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/purchasing/rfqRollup",
-            ["field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <RFQ
-              path="/purchasing/rfq"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/purchasing/rfq",
-            ["field2", "purchaser", "super", "supplier"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <RFQHistory
-              path="/purchasing/rfqHistory/:filterOption"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/purchasing/rfqHistory",
-            ["field2", "purchaser", "super", "supplier"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PurchaseOrderRollup
-              path="/purchasing/poRollup"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/purchasing/poRollup",
-            ["field2", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PurchaseOrder
-              path="/purchasing/purchaseOrder"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/purchasing/purchaseOrder",
-            ["field2", "purchaser", "super", "supplier"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PurchaseOrderHistory
-              path="/purchasing/poHistory/:filterOption"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/purchasing/poHistory",
-            ["field2", "purchaser", "super", "supplier"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <SingleOrder
-              path="/orders/history/:orderId"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/orders/history",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <OrderHistory
-              path="/orders/history/group/:filterOption"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/history",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <OrderApprovals
-              path="/orders/approvals"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/approvals",
-            ["field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <Rollup
-              path="/rollup"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/rollup",
-            ["field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <CurrentOrderDetail
-              path="/rollup/detail/:orderId"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/rollup/detail",
-            ["field2", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <Coupons
-              path="/coupons"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/coupons",
-            ["field1", "field2", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <ItemCatalog
-              path="/items/:catalogType"
-              userType={currentRole}
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/items",
-            [
-              "field1",
-              "field2",
-              "compliance",
-              "purchaser",
-              "super",
-              "view-only",
-            ],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <PendingCompliance
-              path="/compliance/pending/:itemId"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/compliance/pending",
-            ["field2", "compliance", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <ComplianceContacts
-              path="/compliance/contacts"
-              userType={currentRole}
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/compliance/contacts",
-            ["field2", "compliance", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <ComplianceItems
-              path="/compliance/items"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/items/onDemand",
-            ["field1", "field2", "compliance", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <ComplianceRules
-              path="/compliance/rules"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/orders/items/onDemand",
-            ["field1", "field2", "compliance", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <BudgetVsSpend
-              path="/budgets/ytod"
-              handleFilterDrawer={setFiltersOpen}
-              filtersOpen={filtersOpen}
-            />,
-            "/budgets/ytod",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <Profile
-              path="/profile"
-              userType={currentRole}
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/profile",
-            ["field1", "field2", "compliance", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <Settings
-              path="/settings"
-              userType={currentRole}
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/settings",
-            ["field1", "field2", "compliance", "purchaser", "super"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <ReportWrapUp
-              path="/reports/wrap-up"
-              handleFiltersClosed={handleFiltersClosed}
-            />,
-            "/reports/wrap-up",
-            ["field1", "field2", "purchaser", "super", "view-only"],
-            currentRole,
-            territories
-          )}
-          {handleAuth(
-            <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
-            "/help",
-            [],
-            currentRole,
-            territories
-          )}
-          <FourOhFour default path="/whoops" />
-        </Router>
-      </div>
-    </MuiThemeProvider>
-  );
+              handleLogout={handleLogout}
+              path="/newUser"
+            />
+            {handleAuth(
+              <Programs
+                path="/programs"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/programs",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ProgramNew
+                path="/programs/new"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/programs",
+              ["field1", "field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Program
+                path="/program/:programId"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/program",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <CurrentPreOrder
+                path="/orders/open/preorder"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/orders/open/preorder",
+              ["field1", "field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <CurrentOrderDetail
+                path="/orders/open/:orderId"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/orders/open",
+              ["field1", "field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PlaceInStockOrder
+                path="/orders/items/inStock"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/items/inStock",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PlaceOnDemandOrder
+                path="/orders/items/onDemand"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/items/onDemand",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <RFQRollup
+                path="/purchasing/rfqRollup"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/purchasing/rfqRollup",
+              ["field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <RFQ
+                path="/purchasing/rfq"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/purchasing/rfq",
+              ["field2", "purchaser", "super", "supplier"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <RFQHistory
+                path="/purchasing/rfqHistory/:filterOption"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/purchasing/rfqHistory",
+              ["field2", "purchaser", "super", "supplier"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PurchaseOrderRollup
+                path="/purchasing/poRollup"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/purchasing/poRollup",
+              ["field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PurchaseOrder
+                path="/purchasing/purchaseOrder"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/purchasing/purchaseOrder",
+              ["field2", "purchaser", "super", "supplier"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PurchaseOrderHistory
+                path="/purchasing/poHistory/:filterOption"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/purchasing/poHistory",
+              ["field2", "purchaser", "super", "supplier"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <SingleOrder
+                path="/orders/history/:orderId"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/orders/history",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <OrderHistory
+                path="/orders/history/group/:filterOption"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/history",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <OrderApprovals
+                path="/orders/approvals"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/approvals",
+              ["field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Rollup
+                path="/rollup"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/rollup",
+              ["field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <CurrentOrderDetail
+                path="/rollup/detail/:orderId"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/rollup/detail",
+              ["field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Coupons
+                path="/coupons"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/coupons",
+              ["field1", "field2", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ItemCatalog
+                path="/items/:catalogType"
+                userType={currentRole}
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/items",
+              [
+                "field1",
+                "field2",
+                "compliance",
+                "purchaser",
+                "super",
+                "read-only",
+              ],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <PendingCompliance
+                path="/compliance/pending/:itemId"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/compliance/pending",
+              ["field2", "compliance", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ComplianceContacts
+                path="/compliance/contacts"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/compliance/contacts",
+              ["field2", "compliance", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ComplianceItems
+                path="/compliance/items"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/items/onDemand",
+              ["field1", "field2", "compliance", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ComplianceRules
+                path="/compliance/rules"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/orders/items/onDemand",
+              ["field1", "field2", "compliance", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <BudgetVsSpend
+                path="/budgets/ytod"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />,
+              "/budgets/ytod",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Profile
+                path="/profile"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/profile",
+              ["field1", "field2", "compliance", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Settings
+                path="/settings"
+                userType={currentRole}
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/settings",
+              ["field1", "field2", "compliance", "purchaser", "super"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ReportWrapUp
+                path="/reports/wrap-up"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/reports/wrap-up",
+              ["field1", "field2", "purchaser", "super", "read-only"],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <Help path="/help" handleFiltersClosed={handleFiltersClosed} />,
+              "/help",
+              [],
+              currentRole,
+              territories
+            )}
+            <FourOhFour default path="/whoops" />
+          </Router>
+        </div>
+      </MuiThemeProvider>
+    );
+  } else
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Loading partial={false} />;
+      </MuiThemeProvider>
+    );
 };
 
 export default App;
 
 const handleAuth = (component, path, users, role, territories) => {
-  if (role === "view-only" && territories.length === 0) {
+  if (role === "read-only" && territories.length === 0) {
     return <Redirect noThrow from={path} to="/newUser" />;
   }
   if (users.length === 0) {
