@@ -281,9 +281,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   <IconButton
                     component={Link}
                     to="/purchasing/poRollup"
-                    onClick={() => {
-                      dispatch(setRetain({ value: true }));
-                    }}
                   >
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
