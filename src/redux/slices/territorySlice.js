@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllTerritories, fetchFilteredTerritories, fetchAllStates } from "../../api/territoryApi";
+import { fetchAllTerritories, fetchFilteredTerritories, fetchAllStates, fetchFilteredStates } from "../../api/territoryApi";
 
 
 let initialState = {
@@ -8,6 +8,7 @@ let initialState = {
   territoryList: [],
   filteredTerritoryList: [],
   stateList: [],
+  filteredStateList: [],
   error: null,
 };
 
@@ -44,17 +45,27 @@ const territorySlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    getStatesSuccess(state, action) {
+      const { states } = action.payload;
+      state.filteredStateList = states;
+      state.isStatesLoading = false;
+      state.error = null;
+    },
     getAllStatesSuccess(state, action) {
       const { states } = action.payload;
       state.stateList = states;
       state.isStatesLoading = false;
       state.error = null;
     },
+    clearFilteredStates(state) {
+      state.filteredStateList = [];
+    },
     clearTerritories(state) {
       state.isLoading = false;
       state.territoryList = [];
       state.filteredTerritoryList = [];
       state.stateList = [];
+      state.filteredStateList = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -66,7 +77,9 @@ export const {
   setStatesLoading,
   getTerritoriesSuccess,
   getAllTerritoriesSuccess,
+  getStatesSuccess,
   getAllStatesSuccess,
+  clearFilteredStates,
   clearTerritories,
   setFailure,
 } = territorySlice.actions;
@@ -102,11 +115,25 @@ export const fetchTerritoriesByName = (name) => async (dispatch) => {
 export const fetchStates = () => async (dispatch) => {
   try {
     dispatch(setStatesLoading());
-    let states = await fetchAllStates();
+    const states = await fetchAllStates();
     if (states.error) {
       throw states.error
     }
     dispatch(getAllStatesSuccess({ states: states.data }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const fetchStatesByIds = (ids) => async (dispatch) => {
+  try {
+    dispatch(setStatesLoading());
+    const states = await fetchFilteredStates(ids);
+    console.log(states.data);
+    if (states.error) {
+      throw states.error
+    }
+    dispatch(getStatesSuccess({ states: states.data }))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
