@@ -89,12 +89,9 @@ axios.defaults.headers.get["Cache-Control"] = "no-cache";
 axios.defaults.timeout = 10000;
 
 const theme = createMuiTheme(themeFile);
-useEffect(() => {
-  const isProd = process.env.NODE_ENV === 'production';
-}, [])
 
+const isProd = process.env.NODE_ENV === 'production';
 console.log(isProd)
-
 const App = () => {
   const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState(
