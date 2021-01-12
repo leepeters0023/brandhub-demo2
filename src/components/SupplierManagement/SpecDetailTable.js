@@ -17,7 +17,7 @@ const SpecDetailTable = ({ classes, specArray }) => {
               <TableCell classes={{root: classes.specTableCellRoot}} align="left" className={classes.headerText}>
                 {spec.spec}
               </TableCell>
-              <TableCell classes={{root: classes.specTableCellRoot}} align="left" className={classes.bodyText}>
+              <TableCell classes={{root: classes.specTableCellDetailRoot}} align="left" className={classes.bodyText}>
                 {spec.desc}
               </TableCell>
             </TableRow>

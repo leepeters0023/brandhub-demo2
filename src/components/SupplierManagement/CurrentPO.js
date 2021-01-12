@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
   specTableCellRoot: {
     padding: "5px 0px",
   },
+  specTableCellDetailRoot: {
+    padding: "5px 10px",
+  }
 }));
 
 const CurrentPO = () => {
@@ -210,7 +213,10 @@ const CurrentPO = () => {
             </Typography>
             <br />
             <Typography className={clsx(classes.headerText, classes.POText)}>
-              {`Shipping Labels: ${currentPO.shippingLabel}`}
+              {`Shipping Label:`}
+            </Typography>
+            <Typography className={clsx(classes.bodyText, classes.POText)}>
+              {`${currentPO.shippingLabel}`}
             </Typography>
             <Typography className={clsx(classes.headerText, classes.POText)}>
               {`RFQ Number: ${currentPO.rfqNumber}`}

@@ -552,6 +552,7 @@ export const mapPOShippingParamItems = (items) => {
     expectedArrival: item["expected-arrival-date"]
       ? item["expected-arrival-date"]
       : "---",
+    shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${item["shipping-label"].code}`,
     trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
     tax: item.tax ? stringToCents(item.tax) : "---",
   }));
@@ -609,6 +610,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder)
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
@@ -635,7 +637,6 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     keyAcctTape: purchaseOrder["key-account-tape"]
       ? purchaseOrder["key-account-tape"]
       : "",
-    shippingLabel: purchaseOrder.label ? purchaseOrder.label : "---",
     additionalFile: purchaseOrder["additional-file-cloudinary-id"]
       ? purchaseOrder["additional-file-cloudinary-id"]
       : null,
@@ -654,6 +655,16 @@ export const mapPurchaseOrder = (purchaseOrder) => {
         )
       : "---",
     shippingParams: params,
+    shippingLabel: [
+      ...new Set(
+        [].concat.apply(
+          [],
+          params.map((param) =>
+            param.items.map((item) => item.shippingLabel)
+          )
+        )
+      ),
+    ].join(", "),
     totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
   };
   return formattedPO;

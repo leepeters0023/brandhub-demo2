@@ -209,7 +209,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               state: param.state,
               zip: param.zip,
               itemNumber: currentParamItem.itemNumber,
-              label: "* TODO *",
+              label: currentParamItem.shippingLabel,
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
               carrier:

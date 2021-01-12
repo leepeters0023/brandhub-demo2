@@ -10,7 +10,7 @@ import {
   fetchNextFilteredPOItems,
   createNewPO,
   setSelectedPOItems,
-  addItemsToPO,
+  //addItemsToPO,
 } from "../redux/slices/purchaseOrderSlice";
 import { fetchFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
@@ -18,20 +18,20 @@ import { createNewRFQ } from "../redux/slices/rfqSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
-import AddToPOMenu from "../components/SupplierManagement/AddToPOMenu";
+//import AddToPOMenu from "../components/SupplierManagement/AddToPOMenu";
 import WarningModal from "../components/Utility/WarningModal";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+// import IconButton from "@material-ui/core/IconButton";
+// import Tooltip from "@material-ui/core/Tooltip";
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PrintIcon from "@material-ui/icons/Print";
-import GetAppIcon from "@material-ui/icons/GetApp";
+// import PrintIcon from "@material-ui/icons/Print";
+// import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   orderType: "on-demand",
@@ -69,10 +69,10 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const [itemSelected, setItemSelected] = useCallback(useState(false));
   const [isWarningOpen, setWarningOpen] = useCallback(useState(false));
 
-  const isPOHistoryLoading = useSelector(
-    (state) => state.purchaseOrderHistory.isLoading
-  );
-  const draftPOs = useSelector((state) => state.purchaseOrderHistory.pos);
+  // const isPOHistoryLoading = useSelector(
+  //   (state) => state.purchaseOrderHistory.isLoading
+  // );
+  // const draftPOs = useSelector((state) => state.purchaseOrderHistory.pos);
   const isPOItemsLoading = useSelector(
     (state) => state.purchaseOrder.isLoading
   );
@@ -104,6 +104,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(
       createNewRFQ(selectedPOItems[0].split("-")[1], currentItem.program.id)
     );
+    dispatch(setSelectedPOItems({ selectedItems: [] }));
   };
 
   const handleNewPO = () => {
@@ -127,38 +128,39 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         });
       });
       dispatch(createNewPO(idArray, currentOrderType));
+      dispatch(setSelectedPOItems({ selectedItems: [] }));
       navigate("/purchasing/purchaseOrder#new");
     } else {
       setWarningOpen(true);
     }
   };
 
-  const handleAddToPO = (id) => {
-    let idArray = [];
-    const poRef = draftPOs.find((po) => po.poNum === id);
-    let currentSupplier = [
-      ...new Set(
-        selectedPOItems.map((id) => {
-          let supplier = currentPOItems.find((item) => item.id === id).supplier;
-          return supplier;
-        })
-      ),
-    ];
-    if (currentSupplier.length === 1 && poRef.supplier === currentSupplier[0]) {
-      currentPOItems.forEach((item) => {
-        selectedPOItems.forEach((id) => {
-          if (item.id === id) {
-            idArray = idArray.concat(item.orderItemIds);
-          }
-        });
-      });
-      dispatch(setSelectedPOItems({ selectedItems: [] }));
-      dispatch(addItemsToPO(idArray, id));
-      navigate(`/purchasing/purchaseOrder#${id}`);
-    } else {
-      setWarningOpen(true);
-    }
-  };
+  // const handleAddToPO = (id) => {
+  //   let idArray = [];
+  //   const poRef = draftPOs.find((po) => po.poNum === id);
+  //   let currentSupplier = [
+  //     ...new Set(
+  //       selectedPOItems.map((id) => {
+  //         let supplier = currentPOItems.find((item) => item.id === id).supplier;
+  //         return supplier;
+  //       })
+  //     ),
+  //   ];
+  //   if (currentSupplier.length === 1 && poRef.supplier === currentSupplier[0]) {
+  //     currentPOItems.forEach((item) => {
+  //       selectedPOItems.forEach((id) => {
+  //         if (item.id === id) {
+  //           idArray = idArray.concat(item.orderItemIds);
+  //         }
+  //       });
+  //     });
+  //     dispatch(setSelectedPOItems({ selectedItems: [] }));
+  //     dispatch(addItemsToPO(idArray, id));
+  //     navigate(`/purchasing/purchaseOrder#${id}`);
+  //   } else {
+  //     setWarningOpen(true);
+  //   }
+  // };
 
   const handleCloseWarning = useCallback(() => {
     setWarningOpen(false);
@@ -190,8 +192,6 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  //TODO  update filters conditionally based on url param!
 
   return (
     <>
@@ -227,13 +227,13 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 REQUEST QUOTE
               </Button>
             )}
-            <AddToPOMenu
+            {/* <AddToPOMenu
               classes={classes}
               isLoading={isPOHistoryLoading}
               draftPOs={draftPOs}
               itemSelected={itemSelected}
               handleAddToPO={handleAddToPO}
-            />
+            /> */}
             <Button
               className={classes.largeButton}
               variant="contained"
@@ -246,18 +246,18 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
             >
               CREATE PO
             </Button>
-            <Tooltip title="Print Purchase Order Items">
+            {/* <Tooltip title="Print Purchase Order Items">
               <IconButton>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
+              <CSVLink data={currentOrders} headers={csvHeaders}>
               <IconButton>
                 <GetAppIcon color="secondary" />
               </IconButton>
-              {/* </CSVLink> */}
-            </Tooltip>
+              </CSVLink>
+            </Tooltip> */}
           </div>
         </div>
         <div
