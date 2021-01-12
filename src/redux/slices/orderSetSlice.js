@@ -31,6 +31,7 @@ let initialState = {
   totalEstItemCost: 0,
   orderTotal: 0,
   totalEstFreight: 0,
+  totalEstTax: 0,
   orderNote: "",
   rebuildRef: false,
   error: null,
@@ -58,7 +59,7 @@ const orderSetSlice = createSlice({
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, type, orders, items, status, isComplete, note, totalEstFreight } = action.payload;
+      const { orderId, type, orders, items, status, isComplete, note, totalEstFreight, totalEstTax } = action.payload;
       let currentItems = [...items];
       if (orders.length !== 0) {
         let ordTotal = 0;
@@ -82,8 +83,9 @@ const orderSetSlice = createSlice({
         state.orders = [...orders];
         state.orderNote = note;
         state.totalEstItemCost = ordTotal;
-        state.orderTotal = ordTotal + totalEstFreight;
+        state.orderTotal = ordTotal + totalEstFreight + totalEstTax;
         state.totalEstFreight = totalEstFreight;
+        state.totalEstTax = totalEstTax;
         state.isLoading = false;
         state.error = null;
       } else {
@@ -294,6 +296,7 @@ const orderSetSlice = createSlice({
       state.totalEstItemCost = 0;
       state.orderTotal = 0;
       state.totalEstFreight = 0;
+      state.totalEstTax = 0;
       state.orderNote = "";
       state.error = null;
     },
@@ -349,6 +352,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     let orderStatus = currentOrders.data.status;
     let complete = currentOrders.data["is-work-complete"];
     let totalEstFreight = stringToCents(currentOrders.data["total-estimated-shipping-cost"])
+    let totalEstTax = stringToCents(currentOrders.data["total-estimated-tax"])
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
@@ -371,6 +375,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         isComplete: complete,
         note: note,
         totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax,
       })
     );
   } catch (err) {
@@ -386,6 +391,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data[0]["order-set-items"],
       "order-set-item"
@@ -401,6 +407,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     let orderStatus = currentOrders.data[0].status;
     let complete = currentOrders.data[0]["is-work-complete"];
     let totalEstFreight = stringToCents(currentOrders.data[0]["total-estimated-shipping-cost"])
+    let totalEstTax = stringToCents(currentOrders.data[0]["total-estimated-tax"])
     let territories =
       currentOrders.data[0].program.type === "National"
         ? ["National"]
@@ -421,7 +428,8 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
         status: orderStatus,
         isComplete: complete,
         note: note,
-        totalEstFreight: totalEstFreight
+        totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax
       })
     );
     dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));

@@ -136,7 +136,7 @@ const PreOrderSummary = () => {
                       <TableCell align="center">
                         {preOrder.preOrderId !== currentOrder.orderId
                           ? formatMoney(preOrder.totalEstCost, false)
-                          : formatMoney(currentOrder.orderTotal, false)}
+                          : formatMoney(currentOrder.totalEstItemCost, false)}
                       </TableCell>
                       {/* <TableCell align="right">
                         {formatMoney(

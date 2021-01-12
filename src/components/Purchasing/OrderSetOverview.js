@@ -195,7 +195,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           </Typography>
           <Typography
             className={classes.headerText}
-          >{`Est. Tax: ---`}</Typography>
+          >{`Est. Tax: ${formatMoney(orderSet.totalEstTax, false)}`}</Typography>
           <br />
           <Divider />
           <br />

@@ -245,6 +245,8 @@ export const mapSingleOrder = (order) => {
     totalItems: order["total-quantity"],
     totalEstFreight: stringToCents(order["total-estimated-shipping-cost"]),
     totalActFreight: "---",
+    totalEstTax: stringToCents(order["total-estimated-tax"]),
+    totalActTax: "---",
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
@@ -254,7 +256,7 @@ export const mapSingleOrder = (order) => {
 };
 
 export const mapOrderHistoryOrders = (orders) => {
-  console.log(orders)
+  console.log(orders);
   let mappedOrders = orders.map((order) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
@@ -347,6 +349,14 @@ export const mapOrderItems = (items, type) => {
             : item.order["custom-address"].state.code,
         estCost: stringToCents(item.item["estimated-cost"]),
         totalItems: type === "order-set-item" ? 0 : item.qty,
+        totalEstShipping:
+          type === "order-set-item"
+            ? null
+            : stringToCents(item["total-estimated-shipping-cost"]),
+        totalEstTax:
+          type === "order-set-item"
+            ? null
+            : stringToCents(item["total-estimated-tax"]),
         totalEstCost:
           type === "order-set-item"
             ? 0
@@ -385,6 +395,7 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
+  console.log(order);
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,

@@ -262,6 +262,15 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               {`Total Act. Freight: ${currentOrder.totalActFreight}`}
             </Typography>
             <Typography className={classes.headerText}>
+              {`Total Est. Tax: ${formatMoney(
+                currentOrder.totalEstTax,
+                false
+              )}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Act. Tax: ${currentOrder.totalActTax}`}
+            </Typography>
+            <Typography className={classes.headerText}>
               {`Total Est. Cost: ${formatMoney(
                 currentOrder.totalEstCost,
                 false

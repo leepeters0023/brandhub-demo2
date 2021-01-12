@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalsDiv = React.memo(() => {
   const classes = useStyles();
-  const programTotal = useSelector((state) => state.orderSet.orderTotal);
+  const programTotal = useSelector((state) => state.orderSet.totalEstItemCost);
 
   return (
     <>
