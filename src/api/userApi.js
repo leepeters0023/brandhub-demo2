@@ -38,6 +38,7 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -72,6 +73,100 @@ export const addFavoriteItems = async (idArray) => {
         relationships: {
           "favorite-items": {
             data: ids
+          }
+        }
+      }
+    }, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const getFilteredUsers = async (name) => {
+  const response = { status: "", error: null, data: null };
+  const querySting = name.length > 0 ? `/api/users?filter[name]=${name}` : "/api/users"
+  await axios
+    .get(querySting)
+    .then((res) => {
+      let dataObject = { users: null, nextLink: null }
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.users = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const getNextFilteredUsers = async (link) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(link)
+    .then((res) => {
+      let dataObject = { users: null, nextLink: null }
+      let data = dataFormatter.deserialize(res.data);
+      dataObject.users = data;
+      dataObject.nextLink = res.data.links ? res.data.links.next : null;
+      response.status = "ok";
+      response.data = dataObject;
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const getSingleUser = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/users/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+}
+
+export const updateUserCreds = async (userData) => {
+  const stateIds = userData.states.map((state) => ({type: "state", id: state.id}));
+  const territoryIds = userData.territories.map((terr) => ({type: "territory", id: terr.id}));
+  const response = { status: "", error: null, data: null };
+  await axios
+    .patch(`/api/users/${userData.id}`, {
+      data: {
+        type: "user",
+        id: userData.id,
+        attributes: {
+          role: userData.role,
+          name: userData.name,
+          email: userData.email,
+          "is-on-premise": userData.isOnPremise,
+          "is-retail": userData.isRetail,
+        },
+        relationships: {
+          states: {
+            data: stateIds
+          },
+          territories: {
+            data: territoryIds
           }
         }
       }

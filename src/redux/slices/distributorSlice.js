@@ -32,7 +32,7 @@ let initialState = {
   isLoading: false,
   distListIsLoading: false,
   attnIsLoading: false,
-  updateIsLoading: false,
+  isUpdateLoading: false,
   distributorList: [],
   favoriteDistributors: [],
   editAttnList: [],
@@ -52,7 +52,7 @@ const startAttn = (state) => {
 };
 
 const startUpdate = (state) => {
-  state.updateIsLoading = true;
+  state.isUpdateLoading = true;
 };
 
 const loadingFailed = (state, action) => {
@@ -70,7 +70,7 @@ const distributorSlice = createSlice({
     setIsLoading: startLoading,
     setDistLoading: startDist,
     setAttnisLoading: startAttn,
-    setUpdateIsLoading: startUpdate,
+    setisUpdateLoading: startUpdate,
     getDistributorsSuccess(state, action) {
       const { distributors, attn } = action.payload;
       if (!attn) {
@@ -98,7 +98,7 @@ const distributorSlice = createSlice({
         newDistributorList,
       ]);
       state.favoriteDistributors = updatedLists;
-      state.updateIsLoading = false;
+      state.isUpdateLoading = false;
     },
     updateDistributorList(state, action) {
       const { id, list } = action.payload;
@@ -131,7 +131,7 @@ const distributorSlice = createSlice({
         (distList) => distList.id !== id
       );
       state.favoriteDistributors = updatedDistributors;
-      state.updateIsLoading = false;
+      state.isUpdateLoading = false;
     },
     updateAttnSuccess(state, action) {
       const { id, attn } = action.payload;
@@ -139,10 +139,10 @@ const distributorSlice = createSlice({
         if (dist.id === id) {
           return {
             ...dist,
-            attn: attn
-          }
-        } else return {...dist}
-      })
+            attn: attn,
+          };
+        } else return { ...dist };
+      });
       state.editAttnList = updatedDistributors;
       state.isLoading = false;
       state.error = null;
@@ -150,7 +150,7 @@ const distributorSlice = createSlice({
     clearDistributors(state) {
       state.isLoading = false;
       state.distListIsLoading = false;
-      state.updateIsLoading = false;
+      state.isUpdateLoading = false;
       state.distributorList = [];
       state.favoriteDistributors = [];
       state.editAttnList = [];
@@ -164,7 +164,7 @@ export const {
   setIsLoading,
   setDistLoading,
   setAttnisLoading,
-  setUpdateIsLoading,
+  setisUpdateLoading,
   getDistributorsSuccess,
   getFavDistributorsSuccess,
   updateCurrentTerritory,
@@ -229,7 +229,7 @@ export const fetchFavDistributors = () => async (dispatch) => {
 
 export const newFavoriteDistList = (index) => async (dispatch) => {
   try {
-    dispatch(setUpdateIsLoading());
+    dispatch(setisUpdateLoading());
     dispatch(patchLoading());
     const newList = await newFavDistList(index + 1);
     if (newList.error) {
@@ -252,7 +252,7 @@ export const updateFavoriteDistributorList = (id, name, distArray) => async (
   dispatch
 ) => {
   try {
-    dispatch(setUpdateIsLoading());
+    dispatch(setisUpdateLoading());
     dispatch(patchLoading());
     const formattedDistArray = distArray.map((list) => ({
       id: list.id,
@@ -277,7 +277,7 @@ export const updateFavoriteDistributorList = (id, name, distArray) => async (
 
 export const deleteFavoriteDistributorList = (id) => async (dispatch) => {
   try {
-    dispatch(setUpdateIsLoading());
+    dispatch(setisUpdateLoading());
     dispatch(patchLoading());
     const deleteStatus = await deleteFavDistList(id);
     if (deleteStatus.error) {
