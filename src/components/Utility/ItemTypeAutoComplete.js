@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 const ItemTypeAutoComplete = ({
   classes,

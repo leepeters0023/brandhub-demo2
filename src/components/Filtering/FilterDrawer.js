@@ -41,13 +41,9 @@ import FiltersCompliance from "./FiltersCompliance";
 import FiltersBudget from "./FiltersBudget";
 
 import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
-
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
