@@ -69,7 +69,9 @@ const ItemTypeAutoComplete = ({
             InputProps={{
               ...params.InputProps,
               autoComplete: "new-password",
-              endAdornment: <>{params.InputProps.endAdornment}</>,
+              endAdornment: <>
+                {params.InputProps.endAdornment}
+              </>,
             }}
           />
         )}
