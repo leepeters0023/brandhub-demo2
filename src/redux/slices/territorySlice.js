@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllTerritories, fetchFilteredTerritories, fetchAllStates, fetchFilteredStates } from "../../api/territoryApi";
-
+import {
+  fetchAllTerritories,
+  fetchFilteredTerritories,
+  fetchAllStates,
+  fetchFilteredStates,
+} from "../../api/territoryApi";
 
 let initialState = {
   isLoading: false,
@@ -18,7 +22,7 @@ const startLoading = (state) => {
 
 const startStatesLoading = (state) => {
   state.isStatesLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
@@ -35,13 +39,13 @@ const territorySlice = createSlice({
     setStatesLoading: startStatesLoading,
     getTerritoriesSuccess(state, action) {
       const { territories } = action.payload;
-      state.filteredTerritoryList = territories
+      state.filteredTerritoryList = territories;
       state.isLoading = false;
       state.error = null;
     },
     getAllTerritoriesSuccess(state, action) {
       const { territories } = action.payload;
-      state.territoryList = territories
+      state.territoryList = territories;
       state.isLoading = false;
       state.error = null;
     },
@@ -97,7 +101,7 @@ export const fetchTerritories = () => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const fetchTerritoriesByName = (name) => async (dispatch) => {
   try {
@@ -117,24 +121,37 @@ export const fetchStates = () => async (dispatch) => {
     dispatch(setStatesLoading());
     const states = await fetchAllStates();
     if (states.error) {
-      throw states.error
+      throw states.error;
     }
-    dispatch(getAllStatesSuccess({ states: states.data }))
+    const sortedStates = states.data.sort((a, b) => {
+      return a.code.toLowerCase()[0] < b.code.toLowerCase()[0]
+        ? -1
+        : a.code.toLowerCase()[0] > b.code.toLowerCase()[0]
+        ? 1
+        : 0;
+    });
+    dispatch(getAllStatesSuccess({ states: sortedStates }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const fetchStatesByIds = (ids) => async (dispatch) => {
   try {
     dispatch(setStatesLoading());
     const states = await fetchFilteredStates(ids);
-    console.log(states.data);
     if (states.error) {
-      throw states.error
+      throw states.error;
     }
-    dispatch(getStatesSuccess({ states: states.data }))
+    const sortedStates = states.data.sort((a, b) => {
+      return a.code.toLowerCase()[0] < b.code.toLowerCase()[0]
+        ? -1
+        : a.code.toLowerCase()[0] > b.code.toLowerCase()[0]
+        ? 1
+        : 0;
+    });
+    dispatch(getStatesSuccess({ states: sortedStates }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};

@@ -159,7 +159,6 @@ const EditUserModal = ({ modal, handleModalClose, currentUserId }) => {
 
   const handleTerritories = useCallback(
     (value) => {
-      console.log(value);
       setCurrentTerritories(value);
       if (value.length > 0) {
         dispatch(fetchStatesByIds(value.map((terr) => terr.id)));
