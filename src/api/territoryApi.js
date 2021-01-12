@@ -15,11 +15,11 @@ export const fetchAllTerritories = async () => {
     })
     .catch((err) => {
       console.log(err.toString());
-      response.status = "error"
+      response.status = "error";
       response.error = err.toString();
     });
   return response;
-}
+};
 
 //Returns a filtered array of territories based on partial matches to their name
 
@@ -34,11 +34,11 @@ export const fetchFilteredTerritories = async (name) => {
     })
     .catch((err) => {
       console.log(err.toString());
-      response.status = "error"
+      response.status = "error";
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const fetchAllStates = async () => {
   const response = { status: "", error: null, data: null };
@@ -51,14 +51,13 @@ export const fetchAllStates = async () => {
     })
     .catch((err) => {
       console.log(err.toString());
-      response.status = "error"
+      response.status = "error";
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const fetchFilteredStates = async (ids) => {
-  console.log(ids.join(", "));
   const response = { status: "", error: null, data: null };
   await axios
     .get(`/api/states?filter[territory-id]=${ids.join(",")}`)
@@ -69,8 +68,8 @@ export const fetchFilteredStates = async (ids) => {
     })
     .catch((err) => {
       console.log(err.toString());
-      response.status = "error"
+      response.status = "error";
       response.error = err.toString();
     });
   return response;
-}
+};

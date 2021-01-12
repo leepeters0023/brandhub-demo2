@@ -496,7 +496,6 @@ export const addAdditionalFile = (id, file) => async (dispatch) => {
     if (fileURL.error) {
       throw fileURL.error;
     }
-    console.log(fileURL)
     dispatch(updateAdditionalFile({file: file}))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

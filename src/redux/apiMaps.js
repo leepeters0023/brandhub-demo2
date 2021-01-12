@@ -121,7 +121,6 @@ export const mapSpecifications = (specs) => {
 };
 
 export const mapOrderSetItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
     itemNumber: item["sequence-number"],
@@ -261,7 +260,6 @@ export const mapOrderHistoryOrders = (orders) => {
 };
 
 export const mapOrderHistoryItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => {
     const images = handleImages(item.item.images);
     return {
@@ -610,7 +608,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder)
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
