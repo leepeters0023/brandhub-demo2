@@ -328,7 +328,6 @@ const ItemRollupTable = ({
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
                         disabled={
-                          type === "rfq" &&
                           selected.length >= 1 &&
                           selected[0] !== `${row.id}-${row.itemId}`
                         }
@@ -354,18 +353,21 @@ const ItemRollupTable = ({
                       )}
                     </TableCell>
                     {row.territory.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.territory.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                      <Tooltip
+                        placement="left"
+                        title={`${row.territory.join(", ")}`}
                       >
-                        {row.territory[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
-                    <TableCell align="left">{row.territory[0]}</TableCell>
-                  )}
+                        <TableCell
+                          align="left"
+                          style={{ display: "flex", alignItems: "flex-end" }}
+                        >
+                          {row.territory[0]}
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                      <TableCell align="left">{row.territory[0]}</TableCell>
+                    )}
                     <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>

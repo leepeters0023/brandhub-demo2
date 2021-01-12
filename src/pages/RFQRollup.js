@@ -16,15 +16,15 @@ import ItemRollupTable from "../components/SupplierManagement/ItemRollupTable";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+// import IconButton from "@material-ui/core/IconButton";
+// import Tooltip from "@material-ui/core/Tooltip";
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PrintIcon from "@material-ui/icons/Print";
-import GetAppIcon from "@material-ui/icons/GetApp";
+// import PrintIcon from "@material-ui/icons/Print";
+// import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   orderType: "pre-order",
@@ -118,20 +118,20 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 navigate("/purchasing/rfq#new");
               }}
             >
-              CREATE QUOTE
+              CREATE QUOTE REQUEST
             </Button>
-            <Tooltip title="Print Purchase Order Items">
+            {/* <Tooltip title="Print Purchase Order Items">
               <IconButton>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
+              <CSVLink data={currentOrders} headers={csvHeaders}>
               <IconButton>
                 <GetAppIcon color="secondary" />
               </IconButton>
-              {/* </CSVLink> */}
-            </Tooltip>
+              </CSVLink>
+            </Tooltip> */}
           </div>
         </div>
         <div
