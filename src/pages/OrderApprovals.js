@@ -23,14 +23,10 @@ import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-// import Tooltip from "@material-ui/core/Tooltip";
-// import IconButton from "@material-ui/core/IconButton";
+import TuneIcon from '@material-ui/icons/Tune';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-
-// import PrintIcon from "@material-ui/icons/Print";
-// import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
   fromDate: format(subDays(new Date(), 7), "MM/dd/yyyy"),
@@ -148,17 +144,19 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip> */}
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+        <div
+          className={classes.showHideFilters}
+          onClick={() => {
+            handleFilterDrawer(!filtersOpen);
+          }}
+        >
+          <TuneIcon fontSize="small" color="secondary" />
           <Typography
             variant="body2"
             color="textSecondary"
-            className={classes.hoverText}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              handleFilterDrawer(!filtersOpen);
-            }}
+            style={{ margin: "10px 10px" }}
           >
-            Filters
+            {filtersOpen ? "Hide Filters" : "Show Filters"}
           </Typography>
           <FilterChipList classes={classes} />
         </div>
