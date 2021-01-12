@@ -93,7 +93,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const orderStatus = useSelector((state) => state.orderSet.status);
   const currentItems = useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);
-  const currentTotal = useSelector((state) => state.orderSet.orderTotal);
+  const currentTotal = useSelector((state) => state.orderSet.totalEstItemCost);
   const currentUserRole = useSelector((state) => state.user.role);
   const inStockItems = useSelector(
     (state) => state.currentOrder.inStockOrderItems
