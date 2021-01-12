@@ -93,6 +93,8 @@ useEffect(() => {
   const isProd = process.env.NODE_ENV === 'production';
 }, [])
 
+console.log(isProd)
+
 const App = () => {
   const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState(
