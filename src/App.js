@@ -89,6 +89,7 @@ axios.defaults.headers.get["Cache-Control"] = "no-cache";
 axios.defaults.timeout = 10000;
 
 const theme = createMuiTheme(themeFile);
+const isProd = process.env.NODE_ENV === 'production';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -233,6 +234,12 @@ const App = () => {
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
         <meta name="insight-app-sec-validation" content="aced815d-d550-4d28-87ed-4b8d32c32430" />
+        {isProd && (
+          <>
+            <script type="text/javascript">{`!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});`}</script>
+            <script type="text/javascript">{`window.Beacon('init', '521f5954-7022-46e2-9707-6a82501f23e7')`}</script>
+          </>
+        )}
       </Helmet>
       {loggedIn && (
         <TopDrawerNav
