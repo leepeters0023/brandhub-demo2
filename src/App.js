@@ -227,8 +227,8 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <Helmet>
-        
         <meta charset="utf-8" />
+        <title>Ready to Activate</title>
         <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
