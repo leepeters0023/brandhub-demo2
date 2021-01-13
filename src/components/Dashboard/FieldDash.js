@@ -97,7 +97,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       id: "catalog-archive-parent",
       link: "/items/all",
       //link: "/items/archive"
-      info: "View archive of and details about currently available items",
+      info: "View archive of and details about items no longer available",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Archive_wgetjy.png",
     },

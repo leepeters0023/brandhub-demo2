@@ -52,8 +52,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   icon: {
-    height: "auto",
-    width: "80%",
+    height: "30%",
+    width: "auto",
   },
   divider: {
     width: "100%",
