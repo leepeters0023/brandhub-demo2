@@ -21,7 +21,7 @@ user: {
 let initialState = {
   authIsLoading: false,
   loginIsLoading: false,
-  updateIsLoading: false,
+  isUpdateLoading: false,
   isLoading: false,
   loggedIn: false,
   id: "",
@@ -47,8 +47,8 @@ const startLoading = (state) => {
 };
 
 const startUpdate = (state) => {
-  state.updateIsLoading = true;
-}
+  state.isUpdateLoading = true;
+};
 
 const startAuth = (state) => {
   state.authIsLoading = true;
@@ -75,9 +75,9 @@ const logInFailed = (state, action) => {
 
 const updateFailed = (state, action) => {
   const { error } = action.payload;
-  state.updateIsLoading = false;
+  state.isUpdateLoading = false;
   state.error = error;
-}
+};
 
 const userSlice = createSlice({
   name: "user",
@@ -114,9 +114,9 @@ const userSlice = createSlice({
       state.error = null;
     },
     updateFavoriteItems(state, action) {
-      const {items} = action.payload;
+      const { items } = action.payload;
       state.favoriteItems = [...items];
-      state.updateIsLoading = false;
+      state.isUpdateLoading = false;
     },
     updateCurrentTerritory(state, action) {
       const { territory } = action.payload;
@@ -214,7 +214,7 @@ export const fetchUser = () => async (dispatch) => {
           : [],
       currentTerritory:
         user.data.territories.length > 0 ? user.data.territories[0].id : null,
-      favoriteItems: mapItems(user.data["favorite-items"])
+      favoriteItems: mapItems(user.data["favorite-items"]),
     };
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
@@ -240,14 +240,14 @@ export const addToFavoriteItems = (idArray) => async (dispatch) => {
     dispatch(setUpdateLoading());
     const res = await addFavoriteItems(idArray);
     if (res.error) {
-      throw res.error
+      throw res.error;
     }
-    const items = mapItems(res.data["favorite-items"])
-    dispatch(updateFavoriteItems({items: items}))
+    const items = mapItems(res.data["favorite-items"]);
+    dispatch(updateFavoriteItems({ items: items }));
   } catch (err) {
     dispatch(setUpdateFailure({ error: err.toString() }));
   }
-}
+};
 
 export const loginWithCode = (code) => async (dispatch) => {
   try {
@@ -261,7 +261,7 @@ export const loginWithCode = (code) => async (dispatch) => {
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
-}
+};
 
 export const getRedirect = () => async (dispatch) => {
   try {
@@ -276,4 +276,4 @@ export const getRedirect = () => async (dispatch) => {
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
-}
+};

@@ -18,7 +18,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     itemNumber: "item-number",
     program: "order-program-name",
     itemType: "item-type-description",
-    dueDate: "order-due-date",
+    dueDate: "in-market-date",
   };
 
   let typeBool = `filter[is-for-rfq]=${type === "rfq" ? true : false}`;
@@ -110,6 +110,7 @@ export const createRFQ = async (item, program) => {
     });
   return response;
 };
+//todo add attribute of qty for inventory order
 
 //Updates the note on an RFQ
 export const updateRFQNote = async (id, note) => {
@@ -284,13 +285,14 @@ export const fetchRFQ = async (id) => {
 };
 
 //Creates a new PO based on an item and it's associated program
-export const createPO = async (ids) => {
+export const createPO = async (ids, orderType) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
       type: "purchase-order",
       attributes: {
         "order-item-ids": ids,
+        "order-type": orderType,
       },
     },
   };
@@ -308,6 +310,38 @@ export const createPO = async (ids) => {
     });
   return response;
 };
+
+export const createInvPO = async (id, qty, warehouse) => {
+  const response = { status: "", error: null, data: null };
+  let requestBody = {
+    data: {
+      type: "purchase-order",
+      attributes: warehouse ? {
+        "item-id": id,
+        qty: qty,
+        warehouse: warehouse,
+        type: "in-stock",
+      } : {
+        "item-id": id,
+        qty: qty,
+        type: "in-stock",
+      },
+    },
+  };
+  await axios
+    .post("/api/purchase-orders", requestBody, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+}
 
 export const addToPO = async (ids, poNum) => {
   const response = { status: "", error: null, data: null };

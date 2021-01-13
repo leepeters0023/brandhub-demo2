@@ -18,11 +18,13 @@ import {
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
 import ItemPreviewModal from "../components/ItemPreview/ItemPreviewModal";
+import AddInventoryModal from "../components/Purchasing/AddInventoryModal";
 import Loading from "../components/Utility/Loading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
+import TuneIcon from '@material-ui/icons/Tune';
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -64,6 +66,8 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
+  const [invItemId, setInvItemId] = useCallback(useState(null));
+  const [isAddInvModalOpen, setAddInvModalOpen] = useCallback(useState(false));
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);
@@ -89,6 +93,16 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const handleModalClose = () => {
     handlePreviewModal(false);
   };
+
+  const handleAddInvClose = () => {
+    setAddInvModalOpen(false);
+    setInvItemId(null);
+  };
+
+  const handleAddInvOpen = (id) => {
+    setInvItemId(id);
+    setAddInvModalOpen(true);
+  }
 
   const handleAddToOrder = () => {
     if (currentOrder.inStockOrderItems.length === 0) {
@@ -131,7 +145,13 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
         handleClose={handleModalClose}
         previewModal={previewModal}
       />
-
+      {isAddInvModalOpen && invItemId && (
+        <AddInventoryModal
+          itemId={invItemId}
+          handleClose={handleAddInvClose}
+          open={isAddInvModalOpen}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
@@ -197,17 +217,19 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", height: "32px" }}>
+        <div
+          className={classes.showHideFilters}
+          onClick={() => {
+            handleFilterDrawer(!filtersOpen);
+          }}
+        >
+          <TuneIcon fontSize="small" color="secondary" />
           <Typography
             variant="body2"
             color="textSecondary"
-            className={classes.hoverText}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              handleFilterDrawer(!filtersOpen);
-            }}
+            style={{ margin: "10px 10px" }}
           >
-            Filters
+            {filtersOpen ? "Hide Filters" : "Show Filters"}
           </Typography>
           <FilterChipList classes={classes} />
         </div>
@@ -217,6 +239,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
           type={"inStock"}
           currentView={currentView}
           handlePreview={handlePreview}
+          handleAddInvOpen={handleAddInvOpen}
           items={currentItems}
           isItemsLoading={itemsLoading}
           scrollRef={scrollRef}

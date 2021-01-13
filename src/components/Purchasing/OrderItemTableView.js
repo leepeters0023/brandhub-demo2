@@ -21,6 +21,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
@@ -33,6 +34,7 @@ const headCells = [
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
   { id: "estCost", label: "Est. Cost" },
+  { id: "addInv", label: "" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -48,8 +50,10 @@ const EnhancedTableHead = (props) => {
 
   const currentHeadCells =
     type === "inStock"
-      ? headCells
-      : headCells.filter((cell) => cell.id !== "stock");
+      ? role === "purchaser" || role === "super"
+        ? headCells
+        : headCells.filter((cell) => cell.id !== "addInv")
+      : headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addInv");
 
   return (
     <TableHead>
@@ -88,12 +92,16 @@ EnhancedTableHead.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  buttonText: {
+    whiteSpace: "nowrap"
+  }
 }));
 
 const OrderItemTableView = ({
   type,
   currentItems,
   handlePreview,
+  handleAddInvOpen,
   setCurrentItemAdded,
   isItemsLoading,
   scrollRef,
@@ -235,6 +243,21 @@ const OrderItemTableView = ({
                       row.estCost,
                       false
                     )}`}</TableCell>
+                    {type === "inStock" &&
+                      (currentUserRole === "purchaser" ||
+                        currentUserRole === "super") && (
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            className={classes.largeButton}
+                            color="secondary"
+                            onClick={() => handleAddInvOpen(row.id)}
+                            classes={{label: classes.buttonText}}
+                          >
+                            ADD INV.
+                          </Button>
+                        </TableCell>
+                      )}
                   </TableRow>
                 );
               })}
@@ -256,6 +279,7 @@ OrderItemTableView.propTypes = {
   type: PropTypes.string.isRequired,
   currentItems: PropTypes.array.isRequired,
   handlePreview: PropTypes.func.isRequired,
+  handleAddInvOpen: PropTypes.func,
   handleAddItem: PropTypes.func.isRequired,
   setCurrentItemAdded: PropTypes.func.isRequired,
 };

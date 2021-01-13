@@ -49,7 +49,7 @@ const SelectTerritories = ({ classes }) => {
   const isLoading = useSelector((state) => state.territories.isLoading);
 
   const handleTerritories = useCallback(
-    (value, _type, _filter) => {
+    (value) => {
       dispatch(updateTerritories({ territories: value }));
     },
     [dispatch]

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Router, Redirect, navigate } from "@reach/router";
 import axios from "axios";
-
+import Helmet from 'react-helmet';
 import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
@@ -97,6 +97,8 @@ axios.defaults.headers.get["Cache-Control"] = "no-cache";
 axios.defaults.timeout = 10000;
 
 const theme = createMuiTheme(themeFile);
+
+const isProd = process.env.NODE_ENV === 'production';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -304,6 +306,19 @@ const App = () => {
   } else if (currentRole) {
     return (
       <MuiThemeProvider theme={theme}>
+        <Helmet>
+        <meta charset="utf-8" />
+        <title>Ready to Activate</title>
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="logo192.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="insight-app-sec-validation" content="aced815d-d550-4d28-87ed-4b8d32c32430" />
+        {isProd && (
+            <script type="text/javascript">{`!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});window.Beacon('init', '521f5954-7022-46e2-9707-6a82501f23e7')`}</script>
+        )}
+      </Helmet>
         {loggedIn && (
           <TopDrawerNav
             userType={currentRole}

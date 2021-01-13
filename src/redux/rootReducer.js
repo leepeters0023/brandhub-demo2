@@ -30,6 +30,7 @@ import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
 import trackingReducer from "./slices/trackingSlice";
 import userReducer from "./slices/userSlice";
+import userUpdateReducer from "./slices/userUpdateSlice";
 
 const rootReducer = combineReducers({
   addresses: addressReducer,
@@ -62,6 +63,7 @@ const rootReducer = combineReducers({
   territories: territoryReducer,
   tracking: trackingReducer,
   user: userReducer,
+  userUpdate: userUpdateReducer,
 });
 
 export default rootReducer;
