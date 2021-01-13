@@ -21,21 +21,22 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
     },
   },
+ 
 }));
 
 const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElChild, setAnchorElChild] = useState(null);
   
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
+    evt.preventDefault();
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    
   };
-
 
   return (
     <>
@@ -58,7 +59,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
           horizontal: "right",
         }}
         style={{
-          marginTop: "10px", zIndex: "10001"
+          marginTop: "10px"
           //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding
         }}
         classes={{ root: 'menuBackground' }} // this sometimes works
@@ -79,22 +80,18 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
         </MenuItem>
-        <NestedMenuItem style={{zIndex: "20002"}} label="nestedMenu" parentMenuOpen={!!anchorEl}>
+        <NestedMenuItem
+        label="Nested Menu" 
+        parentMenuOpen={anchorEl}
+        onClick={handleClose}
+        >
           <MenuItem
           button
           onClick={handleClose}
           component={Link}
           to="/items/all"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
-        </MenuItem>
-         <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/items/all"
-        >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+          <ListItemText className={classes.nested} primary="Test Nested Menu" />
         </MenuItem>
         </NestedMenuItem>
         <MenuItem
@@ -106,7 +103,6 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
         </MenuItem>
-
         <ListItemText
           primaryTypographyProps={{ className: classes.headerText }}
           primary="Programs:"
@@ -152,16 +148,6 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         // accurate that we should be showing this to all users?
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
-        </MenuItem>
-        <MenuItem
-          button
-          menuItems={[
-            <MenuItem primaryText="Show Level 2" />,
-            <MenuItem primaryText="Show Level 2" />,
-            <MenuItem primaryText="Show Level 2" />,
-          ]}
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="menu test" />
         </MenuItem>
         {(userType === "compliance" || userType === "super") && (
           <MenuItem
