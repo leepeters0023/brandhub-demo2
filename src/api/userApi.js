@@ -21,6 +21,7 @@ export const logInUser = async (email, password) => {
     })
     .then((res) => {
       setAuthToken(res.data);
+      console.log(res.data);
       response.status = "ok";
     })
     .catch((err) => {
@@ -38,6 +39,7 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(data)
       response.status = "ok";
       response.data = data;
     })
