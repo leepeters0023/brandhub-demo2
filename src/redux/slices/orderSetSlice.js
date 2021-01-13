@@ -148,6 +148,7 @@ const orderSetSlice = createSlice({
       items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = [...items];
       state.orderTotal = ordTotal;
+      state.totalEstItemCost = ordTotal;
     },
     removeGridItem(state, action) {
       const { itemNum } = action.payload;
