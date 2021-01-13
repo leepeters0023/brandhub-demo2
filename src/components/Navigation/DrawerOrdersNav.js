@@ -21,21 +21,33 @@ const DrawerOrdersNav = ({
         <Grid container spacing={1} justify="space-around">
           <Grid item sm={role === "super" ? 2 : 3} xs={12}>
             <List className={classes.navList}>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/orders/open/preorder"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew}} primary="+ Quarterly Pre-Order" />
-              </ListItem>
+              {role !== "read-only" && (
+                <ListItem
+                  button
+                  onClick={handleDrawerClose}
+                  component={Link}
+                  to="/orders/open/preorder"
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItemNew,
+                    }}
+                    primary="+ Quarterly Pre-Order"
+                  />
+                </ListItem>
+              )}
               <ListItem
                 button
                 onClick={handleDrawerClose}
                 component={Link}
                 to="/orders/items/onDemand"
               >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New On-Demand Order" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    className: classes.headerListItemNew,
+                  }}
+                  primary="+ New On-Demand Order"
+                />
               </ListItem>
               <ListItem
                 button
@@ -43,17 +55,25 @@ const DrawerOrdersNav = ({
                 component={Link}
                 to="/orders/items/inStock"
               >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} primary="+ New Inventory Order" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    className: classes.headerListItemNew,
+                  }}
+                  primary="+ New Inventory Order"
+                />
               </ListItem>
-              {role !== "field1" && (
+              {role !== "field1" && role !== "read-only" && (
                 <ListItem
                   button
                   onClick={() => {
-                    handleDrawerClose()
-                    handleCouponModal()
+                    handleDrawerClose();
+                    handleCouponModal();
                   }}
                 >
-                  <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }} 
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItemNew,
+                    }}
                     primary="+ New Coupon"
                   />
                 </ListItem>
@@ -79,7 +99,10 @@ const DrawerOrdersNav = ({
                     : "/orders/open/onDemand"
                 }
               >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="On-Demand" />
+                <ListItemText
+                  primaryTypographyProps={{ className: classes.headerListItem }}
+                  primary="On-Demand"
+                />
               </ListItem>
               <ListItem
                 button
@@ -92,16 +115,21 @@ const DrawerOrdersNav = ({
                     : "/orders/open/inStock"
                 }
               >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In-Stock" />
+                <ListItemText
+                  primaryTypographyProps={{ className: classes.headerListItem }}
+                  primary="In-Stock"
+                />
               </ListItem>
             </List>
           </Grid>
-          {(role === "field2" || role === "super") && (
+          {(role === "field2" || role === "super" || role === "read-only") && (
             <Grid item sm={role === "super" ? 2 : 3} xs={12}>
               <List className={classes.navList}>
                 <ListItem>
                   <ListItemText
-                    primaryTypographyProps={{ className: classes.navHeaderText }}
+                    primaryTypographyProps={{
+                      className: classes.navHeaderText,
+                    }}
                     primary="Order Review:"
                   />
                 </ListItem>
@@ -111,7 +139,12 @@ const DrawerOrdersNav = ({
                   component={Link}
                   to="/rollup"
                 >
-                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Quarterly Rollup" />
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItem,
+                    }}
+                    primary="Quarterly Rollup"
+                  />
                 </ListItem>
                 <ListItem
                   button
@@ -119,82 +152,121 @@ const DrawerOrdersNav = ({
                   component={Link}
                   to="/orders/approvals"
                 >
-                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="On Demand / Inventory Order" />
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItem,
+                    }}
+                    primary="On Demand / Inventory Order"
+                  />
                 </ListItem>
               </List>
             </Grid>
           )}
-          {(role === "purchaser"  || role === "super") && (
+          {(role === "purchaser" || role === "super") && (
             <>
-            <Grid item sm={role === "super" ? 2 : 3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.navHeaderText }}
-                  primary="Purchase Orders:"
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/poRollup"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }}primary="+ New Purchase Order" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/poHistory/current"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/poHistory/all"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
-              </ListItem>
-            </List>
-          </Grid>
-          <Grid item sm={role === "super" ? 2 : 3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.navHeaderText }}
-                  primary="Request for Quotes:"
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/rfqRollup"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItemNew }}primary="+ New RFQ" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/rfqHistory/current"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/purchasing/rfqHistory/all"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
-              </ListItem>
-            </List>
-          </Grid>
-          </>
+              <Grid item sm={role === "super" ? 2 : 3} xs={12}>
+                <List className={classes.navList}>
+                  <ListItem>
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.navHeaderText,
+                      }}
+                      primary="Purchase Orders:"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/poRollup"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItemNew,
+                      }}
+                      primary="+ New Purchase Order"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/poHistory/current"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItem,
+                      }}
+                      primary="Current"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/poHistory/all"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItem,
+                      }}
+                      primary="History"
+                    />
+                  </ListItem>
+                </List>
+              </Grid>
+              <Grid item sm={role === "super" ? 2 : 3} xs={12}>
+                <List className={classes.navList}>
+                  <ListItem>
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.navHeaderText,
+                      }}
+                      primary="Request for Quotes:"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/rfqRollup"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItemNew,
+                      }}
+                      primary="+ New RFQ"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/rfqHistory/current"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItem,
+                      }}
+                      primary="Current"
+                    />
+                  </ListItem>
+                  <ListItem
+                    button
+                    onClick={handleDrawerClose}
+                    component={Link}
+                    to="/purchasing/rfqHistory/all"
+                  >
+                    <ListItemText
+                      primaryTypographyProps={{
+                        className: classes.headerListItem,
+                      }}
+                      primary="History"
+                    />
+                  </ListItem>
+                </List>
+              </Grid>
+            </>
           )}
           {role === "field1" && <Grid item sm={3} xs={12} />}
         </Grid>

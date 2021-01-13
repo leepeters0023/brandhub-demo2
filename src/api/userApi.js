@@ -50,11 +50,53 @@ export const getUser = async () => {
   return response;
 };
 
+export const getLoginURL = async () => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get("/oauth/login_url")
+    .then((res) => {
+      response.status = "ok";
+      response.data = res.data;
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
+export const loginUserWithAuthO = async (code) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/oauth/${code}`)
+    .then((res) => {
+      setAuthToken(res.data);
+      response.data = res.data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      response.status = "error";
+      response.error = err.toString();
+    });
+  return response;
+};
+
 //Removes user information from local storage on logout, and removes authenticated headers from axios
-export const logoutUser = () => {
+export const logoutUser = async () => {
+  const redirectUrl = window.location.origin;
   localStorage.removeItem("brandhub-user");
   localStorage.removeItem("brandhub-role");
   delete axios.defaults.headers.common["Authorization"];
+  await axios
+    .get(
+      `https://dev-bz51h7r4.us.auth0.com/v2/logout?client_id=dF47mW4gMqWUtNBHdt0JcTsNUAOPA1oG&returnTo=${redirectUrl}`
+    )
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err.toString());
+    });
 };
 
 //Set's users info in local storage and updates axios headers on successful login
@@ -65,19 +107,23 @@ const setAuthToken = (token) => {
 };
 
 export const addFavoriteItems = async (idArray) => {
-  const response = { status: "", error: null, data: null }
-  const ids = idArray.map((id => ({ type: "item", id: id})))
+  const response = { status: "", error: null, data: null };
+  const ids = idArray.map((id) => ({ type: "item", id: id }));
   await axios
-    .patch("/api/current-user", {
-      data: {
-        type: "current-user",
-        relationships: {
-          "favorite-items": {
-            data: ids
-          }
-        }
-      }
-    }, writeHeaders)
+    .patch(
+      "/api/current-user",
+      {
+        data: {
+          type: "current-user",
+          relationships: {
+            "favorite-items": {
+              data: ids,
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -89,7 +135,7 @@ export const addFavoriteItems = async (idArray) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const getFilteredUsers = async (name) => {
   const response = { status: "", error: null, data: null };
@@ -128,7 +174,7 @@ export const getNextFilteredUsers = async (link) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const getSingleUser = async (id) => {
   const response = { status: "", error: null, data: null };
@@ -144,7 +190,7 @@ export const getSingleUser = async (id) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const updateUserCreds = async (userData) => {
   const stateIds = userData.states.map((state) => ({type: "state", id: state.id}));
@@ -183,4 +229,4 @@ export const updateUserCreds = async (userData) => {
       response.error = err.toString();
     });
   return response;
-}
+};

@@ -92,6 +92,7 @@ const Login = () => {
         className={classes.loginContainer}
         component="main"
         maxWidth="xs"
+        style={{height: "100vh"}}
       >
         <CssBaseline />
         <div className={classes.paper}>
@@ -102,7 +103,7 @@ const Login = () => {
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               inputProps={{
-                'data-cy': "email"
+                "data-cy": "email",
               }}
               color="secondary"
               variant="outlined"
@@ -126,7 +127,7 @@ const Login = () => {
             />
             <TextField
               inputProps={{
-                'data-cy': "password"
+                "data-cy": "password",
               }}
               color="secondary"
               variant="outlined"
@@ -159,7 +160,7 @@ const Login = () => {
               {!isLoading ? "Sign In" : <CircularProgress />}
             </Button>
             <Grid container justify="center" alignItems="center">
-              <Grid item xs={12} style={{textAlign: "center"}}>
+              <Grid item xs={12} style={{ textAlign: "center" }}>
                 <Link href="#" color="secondary" variant="body2">
                   Forgot password?
                 </Link>
@@ -167,6 +168,14 @@ const Login = () => {
             </Grid>
           </form>
         </div>
+        <br />
+        <br />
+        <iframe
+          title="oauth-login"
+          src="https://dev-bz51h7r4.us.auth0.com/login?state=g6Fo2SBfdE0yUEE3SE1ySVFRYnhEODVTbDRSTkNGUWxOOVVtb6N0aWTZIDNITEhSUmFQSl9NWU9YYWF6RjF0S1dHa1VzMlpwSld2o2NpZNkgbDBLelFUYnhBRnpnczZzbGczbmo4OXJKMVRZYWVzQjM&amp;client=l0KzQTbxAFzgs6slg3nj89rJ1TYaesB3&amp;protocol=oauth2&amp;prompt=consent&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fmanage.auth0.com%2Ftester%2Fcallback%3Fconnection%3Dgoogle-oauth2&amp;scope=openid%20profile"
+          width="300"
+          height="600"
+        ></iframe>
       </Container>
     </div>
   );

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Program = ({ userType, handleFiltersClosed, programId }) => {
+const Program = ({ handleFiltersClosed, programId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [value, updateValue] = useCallback(useState(1));
@@ -64,7 +64,8 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
-  const currentTerritory = useSelector((state) => state.user.currentTerritory)
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -104,9 +105,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
   const handleShareLink = () => {
     dispatch(clearSharedItems());
     const baseUrl = window.location.origin;
-    let urlString = `${baseUrl}/shared/items/${selectedItems.join(
-      "-"
-    )}`;
+    let urlString = `${baseUrl}/shared/items/${selectedItems.join("-")}`;
     dispatch(fetchSharedItemsByIds(selectedItems));
     setCurrentLink(urlString);
     setLinkModalOpen(true);
@@ -116,7 +115,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 
   useEffect(() => {
     dispatch(fetchProgramOrders(programId, userId, currentTerritory));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -169,16 +168,18 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
             <div className={classes.innerConfigDiv}>
               {value !== 1 && (
                 <>
-                  <Button
-                    className={classes.largeButton}
-                    style={{ marginRight: "20px" }}
-                    variant="contained"
-                    color="secondary"
-                    disabled={selectedItems.length === 0}
-                    onClick={handleFavoriteItems}
-                  >
-                    ADD TO FAVORITES
-                  </Button>
+                  {currentUserRole !== "read-only" && (
+                    <Button
+                      className={classes.largeButton}
+                      style={{ marginRight: "20px" }}
+                      variant="contained"
+                      color="secondary"
+                      disabled={selectedItems.length === 0}
+                      onClick={handleFavoriteItems}
+                    >
+                      ADD TO FAVORITES
+                    </Button>
+                  )}
                   <Button
                     className={classes.largeButton}
                     style={{ marginRight: "20px" }}
@@ -191,7 +192,7 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
                   </Button>
                 </>
               )}
-              {userType === "field1" && (
+              {currentUserRole === "field1" && (
                 <Tooltip title="Place Pre-Order">
                   <span>
                     <Button
@@ -271,7 +272,6 @@ const Program = ({ userType, handleFiltersClosed, programId }) => {
 };
 
 Program.propTypes = {
-  userType: PropTypes.string,
   handleFiltersClosed: PropTypes.func.isRequired,
   programId: PropTypes.string,
 };

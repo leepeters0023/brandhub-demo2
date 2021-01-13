@@ -135,6 +135,7 @@ const ItemPreviewModal = (props) => {
   const [currentItem, setCurrentItem] = useState(null);
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   // const handleChangeTab = (_evt, newValue) => {
   //   setValue(newValue);
@@ -157,7 +158,16 @@ const ItemPreviewModal = (props) => {
     } else {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
-  }, [dispatch, setCurrentItem, brand, id, itemType, currentOrderId, type, territoryId]);
+  }, [
+    dispatch,
+    setCurrentItem,
+    brand,
+    id,
+    itemType,
+    currentOrderId,
+    type,
+    territoryId,
+  ]);
 
   return (
     <div className={classes.relativeContainer}>
@@ -203,7 +213,13 @@ const ItemPreviewModal = (props) => {
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
               {!coupon && (
-                <div style={{ display: "flex", height: "Calc(100vh - 300px)", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    height: "Calc(100vh - 300px)",
+                    alignItems: "center",
+                  }}
+                >
                   <div className={classes.scrollDiv}>
                     <Typography variant="body1" color="textSecondary">
                       {`#${itemNumber}`}
@@ -237,30 +253,33 @@ const ItemPreviewModal = (props) => {
                       {`Available to Order: 10/01/2020 - 12/01/2020`}
                     </Typography>
                     <br />
-                    {type && type !== "program" && type !== "catalog" && (
-                      <>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          className={classes.largeButton}
-                          style={{
-                            width: "150px",
-                            marginTop: "10px",
-                          }}
-                          onClick={handleAddItem}
-                        >
-                          ADD TO ORDER
-                        </Button>
-                        <br />
-                        <br />
-                        <Box
-                          bgcolor="primary.main"
-                          className={classes.dividerBox}
-                        />
-                        <br />
-                        <br />
-                      </>
-                    )}
+                    {type &&
+                      type !== "program" &&
+                      type !== "catalog" &&
+                      currentUserRole !== "read-only" && (
+                        <>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.largeButton}
+                            style={{
+                              width: "150px",
+                              marginTop: "10px",
+                            }}
+                            onClick={handleAddItem}
+                          >
+                            ADD TO ORDER
+                          </Button>
+                          <br />
+                          <br />
+                          <Box
+                            bgcolor="primary.main"
+                            className={classes.dividerBox}
+                          />
+                          <br />
+                          <br />
+                        </>
+                      )}
                     <Typography className={classes.headerText}>
                       Specifications:{" "}
                     </Typography>

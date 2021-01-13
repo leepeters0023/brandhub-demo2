@@ -58,14 +58,16 @@ const EnhancedTableHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount - orderLength}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all items" }}
-          />
-        </TableCell>
+        {role !== "read-only" && (
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount - orderLength}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </TableCell>
+        )}
         {currentHeadCells.map((headCell) => (
           <TableCell
             className={classes.headerText}
@@ -191,26 +193,29 @@ const OrderItemTableView = ({
             {!isItemsLoading &&
               currentItems.length > 0 &&
               currentItems.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected =
+                  currentUserRole !== "read-only" ? isSelected(row.id) : null;
                 const labelId = `item-Checkbox-${index}`;
                 return (
                   <TableRow key={row.id} hover>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                        onClick={(event) => event.stopPropagation()}
-                        disabled={
-                          currentOrderItems.filter(
-                            (item) => item.itemNumber === row.itemNumber
-                          ).length !== 0
-                        }
-                        onChange={(event) => {
-                          handleClick(event, row.id);
-                          event.stopPropagation();
-                        }}
-                      />
-                    </TableCell>
+                    {currentUserRole !== "read-only" && (
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isItemSelected}
+                          inputProps={{ "aria-labelledby": labelId }}
+                          onClick={(event) => event.stopPropagation()}
+                          disabled={
+                            currentOrderItems.filter(
+                              (item) => item.itemNumber === row.itemNumber
+                            ).length !== 0
+                          }
+                          onChange={(event) => {
+                            handleClick(event, row.id);
+                            event.stopPropagation();
+                          }}
+                        />
+                      </TableCell>
+                    )}
                     <TableCell align="left">
                       <ImageWrapper
                         id={row.id}

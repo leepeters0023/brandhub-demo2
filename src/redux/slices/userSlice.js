@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFavoriteItems, getUser, logInUser } from "../../api/userApi";
+import { addFavoriteItems, getUser, logInUser, getLoginURL, loginUserWithAuthO } from "../../api/userApi";
 import { mapItems } from "../apiMaps";
 
 /*
@@ -19,6 +19,7 @@ user: {
 */
 
 let initialState = {
+  authIsLoading: false,
   loginIsLoading: false,
   isUpdateLoading: false,
   isLoading: false,
@@ -29,6 +30,10 @@ let initialState = {
   initials: "",
   email: "",
   role: "",
+  redirectLink: null,
+  sessionExpire: null,
+  refreshToken: null,
+  timeOutSet: false,
   territories: [],
   managedUsers: [],
   currentTerritory: "",
@@ -45,6 +50,10 @@ const startUpdate = (state) => {
   state.isUpdateLoading = true;
 };
 
+const startAuth = (state) => {
+  state.authIsLoading = true;
+}
+
 const startLogin = (state) => {
   state.loginIsLoading = true;
 };
@@ -52,12 +61,15 @@ const startLogin = (state) => {
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.error = error;
 };
 
 const logInFailed = (state, action) => {
   const { error } = action.payload;
   state.loginIsLoading = false;
+  state.authIsLoading = false;
   state.logInError = error;
 };
 
@@ -74,7 +86,11 @@ const userSlice = createSlice({
     setIsLoading: startLoading,
     setLoginLoading: startLogin,
     setUpdateLoading: startUpdate,
-    setLoginSuccess(state) {
+    setAuthLoading: startAuth,
+    setLoginSuccess(state, action) {
+      const { refresh, expires } = action.payload;
+      state.refreshToken = refresh;
+      state.sessionExpire = expires;
       state.loginIsLoading = false;
       state.loggedIn = true;
       state.error = null;
@@ -106,6 +122,18 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
+    setRedirectLink(state, action) {
+      const { link } = action.payload;
+      state.redirectLink = link;
+      state.authIsLoading = false;
+    },
+    setExpires (state, action) {
+      const { expires } = action.payload;
+      state.sessionExpire = expires;
+    },
+    setTimeoutSet (state) {
+      state.timeOutSet = !state.timeOutSet
+    },
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
@@ -114,6 +142,10 @@ const userSlice = createSlice({
       state.initials = "";
       state.email = "";
       state.role = "";
+      state.redirectLink = null;
+      state.refreshToken = null;
+      state.sessionExpire = null;
+      state.timeOutSet = false;
       state.territories = [];
       state.managedUsers = [];
       state.favoriteItems = [];
@@ -131,9 +163,13 @@ export const {
   setIsLoading,
   setLoginLoading,
   setUpdateLoading,
+  setAuthLoading,
   getUserSuccess,
   setLoginSuccess,
   updateFavoriteItems,
+  setRedirectLink,
+  setExpires,
+  setTimeoutSet,
   updateCurrentTerritory,
   removeUser,
   setLogInFailure,
@@ -210,5 +246,34 @@ export const addToFavoriteItems = (idArray) => async (dispatch) => {
     dispatch(updateFavoriteItems({ items: items }));
   } catch (err) {
     dispatch(setUpdateFailure({ error: err.toString() }));
+  }
+};
+
+export const loginWithCode = (code) => async (dispatch) => {
+  try {
+    dispatch(setLoginLoading());
+    const res = await loginUserWithAuthO(code);
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setLoginSuccess({refresh: res.data["refresh_token"], expires: res.data["expires_in"]}));
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
+  }
+};
+
+export const getRedirect = () => async (dispatch) => {
+  try {
+    dispatch(setAuthLoading());
+    console.log("getting url")
+    const res = await getLoginURL()
+    if (res.error) {
+      throw res.error;
+    }
+    console.log(res);
+    dispatch(setRedirectLink({link: res.data["redirect_url"]}));
+  } catch (err) {
+    dispatch(setLogInFailure({ error: err.toString() }));
   }
 };
