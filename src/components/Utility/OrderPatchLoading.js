@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, { useState, useEffect, useCallback } from "react";
 
 import { useSelector } from "react-redux";
 
@@ -11,17 +11,19 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
   alertColor: {
     backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.secondary.dark
-  }
-}))
+    color: theme.palette.secondary.dark,
+  },
+}));
 
-const FadeTransition = (props) => <Fade {...props} timeout={{enter: 250, exit: 1000}} />
+const FadeTransition = (props) => (
+  <Fade {...props} timeout={{ enter: 250, exit: 1000 }} />
+);
 
-const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />;
 
 const OrderPatchLoading = () => {
   const classes = useStyles();
-  const [open, setOpen] = useCallback(useState(false))
+  const [open, setOpen] = useCallback(useState(false));
 
   const isLoading = useSelector((state) => state.patchOrder.isLoading);
   const error = useSelector((state) => state.patchOrder.error);
@@ -29,37 +31,43 @@ const OrderPatchLoading = () => {
   useEffect(() => {
     let timeOut;
     if (isLoading) {
-      setOpen(true)
+      setOpen(true);
     }
     if (!isLoading) {
-      timeOut = setTimeout(()=>{setOpen(false)}, 1000)
+      timeOut = setTimeout(() => {
+        setOpen(false);
+      }, 1000);
     }
-    return ()=>{clearTimeout(timeOut)}
-  }, [setOpen, isLoading])
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [setOpen, isLoading]);
 
   return (
     <>
       <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "left"}}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={open}
         TransitionComponent={FadeTransition}
+        style={{ zIndex: "15000", marginLeft: "120px" }}
       >
         {isLoading ? (
-        <Alert severity="info" classes={{filledInfo: classes.alertColor}}>
-          ...Saving...
-        </Alert>
+          <Alert severity="info" classes={{ filledInfo: classes.alertColor }}>
+            ...Saving...
+          </Alert>
         ) : !error ? (
-          <Alert severity="success" classes={{filledSuccess: classes.alertColor}}>
+          <Alert
+            severity="success"
+            classes={{ filledSuccess: classes.alertColor }}
+          >
             Work is Saved!
           </Alert>
         ) : (
-          <Alert severity="error">
-            Something went wrong...
-          </Alert>
+          <Alert severity="error">Something went wrong...</Alert>
         )}
       </Snackbar>
     </>
-  )
-}
+  );
+};
 
-export default OrderPatchLoading
+export default OrderPatchLoading;

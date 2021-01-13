@@ -56,7 +56,7 @@ const AddItemConfirmation = ({ item, type }) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={open}
         TransitionComponent={FadeTransition}
-        style={{zIndex: "15000"}}
+        style={{ zIndex: "15000", marginLeft: "120px" }}
       >
         {isLoading ? (
           <Alert severity="info" classes={{ filledInfo: classes.alertColor }}>
