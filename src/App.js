@@ -249,7 +249,7 @@ const App = () => {
   ]);
 
   if (userError) {
-    handleLogout();
+    navigate("/whoops")
   }
 
   if (!loggedIn && !currentUser) {
@@ -264,6 +264,7 @@ const App = () => {
           <Landing path="/" />
           <AuthOLanding path="/login" />
           <AuthOLanding path="/login/:code" />
+          <FourOhFour default path="/whoops" />
         </Router>
       </MuiThemeProvider>
     );
@@ -300,6 +301,7 @@ const App = () => {
             handleLogout={handleLogout}
             path="/newUser"
           />
+          <FourOhFour default path="/whoops" />
         </Router>
       </MuiThemeProvider>
     );
