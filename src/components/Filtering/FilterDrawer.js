@@ -41,13 +41,9 @@ import FiltersCompliance from "./FiltersCompliance";
 import FiltersBudget from "./FiltersBudget";
 
 import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
-
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -434,14 +430,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
             marginTop: "84px",
           }}
         >
-          <Tooltip title="Close Filters">
-            <IconButton
-              onClick={handleDrawerClose}
-              style={{ position: "absolute", top: "10px", right: "0" }}
-            >
-              <ChevronLeftIcon color="inherit" />
-            </IconButton>
-          </Tooltip>
           <Typography
             className={classes.titleText}
             style={{ fontWeight: "500" }}

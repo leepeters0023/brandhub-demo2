@@ -18,7 +18,6 @@ const headCells = [
   { id: "id", disablePadding: false, label: "User Id", sort: true },
   { id: "name", disablePadding: false, label: "Name", sort: true },
   { id: "email", disablePadding: false, label: "Email", sort: false },
-  { id: "phone", disablePadding: false, label: "Phone", sort: false },
   { id: "role", disablePadding: false, label: "Role", sort: false },
   {
     id: "territories",
@@ -127,14 +126,12 @@ const UserTable = ({
   return (
     <>
       <TableContainer
-        className={classes.tableContainer}
-        style={{ maxHeight: "Calc(50vh - 275px)" }}
+        style={{ maxHeight: "Calc(100vh - 275px)" }}
         ref={scrollRef}
       >
         <Table
           stickyHeader
           className={classes.table}
-          style={{ minWidth: "1325px" }}
         >
           <EnhancedTableHead
             classes={classes}
@@ -166,7 +163,6 @@ const UserTable = ({
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left">{row.phone}</TableCell>
                   <TableCell align="left">{row.role}</TableCell>
                   <TableCell align="left">{row.territories}</TableCell>
                 </TableRow>

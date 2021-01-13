@@ -58,14 +58,16 @@ const UserRoleSelect = ({role, setRole}) => {
           </Button>
           <Button
             className={
-              role === "supplier" ? classes.largeButton : classes.selectedButton
+              role === "purchaser"
+                ? classes.largeButton
+                : classes.selectedButton
             }
-            variant={role === "supplier" ? "contained" : "outlined"}
+            variant={role === "purchaser" ? "contained" : "outlined"}
             onClick={() => {
-              setRole("supplier");
+              setRole("purchaser");
             }}
           >
-            SUPPLIER
+            PURCHASER
           </Button>
           <Button
             className={
@@ -77,6 +79,19 @@ const UserRoleSelect = ({role, setRole}) => {
             }}
           >
             SUPER-USER
+          </Button>
+          <Button
+            className={
+              role === "read-only"
+                ? classes.largeButton
+                : classes.selectedButton
+            }
+            variant={role === "read-only" ? "contained" : "outlined"}
+            onClick={() => {
+              setRole("read-only");
+            }}
+          >
+            VIEW ONLY
           </Button>
         </ButtonGroup>
     </>

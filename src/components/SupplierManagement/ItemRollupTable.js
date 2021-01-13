@@ -27,6 +27,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import WarningIcon from "@material-ui/icons/Warning";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
@@ -327,7 +328,6 @@ const ItemRollupTable = ({
                         inputProps={{ "aria-labelledby": labelId }}
                         onClick={(event) => event.stopPropagation()}
                         disabled={
-                          type === "rfq" &&
                           selected.length >= 1 &&
                           selected[0] !== `${row.id}-${row.itemId}`
                         }
@@ -337,20 +337,37 @@ const ItemRollupTable = ({
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.itemNumber}</TableCell>
+                    <TableCell align="left">
+                      {row.isRush ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <Tooltip title="Order On Rush Status">
+                            <WarningIcon
+                              fontSize="small"
+                              style={{ margin: "0 5px 0 0" }}
+                            />
+                          </Tooltip>
+                          {row.itemNumber}
+                        </div>
+                      ) : (
+                        row.itemNumber
+                      )}
+                    </TableCell>
                     {row.territory.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.territory.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                      <Tooltip
+                        placement="left"
+                        title={`${row.territory.join(", ")}`}
                       >
-                        {row.territory[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
-                    <TableCell align="left">{row.territory[0]}</TableCell>
-                  )}
+                        <TableCell
+                          align="left"
+                          style={{ display: "flex", alignItems: "flex-end" }}
+                        >
+                          {row.territory[0]}
+                          <MoreHorizIcon fontSize="small" color="inherit" />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                      <TableCell align="left">{row.territory[0]}</TableCell>
+                    )}
                     <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>

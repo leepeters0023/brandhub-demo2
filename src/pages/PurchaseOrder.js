@@ -209,7 +209,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               state: param.state,
               zip: param.zip,
               itemNumber: currentParamItem.itemNumber,
-              label: "* TODO *",
+              label: currentParamItem.shippingLabel,
               totalItems: currentParamItem.totalItems,
               shipStatus: currentParamItem.shipStatus,
               carrier:
@@ -281,9 +281,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   <IconButton
                     component={Link}
                     to="/purchasing/poRollup"
-                    onClick={() => {
-                      dispatch(setRetain({ value: true }));
-                    }}
                   >
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
