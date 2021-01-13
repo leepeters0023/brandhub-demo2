@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "flex-end",
-    zIndex: "1500",
+    zIndex: "1300",
   },
   title: {
     flexGrow: 1,
