@@ -26,19 +26,9 @@ const useStyles = makeStyles((theme) => ({
 const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [childAnchorEl, setChildAnchorEl] = useState(null);
-  const [menuPosition, setMenuPosition] = useState(null)
-
+  
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
-    (menuPosition) {
-      return
-    }
-    evt.preventDefault();
-    // setMenuPosition({
-    //   top: evt.pageY,
-    //   left: evt.pageX
-    // })
   };
 
   const handleClose = () => {
@@ -46,13 +36,6 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
     
   };
 
-  const handleChildOpen = (evt) => {
-    setChildAnchorEl(evt.target);
-  }
-
-  const handleChildClose = () => {
-    setChildAnchorEl(null);
-  }
 
   return (
     <>
@@ -96,8 +79,16 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
         </MenuItem>
-        <NestedMenuItem label="nestedMenu" parentMenuOpen={!!open}>
+        <NestedMenuItem style={{zIndex: "20002"}} label="nestedMenu" parentMenuOpen={!!anchorEl}>
           <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+        </MenuItem>
+         <MenuItem
           button
           onClick={handleClose}
           component={Link}
