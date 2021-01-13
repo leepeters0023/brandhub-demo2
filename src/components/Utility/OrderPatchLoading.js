@@ -49,7 +49,7 @@ const OrderPatchLoading = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={open}
         TransitionComponent={FadeTransition}
-        style={{ zIndex: "15000", marginLeft: "120px" }}
+        style={{ zIndex: "15000", marginLeft: "100px", marginBottom: "30px" }}
       >
         {isLoading ? (
           <Alert severity="info" classes={{ filledInfo: classes.alertColor }}>
