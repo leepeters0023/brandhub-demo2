@@ -56,11 +56,12 @@ export const fetchOrderSetById = async (id) => {
 export const fetchAllPreOrders = async (id, terrId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}&filter[is-pre-order-active]=true`)
+    .get(
+      `/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}&filter[is-pre-order-active]=true`
+    )
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
-      console.log(data);
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";
@@ -333,8 +334,8 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
               data: {
                 type: "address",
                 id: addId,
-              }
-            }
+              },
+            },
           },
         },
       },
@@ -382,6 +383,36 @@ export const restartOrderSet = async (id) => {
   await axios
     .post(`/api/order-sets/${id}/restart`, null, writeHeaders)
     .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.toString());
+      response.status = "error";
+      response.err = err.toString();
+    });
+  return response;
+};
+
+//sets work complete boolean on order set for ui display
+export const setWorkComplete = async (id, status) => {
+  console.log(status);
+  const response = { status: "", error: null };
+  await axios
+    .patch(
+      `/api/order-sets/${id}`,
+      {
+        data: {
+          type: "order-set",
+          id: id,
+          attributes: {
+            "is-work-complete": status,
+          },
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {
@@ -492,9 +523,9 @@ export const createOrderSet = async (type, territoryId) => {
               data: {
                 type: "territory",
                 id: territoryId,
-              }
-            }
-          }
+              },
+            },
+          },
         },
       },
       writeHeaders
