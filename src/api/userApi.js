@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import axios from "axios";
 import Jsona from "jsona";
 
@@ -39,7 +40,7 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
+      console.log(data);
       response.status = "ok";
       response.data = data;
     })
@@ -87,16 +88,9 @@ export const logoutUser = async () => {
   localStorage.removeItem("brandhub-user");
   localStorage.removeItem("brandhub-role");
   delete axios.defaults.headers.common["Authorization"];
-  await axios
-    .get(
-      `https://dev-bz51h7r4.us.auth0.com/v2/logout?client_id=dF47mW4gMqWUtNBHdt0JcTsNUAOPA1oG&returnTo=${redirectUrl}`
-    )
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err.toString());
-    });
+  navigate(
+    `https://dev-bz51h7r4.us.auth0.com/v2/logout?client_id=dF47mW4gMqWUtNBHdt0JcTsNUAOPA1oG&returnTo=${redirectUrl}`
+  );
 };
 
 //Set's users info in local storage and updates axios headers on successful login
@@ -139,11 +133,12 @@ export const addFavoriteItems = async (idArray) => {
 
 export const getFilteredUsers = async (name) => {
   const response = { status: "", error: null, data: null };
-  const querySting = name.length > 0 ? `/api/users?filter[name]=${name}` : "/api/users"
+  const querySting =
+    name.length > 0 ? `/api/users?filter[name]=${name}` : "/api/users";
   await axios
     .get(querySting)
     .then((res) => {
-      let dataObject = { users: null, nextLink: null }
+      let dataObject = { users: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.users = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -155,14 +150,14 @@ export const getFilteredUsers = async (name) => {
       response.error = err.toString();
     });
   return response;
-}
+};
 
 export const getNextFilteredUsers = async (link) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(link)
     .then((res) => {
-      let dataObject = { users: null, nextLink: null }
+      let dataObject = { users: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.users = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -193,31 +188,41 @@ export const getSingleUser = async (id) => {
 };
 
 export const updateUserCreds = async (userData) => {
-  const stateIds = userData.states.map((state) => ({type: "state", id: state.id}));
-  const territoryIds = userData.territories.map((terr) => ({type: "territory", id: terr.id}));
+  const stateIds = userData.states.map((state) => ({
+    type: "state",
+    id: state.id,
+  }));
+  const territoryIds = userData.territories.map((terr) => ({
+    type: "territory",
+    id: terr.id,
+  }));
   const response = { status: "", error: null, data: null };
   await axios
-    .patch(`/api/users/${userData.id}`, {
-      data: {
-        type: "user",
-        id: userData.id,
-        attributes: {
-          role: userData.role,
-          name: userData.name,
-          email: userData.email,
-          "is-on-premise": userData.isOnPremise,
-          "is-retail": userData.isRetail,
-        },
-        relationships: {
-          states: {
-            data: stateIds
+    .patch(
+      `/api/users/${userData.id}`,
+      {
+        data: {
+          type: "user",
+          id: userData.id,
+          attributes: {
+            role: userData.role,
+            name: userData.name,
+            email: userData.email,
+            "is-on-premise": userData.isOnPremise,
+            "is-retail": userData.isRetail,
           },
-          territories: {
-            data: territoryIds
-          }
-        }
-      }
-    }, writeHeaders)
+          relationships: {
+            states: {
+              data: stateIds,
+            },
+            territories: {
+              data: territoryIds,
+            },
+          },
+        },
+      },
+      writeHeaders
+    )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
