@@ -10,6 +10,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 
+import NestedMenuItem from "material-ui-nested-menu-item";
+
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   expandMoreIcon: {
@@ -24,14 +26,33 @@ const useStyles = makeStyles((theme) => ({
 const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [childAnchorEl, setChildAnchorEl] = useState(null);
+  const [menuPosition, setMenuPosition] = useState(null)
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
+    (menuPosition) {
+      return
+    }
+    evt.preventDefault();
+    // setMenuPosition({
+    //   top: evt.pageY,
+    //   left: evt.pageX
+    // })
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    
   };
+
+  const handleChildOpen = (evt) => {
+    setChildAnchorEl(evt.target);
+  }
+
+  const handleChildClose = () => {
+    setChildAnchorEl(null);
+  }
 
   return (
     <>
@@ -75,6 +96,16 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
         </MenuItem>
+        <NestedMenuItem label="nestedMenu" parentMenuOpen={!!open}>
+          <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+        </MenuItem>
+        </NestedMenuItem>
         <MenuItem
           button
           onClick={handleClose}
@@ -130,6 +161,16 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
         // accurate that we should be showing this to all users?
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
+        </MenuItem>
+        <MenuItem
+          button
+          menuItems={[
+            <MenuItem primaryText="Show Level 2" />,
+            <MenuItem primaryText="Show Level 2" />,
+            <MenuItem primaryText="Show Level 2" />,
+          ]}
+          >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="menu test" />
         </MenuItem>
         {(userType === "compliance" || userType === "super") && (
           <MenuItem
