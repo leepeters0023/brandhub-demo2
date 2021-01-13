@@ -44,7 +44,7 @@ const Landing = () => {
               </Typography>
               <br />
               <br />
-              <Button component={Link} to="/oauth">
+              <Button component={Link} to="/login">
                 LOG IN
               </Button>
             </Grid>
