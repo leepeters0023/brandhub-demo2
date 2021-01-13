@@ -119,17 +119,13 @@ export default {
       marginRight: "50px",
     },
     headerText: {
-      fontWeight: "600",
-      fontSize: "1rem",
+      fontWeight: "400",
+      fontSize: "14px",
       color: "#4C4C4C",
-    },
-    navHeaderText: {
-      fontWeight: "600",
-      fontSize: "1rem",
-      color: "white",
+      marginLeft: "10px"
     },
     headerListItem: {
-      color: "white",
+      color: "black",
       "&:hover": {
         textDecoration: "underline"
       }

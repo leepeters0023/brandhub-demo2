@@ -1,132 +1,166 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from "@material-ui/core/IconButton";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
 
-const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
+import NestedMenuItem from "material-ui-nested-menu-item";
+
+const useStyles = makeStyles((theme) => ({
+  ...theme.global,
+  expandMoreIcon: {
+    marginRight: "20px",
+    color: "white",
+    "&&:hover": {
+      cursor: "pointer",
+    },
+  },
+ 
+}));
+
+const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElChild, setAnchorElChild] = useState(null);
+  
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+    evt.preventDefault();
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Grid container spacing={2} justify="space-around">
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.navHeaderText }}
-              primary="Item Catalog:"
-            />
-          </ListItem>
-          <ListItem
+    <>
+      <IconButton
+        onMouseEnter={(evt) => {
+          handleOpen(evt);
+        }}
+      >
+        <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
+      </IconButton>
+      <Menu
+        disableScrollLock
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{
+          marginTop: "10px"
+          //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding
+        }}
+        classes={{ root: 'menuBackground' }} // this sometimes works
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <ListItemText
+          primaryTypographyProps={{ className: classes.headerText }}
+          primary="Item Catalog:"
+        />
+        <Divider/>
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+        </MenuItem>
+        <NestedMenuItem
+        label="Nested Menu" 
+        parentMenuOpen={anchorEl}
+        onClick={handleClose}
+        >
+          <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        >
+          <ListItemText className={classes.nested} primary="Test Nested Menu" />
+        </MenuItem>
+        </NestedMenuItem>
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        //to="/items/archive"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
+        </MenuItem>
+        <ListItemText
+          primaryTypographyProps={{ className: classes.headerText }}
+          primary="Programs:"
+        />
+        <Divider key="divider1" />
+        {(userType === "field2" || userType === "super") && (
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
-            to="/items/all"
+            to="/programs/new"
           >
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerListItem }}
-              primary="Current"
-            />
-          </ListItem>
-          <ListItem
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
+          </MenuItem>
+        )}
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/programs"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
+        </MenuItem>
+        <ListItemText
+          primaryTypographyProps={{ className: classes.headerText }}
+          primary="Compliance:"
+        />
+        <Divider key="divider1" />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/compliance/items"
+        // accurate that we should be showing this to all users?
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
+        </MenuItem>
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/compliance/rules"
+        // accurate that we should be showing this to all users?
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
+        </MenuItem>
+        {(userType === "compliance" || userType === "super") && (
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
-            to="/items/all"
-            //to="/items/archive"
+            to="/compliance/contacts"
           >
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerListItem }}
-              primary="Archive"
-            />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.navHeaderText }}
-              primary="Programs:"
-            />
-          </ListItem>
-          {(userType === "field2" || userType === "super") && (
-            <ListItem
-              button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/programs/new"
-            >
-              <ListItemText
-                primaryTypographyProps={{ className: classes.headerListItem }}
-                primary="Create Ad Hoc Program"
-              />
-            </ListItem>
-          )}
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/programs"
-          >
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerListItem }}
-              primary="Pre-Order Programs"
-            />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.navHeaderText }}
-              primary="Compliance:"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/items"
-            // accurate that we should be showing this to all users?
-          >
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerListItem }}
-              primary="Item Rules"
-            />
-          </ListItem>
-          <ListItem
-            button
-            onClick={handleDrawerClose}
-            component={Link}
-            to="/compliance/rules"
-            // accurate that we should be showing this to all users?
-          >
-            <ListItemText
-              primaryTypographyProps={{ className: classes.headerListItem }}
-              primary="General Rules"
-            />
-          </ListItem>
-          {(userType === "compliance" ||
-            userType === "super" ||
-            userType === "read-only") && (
-            <ListItem
-              button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/compliance/contacts"
-            >
-              <ListItemText
-                primaryTypographyProps={{ className: classes.headerListItem }}
-                primary="Contacts"
-              />
-            </ListItem>
-          )}
-        </List>
-      </Grid>
-    </Grid>
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
+          </MenuItem>
+        )}
+      </Menu>
+    </>
   );
 };
 
