@@ -19,7 +19,7 @@ export const fetchOrdersByProgram = async (program, userId, terrId) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(
-      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}&filter[territory-ids]=${terrId}`
+      `/api/order-sets?filter[type]=pre-order&filter[program_ids]=${program}&filter[user-ids]=${userId}&filter[territory-ids]=${terrId}&filter[is-pre-order-active]=true`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -56,10 +56,11 @@ export const fetchOrderSetById = async (id) => {
 export const fetchAllPreOrders = async (id, terrId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}`)
+    .get(`/api/order-sets?filter[type]=pre-order&filter[user-ids]=${id}&filter[territory-ids]=${terrId}&filter[is-pre-order-active]=true`)
     .then((res) => {
       let dataObject = { preOrders: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
+      console.log(data);
       dataObject.preOrders = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
       response.status = "ok";

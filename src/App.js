@@ -170,7 +170,7 @@ const App = () => {
 
     if (currentUser && currentRole.length > 0) {
       if (currentRole !== "supplier") {
-        if (currentRole === "read-only" && territories.length > 0) {
+        if (territories.length > 0) {
           dispatch(fetchInitialPrograms(currentTerritory.id));
           if (currentRole !== "read-only") {
             dispatch(
@@ -344,7 +344,8 @@ const App = () => {
           {currentRole === "read-only" && territories.length === 0 && (
             <Redirect noThrow to="/newUser" />
           )}
-          {window.location.pathname.includes("/login") && (
+          {(window.location.pathname === "/" ||
+            window.location.pathname.includes("/login")) && (
             <Redirect noThrow to="/dashboard" />
           )}
 
