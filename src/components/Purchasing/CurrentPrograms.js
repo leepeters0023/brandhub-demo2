@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
-
 import { formatMoney } from "../../utility/utilityFunctions";
+
+import { useSelector } from "react-redux";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 
@@ -57,8 +58,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
+const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
   const classes = useStyles();
+
+  const currentUserRole = useSelector((state) => state.user.role);
 
   return (
     <>
@@ -113,25 +116,28 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
                     )}`}
                   </Typography>
                 </div>
-                {userType !== "compliance" && (
-                  <div className={classes.itemControl}>
-                    <Tooltip title="Place Pre-Order">
-                      <span>
-                        <Button
-                          component={Link}
-                          to={`/orders/open/preorder#${prog.id}`}
-                          className={classes.largeButton}
-                          variant="contained"
-                          color="secondary"
-                          style={{marginBottom: "10px"}}
-                          startIcon={<ExitToAppIcon />}
-                        >
-                          ORDER
-                        </Button>
-                      </span>
-                    </Tooltip>
-                  </div>
-                )}
+                {currentUserRole !== "compliance" &&
+                  currentUserRole !== "read-only" && (
+                    <div className={classes.itemControl}>
+                      <Tooltip title="Place Pre-Order">
+                        <span>
+                          <Button
+                            component={Link}
+                            to={`/orders/open/preorder#${prog.id}`}
+                            className={classes.largeButton}
+                            variant="contained"
+                            color="secondary"
+                            style={{ marginBottom: "10px" }}
+                            startIcon={<ExitToAppIcon />}
+                          >
+                            ORDER
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    </div>
+                  )}
+                {(currentUserRole === "compliance" ||
+                  currentUserRole === "read-only") && <div></div>}
               </Paper>
             </Grid>
           ))}
@@ -142,7 +148,6 @@ const CurrentPrograms = ({ userType, currentPrograms, filtersOpen }) => {
 };
 
 CurrentPrograms.propTypes = {
-  userType: PropTypes.string.isRequired,
   currentPrograms: PropTypes.array.isRequired,
   filtersOpen: PropTypes.bool.isRequired,
 };

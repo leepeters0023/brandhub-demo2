@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
-
 import { formatMoney } from "../../utility/utilityFunctions";
+
+import { useSelector } from "react-redux";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -46,7 +47,12 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "orderDate", disablePadding: false, label: "Order Submitted", sort: true },
+  {
+    id: "orderDate",
+    disablePadding: false,
+    label: "Order Submitted",
+    sort: true,
+  },
   { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
@@ -141,6 +147,8 @@ const RollupOverviewByItemTable = ({
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
 
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -161,7 +169,9 @@ const RollupOverviewByItemTable = ({
   };
 
   const handleRowClick = (id, userName, program) => {
-    navigate(`/rollup/detail/${id}#${userName} - ${program}`);
+    if (currentUserRole !== "read-only") {
+      navigate(`/rollup/detail/${id}#${userName} - ${program}`);
+    }
   };
 
   return (
@@ -199,7 +209,11 @@ const RollupOverviewByItemTable = ({
                 <TableRow
                   key={index}
                   hover
-                  className={classes.orderHistoryRow}
+                  className={
+                    currentUserRole !== "read-only"
+                      ? classes.orderHistoryRow
+                      : ""
+                  }
                   onClick={() => {
                     handleRowClick(row.orderSetId, row.user, row.program);
                   }}
@@ -230,13 +244,14 @@ const RollupOverviewByItemTable = ({
                       title={`${row.state.split(", ").splice(1).join(", ")}`}
                     >
                       <TableCell align="left">
-                        <Typography variant="body2">{`${row.state.split(", ")[0]
-                          }...`}</Typography>
+                        <Typography variant="body2">{`${
+                          row.state.split(", ")[0]
+                        }...`}</Typography>
                       </TableCell>
                     </Tooltip>
                   ) : (
-                      <TableCell align="left">{row.state}</TableCell>
-                    )}
+                    <TableCell align="left">{row.state}</TableCell>
+                  )}
                   <TableCell align="left">{row.packSize}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">

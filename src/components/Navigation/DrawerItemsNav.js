@@ -24,7 +24,10 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/items/all"
           >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerListItem }}
+              primary="Current"
+            />
           </ListItem>
           <ListItem
             button
@@ -33,7 +36,10 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             to="/items/all"
             //to="/items/archive"
           >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerListItem }}
+              primary="Archive"
+            />
           </ListItem>
         </List>
       </Grid>
@@ -52,7 +58,10 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
               component={Link}
               to="/programs/new"
             >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
+              <ListItemText
+                primaryTypographyProps={{ className: classes.headerListItem }}
+                primary="Create Ad Hoc Program"
+              />
             </ListItem>
           )}
           <ListItem
@@ -61,47 +70,61 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             component={Link}
             to="/programs"
           >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerListItem }}
+              primary="Pre-Order Programs"
+            />
           </ListItem>
         </List>
       </Grid>
       <Grid item sm={3} xs={12}>
-          <List className={classes.navList}>
-            <ListItem>
-              <ListItemText
-                primaryTypographyProps={{ className: classes.navHeaderText }}
-                primary="Compliance:"
-              />
-            </ListItem>
+        <List className={classes.navList}>
+          <ListItem>
+            <ListItemText
+              primaryTypographyProps={{ className: classes.navHeaderText }}
+              primary="Compliance:"
+            />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/items"
+            // accurate that we should be showing this to all users?
+          >
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerListItem }}
+              primary="Item Rules"
+            />
+          </ListItem>
+          <ListItem
+            button
+            onClick={handleDrawerClose}
+            component={Link}
+            to="/compliance/rules"
+            // accurate that we should be showing this to all users?
+          >
+            <ListItemText
+              primaryTypographyProps={{ className: classes.headerListItem }}
+              primary="General Rules"
+            />
+          </ListItem>
+          {(userType === "compliance" ||
+            userType === "super" ||
+            userType === "read-only") && (
             <ListItem
-              button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/compliance/items"
-              // accurate that we should be showing this to all users?
-            >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
-            </ListItem>
-            <ListItem
-              button
-              onClick={handleDrawerClose}
-              component={Link}
-              to="/compliance/rules"
-             // accurate that we should be showing this to all users?
-            >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
-            </ListItem>
-            {(userType === "compliance" || userType === "super") && (
-              <ListItem
               button
               onClick={handleDrawerClose}
               component={Link}
               to="/compliance/contacts"
             >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
+              <ListItemText
+                primaryTypographyProps={{ className: classes.headerListItem }}
+                primary="Contacts"
+              />
             </ListItem>
-            )}
-          </List>
+          )}
+        </List>
       </Grid>
     </Grid>
   );

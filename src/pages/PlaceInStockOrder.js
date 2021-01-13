@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
+const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.items.nextLink);
@@ -159,33 +159,38 @@ const PlaceInStockOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
           </Typography>
 
           <div className={classes.innerConfigDiv}>
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={selectedItems.length === 0}
-              onClick={handleAddToOrder}
-              style={{ marginRight: "20px" }}
-            >
-              ADD TO ORDER
-            </Button>
-            <Button
-              component={Link}
-              disabled={
-                isUpdateLoading || currentOrder.inStockOrderItems.length === 0
-              }
-              to={
-                currentOrder.inStockOrderItems.length > 0
-                  ? `/orders/open/${currentOrder.inStockOrderNumber}`
-                  : "/orders/open/inStock"
-              }
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              style={{ marginRight: "20px" }}
-            >
-              VIEW ORDER
-            </Button>
+            {currentUserRole !== "read-only" && (
+              <>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={selectedItems.length === 0}
+                  onClick={handleAddToOrder}
+                  style={{ marginRight: "20px" }}
+                >
+                  ADD TO ORDER
+                </Button>
+                <Button
+                  component={Link}
+                  disabled={
+                    isUpdateLoading ||
+                    currentOrder.inStockOrderItems.length === 0
+                  }
+                  to={
+                    currentOrder.inStockOrderItems.length > 0
+                      ? `/orders/open/${currentOrder.inStockOrderNumber}`
+                      : "/orders/open/inStock"
+                  }
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  style={{ marginRight: "20px" }}
+                >
+                  VIEW ORDER
+                </Button>
+              </>
+            )}
             <Tooltip title="View List">
               <IconButton
                 onClick={() => {

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -12,6 +13,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Help = ({ handleFiltersClosed }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

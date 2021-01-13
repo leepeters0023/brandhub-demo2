@@ -113,36 +113,28 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order Approvals</Typography>
-          <div
-            style={{
-              display: "flex",
-              width: "250px",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button
-              className={classes.largeButton}
-              variant="contained"
-              color="secondary"
-              disabled={selected.length === 0}
-              style={{ marginRight: "20px" }}
-              onClick={handleBulkApproval}
+          {currentUserRole !== "read-only" ? (
+            <div
+              style={{
+                display: "flex",
+                width: "250px",
+                justifyContent: "flex-end",
+              }}
             >
-              APPROVE
-            </Button>
-            {/* <Tooltip title="Print Order History">
-              <IconButton>
-                <PrintIcon color="secondary" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Export CSV">
-              <CSVLink data={currentOrders} headers={csvHeaders}>
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              </CSVLink>
-            </Tooltip> */}
-          </div>
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                disabled={selected.length === 0}
+                style={{ marginRight: "20px" }}
+                onClick={handleBulkApproval}
+              >
+                APPROVE
+              </Button>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div
           className={classes.showHideFilters}

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
+const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [programFilters, setProgramFilters] = useCallback(useState([]));
@@ -46,6 +47,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isPrograms = useSelector((state) => state.programs.isPrograms);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -57,12 +59,12 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
     if (
       activePrograms.length === 0 &&
       !isPrograms &&
-      userType &&
+      currentUserRole &&
       currentTerritory
     ) {
       dispatch(fetchInitialPrograms(currentTerritory));
     }
-  }, [userType, dispatch, activePrograms, currentTerritory, isPrograms]);
+  }, [currentUserRole, dispatch, activePrograms, currentTerritory, isPrograms]);
 
   useInitialFilters(
     "program",
@@ -70,7 +72,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
     retainFilters,
     dispatch,
     handleFilterDrawer,
-    userType
+    currentUserRole
   );
 
   useEffect(() => {
@@ -97,7 +99,7 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>
 
-          {userType !== "compliance" && (
+          {currentUserRole !== "compliance" && currentUserRole !== "read-only" && (
             <div className={classes.configButtons}>
               <div className={classes.innerConfigDiv}>
                 <Button
@@ -135,15 +137,20 @@ const Programs = ({ userType, handleFilterDrawer, filtersOpen }) => {
         {isLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-            <CurrentPrograms
-              userType={userType}
-              currentPrograms={currentPrograms}
-              filtersOpen={filtersOpen}
-            />
-          )}
+          <CurrentPrograms
+            currentUserRole={currentUserRole}
+            currentPrograms={currentPrograms}
+            filtersOpen={filtersOpen}
+          />
+        )}
       </Container>
     </>
   );
+};
+
+Programs.propTypes = {
+  handleFilterDrawer: PropTypes.func.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default Programs;
