@@ -45,7 +45,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       info:
         "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Q1_Ordering_tg2ryl.png",
     },
     {
       titleText: "On-Demand Order",
@@ -56,7 +56,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       info:
         "Place orders for items that will need to be produced for your order",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_On_Demand_Order_zoymv2.png",
     },
     {
       titleText: "In-Stock Order",
@@ -67,7 +67,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       info:
         "Place orders for items that are currently available in our inventory",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/in-stock-order_e2ljoa.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_In_Stock_Order_skvxpj.png",
     },
     {
       titleText: "Order History",
@@ -78,7 +78,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       info:
         "View order history grouped by item or order & get tracking information",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Order_History_jvvgmh.png",
     },
     {
       titleText: "Item Catalog: Current",
@@ -88,7 +88,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/items/all",
       info: "View catalog of and details about currently available items",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-current_bpu1tl.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Current_ykkrrc.png",
     },
     {
       titleText: "Item Catalog: Archive",
@@ -99,7 +99,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       //link: "/items/archive"
       info: "View archive of and details about currently available items",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Archive_wgetjy.png",
     },
     {
       titleText: "Item Rules",
@@ -109,7 +109,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/compliance/items",
       info: "View details about regional item compliance",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-rules_vzkm5t.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Rules_r2iepr.png",
     },
     {
       titleText: "Wrap Up Report",
@@ -119,7 +119,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/reports/wrap-up",
       info: "View wrap up report",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/wrap-up-report_ryrffh.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Wrap_Up_Reports_hwy0en.png",
     },
   ];
   return (
