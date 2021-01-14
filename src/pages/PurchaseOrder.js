@@ -55,6 +55,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
   const currentRole = useSelector((state) => state.user.role);
+  const poError = useSelector((state) => state.purchaseOrder.error);
 
   const uploadToCloudinary = () => {
     const options = {
@@ -252,6 +253,12 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     currentPO.shippingParams,
   ]);
 
+  useEffect(() => {
+    if (poError) {
+      navigate("/whoops");
+    }
+  }, [poError]);
+
   if (isPOLoading || !currentPO.id) {
     return <Loading />;
   }
@@ -278,10 +285,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               )}
               {isNew && (
                 <Tooltip title="Back to PO Rollup" placement="bottom-start">
-                  <IconButton
-                    component={Link}
-                    to="/purchasing/poRollup"
-                  >
+                  <IconButton component={Link} to="/purchasing/poRollup">
                     <ArrowBackIcon fontSize="large" color="secondary" />
                   </IconButton>
                 </Tooltip>

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
+import { useSelector } from "react-redux";
+
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
@@ -17,11 +19,13 @@ const FourOhFour = () => {
   const classes = useStyles();
   let redirectTime;
 
+  const currentUserRole = useSelector((state) => state.user.role);
+
   useEffect(() => {
     if (window.location.pathname !== "/login") {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       redirectTime = setTimeout(() => {
-        navigate("/");
+        currentUserRole ? navigate("/dashboard") : navigate("/");
       }, 5000);
     }
     return () => {
