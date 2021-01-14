@@ -30,8 +30,11 @@ export const fetchDistributorsByTerritory = async (id) => {
 //Returns a filtered array of distributors based on partial matches to their name
 export const fetchDistributors = async (name, territoryId) => {
   const response = { status: "", error: null, data: null };
+  const queryString = territoryId
+    ? `/api/distributors?filter[name]=${name}&filter[territory-id]=${territoryId}`
+    : `/api/distributors?filter[name]=${name}`;
   await axios
-    .get(`/api/distributors?filter[name]=${name}&filter[territory-id]=${territoryId}`)
+    .get(queryString)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";

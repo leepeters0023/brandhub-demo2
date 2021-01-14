@@ -12,6 +12,7 @@ import {
 
 import { useMoneyInput } from "../../hooks/InputHooks";
 
+import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
@@ -26,7 +27,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 const MoneyCell = ({ initialCost, id, role, span }) => {
   let currentFunc = role !== "supplier" ? setItemActCost : undefined;
@@ -52,7 +52,9 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
 const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
   const dispatch = useDispatch();
   const currentRole = useSelector((state) => state.user.role);
-  const totalTax = useSelector((state) => state.purchaseOrder.currentPO.totalTax);
+  const totalTax = useSelector(
+    (state) => state.purchaseOrder.currentPO.totalTax
+  );
 
   const handlePackOut = (id, value) => {
     dispatch(setItemPackOut(id, value));
@@ -107,98 +109,154 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell align="left">{row.itemNumber}</TableCell>
-              {row.program !== "---" && row.program.length > 1 ? (
-                <Tooltip placement="left" title={`${row.program.join(", ")}`}>
-                  <TableCell
-                    align="left"
-                    style={{ display: "flex", alignItems: "flex-end" }}
-                  >
-                    {row.program[0]}
-                    <MoreHorizIcon fontSize="small" color="inherit" />
-                  </TableCell>
-                </Tooltip>
-              ) : (
-                <TableCell align="left">
-                  {row.program === "---"
-                    ? row.program
-                    : row.program[0] || row.program}
-                </TableCell>
-              )}
-              <TableCell align="left">{row.itemType}</TableCell>
-              <TableCell align="left">{row.packSize}</TableCell>
-              <TableCell align="left">{row.totalItems}</TableCell>
-              {currentRole !== "supplier" && (
-                <TableCell align="left">
-                  {row.estCost !== "---"
-                    ? formatMoney(row.estCost, true)
-                    : "---"}
-                </TableCell>
-              )}
-              {currentRole !== "supplier" ? (
-                <MoneyCell
-                  initialCost={formatMoney(row.actCost, true)}
-                  id={row.id}
-                  role={currentRole}
-                />
-              ) : (
-                <TableCell align="left">
-                  {formatMoney(row.actCost, true)}
-                </TableCell>
-              )}
-              <TableCell align="left">
-                {formatMoney(row.totalCost, true)}
-              </TableCell>
-              {currentRole !== "supplier" && (
-                <TableCell padding="checkbox" align="center">
-                  {row.itemType === "Set Up Fee" ? (
-                    "---"
-                  ) : (
-                    <Checkbox
-                      checked={row.packOut}
-                      onChange={() => handlePackOut(row.id, !row.packOut)}
-                    />
-                  )}
-                </TableCell>
-              )}
-              {currentRole === "supplier" && (
-                <TableCell align="left">{row.packout ? "Yes" : "No"}</TableCell>
-              )}
-              {currentRole !== "supplier" && (
-                <TableCell align="right">
-                  <Tooltip title="Remove">
-                    <IconButton
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleDelete(row.id);
-                      }}
+          {items
+            .filter((item) => item.itemType !== "Set Up Fee")
+            .map((row) => (
+              <TableRow key={row.id}>
+                <TableCell align="left">{row.itemNumber}</TableCell>
+                {row.program !== "---" && row.program.length > 1 ? (
+                  <Tooltip placement="left" title={`${row.program.join(", ")}`}>
+                    <TableCell
+                      align="left"
+                      style={{ display: "flex", alignItems: "flex-end" }}
                     >
-                      <CancelIcon color="inherit" />
-                    </IconButton>
+                      {row.program[0]}
+                      <MoreHorizIcon fontSize="small" color="inherit" />
+                    </TableCell>
                   </Tooltip>
+                ) : (
+                  <TableCell align="left">
+                    {row.program === "---"
+                      ? row.program
+                      : row.program[0] || row.program}
+                  </TableCell>
+                )}
+                <TableCell align="left">{row.itemType}</TableCell>
+                <TableCell align="left">{row.packSize}</TableCell>
+                <TableCell align="left">{row.totalItems}</TableCell>
+                {currentRole !== "supplier" && (
+                  <TableCell align="left">
+                    {row.estCost !== "---"
+                      ? formatMoney(row.estCost, true)
+                      : "---"}
+                  </TableCell>
+                )}
+                {currentRole !== "supplier" ? (
+                  <MoneyCell
+                    initialCost={formatMoney(row.actCost, true)}
+                    id={row.id}
+                    role={currentRole}
+                  />
+                ) : (
+                  <TableCell align="left">
+                    {formatMoney(row.actCost, true)}
+                  </TableCell>
+                )}
+                <TableCell align="left">
+                  {formatMoney(row.totalCost, true)}
                 </TableCell>
-              )}
-            </TableRow>
-          ))}
+                {currentRole !== "supplier" && (
+                  <TableCell padding="checkbox" align="center">
+                    {row.itemType === "Set Up Fee" ? (
+                      "---"
+                    ) : (
+                      <Checkbox
+                        checked={row.packOut}
+                        onChange={() => handlePackOut(row.id, !row.packOut)}
+                      />
+                    )}
+                  </TableCell>
+                )}
+                {currentRole === "supplier" && (
+                  <TableCell align="left">
+                    {row.packout ? "Yes" : "No"}
+                  </TableCell>
+                )}
+                {currentRole !== "supplier" && (
+                  <TableCell align="right">
+                    <Tooltip title="Remove">
+                      <IconButton
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleDelete(row.id);
+                        }}
+                      >
+                        <CancelIcon color="inherit" />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          {items.filter((item) => item.itemType === "Set Up Fee").length >
+            0 && (
+            <>
+              <TableRow>
+                <TableCell colSpan={currentRole !== "supplier" ? 10 : 8} />
+              </TableRow>
+
+              {items
+                .filter((item) => item.itemType === "Set Up Fee")
+                .map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left" colSpan={3}>
+                      {row.itemDescription}
+                    </TableCell>
+                    <TableCell align="left">{row.totalItems}</TableCell>
+                    {currentRole !== "supplier" && (
+                      <TableCell align="left">---</TableCell>
+                    )}
+                    {currentRole !== "supplier" ? (
+                      <MoneyCell
+                        initialCost={formatMoney(row.actCost, true)}
+                        id={row.id}
+                        role={currentRole}
+                      />
+                    ) : (
+                      <TableCell align="left">
+                        {formatMoney(row.actCost, true)}
+                      </TableCell>
+                    )}
+                    <TableCell align="left">
+                      {formatMoney(row.totalCost, true)}
+                    </TableCell>
+                    <TableCell align="center" padding="checkbox">
+                      ---
+                    </TableCell>
+                    {currentRole !== "supplier" && (
+                      <TableCell align="right">
+                        <Tooltip title="Remove">
+                          <IconButton
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleDelete(row.id);
+                            }}
+                          >
+                            <CancelIcon color="inherit" />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+            </>
+          )}
           {currentRole !== "supplier" && (
             <>
               <TableRow>
-                <TableCell colSpan={2} className={classes.headerText}>
-                  Set Up Fee:
-                </TableCell>
-                <TableCell colSpan={8} align="left">
-                  <Tooltip title="Add Another Cost">
-                    <IconButton
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleSetUpFee();
-                      }}
-                    >
-                      <AddCircleIcon color="inherit" />
-                    </IconButton>
-                  </Tooltip>
+                <TableCell align="left" colSpan={10}>
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleSetUpFee();
+                    }}
+                  >
+                    ADD SET-UP FEE
+                  </Button>
                 </TableCell>
               </TableRow>
             </>
