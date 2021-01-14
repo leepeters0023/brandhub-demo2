@@ -33,7 +33,7 @@ const DrawerItemsNav = ({ userType, classes }) => {
         }}
       >
         <Typography variant="h5" className={classes.navigationText}>
-                    Items
+          Items
                </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
@@ -50,30 +50,18 @@ const DrawerItemsNav = ({ userType, classes }) => {
         }}
         style={{
           marginTop: "10px"
-          //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding
+          //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding if menu is to have a black background
         }}
-        classes={{ root: 'menuBackground' }} // this sometimes works
+        classes={{ root: 'menuBackground' }} // this sometimes works to change styles
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <ListItemText
-          primaryTypographyProps={{ className: classes.headerText }}
-          primary="Item Catalog:"
-        />
-        <Divider />
-        <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/items/all"
-        >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
-        </MenuItem>
         <NestedMenuItem
-          label="Nested Menu"
+          className={classes.headerListItem}
           parentMenuOpen={anchorEl}
           onClick={handleClose}
+          label="Item Catalog"
         >
           <MenuItem
             button
@@ -81,74 +69,80 @@ const DrawerItemsNav = ({ userType, classes }) => {
             component={Link}
             to="/items/all"
           >
-            <ListItemText className={classes.nested} primary="Test Nested Menu" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
+          </MenuItem>
+          <MenuItem
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/items/all"
+          //to="/items/archive"
+          >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
           </MenuItem>
         </NestedMenuItem>
-        <MenuItem
-          button
+        <Divider className={classes.divider}/>
+        <NestedMenuItem
+          className={classes.headerListItem}
+          parentMenuOpen={anchorEl}
           onClick={handleClose}
-          component={Link}
-          to="/items/all"
-        //to="/items/archive"
+          label="Programs"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
-        </MenuItem>
-        <ListItemText
-          primaryTypographyProps={{ className: classes.headerText }}
-          primary="Programs:"
-        />
-        <Divider key="divider1" />
-        {(userType === "field2" || userType === "super") && (
+          {(userType === "field2" || userType === "super") && (
+            <MenuItem
+              button
+              onClick={handleClose}
+              component={Link}
+              to="/programs/new"
+            >
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
+            </MenuItem>
+          )}
           <MenuItem
             button
             onClick={handleClose}
             component={Link}
-            to="/programs/new"
+            to="/programs"
           >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
           </MenuItem>
-        )}
-        <MenuItem
-          button
+        </NestedMenuItem>
+        <Divider className={classes.divider} key="divider1" />
+        <NestedMenuItem
+          className={classes.headerListItem}
+          parentMenuOpen={anchorEl}
           onClick={handleClose}
-          component={Link}
-          to="/programs"
+          label="Compliance"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
-        </MenuItem>
-        <ListItemText
-          primaryTypographyProps={{ className: classes.headerText }}
-          primary="Compliance:"
-        />
-        <Divider key="divider1" />
-        <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/compliance/items"
-        // accurate that we should be showing this to all users?
-        >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
-        </MenuItem>
-        <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/compliance/rules"
-        // accurate that we should be showing this to all users?
-        >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
-        </MenuItem>
-        {(userType === "compliance" || userType === "super") && (
           <MenuItem
             button
             onClick={handleClose}
             component={Link}
-            to="/compliance/contacts"
+            to="/compliance/items"
+          // accurate that we should be showing this to all users?
           >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
           </MenuItem>
-        )}
+          <MenuItem
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/compliance/rules"
+          // accurate that we should be showing this to all users?
+          >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
+          </MenuItem>
+          {(userType === "compliance" || userType === "super") && (
+            <MenuItem
+              button
+              onClick={handleClose}
+              component={Link}
+              to="/compliance/contacts"
+            >
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
+            </MenuItem>
+          )}
+        </NestedMenuItem>
       </Menu>
     </>
   );
