@@ -52,15 +52,13 @@ const DrawerItemsNav = ({ role, classes }) => {
           marginTop: "10px"
           //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding if menu is to have a black background
         }}
-        classes={{ root: 'menuBackground' }} // this sometimes works to change styles
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <>
           <NestedMenuItem
             className={classes.headerListItem}
-            parentMenuOpen={anchorEl}
+            parentMenuOpen={Boolean(anchorEl)}
             onClick={handleClose}
             label="Item Catalog"
           >
@@ -85,7 +83,7 @@ const DrawerItemsNav = ({ role, classes }) => {
           <Divider className={classes.divider} />
           <NestedMenuItem
             className={classes.headerListItem}
-            parentMenuOpen={anchorEl}
+            parentMenuOpen={Boolean(anchorEl)}
             onClick={handleClose}
             label="Programs"
           >
@@ -111,7 +109,7 @@ const DrawerItemsNav = ({ role, classes }) => {
           <Divider className={classes.divider} key="divider1" />
           <NestedMenuItem
             className={classes.headerListItem}
-            parentMenuOpen={anchorEl}
+            parentMenuOpen={Boolean(anchorEl)}
             onClick={handleClose}
             label="Compliance"
           >
@@ -144,7 +142,6 @@ const DrawerItemsNav = ({ role, classes }) => {
               </MenuItem>
             )}
           </NestedMenuItem>
-        </>
       </Menu>
     </>
   );
