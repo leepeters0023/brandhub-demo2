@@ -18,7 +18,6 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
-    evt.stopPropagation();
   };
 
   const handleClose = () => {
@@ -34,7 +33,7 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
       >
         <Typography variant="h5" className={classes.navigationText}>
           Reports
-               </Typography>
+        </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
@@ -55,6 +54,7 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <>
         {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
           <>
             <NestedMenuItem
@@ -134,13 +134,13 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
           </>
         )}
         {/* {currentUserRole === "field1" && <Grid item sm={3} xs={12} />} */}
+        </>
       </Menu>
     </>
   );
 };
 
 DrawerReportsNav.propTypes = {
-  handleClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

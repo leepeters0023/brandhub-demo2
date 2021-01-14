@@ -63,6 +63,7 @@ const DrawerOrdersNav = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          <>
           {role !== "read-only" && (
             <MenuItem
               button
@@ -301,6 +302,7 @@ const DrawerOrdersNav = ({
           )}
           {/* {role === "field1" && <Grid item sm={3} xs={12} />} */}
           {/* unsure of line 370's purpose */}
+          </>
         </Menu>
       )}
     </>
@@ -308,7 +310,6 @@ const DrawerOrdersNav = ({
 };
 
 DrawerOrdersNav.propTypes = {
-  handleDrawerClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   inStockOrderId: PropTypes.string,
   onDemandOrderId: PropTypes.string,

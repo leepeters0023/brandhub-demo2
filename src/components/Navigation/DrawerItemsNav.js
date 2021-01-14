@@ -57,6 +57,7 @@ const DrawerItemsNav = ({ userType, classes }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <>
         <NestedMenuItem
           className={classes.headerListItem}
           parentMenuOpen={anchorEl}
@@ -143,13 +144,13 @@ const DrawerItemsNav = ({ userType, classes }) => {
             </MenuItem>
           )}
         </NestedMenuItem>
+        </>
       </Menu>
     </>
   );
 };
 
 DrawerItemsNav.propTypes = {
-  handleDrawerClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

@@ -1,93 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from "@material-ui/core/IconButton";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar"
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 
 //TODO get actual number of each status to display from redux (mock only), add correct statuses
 
-const DrawerOrdersNav = ({
-  handleDrawerClose,
-  classes,
-}) => {
+const DrawerOrdersNav = ({ classes, }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
 
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+    evt.stopPropagation();
+  };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
-    <Grid container spacing={2} justify="space-around">
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem
+    <>
+    <IconButton
+        onClick={(evt) => {
+          handleOpen(evt);
+        }}
+      >
+        <Typography variant="h5" className={classes.navigationText}>
+          Quotes
+        </Typography>
+        <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
+      </IconButton>
+      <Menu
+        disableScrollLock
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{
+          marginTop: "10px"
+        }}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/purchasing/rfqHistory/current"
           >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
-                8
+              8
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem
+          </MenuItem>
+          <Divider className={classes.divider} />
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/purchasing/rfqHistory/current"
           >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
-                15
+              15
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem
+          </MenuItem>
+          <Divider className={classes.divider} key="divider2" />
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded:" />
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
-                25
+              25
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded" />
-          </ListItem>
-        </List>
-      </Grid>
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem
+          </MenuItem>
+          <Divider className={classes.divider} key="divider3" />
+          <MenuItem
             button
-            onClick={handleDrawerClose}
+            onClick={handleClose}
             component={Link}
             to="/purchasing/rfqHistory/all"
           >
             <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
-          </ListItem>
-        </List>
-      </Grid>
-    </Grid>
+          </MenuItem>
+        </Menu>
+      </>
   );
 };
 
 DrawerOrdersNav.propTypes = {
-  handleDrawerClose: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
