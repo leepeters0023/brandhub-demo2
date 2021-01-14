@@ -38,7 +38,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/purchasing/rfqHistory/current",
       info: "New and Pending Quotes",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/on-demand-order-and-current-quotes_cmoaqi.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_On_Demand_Order_zoymv2.png",
     },
     {
       titleText: "Quote History",
@@ -48,7 +48,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/purchasing/rfqHistory/all",
       info: "All Quotes",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/item-catalog-archive-and-quote-history_tjl7au.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Archive_wgetjy.png",
     },
     {
       titleText: "Current Purchase Orders",
@@ -58,7 +58,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/purchasing/poHistory/current",
       info: "New and Pending Purchase Orders",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786360/prod/Icons/pre-order-and-current-PO_suofhu.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Order_History_jvvgmh.png",
     },
     {
       titleText: "Purchase Order History",
@@ -68,7 +68,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
       link: "/purchasing/poHistory/all",
       info: "All Purchase Orders",
       icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1609786359/prod/Icons/order-history-and-PO-history_lmnw4w.png",
+        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Current_ykkrrc.png",
     },
   ];
   return (
