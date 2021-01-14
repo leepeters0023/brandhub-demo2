@@ -21,7 +21,7 @@ const UserNavMenu = ({
   initials,
   handleLogout,
   classes,
-  userType,
+  role,
 }) => {
   
 
@@ -74,8 +74,8 @@ const UserNavMenu = ({
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
-        {userType !== "supplier" &&
-          userType !== "read-only" && [
+        {role !== "supplier" &&
+          role !== "read-only" && [
             <MenuItem
               key="profile"
               component={Link}
@@ -139,7 +139,7 @@ const UserNavMenu = ({
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
-  userType: PropTypes.string,
+  role: PropTypes.string,
   classes: PropTypes.object.isRequired,
 };
 

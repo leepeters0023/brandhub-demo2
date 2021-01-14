@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 
 import NestedMenuItem from "material-ui-nested-menu-item";
 
-const DrawerItemsNav = ({ userType, classes }) => {
+const DrawerItemsNav = ({ role, classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
@@ -89,7 +89,7 @@ const DrawerItemsNav = ({ userType, classes }) => {
             onClick={handleClose}
             label="Programs"
           >
-            {(userType === "field2" || userType === "super") && (
+            {(role === "field2" || role === "super") && (
               <MenuItem
                 button
                 onClick={handleClose}
@@ -133,7 +133,7 @@ const DrawerItemsNav = ({ userType, classes }) => {
             >
               <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
             </MenuItem>
-            {(userType === "compliance" || userType === "super") && (
+            {(role === "compliance" || role === "super") && (
               <MenuItem
                 button
                 onClick={handleClose}

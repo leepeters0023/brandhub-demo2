@@ -44,234 +44,234 @@ const DrawerOrdersNav = ({
         </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
-      {role !== "compliance" && ( //handle this at higher level component?
-        <Menu
-          disableScrollLock
-          getContentAnchorEl={null}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          style={{
-            marginTop: "10px"
-          }}
-          classes={{ root: 'menuBackground' }} // this sometimes works
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <>
-            {role !== "read-only" && (
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                to="/orders/open/preorder"
-              >
-                <ListItemText
-                  primaryTypographyProps={{
-                    className: classes.headerListItemNew,
-                  }}
-                  primary="+ Quarterly Pre-Order"
-                />
-              </MenuItem>
-            )}
+      <Menu
+        disableScrollLock
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{
+          marginTop: "10px"
+        }}
+        classes={{ root: 'menuBackground' }} // this sometimes works
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <>
+          {role !== "read-only" && (
             <MenuItem
               button
               onClick={handleClose}
               component={Link}
-              to="/orders/items/onDemand"
+              to="/orders/open/preorder"
             >
               <ListItemText
                 primaryTypographyProps={{
                   className: classes.headerListItemNew,
                 }}
-                primary="+ New On-Demand Order"
+                primary="+ Quarterly Pre-Order"
+              />
+            </MenuItem>
+          )}
+          <MenuItem
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/orders/items/onDemand"
+          >
+            <ListItemText
+              primaryTypographyProps={{
+                className: classes.headerListItemNew,
+              }}
+              primary="+ New On-Demand Order"
+            />
+          </MenuItem>
+          <MenuItem
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/orders/items/inStock"
+          >
+            <ListItemText
+              primaryTypographyProps={{
+                className: classes.headerListItemNew,
+              }}
+              primary="+ New Inventory Order"
+            />
+          </MenuItem>
+          {(role === "purchaser" || role === "super") && (
+            <>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/purchasing/poRollup"
+              >
+                <ListItemText
+                  primaryTypographyProps={{
+                    className: classes.headerListItemNew,
+                  }}
+                  primary="+ New Purchase Order"
+                />
+              </MenuItem>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/purchasing/rfqRollup"
+              >
+                <ListItemText
+                  primaryTypographyProps={{
+                    className: classes.headerListItemNew,
+                  }}
+                  primary="+ New RFQ"
+                />
+              </MenuItem>
+            </>
+          )}
+          {role !== "field1" && role !== "read-only" && (
+            <MenuItem
+              button
+              onClick={() => {
+                handleClose();
+                handleCouponModal();
+              }}
+            >
+              <ListItemText
+                primaryTypographyProps={{
+                  className: classes.headerListItemNew,
+                }}
+                primary="+ New Coupon"
+              />
+            </MenuItem>
+          )}
+          <Divider className={classes.divider} />
+          <NestedMenuItem
+            className={classes.headerListItem}
+            parentMenuOpen={anchorEl}
+            onClick={handleClose}
+            label="Draft Orders"
+          >
+            <MenuItem
+              button
+              onClick={handleClose}
+              component={Link}
+              disabled={!onDemandOrderId}
+              to={
+                onDemandOrderId
+                  ? `/orders/open/${onDemandOrderId}`
+                  : "/orders/open/onDemand"
+              }
+            >
+              <ListItemText
+                primaryTypographyProps={{ className: classes.headerListItem }}
+                primary="On-Demand"
               />
             </MenuItem>
             <MenuItem
               button
               onClick={handleClose}
               component={Link}
-              to="/orders/items/inStock"
+              disabled={!inStockOrderId}
+              to={
+                inStockOrderId
+                  ? `/orders/open/${inStockOrderId}`
+                  : "/orders/open/inStock"
+              }
             >
               <ListItemText
-                primaryTypographyProps={{
-                  className: classes.headerListItemNew,
-                }}
-                primary="+ New Inventory Order"
+                primaryTypographyProps={{ className: classes.headerListItem }}
+                primary="In-Stock"
               />
             </MenuItem>
-            {role !== "field1" && role !== "read-only" && (
-              <MenuItem
-                button
-                onClick={() => {
-                  handleClose();
-                  handleCouponModal();
-                }}
-              >
-                <ListItemText
-                  primaryTypographyProps={{
-                    className: classes.headerListItemNew,
-                  }}
-                  primary="+ New Coupon"
-                />
-              </MenuItem>
-            )}
-            <Divider className={classes.divider} />
-            <NestedMenuItem
-              className={classes.headerListItem}
-              parentMenuOpen={anchorEl}
-              onClick={handleClose}
-              label="Draft Orders"
-            >
-              <MenuItem
-                button
+          </NestedMenuItem>
+          <Divider className={classes.divider} key="divider1" />
+          {(role === "field2" || role === "super" || role === "read-only") && (
+            <>
+              <NestedMenuItem
+                className={classes.headerListItem}
+                parentMenuOpen={anchorEl}
                 onClick={handleClose}
-                component={Link}
-                disabled={!onDemandOrderId}
-                to={
-                  onDemandOrderId
-                    ? `/orders/open/${onDemandOrderId}`
-                    : "/orders/open/onDemand"
-                }
+                label="Order Review"
               >
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.headerListItem }}
-                  primary="On-Demand"
-                />
-              </MenuItem>
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                disabled={!inStockOrderId}
-                to={
-                  inStockOrderId
-                    ? `/orders/open/${inStockOrderId}`
-                    : "/orders/open/inStock"
-                }
-              >
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.headerListItem }}
-                  primary="In-Stock"
-                />
-              </MenuItem>
-            </NestedMenuItem>
-            <Divider className={classes.divider} key="divider1" />
-            {(role === "field2" || role === "super" || role === "read-only") && (
-              <>
-                <NestedMenuItem
-                  className={classes.headerListItem}
-                  parentMenuOpen={anchorEl}
-                  onClick={handleClose}
-                  label="Order Review"
-                >
-                  <MenuItem
-                    button
-                    onClick={handleClose}
-                    component={Link}
-                    to="/rollup"
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        className: classes.headerListItem,
-                      }}
-                      primary="Quarterly Rollup"
-                    />
-                  </MenuItem>
-                  <MenuItem
-                    button
-                    onClick={handleClose}
-                    component={Link}
-                    to="/orders/approvals"
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        className: classes.headerListItem,
-                      }}
-                      primary="On Demand / Inventory Order"
-                    />
-                  </MenuItem>
-                </NestedMenuItem>
-              </>
-            )}
-            {(role === "purchaser" || role === "super") && (
-              <>
-                <Divider className={classes.divider} key="divider2" />
-                <NestedMenuItem
-                  className={classes.headerText}
-                  parentMenuOpen={anchorEl}
-                  onClick={handleClose}
-                  label="Purchase Orders"
-                >
-                  <MenuItem
-                    button
-                    onClick={handleClose}
-                    component={Link}
-                    to="/purchasing/poRollup"
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        className: classes.headerListItemNew,
-                      }}
-                      primary="+ New Purchase Order"
-                    />
-                  </MenuItem>
-                  <MenuItem
-                    button
-                    onClick={handleClose}
-                    component={Link}
-                    to="/purchasing/poHistory/current"
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        className: classes.headerListItem,
-                      }}
-                      primary="Current"
-                    />
-                  </MenuItem>
-                  <MenuItem
-                    button
-                    onClick={handleClose}
-                    component={Link}
-                    to="/purchasing/poHistory/all"
-                  >
-                    <ListItemText
-                      primaryTypographyProps={{
-                        className: classes.headerListItem,
-                      }}
-                      primary="History"
-                    />
-                  </MenuItem>
-                </NestedMenuItem>
-                <Divider className={classes.divider} key="divider3" />
-                <NestedMenuItem
-                  className={classes.headerText}
-                  parentMenuOpen={anchorEl}
-                  onClick={handleClose}
-                  label="Request for Quotes"
-                >
-
-                </NestedMenuItem>
-                <Divider key="divider3" />
                 <MenuItem
                   button
                   onClick={handleClose}
                   component={Link}
-                  to="/purchasing/rfqRollup"
+                  to="/rollup"
                 >
                   <ListItemText
                     primaryTypographyProps={{
-                      className: classes.headerListItemNew,
+                      className: classes.headerListItem,
                     }}
-                    primary="+ New RFQ"
+                    primary="Quarterly Rollup"
                   />
                 </MenuItem>
+                <MenuItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/orders/approvals"
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItem,
+                    }}
+                    primary="On Demand / Inventory Order"
+                  />
+                </MenuItem>
+              </NestedMenuItem>
+            </>
+          )}
+          {(role === "purchaser" || role === "super") && (
+            <>
+              <Divider className={classes.divider} key="divider2" />
+              <NestedMenuItem
+                className={classes.headerListItem}
+                parentMenuOpen={anchorEl}
+                onClick={handleClose}
+                label="Purchase Orders"
+              >
+                <MenuItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/purchasing/poHistory/current"
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItem,
+                    }}
+                    primary="Current"
+                  />
+                </MenuItem>
+                <MenuItem
+                  button
+                  onClick={handleClose}
+                  component={Link}
+                  to="/purchasing/poHistory/all"
+                >
+                  <ListItemText
+                    primaryTypographyProps={{
+                      className: classes.headerListItem,
+                    }}
+                    primary="History"
+                  />
+                </MenuItem>
+              </NestedMenuItem>
+              <Divider className={classes.divider} key="divider3" />
+              <NestedMenuItem
+                className={classes.headerListItem}
+                parentMenuOpen={anchorEl}
+                onClick={handleClose}
+                label="Request for Quotes"
+              >
                 <MenuItem
                   button
                   onClick={handleClose}
@@ -285,6 +285,7 @@ const DrawerOrdersNav = ({
                     primary="Current"
                   />
                 </MenuItem>
+                <Divider className={classes.divider} key="divide5" />
                 <MenuItem
                   button
                   onClick={handleClose}
@@ -298,14 +299,13 @@ const DrawerOrdersNav = ({
                     primary="History"
                   />
                 </MenuItem>
-
-              </>
-            )}
-            {/* {role === "field1" && <Grid item sm={3} xs={12} />} */}
-            {/* unsure of line 370's purpose */}
-          </>
-        </Menu>
-      )}
+              </NestedMenuItem>
+            </>
+          )}
+          {/* {role === "field1" && <Grid item sm={3} xs={12} />} */}
+          {/* unsure of line 370's purpose */}
+        </>
+      </Menu>
     </>
   );
 };

@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 
 import NestedMenuItem from "material-ui-nested-menu-item";
 
-const DrawerReportsNav = ({ classes, currentUserRole }) => {
+const DrawerReportsNav = ({ classes, role }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
@@ -57,7 +57,7 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
         onClose={handleClose}
       >
         <>
-          {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
+          {(role !== "finance" || role !== "compliance") && (
             <>
               <NestedMenuItem
                 className={classes.headerListItem}
@@ -105,7 +105,7 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
               </Box>
             </MenuItem>
           </NestedMenuItem>
-          {currentUserRole !== "compliance" && (
+          {role !== "compliance" && (
             <>
               <Divider className={classes.divider} key="divider2" />
               <NestedMenuItem
@@ -135,7 +135,7 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
               </NestedMenuItem>
             </>
           )}
-          {/* {currentUserRole === "field1" && <Grid item sm={3} xs={12} />} */}
+          {/* {role === "field1" && <Grid item sm={3} xs={12} />} */}
         </>
       </Menu>
     </>

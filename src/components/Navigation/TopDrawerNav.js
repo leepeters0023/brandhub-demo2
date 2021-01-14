@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import Logo from "../../assets/RTA_Logo_Stacked_White.png";
 import { Link } from "@reach/router";
 
@@ -131,43 +131,41 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             <div className={classes.nav}>
               {role === "supplier" && (
                 <>
-                  <DrawerRFQNav
-                    classes={classes}
-                  />
-                  <DrawerPONav
-                    classes={classes}
-                  />
+                  <DrawerRFQNav classes={classes} />
+                  <DrawerPONav classes={classes} />
                 </>
               )}
               {role !== "supplier" && (
                 <>
                   <DrawerItemsNav
-                    userType={role}
-                    classes={classes}
-                  />
-                  <DrawerOrdersNav
-                    classes={classes}
-                    inStockOrderId={inStockOrderId}
-                    onDemandOrderId={onDemandOrderId}
                     role={role}
-                    handleCouponModal={handleCouponModal}
+                    classes={classes}
                   />
+                  {role !=="compiance" && (
+                     <DrawerOrdersNav
+                     role={role}
+                     classes={classes}
+                     inStockOrderId={inStockOrderId}
+                     onDemandOrderId={onDemandOrderId}
+                     handleCouponModal={handleCouponModal}
+                   />
+                  )}
                 </>
               )}
               {role !== "purchasing" && (
                 <>
                   <DrawerReportsNav
+                    role={role}
                     classes={classes}
-                    currentUserRole={role}
                   />
                 </>
               )}
               {territories && territories.length > 0 && <RegionSelector classes={classes} />}
               <UserNav
+                role={role}
+                classes={classes}
                 initials={initials}
                 handleLogout={handleLogout}
-                userType={role}
-                classes={classes}
               />
             </div>
           </>
