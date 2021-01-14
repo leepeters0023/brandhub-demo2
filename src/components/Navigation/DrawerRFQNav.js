@@ -27,9 +27,10 @@ const DrawerOrdersNav = ({ classes, }) => {
   };
   return (
     <>
-    <IconButton
+      <IconButton
         onClick={(evt) => {
           handleOpen(evt);
+          evt.stopPropagation();
         }}
       >
         <Typography variant="h5" className={classes.navigationText}>
@@ -55,58 +56,58 @@ const DrawerOrdersNav = ({ classes, }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/purchasing/rfqHistory/current"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/purchasing/rfqHistory/current"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
+          <ListItemAvatar>
+            <Avatar className={classes.avatar}>
               8
               </Avatar>
-            </ListItemAvatar>
-          </MenuItem>
-          <Divider className={classes.divider} />
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/purchasing/rfqHistory/current"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
+          </ListItemAvatar>
+        </MenuItem>
+        <Divider className={classes.divider} />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/purchasing/rfqHistory/current"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
+          <ListItemAvatar>
+            <Avatar className={classes.avatar}>
               15
               </Avatar>
-            </ListItemAvatar>
-          </MenuItem>
-          <Divider className={classes.divider} key="divider2" />
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/purchasing/rfqHistory/all"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded:" />
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
+          </ListItemAvatar>
+        </MenuItem>
+        <Divider className={classes.divider} key="divider2" />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/purchasing/rfqHistory/all"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded:" />
+          <ListItemAvatar>
+            <Avatar className={classes.avatar}>
               25
               </Avatar>
-            </ListItemAvatar>
-          </MenuItem>
-          <Divider className={classes.divider} key="divider3" />
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/purchasing/rfqHistory/all"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
-          </MenuItem>
-        </Menu>
-      </>
+          </ListItemAvatar>
+        </MenuItem>
+        <Divider className={classes.divider} key="divider3" />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/purchasing/rfqHistory/all"
+        >
+          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 

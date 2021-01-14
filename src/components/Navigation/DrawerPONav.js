@@ -31,6 +31,7 @@ const DrawerOrdersNav = ({
       <IconButton
         onClick={(evt) => {
           handleOpen(evt);
+          evt.stopPropagation();
         }}
       >
         <Typography variant="h5" className={classes.navigationText}>
@@ -39,7 +40,7 @@ const DrawerOrdersNav = ({
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
-        disableScrollLock
+        disableScrollLockd
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: "bottom",
