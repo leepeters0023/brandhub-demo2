@@ -8,43 +8,33 @@ import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
-import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
 import NestedMenuItem from "material-ui-nested-menu-item";
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-  expandMoreIcon: {
-    marginRight: "20px",
-    color: "white",
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
- 
-}));
-
-const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
-  const classes = useStyles();
+const DrawerItemsNav = ({ userType, classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorElChild, setAnchorElChild] = useState(null);
-  
+
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
-    evt.preventDefault();
+    evt.stopPropagation(); //renders menu next to unique child element instead of fixed position of parent container
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+  //tried to handle these at top level but was rendering all menus at once : (
 
   return (
     <>
       <IconButton
-        onMouseEnter={(evt) => {
+        onClick={(evt) => {
           handleOpen(evt);
         }}
       >
+        <Typography variant="h5" className={classes.navigationText}>
+                    Items
+               </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
@@ -71,7 +61,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
           primaryTypographyProps={{ className: classes.headerText }}
           primary="Item Catalog:"
         />
-        <Divider/>
+        <Divider />
         <MenuItem
           button
           onClick={handleClose}
@@ -81,18 +71,18 @@ const DrawerItemsNav = ({ userType, handleDrawerClose }) => {
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
         </MenuItem>
         <NestedMenuItem
-        label="Nested Menu" 
-        parentMenuOpen={anchorEl}
-        onClick={handleClose}
+          label="Nested Menu"
+          parentMenuOpen={anchorEl}
+          onClick={handleClose}
         >
           <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/items/all"
-        >
-          <ListItemText className={classes.nested} primary="Test Nested Menu" />
-        </MenuItem>
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/items/all"
+          >
+            <ListItemText className={classes.nested} primary="Test Nested Menu" />
+          </MenuItem>
         </NestedMenuItem>
         <MenuItem
           button

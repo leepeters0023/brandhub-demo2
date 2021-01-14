@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Logo from "../../assets/RTA_Logo_Stacked_White.png";
 import { Link } from "@reach/router";
 
@@ -11,12 +11,10 @@ import DrawerOrdersNav from "./DrawerOrdersNav";
 import DrawerReportsNav from "./DrawerReportsNav";
 import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AppBar from '@material-ui/core/AppBar';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -89,8 +87,16 @@ const useStyles = makeStyles((theme) => ({
     color: "black",
   },
   expandMoreIcon: {
+    marginRight: "20px",
     color: "white",
+    "&&:hover": {
+      cursor: "pointer",
+    },
   },
+  navTextWrapper: {
+    display: "flex",
+    flexDirection: "row",
+  }
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
@@ -117,6 +123,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 src={Logo}
                 alt="Logo"
                 className={classes.logoLink}
+                // no more logo? WTF?
               />
             </Link>
           </Tooltip>
@@ -142,16 +149,10 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               )}
               {role !== "supplier" && (
                 <>
-                  <Typography variant="h5" className={classes.navigationText}>
-                    Items
-               </Typography>
                   <DrawerItemsNav
                     userType={role}
                     classes={classes}
                   />
-                  <Typography variant="h5" className={classes.navigationText}>
-                    Order
-                  </Typography>
                   <DrawerOrdersNav
                     classes={classes}
                     inStockOrderId={inStockOrderId}
@@ -163,12 +164,9 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               )}
               {role !== "purchasing" && (
                 <>
-                  <Typography variant="h5" className={classes.navigationText}>
-                    Reports
-                  </Typography>
                   <DrawerReportsNav
-                    userType={role}
                     classes={classes}
+                    currentUserRole={role}
                   />
                 </>
               )}
