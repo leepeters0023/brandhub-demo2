@@ -30,13 +30,14 @@ const DistributorOptions = () => {
   const currentDistributors = useSelector(
     (state) => state.distributors.editAttnList
   );
+  const territoryId = useSelector((state) => state.user.currentTerritory);
   const isLoading = useSelector((state) => state.distributors.attnIsLoading);
 
   useEffect(() => {
     if (distName.length >= 1) {
-      dispatch(fetchUserDistributors(distName, true));
+      dispatch(fetchUserDistributors(distName, territoryId, true));
     }
-  }, [distName, dispatch]);
+  }, [distName, territoryId, dispatch]);
 
   return (
     <>

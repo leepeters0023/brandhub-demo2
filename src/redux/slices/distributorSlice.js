@@ -179,7 +179,7 @@ export const {
 
 export default distributorSlice.reducer;
 
-export const fetchUserDistributors = (name, attn = false) => async (
+export const fetchUserDistributors = (name, territoryId, attn = false) => async (
   dispatch
 ) => {
   try {
@@ -188,11 +188,10 @@ export const fetchUserDistributors = (name, attn = false) => async (
     } else {
       dispatch(setIsLoading());
     }
-    let distributors = await fetchDistributors(name);
+    let distributors = await fetchDistributors(name, territoryId);
     if (distributors.error) {
       throw distributors.error;
     }
-    //for mock data, will update when fields are there
     let mappedDistributors = distributors.data.map((dist) => ({
       ...dist,
       attn: dist["current-user-attn"]

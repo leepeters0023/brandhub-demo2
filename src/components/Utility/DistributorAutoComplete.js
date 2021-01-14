@@ -23,6 +23,7 @@ const DistributorAutoComplete = ({
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
   const currentFiltersDistributor = useSelector(
     (state) => state.filters.distributor
   );
@@ -35,9 +36,9 @@ const DistributorAutoComplete = ({
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor));
+      dispatch(fetchUserDistributors(distributor, territoryId));
     }
-  }, [distributor, dispatch]);
+  }, [distributor, territoryId, dispatch]);
 
   useEffect(() => {
     if (currentFiltersDistributor.length !== currentDistributors.length) {
