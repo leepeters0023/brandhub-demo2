@@ -20,11 +20,11 @@ export const fetchAllRules = async (filterObject) => {
     "",
     "/api/rules",
     "compliance"
-  )
+  );
   await axios
     .get(queryString)
     .then((res) => {
-      let dataObject = { rules: null, nextLink: null }
+      let dataObject = { rules: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.rules = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -32,19 +32,19 @@ export const fetchAllRules = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};
 
 export const fetchNextRules = async (url) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(url)
     .then((res) => {
-      let dataObject = { rules: null, nextLink: null }
+      let dataObject = { rules: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.rules = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -52,26 +52,26 @@ export const fetchNextRules = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};
 
 export const fetchTriggeredRules = async (filterObject) => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   let queryString = buildFilters(
     filterObject,
     "",
     "",
     "/api/triggered-rules",
     "compliance"
-  )
+  );
   await axios
     .get(queryString)
     .then((res) => {
-      let dataObject = { rules: null, nextLink: null }
+      let dataObject = { rules: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.rules = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -79,19 +79,19 @@ export const fetchTriggeredRules = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};
 
 export const fetchNextTriggeredRules = async (url) => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
     .get(url)
     .then((res) => {
-      let dataObject = { rules: null, nextLink: null }
+      let dataObject = { rules: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.rules = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;
@@ -99,9 +99,9 @@ export const fetchNextTriggeredRules = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};

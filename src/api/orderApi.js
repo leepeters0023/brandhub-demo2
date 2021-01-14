@@ -27,9 +27,9 @@ export const fetchOrdersByProgram = async (program, userId, terrId) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -45,9 +45,9 @@ export const fetchOrderSetById = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -68,9 +68,9 @@ export const fetchAllPreOrders = async (id, terrId) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -117,9 +117,9 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -149,9 +149,9 @@ export const fetchNextOrderSets = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -190,9 +190,9 @@ export const fetchOrderSetItems = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -213,9 +213,9 @@ export const fetchNextOrderSetItems = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -235,9 +235,9 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -263,9 +263,9 @@ export const setOrderSetNote = async (id, note) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -305,9 +305,9 @@ export const addSingleOrderToSet = async (id, dist, type) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -347,9 +347,9 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -370,9 +370,9 @@ export const startOrderSet = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -386,9 +386,9 @@ export const restartOrderSet = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -416,9 +416,9 @@ export const setWorkComplete = async (id, status) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -432,9 +432,9 @@ export const submitOrderSet = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -448,9 +448,9 @@ export const approveOrderSet = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -473,9 +473,9 @@ export const deleteOrderSetItem = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -498,9 +498,9 @@ export const deleteOrderSet = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -536,9 +536,9 @@ export const createOrderSet = async (type, territoryId) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -576,9 +576,9 @@ export const addOrderSetItem = async (id, item) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -603,9 +603,9 @@ export const updateOrderSetItemDate = async (id, date) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -630,9 +630,9 @@ export const updateOrderSetItemRush = async (id, status) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -671,9 +671,9 @@ export const fetchOrderHistory = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -693,9 +693,9 @@ export const fetchNextHistory = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -732,9 +732,9 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -752,9 +752,9 @@ export const fetchNextOrderHistoryByItem = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -770,9 +770,9 @@ export const fetchSingleOrder = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -798,9 +798,9 @@ export const patchOrderItem = async (id, qty) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -827,9 +827,9 @@ export const setOrderDetail = async (id, note, attn) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -852,9 +852,9 @@ export const deleteOrder = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -877,9 +877,9 @@ export const deleteOrderItem = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.err = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
