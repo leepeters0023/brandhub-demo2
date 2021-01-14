@@ -50,86 +50,87 @@ const DrawerReportsNav = ({ classes, currentUserRole }) => {
         }}
         style={{
           marginTop: "10px"
-          //TODO remove padding from MuiList-root MuiMenu-list MuiList-padding
         }}
-        classes={{ root: 'menuBackground' }} // this sometimes works
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
         {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
           <>
-            <MenuItem>
-              <ListItemText
-                primaryTypographyProps={{ className: classes.navHeaderText }}
-                primary="Order History"
-              />
-            </MenuItem>
-            <MenuItem
-              button
+            <NestedMenuItem
+              className={classes.headerListItem}
+              parentMenuOpen={anchorEl}
               onClick={handleClose}
-              component={Link}
-              to="/orders/history/group/byOrder"
+              label="History"
             >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Order" />
-            </MenuItem>
-            <MenuItem
-              button
-              onClick={handleClose}
-              component={Link}
-              to="/orders/history/group/byItem"
-            >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Item" />
-            </MenuItem>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/orders/history/group/byOrder"
+              >
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Order" />
+              </MenuItem>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/orders/history/group/byItem"
+              >
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Item" />
+              </MenuItem>
+            </NestedMenuItem>
+            <Divider className={classes.divider} key="divider2" />
           </>
         )}
-        <>
-        <MenuItem>
-          <ListItemText
-            primaryTypographyProps={{ className: classes.navHeaderText }}
-            primary="Reporting:"
-          />
-        </MenuItem>
-        <MenuItem
-          button
+        <NestedMenuItem
+          className={classes.headerListItem}
+          parentMenuOpen={anchorEl}
           onClick={handleClose}
-          component={Link}
-          to="/reports/wrap-up"
+          label="Reporting"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Wrap Up" />
-        </MenuItem>
-        <MenuItem button onClick={handleClose} component={Link} to="">
-          <Box fontStyle="italic">
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-          </Box>
-        </MenuItem>
-        </>
+          <MenuItem
+            button
+            onClick={handleClose}
+            component={Link}
+            to="/reports/wrap-up"
+          >
+            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Wrap Up" />
+          </MenuItem>
+          <MenuItem button onClick={handleClose} component={Link} to="">
+            <Box fontStyle="italic">
+              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
+            </Box>
+          </MenuItem>
+        </NestedMenuItem>
         {currentUserRole !== "compliance" && (
           <>
-            <MenuItem>
-              <ListItemText
-                primaryTypographyProps={{ className: classes.navHeaderText }}
-                primary="Budgets"
-              />
-            </MenuItem>
-            <MenuItem
-              button
+            <Divider className={classes.divider} key="divider2" />
+            <NestedMenuItem
+              className={classes.headerListItem}
+              parentMenuOpen={anchorEl}
               onClick={handleClose}
-              component={Link}
-              to="/budgets/ytod"
+              label="Budgets"
             >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Budget vs Spend" />
-            </MenuItem>
-            <MenuItem
-              button
-              onClick={handleClose}
-              component={Link}
-              to=""
-            >
-              <Box fontStyle="italic">
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-              </Box>
-            </MenuItem>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/budgets/ytod"
+              >
+                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Budget vs Spend" />
+              </MenuItem>
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to=""
+              >
+                <Box fontStyle="italic">
+                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
+                </Box>
+              </MenuItem>
+            </NestedMenuItem>
           </>
         )}
         {/* {currentUserRole === "field1" && <Grid item sm={3} xs={12} />} */}

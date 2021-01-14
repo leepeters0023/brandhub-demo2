@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   headerListItem: {
     color: "#4C4C4C",
+
     "&:hover": {
       textDecoration: "underline"
     }
@@ -96,6 +97,10 @@ const useStyles = makeStyles((theme) => ({
   navTextWrapper: {
     display: "flex",
     flexDirection: "row",
+  },
+  divider: {
+    marginTop: "10px",
+    marginBottom: "10px"
   }
 }));
 
@@ -123,7 +128,6 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 src={Logo}
                 alt="Logo"
                 className={classes.logoLink}
-                // no more logo? WTF?
               />
             </Link>
           </Tooltip>
@@ -157,7 +161,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                     classes={classes}
                     inStockOrderId={inStockOrderId}
                     onDemandOrderId={onDemandOrderId}
-                    userType={role}
+                    role={role}
                     handleCouponModal={handleCouponModal}
                   />
                 </>
