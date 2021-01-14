@@ -32,12 +32,15 @@ const DistributorOptions = () => {
   );
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const isLoading = useSelector((state) => state.distributors.attnIsLoading);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   useEffect(() => {
     if (distName.length >= 1) {
-      dispatch(fetchUserDistributors(distName, territoryId, true));
+      currentUserRole !== "super" && currentUserRole !== "purchaser"
+      ? dispatch(fetchUserDistributors(distName, territoryId, true))
+      : dispatch(fetchUserDistributors(distName, false, true))
     }
-  }, [distName, territoryId, dispatch]);
+  }, [distName, territoryId, currentUserRole, dispatch]);
 
   return (
     <>

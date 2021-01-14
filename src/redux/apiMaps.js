@@ -494,6 +494,7 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
+  console.log(items)
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
@@ -502,6 +503,7 @@ export const mapPOItems = (items) => {
         itemNumber: "---",
         program: "---",
         itemType: "Set Up Fee",
+        itemDescription: item["direct-cost-desc"],
         packSize: "1",
         itemSpec: "---",
         totalItems: item.qty,

@@ -172,8 +172,11 @@ const purchaseOrderSlice = createSlice({
     },
     addCost(state, action) {
       const { item } = action.payload;
-      let currentItems = state.currentPO.poItems.concat(item);
+      const currentItems = state.currentPO.poItems.concat(item);
       state.currentPO.poItems = currentItems;
+      state.currentPO.totalCost = currentItems
+        .map((item) => item.totalCost)
+        .reduce((a, b) => a + b);
       state.isUpdateLoading = false;
       state.error = null;
     },
