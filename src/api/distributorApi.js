@@ -20,9 +20,9 @@ export const fetchDistributorsByTerritory = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -41,9 +41,9 @@ export const fetchDistributors = async (name, territoryId) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -58,9 +58,9 @@ export const getFavDistributors = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -86,9 +86,9 @@ export const newFavDistList = async (index) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -119,9 +119,9 @@ export const updateFavDistList = async (id, name, distArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -134,9 +134,9 @@ export const deleteFavDistList = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -157,9 +157,9 @@ export const editCustomAttentionLine = async (id, attn) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };

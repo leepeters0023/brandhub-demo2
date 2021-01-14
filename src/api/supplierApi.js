@@ -14,12 +14,12 @@ export const fetchFilteredSuppliers = async (name) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
-      response.status = "error"
-      response.error = err.toString();
+      console.log(err.response.data.errors[0].title);
+      response.status = "error";
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};
 
 //Returns all active suppliers
 export const fetchSuppliers = async () => {
@@ -32,9 +32,9 @@ export const fetchSuppliers = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
