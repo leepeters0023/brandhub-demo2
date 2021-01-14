@@ -201,6 +201,7 @@ export const fetchUser = () => async (dispatch) => {
           ? user.data.territories.map((terr) => ({
               name: terr.name,
               id: terr.id,
+              type: terr.type,
             }))
           : [],
       managedUsers:

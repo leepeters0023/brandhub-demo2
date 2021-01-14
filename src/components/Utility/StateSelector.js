@@ -17,6 +17,7 @@ const StateSelector = ({ handleState, currentState, type }) => {
 
   const [currentStates, setCurrentStates] = useState([]);
 
+  const allStates = useSelector((state) => state.territories.stateList);
   const states = useSelector((state) => state.territories.filteredStateList);
   const isLoading = useSelector((state) => state.territories.isStatesLoading);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
@@ -38,7 +39,13 @@ const StateSelector = ({ handleState, currentState, type }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading || states.length === 0) {
+  useEffect(() => {
+    if (states.length === 0 && allStates.length > 0) {
+      setCurrentStates(allStates);
+    }
+  }, [states, allStates, setCurrentStates]);
+
+  if (isLoading) {
     return <CircularProgress />;
   }
 
