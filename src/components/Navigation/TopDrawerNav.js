@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
     color: "white",
     margin: "0 20px",
+    pointerEvents: "none",
+    cursor: "none",
   },
   navTextContainer: {
     display: "flex",
@@ -89,13 +91,8 @@ const useStyles = makeStyles((theme) => ({
   expandMoreIcon: {
     marginRight: "20px",
     color: "white",
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
-  navTextWrapper: {
-    display: "flex",
-    flexDirection: "row",
+    pointerEvents: "none",
+    cursor: "none",
   },
   divider: {
     marginTop: "10px",
