@@ -14,7 +14,6 @@ import DrawerRFQNav from "./DrawerRFQNav";
 
 import AppBar from '@material-ui/core/AppBar';
 import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -135,18 +134,10 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             <div className={classes.nav}>
               {role === "supplier" && (
                 <>
-                  <Typography variant="h5" className={classes.navigationText}>
-                    Quotes
-                </Typography>
                   <DrawerRFQNav
-                    userType={role}
                     classes={classes}
                   />
-                  <Typography variant="h5" className={classes.navigationText}>
-                    Purchase Orders
-                </Typography>
                   <DrawerPONav
-                    userType={role}
                     classes={classes}
                   />
                 </>
@@ -179,6 +170,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                 initials={initials}
                 handleLogout={handleLogout}
                 userType={role}
+                classes={classes}
               />
             </div>
           </>
