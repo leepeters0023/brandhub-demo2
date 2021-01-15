@@ -360,7 +360,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/dashboard",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "super", "supplier", "read-only"],
               currentRole,
               territories
             )}
