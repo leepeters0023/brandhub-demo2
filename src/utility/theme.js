@@ -122,13 +122,13 @@ export default {
       fontWeight: "400",
       fontSize: "14px",
       color: "#4C4C4C",
-      marginLeft: "10px"
+      marginLeft: "10px",
     },
     headerListItem: {
       color: "black",
       "&:hover": {
-        textDecoration: "underline"
-      }
+        textDecoration: "underline",
+      },
     },
     headerListItemNew: {
       color: "white",
@@ -136,9 +136,8 @@ export default {
       padding: "7px",
       "&:hover": {
         backgroundColor: "#8397B0",
-        border: "none",
-        boxShadow: "5px 5px 5px rgba(68, 68, 68, 0.6)"
-      }
+        boxShadow: "5px 5px 5px rgba(68, 68, 68, 0.6)",
+      },
     },
     bodyText: {
       fontSize: ".9rem",
@@ -207,10 +206,10 @@ export default {
       color: "#fff",
     },
     showHideFilters: {
-      display: "flex", 
+      display: "flex",
       position: "relative",
-      alignItems: "center", 
-      height: "32px", 
+      alignItems: "center",
+      height: "32px",
       marginRight: "10px",
       marginBottom: "10px",
       "&:hover": {
@@ -219,6 +218,6 @@ export default {
     },
     liftedPopper: {
       zIndex: "2500",
-    }
+    },
   },
 };
