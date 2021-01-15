@@ -142,7 +142,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const grandTotalMod = useSelector(
     (state) => state.preOrderDetails.preOrderTotalMod
   );
-  const setTotal = useSelector((state) => state.orderSet.orderTotal);
+  const setTotal = useSelector((state) => state.orderSet.totalEstItemCost);
 
   const handleModalClose = () => {
     handlePreviewModal(false);
