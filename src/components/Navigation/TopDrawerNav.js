@@ -123,7 +123,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
       <AppBar className={classes.appBar} position="fixed">
         <div style={{ display: "static", width: "100%" }}>
           <Tooltip style={{ float: "left" }} title="Home">
-            <Link to="/">
+            <Link to="/dashboard">
               <img
                 src={Logo}
                 alt="Logo"

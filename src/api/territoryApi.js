@@ -14,9 +14,9 @@ export const fetchAllTerritories = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -33,9 +33,9 @@ export const fetchFilteredTerritories = async (name) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -50,9 +50,9 @@ export const fetchAllStates = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -67,9 +67,9 @@ export const fetchFilteredStates = async (ids) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };

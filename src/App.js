@@ -170,7 +170,7 @@ const App = () => {
 
     if (currentUser && currentRole.length > 0) {
       if (currentRole !== "supplier") {
-        if (currentRole === "read-only" && territories.length > 0) {
+        if (territories.length > 0) {
           dispatch(fetchInitialPrograms(currentTerritory.id));
           if (currentRole !== "read-only") {
             dispatch(
@@ -249,7 +249,7 @@ const App = () => {
   ]);
 
   if (userError) {
-    handleLogout();
+    navigate("/whoops")
   }
 
   if (!loggedIn && !currentUser) {
@@ -264,6 +264,7 @@ const App = () => {
           <Landing path="/" />
           <AuthOLanding path="/login" />
           <AuthOLanding path="/login/:code" />
+          <FourOhFour default path="/whoops" />
         </Router>
       </MuiThemeProvider>
     );
@@ -300,6 +301,7 @@ const App = () => {
             handleLogout={handleLogout}
             path="/newUser"
           />
+          <FourOhFour default path="/whoops" />
         </Router>
       </MuiThemeProvider>
     );
@@ -316,7 +318,7 @@ const App = () => {
           <link rel="manifest" href="/manifest.json" />
           <meta
             name="insight-app-sec-validation"
-            content="aced815d-d550-4d28-87ed-4b8d32c32430"
+            content="2d6c244f-f6f7-4359-b665-6afb1b69df4b"
           />
           {isProd && (
             <script type="text/javascript">{`!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});window.Beacon('init', '521f5954-7022-46e2-9707-6a82501f23e7')`}</script>
@@ -344,7 +346,8 @@ const App = () => {
           {currentRole === "read-only" && territories.length === 0 && (
             <Redirect noThrow to="/newUser" />
           )}
-          {window.location.pathname.includes("/login") && (
+          {(window.location.pathname === "/" ||
+            window.location.pathname.includes("/login")) && (
             <Redirect noThrow to="/dashboard" />
           )}
 
@@ -357,7 +360,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/dashboard",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "super", "supplier", "read-only"],
               currentRole,
               territories
             )}

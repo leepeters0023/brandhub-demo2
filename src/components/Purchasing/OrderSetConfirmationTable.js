@@ -146,6 +146,8 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
                       if (
                         order.items.find(
                           (item) => item.itemNumber === rowData.itemNumber
+                        ) && order.items.find(
+                          (item) => item.itemNumber === rowData.itemNumber
                         ).totalItems > 0
                       ) {
                         return (

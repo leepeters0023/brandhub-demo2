@@ -46,6 +46,9 @@ const ItemTypeAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="itemType-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}

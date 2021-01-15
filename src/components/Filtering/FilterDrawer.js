@@ -53,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: "300px",
+    zIndex: "2001",
   },
   selectedButton: {
     fontWeight: "600",

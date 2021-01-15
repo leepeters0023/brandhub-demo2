@@ -59,6 +59,9 @@ const UserAutoComplete = ({
         multiple
         freeSolo
         renderTags={() => null}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         fullWidth
         className={classes.queryField}
         id={id ? id : "field-auto-complete"}

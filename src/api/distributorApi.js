@@ -20,27 +20,30 @@ export const fetchDistributorsByTerritory = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
 
 //Returns a filtered array of distributors based on partial matches to their name
-export const fetchDistributors = async (name) => {
+export const fetchDistributors = async (name, territoryId) => {
   const response = { status: "", error: null, data: null };
+  const queryString = territoryId
+    ? `/api/distributors?filter[name]=${name}&filter[territory-id]=${territoryId}`
+    : `/api/distributors?filter[name]=${name}`;
   await axios
-    .get(`/api/distributors?filter[name]=${name}`)
+    .get(queryString)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -55,9 +58,9 @@ export const getFavDistributors = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -83,9 +86,9 @@ export const newFavDistList = async (index) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -116,9 +119,9 @@ export const updateFavDistList = async (id, name, distArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -131,9 +134,9 @@ export const deleteFavDistList = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };
@@ -154,9 +157,9 @@ export const editCustomAttentionLine = async (id, attn) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
 };

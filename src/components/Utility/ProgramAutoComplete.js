@@ -59,6 +59,9 @@ const ProgramAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="program-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}

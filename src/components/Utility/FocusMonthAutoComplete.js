@@ -60,6 +60,9 @@ const FocusMonthAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="month-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}

@@ -5,6 +5,7 @@ import { updateCurrentTerritory } from "../../redux/slices/userSlice";
 
 import { fetchPrograms } from "../../redux/slices/programsSlice";
 import { fetchStatesByIds } from "../../redux/slices/territorySlice";
+import { clearDistributors } from "../../redux/slices/distributorSlice";
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -23,6 +24,7 @@ const RegionSelector = ({ classes }) => {
     window.location.hash = "";
     updateRegion(evt.target.value);
     let currentTerritory = regions.find((reg) => reg.name === evt.target.value);
+    dispatch(clearDistributors());
     dispatch(updateCurrentTerritory({ territory: currentTerritory.id }));
     dispatch(fetchPrograms(currentTerritory.id));
     dispatch(fetchStatesByIds([currentTerritory.id]));
