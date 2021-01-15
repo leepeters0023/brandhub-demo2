@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import { setIsLoading as setOrderLoading, buildTableFromOrders } from "./orderSetSlice"
+import {
+  setIsLoading as setOrderLoading,
+  buildTableFromOrders,
+} from "./orderSetSlice";
 import { getCouponUrl, getCouponOrderSet } from "../../api/couponApi";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 /*
@@ -24,7 +27,7 @@ const startLoading = (state) => {
 
 const startLinkLoading = (state) => {
   state.isLinkLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
@@ -66,21 +69,23 @@ export const {
 
 export default couponSlice.reducer;
 
-export const getIframeUrl = (email) => async (dispatch) => {
+export const getIframeUrl = (email, territoryId, userId) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     dispatch(setLinkIsLoading());
     const id = uuidv4();
-    const uniqueUrl = `${process.env.REACT_APP_COUPON_POSTBACK_URL}/${id}`
-    const iframeUrl = await getCouponUrl(email, uniqueUrl)
+    const uniqueUrl = `${process.env.REACT_APP_COUPON_POSTBACK_URL}/${id}?territory_id=${territoryId}&user_id=${userId}`;
+    const iframeUrl = await getCouponUrl(email, uniqueUrl);
     if (iframeUrl.error) {
-      throw iframeUrl.error
+      throw iframeUrl.error;
     }
-    dispatch(getIframeLinkSuccess({ link: iframeUrl, id: id }))
+    dispatch(getIframeLinkSuccess({ link: iframeUrl, id: id }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const fetchCouponOrderSet = (code) => async (dispatch) => {
   try {
@@ -121,4 +126,4 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
