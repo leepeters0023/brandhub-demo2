@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
@@ -53,22 +56,32 @@ const DrawerItemsNav = ({ role, classes, }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <NestedMenuItem
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          label="Item Catalog"
-          classes={classes}
-          childItems={[
-            {
-              link: "/items/all",
-              primary: "Current"
-            },
-            {
-              link: "/items/archive",
-              primary: "Archive"
-            },
-          ]}
-        />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/all"
+        >
+          <ListItemText
+            primaryTypographyProps={{
+              className: classes.headerListItemNew,
+            }}
+            primary="Current Items"
+          />
+        </MenuItem>
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="/items/archive"
+        >
+          <ListItemText
+            primaryTypographyProps={{
+              className: classes.headerListItemNew,
+            }}
+            primary="Archived Items"
+          />
+        </MenuItem>
         <Divider className={classes.divider} />
         <NestedMenuItem
           anchorEl={anchorEl}
@@ -114,6 +127,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
 
 DrawerItemsNav.propTypes = {
   classes: PropTypes.object.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 export default DrawerItemsNav;

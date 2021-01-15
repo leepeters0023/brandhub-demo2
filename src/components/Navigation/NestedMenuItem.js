@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Menu from "@material-ui/core/Menu";
 import { Link } from "@reach/router";
@@ -6,16 +6,22 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
 
-const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) => {
+const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-  const handleFocus = () => {setIsSubMenuOpen(true)}
-  const handleMouseEnter = () => {setIsSubMenuOpen(true)}
-  const handleMouseLeave = () => {setIsSubMenuOpen(false)}
+  const [subAnchorEl, setSubAnchorEl] = useState(null);
+  const handleFocus = (evt) => {
+    setIsSubMenuOpen(true);
+    setSubAnchorEl(evt.target);
+  }
+  const handleMouseEnter = (evt) => {
+    setIsSubMenuOpen(true);
+    setSubAnchorEl(evt.target);
+  }
+  const handleMouseLeave = () => { setIsSubMenuOpen(false) }
 
   const open = isSubMenuOpen && anchorEl
-  const menuItemRef = useRef(null)
-  const menuContainerRef = useRef(null)
-
+  //const menuItemRef = useRef(null)
+  
   return (
     <div
       onFocus={handleFocus}
@@ -23,7 +29,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) 
       onMouseLeave={handleMouseLeave}
     >
       <MenuItem
-        ref={menuItemRef}
+        // ref={menuItemRef}
         className={classes.headerListItem}
       >
         {label}
@@ -32,7 +38,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) 
       <Menu
         classes={{ paper: classes.menuBackground }}
         style={{ pointerEvents: 'none' }}
-        anchorEl={menuItemRef.current}
+        anchorEl={subAnchorEl}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right'
@@ -41,7 +47,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) 
           vertical: 'top',
           horizontal: 'left'
         }}
-        open={open}
+        open={Boolean(open)}
         autoFocus={false}
         disableAutoFocus
         disableEnforceFocus
@@ -49,7 +55,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) 
           setIsSubMenuOpen(false)
         }}
       >
-        <div ref={menuContainerRef} style={{ pointerEvents: 'auto' }}>
+        <div style={{ pointerEvents: 'auto' }}>
           {childItems.filter(item => item.link && item.primary).map((item, i) => (
             <MenuItem
               key={i}

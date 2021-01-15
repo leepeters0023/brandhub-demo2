@@ -53,6 +53,7 @@ const DrawerReportsNav = ({ classes, role }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        <div />
         {(role !== "finance" || role !== "compliance") && (
           <NestedMenuItem
             anchorEl={anchorEl}
@@ -116,6 +117,7 @@ const DrawerReportsNav = ({ classes, role }) => {
 
 DrawerReportsNav.propTypes = {
   classes: PropTypes.object.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 export default DrawerReportsNav;
