@@ -54,6 +54,7 @@ const RuleTypeSelector = ({
           value={ruleType}
           onChange={handleChangeSelect}
           MenuProps={{
+            style: { zIndex: "2500" },
             getContentAnchorEl: null,
             anchorOrigin: {
               vertical: "bottom",
