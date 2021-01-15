@@ -99,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: "10px",
     marginBottom: "10px",
+    backgroundColor: "white"
   }
 }));
 

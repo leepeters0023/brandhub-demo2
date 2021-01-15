@@ -39,6 +39,7 @@ const DrawerOrdersNav = ({ classes, }) => {
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
+        classes={{ paper: classes.menuBackground }}
         disableScrollLock
         getContentAnchorEl={null}
         anchorOrigin={{
