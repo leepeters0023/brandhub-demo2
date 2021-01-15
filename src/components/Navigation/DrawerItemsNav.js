@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
@@ -58,7 +55,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
       >
         <NestedMenuItem
           anchorEl={anchorEl}
-          onClick={handleClose}
+          handleClose={handleClose}
           label="Item Catalog"
           classes={classes}
           childItems={[
@@ -67,7 +64,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
               primary: "Current"
             },
             {
-              link: "/items/all",
+              link: "/items/archive",
               primary: "Archive"
             },
           ]}
@@ -75,81 +72,41 @@ const DrawerItemsNav = ({ role, classes, }) => {
         <Divider className={classes.divider} />
         <NestedMenuItem
           anchorEl={anchorEl}
-          onClick={handleClose}
-          label="Item Catalog"
+          handleClose={handleClose}
+          label="Programs"
           classes={classes}
           childItems={[
             {
-              link: role ==="field1" ? "/items/all" : "---",
-              primary: role ==="field1" ? "Current" : "---",
+              link: (role === "field2" || role === "super") ? "/programs/new" : null,
+              primary: (role === "field2" || role === "super") ? "Create Ad Hoc Program" : null,
             },
             {
-              link: "/items/all",
-              primary: "Archive"
+              link: "/programs",
+              primary: "Pre-Order Programs"
             },
           ]}
         />
-        {/* <NestedMenuItem
-          className={classes.headerListItem}
-          parentMenuOpen={Boolean(anchorEl)}
-          onClick={handleClose}
-          label="Programs"
-        >
-          {(role === "field2" || role === "super") && (
-            <MenuItem
-              button
-              onClick={handleClose}
-              component={Link}
-              to="/programs/new"
-            >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Create Ad Hoc Program" />
-            </MenuItem>
-          )}
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/programs"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Pre-Order Programs" />
-          </MenuItem>
-        </NestedMenuItem>
         <Divider className={classes.divider} key="divider1" />
         <NestedMenuItem
-          className={classes.headerListItem}
-          parentMenuOpen={Boolean(anchorEl)}
-          onClick={handleClose}
+          anchorEl={anchorEl}
+          handleClose={handleClose}
           label="Compliance"
-        >
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/compliance/items"
-          // accurate that we should be showing this to all users?
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Item Rules" />
-          </MenuItem>
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/compliance/rules"
-          // accurate that we should be showing this to all users?
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="General Rules" />
-          </MenuItem>
-          {(role === "compliance" || role === "super") && (
-            <MenuItem
-              button
-              onClick={handleClose}
-              component={Link}
-              to="/compliance/contacts"
-            >
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
-            </MenuItem>
-          )}
-        </NestedMenuItem> */}
+          classes={classes}
+          childItems={[
+            {
+              link: "/compliance/items",
+              primary: "Item Rules",
+            },
+            {
+              link: "/compliance/rules",
+              primary: "General Rules"
+            },
+            {
+              link: (role === "compliance" || role === "super") ? "/compliance/contacts" : null,
+              primary: (role === "compliance" || role === "super") ? "Contacts" : null,
+            },
+          ]}
+        />
       </Menu>
     </>
   );
