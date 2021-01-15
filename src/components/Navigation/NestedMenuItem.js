@@ -1,4 +1,4 @@
-import React, { useState, useRef, useImperativeHandle } from 'react'
+import React, { useState, useRef } from 'react'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Menu from "@material-ui/core/Menu";
 import { Link } from "@reach/router";
@@ -6,16 +6,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
 
-const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, ref, }) => {
+const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, }) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
-  const handleFocus = (event) => {setIsSubMenuOpen(true)}
-  const handleMouseEnter = (event) => {setIsSubMenuOpen(true)}
-  const handleMouseLeave = (event) => {setIsSubMenuOpen(false)}
+  const handleFocus = () => {setIsSubMenuOpen(true)}
+  const handleMouseEnter = () => {setIsSubMenuOpen(true)}
+  const handleMouseLeave = () => {setIsSubMenuOpen(false)}
 
   const open = isSubMenuOpen && anchorEl
   const menuItemRef = useRef(null)
   const menuContainerRef = useRef(null)
-  useImperativeHandle(ref, () => menuItemRef.current)
 
   return (
     <div
@@ -51,7 +50,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose, ref
         }}
       >
         <div ref={menuContainerRef} style={{ pointerEvents: 'auto' }}>
-          {childItems.map((item, i) => (
+          {childItems.filter(item => item.link && item.primary).map((item, i) => (
             <MenuItem
               key={i}
               button

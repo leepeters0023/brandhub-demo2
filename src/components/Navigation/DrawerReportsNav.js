@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
-import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
-import Box from "@material-ui/core/Box"
-import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
-import NestedMenuItem from "material-ui-nested-menu-item";
+import NestedMenuItem from "./NestedMenuItem.js";
 
 const DrawerReportsNav = ({ classes, role }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -39,6 +35,7 @@ const DrawerReportsNav = ({ classes, role }) => {
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
+        classes={{ paper: classes.menuBackground }}
         disableScrollLock
         getContentAnchorEl={null}
         anchorOrigin={{
@@ -57,81 +54,59 @@ const DrawerReportsNav = ({ classes, role }) => {
         onClose={handleClose}
       >
         {(role !== "finance" || role !== "compliance") && (
-          <div>
-            <NestedMenuItem
-              className={classes.headerListItem}
-              parentMenuOpen={Boolean(anchorEl)}
-              onClick={handleClose}
-              label="History"
-            >
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                to="/orders/history/group/byOrder"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Order" />
-              </MenuItem>
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                to="/orders/history/group/byItem"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Item" />
-              </MenuItem>
-            </NestedMenuItem>
-            <Divider className={classes.divider} key="divider2" />
-          </div>
+          <NestedMenuItem
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            label="History"
+            classes={classes}
+            childItems={[
+              {
+                link: "/orders/history/group/byOrder",
+                primary: "By Order",
+              },
+              {
+                link: "/orders/history/group/byItem",
+                primary: "By Item",
+              },
+            ]}
+          />
         )}
+        <Divider className={classes.divider} key="divider1" />
         <NestedMenuItem
-          className={classes.headerListItem}
-          parentMenuOpen={Boolean(anchorEl)}
-          onClick={handleClose}
+          anchorEl={anchorEl}
+          handleClose={handleClose}
           label="Reporting"
-        >
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/reports/wrap-up"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Wrap Up" />
-          </MenuItem>
-          <MenuItem button onClick={handleClose} component={Link} to="">
-            <Box fontStyle="italic">
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-            </Box>
-          </MenuItem>
-        </NestedMenuItem>
+          classes={classes}
+          childItems={[
+            {
+              link: "/reports/wrap-up",
+              primary: "Wrap Up",
+            },
+            {
+              link: "/reports/wrap-up",
+              primary: "*TBD",
+            },
+          ]}
+        />
         {role !== "compliance" && (
           <div>
             <Divider className={classes.divider} key="divider2" />
             <NestedMenuItem
-              className={classes.headerListItem}
-              parentMenuOpen={Boolean(anchorEl)}
-              onClick={handleClose}
+              anchorEl={anchorEl}
+              handleClose={handleClose}
               label="Budgets"
-            >
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                to="/budgets/ytod"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Budget vs Spend" />
-              </MenuItem>
-              <MenuItem
-                button
-                onClick={handleClose}
-                component={Link}
-                to=""
-              >
-                <Box fontStyle="italic">
-                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-                </Box>
-              </MenuItem>
-            </NestedMenuItem>
+              classes={classes}
+              childItems={[
+                {
+                  link: "/budgets/ytod",
+                  primary: "Budget vs Spend",
+                },
+                {
+                  link: "/reports/wrap-up",
+                  primary: "*TBD",
+                },
+              ]}
+            />
           </div>
         )}
       </Menu>

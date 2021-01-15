@@ -131,13 +131,13 @@ export default {
       }
     },
     headerListItemNew: {
-      color: "black",
-      border: "solid black .5px",
+      color: "white",
+      border: "solid white .5px",
       padding: "7px",
       "&:hover": {
-        color: "white",
         backgroundColor: "#8397B0",
         border: "none",
+        boxShadow: "5px 5px 5px rgba(68, 68, 68, 0.6)"
       }
     },
     bodyText: {
