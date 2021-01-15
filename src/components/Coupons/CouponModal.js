@@ -36,12 +36,14 @@ const CouponModal = ({ handleCouponModal, couponsOpen }) => {
   const iframeId = useSelector((state) => state.coupons.iframeId);
   const iframeLink = useSelector((state) => state.coupons.iframeLink);
   const currentEmail = useSelector((state) => state.user.email);
+  const territoryId = useSelector((state) => state.user.currentTerritory);
+  const userId = useSelector((state) => state.user.id);
 
   useEffect(() => {
     dispatch(clearCoupon());
-    dispatch(getIframeUrl(currentEmail));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(getIframeUrl(currentEmail, territoryId, userId));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={classes.relativeContainer}>
@@ -63,9 +65,7 @@ const CouponModal = ({ handleCouponModal, couponsOpen }) => {
             <CancelIcon fontSize="large" color="secondary" />
           </IconButton>
           <div className={classes.innerCouponWrapper}>
-            {(!iframeLink || isCouponLoading) && (
-              <CircularProgress />
-            )}
+            {(!iframeLink || isCouponLoading) && <CircularProgress />}
             {iframeLink && iframeId && !isLinkLoading && (
               <iframe src={iframeLink} title="Create a Coupon" />
             )}

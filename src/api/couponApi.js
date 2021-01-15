@@ -60,7 +60,7 @@ export const getCouponOrderSet = async (code) => {
   await sleep(10000, token, breakPoll);
   const getSet = async () => {
     await axios
-      .get(`/api/order-sets/coupon/${code}`)
+      .get(`/api/coupon/order-sets/${code}`)
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
         polling = false
