@@ -47,7 +47,8 @@ const DrawerReportsNav = ({ classes, role }) => {
           horizontal: "right",
         }}
         style={{
-          marginTop: "10px"
+          marginTop: "10px",
+          zIndex: "3000",
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

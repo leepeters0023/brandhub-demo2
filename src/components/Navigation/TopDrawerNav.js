@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "black",
     justifyContent: "center",
     alignItems: "flex-end",
-    zIndex: "1300",
+    zIndex: "2500",
   },
   title: {
     flexGrow: 1,
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     filter: "brightness(100%)",
     height: "58px",
     width: "auto",
-    marginLeft: "50px",
+    marginLeft: "25px",
     "&&:hover": {
       cursor: "pointer",
     },
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginRight: "50px"
+    marginRight: "10px"
   },
   navigationText: {
     fontWeight: 500,
