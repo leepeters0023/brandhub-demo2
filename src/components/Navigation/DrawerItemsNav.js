@@ -1,4 +1,4 @@
-import React, { useState, useRef, useImperativeHandle } from "react";
+import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
@@ -9,13 +9,11 @@ import IconButton from "@material-ui/core/IconButton";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import ArrowRight from '@material-ui/icons/ArrowRight'
 
-import NestedMenuItem from "material-ui-nested-menu-item";
+import NestedMenuItem from "./NestedMenuItem.js";
 
-const DrawerItemsNav = ({ role, classes, ref }) => {
+const DrawerItemsNav = ({ role, classes, }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -25,23 +23,6 @@ const DrawerItemsNav = ({ role, classes, ref }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleFocus = (event) => {
-      setIsSubMenuOpen(true)
-  }
-  const handleMouseEnter = (event) => {
-    setIsSubMenuOpen(true)
-  }
-  const handleMouseLeave = (event) => {
-    setIsSubMenuOpen(false)
-  }
-
-  const open = isSubMenuOpen && anchorEl
-
-  const menuItemRef = useRef(null)
-  const menuContainerRef = useRef(null)
-  
-  useImperativeHandle(ref, () => menuItemRef.current)
 
   return (
     <>
@@ -75,69 +56,40 @@ const DrawerItemsNav = ({ role, classes, ref }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <div
-          //ref={containerRef}
-          onFocus={handleFocus}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <MenuItem
-            ref={menuItemRef}
-          >
-            Test
-            <ArrowRight />
-          </MenuItem>
-          <Menu
-            style={{ pointerEvents: 'none' }}
-            anchorEl={menuItemRef.current}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left'
-            }}
-            open={open}
-            autoFocus={false}
-            disableAutoFocus
-            disableEnforceFocus
-            onClose={() => {
-              setIsSubMenuOpen(false)
-            }}
-          >
-            <div ref={menuContainerRef} style={{ pointerEvents: 'auto' }}>
-              <MenuItem>Test</MenuItem>
-            </div>
-          </Menu>
-        </div>
-
         <NestedMenuItem
-          className={classes.headerListItem}
-          parentMenuOpen={Boolean(anchorEl)}
+          anchorEl={anchorEl}
           onClick={handleClose}
           label="Item Catalog"
-        >
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/items/all"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Current" />
-          </MenuItem>
-          <MenuItem
-            button
-            onClick={handleClose}
-            component={Link}
-            to="/items/all"
-          //to="/items/archive"
-          >
-            <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Archive" />
-          </MenuItem>
-        </NestedMenuItem>
+          classes={classes}
+          childItems={[
+            {
+              link: "/items/all",
+              primary: "Current"
+            },
+            {
+              link: "/items/all",
+              primary: "Archive"
+            },
+          ]}
+        />
         <Divider className={classes.divider} />
         <NestedMenuItem
+          anchorEl={anchorEl}
+          onClick={handleClose}
+          label="Item Catalog"
+          classes={classes}
+          childItems={[
+            {
+              link: role ==="field1" ? "/items/all" : "---",
+              primary: role ==="field1" ? "Current" : "---",
+            },
+            {
+              link: "/items/all",
+              primary: "Archive"
+            },
+          ]}
+        />
+        {/* <NestedMenuItem
           className={classes.headerListItem}
           parentMenuOpen={Boolean(anchorEl)}
           onClick={handleClose}
@@ -197,7 +149,7 @@ const DrawerItemsNav = ({ role, classes, ref }) => {
               <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Contacts" />
             </MenuItem>
           )}
-        </NestedMenuItem>
+        </NestedMenuItem> */}
       </Menu>
     </>
   );
