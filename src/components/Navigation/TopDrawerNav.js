@@ -172,7 +172,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
           }}
         >
           <Tooltip title="Home">
-            <Link to="/">
+            <Link to="/dashboard">
               <img
                 src={Logo}
                 alt="Logo"
