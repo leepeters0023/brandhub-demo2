@@ -318,7 +318,7 @@ const App = () => {
           <link rel="manifest" href="/manifest.json" />
           <meta
             name="insight-app-sec-validation"
-            content="aced815d-d550-4d28-87ed-4b8d32c32430"
+            content="186a8001-a29c-4fe5-bdc6-2a9cdd87656b"
           />
           {isProd && (
             <script type="text/javascript">{`!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});window.Beacon('init', '521f5954-7022-46e2-9707-6a82501f23e7')`}</script>
