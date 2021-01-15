@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from 'uuid';
 
-import { getCouponUrl } from "../../api/couponApi";
+import { setIsLoading as setOrderLoading, buildTableFromOrders } from "./orderSetSlice"
+import { getCouponUrl, getCouponOrderSet } from "../../api/couponApi";
+import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 /*
 * Coupon Model
 notes: Still in the works, nothing set in stone
@@ -75,6 +77,47 @@ export const getIframeUrl = (email) => async (dispatch) => {
       throw iframeUrl.error
     }
     dispatch(getIframeLinkSuccess({ link: iframeUrl, id: id }))
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const fetchCouponOrderSet = (code) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    const currentOrders = await getCouponOrderSet(code);
+    if (currentOrders.error) {
+      throw currentOrders.error;
+    }
+    let currentItems = mapOrderItems(
+      currentOrders.data["order-set-items"],
+      "order-set-item"
+    );
+    let orders = mapOrderHistoryOrders(currentOrders.data.orders);
+    orders.sort((a, b) => {
+      let aName = a.distributorName ? a.distributorName : a.customAddressName;
+      let bName = b.distributorName ? b.distributorName : b.customAddressName;
+      return aName < bName ? -1 : aName > bName ? 1 : 0;
+    });
+
+    let type = currentOrders.data.type;
+    let orderId = currentOrders.data.id;
+    let orderStatus = currentOrders.data.status;
+    let complete = currentOrders.data["is-work-complete"];
+    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
+
+    dispatch(
+      buildTableFromOrders({
+        orderId: orderId,
+        type: type,
+        orders: orders,
+        items: currentItems,
+        status: orderStatus,
+        isComplete: complete,
+        note: note,
+      })
+    );
+    dispatch(clearCoupon());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
