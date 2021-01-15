@@ -140,7 +140,7 @@ export const buildFilters = (
     ruleTypeString,
     isVisibleString,
     isOrderableString,
-    isArchivedString
+    isArchivedString,
   ];
 
   let queryStringAppend = queryArray
