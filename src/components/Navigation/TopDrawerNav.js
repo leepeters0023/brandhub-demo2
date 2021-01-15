@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     filter: "brightness(100%)",
     height: "58px",
     width: "auto",
-    marginLeft: "120px",
+    marginLeft: "50px",
     "&&:hover": {
       cursor: "pointer",
     },
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginRight: "120px"
+    marginRight: "50px"
   },
   navigationText: {
     fontWeight: 500,
@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: "white",
     color: "black",
+    float: "right"
   },
   expandMoreIcon: {
     marginRight: "20px",

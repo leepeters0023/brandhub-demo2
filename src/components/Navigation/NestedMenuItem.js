@@ -29,7 +29,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) =>
       onMouseLeave={handleMouseLeave}
     >
       <MenuItem
-        // ref={menuItemRef}
+        style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", }}
         className={classes.headerListItem}
       >
         {label}
