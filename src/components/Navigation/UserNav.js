@@ -10,7 +10,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -18,21 +17,13 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
-const useStyles = makeStyles((theme) => ({
-  ...theme.global,
-  avatar: {
-    backgroundColor: "white",
-    color: "black",
-  },
-}));
-
 const UserNavMenu = ({
   initials,
   handleLogout,
-  handleDrawerClose,
-  userType,
+  classes,
+  role,
 }) => {
-  const classes = useStyles();
+  
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -51,7 +42,6 @@ const UserNavMenu = ({
           aria-haspopup="true"
           onClick={(evt) => {
             handleOpen(evt);
-            handleDrawerClose();
           }}
         >
           <Avatar className={classes.avatar}>{initials}</Avatar>
@@ -84,8 +74,8 @@ const UserNavMenu = ({
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider />
-        {userType !== "supplier" &&
-          userType !== "read-only" && [
+        {role !== "supplier" &&
+          role !== "read-only" && [
             <MenuItem
               key="profile"
               component={Link}
@@ -149,8 +139,8 @@ const UserNavMenu = ({
 UserNavMenu.propTypes = {
   initials: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
-  handleDrawerClose: PropTypes.func.isRequired,
-  userType: PropTypes.string,
+  role: PropTypes.string,
+  classes: PropTypes.object.isRequired,
 };
 
 export default UserNavMenu;
