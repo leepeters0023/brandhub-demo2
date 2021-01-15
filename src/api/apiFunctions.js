@@ -109,6 +109,15 @@ export const buildFilters = (
         ? ""
         : `filter[type]=${filterObject.ruleType}`
       : "";
+  let isVisibleString = filterObject.isItemVisible
+    ? `filter[is-visible]=true`
+    : "";
+  let isOrderableString = filterObject.isItemOrderable
+    ? `filter[is-orderable]=true`
+    : "";
+  let isArchivedString = filterObject.isItemArchived
+    ? `filter[is-archived]=true`
+    : "";
 
   let queryArray = [
     uniqueFilter,
@@ -129,6 +138,9 @@ export const buildFilters = (
     supplierString,
     sortString,
     ruleTypeString,
+    isVisibleString,
+    isOrderableString,
+    isArchivedString,
   ];
 
   let queryStringAppend = queryArray

@@ -201,7 +201,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   );
 
   useEffect(() => {
-    if (currentView !== filterOption) {
+    if (filterOption && currentView !== filterOption) {
       setCurrentView(filterOption);
       if (filterOption === "byOrder") {
         dispatch(updateMultipleFilters({ filterObject: defaultOrderFilters }));

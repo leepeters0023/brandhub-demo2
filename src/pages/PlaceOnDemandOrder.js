@@ -41,6 +41,8 @@ const defaultFilters = {
   orderType: "on-demand",
   itemNumber: "",
   itemDesc: "",
+  isItemVisible: true,
+  isItemOrderable: true,
 };
 
 const useStyles = makeStyles((theme) => ({

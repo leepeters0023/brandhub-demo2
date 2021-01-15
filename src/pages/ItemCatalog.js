@@ -9,7 +9,10 @@ import {
   fetchNextFilteredItems,
   clearItemSelection,
 } from "../redux/slices/itemSlice";
-import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
+import {
+  updateMultipleFilters,
+  setSorted,
+} from "../redux/slices/filterSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
 import {
   fetchSharedItemsByIds,
@@ -26,14 +29,14 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 
-const defaultFilters = {
+const defaultCurrentFilters = {
   brand: [],
   itemType: [],
   bu: [],
@@ -42,6 +45,20 @@ const defaultFilters = {
   orderType: "",
   itemNumber: "",
   itemDesc: "",
+  isItemVisible: true,
+  isItemOrderable: true,
+};
+
+const defaultArchiveFilters = {
+  brand: [],
+  itemType: [],
+  bu: [],
+  program: [],
+  favItems: [],
+  orderType: "",
+  itemNumber: "",
+  itemDesc: "",
+  isItemArchived: true,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -76,6 +93,9 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
 
+  const defaultFilters =
+    catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
+
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
@@ -105,20 +125,6 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     setLinkModalOpen(true);
   };
 
-  useEffect(() => {
-    if (catalogType && currentType !== catalogType) {
-      setCurrentType(catalogType);
-      dispatch(
-        updateSingleFilter({
-          filter: "orderType",
-          value: catalogType === "all" ? "" : catalogType,
-        })
-      );
-      dispatch(setSorted());
-    }
-    defaultFilters.orderType = catalogType === "all" ? "" : catalogType;
-  }, [currentType, catalogType, dispatch, setCurrentType]);
-
   useInitialFilters(
     `item-${catalogType}`,
     defaultFilters,
@@ -127,6 +133,22 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (catalogType && currentType !== catalogType) {
+      setCurrentType(catalogType);
+      if (catalogType === "all") {
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultCurrentFilters })
+        );
+      } else {
+        dispatch(
+          updateMultipleFilters({ filterObject: defaultArchiveFilters })
+        );
+      }
+      dispatch(setSorted());
+    }
+  }, [catalogType, currentType, dispatch, setCurrentType]);
 
   return (
     <>
@@ -146,7 +168,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
-            Item Catalog
+            {catalogType === "all" ? "Item Catalog" : "Item Archive"}
           </Typography>
 
           <div className={classes.innerConfigDiv}>
