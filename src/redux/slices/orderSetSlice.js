@@ -347,13 +347,20 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       let bName = b.distributorName ? b.distributorName : b.customAddressName;
       return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
+    
+    let totalFreight = 0;
+    let totalTax = 0;
+    orders.forEach((ord) => {
+      totalFreight += stringToCents(ord.totalEstFreight);
+      totalTax += stringToCents(ord.totalEstTax)
+    })
 
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
     let complete = currentOrders.data["is-work-complete"];
-    let totalEstFreight = stringToCents(currentOrders.data["total-estimated-shipping-cost"])
-    let totalEstTax = stringToCents(currentOrders.data["total-estimated-tax"])
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
@@ -403,12 +410,20 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
       let bName = b.distributorName ? b.distributorName : b.customAddressName;
       return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
+
+    let totalFreight = 0;
+    let totalTax = 0;
+    orders.forEach((ord) => {
+      totalFreight += stringToCents(ord.totalEstFreight);
+      totalTax += stringToCents(ord.totalEstTax)
+    })
+
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
     let complete = currentOrders.data[0]["is-work-complete"];
-    let totalEstFreight = stringToCents(currentOrders.data[0]["total-estimated-shipping-cost"])
-    let totalEstTax = stringToCents(currentOrders.data[0]["total-estimated-tax"])
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
     let territories =
       currentOrders.data[0].program.type === "National"
         ? ["National"]
