@@ -64,6 +64,9 @@ const DistributorAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="distributor-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}

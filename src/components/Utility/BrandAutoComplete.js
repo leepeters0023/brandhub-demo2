@@ -59,6 +59,9 @@ const BrandAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="brand-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}
