@@ -168,7 +168,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
-            Item Catalog
+            {catalogType === "all" ? "Item Catalog" : "Item Archive"}
           </Typography>
 
           <div className={classes.innerConfigDiv}>

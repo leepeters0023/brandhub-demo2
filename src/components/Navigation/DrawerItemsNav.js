@@ -33,8 +33,7 @@ const DrawerItemsNav = ({ userType, handleDrawerClose, classes }) => {
             button
             onClick={handleDrawerClose}
             component={Link}
-            to="/items/all"
-            //to="/items/archive"
+            to="/items/archive"
           >
             <ListItemText
               primaryTypographyProps={{ className: classes.headerListItem }}

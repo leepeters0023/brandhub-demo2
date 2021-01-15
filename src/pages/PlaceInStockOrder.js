@@ -42,6 +42,8 @@ const defaultFilters = {
   orderType: "in-stock",
   itemNumber: "",
   itemDesc: "",
+  isItemVisible: true,
+  isItemOrderable: true,
 };
 
 const useStyles = makeStyles((theme) => ({
