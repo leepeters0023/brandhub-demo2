@@ -19,6 +19,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  menuBackground: {
+    backgroundColor: theme.palette.secondary.dark,
+  },
   appBar: {
     height: "87px",
     backgroundColor: "black",
@@ -71,8 +74,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0",
   },
   headerListItem: {
-    color: "#4C4C4C",
-
+    color: "white",
     "&:hover": {
       textDecoration: "underline"
     }
@@ -96,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     marginTop: "10px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   }
 }));
 
