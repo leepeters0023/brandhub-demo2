@@ -11,7 +11,7 @@ const writeHeaders = {
 };
 
 export const fetchWarehouseAddress = async () => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
     .get("/api/addresses?filter[type]=warehouse")
     .then((res) => {
@@ -20,48 +20,51 @@ export const fetchWarehouseAddress = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};
 
 export const addAddress = async (address) => {
-  const response = { status: "", error: null, data: null }
+  const response = { status: "", error: null, data: null };
   await axios
-    .post("/api/addresses",
-    {
-      data: {
-        type: "address",
-        attributes: {
-          name: address.name,
-          "street-address-1": address.addressOne,
-          "street-address-2": address.addressTwo,
-          city: address.city,
-          zip: address.zip,
-          country: address.country,
-          type: "custom"
+    .post(
+      "/api/addresses",
+      {
+        data: {
+          type: "address",
+          attributes: {
+            name: address.name,
+            "street-address-1": address.addressOne,
+            "street-address-2": address.addressTwo,
+            city: address.city,
+            zip: address.zip,
+            country: address.country,
+            type: "custom",
+          },
+          relationships: {
+            state: {
+              data: {
+                type: "state",
+                id: address.state,
+              },
+            },
+          },
         },
-        relationships: {
-          state: {
-            data: {
-              type: "state",
-              id: address.state
-            }
-          }
-        }
-      }
-    }, writeHeaders)
+      },
+      writeHeaders
+    )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.toString());
+      console.log(err.response.data.errors[0].title);
       response.status = "error";
-      response.error = err.toString();
+      response.error = err.response.data.errors[0].title;
     });
   return response;
-}
+};

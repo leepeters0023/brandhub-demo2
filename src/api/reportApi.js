@@ -6,14 +6,14 @@ import { buildFilters } from "./apiFunctions";
 const dataFormatter = new Jsona();
 
 export const fetchWrapUpReport = async (filterObject) => {
-  let sortString = `sort=item-number`
+  let sortString = `sort=item-number`;
   let queryString = buildFilters(
     filterObject,
     "",
     sortString,
     "/api/order-items",
     "history-items"
-  )
+  );
   let next = "start";
   let dataArray = [];
   const response = { status: "", error: null, data: null };
@@ -28,10 +28,10 @@ export const fetchWrapUpReport = async (filterObject) => {
       })
       // eslint-disable-next-line no-loop-func
       .catch((err) => {
-        console.log(err.toString());
+        console.log(err.response.data.errors[0].title);
         next = null;
         response.status = "error";
-        response.error = err.toString();
+        response.error = err.response.data.errors[0].title;
       });
   }
   if (!response.error) {
@@ -39,4 +39,4 @@ export const fetchWrapUpReport = async (filterObject) => {
     response.data = dataArray;
   }
   return response;
-}
+};

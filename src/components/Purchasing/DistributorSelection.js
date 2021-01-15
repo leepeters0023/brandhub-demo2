@@ -90,9 +90,9 @@ const DistributorSelection = () => {
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor));
+      dispatch(fetchUserDistributors(distributor, territoryId));
     }
-  }, [distributor, dispatch]);
+  }, [distributor, territoryId,  dispatch]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {

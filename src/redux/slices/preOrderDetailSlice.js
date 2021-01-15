@@ -106,7 +106,9 @@ export const {
 
 export default preOrderDetailSlice.reducer;
 
-export const fetchPreOrders = (id, type, program, terrId) => async (dispatch) => {
+export const fetchPreOrders = (id, type, program, terrId) => async (
+  dispatch
+) => {
   try {
     if (type === "initial") {
       dispatch(setInitialPreOrdersLoading());
@@ -127,6 +129,7 @@ export const fetchPreOrders = (id, type, program, terrId) => async (dispatch) =>
       totalItems: order["total-quantity"],
       totalEstCost: stringToCents(order["total-estimated-cost"]),
       status: order.status,
+      isComplete: order["is-work-complete"]
     }));
     let totalCost = preOrders
       .map((order) => order.totalEstCost)
@@ -136,9 +139,11 @@ export const fetchPreOrders = (id, type, program, terrId) => async (dispatch) =>
       .map((ord) => stringToCents(ord["total-estimated-cost"]))
       .reduce((a, b) => a + b);
     preOrders.forEach((order) => {
-      dispatch(
-        setProgramStatus({ program: order.programId, status: order.status })
-      );
+      let status;
+      if (order.status === "in-progress" && order.isComplete) {
+        status = "complete";
+      } else status = order.status;
+      dispatch(setProgramStatus({ program: order.programId, status: status }));
     });
     dispatch(
       setPreOrderSummary({

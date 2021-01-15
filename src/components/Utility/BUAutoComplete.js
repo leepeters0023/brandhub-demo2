@@ -46,6 +46,9 @@ const BUAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id="bu-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}

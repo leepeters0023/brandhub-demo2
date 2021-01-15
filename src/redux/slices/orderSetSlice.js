@@ -23,6 +23,7 @@ let initialState = {
   orderId: null,
   type: null,
   status: null,
+  isComplete: null,
   items: [],
   orders: [],
   stateFilter: null,
@@ -54,7 +55,7 @@ const orderSetSlice = createSlice({
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, type, orders, items, status, note } = action.payload;
+      const { orderId, type, orders, items, status, isComplete, note } = action.payload;
       let currentItems = [...items];
       if (orders.length !== 0) {
         let ordTotal = 0;
@@ -72,6 +73,7 @@ const orderSetSlice = createSlice({
         });
         state.orderId = orderId;
         state.status = status;
+        state.isComplete = isComplete;
         state.type = type;
         state.items = currentItems;
         state.orders = [...orders];
@@ -83,6 +85,7 @@ const orderSetSlice = createSlice({
         state.orders = [];
         state.orderId = orderId;
         state.status = status;
+        state.isComplete = isComplete;
         state.type = type;
         state.items = currentItems;
         state.orderNote = note;
@@ -205,6 +208,10 @@ const orderSetSlice = createSlice({
       const { status } = action.payload;
       state.status = status;
     },
+    setIsComplete(state, action) {
+      const { status } = action.payload;
+      state.isComplete = status;
+    },
     updateSetItemDate(state, action) {
       const { id, date } = action.payload;
       const currentItems = state.items.map((item) => {
@@ -273,6 +280,7 @@ const orderSetSlice = createSlice({
       state.orderId = null;
       state.type = null;
       state.status = null;
+      state.isComplete = null;
       state.items = [];
       state.orders = [];
       state.stateFilter = null;
@@ -295,6 +303,7 @@ export const {
   updateOrderDetails,
   updateOrderNote,
   setOrderStatus,
+  setIsComplete,
   clearOrderSet,
   setRebuildRef,
   updateSetItemDate,
@@ -328,6 +337,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
+    let complete = currentOrders.data["is-work-complete"];
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
@@ -347,6 +357,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         orders: orders,
         items: currentItems,
         status: orderStatus,
+        isComplete: complete,
         note: note,
       })
     );
@@ -376,6 +387,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
+    let complete = currentOrders.data[0]["is-work-complete"];
     let territories =
       currentOrders.data[0].program.type === "National"
         ? ["National"]
@@ -394,6 +406,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
         orders: orders,
         items: currentItems,
         status: orderStatus,
+        isComplete: complete,
         note: note,
       })
     );

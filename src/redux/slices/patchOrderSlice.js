@@ -20,6 +20,7 @@ import {
   deleteOrder,
   startOrderSet,
   restartOrderSet,
+  setWorkComplete,
   submitOrderSet,
   approveOrderSet,
   deleteOrderSet,
@@ -31,6 +32,7 @@ import {
 import { setProgramStatus } from "./programsSlice";
 import {
   setOrderStatus,
+  setIsComplete,
   updateOrderDetails,
   removeGridItem,
   removeGridOrder,
@@ -258,6 +260,21 @@ export const submitOrdSet = (programId, value, orderSetId, role) => async (
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const completeOrderSet = (id, programId, value) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const completeStatus = await setWorkComplete(id, value);
+    if (completeStatus.error) {
+      throw completeStatus.error
+    }
+    dispatch(setProgramStatus({ program: programId, status: value ? "complete" : "in-progress"}));
+    dispatch(setIsComplete({ status: value }))
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 //updates status on order set from submitted to approved
 export const approveOrdSet = (orderSetId, value, filters) => async (

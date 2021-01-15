@@ -216,6 +216,9 @@ export default {
       "&:hover": {
         cursor: "pointer",
       },
+    },
+    liftedPopper: {
+      zIndex: "2500",
     }
   },
 };

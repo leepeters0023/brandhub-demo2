@@ -12,7 +12,7 @@ import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
-  submitOrdSet,
+  completeOrderSet,
 } from "../redux/slices/patchOrderSlice";
 import { deletePreOrderItems } from "../redux/slices/programsSlice";
 
@@ -135,6 +135,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
   const preOrderStatus = useSelector((state) => state.orderSet.status);
+  const preOrderComplete = useSelector((state) => state.orderSet.isComplete);
   const currentItems = useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);
   const userPrograms = useSelector((state) => state.programs.programs);
@@ -186,7 +187,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleSubmit = () => {
-    dispatch(submitOrdSet(program, "submitted", preOrderId));
+    dispatch(completeOrderSet(preOrderId, program, !preOrderComplete));
   };
 
   const handleProgramIdHash = useCallback(() => {
@@ -419,7 +420,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   variant="contained"
                   onClick={handleSubmit}
                 >
-                  COMPLETE ORDER
+                  {preOrderComplete ? "MARK IN-PROGRESS" : "MARK COMPLETE"}
                 </Button>
               )}
             </div>
