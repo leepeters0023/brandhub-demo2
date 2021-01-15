@@ -1,114 +1,123 @@
-import React from "react";
-import { Link } from "@reach/router";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector } from "react-redux";
+import Menu from "@material-ui/core/Menu";
+import IconButton from "@material-ui/core/IconButton";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 
-import Grid from "@material-ui/core/Grid";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Box from "@material-ui/core/Box";
+import NestedMenuItem from "./NestedMenuItem.js";
 
-const DrawerReportsNav = ({ handleDrawerClose, classes, role }) => {
-  const currentUserRole = useSelector((state) => state.user.role);
+const DrawerReportsNav = ({ classes, role }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpen = (evt) => {
+    setAnchorEl(evt.target);
+    evt.stopPropagation();
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <Grid container spacing={2} justify="space-around">
-      {(currentUserRole !== "finance" || currentUserRole !== "compliance") && (
-        <>
-          <Grid item sm={3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.navHeaderText }}
-                  primary="Order History"
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/orders/history/group/byOrder"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Order" />
-              </ListItem>
-              <ListItem
-                
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/orders/history/group/byItem"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="By Item" />
-              </ListItem>
-            </List>
-          </Grid>
-        </>
-      )}
-      <Grid item sm={3} xs={12}>
-        <List className={classes.navList}>
-          <ListItem>
-            <ListItemText
-              primaryTypographyProps={{ className: classes.navHeaderText }}
-              primary="Reporting:"
+    <>
+      <IconButton
+        onClick={(evt) => {
+          handleOpen(evt);
+          evt.stopPropagation();
+        }}
+      >
+        <Typography variant="h5" className={classes.navigationText}>
+          Reports
+        </Typography>
+        <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
+      </IconButton>
+      <Menu
+        classes={{ paper: classes.menuBackground }}
+        disableScrollLock
+        getContentAnchorEl={null}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        style={{
+          marginTop: "10px"
+        }}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <div />
+        {(role !== "finance" || role !== "compliance") && (
+          <NestedMenuItem
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            label="History"
+            classes={classes}
+            childItems={[
+              {
+                link: "/orders/history/group/byOrder",
+                primary: "By Order",
+              },
+              {
+                link: "/orders/history/group/byItem",
+                primary: "By Item",
+              },
+            ]}
+          />
+        )}
+        <Divider className={classes.divider} key="divider1" />
+        <NestedMenuItem
+          anchorEl={anchorEl}
+          handleClose={handleClose}
+          label="Reporting"
+          classes={classes}
+          childItems={[
+            {
+              link: "/reports/wrap-up",
+              primary: "Wrap Up",
+            },
+            {
+              link: "/reports/wrap-up",
+              primary: "*TBD",
+            },
+          ]}
+        />
+        {role !== "compliance" && (
+          <div>
+            <Divider className={classes.divider} key="divider2" />
+            <NestedMenuItem
+              anchorEl={anchorEl}
+              handleClose={handleClose}
+              label="Budgets"
+              classes={classes}
+              childItems={[
+                {
+                  link: "/budgets/ytod",
+                  primary: "Budget vs Spend",
+                },
+                {
+                  link: "/reports/wrap-up",
+                  primary: "*TBD",
+                },
+              ]}
             />
-          </ListItem>
-          <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/reports/wrap-up"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Wrap Up" />
-              </ListItem>
-          <ListItem button onClick={handleDrawerClose} component={Link} to="">
-            <Box fontStyle="italic">
-              <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-            </Box>
-          </ListItem>
-        </List>
-      </Grid>
-      {currentUserRole !== "compliance" && (
-        <>
-          <Grid item sm={3} xs={12}>
-            <List className={classes.navList}>
-              <ListItem>
-                <ListItemText
-                  primaryTypographyProps={{ className: classes.navHeaderText }}
-                  primary="Budgets"
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to="/budgets/ytod"
-              >
-                <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Budget vs Spend" />
-              </ListItem>
-              <ListItem
-                button
-                onClick={handleDrawerClose}
-                component={Link}
-                to=""
-              >
-                <Box fontStyle="italic">
-                  <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="*TBD" />
-                </Box>
-              </ListItem>
-            </List>
-          </Grid>
-        </>
-      )}
-      {currentUserRole === "field1" && <Grid item sm={3} xs={12} />}
-    </Grid>
+          </div>
+        )}
+      </Menu>
+    </>
   );
 };
 
 DrawerReportsNav.propTypes = {
-  handleDrawerClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  role: PropTypes.string.isRequired,
 };
 
 export default DrawerReportsNav;

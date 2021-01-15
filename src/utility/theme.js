@@ -119,17 +119,13 @@ export default {
       marginRight: "50px",
     },
     headerText: {
-      fontWeight: "600",
-      fontSize: "1rem",
+      fontWeight: "400",
+      fontSize: "14px",
       color: "#4C4C4C",
-    },
-    navHeaderText: {
-      fontWeight: "600",
-      fontSize: "1rem",
-      color: "white",
+      marginLeft: "10px"
     },
     headerListItem: {
-      color: "white",
+      color: "black",
       "&:hover": {
         textDecoration: "underline"
       }
@@ -139,8 +135,9 @@ export default {
       border: "solid white .5px",
       padding: "7px",
       "&:hover": {
-        color: "black",
-        backgroundColor: "white "
+        backgroundColor: "#8397B0",
+        border: "none",
+        boxShadow: "5px 5px 5px rgba(68, 68, 68, 0.6)"
       }
     },
     bodyText: {
