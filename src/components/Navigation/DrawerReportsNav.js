@@ -59,7 +59,7 @@ const DrawerReportsNav = ({ classes, role }) => {
           <NestedMenuItem
             anchorEl={anchorEl}
             handleClose={handleClose}
-            label="History"
+            label="Order History"
             classes={classes}
             childItems={[
               {

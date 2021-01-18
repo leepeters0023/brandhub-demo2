@@ -60,6 +60,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) =
               component={Link}
               onClick={handleClose}
               to={item.link}
+              disabled={item.disabled}
             >
               <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary={item.primary} />
             </MenuItem>

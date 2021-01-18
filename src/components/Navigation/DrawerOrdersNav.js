@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
+import { useSelector } from "react-redux";
+
 import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
@@ -19,8 +21,14 @@ const DrawerOrdersNav = ({
   handleCouponModal,
   classes,
 }) => {
-
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const hasInStockOrder = useSelector(
+    (state) => state.currentOrder.inStockOrderNumber
+  );
+  const hasOnDemandOrder = useSelector(
+    (state) => state.currentOrder.onDemandOrderNumber
+  );
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -57,7 +65,8 @@ const DrawerOrdersNav = ({
           horizontal: "right",
         }}
         style={{
-          marginTop: "10px"
+          marginTop: "10px",
+          zIndex: "3000",
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -151,40 +160,50 @@ const DrawerOrdersNav = ({
           </MenuItem>
         )}
         <Divider className={classes.divider} />
-        <NestedMenuItem
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          label="Draft Orders"
-          classes={classes}
-          childItems={[
-            {
-              link: onDemandOrderId ? `/orders/open/${onDemandOrderId}` : "/orders/open/onDemand", // how to set disabled={!onDemandOrderId} on this?
-              primary: "On-Demand",
-            },
-            {
-              link: inStockOrderId ? `/orders/open/${inStockOrderId}` : "/orders/open/inStock",
-              primary: "In-Stock",
-            },
-          ]}
-        />
-        <Divider className={classes.divider} key="divider1" />
+        {role !== "read-only" && role !== "compliance" && (
+          <NestedMenuItem
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            label="Draft Orders"
+            classes={classes}
+            childItems={[
+              {
+                link: onDemandOrderId
+                  ? `/orders/open/${onDemandOrderId}`
+                  : "/orders/open/onDemand", // how to set disabled={!onDemandOrderId} on this?
+                primary: "On-Demand",
+                disabled: !hasOnDemandOrder,
+              },
+              {
+                link: inStockOrderId
+                  ? `/orders/open/${inStockOrderId}`
+                  : "/orders/open/inStock",
+                primary: "In-Stock",
+                disabled: !hasInStockOrder,
+              },
+            ]}
+          />
+        )}
+        {role !== "field1" && role !== "read-only" && (
+          <Divider className={classes.divider} key="divider1" />
+        )}
         {(role === "field2" || role === "super" || role === "read-only") && (
-            <NestedMenuItem
-              anchorEl={anchorEl}
-              handleClose={handleClose}
-              label="Order Review"
-              classes={classes}
-              childItems={[
-                {
-                  link: "/rollup",
-                  primary: "Quarterly Rollup",
-                },
-                {
-                  link: "/orders/approvals",
-                  primary: "On Demand / Inventory Order",
-                },
-              ]}
-            />
+          <NestedMenuItem
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            label="Order Review"
+            classes={classes}
+            childItems={[
+              {
+                link: "/rollup",
+                primary: "Quarterly Rollup",
+              },
+              {
+                link: "/orders/approvals",
+                primary: "On Demand / Inventory Order",
+              },
+            ]}
+          />
         )}
         {(role === "purchaser" || role === "super") && (
           <div>
