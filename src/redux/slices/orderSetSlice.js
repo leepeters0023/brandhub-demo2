@@ -59,7 +59,17 @@ const orderSetSlice = createSlice({
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, type, orders, items, status, isComplete, note, totalEstFreight, totalEstTax } = action.payload;
+      const {
+        orderId,
+        type,
+        orders,
+        items,
+        status,
+        isComplete,
+        note,
+        totalEstFreight,
+        totalEstTax,
+      } = action.payload;
       let currentItems = [...items];
       if (orders.length !== 0) {
         let ordTotal = 0;
@@ -347,13 +357,13 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       let bName = b.distributorName ? b.distributorName : b.customAddressName;
       return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
-    
+
     let totalFreight = 0;
     let totalTax = 0;
     orders.forEach((ord) => {
-      totalFreight += stringToCents(ord.totalEstFreight);
-      totalTax += stringToCents(ord.totalEstTax)
-    })
+      totalFreight += ord.totalEstFreight;
+      totalTax += ord.totalEstTax;
+    });
 
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
@@ -391,7 +401,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
   }
 };
 
-export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) => {
+export const fetchProgramOrders = (program, userId, terrId) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     dispatch(resetPreOrderItems());
@@ -414,9 +426,9 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     let totalFreight = 0;
     let totalTax = 0;
     orders.forEach((ord) => {
-      totalFreight += stringToCents(ord.totalEstFreight);
-      totalTax += stringToCents(ord.totalEstTax)
-    })
+      totalFreight += ord.totalEstFreight;
+      totalTax += ord.totalEstTax;
+    });
 
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
@@ -445,7 +457,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
         isComplete: complete,
         note: note,
         totalEstFreight: totalEstFreight,
-        totalEstTax: totalEstTax
+        totalEstTax: totalEstTax,
       })
     );
     dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
