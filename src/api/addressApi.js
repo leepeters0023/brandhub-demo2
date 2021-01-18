@@ -20,9 +20,15 @@ export const fetchWarehouseAddress = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -62,9 +68,15 @@ export const addAddress = async (address) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };

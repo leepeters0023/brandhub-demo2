@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   specTableCellDetailRoot: {
     padding: "5px 10px",
-  }
+  },
 }));
 
 const CurrentPO = () => {
@@ -362,7 +362,10 @@ const CurrentPO = () => {
           className={classes.titleText}
           style={{ marginRight: "20px" }}
         >
-          {`Total: ${formatMoney(currentPO.totalCost, true)}`}
+          {`Total: ${formatMoney(
+            currentPO.totalCost + currentPO.totalFreight + currentPO.totalTax,
+            true
+          )}`}
         </Typography>
       </div>
       <br />

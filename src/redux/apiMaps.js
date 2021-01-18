@@ -243,6 +243,18 @@ export const mapSingleOrder = (order) => {
     shipDate: order["shipped-at"] ? order["shipped-at"] : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
+    totalEstFreight: order["total-estimated-shipping-cost"]
+      ? stringToCents(order["total-estimated-shipping-cost"])
+      : "---",
+    totalActFreight: order["total-actual-shipping-cost"]
+      ? stringToCents(order["total-actual-shipping-cost"])
+      : "---",
+    totalEstTax: order["total-estimated-tax"]
+      ? stringToCents(order["total-estimated-tax"])
+      : "---",
+    totalActTax: order["total-actual-tax"]
+      ? stringToCents(order["total-actual-tax"])
+      : "---",
     totalEstCost: stringToCents(order["total-estimated-cost"]),
     totalActCost: "---",
     note: order.notes ? order.notes : "---",
@@ -494,7 +506,7 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  console.log(items)
+  console.log(items);
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
@@ -643,6 +655,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ? purchaseOrder["rfq-number"]
       : "---",
     poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
+    totalFreight: stringToCents(purchaseOrder["total-freight-cost"]),
     totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
       .map((item) => item.totalCost)
       .reduce((a, b) => a + b),
@@ -658,9 +671,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ...new Set(
         [].concat.apply(
           [],
-          params.map((param) =>
-            param.items.map((item) => item.shippingLabel)
-          )
+          params.map((param) => param.items.map((item) => item.shippingLabel))
         )
       ),
     ].join(", "),

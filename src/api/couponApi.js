@@ -32,9 +32,15 @@ export const getCouponUrl = async (email, url) => {
       response.data = res;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -45,17 +51,17 @@ export const getCouponOrderSet = async (code) => {
   const sleep = (ms, cancelToken, cb) => {
     return new Promise((resolve, reject) => () => {
       cancelToken.cancel = () => {
-        reject(new Error("sleep() cancelled"))
+        reject(new Error("sleep() cancelled"));
       };
-      setTimeout(()=>{
-        cb()
-        resolve()
-      }, ms)
-    })
-  }
+      setTimeout(() => {
+        cb();
+        resolve();
+      }, ms);
+    });
+  };
   const breakPoll = () => {
     polling = false;
-  }
+  };
   const token = {};
   await sleep(10000, token, breakPoll);
   const getSet = async () => {
@@ -64,14 +70,20 @@ export const getCouponOrderSet = async (code) => {
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
         console.log(data);
-        polling = false
+        polling = false;
         response.status = "ok";
         response.data = data;
       })
       .catch((err) => {
-        console.log(err.response.data.errors[0].title);
+        console.log(
+          err.response.data.errors
+            ? err.response.data.errors[0].title
+            : err.response.data
+        );
         response.status = "error";
-        response.error = err.response.data.errors[0].title;
+        response.error = err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data;
       });
   };
   await getSet();

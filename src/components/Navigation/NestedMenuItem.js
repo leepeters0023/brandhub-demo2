@@ -37,7 +37,7 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) =>
       </MenuItem>
       <Menu
         classes={{ paper: classes.menuBackground }}
-        style={{ pointerEvents: 'none', zIndex: "3001" }}
+        style={{ pointerEvents: 'none', zIndex: "3000" }}
         anchorEl={subAnchorEl}
         anchorOrigin={{
           vertical: 'top',

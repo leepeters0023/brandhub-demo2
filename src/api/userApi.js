@@ -26,9 +26,15 @@ export const logInUser = async (email, password) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -45,9 +51,15 @@ export const getUser = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -61,9 +73,15 @@ export const getLoginURL = async () => {
       response.data = res.data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -78,9 +96,15 @@ export const loginUserWithAuthO = async (code) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -127,9 +151,15 @@ export const addFavoriteItems = async (idArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -149,9 +179,15 @@ export const getFilteredUsers = async (name) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -169,9 +205,15 @@ export const getNextFilteredUsers = async (link) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -186,9 +228,15 @@ export const getSingleUser = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -235,9 +283,15 @@ export const updateUserCreds = async (userData) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };

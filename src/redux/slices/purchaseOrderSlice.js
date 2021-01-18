@@ -14,6 +14,7 @@ import {
   updatePOItemPackOut,
   updatePOItemCost,
   updatePOItemPackSize,
+  updatePOFreight,
   deletePO,
   deletePOItem,
   addToPO,
@@ -54,6 +55,7 @@ let initialState = {
     keyAcctTape: "",
     specDetails: null,
     poItems: [],
+    totalFreight: null,
     totalCost: null,
     totalTax: null,
     directShip: null,
@@ -126,6 +128,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.rfqNumber = purchaseOrder.rfqNumber;
       state.currentPO.specDetails = purchaseOrder.specDetails;
       state.currentPO.poItems = purchaseOrder.poItems;
+      state.currentPO.totalFreight = purchaseOrder.totalFreight;
       state.currentPO.totalCost = purchaseOrder.totalCost;
       state.currentPO.totalTax = purchaseOrder.totalTax;
       state.currentPO.directShip = purchaseOrder.directShip;
@@ -218,6 +221,13 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.error = null;
     },
+    updateFreight(state, action) {
+      const { freightCost } = action.payload;
+      let fixedCost = stringToCents(freightCost);
+      state.currentPO.totalFreight = fixedCost;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     updateDirectShip(state, action) {
       const { value } = action.payload;
       state.currentPO.directShip = value;
@@ -306,6 +316,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.rfqNumber = null;
       state.currentPO.specDetails = null;
       state.currentPO.poItems = [];
+      state.currentPO.totalFreight = null;
       state.currentPO.totalCost = null;
       state.currentPO.totalTax = null;
       state.currentPO.directShip = null;
@@ -332,6 +343,7 @@ export const {
   updateMethod,
   updateSupplierNotes,
   updateKeyAcctTape,
+  updateFreight,
   updateDirectShip,
   updateAdditionalFile,
   deleteItemSuccess,
@@ -401,6 +413,7 @@ export const createNewPO = (idArray, orderType) => async (dispatch) => {
     if (newPO.error) {
       throw newPO.error;
     }
+    console.log(newPO.data);
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
@@ -557,6 +570,19 @@ export const setItemActCost = (id, cost) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const setTotalFreight = (id, freightCost) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const freightStatus = updatePOFreight(id, freightCost);
+    if (freightStatus.error) {
+      throw freightStatus.error;
+    }
+    dispatch(updateFreight({ freightCost: freightCost }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
 
 export const deleteItem = (id) => async (dispatch) => {
   try {
