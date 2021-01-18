@@ -49,6 +49,7 @@ import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
+import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
@@ -250,7 +251,17 @@ const App = () => {
   if (userError) {
     navigate("/whoops")
   }
-
+  if (window.location.pathname.includes("/approveOrDenyItem")) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <ApproveOrDenyItem
+            path="approveOrDenyItem"
+            handleFiltersClosed={handleFiltersClosed} />
+        </Router>
+      </MuiThemeProvider>
+    );
+  };
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
