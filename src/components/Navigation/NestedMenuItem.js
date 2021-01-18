@@ -6,7 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
 
-const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) => {
+const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
   const [subAnchorEl, setSubAnchorEl] = useState(null);
 
