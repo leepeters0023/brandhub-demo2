@@ -114,7 +114,6 @@ const DrawerOrdersNav = ({ classes, }) => {
 };
 
 DrawerOrdersNav.propTypes = {
-  handleClose: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

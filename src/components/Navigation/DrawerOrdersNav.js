@@ -57,8 +57,7 @@ const DrawerOrdersNav = ({
           horizontal: "right",
         }}
         style={{
-          marginTop: "10px",
-          zIndex: "3000",
+          marginTop: "10px"
         }}
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

@@ -41,7 +41,7 @@ const DrawerOrdersNav = ({
       </IconButton>
       <Menu
         classes={{ paper: classes.menuBackground }}
-        disableScrollLockd
+        disableScrollLock
         getContentAnchorEl={null}
         anchorOrigin={{
           vertical: "bottom",

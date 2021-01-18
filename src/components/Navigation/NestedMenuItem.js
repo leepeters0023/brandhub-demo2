@@ -6,25 +6,22 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
 
-const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) => {
+const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
   const [subAnchorEl, setSubAnchorEl] = useState(null);
-  const handleFocus = (evt) => {
-    setIsSubMenuOpen(true);
-    setSubAnchorEl(evt.target);
-  }
+
   const handleMouseEnter = (evt) => {
     setIsSubMenuOpen(true);
     setSubAnchorEl(evt.target);
   }
-  const handleMouseLeave = () => { setIsSubMenuOpen(false) }
+  const handleMouseLeave = () => { 
+    setIsSubMenuOpen(false); 
+  }
 
   const open = isSubMenuOpen && anchorEl
-  //const menuItemRef = useRef(null)
   
   return (
     <div
-      onFocus={handleFocus}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -60,8 +57,8 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose}) =>
             <MenuItem
               key={i}
               button
-              onClick={handleClose}
               component={Link}
+              onClick={handleClose}
               to={item.link}
             >
               <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary={item.primary} />
