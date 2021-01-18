@@ -156,7 +156,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                   )}
                 </>
               )}
-              {role !== "purchasing" && (
+              {(role !== "purchasing" && role !== "supplier") && (
                 <>
                   <DrawerReportsNav
                     role={role}
