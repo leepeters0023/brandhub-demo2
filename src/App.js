@@ -248,7 +248,7 @@ const App = () => {
   ]);
 
   if (userError) {
-    navigate("/whoops")
+    navigate("/whoops");
   }
 
   if (!loggedIn && !currentUser) {
@@ -318,10 +318,12 @@ const App = () => {
           open={filtersOpen}
           handleDrawerClose={handleFiltersClosed}
         />
-        <CouponsModal
-          handleCouponModal={handleCouponModal}
-          couponsOpen={couponsOpen}
-        />
+        {couponsOpen && (
+          <CouponsModal
+            handleCouponModal={handleCouponModal}
+            couponsOpen={couponsOpen}
+          />
+        )}
         <div
           id="main-container"
           style={{ marginLeft: filtersOpen ? "300px" : "0px" }}
