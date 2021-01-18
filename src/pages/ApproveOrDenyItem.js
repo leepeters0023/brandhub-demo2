@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Container from "@material-ui/core/Container";
+import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,9 +17,10 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
   return (
     <>
       <Container className={classes.mainWrapper}>
+      RTA logo
         <div
           style={{
-            height: "70vh",
+            height: "90vh",
             width: "100%",
             display: "flex",
             justifyContent: "center",
@@ -27,18 +29,41 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
         >
           <Grid container>
             <Grid item sm={2} xs={1} />
-            <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
+            <Grid item sm={8} xs={10} style={{ textAlign: "center"}}>
               <Typography className={classes.titleText} variant="h5">
                 Approve or deny this
               </Typography>
               <br />
-              <Typography className={classes.bodyText}>
-               Some buttons and logic that passes an approve or deny value back to API
-              </Typography>
+              <div 
+                style={{display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                }}>
+                <Button
+                    className={classes.largeButton}
+                    style={{width: "150px", margin: "10px"}}
+                    variant="contained" 
+                    onClick={() => { /*do something */}}
+                      >
+                        Approve
+                </Button>
+            
+            
+                <Button
+                    className={classes.largeButton}
+                    style={{width: "150px", margin: "10px"}}
+                    variant="contained"
+                    onClick={() => { /*do something */}}
+                      >
+                        Deny
+                </Button>
+                </div>
             </Grid>
-            <Grid item sm={2} xs={1} />
           </Grid>
         </div>
+            <Typography className={classes.titleText} style={{bottom: "0", float: "right"}} variant="h5">
+                    need help?
+            </Typography>
       </Container>
     </>
   );
