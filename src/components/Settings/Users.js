@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { useInitialFilters } from "../../hooks/UtilityHooks";
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
-import { useInput } from "../../hooks/InputHooks";
+import { useDetailedInput } from "../../hooks/InputHooks";
 
 import {
-  setFilterType,
-  setDefaultFilters,
   updateMultipleFilters,
   setSorted,
 } from "../../redux/slices/filterSlice";
+import {
+  fetchNextFilteredUsers,
+  fetchFilteredUsers,
+  setUpdateSuccess,
+  clearCurrentUser,
+} from "../../redux/slices/userUpdateSlice";
 
 import UserTable from "./UserTable";
 import EditUserModal from "./EditUserModal";
@@ -18,101 +22,6 @@ import EditUserModal from "./EditUserModal";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-
-//mock data
-const createData = (id, name, email, phone, role, regions) => {
-  return {
-    id: id,
-    name: name,
-    email: email,
-    phone: phone,
-    role: role,
-    territories: regions,
-  };
-};
-
-const userList = [
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-  createData(
-    Math.floor(Math.random() * 10000 + 1).toString(),
-    "Firstname Lastname",
-    "email@email.com",
-    "555-555-5555",
-    "Field User Lvl. One",
-    "Region 1, Region 2"
-  ),
-];
 
 const defaultFilters = {
   userName: "",
@@ -140,20 +49,22 @@ const Users = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { value: search, bind: bindSearch } = useInput("");
-
   const [modal, handleModal] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const isLoading = useSelector((state) => state.userUpdate.isLoading);
+  const isNextLoading = useSelector((state) => state.userUpdate.isNextLoading);
+  const nextLink = useSelector((state) => state.userUpdate.nextLink);
+  const currentUsers = useSelector((state) => state.userUpdate.userList);
 
   const handleBottomScroll = () => {
-    // if (nextLink && !isNextLoading) {
-    //   if (scrollRef.current.scrollTop !== 0) {
-    //     dispatch(fetchNextUsers(nextLink));
-    //   }
-    // }
+    if (nextLink && !isNextLoading) {
+      if (scrollRef.current.scrollTop !== 0) {
+        dispatch(fetchNextFilteredUsers(nextLink));
+      }
+    }
   };
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
@@ -165,6 +76,8 @@ const Users = () => {
 
   const handleModalClose = () => {
     handleModal(false);
+    dispatch(setUpdateSuccess({updateStatus: false}))
+    dispatch(clearCurrentUser())
   };
 
   const handleSort = (sortObject) => {
@@ -180,22 +93,16 @@ const Users = () => {
     dispatch(setSorted());
   };
 
-  useEffect(() => {
-    dispatch(setFilterType({ type: "user-settings" }));
-    dispatch(
-      setDefaultFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    dispatch(
-      updateMultipleFilters({
-        filterObject: defaultFilters,
-      })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleSearch = (value, _type, _filter) => {
+    console.log(value);
+    dispatch(fetchFilteredUsers(value));
+  };
 
-  //Todo handle fetch in filter drawer
+  const { value: search, bind: bindSearch } = useDetailedInput(
+    "",
+    handleSearch
+  );
+
   useInitialFilters(
     "user-settings",
     defaultFilters,
@@ -203,7 +110,7 @@ const Users = () => {
     dispatch,
     undefined,
     currentUserRole
-  )
+  );
 
   return (
     <>
@@ -230,8 +137,8 @@ const Users = () => {
 
       <UserTable
         handleUserClick={handleUserClick}
-        users={userList}
-        isUsersLoading={false}
+        users={currentUsers}
+        isUsersLoading={isLoading}
         handleSort={handleSort}
         scrollRef={scrollRef}
       />
