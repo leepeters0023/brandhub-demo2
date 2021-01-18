@@ -32,9 +32,15 @@ export const fetchAllRules = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -52,9 +58,15 @@ export const fetchNextRules = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -79,9 +91,15 @@ export const fetchTriggeredRules = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -99,9 +117,15 @@ export const fetchNextTriggeredRules = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };

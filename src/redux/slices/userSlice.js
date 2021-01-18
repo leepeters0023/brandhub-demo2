@@ -257,7 +257,6 @@ export const loginWithCode = (code) => async (dispatch) => {
     if (res.error) {
       throw res.error;
     }
-    console.log(res);
     dispatch(setLoginSuccess({refresh: res.data["refresh_token"], expires: res.data["expires_in"]}));
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
@@ -272,7 +271,6 @@ export const getRedirect = () => async (dispatch) => {
     if (res.error) {
       throw res.error;
     }
-    console.log(res);
     dispatch(setRedirectLink({link: res.data["redirect_url"]}));
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));

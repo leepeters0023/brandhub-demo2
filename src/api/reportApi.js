@@ -28,10 +28,16 @@ export const fetchWrapUpReport = async (filterObject) => {
       })
       // eslint-disable-next-line no-loop-func
       .catch((err) => {
-        console.log(err.response.data.errors[0].title);
+        console.log(
+          err.response.data.errors
+            ? err.response.data.errors[0].title
+            : err.response.data
+        );
         next = null;
         response.status = "error";
-        response.error = err.response.data.errors[0].title;
+        response.error = err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data;
       });
   }
   if (!response.error) {

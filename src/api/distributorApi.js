@@ -20,9 +20,15 @@ export const fetchDistributorsByTerritory = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -41,9 +47,15 @@ export const fetchDistributors = async (name, territoryId) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -58,9 +70,15 @@ export const getFavDistributors = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -86,9 +104,15 @@ export const newFavDistList = async (index) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -119,9 +143,15 @@ export const updateFavDistList = async (id, name, distArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -134,9 +164,15 @@ export const deleteFavDistList = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -157,9 +193,15 @@ export const editCustomAttentionLine = async (id, attn) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setItemActCost,
   setItemPackOut,
+  setTotalFreight,
 } from "../../redux/slices/purchaseOrderSlice";
 
 import { useMoneyInput } from "../../hooks/InputHooks";
@@ -29,7 +30,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
 
 const MoneyCell = ({ initialCost, id, role, span }) => {
-  let currentFunc = role !== "supplier" ? setItemActCost : undefined;
+  let currentFunc = role !== "supplier" ? setItemActCost : setTotalFreight;
   const { value: cost, bind: bindCost } = useMoneyInput(
     initialCost,
     currentFunc,
@@ -55,7 +56,8 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
   const totalTax = useSelector(
     (state) => state.purchaseOrder.currentPO.totalTax
   );
-
+  const poId = useSelector((state) => state.purchaseOrder.currentPO.id);
+  const totalFreight = useSelector((state) => state.purchaseOrder.currentPO.totalFreight);
   const handlePackOut = (id, value) => {
     dispatch(setItemPackOut(id, value));
   };
@@ -65,7 +67,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
       className={classes.tableContainer}
       style={{ width: "75%", minWidth: "1000px" }}
     >
-      <Typography className={classes.titleText} style={{ marginLeft: "20px" }}>
+      <Typography className={classes.titleText} style={{ marginLeft: "10px" }}>
         Purchase Order Items:
       </Typography>
       <br />
@@ -267,7 +269,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                 <TableCell colSpan={6} className={classes.headerText}>
                   Total Freight Cost:
                 </TableCell>
-                <MoneyCell initialCost="$0.00" role={currentRole} span={2} />
+                <MoneyCell initialCost={formatMoney(totalFreight, true)} role={currentRole} id={poId} span={2} />
               </TableRow>
               <TableRow>
                 <TableCell colSpan={6} className={classes.headerText}>
