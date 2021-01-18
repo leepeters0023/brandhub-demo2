@@ -44,7 +44,7 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
   );
 };
 
-Help.propTypes = {
+ApproveOrDenyItem.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
 };
 
