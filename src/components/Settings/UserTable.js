@@ -164,7 +164,7 @@ const UserTable = ({
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.email}</TableCell>
                   <TableCell align="left">{row.role}</TableCell>
-                  <TableCell align="left">{row.territories}</TableCell>
+                  <TableCell align="left">{row.territories.map((terr) => terr.name).join(", ")}</TableCell>
                 </TableRow>
               ))}
             {isUsersLoading && (

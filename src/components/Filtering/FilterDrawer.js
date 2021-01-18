@@ -30,6 +30,7 @@ import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
 import { fetchFilteredPOHistory } from "../../redux/slices/purchaseOrderHistorySlice";
 import { fetchFilteredRules } from "../../redux/slices/complianceRulesSlice";
 import { fetchFilteredTriggeredRules } from "../../redux/slices/complianceItemsSlice";
+import { fetchFilteredUsers } from "../../redux/slices/userUpdateSlice";
 
 import { useDetailedInput } from "../../hooks/InputHooks";
 
@@ -263,6 +264,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       if (filterType === "compliance-items") {
         dispatch(fetchFilteredTriggeredRules(defaultFilters));
       }
+      if (filterType === "user-settings") {
+        dispatch(fetchFilteredUsers(defaultFilters));
+      }
       dispatch(setChips({ filterType: allFilters.filterType }));
     }
   }, [
@@ -277,7 +281,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     allFilters.filterType,
   ]);
 
-  //TODO write PO, rfq, compliance (rules / items), items, budget search when available
+  //TODO write compliance (rules / items), budget search when available
 
   const handleOrderHistoryFetch = () => {
     dispatch(setChips({ filterType: "history" }));
@@ -334,9 +338,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     rfq: handleFilteredRFQFetch,
     po: handleFilteredPOFetch,
   };
-
-  //TODO write handle grouping change function that fetches order history / rollup by
-  // order or item
 
   useEffect(() => {
     if (setToClear) {
@@ -401,6 +402,9 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
       }
       if (filterType === "compliance-items") {
         dispatch(fetchFilteredTriggeredRules(allFilters));
+      }
+      if (filterType === "user-settings") {
+        dispatch(fetchFilteredUsers(allFilters));
       }
       if (sorted) {
         dispatch(setSorted());

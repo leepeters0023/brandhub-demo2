@@ -8,6 +8,7 @@ import {
 
 let initialState = {
   isLoading: false,
+  isUserLoading: false,
   isNextLoading: false,
   isUpdateLoading: false,
   userList: [],
@@ -23,12 +24,17 @@ let initialState = {
     states: [],
     territories: [],
   },
+  updateStatus: false,
   error: null,
 };
 
 const startLoading = (state) => {
   state.isLoading = true;
 };
+
+const startUser = (state) => {
+  state.isUserLoading = true;
+}
 
 const startNext = (state) => {
   state.isNextLoading = true;
@@ -41,6 +47,7 @@ const startUpdate = (state) => {
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
+  state.isUserLoading = false;
   state.isNextLoading = false;
   state.isUpdateLoading = false;
   state.error = error;
@@ -51,6 +58,7 @@ const userUpdateSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setIsUserLoading: startUser,
     setIsNextLoading: startNext,
     setUpdateLoading: startUpdate,
     getUsersSuccess(state, action) {
@@ -79,12 +87,27 @@ const userUpdateSlice = createSlice({
       state.currentUser.isRetail = user.isRetail;
       state.currentUser.states = [...user.states];
       state.currentUser.territories = [...user.territories];
-      state.isLoading = false;
+      state.isUserLoading = false;
       state.isUpdateLoading = false;
       state.error = null;
     },
+    setUpdateSuccess(state, action) {
+      const { updateStatus } = action.payload;
+      state.updateSuccess = updateStatus;
+    },
+    clearCurrentUser(state) {
+      state.currentUser.id = null;
+      state.currentUser.role = null;
+      state.currentUser.name = null;
+      state.currentUser.email = null;
+      state.currentUser.isOnPremise = null;
+      state.currentUser.isRetail = null;
+      state.currentUser.states = [];
+      state.currentUser.territories = [];
+    },
     clearUserUpdate(state) {
       state.isLoading = false;
+      state.isUserLoading = false;
       state.isNextLoading = false;
       state.isUpdateLoading = false;
       state.nextPage = null;
@@ -98,6 +121,7 @@ const userUpdateSlice = createSlice({
       state.currentUser.isRetail = null;
       state.currentUser.states = [];
       state.currentUser.territories = [];
+      state.updateStatus = false;
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -106,11 +130,14 @@ const userUpdateSlice = createSlice({
 
 export const {
   setIsLoading,
+  setIsUserLoading,
   setIsNextLoading,
   setUpdateLoading,
   getUsersSuccess,
   getNextUsersSuccess,
   getSingleUserSuccess,
+  setUpdateSuccess,
+  clearCurrentUser,
   clearUserUpdate,
   setFailure,
 } = userUpdateSlice.actions;
@@ -175,7 +202,7 @@ export const fetchNextFilteredUsers = (link) => async (dispatch) => {
 
 export const fetchSingleUser = (id) => async (dispatch) => {
   try {
-    dispatch(setIsLoading());
+    dispatch(setIsUserLoading());
     let user = await getSingleUser(id);
     if (user.error) {
       throw user.error;
@@ -214,6 +241,7 @@ export const updateUser = (userData) => async (dispatch) => {
       territories: user.data.territories,
     };
     dispatch(getSingleUserSuccess({ user: mappedUser }));
+    dispatch(setUpdateSuccess({ updateStatus: true }))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
