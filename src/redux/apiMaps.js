@@ -87,6 +87,10 @@ export const mapItems = (items) => {
         item.programs && item.programs.length > 0
           ? item.programs.map((prog) => prog.name).join(", ")
           : "---",
+      programIds:
+        item.programs && item.programs.length > 0
+          ? item.programs.map((prog) => prog.id)
+          : null,
       itemType: item.type,
       projectNum: item["at-task-project-id"]
         ? item["at-task-project-id"]
@@ -494,7 +498,7 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  console.log(items)
+  console.log(items);
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
@@ -658,9 +662,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ...new Set(
         [].concat.apply(
           [],
-          params.map((param) =>
-            param.items.map((item) => item.shippingLabel)
-          )
+          params.map((param) => param.items.map((item) => item.shippingLabel))
         )
       ),
     ].join(", "),

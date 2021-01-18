@@ -311,7 +311,7 @@ export const createPO = async (ids, orderType) => {
   return response;
 };
 
-export const createInvPO = async (id, qty, warehouse) => {
+export const createInvPO = async (id, qty, warehouse, programId) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
@@ -320,12 +320,14 @@ export const createInvPO = async (id, qty, warehouse) => {
         ? {
             "item-id": id,
             qty: qty,
+            "program-id": programId,
             warehouse: warehouse,
             type: "in-stock",
           }
         : {
             "item-id": id,
             qty: qty,
+            "program-id": programId,
             type: "in-stock",
           },
     },

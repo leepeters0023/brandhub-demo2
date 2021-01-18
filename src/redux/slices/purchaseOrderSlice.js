@@ -408,10 +408,10 @@ export const createNewPO = (idArray, orderType) => async (dispatch) => {
   }
 };
 
-export const createInventoryPO = (itemId, qty, warehouse) => async (dispatch) => {
+export const createInventoryPO = (itemId, qty, warehouse, programId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const newPO = await createInvPO(itemId, qty, warehouse);
+    const newPO = await createInvPO(itemId, qty, warehouse, programId);
     if (newPO.error) {
       throw newPO.error;
     }
