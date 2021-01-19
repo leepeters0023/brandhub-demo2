@@ -19,12 +19,12 @@ import orderSetReducer from "./slices/orderSetSlice";
 import patchOrderReducer from "./slices/patchOrderSlice";
 import preOrderDetailReducer from "./slices/preOrderDetailSlice";
 import programsReducer from "./slices/programsSlice";
-import sharedItemsReducer from "./slices/sharedItemsSlice";
 import purchaseOrderReducer from "./slices/purchaseOrderSlice";
 import purchaseOrderHistoryReducer from "./slices/purchaseOrderHistorySlice";
 import reportReducer from "./slices/reportSlice";
 import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
+import sharedItemsReducer from "./slices/sharedItemsSlice";
 import supplierReducer from "./slices/supplierSlice";
 import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
@@ -52,12 +52,12 @@ const rootReducer = combineReducers({
   patchOrder: patchOrderReducer,
   preOrderDetails: preOrderDetailReducer,
   programs: programsReducer,
-  sharedItems: sharedItemsReducer,
   purchaseOrder: purchaseOrderReducer,
   purchaseOrderHistory: purchaseOrderHistoryReducer,
   reports: reportReducer,
   rfq: rfqReducer,
   rfqHistory: rfqHistoryReducer,
+  sharedItems: sharedItemsReducer,
   suppliers: supplierReducer,
   tags: tagReducer,
   territories: territoryReducer,
