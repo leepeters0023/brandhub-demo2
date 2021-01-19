@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
   const [subAnchorEl, setSubAnchorEl] = useState(null);
-
+ 
   const handleMouseEnter = (evt) => {
     setIsSubMenuOpen(true);
     setSubAnchorEl(evt.target);
@@ -17,16 +17,17 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) =
   const handleMouseLeave = () => { 
     setIsSubMenuOpen(false); 
   }
-
+ 
   const open = isSubMenuOpen && anchorEl
   
   return (
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      style={{paddingTop: "10px", paddingBottom: "10px"}}
     >
       <MenuItem
-        style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", }}
         className={classes.headerListItem}
       >
         {label}
@@ -34,6 +35,9 @@ const NestedMenuItem = ({ anchorEl, label, childItems, classes, handleClose }) =
       </MenuItem>
       <Menu
         classes={{ paper: classes.menuBackground }}
+        transitionDuration={{enter : 500, exit: 0 }}
+        // Set pointer events to 'none' to prevent the invisible Popover div
+        // from capturing events for clicks and hovers
         style={{ pointerEvents: 'none', zIndex: "3001" }}
         anchorEl={subAnchorEl}
         anchorOrigin={{
