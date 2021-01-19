@@ -16,7 +16,6 @@ import {
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
-import { stringToCents } from "../../utility/utilityFunctions";
 
 let initialState = {
   isLoading: false,
