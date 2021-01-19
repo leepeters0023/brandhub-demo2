@@ -285,7 +285,7 @@ export const fetchRFQ = async (id) => {
 };
 
 //Creates a new PO based on an item and it's associated program
-export const createPO = async (ids, orderType) => {
+export const createPO = async (ids, orderType, programId) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
@@ -293,6 +293,7 @@ export const createPO = async (ids, orderType) => {
       attributes: {
         "order-item-ids": ids,
         "order-type": orderType,
+        "program-id": +programId,
       },
     },
   };

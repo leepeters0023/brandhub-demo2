@@ -368,7 +368,6 @@ const ItemRollupTable = ({
                     ) : (
                       <TableCell align="left">{row.territory[0]}</TableCell>
                     )}
-                    <TableCell align="left">{row.brand}</TableCell>
                     {row.programs.length > 1 && (
                       <Tooltip title={`${row.programs.join(", ")}`}>
                         <TableCell align="left">
@@ -389,6 +388,7 @@ const ItemRollupTable = ({
                           : "---"}
                       </TableCell>
                     )}
+                    <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.projectNum}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>

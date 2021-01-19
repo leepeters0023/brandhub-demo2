@@ -109,6 +109,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   const handleNewPO = () => {
     let idArray = [];
+    let programId;
     const itemIdArray = selectedPOItems.map((idString) => idString.split("-"));
     let currentSupplier = [
       ...new Set(
@@ -124,10 +125,11 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         itemIdArray.forEach((id) => {
           if (item.itemId === id[1] && item.id === id[0]) {
             idArray = idArray.concat(item.orderItemIds);
+            programId = item.program.id
           }
         });
       });
-      dispatch(createNewPO(idArray, currentOrderType));
+      dispatch(createNewPO(idArray, currentOrderType, programId));
       dispatch(setSelectedPOItems({ selectedItems: [] }));
       navigate("/purchasing/purchaseOrder#new");
     } else {
