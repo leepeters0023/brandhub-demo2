@@ -368,26 +368,8 @@ const ItemRollupTable = ({
                     ) : (
                       <TableCell align="left">{row.territory[0]}</TableCell>
                     )}
-                    {row.programs.length > 1 && (
-                      <Tooltip title={`${row.programs.join(", ")}`}>
-                        <TableCell align="left">
-                          {row.program && row.program !== "---"
-                            ? row.program.name
-                            : row.programs.length > 0
-                            ? row.programs[0].name
-                            : "---"}
-                        </TableCell>
-                      </Tooltip>
-                    )}
-                    {row.programs.length <= 1 && (
-                      <TableCell align="left">
-                        {row.program && row.program !== "---"
-                          ? row.program.name
-                          : row.programs.length > 0
-                          ? row.programs[0].name
-                          : "---"}
-                      </TableCell>
-                    )}
+
+                    <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.projectNum}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>

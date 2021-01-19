@@ -1,5 +1,4 @@
 import {
-  earliestDate,
   stringToCents,
   formatDate,
 } from "../utility/utilityFunctions";
@@ -452,20 +451,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items);
-  const determineProgram = (i) => {
-    if (i["order-program"]) {
-      return i["order-program"];
-    } else {
-      if (i.programs && i.programs.length > 1) {
-        return earliestDate(i.programs)[0];
-      } else if (i.programs.length === 1) {
-        return i.programs[0];
-      } else {
-        return "---";
-      }
-    }
-  };
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -474,12 +459,8 @@ export const mapRollupItems = (items) => {
       ? item.item["at-task-project-id"]
       : "---",
     territory: item["territory-names"],
-    brand: item.brands
-      ? item.brands.map((brand) => brand.name).join(", ")
-      : item.programs
-          .map((prog) => prog.brands.map((brand) => brand.name))
-          .join(", "),
-    program: determineProgram(item),
+    brand: item["brand-names"] ? item["brand-names"].join(", ") : "---",
+    program: item["order-program-name"],
     programs: item.programs,
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -499,7 +480,6 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
-  console.log(items);
   const mappedItems = items.map((item) => {
     if (item["is-direct-cost"]) {
       return {
