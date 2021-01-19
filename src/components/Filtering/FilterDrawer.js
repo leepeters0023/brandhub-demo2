@@ -184,6 +184,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredRules(currentFilters));
       }
       if (filterType === "compliance-items" && filter !== "itemNumber") {
+        console.log(currentFilters);
         dispatch(fetchFilteredTriggeredRules(currentFilters));
       }
     },

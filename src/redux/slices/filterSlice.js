@@ -192,7 +192,7 @@ const filterSlice = createSlice({
         chippable = ["brand", "program", "itemType", "itemNumber", "bu"];
       }
       if (filterType.includes("compliance")) {
-        chippable = ["brand", "program", "itemType", "tag", "itemNumber"];
+        chippable = ["brand", "program", "itemType", "tag", "itemNumber", "stateIds"];
       }
       if (filterType.includes("budget")) {
         chippable = ["brand", "user", "territory", "stateIds"];

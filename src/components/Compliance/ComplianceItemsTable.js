@@ -24,6 +24,7 @@ const headCells = [
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: true },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "ruleType", disablePadding: false, label: "Rule Type", sort: true },
   { id: "desc", disablePadding: false, label: "Rule Description", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: false },
@@ -262,6 +263,7 @@ const ComplianceItemsTable = ({
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
+                    <TableCell align="left">{row.state}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
                     <TableCell align="left">{row.ruleDesc}</TableCell>
                     <TableCell align="left">

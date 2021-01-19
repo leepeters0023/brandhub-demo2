@@ -118,6 +118,9 @@ export const buildFilters = (
   let isArchivedString = filterObject.isItemArchived
     ? `filter[is-archived]=true`
     : "";
+  let stateString = filterObject.stateIds && filterObject.stateIds.length > 0
+    ? `filter[state-ids]=${separateByComma(filterObject.stateIds, "id")}`
+    : "";
 
   let queryArray = [
     uniqueFilter,
@@ -141,6 +144,7 @@ export const buildFilters = (
     isVisibleString,
     isOrderableString,
     isArchivedString,
+    stateString,
   ];
 
   let queryStringAppend = queryArray

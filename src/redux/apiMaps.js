@@ -814,6 +814,7 @@ export const mapCompItems = (items) => {
     ruleType: typeMap[item.rule.type],
     ruleDesc: item.rule.description,
     status: statusMap[item.status],
+    state: item.state.code,
     //These two are placeholder for now
     active: true,
     emailSent:

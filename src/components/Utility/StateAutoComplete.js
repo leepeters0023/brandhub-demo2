@@ -54,6 +54,9 @@ const StateAutoComplete = ({
         renderTags={() => null}
         fullWidth
         className={classes.queryField}
+        classes={{
+          popper: classes.liftedPopper
+        }}
         id={id ? id : "state-code-complete"}
         open={open}
         onOpen={() => setOpen(true)}

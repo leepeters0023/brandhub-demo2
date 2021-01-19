@@ -93,6 +93,7 @@ export const fetchFilteredTriggeredRules = (filterObject) => async (dispatch) =>
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
+    console.log(triggeredRules)
     const mappedCompItems = mapCompItems(triggeredRules.data.rules)
     dispatch(getComplianceItemsSuccess({
       items: mappedCompItems,

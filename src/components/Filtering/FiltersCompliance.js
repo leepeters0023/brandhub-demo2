@@ -10,6 +10,7 @@ import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
 import RuleTypeSelector from "../Utility/RuleTypeSelector";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
+import StateAutoComplete from "../Utility/StateAutoComplete";
 
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
@@ -73,15 +74,15 @@ const FiltersCompliance = ({
                 filterType={"compliance"}
               />
             </ListItem>
-            {/* <ListItem>
-              <ProgramAutoComplete
+            <ListItem>
+              <StateAutoComplete
                 classes={classes}
                 handleChange={handleFilters}
                 reset={reset}
                 setReset={setReset}
                 filterType={"compliance"}
               />
-            </ListItem> */}
+            </ListItem>
             <ListItem>
               <BrandAutoComplete
                 classes={classes}
