@@ -41,9 +41,17 @@ const RFQ = ({ handleFiltersClosed }) => {
   const role = useSelector((state) => state.user.role);
   const isRFQLoading = useSelector((state) => state.rfq.isLoading);
   const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
-  const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
+  const currentSuppliers = useSelector(
+    (state) => state.suppliers.supplierList
+  ).filter(
+    (sup) =>
+      (sup.name.includes("Curtis") ||
+        sup.name.includes("Halo") ||
+        sup.name.includes("Willey")) &&
+      !sup.name.includes("Structure")
+  );
   const isSuppliersLoading = useSelector((state) => state.suppliers.isLoading);
-
+  console.log(currentSuppliers);
   const handleSendBids = () => {
     dispatch(sendBids(suppliersSelected, currentRFQ.id));
     setSuppliersSelected([]);
@@ -128,7 +136,7 @@ const RFQ = ({ handleFiltersClosed }) => {
           alignItems: "center",
         }}
       >
-        <CurrentRFQ currentRFQ={currentRFQ} />
+        <CurrentRFQ />
         <br />
         <br />
         <Divider style={{ width: "75%", minWidth: "600px" }} />
@@ -168,9 +176,7 @@ const RFQ = ({ handleFiltersClosed }) => {
             )}
           </>
         )}
-        {role === "supplier" && (
-          <RFQAcceptOrDecline />
-        )}
+        {role === "supplier" && <RFQAcceptOrDecline />}
         <br />
       </div>
       <br />

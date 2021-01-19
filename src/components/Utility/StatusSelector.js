@@ -36,6 +36,18 @@ const StatusSelector = ({
     { status: "draft", label: "Draft" },
     { status: "all", label: "All Status" },
   ];
+  const rfqSupplierStatusList = [
+    { status: "new", label: "New" },
+    { status: "in-progress", label: "In Progress" },
+    { status: "awarded", label: "Awarded" },
+    { status: "all", label: "All Status" },
+  ];
+  const poSupplierStatusList = [
+    { status: "new", label: "New" },
+    { status: "in-progress", label: "In Progress" },
+    { status: "shipping-hold", label: "Shipping Hold" },
+    { status: "all", label: "All Status" },
+  ];
   const poStatusList = [
     { status: "draft", label: "Draft" },
     { status: "submitted", label: "Submitted" },
@@ -49,7 +61,9 @@ const StatusSelector = ({
     history: "Order Status",
     compliance: "Item Status",
     rfq: "RFQ Status",
+    rfqSupplier: "RFQ Status",
     po: "PO Status",
+    poSupplier: "PO Status",
   };
 
   const currentStatus = useSelector((state) => state.filters.status);
@@ -82,7 +96,7 @@ const StatusSelector = ({
           value={status}
           onChange={handleChangeSelect}
           MenuProps={{
-            style: { zIndex: "2500"},
+            style: { zIndex: "2500" },
             getContentAnchorEl: null,
             anchorOrigin: {
               vertical: "bottom",
@@ -112,8 +126,20 @@ const StatusSelector = ({
                 <Typography variant="body2">{status.label}</Typography>
               </MenuItem>
             ))}
+          {filterType === "rfqSupplier" &&
+            rfqSupplierStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
           {filterType === "po" &&
             poStatusList.map((status, index) => (
+              <MenuItem value={status.status} key={index}>
+                <Typography variant="body2">{status.label}</Typography>
+              </MenuItem>
+            ))}
+          {filterType === "poSupplier" &&
+            poSupplierStatusList.map((status, index) => (
               <MenuItem value={status.status} key={index}>
                 <Typography variant="body2">{status.label}</Typography>
               </MenuItem>

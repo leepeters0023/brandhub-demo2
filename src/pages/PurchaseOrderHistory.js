@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -34,6 +34,42 @@ const defaultCurrentFilters = {
   sortOrderBy: "poNum",
 };
 
+const defaultSupplierNewFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "new",
+  poNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+};
+
+const defaultSupplierInProgressFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "in-progress",
+  poNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+};
+
+const defaultSupplierShipHoldFilters = {
+  supplier: [],
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "shipping-hold",
+  poNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "poNum",
+};
+
 const defaultHistoryFilters = {
   supplier: [],
   brand: [],
@@ -44,6 +80,14 @@ const defaultHistoryFilters = {
   itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "poNum",
+};
+
+const filterOptionMap = {
+  current: defaultCurrentFilters,
+  new: defaultSupplierNewFilters,
+  inProgress: defaultSupplierInProgressFilters,
+  shippingHold: defaultSupplierShipHoldFilters,
+  all: defaultHistoryFilters,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -78,8 +122,7 @@ const PurchaseOrderHistory = ({
     (state) => state.purchaseOrderHistory.isLoading
   );
   const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos);
-  const defaultFilters =
-    filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters;
+  const defaultFilters = filterOptionMap[filterOption];
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -106,15 +149,10 @@ const PurchaseOrderHistory = ({
   useEffect(() => {
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
-      if (filterOption === "current") {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultCurrentFilters })
-        );
-      } else {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultHistoryFilters })
-        );
-      }
+      setCurrentView(filterOption);
+      dispatch(
+        updateMultipleFilters({ filterObject: filterOptionMap[filterOption] })
+      );
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);

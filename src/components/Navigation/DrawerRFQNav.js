@@ -62,7 +62,7 @@ const DrawerOrdersNav = ({ classes, }) => {
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/rfqHistory/current"
+          to="/purchasing/rfqHistory/new"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
           <ListItemAvatar>
@@ -76,7 +76,7 @@ const DrawerOrdersNav = ({ classes, }) => {
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/rfqHistory/current"
+          to="/purchasing/rfqHistory/inProgress"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
           <ListItemAvatar>
@@ -90,7 +90,7 @@ const DrawerOrdersNav = ({ classes, }) => {
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/rfqHistory/all"
+          to="/purchasing/rfqHistory/awarded"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded:" />
           <ListItemAvatar>

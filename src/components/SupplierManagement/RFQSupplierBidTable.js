@@ -65,7 +65,7 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
               {(bid.note || bid.price) && (
                 <>
                   <TableCell align="left">
-                    {bid.price ? formatMoney(bid.price, true) : "---"}
+                    {bid.price && bid.price !== "---" ? formatMoney(bid.price, true) : "---"}
                   </TableCell>
                   <TableCell align="left">
                     {bid.note ? bid.note : "---"}
