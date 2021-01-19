@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -34,6 +34,39 @@ const defaultCurrentFilters = {
   sortOrderBy: "rfqNum",
 };
 
+const defaultSupplierNewFilters = {
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "new",
+  rfqNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "rfqNum",
+};
+
+const defaultSupplierInProgressFilters = {
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "in-progress",
+  rfqNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "rfqNum",
+};
+
+const defaultSupplierAwardedFilters = {
+  brand: [],
+  program: [],
+  itemType: [],
+  status: "awarded",
+  rfqNum: "",
+  itemNumber: "",
+  sortOrder: "asc",
+  sortOrderBy: "rfqNum",
+};
+
 const defaultHistoryFilters = {
   brand: [],
   program: [],
@@ -43,6 +76,14 @@ const defaultHistoryFilters = {
   itemNumber: "",
   sortOrder: "asc",
   sortOrderBy: "rfqNum",
+};
+
+const filterOptionMap = {
+  current: defaultCurrentFilters,
+  new: defaultSupplierNewFilters,
+  inProgress: defaultSupplierInProgressFilters,
+  awarded: defaultSupplierAwardedFilters,
+  all: defaultHistoryFilters,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -71,8 +112,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
-  const defaultFilters =
-    filterOption === "current" ? defaultCurrentFilters : defaultHistoryFilters;
+  const defaultFilters = filterOptionMap[filterOption];
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
@@ -98,15 +138,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   useEffect(() => {
     if (currentView !== filterOption) {
       setCurrentView(filterOption);
-      if (filterOption === "current") {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultCurrentFilters })
-        );
-      } else {
-        dispatch(
-          updateMultipleFilters({ filterObject: defaultHistoryFilters })
-        );
-      }
+      dispatch(
+        updateMultipleFilters({ filterObject: filterOptionMap[filterOption] })
+      );
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);

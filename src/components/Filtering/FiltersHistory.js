@@ -240,7 +240,13 @@ const FiltersHistory = ({
               status={status}
               setStatus={setStatus}
               classes={classes}
-              filterType={historyType === "rollup" ? "history" : historyType}
+              filterType={
+                historyType === "rollup"
+                  ? "history"
+                  : currentUserRole === "supplier"
+                  ? `${historyType}Supplier`
+                  : historyType
+              }
             />
           </ListItem>
         )}

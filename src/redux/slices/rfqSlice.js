@@ -38,9 +38,8 @@ let initialState = {
     totalItems: null,
     supplierNote: "",
     itemSpec: null,
-    imgUrlOne: null,
-    imgUrlTwo: null,
-    imgUrlThree: null,
+    imgUrlThumb: null,
+    imgUrlLg: null,
   },
   error: null,
 };
@@ -100,9 +99,8 @@ const rfqSlice = createSlice({
       state.currentRFQ.totalItems = rfq.totalItems;
       state.currentRFQ.supplierNote = rfq.supplierNote;
       state.currentRFQ.itemSpec = rfq.itemSpec ? { ...rfq.itemSpec } : null;
-      state.currentRFQ.imgUrlOne = rfq.imgUrlOne;
-      state.currentRFQ.imgUrlTwo = rfq.imgUrlTwo;
-      state.currentRFQ.imgUrlThree = rfq.imgUrlThree;
+      state.currentRFQ.imgUrlThumb = rfq.imgUrlThumb;
+      state.currentRFQ.imgUrlLg = rfq.imgUrlLg;
       state.isLoading = false;
       state.isUpdateLoading = false;
       state.error = null;
@@ -150,9 +148,8 @@ const rfqSlice = createSlice({
       state.currentRFQ.totalItems = null;
       state.currentRFQ.supplierNote = "";
       state.currentRFQ.itemSpec = null;
-      state.currentRFQ.imgUrlOne = null;
-      state.currentRFQ.imgUrlTwo = null;
-      state.currentRFQ.imgUrlThree = null;
+      state.currentRFQ.imgUrlThumb = null;
+      state.currentRFQ.imgUrlLg = null;
       state.error = null;
     },
     setFailure: loadingFailed,

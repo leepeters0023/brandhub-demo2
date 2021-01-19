@@ -725,15 +725,17 @@ export const mapPOHistoryItems = (items) => {
 };
 
 export const mapRFQ = (rfq) => {
+  console.log(rfq);
   const mapBids = (bids) => {
     return bids.map((bid) => ({
       id: bid.id,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
       note: bid.note,
-      price: bid.price ? stringToCents(bid.price) : "---",
+      price: bid.price ? stringToCents(bid.price) : null,
     }));
   };
   const images = handleImages([rfq.item.images]);
+  console.log(images);
   let mappedRFQ = {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",
@@ -744,32 +746,22 @@ export const mapRFQ = (rfq) => {
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),
     itemType: rfq.item.type,
     itemDescription: rfq.item.description ? rfq.item.description : "---",
+    projectNum: rfq.item["at-task-project-id"],
     itemNumber: rfq.item["item-number"],
     totalItems: rfq.qty,
     estCost: stringToCents(rfq.item["estimated-cost"]),
     totalEstCost: rfq.qty * stringToCents(rfq.item["estimated-cost"]),
     supplierNote: rfq.note ? rfq.note : "",
-    //TODO not sure about this line, as we don't know what the spec will look like yet
-    itemSpec: rfq.item.spec ? rfq.item.spec : null,
-    //TODO currently just getting the one image, need to update when we get more
-    imgUrlThumbOne:
-      images.imgUrlLg.length > 0 ?? images.imgUrlLg[0]
-        ? images.imgUrlLg[0]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlThumbTwo:
-      images.imgUrlLg.length > 0 ?? images.imgUrlLg[1]
-        ? images.imgUrlLg[1]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
-    imgUrlThumbThree:
-      images.imgUrlLg.length > 0 ?? images.imgUrlLg[2]
-        ? images.imgUrlLg[2]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607091694/Select/NotFound_v0kyue.png",
+    itemSpec: rfq.item.specification ? rfq.item.specification : null,
+    imgUrlThumb: images.imgUrlThumb,
+    imgUrlLg: images.imgUrlLg,
   };
 
   return mappedRFQ;
 };
 
 export const mapRFQHistory = (rfqs) => {
+  console.log(rfqs)
   let mappedRFQHistory = rfqs.map((rfq) => mapRFQ(rfq));
   return mappedRFQHistory;
 };

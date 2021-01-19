@@ -1,8 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
 import format from "date-fns/format";
-import clsx from "clsx";
-//import addDays from "date-fns/addDays";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,8 +11,14 @@ import {
 import { formatDate } from "../../utility/utilityFunctions";
 
 import ImageWrapper from "../Utility/ImageWrapper";
+import SpecDetailTable from "./SpecDetailTable";
 
 import Grid from "@material-ui/core/Grid";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
@@ -73,13 +76,19 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     heigth: "100%",
   },
+  specTableCellRoot: {
+    padding: "5px 0px",
+  },
+  specTableCellDetailRoot: {
+    padding: "5px 10px",
+  },
 }));
 
-const CurrentRFQ = ({ currentRFQ }) => {
+const CurrentRFQ = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const currentNote = useSelector((state) => state.rfq.currentRFQ.supplierNote);
+  const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
 
   return (
     <>
@@ -90,11 +99,12 @@ const CurrentRFQ = ({ currentRFQ }) => {
         alignItems="stretch"
       >
         <Grid item lg={6} sm={12} className={classes.gridBorder}>
-          <Grid container spacing={2} alignItems="flex-end">
-            <Grid item sm={4}>
+          <Grid container spacing={2}>
+            <Grid item sm={6}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   color="secondary"
+                  fullWidth
                   className={classes.dateField}
                   disableToolbar
                   variant="inline"
@@ -104,7 +114,10 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="Quote Due"
                   value={
                     currentRFQ.dueDate !== "---"
-                      ? formatDate(currentRFQ.dueDate)
+                      ? format(
+                          formatDate(new Date(currentRFQ.dueDate)),
+                          "MM/dd/yyyy"
+                        )
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>
@@ -117,9 +130,12 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   }}
                 />
               </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid item sm={6}>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   color="secondary"
+                  fullWidth
                   className={classes.dateField}
                   disableToolbar
                   variant="inline"
@@ -129,7 +145,10 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   label="In-Market Date"
                   value={
                     currentRFQ.inMarketDate !== "---"
-                      ? formatDate(currentRFQ.inMarketDate)
+                      ? format(
+                          formatDate(new Date(currentRFQ.inMarketDate)),
+                          "MM/dd/yyyy"
+                        )
                       : format(new Date(), "MM/dd/yyyy")
                   }
                   onChange={(value) =>
@@ -146,92 +165,130 @@ const CurrentRFQ = ({ currentRFQ }) => {
                   }}
                 />
               </MuiPickersUtilsProvider>
-              <br />
-              <br />
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {`Program:`}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {`Brand(s):`}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {`Item Type:`}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {`Sequence Number:`}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {`Qty:`}
-              </Typography>
-            </Grid>
-            <Grid item sm={8}>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {currentRFQ.program}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {currentRFQ.brand}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {currentRFQ.itemType}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {currentRFQ.itemNumber}
-              </Typography>
-              <Typography
-                noWrap
-                className={clsx(classes.headerText, classes.bidText)}
-              >
-                {currentRFQ.totalItems}
-              </Typography>
-            </Grid>
-            <Grid item sm={12}>
-              <TextField
-                label="Supplier Notes"
-                color="secondary"
-                multiline
-                fullWidth
-                variant="outlined"
-                size="small"
-                rows="4"
-                value={currentNote}
-                onChange={(event) =>
-                  dispatch(updateNote({ note: event.target.value }))
-                }
-                onBlur={(event) =>
-                  dispatch(
-                    updateSupplierNote(currentRFQ.id, event.target.value)
-                  )
-                }
-              />
             </Grid>
           </Grid>
+          <br />
+          <br />
+          <TableContainer className={classes.TableContainer}>
+            <Table className={classes.table} size="small">
+              <TableBody>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    Sequence #
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.itemNumber}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    Item Type
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.itemType}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    Project Id
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.projectNum}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    Program
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.program}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    {"Brand(s)"}
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.brand}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    classes={{ root: classes.specTableCellRoot }}
+                    align="left"
+                    className={classes.headerText}
+                  >
+                    Quantity
+                  </TableCell>
+                  <TableCell
+                    classes={{ root: classes.specTableCellDetailRoot }}
+                    align="left"
+                    className={classes.bodyText}
+                  >
+                    {currentRFQ.totalItems}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <br />
+          <br />
+          <TextField
+            label="Supplier Notes"
+            color="secondary"
+            multiline
+            fullWidth
+            variant="outlined"
+            size="small"
+            rows="4"
+            value={currentRFQ.supplierNote}
+            onChange={(event) =>
+              dispatch(updateNote({ note: event.target.value }))
+            }
+            onBlur={(event) =>
+              dispatch(updateSupplierNote(currentRFQ.id, event.target.value))
+            }
+          />
         </Grid>
         <Grid item lg={6} sm={12}>
           <div className={classes.fullHeightGridItem}>
@@ -239,132 +296,13 @@ const CurrentRFQ = ({ currentRFQ }) => {
               Product Specifications:
             </Typography>
             <br />
-            <Grid container spacing={2}>
-              <Grid item sm={3}>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Front 4-Color:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Front Finish:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Back 4-Color:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Hot Stamp:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Embossing:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Stock:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Flat Size:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Finishing Type:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Perf:
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Score:
-                </Typography>
-              </Grid>
-              <Grid item sm={9}>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  4-Color
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Dull Matte
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  No
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  No
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  No
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Other - 8 mill. White electrostatic Matte finish vinyl
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Size Info
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  Trim to size
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  No
-                </Typography>
-                <Typography
-                  noWrap
-                  className={clsx(classes.headerText, classes.bidText)}
-                >
-                  No
-                </Typography>
-              </Grid>
-            </Grid>
+            <SpecDetailTable
+              classes={classes}
+              specArray={Object.keys(currentRFQ.itemSpec).map((spec) => ({
+                spec: spec,
+                desc: currentRFQ.itemSpec[spec],
+              }))}
+            />
           </div>
         </Grid>
       </Grid>
@@ -378,49 +316,25 @@ const CurrentRFQ = ({ currentRFQ }) => {
         style={{ width: "75%", minWidth: "600px" }}
         alignItems="stretch"
       >
-        <Grid item md={4} sm={12}>
-          <div className={classes.squareGridItem}>
-            <Paper className={classes.squarePaper}>
-              <div className={classes.squareInnerPaper}>
-                <ImageWrapper
-                  id={currentRFQ.id}
-                  imgClass={classes.largePreview}
-                  alt={`Item number ${currentRFQ.itemNumber}`}
-                  imgUrl={currentRFQ.imgUrlOne}
-                />
-              </div>
-            </Paper>
-          </div>
-        </Grid>
-        <Grid item md={4} sm={12}>
-          <div className={classes.squareGridItem}>
-            <Paper className={classes.squarePaper}>
-              <div className={classes.squareInnerPaper}>
-                <Typography className={classes.titleText}>
-                  Sample Image
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-        </Grid>
-        <Grid item md={4} sm={12}>
-          <div className={classes.squareGridItem}>
-            <Paper className={classes.squarePaper}>
-              <div className={classes.squareInnerPaper}>
-                <Typography className={classes.titleText}>
-                  Sample Image
-                </Typography>
-              </div>
-            </Paper>
-          </div>
-        </Grid>
+        {currentRFQ.imgUrlLg.map((img, index) => (
+          <Grid item md={4} sm={12} key={index}>
+            <div className={classes.squareGridItem}>
+              <Paper className={classes.squarePaper}>
+                <div className={classes.squareInnerPaper}>
+                  <ImageWrapper
+                    id={currentRFQ.id}
+                    imgClass={classes.largePreview}
+                    alt={`Item number ${currentRFQ.itemNumber}`}
+                    imgUrl={img}
+                  />
+                </div>
+              </Paper>
+            </div>
+          </Grid>
+        ))}
       </Grid>
     </>
   );
-};
-
-CurrentRFQ.propTypes = {
-  currentRFQ: PropTypes.object.isRequired,
 };
 
 export default CurrentRFQ;

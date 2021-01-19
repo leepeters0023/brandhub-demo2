@@ -44,6 +44,8 @@ import {
   fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
+import { resetRfqHistory } from "./redux/slices/rfqHistorySlice"
+import { resetPoHistory } from "./redux/slices/purchaseOrderHistorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
@@ -152,6 +154,8 @@ const App = () => {
     dispatch(resetComplianceRules());
     dispatch(clearSharedItems());
     dispatch(resetAddresses());
+    dispatch(resetRfqHistory());
+    dispatch(resetPoHistory());
     navigate("/");
   }, [dispatch]);
 

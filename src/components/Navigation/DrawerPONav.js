@@ -63,7 +63,7 @@ const DrawerOrdersNav = ({
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/poHistory/all"
+          to="/purchasing/poHistory/new"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
           <ListItemAvatar>
@@ -77,7 +77,7 @@ const DrawerOrdersNav = ({
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/poHistory/all"
+          to="/purchasing/poHistory/inProgress"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
           <ListItemAvatar>
@@ -91,7 +91,7 @@ const DrawerOrdersNav = ({
           button
           onClick={handleClose}
           component={Link}
-          to="/purchasing/poHistory/all"
+          to="/purchasing/poHistory/shippingHold"
         >
           <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Shipping Hold:" />
           <ListItemAvatar>
