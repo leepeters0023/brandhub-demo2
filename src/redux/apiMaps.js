@@ -259,7 +259,6 @@ export const mapSingleOrder = (order) => {
 };
 
 export const mapOrderHistoryOrders = (orders) => {
-  console.log(orders);
   let mappedOrders = orders.map((order) => {
     let formattedOrder = mapSingleOrder(order);
     return formattedOrder;
@@ -399,7 +398,6 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
-  console.log(order);
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,

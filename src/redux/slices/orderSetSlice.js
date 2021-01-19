@@ -345,7 +345,6 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data["order-set-items"],
       "order-set-item"
