@@ -455,8 +455,8 @@ export const mapRollupItems = (items) => {
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
-    projectNum: item.item["at-task-project-id"]
-      ? item.item["at-task-project-id"]
+    projectNum: item["at-task-project-id"]
+      ? item["at-task-project-id"]
       : "---",
     territory: item["territory-names"],
     brand: item["brand-names"] ? item["brand-names"].join(", ") : "---",
