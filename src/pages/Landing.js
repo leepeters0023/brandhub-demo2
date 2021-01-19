@@ -3,18 +3,49 @@ import { Link } from "@reach/router";
 import Logo from "../assets/RTA_Logo_Stacked.png";
 
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
+import ImageWrapper from "../components/Utility/ImageWrapper";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   logo: {
-    width: "75%",
-    height: "auto",
-    minWidth: "500px",
-  },
+    height: "58px",
+    width: "auto",
+    marginLeft: "25px",
+    float: "left",
+    zIndex: "1",
+},
+header: {
+  zIndex: "1",
+  display: "flex", 
+  flexDirection: "row", 
+  alignContent: "center", 
+  width: "100%", 
+  justifyContent: "space-between", 
+  marginTop: "20px"
+},
+footer: {
+  zIndex: "1",
+  position: "fixed",
+  display: "flex", 
+  flexDirection: "row", 
+  alignContent: "center", 
+  width: "100%", 
+  justifyContent: "space-between", 
+  marginTop: "20px",
+  bottom: "0"
+},
+image: {
+  position: "absolute",
+  width: "100%",
+  height: "auto",
+  margin: 0,
+  opacity: ".5",
+  top: "0",
+  left: "0",
+  overflow: "hidden"
+},
 }));
 
 const Landing = () => {
@@ -23,33 +54,35 @@ const Landing = () => {
   return (
     <>
       <Container className={classes.mainWrapper}>
+        <div className={classes.header}>
+        <ImageWrapper
+                imgUrl={Logo}
+                alt={"Logo"}
+                imgClass={classes.logo}
+                id={"logo"}
+            />
+        <Button style={{zIndex: "1"}} component={Link} to="/login">
+                LOG IN
+              </Button>
+      
+        </div>
         <div
           style={{
-            height: "70vh",
-            width: "100%",
+            height: "90vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            overflow: "hidden"
           }}
         >
-          <Grid container>
-            <Grid item sm={2} xs={1} />
-            <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
-              <img src={Logo} className={classes.logo} alt="Welcome to RTA" />
-              <br />
-              <br />
-              <Typography className={classes.bodyText}>
-                Maybe we could have some sort of description here? Make a nice
-                info page for anyone who happens upon our generic url?
-              </Typography>
-              <br />
-              <br />
-              <Button component={Link} to="/login">
-                LOG IN
-              </Button>
-            </Grid>
-            <Grid item sm={2} xs={1} />
-          </Grid>
+         <ImageWrapper
+          imgUrl={'https://images.unsplash.com/photo-1585803085621-7eea6581caec?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80'}
+          alt={"guy-drinking-wine"}
+          imgClass={classes.image}
+          />
+        </div>
+        <div className={classes.footer}>
+          Copyright brandHub 2021
         </div>
       </Container>
     </>

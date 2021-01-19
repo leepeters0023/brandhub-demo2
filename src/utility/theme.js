@@ -122,6 +122,7 @@ export default {
       fontWeight: "400",
       fontSize: "14px",
       color: "#4C4C4C",
+      marginLeft: "10px",
     },
     headerListItem: {
       color: "black",
