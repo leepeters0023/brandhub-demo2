@@ -16,6 +16,7 @@ import {
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
+import { stringToCents } from "../../utility/utilityFunctions";
 
 let initialState = {
   isLoading: false,
@@ -27,7 +28,10 @@ let initialState = {
   items: [],
   orders: [],
   stateFilter: null,
+  totalEstItemCost: 0,
   orderTotal: 0,
+  totalEstFreight: 0,
+  totalEstTax: 0,
   orderNote: "",
   rebuildRef: false,
   error: null,
@@ -55,7 +59,17 @@ const orderSetSlice = createSlice({
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
     buildTableFromOrders(state, action) {
-      const { orderId, type, orders, items, status, isComplete, note } = action.payload;
+      const {
+        orderId,
+        type,
+        orders,
+        items,
+        status,
+        isComplete,
+        note,
+        totalEstFreight,
+        totalEstTax,
+      } = action.payload;
       let currentItems = [...items];
       if (orders.length !== 0) {
         let ordTotal = 0;
@@ -78,7 +92,10 @@ const orderSetSlice = createSlice({
         state.items = currentItems;
         state.orders = [...orders];
         state.orderNote = note;
-        state.orderTotal = ordTotal;
+        state.totalEstItemCost = ordTotal;
+        state.orderTotal = ordTotal + totalEstFreight + totalEstTax;
+        state.totalEstFreight = totalEstFreight;
+        state.totalEstTax = totalEstTax;
         state.isLoading = false;
         state.error = null;
       } else {
@@ -89,7 +106,9 @@ const orderSetSlice = createSlice({
         state.type = type;
         state.items = currentItems;
         state.orderNote = note;
+        state.totalEstItemCost = 0;
         state.orderTotal = 0;
+        state.totalEstFreight = 0;
         state.isLoading = false;
         state.error = null;
       }
@@ -139,6 +158,7 @@ const orderSetSlice = createSlice({
       items.splice(items.indexOf(currentItem), 1, currentItem);
       state.items = [...items];
       state.orderTotal = ordTotal;
+      state.totalEstItemCost = ordTotal;
     },
     removeGridItem(state, action) {
       const { itemNum } = action.payload;
@@ -284,7 +304,10 @@ const orderSetSlice = createSlice({
       state.items = [];
       state.orders = [];
       state.stateFilter = null;
+      state.totalEstItemCost = 0;
       state.orderTotal = 0;
+      state.totalEstFreight = 0;
+      state.totalEstTax = 0;
       state.orderNote = "";
       state.error = null;
     },
@@ -335,10 +358,19 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
 
+    let totalFreight = 0;
+    let totalTax = 0;
+    orders.forEach((ord) => {
+      totalFreight += ord.totalEstFreight;
+      totalTax += ord.totalEstTax;
+    });
+
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
     let orderStatus = currentOrders.data.status;
     let complete = currentOrders.data["is-work-complete"];
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
     let territories =
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
@@ -360,6 +392,8 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         status: orderStatus,
         isComplete: complete,
         note: note,
+        totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax,
       })
     );
   } catch (err) {
@@ -367,7 +401,9 @@ export const fetchOrderSet = (id) => async (dispatch) => {
   }
 };
 
-export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) => {
+export const fetchProgramOrders = (program, userId, terrId) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     dispatch(resetPreOrderItems());
@@ -375,6 +411,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
     if (currentOrders.error) {
       throw currentOrders.error;
     }
+    console.log(currentOrders);
     let currentItems = mapOrderItems(
       currentOrders.data[0]["order-set-items"],
       "order-set-item"
@@ -385,10 +422,20 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
       let bName = b.distributorName ? b.distributorName : b.customAddressName;
       return aName < bName ? -1 : aName > bName ? 1 : 0;
     });
+
+    let totalFreight = 0;
+    let totalTax = 0;
+    orders.forEach((ord) => {
+      totalFreight += ord.totalEstFreight;
+      totalTax += ord.totalEstTax;
+    });
+
     let type = currentOrders.data[0].type;
     let orderId = currentOrders.data[0].id;
     let orderStatus = currentOrders.data[0].status;
     let complete = currentOrders.data[0]["is-work-complete"];
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
     let territories =
       currentOrders.data[0].program.type === "National"
         ? ["National"]
@@ -409,6 +456,8 @@ export const fetchProgramOrders = (program, userId, terrId) => async (dispatch) 
         status: orderStatus,
         isComplete: complete,
         note: note,
+        totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax,
       })
     );
     dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));

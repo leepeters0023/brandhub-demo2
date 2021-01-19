@@ -37,6 +37,12 @@ let initialState = {
     shipDate: null,
     trackingNum: null,
     totalItems: 0,
+    totalItemEstCost: 0,
+    totalItemActCost: 0,
+    totalEstFreight: 0,
+    totalActFreight: 0,
+    totalEstTax: 0,
+    totalActTax: 0,
     totalEstCost: 0,
     totalActCost: 0,
     note: null,
@@ -90,7 +96,13 @@ const orderHistorySlice = createSlice({
       state.singleOrder.shipDate = order.shipDate;
       state.singleOrder.trackingNum = order.trackingNum;
       state.singleOrder.totalItems = order.totalItems;
-      state.singleOrder.totalEstCost = order.totalEstCost;
+      state.singleOrder.totalItemEstCost =  order.totalEstCost;
+      state.singleOrder.totalItemActCost =  order.totalActCost;
+      state.singleOrder.totalEstFreight =  order.totalEstFreight;
+      state.singleOrder.totalActFreight =  order.totalActFreight;
+      state.singleOrder.totalEstTax = order.totalEstTax;
+      state.singleOrder.totalActTax = order.totalActTax;
+      state.singleOrder.totalEstCost = order.totalEstCost + order.totalEstFreight + order.totalEstTax;
       state.singleOrder.totalActCost = order.totalActCost;
       state.singleOrder.note = order.note;
       state.singleOrder.attn = order.attn;
@@ -152,6 +164,12 @@ const orderHistorySlice = createSlice({
         shipDate: null,
         trackingNum: null,
         totalItems: 0,
+        totalItemEstCost: 0,
+        totalItemActCost: 0,
+        totalEstFreight: 0,
+        totalActFreight: 0,
+        totalEstTax: 0,
+        totalActTax: 0,
         totalEstCost: 0,
         totalActCost: 0,
         note: null,
@@ -222,6 +240,7 @@ export const fetchOrder = (id) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
+    console.log(order);
     let formattedOrder = mapSingleOrder(order.data);
     let formattedItems = mapOrderItems(order.data["order-items"]);
     dispatch(

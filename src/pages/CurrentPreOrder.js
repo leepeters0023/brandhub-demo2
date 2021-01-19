@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TotalsDiv = React.memo(() => {
   const classes = useStyles();
-  const programTotal = useSelector((state) => state.orderSet.orderTotal);
+  const programTotal = useSelector((state) => state.orderSet.totalEstItemCost);
 
   return (
     <>
@@ -142,7 +142,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const grandTotalMod = useSelector(
     (state) => state.preOrderDetails.preOrderTotalMod
   );
-  const setTotal = useSelector((state) => state.orderSet.orderTotal);
+  const setTotal = useSelector((state) => state.orderSet.totalEstItemCost);
 
   const handleModalClose = () => {
     handlePreviewModal(false);
@@ -403,6 +403,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   onClick={() => {
                     setSwitched(false);
                     setOverviewVisible(true);
+                    dispatch(fetchProgramOrders(program, currentUserId, currentTerritory))
                   }}
                   disabled={
                     currentItems.length === 0 ||

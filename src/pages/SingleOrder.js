@@ -237,11 +237,38 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Typography className={classes.headerText}>
               {`Attention: ${currentOrder.attn}`}
             </Typography>
-            {/* {order.rushOrder && (
-              <Typography className={classes.headerText}>Rush Order</Typography>
-            )} */}
+            <br />
+            <Divider />
+            <br />
             <Typography className={classes.headerText}>
               {`Total Items: ${currentOrder.totalItems}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Item Est. Cost: ${formatMoney(
+                currentOrder.totalItemEstCost,
+                false
+              )}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Item Act. Cost: ${currentOrder.totalActCost}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Est. Freight: ${formatMoney(
+                currentOrder.totalEstFreight,
+                false
+              )}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Act. Freight: ${currentOrder.totalActFreight}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Est. Tax: ${formatMoney(
+                currentOrder.totalEstTax,
+                false
+              )}`}
+            </Typography>
+            <Typography className={classes.headerText}>
+              {`Total Act. Tax: ${currentOrder.totalActTax}`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Est. Cost: ${formatMoney(
