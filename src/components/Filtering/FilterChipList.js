@@ -62,7 +62,7 @@ const FilterChipList = () => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+    <div style={{ display: "flex", alignItems: "center" }}>
       {filterState.chipList.map((filter) => (
         <Chip
           style={{ margin: "auto 2.5px" }}
