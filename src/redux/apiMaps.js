@@ -311,7 +311,6 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
-  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
@@ -383,7 +382,6 @@ export const mapOrderItems = (items, type) => {
         ? 1
         : 0;
     });
-    console.log(mappedItems);
   return mappedItems;
 };
 
@@ -465,7 +463,7 @@ export const mapRollupItems = (items) => {
     territory: item["territory-names"],
     brand: item["brand-names"] ? item["brand-names"].join(", ") : "---",
     program: item["order-program-name"],
-    programs: item.programs,
+    programId: item["order-program"].id,
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
     totalItems: item["total-ordered"],

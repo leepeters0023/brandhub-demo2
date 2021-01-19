@@ -70,7 +70,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     let currentItem = currentRFQItems.find(
       (item) => item.itemId === selectedRFQItem
     );
-    dispatch(createNewRFQ(selectedRFQItem, currentItem.program.id));
+    dispatch(createNewRFQ(selectedRFQItem, currentItem.programId));
   };
 
   const handleSort = (sortObject) => {
