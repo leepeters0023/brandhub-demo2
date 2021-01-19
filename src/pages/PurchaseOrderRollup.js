@@ -125,7 +125,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         itemIdArray.forEach((id) => {
           if (item.itemId === id[1] && item.id === id[0]) {
             idArray = idArray.concat(item.orderItemIds);
-            programId = item.program.id
+            programId = item.programId
           }
         });
       });
