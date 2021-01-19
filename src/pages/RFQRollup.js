@@ -27,7 +27,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // import GetAppIcon from "@material-ui/icons/GetApp";
 
 const defaultFilters = {
-  orderType: "pre-order",
+  //orderType: "pre-order",
   brand: [],
   program: [],
   itemType: [],

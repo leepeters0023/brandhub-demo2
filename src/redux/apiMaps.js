@@ -311,6 +311,7 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
+  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
@@ -320,8 +321,8 @@ export const mapOrderItems = (items, type) => {
         itemNumber: item.item["item-number"],
         imgUrlThumb: images.imgUrlThumb,
         imgUrlLg: images.imgUrlLg,
-        brand: item.item.brands.map((brand) => brand.name).join(", "),
-        specification: mapSpecifications(item.item.specification),
+        brand: item.item.brands.length > 0 ? item.item.brands.map((brand) => brand.name).join(", ") : "---",
+        specification: item.item.specification ? mapSpecifications(item.item.specification) : "---",
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
@@ -330,11 +331,14 @@ export const mapOrderItems = (items, type) => {
           : item.item.programs.map((prog) => prog.name).join(", "),
         itemType: item.item.type,
         itemDescription: item.item.description ? item.item.description : "---",
-        unit: [
-          ...new Set(
-            item.item.brands.map((brand) => brand["business-unit"].name)
-          ),
-        ].join(", "),
+        unit:
+          item.item.brands.length > 0
+            ? [
+                ...new Set(
+                  item.item.brands.map((brand) => brand["business-unit"].name)
+                ),
+              ].join(", ")
+            : "---",
         packSize: item.item["qty-per-pack"],
         leadTime: item.item["lead-time-in-days"],
         supplierId: item.item.supplier.id,
@@ -372,7 +376,6 @@ export const mapOrderItems = (items, type) => {
           : null,
       };
     })
-
     .sort((a, b) => {
       return parseInt(a.itemNumber) < parseInt(b.itemNumber)
         ? -1
@@ -380,6 +383,7 @@ export const mapOrderItems = (items, type) => {
         ? 1
         : 0;
     });
+    console.log(mappedItems);
   return mappedItems;
 };
 
@@ -595,7 +599,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder)
+  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {
