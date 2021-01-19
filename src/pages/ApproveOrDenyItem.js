@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Logo from "../assets/RTA_Logo_Stacked.png";
 
@@ -19,32 +19,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
+const ApproveOrDenyItem = ({}) => {
     const classes = useStyles();
     const [isApproved, setIsApproved] = useState(false);
     const [isDenied, setIsDenied] = useState(false)
-    const [timeLeft, setTimeLeft] = useState();
 
     const handleApprove = () => {
         setIsApproved(true)
-        setTimeout(() => { window.location.href = '/login'; }, 5000)
-        setTimeLeft(Number(5))
+        // some stuff here that approves the item
     };
 
     const handleDeny = () => {
         setIsDenied(true)
-        setTimeout(() => { window.location.href = '/login'; }, 5000)
-        setTimeLeft(Number(5))
+        // some stuff here that denies the item
     }
-    
-    useEffect(() => {
-        if (!timeLeft) return;
-        const intervalId = setInterval(() => {
-            setTimeLeft(timeLeft - 1);
-        }, 1000);
-        return () => clearInterval(intervalId);
-    }, [timeLeft]);
-
+  
     return (
     <>
         <Container className={classes.mainWrapper}>
@@ -67,7 +56,7 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
                     <Grid item sm={2} xs={1} />
                     <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
                     <Typography className={classes.titleText} variant="h5">
-                        Approve or deny this
+                        Please approve or deny this item
                      </Typography>
                     <br />
                     {(!isApproved && !isDenied) && (
@@ -101,7 +90,7 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
                             You have approved this item. No further action is needed.
                         </Typography>
                         <Typography className={classes.headerText} variant="h5">
-                            You will be redirected to RTA.com in {timeLeft} seconds.
+                            You may close this window.
                         </Typography>
                         <br></br>
                     </>
@@ -112,15 +101,15 @@ const ApproveOrDenyItem = ({ handleFiltersClosed }) => {
                             You have denied this item. No further action is needed.
                         </Typography>
                          <Typography className={classes.headerText} variant="h5">
-                         You will be redirected to RTA.com in {timeLeft} seconds.
+                         You may close this window.
                         </Typography>
                     </>
                     )}
                     </Grid>
                 </Grid>
             </div>
-            <Typography className={classes.titleText} style={{ bottom: "0",float: "right" }} variant="h5">
-            need help?
+            <Typography className={classes.headerText} style={{ bottom: "0",float: "right" }} variant="h5">
+            need help? Email us: support@brandhub.com
             </Typography>
         </Container>
     </>
