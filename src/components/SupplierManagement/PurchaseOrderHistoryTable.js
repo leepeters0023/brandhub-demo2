@@ -216,7 +216,7 @@ const PurchaseOrderHistoryTable = ({
                     )}
                   </TableCell>
                   {row.brand.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                    <Tooltip placement="right-start" title={`${row.brand.join(", ")}`}>
                       <TableCell
                         align="left"
                         style={{ display: "flex", alignItems: "flex-end" }}
