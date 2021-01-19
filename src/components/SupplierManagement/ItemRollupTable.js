@@ -71,7 +71,6 @@ const EnhancedTableHead = (props) => {
     numSelected,
     type,
   } = props;
-  console.log(type)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
