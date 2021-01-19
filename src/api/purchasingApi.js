@@ -681,9 +681,23 @@ export const deletePOItem = async (id) => {
 
 export const submitPO = async (id) => {
   const response = { status: "", error: null };
-  //TODO confirm this is the correct route
   await axios
     .post(`/api/purchase-orders/${id}/submit`, null, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(err.response.data.errors[0].title);
+      response.status = "error";
+      response.error = err.response.data.errors[0].title;
+    });
+  return response;
+};
+
+export const completePO = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/purchase-orders/${id}/complete`, null, writeHeaders)
     .then((_res) => {
       response.status = "ok";
     })

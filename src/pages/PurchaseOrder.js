@@ -14,6 +14,7 @@ import { setRetain } from "../redux/slices/filterSlice";
 import {
   fetchSinglePO,
   submitPurchaseOrder,
+  completePurchaseOrder,
   updateAllShippingParams,
   addAdditionalFile,
 } from "../redux/slices/purchaseOrderSlice";
@@ -81,6 +82,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   const handleSupplierDecline = () => {
     //TODO
+  };
+
+  const handleSupplierComplete = () => {
+    dispatch(completePurchaseOrder(currentPO.id));
+    navigate("/purchasing/poHistory/all");
   };
 
   const handlePurchaserSubmit = () => {
@@ -466,6 +472,16 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   Decline
                 </Button>
               </div>
+            )}
+            {currentRole === "supplier" && currentPO.accepted && (
+              <Button
+                className={classes.largeButton}
+                variant="contained"
+                color="secondary"
+                onClick={handleSupplierComplete}
+              >
+                COMPLETE PURCHASE ORDER
+              </Button>
             )}
             <br />
             <div

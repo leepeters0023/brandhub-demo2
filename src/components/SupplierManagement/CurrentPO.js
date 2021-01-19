@@ -20,6 +20,7 @@ import {
 import POItemsTable from "./POItemsTable";
 import SpecDetailTable from "./SpecDetailTable";
 import SetUpFeeModal from "./SetUpFeeModal";
+import OrderPatchLoading from "../Utility/OrderPatchLoading";
 
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -367,6 +368,7 @@ const CurrentPO = () => {
       </div>
       <br />
       <br />
+      <OrderPatchLoading />
     </>
   );
 };
