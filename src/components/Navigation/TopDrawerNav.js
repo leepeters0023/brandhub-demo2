@@ -98,8 +98,6 @@ const useStyles = makeStyles((theme) => ({
     cursor: "none",
   },
   divider: {
-    marginTop: "10px",
-    marginBottom: "10px",
     backgroundColor: "white"
   }
 }));
