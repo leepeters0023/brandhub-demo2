@@ -22,7 +22,15 @@ export const getCouponUrl = async (email, url) => {
       },
       {
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+          "Content-Type": "application/json; charset=utf-8",
+          Expires: "-1",
+          Server: "Microsoft-IIS/85",
+          "X-AspNet-Version": "4.0.30319",
+          "Access-Control-Allow-Origin": "https://brandhub-ui-dev.onrender.com",
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Methods": "HEAD,GET,POST,OPTIONS",
         },
       }
     )
@@ -45,17 +53,17 @@ export const getCouponOrderSet = async (code) => {
   const sleep = (ms, cancelToken, cb) => {
     return new Promise((resolve, reject) => () => {
       cancelToken.cancel = () => {
-        reject(new Error("sleep() cancelled"))
+        reject(new Error("sleep() cancelled"));
       };
-      setTimeout(()=>{
-        cb()
-        resolve()
-      }, ms)
-    })
-  }
+      setTimeout(() => {
+        cb();
+        resolve();
+      }, ms);
+    });
+  };
   const breakPoll = () => {
     polling = false;
-  }
+  };
   const token = {};
   await sleep(10000, token, breakPoll);
   const getSet = async () => {
@@ -64,7 +72,7 @@ export const getCouponOrderSet = async (code) => {
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
         console.log(data);
-        polling = false
+        polling = false;
         response.status = "ok";
         response.data = data;
       })
