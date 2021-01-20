@@ -28,11 +28,14 @@ export const getCouponUrl = async (email, url) => {
           Pragma: "no-cache",
           "Content-Type": "application/json; charset=utf-8",
           Expires: "-1",
-          Server: "Microsoft-IIS/85",
+          Server: "Microsoft-IIS/8.5",
+          Accept: "*/*",
           "X-AspNet-Version": "4.0.30319",
           "Access-Control-Allow-Origin": "https://brandhub-ui-dev.onrender.com",
           "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Methods": "HEAD,GET,POST,OPTIONS",
+          "Accept-Encoding": "gzip, deflate, br",
+          Connection: "keep-alive",
         },
       }
     )
