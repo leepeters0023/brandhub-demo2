@@ -25,7 +25,6 @@ export const getCouponUrl = async (email, url) => {
         headers: {
           "Authorization":  `Basic ${encode("GalloAPI-Prod:6326iTc8mXEDGRVUEL4y")}`,
           "Cache-Control": "no-cache",
-          Pragma: "no-cache",
           Expires: "-1",
           Server: "Microsoft-IIS/8.5",
           Accept: "*/*",
