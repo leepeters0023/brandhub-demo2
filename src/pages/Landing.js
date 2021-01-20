@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     height: "58px",
     width: "auto",
-    float: "left",
     marginLeft: "50px",
   },
   header: {
@@ -30,8 +29,9 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     display: "flex",
     flexDirection: "row",
+    justifyContent: "flex-end",
     width: "100%",
-    paddingBottom: "20px",
+    marginBottom: "50px",
     bottom: "0"
   },
   image: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     color: "black",
     zIndex: "1",
-    marginRight: "50px",
+    marginRight: "75px",
     border: "solid black .5px",
     width: "150px",
   }
@@ -88,7 +88,7 @@ const Landing = () => {
           />
         </div>
         <div className={classes.footer}>
-          <Typography className={classes.headerText} style={{ marginLeft: "50px" }} variant="h5">
+          <Typography className={classes.headerText} style={{ marginRight: "75px"}} variant="h5">
             &#169; brandHub 2021
           </Typography>
         </div>
