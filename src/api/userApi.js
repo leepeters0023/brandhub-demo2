@@ -214,8 +214,8 @@ export const updateUserCreds = async (userData) => {
             role: userData.role,
             name: userData.name,
             email: userData.email,
-            is_on_premise: userData.isOnPremise,
-            is_retail: userData.isRetail,
+            "is-on-premise": userData.isOnPremise,
+            "is-retail": userData.isRetail,
             status: "active",
           },
           relationships: {

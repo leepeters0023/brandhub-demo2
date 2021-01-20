@@ -34,7 +34,7 @@ const startLoading = (state) => {
 
 const startUser = (state) => {
   state.isUserLoading = true;
-}
+};
 
 const startNext = (state) => {
   state.isNextLoading = true;
@@ -241,7 +241,7 @@ export const updateUser = (userData) => async (dispatch) => {
       territories: user.data.territories,
     };
     dispatch(getSingleUserSuccess({ user: mappedUser }));
-    dispatch(setUpdateSuccess({ updateStatus: true }))
+    dispatch(setUpdateSuccess({ updateStatus: true }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

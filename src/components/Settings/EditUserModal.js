@@ -223,7 +223,11 @@ const EditUserModal = ({ modal, handleModalClose, currentUserId }) => {
 
   const handleFormSubmit = (evt) => {
     evt.preventDefault();
-    if (currentTerritories.length === 0 || currentStates.length === 0) {
+    if (!checkboxState.retail && ! checkboxState.onPremise) {
+      setError(
+        "You must select at least one option for On Premise or Retail"
+      )
+    } else if (currentTerritories.length === 0 || currentStates.length === 0) {
       setError(
         "You must assign a user to at least one territory and one state"
       );
