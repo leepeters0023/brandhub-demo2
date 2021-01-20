@@ -89,6 +89,7 @@ const CurrentRFQ = () => {
   const dispatch = useDispatch();
 
   const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   return (
     <>
@@ -101,70 +102,100 @@ const CurrentRFQ = () => {
         <Grid item lg={6} sm={12} className={classes.gridBorder}>
           <Grid container spacing={2}>
             <Grid item sm={6}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  color="secondary"
-                  fullWidth
-                  className={classes.dateField}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  id="quoteDue"
-                  label="Quote Due"
-                  value={
+              {currentUserRole !== "supplier" ? (
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    fullWidth
+                    className={classes.dateField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="quoteDue"
+                    label="Quote Due"
+                    value={
+                      currentRFQ.dueDate !== "---"
+                        ? format(
+                            formatDate(new Date(currentRFQ.dueDate)),
+                            "MM/dd/yyyy"
+                          )
+                        : format(new Date(), "MM/dd/yyyy")
+                    }
+                    onChange={(value) =>
+                      dispatch(
+                        updateRFQDates(
+                          currentRFQ.id,
+                          "due-date",
+                          new Date(value)
+                        )
+                      )
+                    }
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              ) : (
+                <Typography className={classes.bodyText}>
+                  {`Quote Due: ${
                     currentRFQ.dueDate !== "---"
                       ? format(
                           formatDate(new Date(currentRFQ.dueDate)),
                           "MM/dd/yyyy"
                         )
                       : format(new Date(), "MM/dd/yyyy")
-                  }
-                  onChange={(value) =>
-                    dispatch(
-                      updateRFQDates(currentRFQ.id, "due-date", new Date(value))
-                    )
-                  }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-              </MuiPickersUtilsProvider>
+                  }`}
+                </Typography>
+              )}
             </Grid>
             <Grid item sm={6}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  color="secondary"
-                  fullWidth
-                  className={classes.dateField}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  id="dueDate"
-                  label="In-Market Date"
-                  value={
+              {currentUserRole !== "supplier" ? (
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    color="secondary"
+                    fullWidth
+                    className={classes.dateField}
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="dueDate"
+                    label="In-Market Date"
+                    value={
+                      currentRFQ.inMarketDate !== "---"
+                        ? format(
+                            formatDate(new Date(currentRFQ.inMarketDate)),
+                            "MM/dd/yyyy"
+                          )
+                        : format(new Date(), "MM/dd/yyyy")
+                    }
+                    onChange={(value) =>
+                      dispatch(
+                        updateRFQDates(
+                          currentRFQ.id,
+                          "in-market-date",
+                          new Date(value)
+                        )
+                      )
+                    }
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              ) : (
+                <Typography className={classes.bodyText}>
+                  {`In-Market Date: ${
                     currentRFQ.inMarketDate !== "---"
                       ? format(
                           formatDate(new Date(currentRFQ.inMarketDate)),
                           "MM/dd/yyyy"
                         )
                       : format(new Date(), "MM/dd/yyyy")
-                  }
-                  onChange={(value) =>
-                    dispatch(
-                      updateRFQDates(
-                        currentRFQ.id,
-                        "in-market-date",
-                        new Date(value)
-                      )
-                    )
-                  }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-              </MuiPickersUtilsProvider>
+                  }`}
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <br />

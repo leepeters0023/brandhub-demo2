@@ -33,9 +33,15 @@ export const getCouponUrl = async (email, url) => {
       response.data = res.data.AccessUrl;
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
-      response.error = err.response.data.errors[0].title;
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
     });
   return response;
 };
@@ -70,9 +76,15 @@ export const getCouponOrderSet = async (code) => {
         response.data = data;
       })
       .catch((err) => {
-        console.log(err.response.data.errors[0].title);
+        console.log(
+          err.response.data.errors
+            ? err.response.data.errors[0].title
+            : err.response.data
+        );
         response.status = "error";
-        response.error = err.response.data.errors[0].title;
+        response.error = err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data;
       });
   };
   await getSet();
