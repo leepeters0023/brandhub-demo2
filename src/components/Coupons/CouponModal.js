@@ -31,7 +31,7 @@ const CouponModal = ({ handleCouponModal, couponsOpen }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const isCouponLoading = useSelector((state) => state.coupons.isLoading);
+  //const isCouponLoading = useSelector((state) => state.coupons.isLoading);
   const isLinkLoading = useSelector((state) => state.coupons.isLinkLoading);
   const iframeId = useSelector((state) => state.coupons.iframeId);
   const iframeLink = useSelector((state) => state.coupons.iframeLink);
@@ -65,9 +65,24 @@ const CouponModal = ({ handleCouponModal, couponsOpen }) => {
             <CancelIcon fontSize="large" color="secondary" />
           </IconButton>
           <div className={classes.innerCouponWrapper}>
-            {(!iframeLink || isCouponLoading) && <CircularProgress />}
+            {(!iframeLink || isLinkLoading) && <CircularProgress />}
             {iframeLink && iframeId && !isLinkLoading && (
-              <iframe src={iframeLink} title="Create a Coupon" />
+              <div
+                style={{ display: "table-row", height: "100%", width: "100%" }}
+              >
+                <iframe
+                  src={iframeLink}
+                  title="Create a Coupon"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    padding: "0",
+                    margin: "0",
+                    display: "block",
+                  }}
+                />
+              </div>
             )}
           </div>
         </DialogContent>

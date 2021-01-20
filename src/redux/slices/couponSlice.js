@@ -81,7 +81,7 @@ export const getIframeUrl = (email, territoryId, userId) => async (
     if (iframeUrl.error) {
       throw iframeUrl.error;
     }
-    dispatch(getIframeLinkSuccess({ link: iframeUrl, id: id }));
+    dispatch(getIframeLinkSuccess({ link: iframeUrl.data, id: id }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }

@@ -24,21 +24,13 @@ export const getCouponUrl = async (email, url) => {
       {
         headers: {
           "Authorization":  `Basic ${encode("GalloAPI-Prod:6326iTc8mXEDGRVUEL4y")}`,
-          // "Cache-Control": "no-cache",
-          // Expires: "-1",
-          // Server: "Microsoft-IIS/8.5",
-          // Accept: "*/*",
-          // "X-AspNet-Version": "4.0.30319",
-          // "Access-Control-Allow-Origin": "https://brandhub-ui-dev.onrender.com",
-          // "Access-Control-Allow-Headers": "Authorization",
-          // "Access-Control-Allow-Methods": "HEAD,GET,POST,OPTIONS",
         },
       }
     )
     .then((res) => {
       console.log(res);
       response.status = "ok";
-      response.data = res;
+      response.data = res.data.AccessUrl;
     })
     .catch((err) => {
       console.log(err.response.data.errors[0].title);
