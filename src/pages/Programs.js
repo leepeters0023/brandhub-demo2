@@ -17,7 +17,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -48,6 +48,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isPrograms = useSelector((state) => state.programs.isPrograms);
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentMarket = useSelector((state) => state.user.currentMarket);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -62,9 +63,17 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
       currentUserRole &&
       currentTerritory
     ) {
-      dispatch(fetchInitialPrograms(currentTerritory));
+      let marketBool = currentMarket === "On Premise" ? true : false;
+      dispatch(fetchInitialPrograms(currentTerritory, marketBool));
     }
-  }, [currentUserRole, dispatch, activePrograms, currentTerritory, isPrograms]);
+  }, [
+    currentUserRole,
+    dispatch,
+    activePrograms,
+    currentTerritory,
+    isPrograms,
+    currentMarket,
+  ]);
 
   useInitialFilters(
     "program",

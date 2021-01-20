@@ -223,6 +223,11 @@ export const fetchUser = () => async (dispatch) => {
         : !user["is-on-premise"]
         ? true
         : false,
+      currentMarket: user["is-retail"]
+        ? "Retail"
+        : user["is-on-premise"]
+        ? "On Premise"
+        : "Retail",
       territories:
         user.data.territories.length > 0
           ? user.data.territories.map((terr) => ({

@@ -185,17 +185,17 @@ export const {
 
 export default programsSlice.reducer;
 
-export const fetchInitialPrograms = (id) => async (dispatch) => {
+export const fetchInitialPrograms = (id, marketBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     let terrPrograms;
     if (id) {
-      terrPrograms = await fetchProgramsByTerritory(id);
+      terrPrograms = await fetchProgramsByTerritory(id, marketBool);
       if (terrPrograms.error) {
         throw terrPrograms.error;
       }
     } else terrPrograms = { data: [] };
-    const natPrograms = await fetchNationalPrograms();
+    const natPrograms = await fetchNationalPrograms(marketBool);
     if (natPrograms.error) {
       throw natPrograms.error;
     }
@@ -207,10 +207,10 @@ export const fetchInitialPrograms = (id) => async (dispatch) => {
   }
 };
 
-export const fetchPrograms = (id) => async (dispatch) => {
+export const fetchPrograms = (id, marketBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const programs = await fetchProgramsByTerritory(id);
+    const programs = await fetchProgramsByTerritory(id, marketBool);
     if (programs.error) {
       throw programs.error;
     }

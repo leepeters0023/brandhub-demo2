@@ -74,6 +74,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentLink, setCurrentLink] = useCallback(useState(null));
   const [isLinkModalOpen, setLinkModalOpen] = useCallback(useState(false));
+  const currentMarket = useSelector((state) => state.user.currentMarket);
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
@@ -95,6 +96,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   const defaultFilters =
     catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
+  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);

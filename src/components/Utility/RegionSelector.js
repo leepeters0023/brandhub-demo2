@@ -21,14 +21,16 @@ const RegionSelector = ({ classes }) => {
   
   const regions = useSelector((state) => state.user.territories);
   const currentRegion = useSelector((state) => state.user.currentTerritory);
+  const currentMarket = useSelector((state) => state.user.currentMarket);
 
   const handleChangeSelect = (evt) => {
     window.location.hash = "";
     updateRegion(evt.target.value);
     let currentTerritory = regions.find((reg) => reg.name === evt.target.value);
+    let marketBool = currentMarket === "On Premise" ? true : false;
     dispatch(clearDistributors());
     dispatch(updateCurrentTerritory({ territory: currentTerritory.id }));
-    dispatch(fetchPrograms(currentTerritory.id));
+    dispatch(fetchPrograms(currentTerritory.id, marketBool));
     dispatch(fetchStatesByIds([currentTerritory.id]));
   };
 
