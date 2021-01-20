@@ -3,28 +3,19 @@ import PropTypes from "prop-types";
 
 
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
+import Typography from "@material-ui/core/Typography";
 import GetAppIcon from '@material-ui/icons/GetApp';
-import IconButton from "@material-ui/core/IconButton";
-import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton"
+
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   divider: {
     width: "100%",
   },
-  dashPaper: {
-    backgroundColor: "white",
-    width: "100%",
-    height: "150px",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  }
 }));
 
 const Help = ({ handleFiltersClosed }) => {
@@ -65,6 +56,10 @@ const Help = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const downloadPDF = () => {
+    // download pdf here
+  }
+
   return (
     <Container
       className={classes.mainWrapper}
@@ -87,17 +82,15 @@ const Help = ({ handleFiltersClosed }) => {
             }}
           >
             How can we help?
-        </Typography>
+          </Typography>
         </div>
         {helpData.map((data, i) => (
           <Grid
             item
             lg={4}
             md={6}
-            sm={6}
+            sm={12}
             xs={12}
-            //component={Link}
-            //to={data.link}
             key={i}
           >
             <Divider className={classes.divider} />
@@ -105,8 +98,9 @@ const Help = ({ handleFiltersClosed }) => {
               <Typography className={classes.titleText}>
                 {data.text}
               </Typography>
-              <IconButton>
-                <GetAppIcon color="secondary" />
+              <IconButton
+                onClick={downloadPDF}>
+                <GetAppIcon color="secondary" /> {/*justify right or good as is?*/}
               </IconButton>
             </div>
             <Divider className={classes.divider} />
