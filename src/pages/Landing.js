@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     left: "0",
     opacity: ".5",
     transform: "scale(1.12)",
+    objectFit: "cover"
   },
   loginButton: {
     fontWeight: "600",

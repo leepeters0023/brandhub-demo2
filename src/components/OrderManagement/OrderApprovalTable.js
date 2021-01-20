@@ -306,12 +306,13 @@ const OrderApprovalTable = ({
                         placement="left"
                         title={`${row.program.join(", ")}`}
                       >
-                        <TableCell
-                          align="left"
-                          style={{ display: "flex", alignItems: "flex-end" }}
-                        >
+                        <TableCell align="left">
                           {row.program[0]}
-                          <MoreHorizIcon fontSize="small" color="inherit" />
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
                         </TableCell>
                       </Tooltip>
                     ) : (
@@ -322,12 +323,13 @@ const OrderApprovalTable = ({
                         placement="left"
                         title={`${row.brand.join(", ")}`}
                       >
-                        <TableCell
-                          align="left"
-                          style={{ display: "flex", alignItems: "flex-end" }}
-                        >
+                        <TableCell align="left">
                           {row.brand[0]}
-                          <MoreHorizIcon fontSize="small" color="inherit" />
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
                         </TableCell>
                       </Tooltip>
                     ) : (

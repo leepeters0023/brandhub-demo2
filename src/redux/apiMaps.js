@@ -567,6 +567,7 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
+  console.log(params)
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]

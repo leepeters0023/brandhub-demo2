@@ -216,13 +216,17 @@ const PurchaseOrderHistoryTable = ({
                     )}
                   </TableCell>
                   {row.brand.length > 1 ? (
-                    <Tooltip placement="right-start" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
-                      >
+                    <Tooltip
+                      placement="right-start"
+                      title={`${row.brand.join(", ")}`}
+                    >
+                      <TableCell align="left">
                         {row.brand[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ float: "right" }}
+                        />
                       </TableCell>
                     </Tooltip>
                   ) : (

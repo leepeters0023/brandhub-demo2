@@ -229,9 +229,7 @@ const OrderHistoryByItemTable = ({
                       imgUrl={row.imgUrlThumb}
                       handleClick={(evt) => {
                         evt.stopPropagation();
-                        handlePreview(
-                          row.itemNumber
-                        );
+                        handlePreview(row.itemNumber);
                       }}
                     />
                   </TableCell>
@@ -247,18 +245,20 @@ const OrderHistoryByItemTable = ({
                         placement="left"
                         title={`${row.brand.join(", ")}`}
                       >
-                        <MoreHorizIcon fontSize="small" color="inherit" />
+                        <MoreHorizIcon fontSize="small" color="inherit" style={{ float: "right" }} />
                       </Tooltip>
                     </TableCell>
                   ) : (
-                      <TableCell align="left">{row.brand[0]}</TableCell>
-                    )}
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left">{row.program}</TableCell>
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
                   </TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
-                  <TableCell align="left">{row.distributor.length > 0 ? row.distributor : "---"}</TableCell>
+                  <TableCell align="left">
+                    {row.distributor.length > 0 ? row.distributor : "---"}
+                  </TableCell>
                   <TableCell align="left">{row.state}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
                   <TableCell align="left">
@@ -291,9 +291,9 @@ const OrderHistoryByItemTable = ({
                     onClick={
                       row.tracking !== "---" && row.trackingId
                         ? (evt) => {
-                          evt.stopPropagation();
-                          handleTrackingClick(row.trackingId);
-                        }
+                            evt.stopPropagation();
+                            handleTrackingClick(row.trackingId);
+                          }
                         : null
                     }
                   >

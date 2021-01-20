@@ -357,12 +357,13 @@ const ItemRollupTable = ({
                         placement="left"
                         title={`${row.territory.join(", ")}`}
                       >
-                        <TableCell
-                          align="left"
-                          style={{ display: "flex", alignItems: "flex-end" }}
-                        >
+                        <TableCell align="left">
                           {row.territory[0]}
-                          <MoreHorizIcon fontSize="small" color="inherit" />
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
                         </TableCell>
                       </Tooltip>
                     ) : (

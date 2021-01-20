@@ -57,7 +57,9 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
     (state) => state.purchaseOrder.currentPO.totalTax
   );
   const poId = useSelector((state) => state.purchaseOrder.currentPO.id);
-  const totalFreight = useSelector((state) => state.purchaseOrder.currentPO.totalFreight);
+  const totalFreight = useSelector(
+    (state) => state.purchaseOrder.currentPO.totalFreight
+  );
   const handlePackOut = (id, value) => {
     dispatch(setItemPackOut(id, value));
   };
@@ -118,12 +120,13 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                 <TableCell align="left">{row.itemNumber}</TableCell>
                 {row.program !== "---" && row.program.length > 1 ? (
                   <Tooltip placement="left" title={`${row.program.join(", ")}`}>
-                    <TableCell
-                      align="left"
-                      style={{ display: "flex", alignItems: "flex-end" }}
-                    >
+                    <TableCell align="left">
                       {row.program[0]}
-                      <MoreHorizIcon fontSize="small" color="inherit" />
+                      <MoreHorizIcon
+                        fontSize="small"
+                        color="inherit"
+                        style={{ float: "right" }}
+                      />
                     </TableCell>
                   </Tooltip>
                 ) : (
@@ -269,7 +272,12 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                 <TableCell colSpan={6} className={classes.headerText}>
                   Total Freight Cost:
                 </TableCell>
-                <MoneyCell initialCost={formatMoney(totalFreight, true)} role={currentRole} id={poId} span={2} />
+                <MoneyCell
+                  initialCost={formatMoney(totalFreight, true)}
+                  role={currentRole}
+                  id={poId}
+                  span={2}
+                />
               </TableRow>
               <TableRow>
                 <TableCell colSpan={6} className={classes.headerText}>

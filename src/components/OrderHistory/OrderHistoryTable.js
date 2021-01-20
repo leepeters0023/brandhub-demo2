@@ -146,7 +146,7 @@ const OrderHistoryTable = ({
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("orderDate");
   const grouping = useSelector((state) => state.filters.groupBy);
-  
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -213,12 +213,13 @@ const OrderHistoryTable = ({
                   <TableCell align="left">{row.program}</TableCell>
                   {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
-                      <TableCell
-                        align="left"
-                        style={{ display: "flex", alignItems: "flex-end" }}
-                      >
+                      <TableCell align="left">
                         {row.brand[0]}
-                        <MoreHorizIcon fontSize="small" color="inherit" />
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ float: "right" }}
+                        />
                       </TableCell>
                     </Tooltip>
                   ) : (
