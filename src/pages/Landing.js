@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     left: "0",
     opacity: ".5",
+    transform: "scale(1.12)",
   },
-  login: {
+  loginButton: {
     fontWeight: "600",
     fontSize: "1rem",
     textAlign: "center",
@@ -69,7 +70,7 @@ const Landing = () => {
             imgClass={classes.logo}
             id={"logo"}
           />
-          <Button className={classes.login} component={Link} to="/login">
+          <Button className={classes.loginButton} component={Link} to="/login">
             LOG IN
            </Button>
         </div>
