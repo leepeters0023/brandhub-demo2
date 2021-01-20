@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFavoriteItems, getUser, logInUser, getLoginURL, loginUserWithAuthO } from "../../api/userApi";
+import {
+  addFavoriteItems,
+  getUser,
+  logInUser,
+  getLoginURL,
+  loginUserWithAuthO,
+} from "../../api/userApi";
 import { mapItems } from "../apiMaps";
 
 /*
@@ -55,7 +61,7 @@ const startUpdate = (state) => {
 
 const startAuth = (state) => {
   state.authIsLoading = true;
-}
+};
 
 const startLogin = (state) => {
   state.loginIsLoading = true;
@@ -137,12 +143,12 @@ const userSlice = createSlice({
       state.redirectLink = link;
       state.authIsLoading = false;
     },
-    setExpires (state, action) {
+    setExpires(state, action) {
       const { expires } = action.payload;
       state.sessionExpire = expires;
     },
-    setTimeoutSet (state) {
-      state.timeOutSet = !state.timeOutSet
+    setTimeoutSet(state) {
+      state.timeOutSet = !state.timeOutSet;
     },
     removeUser: (state) => {
       state.isLoading = false;
@@ -212,7 +218,11 @@ export const fetchUser = () => async (dispatch) => {
       role: user.data.role,
       isOnPremise: user["is-on-premise"] ? true : false,
       //todo update when this is coming through
-      isRetail: user["is-retail"] ? true : true,
+      isRetail: user["is-retail"]
+        ? true
+        : !user["is-on-premise"]
+        ? true
+        : false,
       territories:
         user.data.territories.length > 0
           ? user.data.territories.map((terr) => ({
@@ -283,8 +293,8 @@ export const loginWithCode = (code) => async (dispatch) => {
 export const getRedirect = () => async (dispatch) => {
   try {
     dispatch(setAuthLoading());
-    console.log("getting url")
-    const res = await getLoginURL()
+    console.log("getting url");
+    const res = await getLoginURL();
     if (res.error) {
       throw res.error;
     }
