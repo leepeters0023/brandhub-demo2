@@ -1,7 +1,4 @@
-import {
-  stringToCents,
-  formatDate,
-} from "../utility/utilityFunctions";
+import { stringToCents, formatDate } from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
@@ -326,14 +323,22 @@ export const mapOrderItems = (items, type) => {
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
+      if (type !== "order-set-item" && item["triggered-rules"].length > 0) {
+        console.log(item);
+      }
       return {
         id: item.id,
         itemId: item.item.id,
         itemNumber: item.item["item-number"],
         imgUrlThumb: images.imgUrlThumb,
         imgUrlLg: images.imgUrlLg,
-        brand: item.item.brands.length > 0 ? item.item.brands.map((brand) => brand.name).join(", ") : "---",
-        specification: item.item.specification ? mapSpecifications(item.item.specification) : "---",
+        brand:
+          item.item.brands.length > 0
+            ? item.item.brands.map((brand) => brand.name).join(", ")
+            : "---",
+        specification: item.item.specification
+          ? mapSpecifications(item.item.specification)
+          : "---",
         brandCode: item.item.brands
           .map((brand) => brand["external-id"])
           .join(", "),
@@ -374,9 +379,13 @@ export const mapOrderItems = (items, type) => {
             ? 0
             : stringToCents(item["total-estimated-cost"]),
         actTotal: "---",
-        complianceStatus: item.item["compliance-status"]
-          ? item.item["compliance-status"]
-          : "compliant",
+        complianceStatus:
+          type !== "order-set-item" &&
+          item["triggered-rules"].length > 0 &&
+          item["triggered-rules"].filter((rule) => rule.type === "item-type")
+            .length > 0
+            ? "not-compliant"
+            : "compliant",
         orderType: item.item["order-type"],
         standardDeliveryDate: item["standard-delivery-date"]
           ? item["standard-delivery-date"]
@@ -477,9 +486,7 @@ export const mapRollupItems = (items) => {
     id: item.id,
     itemId: item.item.id,
     itemNumber: item["item-number"],
-    projectNum: item["at-task-project-id"]
-      ? item["at-task-project-id"]
-      : "---",
+    projectNum: item["at-task-project-id"] ? item["at-task-project-id"] : "---",
     territory: item["territory-names"],
     brand: item["brand-names"] ? item["brand-names"].join(", ") : "---",
     program: item["order-program-name"],
@@ -567,7 +574,7 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
-  console.log(params)
+  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]
@@ -783,7 +790,7 @@ export const mapRFQ = (rfq) => {
 };
 
 export const mapRFQHistory = (rfqs) => {
-  console.log(rfqs)
+  console.log(rfqs);
   let mappedRFQHistory = rfqs.map((rfq) => mapRFQ(rfq));
   return mappedRFQHistory;
 };
