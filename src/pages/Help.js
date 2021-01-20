@@ -106,23 +106,23 @@ const Help = ({ handleFiltersClosed }) => {
             <Divider className={classes.divider} />
           </Grid>
         ))}
-         <div style={{ width: "100%", textAlign: "center", marginTop: "75px", }}>
-            <Typography className={classes.bodyText}>
-             If you have any immediate questions, please contact Select
-             Design. We are happy to help!
+        <div style={{ width: "100%", textAlign: "center", marginTop: "75px", }}>
+          <Typography className={classes.bodyText}>
+            If you have any immediate questions, please contact Select
+            Design. We are happy to help!
             </Typography>
-            <br />
-            <Typography className={classes.headerText}>
-             General Contact Information
+          <br />
+          <Typography className={classes.headerText}>
+            General Contact Information
             </Typography>
-            <Typography className={classes.bodyText}>
-             Phone: 802-864-9075
+          <Typography className={classes.bodyText}>
+            Phone: 802-864-9075
             </Typography>
-            <Typography className={classes.bodyText}>
-             Email: help@brandhub.com
+          <Typography className={classes.bodyText}>
+            Email: help@readytoactivate.com
             </Typography>
-            <Typography className={classes.bodyText}>
-             Please allow up to 12 hours to receive a response from us.
+          <Typography className={classes.bodyText}>
+            Please allow up to 12 hours to receive a response from us.
             </Typography>
         </div>
       </Grid>
