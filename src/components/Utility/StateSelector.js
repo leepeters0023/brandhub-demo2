@@ -27,7 +27,10 @@ const StateSelector = ({ handleState, currentState, type }) => {
   };
 
   useEffect(() => {
-    if (currentStates.length === 0 && states.length > 0) {
+    if (
+      (currentStates.length === 0 && states.length > 0) ||
+      (states.length > 0 && states.length !== currentStates.length)
+    ) {
       setCurrentStates(states);
     }
   }, [currentStates.length, states, setCurrentStates]);

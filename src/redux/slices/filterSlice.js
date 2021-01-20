@@ -170,7 +170,8 @@ const filterSlice = createSlice({
       if (
         filterType.includes("history") ||
         filterType === "rfq" ||
-        filterType === "po"
+        filterType === "po" ||
+        filterType.includes("Supplier")
       ) {
         chippable = [
           "bu",
