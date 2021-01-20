@@ -1,5 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
+import { encode } from 'js-base64';
 
 const dataFormatter = new Jsona();
 
@@ -22,6 +23,7 @@ export const getCouponUrl = async (email, url) => {
       },
       {
         headers: {
+          "Authorization":  `Basic ${encode("GalloAPI-Prod:6326iTc8mXEDGRVUEL4y")}`,
           "Cache-Control": "no-cache",
           Pragma: "no-cache",
           "Content-Type": "application/json; charset=utf-8",

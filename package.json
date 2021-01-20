@@ -18,6 +18,7 @@
     "cloudinary-core": "^2.11.3",
     "cloudinary-react": "^1.6.8",
     "date-fns": "^2.15.0",
+    "js-base64": "^3.6.0",
     "jsona": "^1.8.0",
     "material-table": "^1.66.0",
     "material-ui-nested-menu-item": "^1.0.2",
