@@ -196,11 +196,11 @@ export const getSingleUser = async (id) => {
 export const updateUserCreds = async (userData) => {
   const stateIds = userData.states.map((state) => ({
     type: "state",
-    id: state.id,
+    id: state,
   }));
   const territoryIds = userData.territories.map((terr) => ({
     type: "territory",
-    id: terr.id,
+    id: terr,
   }));
   const response = { status: "", error: null, data: null };
   await axios
@@ -216,6 +216,7 @@ export const updateUserCreds = async (userData) => {
             email: userData.email,
             "is-on-premise": userData.isOnPremise,
             "is-retail": userData.isRetail,
+            status: "active",
           },
           relationships: {
             states: {
