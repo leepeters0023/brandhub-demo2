@@ -31,7 +31,7 @@ export const getCouponUrl = async (email, url) => {
           Accept: "*/*",
           "X-AspNet-Version": "4.0.30319",
           "Access-Control-Allow-Origin": "https://brandhub-ui-dev.onrender.com",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Allow-Headers": "Authorization",
           "Access-Control-Allow-Methods": "HEAD,GET,POST,OPTIONS",
         },
       }
