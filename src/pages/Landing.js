@@ -13,18 +13,17 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     height: "58px",
     width: "auto",
-    marginLeft: "25px",
     float: "left",
-    zIndex: "1",
+    marginLeft: "50px",
   },
   header: {
-    zIndex: "1",
     display: "flex",
     flexDirection: "row",
-    alignContent: "center",
+    position: "fixed",
+    zIndex: "1",
     width: "100%",
     justifyContent: "space-between",
-    marginTop: "20px"
+    marginTop: "50px",
   },
   footer: {
     zIndex: "1",
@@ -36,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: "0"
   },
   image: {
-    minHeight: "100%",
+    minHeight: "100vh",
     minWidth: "1024px",
     width: "100%",
     height: "auto",
@@ -44,8 +43,17 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     left: "0",
     opacity: ".5",
-    overFlow: "visible",
   },
+  login: {
+    fontWeight: "600",
+    fontSize: "1rem",
+    textAlign: "center",
+    color: "black",
+    zIndex: "1",
+    marginRight: "50px",
+    border: "solid black .5px",
+    width: "150px",
+  }
 }));
 
 const Landing = () => {
@@ -61,9 +69,9 @@ const Landing = () => {
             imgClass={classes.logo}
             id={"logo"}
           />
-          <Button style={{ zIndex: "1" }} component={Link} to="/login">
+          <Button className={classes.login} component={Link} to="/login">
             LOG IN
-        </Button>
+           </Button>
         </div>
         <div
           style={{
@@ -80,9 +88,9 @@ const Landing = () => {
           />
         </div>
         <div className={classes.footer}>
-        <Typography className={classes.headerText} variant="h5">
-          Copyright brandHub 2021
-        </Typography>
+          <Typography className={classes.headerText} style={{ marginLeft: "50px" }} variant="h5">
+            &#169; brandHub 2021
+          </Typography>
         </div>
       </Container>
     </>
