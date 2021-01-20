@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     boxSizing: "border-box",
   },
+  paperRoot: {
+    minHeight: "75vh",
+    maxHeight: "75vh",
+  }
 }));
 
 const CouponModal = ({ handleCouponModal, couponsOpen }) => {
@@ -53,6 +57,7 @@ const CouponModal = ({ handleCouponModal, couponsOpen }) => {
         disableScrollLock
         fullWidth
         maxWidth="xl"
+        classes={{ paper: classes.paperRoot }}
         style={{ zIndex: "15000" }}
       >
         <DialogContent>
