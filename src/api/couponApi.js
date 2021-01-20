@@ -26,7 +26,6 @@ export const getCouponUrl = async (email, url) => {
           "Authorization":  `Basic ${encode("GalloAPI-Prod:6326iTc8mXEDGRVUEL4y")}`,
           "Cache-Control": "no-cache",
           Pragma: "no-cache",
-          "Content-Type": "application/json; charset=utf-8",
           Expires: "-1",
           Server: "Microsoft-IIS/8.5",
           Accept: "*/*",
@@ -34,8 +33,6 @@ export const getCouponUrl = async (email, url) => {
           "Access-Control-Allow-Origin": "https://brandhub-ui-dev.onrender.com",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
           "Access-Control-Allow-Methods": "HEAD,GET,POST,OPTIONS",
-          "Accept-Encoding": "gzip, deflate, br",
-          Connection: "keep-alive",
         },
       }
     )
