@@ -565,7 +565,7 @@ export const mapPOShippingParams = (params) => {
       ? shipObj["street-address-2"]
       : false;
     let city = shipObj.city;
-    let state = shipObj.state;
+    let state = shipObj.state.code;
     let country = shipObj.country;
     let zip = shipObj.zip;
     return [addOne, addTwo, city, state, zip, country]
