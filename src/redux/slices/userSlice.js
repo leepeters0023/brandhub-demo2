@@ -30,6 +30,9 @@ let initialState = {
   initials: "",
   email: "",
   role: "",
+  isOnPremise: null,
+  isRetail: null,
+  currentMarket: null,
   redirectLink: null,
   sessionExpire: null,
   refreshToken: null,
@@ -103,6 +106,9 @@ const userSlice = createSlice({
       state.initials = user.initials;
       state.email = user.email;
       state.role = user.role;
+      state.isOnPremise = user.isOnPremise;
+      state.isRetail = user.isRetail;
+      state.currentMarket = user.currentMarket;
       state.territories = [...user.territories];
       state.managedUsers =
         user.managedUsers.length > 0 ? [...user.managedUsers] : [];
@@ -121,6 +127,10 @@ const userSlice = createSlice({
     updateCurrentTerritory(state, action) {
       const { territory } = action.payload;
       state.currentTerritory = territory;
+    },
+    updateCurrentMarket(state, action) {
+      const { market } = action.payload;
+      state.currentMarket = market;
     },
     setRedirectLink(state, action) {
       const { link } = action.payload;
@@ -142,6 +152,9 @@ const userSlice = createSlice({
       state.initials = "";
       state.email = "";
       state.role = "";
+      state.isOnPremise = null;
+      state.isRetail = null;
+      state.currentMarket = null;
       state.redirectLink = null;
       state.refreshToken = null;
       state.sessionExpire = null;
@@ -171,6 +184,7 @@ export const {
   setExpires,
   setTimeoutSet,
   updateCurrentTerritory,
+  updateCurrentMarket,
   removeUser,
   setLogInFailure,
   setUpdateFailure,
@@ -196,6 +210,9 @@ export const fetchUser = () => async (dispatch) => {
       }`,
       email: user.data.email,
       role: user.data.role,
+      isOnPremise: user["is-on-premise"] ? true : false,
+      //todo update when this is coming through
+      isRetail: user["is-retail"] ? true : true,
       territories:
         user.data.territories.length > 0
           ? user.data.territories.map((terr) => ({

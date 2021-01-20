@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
 import { useSelector, useDispatch } from "react-redux";
 
 import { updateCurrentTerritory } from "../../redux/slices/userSlice";
@@ -14,11 +16,11 @@ import Typography from "@material-ui/core/Typography";
 
 const RegionSelector = ({ classes }) => {
   const dispatch = useDispatch();
-
+  
+  const [region, updateRegion] = useState("");
+  
   const regions = useSelector((state) => state.user.territories);
   const currentRegion = useSelector((state) => state.user.currentTerritory);
-
-  const [region, updateRegion] = useState("");
 
   const handleChangeSelect = (evt) => {
     window.location.hash = "";
@@ -87,5 +89,9 @@ const RegionSelector = ({ classes }) => {
       </>
     );
 };
+
+RegionSelector.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
 
 export default React.memo(RegionSelector);
