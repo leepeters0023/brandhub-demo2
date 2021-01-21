@@ -26,7 +26,6 @@ import rfqReducer from "./slices/rfqSlice";
 import rfqHistoryReducer from "./slices/rfqHistorySlice";
 import sharedItemsReducer from "./slices/sharedItemsSlice";
 import supplierReducer from "./slices/supplierSlice";
-import tagReducer from "./slices/tagSlice";
 import territoryReducer from "./slices/territorySlice";
 import trackingReducer from "./slices/trackingSlice";
 import userReducer from "./slices/userSlice";
@@ -59,7 +58,6 @@ const rootReducer = combineReducers({
   rfqHistory: rfqHistoryReducer,
   sharedItems: sharedItemsReducer,
   suppliers: supplierReducer,
-  tags: tagReducer,
   territories: territoryReducer,
   tracking: trackingReducer,
   user: userReducer,
