@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   navigationText: {
     fontWeight: 500,
     color: "white",
-    margin: "0 20px",
+    margin: "0 10px",
     pointerEvents: "none",
     cursor: "none",
   },

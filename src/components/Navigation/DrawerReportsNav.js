@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Menu from "@material-ui/core/Menu";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
@@ -24,6 +24,7 @@ const DrawerReportsNav = ({ classes, role }) => {
   return (
     <>
       <IconButton
+        style={{ padding: 0 }}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();

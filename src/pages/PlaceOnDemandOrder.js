@@ -14,6 +14,7 @@ import {
   createNewBulkItemOrder,
   clearItemSelections,
 } from "../redux/slices/currentOrderSlice";
+import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -68,6 +69,8 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const currentItems = useSelector((state) => state.items.items);
+  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const territoryId = useSelector((state) => state.user.currentTerritory);
@@ -81,6 +84,8 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
   );
+
+  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -121,6 +126,18 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (
+      (currentMarket === "On Premise" && !currentMarketBool) ||
+      (currentMarket === "Retail" && currentMarketBool)
+    ) {
+      dispatch(
+        updateSingleFilter({ filter: "isOnPremise", value: !currentMarketBool })
+      );
+      dispatch(setSorted());
+    }
+  }, [currentMarket, currentMarketBool, dispatch]);
 
   if (orderLoading) {
     return <Loading />;

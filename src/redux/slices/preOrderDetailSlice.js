@@ -119,14 +119,13 @@ export const fetchPreOrders = (id, type, program, terrId) => async (
     if (currentPreOrders.error) {
       throw currentPreOrders.error;
     }
-    console.log(currentPreOrders);
     let grandTotal = 0;
     let totalMod = 0;
     let preOrders = currentPreOrders.data.preOrders.map((order) => {
       let total = order.orders
-      .map((ord) => stringToCents(ord["total-estimated-cost"]))
-      .reduce((a, b) => a + b)
-      grandTotal += total
+        .map((ord) => stringToCents(ord["total-estimated-cost"]))
+        .reduce((a, b) => a + b);
+      grandTotal += total;
       if (order.program.id !== program) {
         totalMod += total;
       }

@@ -6,19 +6,19 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
 import NestedMenuItem from "./NestedMenuItem.js";
 
-const DrawerItemsNav = ({ role, classes, }) => {
+const DrawerItemsNav = ({ role, classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
     evt.stopPropagation(); //to ensure menu renders only above parent element
-  };   //tried to handle these events at top level (TopDrawerNav) but was rendering all menus at once : (
+  }; //tried to handle these events at top level (TopDrawerNav) but was rendering all menus at once : (
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -27,6 +27,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
   return (
     <>
       <IconButton
+        style={{padding: 0}}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();
@@ -34,7 +35,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
       >
         <Typography variant="h5" className={classes.navigationText}>
           Items
-               </Typography>
+        </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
@@ -57,12 +58,7 @@ const DrawerItemsNav = ({ role, classes, }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem
-          button
-          onClick={handleClose}
-          component={Link}
-          to="/items/all"
-        >
+        <MenuItem button onClick={handleClose} component={Link} to="/items/all">
           <ListItemText
             primaryTypographyProps={{
               className: classes.headerListItemNew,
@@ -91,12 +87,16 @@ const DrawerItemsNav = ({ role, classes, }) => {
           classes={classes}
           childItems={[
             {
-              link: (role === "field2" || role === "super") ? "/programs/new" : null,
-              primary: (role === "field2" || role === "super") ? "Create Ad Hoc Program" : null,
+              link:
+                role === "field2" || role === "super" ? "/programs/new" : null,
+              primary:
+                role === "field2" || role === "super"
+                  ? "Create Ad Hoc Program"
+                  : null,
             },
             {
               link: "/programs",
-              primary: "Pre-Order Programs"
+              primary: "Pre-Order Programs",
             },
           ]}
         />
@@ -113,11 +113,15 @@ const DrawerItemsNav = ({ role, classes, }) => {
             },
             {
               link: "/compliance/rules",
-              primary: "General Rules"
+              primary: "General Rules",
             },
             {
-              link: (role === "compliance" || role === "super") ? "/compliance/contacts" : null,
-              primary: (role === "compliance" || role === "super") ? "Contacts" : null,
+              link:
+                role === "compliance" || role === "super"
+                  ? "/compliance/contacts"
+                  : null,
+              primary:
+                role === "compliance" || role === "super" ? "Contacts" : null,
             },
           ]}
         />
