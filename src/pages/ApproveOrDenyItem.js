@@ -32,7 +32,7 @@ const ApproveOrDenyItem = () => {
 
     useEffect(() => {
         // let url = window.location.pathname
-        let url = '?token=B77dWv3cRFI2-RahFxQkxayHD6ONidoO&item_id=123&item_type_id=123'
+        let url = '?token=56grnPHEdCQ1ggsK3FiY5oQeHzeaCr-n&item_id=123&item_type_id=123'
         let hash;
         let itemObj = {};
         let hashes = url.slice(url.indexOf('?') + 1).split('&');
@@ -42,30 +42,32 @@ const ApproveOrDenyItem = () => {
         }
         setItem(itemObj)
     }, [])
-
-    console.log(item)
-
+      
     const handleApprove = async () => {
         setIsLoading(true)
-        const response = { status: "", error: null };
         await axios
-            .post("/public/approve_or_deny",
+            .post("/public/update-status",
                 {
+                   data: {
                     token: item.token,
-                    approve_or_deny: "approved"
+                    status: "approved"
+                   },
+                },
+                {   
+                    headers: {
+                    Accept: "application/vnd.api+json",
+                    "Content-Type": "application/vnd.api+json",
+                  }
                 })
             .then((res) => {
                 console.log(res.data);
-                response.status = "ok";
                 setIsLoading(false)
                 setIsApproved(true)
             })
             .catch((err) => {
+                console.log(err)
                 setIsLoading(false)
                 setIsError(true)
-                console.log(err)
-                response.status = "error";
-                //response.error = err.response.data.errors[0].title;
             })
     };
 
@@ -73,11 +75,19 @@ const ApproveOrDenyItem = () => {
         setIsLoading(true)
         const response = { status: "", error: null };
         await axios
-            .post("/public/approve_or_deny",
-                {
-                    token: item.token,
-                    approve_or_deny: "in-violation"
-                })
+            .post("/public/update-status",
+            {
+                data: {
+                 token: item.token,
+                 status: "approved"
+                },
+             },
+             {   
+                 headers: {
+                 Accept: "application/vnd.api+json",
+                 "Content-Type": "application/vnd.api+json",
+               }
+             })
             .then((res) => {
                 console.log(res.data);
                 response.status = "ok";
@@ -92,6 +102,11 @@ const ApproveOrDenyItem = () => {
                 //response.error = err.response.data.errors[0].title;
             })
     }
+//200 if status updated and successful
+//404 token not found
+//404 token expired
+// error will be JSON
+// 
 
     return (
         <>
@@ -118,7 +133,7 @@ const ApproveOrDenyItem = () => {
                                 Please approve or deny item: {item.item_id}
                             </Typography>
                             <br />
-                            {!isLoading && (
+                            {(!isLoading && !isError) && (
                                 <div
                                     style={{
                                         display: "flex",
