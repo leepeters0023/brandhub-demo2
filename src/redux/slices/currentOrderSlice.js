@@ -91,7 +91,6 @@ const currentOrderSlice = createSlice({
     },
     createNewBulkOrderSuccess(state, action) {
       const { type, orderId, itemArray } = action.payload;
-      console.log(type);
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = itemArray;
       state.orderId = orderId;
