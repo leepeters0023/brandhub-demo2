@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-//import { fetchBrandsByName } from "../../api/brandApi";
 
 let initialState = {
   isLoading: false,
@@ -21,13 +20,10 @@ const approveOrDenyItemSlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
-    approveOrDenyItemSuccess(state, action) {
-    //   const { brands } = action.payload;
-    //   state.brandList = brands;
+    approveOrDenyItemSuccess(state) {
       state.isLoading = false;
       state.error = null;
     },
-
     setFailure: loadingFailed,
   }
 })
