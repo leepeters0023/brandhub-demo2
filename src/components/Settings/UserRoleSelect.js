@@ -93,6 +93,17 @@ const UserRoleSelect = ({role, setRole}) => {
           >
             VIEW ONLY
           </Button>
+          <Button
+            className={
+              role === "supplier" ? classes.largeButton : classes.selectedButton
+            }
+            variant={role === "supplier" ? "contained" : "outlined"}
+            onClick={() => {
+              setRole("supplier");
+            }}
+          >
+            SUPPLIER
+          </Button>
         </ButtonGroup>
     </>
   )

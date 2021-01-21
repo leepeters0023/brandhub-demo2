@@ -13,7 +13,7 @@ import DrawerReportsNav from "./DrawerReportsNav";
 import DrawerPONav from "./DrawerPONav";
 import DrawerRFQNav from "./DrawerRFQNav";
 
-import AppBar from '@material-ui/core/AppBar';
+import AppBar from "@material-ui/core/AppBar";
 import Tooltip from "@material-ui/core/Tooltip";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginRight: "10px"
+    marginRight: "10px",
   },
   navigationText: {
     fontWeight: 500,
@@ -77,20 +77,20 @@ const useStyles = makeStyles((theme) => ({
   headerListItem: {
     color: "white",
     "&:hover": {
-      textDecoration: "underline"
-    }
+      textDecoration: "underline",
+    },
   },
   navList: {
     backgroundColor: "black",
-    overFlow: "hidden"
+    overFlow: "hidden",
   },
   regionText: {
-    color: "black"
+    color: "black",
   },
   avatar: {
     backgroundColor: "white",
     color: "black",
-    float: "right"
+    float: "right",
   },
   expandMoreIcon: {
     marginRight: "20px",
@@ -99,8 +99,8 @@ const useStyles = makeStyles((theme) => ({
     cursor: "none",
   },
   divider: {
-    backgroundColor: "white"
-  }
+    backgroundColor: "white",
+  },
 }));
 
 const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
@@ -123,11 +123,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
         <div style={{ display: "static", width: "100%" }}>
           <Tooltip style={{ float: "left" }} title="Home">
             <Link to="/dashboard">
-              <img
-                src={Logo}
-                alt="Logo"
-                className={classes.logoLink}
-              />
+              <img src={Logo} alt="Logo" className={classes.logoLink} />
             </Link>
           </Tooltip>
           <>
@@ -140,31 +136,29 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
               )}
               {role !== "supplier" && (
                 <>
-                  <DrawerItemsNav
-                    role={role}
-                    classes={classes}
-                  />
-                  {role !=="compiance" && (
-                     <DrawerOrdersNav
-                     role={role}
-                     classes={classes}
-                     inStockOrderId={inStockOrderId}
-                     onDemandOrderId={onDemandOrderId}
-                     handleCouponModal={handleCouponModal}
-                   />
+                  <DrawerItemsNav role={role} classes={classes} />
+                  {role !== "compiance" && (
+                    <DrawerOrdersNav
+                      role={role}
+                      classes={classes}
+                      inStockOrderId={inStockOrderId}
+                      onDemandOrderId={onDemandOrderId}
+                      handleCouponModal={handleCouponModal}
+                    />
                   )}
                 </>
               )}
-              {(role !== "purchasing" && role !== "supplier") && (
+              {role !== "purchasing" && role !== "supplier" && (
                 <>
-                  <DrawerReportsNav
-                    role={role}
-                    classes={classes}
-                  />
+                  <DrawerReportsNav role={role} classes={classes} />
                 </>
               )}
-              <OnPremiseRetailSelector classes={classes} />
-              {territories && territories.length > 0 && <RegionSelector classes={classes} />}
+              {role !== "supplier" && (
+                <OnPremiseRetailSelector classes={classes} />
+              )}
+              {territories && territories.length > 0 && (
+                <RegionSelector classes={classes} />
+              )}
               <UserNav
                 role={role}
                 classes={classes}
@@ -174,7 +168,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
             </div>
           </>
         </div>
-      </AppBar >
+      </AppBar>
     </>
   );
 };
