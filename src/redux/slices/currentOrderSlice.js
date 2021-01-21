@@ -99,7 +99,7 @@ const currentOrderSlice = createSlice({
       state.error = null;
     },
     getCurrentOrderSuccess(state, action) {
-      const { order, itemReference } = action.payload;
+      const { order, itemReference, warehouse } = action.payload;
       if (order.type === "In Stock") {
         state.inStockOrderNumber = order.id;
         state.inStockOrderItems = itemReference;
@@ -114,6 +114,7 @@ const currentOrderSlice = createSlice({
       state.orderId = order.id;
       state.type = order.type;
       state.status = order.status;
+      state.currentWarehouse = warehouse ? warehouse : state.currentWarehouse;
       state.orderDate = order.orderDate;
       state.totalItems = order.totalItems;
       state.totalCost = order.totalEstCost;
@@ -286,6 +287,8 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
+    console.log(order);
+    let currentWarehouse;
     let formattedOrder;
     let itemReferenceArray;
     if (order.data.length === 0) {
@@ -307,10 +310,14 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         itemNumber: item.item["item-number"],
       }));
     }
+    if (type === "inStock" && order.data[0].orders.length > 0) {
+      currentWarehouse = order.data[0].orders[0].warehouse;
+    }
     dispatch(
       getCurrentOrderSuccess({
         order: formattedOrder,
         itemReference: itemReferenceArray,
+        warehouse: currentWarehouse ? currentWarehouse : null,
       })
     );
   } catch (err) {
