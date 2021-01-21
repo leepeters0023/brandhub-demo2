@@ -285,6 +285,7 @@ const ItemPreviewModal = (props) => {
                                 (item) => item.itemNumber === itemNumber
                               ).length !== 0 ||
                               (type === "inStock" &&
+                                currentWarehouse &&
                                 warehouse &&
                                 warehouse !== currentWarehouse)
                             }

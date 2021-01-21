@@ -107,6 +107,7 @@ const currentOrderSlice = createSlice({
         state.onDemandOrderNumber = order.id;
         state.onDemandOrderItems = itemReference;
       }
+      console.log(state.currentWarehouse);
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.userId = order.userId;
@@ -114,10 +115,12 @@ const currentOrderSlice = createSlice({
       state.orderId = order.id;
       state.type = order.type;
       state.status = order.status;
-      state.currentWarehouse = warehouse ? warehouse : state.currentWarehouse;
       state.orderDate = order.orderDate;
       state.totalItems = order.totalItems;
       state.totalCost = order.totalEstCost;
+      if (warehouse) {
+        state.currentWarehouse = warehouse;
+      }
       state.error = null;
     },
     addNewItem(state, action) {
@@ -158,7 +161,7 @@ const currentOrderSlice = createSlice({
     },
     clearItemSelections(state) {
       state.selectedInStockItems = [];
-      state.currentWarehouse = null;
+      //state.currentWarehouse = null;
       state.selectedOnDemandItems = [];
     },
     clearCurrentOrder(state) {
@@ -287,7 +290,6 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
     if (order.error) {
       throw order.error;
     }
-    console.log(order);
     let currentWarehouse;
     let formattedOrder;
     let itemReferenceArray;

@@ -230,6 +230,7 @@ const OrderItemTableView = ({
                               (item) => item.itemNumber === row.itemNumber
                             ).length !== 0 ||
                             (type === "inStock" &&
+                              currentWarehouse &&
                               row.warehouse &&
                               row.warehouse !== currentWarehouse)
                           }

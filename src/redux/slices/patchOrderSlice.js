@@ -58,8 +58,14 @@ const loadingFailed = (state, action) => {
   const { error, cell } = action.payload;
   if (cell) {
     let currentErrors = [...state.cellsError];
+    let currentLoading = [...state.cellsLoading];
+    let currentCell = currentLoading.find(
+      (c) => c.id === cell.id && c.orderNumber === cell.orderNumber
+    );
+    currentLoading.splice(currentLoading.indexOf(currentCell), 1);
     currentErrors.push(cell);
     state.cellsError = currentErrors;
+    state.cellsLoading = currentLoading;
     state.isLoading = false;
   } else {
     state.isLoading = false;
@@ -81,12 +87,17 @@ const patchOrderSlice = createSlice({
     patchItemSuccess(state, action) {
       const { id, orderNumber } = action.payload;
       let currentLoading = [...state.cellsLoading];
+      let currentErrors = [...state.cellsError];
       let currentCell = currentLoading.find(
         (cell) => cell.id === id && cell.orderNumber === orderNumber
       );
       currentLoading.splice(currentLoading.indexOf(currentCell), 1);
-
+      let currentErrorCell = currentErrors.find(
+        (cell) => cell.id === id && cell.orderNumber === orderNumber
+      )
+      if (currentErrorCell) currentErrors.splice(currentErrors.indexOf(currentErrorCell), 1);
       state.cellsLoading = [...currentLoading];
+      state.cellsError = [...currentErrors];
       state.isLoading = false;
       state.error = null;
     },

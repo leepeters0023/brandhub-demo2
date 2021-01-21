@@ -157,6 +157,7 @@ const OrderItemGridView = (props) => {
                                 (i) => i.itemNumber === item.itemNumber
                               ).length !== 0 ||
                               (type === "inStock" &&
+                                currentWarehouse &&
                                 item.warehouse &&
                                 item.warehouse !== currentWarehouse)
                             }
