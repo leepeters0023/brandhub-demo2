@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Logo from "../assets/RTA_Logo_Stacked.png";
 import axios from "axios";
 
-import ImageWrapper from "../components/Utility/ImageWrapper";
-import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import ImageWrapper from "../components/Utility/ImageWrapper";
+import Logo from "../assets/RTA_Logo_Stacked.png";
+import Typography from "@material-ui/core/Typography";
+
+import { makeStyles } from "@material-ui/core/styles";
+
 
 const useStyles = makeStyles((theme) => ({
     ...theme.global,
