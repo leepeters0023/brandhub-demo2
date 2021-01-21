@@ -323,9 +323,6 @@ export const mapOrderItems = (items, type) => {
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
-      if (type !== "order-set-item" && item["triggered-rules"].length > 0) {
-        console.log(item);
-      }
       return {
         id: item.id,
         itemId: item.item.id,
