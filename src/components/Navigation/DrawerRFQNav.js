@@ -6,15 +6,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar"
+import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 
 //TODO get actual number of each status to display from redux (mock only), add correct statuses
 
-const DrawerOrdersNav = ({ classes, }) => {
+const DrawerOrdersNav = ({ classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
@@ -28,6 +28,7 @@ const DrawerOrdersNav = ({ classes, }) => {
   return (
     <>
       <IconButton
+        style={{ padding: 0 }}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();
@@ -64,11 +65,12 @@ const DrawerOrdersNav = ({ classes, }) => {
           component={Link}
           to="/purchasing/rfqHistory/new"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="New:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              8
-              </Avatar>
+            <Avatar className={classes.avatar}>8</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} />
@@ -78,11 +80,12 @@ const DrawerOrdersNav = ({ classes, }) => {
           component={Link}
           to="/purchasing/rfqHistory/inProgress"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="In Progress:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              15
-              </Avatar>
+            <Avatar className={classes.avatar}>15</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider2" />
@@ -92,11 +95,12 @@ const DrawerOrdersNav = ({ classes, }) => {
           component={Link}
           to="/purchasing/rfqHistory/awarded"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Awarded:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="Awarded:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              25
-              </Avatar>
+            <Avatar className={classes.avatar}>25</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider3" />
@@ -106,7 +110,10 @@ const DrawerOrdersNav = ({ classes, }) => {
           component={Link}
           to="/purchasing/rfqHistory/all"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="History"
+          />
         </MenuItem>
       </Menu>
     </>

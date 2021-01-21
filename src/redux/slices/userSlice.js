@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFavoriteItems, getUser, logInUser, getLoginURL, loginUserWithAuthO } from "../../api/userApi";
+import {
+  addFavoriteItems,
+  getUser,
+  logInUser,
+  getLoginURL,
+  loginUserWithAuthO,
+} from "../../api/userApi";
 import { mapItems } from "../apiMaps";
 
 /*
@@ -30,6 +36,9 @@ let initialState = {
   initials: "",
   email: "",
   role: "",
+  isOnPremise: null,
+  isRetail: null,
+  currentMarket: null,
   redirectLink: null,
   sessionExpire: null,
   refreshToken: null,
@@ -52,7 +61,7 @@ const startUpdate = (state) => {
 
 const startAuth = (state) => {
   state.authIsLoading = true;
-}
+};
 
 const startLogin = (state) => {
   state.loginIsLoading = true;
@@ -103,6 +112,9 @@ const userSlice = createSlice({
       state.initials = user.initials;
       state.email = user.email;
       state.role = user.role;
+      state.isOnPremise = user.isOnPremise;
+      state.isRetail = user.isRetail;
+      state.currentMarket = user.currentMarket;
       state.territories = [...user.territories];
       state.managedUsers =
         user.managedUsers.length > 0 ? [...user.managedUsers] : [];
@@ -122,17 +134,21 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
+    updateCurrentMarket(state, action) {
+      const { market } = action.payload;
+      state.currentMarket = market;
+    },
     setRedirectLink(state, action) {
       const { link } = action.payload;
       state.redirectLink = link;
       state.authIsLoading = false;
     },
-    setExpires (state, action) {
+    setExpires(state, action) {
       const { expires } = action.payload;
       state.sessionExpire = expires;
     },
-    setTimeoutSet (state) {
-      state.timeOutSet = !state.timeOutSet
+    setTimeoutSet(state) {
+      state.timeOutSet = !state.timeOutSet;
     },
     removeUser: (state) => {
       state.isLoading = false;
@@ -142,6 +158,9 @@ const userSlice = createSlice({
       state.initials = "";
       state.email = "";
       state.role = "";
+      state.isOnPremise = null;
+      state.isRetail = null;
+      state.currentMarket = null;
       state.redirectLink = null;
       state.refreshToken = null;
       state.sessionExpire = null;
@@ -171,6 +190,7 @@ export const {
   setExpires,
   setTimeoutSet,
   updateCurrentTerritory,
+  updateCurrentMarket,
   removeUser,
   setLogInFailure,
   setUpdateFailure,
@@ -196,6 +216,18 @@ export const fetchUser = () => async (dispatch) => {
       }`,
       email: user.data.email,
       role: user.data.role,
+      isOnPremise: user["is-on-premise"] ? true : false,
+      //todo update when this is coming through
+      isRetail: user["is-retail"]
+        ? true
+        : !user["is-on-premise"]
+        ? true
+        : false,
+      currentMarket: user["is-retail"]
+        ? "Retail"
+        : user["is-on-premise"]
+        ? "On Premise"
+        : "Retail",
       territories:
         user.data.territories.length > 0
           ? user.data.territories.map((terr) => ({
@@ -266,8 +298,8 @@ export const loginWithCode = (code) => async (dispatch) => {
 export const getRedirect = () => async (dispatch) => {
   try {
     dispatch(setAuthLoading());
-    console.log("getting url")
-    const res = await getLoginURL()
+    console.log("getting url");
+    const res = await getLoginURL();
     if (res.error) {
       throw res.error;
     }

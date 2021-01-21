@@ -14,6 +14,7 @@ import {
   createNewBulkItemOrder,
   clearItemSelections,
 } from "../redux/slices/currentOrderSlice";
+import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -24,7 +25,7 @@ import Loading from "../components/Utility/Loading";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -71,6 +72,8 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const [invItemId, setInvItemId] = useCallback(useState(null));
   const [isAddInvModalOpen, setAddInvModalOpen] = useCallback(useState(false));
   const currentItems = useSelector((state) => state.items.items);
+  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);
   const selectedItems = useSelector(
@@ -84,6 +87,8 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
   );
+
+  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -104,7 +109,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const handleAddInvOpen = (id) => {
     setInvItemId(id);
     setAddInvModalOpen(true);
-  }
+  };
 
   const handleAddToOrder = () => {
     if (currentOrder.inStockOrderItems.length === 0) {
@@ -134,6 +139,18 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (
+      (currentMarket === "On Premise" && !currentMarketBool) ||
+      (currentMarket === "Retail" && currentMarketBool)
+    ) {
+      dispatch(
+        updateSingleFilter({ filter: "isOnPremise", value: !currentMarketBool })
+      );
+      dispatch(setSorted());
+    }
+  }, [currentMarket, currentMarketBool, dispatch]);
 
   if (orderLoading) {
     return <Loading />;

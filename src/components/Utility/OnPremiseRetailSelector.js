@@ -3,44 +3,39 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateCurrentTerritory } from "../../redux/slices/userSlice";
+import { updateCurrentMarket } from "../../redux/slices/userSlice";
 
 import { fetchPrograms } from "../../redux/slices/programsSlice";
-import { fetchStatesByIds } from "../../redux/slices/territorySlice";
-import { clearDistributors } from "../../redux/slices/distributorSlice";
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 
-const RegionSelector = ({ classes }) => {
+const OnPremiseRetailSelector = ({ classes }) => {
   const dispatch = useDispatch();
-  
-  const [region, updateRegion] = useState("");
-  
-  const regions = useSelector((state) => state.user.territories);
-  const currentRegion = useSelector((state) => state.user.currentTerritory);
+
+  const [market, setMarket] = useState("");
+
+  const isRetail = useSelector((state) => state.user.isRetail);
+  const isOnPremise = useSelector((state) => state.user.isOnPremise);
   const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
 
   const handleChangeSelect = (evt) => {
-    window.location.hash = "";
-    updateRegion(evt.target.value);
-    let currentTerritory = regions.find((reg) => reg.name === evt.target.value);
-    let marketBool = currentMarket === "On Premise" ? true : false;
-    dispatch(clearDistributors());
-    dispatch(updateCurrentTerritory({ territory: currentTerritory.id }));
-    dispatch(fetchPrograms(currentTerritory.id, marketBool));
-    dispatch(fetchStatesByIds([currentTerritory.id]));
+    setMarket(evt.target.value);
+    let marketBool = evt.target.value === "On Premise" ? true : false;
+    dispatch(fetchPrograms(currentTerritory, marketBool));
+    dispatch(updateCurrentMarket({ market: evt.target.value }));
   };
 
   useEffect(() => {
-    if (regions.length > 0) {
-      updateRegion(regions.find((reg) => reg.id === currentRegion).name);
+    if (currentMarket !== market) {
+      setMarket(currentMarket);
     }
-  }, [regions, currentRegion]);
+  }, [currentMarket, market]);
 
-  if (regions.length === 1) {
+  if ((isRetail && !isOnPremise) || (!isRetail && !isOnPremise)) {
     return (
       <div
         style={{
@@ -55,11 +50,11 @@ const RegionSelector = ({ classes }) => {
         }}
       >
         <Typography className={classes.regionText} variant="body2">
-          {regions[0].name}
+          {currentMarket}
         </Typography>
       </div>
     );
-  } else
+  } else {
     return (
       <>
         <FormControl
@@ -75,25 +70,27 @@ const RegionSelector = ({ classes }) => {
             name="regions"
             labelId="region-select"
             id="regions"
-            value={region}
+            value={market}
             onChange={handleChangeSelect}
             MenuProps={{
               style: { zIndex: "10001" },
             }}
           >
-            {regions.map((region, index) => (
-              <MenuItem value={region.name} key={index}>
-                <Typography variant="body2">{region.name}</Typography>
-              </MenuItem>
-            ))}
+            <MenuItem value={"Retail"}>
+              <Typography variant="body2">Retail</Typography>
+            </MenuItem>
+            <MenuItem value={"On Premise"}>
+              <Typography variant="body2">On Premise</Typography>
+            </MenuItem>
           </Select>
         </FormControl>
       </>
     );
+  }
 };
 
-RegionSelector.propTypes = {
+OnPremiseRetailSelector.propTypes = {
   classes: PropTypes.object.isRequired,
-}
+};
 
-export default React.memo(RegionSelector);
+export default React.memo(OnPremiseRetailSelector);

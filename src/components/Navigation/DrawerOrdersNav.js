@@ -42,6 +42,7 @@ const DrawerOrdersNav = ({
   return (
     <>
       <IconButton
+        style={{ padding: 0 }}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();

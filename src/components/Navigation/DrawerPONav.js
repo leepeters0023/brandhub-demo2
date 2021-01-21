@@ -6,17 +6,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar"
+import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 
 //TODO get actual number of each status to display from redux (mock only)
 
-const DrawerOrdersNav = ({
-  classes,
-}) => {
+const DrawerOrdersNav = ({ classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
@@ -29,6 +27,7 @@ const DrawerOrdersNav = ({
   return (
     <>
       <IconButton
+        style={{ padding: 0 }}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();
@@ -36,7 +35,7 @@ const DrawerOrdersNav = ({
       >
         <Typography variant="h5" className={classes.navigationText}>
           Purchase Orders
-                </Typography>
+        </Typography>
         <ExpandMoreIcon fontSize="large" className={classes.expandMoreIcon} />
       </IconButton>
       <Menu
@@ -65,11 +64,12 @@ const DrawerOrdersNav = ({
           component={Link}
           to="/purchasing/poHistory/new"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="New:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="New:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              5
-              </Avatar>
+            <Avatar className={classes.avatar}>5</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} />
@@ -79,11 +79,12 @@ const DrawerOrdersNav = ({
           component={Link}
           to="/purchasing/poHistory/inProgress"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="In Progress:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="In Progress:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              10
-              </Avatar>
+            <Avatar className={classes.avatar}>10</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider2" />
@@ -93,11 +94,12 @@ const DrawerOrdersNav = ({
           component={Link}
           to="/purchasing/poHistory/shippingHold"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="Shipping Hold:" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="Shipping Hold:"
+          />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>
-              2
-              </Avatar>
+            <Avatar className={classes.avatar}>2</Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider3" />
@@ -107,7 +109,10 @@ const DrawerOrdersNav = ({
           component={Link}
           to="/purchasing/poHistory/all"
         >
-          <ListItemText primaryTypographyProps={{ className: classes.headerListItem }} primary="History" />
+          <ListItemText
+            primaryTypographyProps={{ className: classes.headerListItem }}
+            primary="History"
+          />
         </MenuItem>
       </Menu>
     </>

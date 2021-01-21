@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 import UserNav from "./UserNav";
 import RegionSelector from "../Utility/RegionSelector";
+import OnPremiseRetailSelector from "../Utility/OnPremiseRetailSelector";
 import DrawerItemsNav from "./DrawerItemsNav";
 import DrawerOrdersNav from "./DrawerOrdersNav";
 import DrawerReportsNav from "./DrawerReportsNav";
@@ -55,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   navigationText: {
     fontWeight: 500,
     color: "white",
-    margin: "0 20px",
+    margin: "0 10px",
     pointerEvents: "none",
     cursor: "none",
   },
@@ -162,6 +163,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                   />
                 </>
               )}
+              <OnPremiseRetailSelector classes={classes} />
               {territories && territories.length > 0 && <RegionSelector classes={classes} />}
               <UserNav
                 role={role}

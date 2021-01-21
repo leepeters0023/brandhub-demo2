@@ -11,6 +11,7 @@ import {
 } from "../redux/slices/itemSlice";
 import {
   updateMultipleFilters,
+  updateSingleFilter,
   setSorted,
 } from "../redux/slices/filterSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
@@ -74,6 +75,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentLink, setCurrentLink] = useCallback(useState(null));
   const [isLinkModalOpen, setLinkModalOpen] = useCallback(useState(false));
+  const currentMarket = useSelector((state) => state.user.currentMarket);
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
@@ -92,9 +94,11 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
+  const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
 
   const defaultFilters =
     catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
+  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -149,6 +153,18 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       dispatch(setSorted());
     }
   }, [catalogType, currentType, dispatch, setCurrentType]);
+
+  useEffect(() => {
+    if (
+      (currentMarket === "On Premise" && !currentMarketBool) ||
+      (currentMarket === "Retail" && currentMarketBool)
+    ) {
+      dispatch(
+        updateSingleFilter({ filter: "isOnPremise", value: !currentMarketBool })
+      );
+      dispatch(setSorted());
+    }
+  }, [currentMarket, currentMarketBool, dispatch]);
 
   return (
     <>

@@ -119,25 +119,31 @@ export const fetchPreOrders = (id, type, program, terrId) => async (
     if (currentPreOrders.error) {
       throw currentPreOrders.error;
     }
-    let preOrders = currentPreOrders.data.preOrders.map((order) => ({
-      preOrderId: order.id,
-      programId: order.program.id,
-      territories:
-        order.program.type === "National"
-          ? ["National"]
-          : order["territory-names"].split(", "),
-      totalItems: order["total-quantity"],
-      totalEstCost: stringToCents(order["total-estimated-cost"]),
-      status: order.status,
-      isComplete: order["is-work-complete"]
-    }));
-    let totalCost = preOrders
-      .map((order) => order.totalEstCost)
-      .reduce((a, b) => a + b);
-    let totalModCost = currentPreOrders.data.preOrders
-      .filter((order) => order.program.id !== program)
-      .map((ord) => stringToCents(ord["total-estimated-cost"]))
-      .reduce((a, b) => a + b);
+    let grandTotal = 0;
+    let totalMod = 0;
+    let preOrders = currentPreOrders.data.preOrders.map((order) => {
+      let total = order.orders
+        .map((ord) => stringToCents(ord["total-estimated-cost"]))
+        .reduce((a, b) => a + b);
+      grandTotal += total;
+      if (order.program.id !== program) {
+        totalMod += total;
+      }
+      return {
+        preOrderId: order.id,
+        programId: order.program.id,
+        territories:
+          order.program.type === "National"
+            ? ["National"]
+            : order["territory-names"].split(", "),
+        totalItems: order["total-quantity"],
+        totalEstCost: total,
+        status: order.status,
+        isComplete: order["is-work-complete"],
+      };
+    });
+    let totalCost = grandTotal;
+    let totalModCost = totalMod;
     preOrders.forEach((order) => {
       let status;
       if (order.status === "in-progress" && order.isComplete) {
