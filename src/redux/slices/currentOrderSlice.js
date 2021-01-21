@@ -43,6 +43,7 @@ let initialState = {
   inStockOrderNumber: null,
   inStockOrderItems: [],
   selectedInStockItems: [],
+  currentWarehouse: null,
   onDemandOrderNumber: null,
   selectedOnDemandItems: [],
   onDemandOrderItems: [],
@@ -80,6 +81,7 @@ const currentOrderSlice = createSlice({
     setUpdateLoading: startUpdateLoading,
     createNewOrderSuccess(state, action) {
       const { type, orderId, item } = action.payload;
+      console.log(type);
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
       state.orderId = orderId;
@@ -89,6 +91,7 @@ const currentOrderSlice = createSlice({
     },
     createNewBulkOrderSuccess(state, action) {
       const { type, orderId, itemArray } = action.payload;
+      console.log(type);
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = itemArray;
       state.orderId = orderId;
@@ -149,8 +152,13 @@ const currentOrderSlice = createSlice({
       const { type, selectedItems } = action.payload;
       state[type] = selectedItems;
     },
+    updateCurrentWarehouse(state, action) {
+      const { warehouse } = action.payload;
+      state.currentWarehouse = warehouse;
+    },
     clearItemSelections(state) {
       state.selectedInStockItems = [];
+      state.currentWarehouse = null;
       state.selectedOnDemandItems = [];
     },
     clearCurrentOrder(state) {
@@ -193,6 +201,7 @@ export const {
   addNewItem,
   addBulkItems,
   updateSelection,
+  updateCurrentWarehouse,
   clearItemSelections,
   clearCurrentOrder,
   clearOrderByType,
@@ -202,7 +211,9 @@ export const {
 
 export default currentOrderSlice.reducer;
 
-export const createNewOrder = (type, itemNumber, territoryId) => async (dispatch) => {
+export const createNewOrder = (type, itemNumber, territoryId) => async (
+  dispatch
+) => {
   try {
     dispatch(setUpdateLoading());
     let newOrder = await createOrderSet(type, territoryId);
@@ -228,7 +239,9 @@ export const createNewOrder = (type, itemNumber, territoryId) => async (dispatch
   }
 };
 
-export const createNewBulkItemOrder = (type, itemArray, territoryId) => async (dispatch) => {
+export const createNewBulkItemOrder = (type, itemArray, territoryId) => async (
+  dispatch
+) => {
   try {
     dispatch(setUpdateLoading());
     let newOrder = await createOrderSet(type, territoryId);

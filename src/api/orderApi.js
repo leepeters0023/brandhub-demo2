@@ -324,12 +324,33 @@ export const setOrderSetNote = async (id, note) => {
   return response;
 };
 
-export const addSingleOrderToSet = async (id, dist, type) => {
+export const addSingleOrderToSet = async (id, dist, type, warehouse) => {
   const response = { status: "", error: null, data: null };
-  await axios
-    .post(
-      "/api/orders",
-      {
+  let requestData = warehouse
+    ? {
+        data: {
+          type: "order",
+          attributes: {
+            type: type,
+            warehouse: warehouse,
+          },
+          relationships: {
+            distributor: {
+              data: {
+                type: "distributor",
+                id: dist,
+              },
+            },
+            "order-set": {
+              data: {
+                type: "order-set",
+                id: id,
+              },
+            },
+          },
+        },
+      }
+    : {
         data: {
           type: "order",
           attributes: {
@@ -350,9 +371,9 @@ export const addSingleOrderToSet = async (id, dist, type) => {
             },
           },
         },
-      },
-      writeHeaders
-    )
+      };
+  await axios
+    .post("/api/orders", requestData, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";

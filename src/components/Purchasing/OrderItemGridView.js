@@ -5,7 +5,10 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateSelection } from "../../redux/slices/currentOrderSlice";
+import {
+  updateSelection,
+  updateCurrentWarehouse,
+} from "../../redux/slices/currentOrderSlice";
 import { fetchNextFilteredItems } from "../../redux/slices/itemSlice";
 
 import BottomScrollListener from "react-bottom-scroll-listener";
@@ -42,6 +45,12 @@ const OrderItemGridView = (props) => {
   const currentOrderItems = useSelector(
     (state) => state.currentOrder[`${type}OrderItems`]
   );
+  const currentWarehouse = useSelector(
+    (state) => state.currentOrder.currentWarehouse
+  );
+  const inStockOrderItems = useSelector(
+    (state) => state.currentOrder.inStockOrderItems
+  );
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
   const currentUserRole = useSelector((state) => state.user.role);
@@ -52,12 +61,19 @@ const OrderItemGridView = (props) => {
     }
   };
 
-  const handleClick = (_event, id) => {
+  const handleClick = (_event, id, warehouse) => {
     const selectedIndex = selectedItems.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selectedItems, id);
+      if (
+        !currentWarehouse &&
+        type === "inStock" &&
+        inStockOrderItems.length === 0
+      ) {
+        dispatch(updateCurrentWarehouse({ warehouse: warehouse }));
+      }
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selectedItems.slice(1));
     } else if (selectedIndex === selectedItems.length - 1) {
@@ -68,7 +84,13 @@ const OrderItemGridView = (props) => {
         selectedItems.slice(selectedIndex + 1)
       );
     }
-
+    if (
+      newSelected.length === 0 &&
+      type === "inStock" &&
+      inStockOrderItems.length === 0
+    ) {
+      dispatch(updateCurrentWarehouse({ warehouse: null }));
+    }
     dispatch(
       updateSelection({ type: formattedType, selectedItems: newSelected })
     );
@@ -133,7 +155,10 @@ const OrderItemGridView = (props) => {
                             disabled={
                               currentOrderItems.filter(
                                 (i) => i.itemNumber === item.itemNumber
-                              ).length !== 0
+                              ).length !== 0 ||
+                              (type === "inStock" &&
+                                item.warehouse &&
+                                item.warehouse !== currentWarehouse)
                             }
                             onChange={(event) => {
                               handleClick(event, item.id);

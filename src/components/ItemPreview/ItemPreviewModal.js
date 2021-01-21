@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addNewOrderItem,
   createNewOrder,
+  updateCurrentWarehouse,
 } from "../../redux/slices/currentOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
@@ -113,6 +114,7 @@ const ItemPreviewModal = (props) => {
       program,
       itemType,
       itemDescription,
+      warehouse,
       estCost,
       imgUrlLg,
       packSize,
@@ -130,10 +132,16 @@ const ItemPreviewModal = (props) => {
     handleClose,
     previewModal,
   } = props;
-
   // const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
+  const currentOrderItems = useSelector(
+    (state) => state.currentOrder[`${type}OrderItems`]
+  );
+  const currentWarehouse = useSelector(
+    (state) => state.currentOrder.currentWarehouse
+  );
+  const inStockOrderItems = useSelector((state) => state.currentOrder.inStockOrderItems);
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const currentUserRole = useSelector((state) => state.user.role);
 
@@ -152,7 +160,9 @@ const ItemPreviewModal = (props) => {
     };
 
     setCurrentItem(newItem);
-
+    if (!currentWarehouse && type === "inStock" && inStockOrderItems.length === 0) {
+      dispatch(updateCurrentWarehouse({ warehouse: warehouse }));
+    }
     if (!currentOrderId) {
       dispatch(createNewOrder(type, id, territoryId));
     } else {
@@ -161,8 +171,11 @@ const ItemPreviewModal = (props) => {
   }, [
     dispatch,
     setCurrentItem,
+    inStockOrderItems,
+    currentWarehouse,
     brand,
     id,
+    warehouse,
     itemType,
     currentOrderId,
     type,
@@ -267,6 +280,14 @@ const ItemPreviewModal = (props) => {
                               marginTop: "10px",
                             }}
                             onClick={handleAddItem}
+                            disabled={
+                              currentOrderItems.filter(
+                                (item) => item.itemNumber === itemNumber
+                              ).length !== 0 ||
+                              (type === "inStock" &&
+                                warehouse &&
+                                warehouse !== currentWarehouse)
+                            }
                           >
                             ADD TO ORDER
                           </Button>

@@ -24,7 +24,7 @@ import Loading from "../components/Utility/Loading";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -145,13 +145,14 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <ItemPreviewModal
-        type={"onDemand"}
-        currentItem={currentItem}
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-      />
-
+      {previewModal && (
+        <ItemPreviewModal
+          type={"onDemand"}
+          currentItem={currentItem}
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">

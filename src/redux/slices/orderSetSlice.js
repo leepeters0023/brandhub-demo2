@@ -464,11 +464,11 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
   }
 };
 
-export const createSingleOrder = (id, dist, type) => async (dispatch) => {
+export const createSingleOrder = (id, dist, type, warehouse) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    const order = await addSingleOrderToSet(id, dist, type);
+    const order = await addSingleOrderToSet(id, dist, type, warehouse);
     if (order.error) {
       throw order.error;
     }
@@ -482,14 +482,14 @@ export const createSingleOrder = (id, dist, type) => async (dispatch) => {
   }
 };
 
-export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
+export const createMultipleOrders = (idArray, id, type, warehouse) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
     const orders = [];
     await Promise.all(
       idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type);
+        const order = await addSingleOrderToSet(id, distId, type, warehouse);
         if (order.error) {
           throw order.error;
         }
@@ -506,7 +506,7 @@ export const createMultipleOrders = (idArray, id, type) => async (dispatch) => {
   }
 };
 
-export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
+export const createAllOrders = (territoryId, id, type, warehouse) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
@@ -518,7 +518,7 @@ export const createAllOrders = (territoryId, id, type) => async (dispatch) => {
     const orders = [];
     await Promise.all(
       idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type);
+        const order = await addSingleOrderToSet(id, distId, type, warehouse);
         if (order.error) {
           throw order.error;
         }

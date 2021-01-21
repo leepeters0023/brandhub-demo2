@@ -24,6 +24,7 @@ import {
 import { clearDistributors } from "./redux/slices/distributorSlice";
 import {
   clearCurrentOrder,
+  clearItemSelections,
   fetchCurrentOrderByType,
   clearOrderByType,
 } from "./redux/slices/currentOrderSlice";
@@ -143,6 +144,7 @@ const App = () => {
     dispatch(clearCurrentOrder());
     dispatch(clearOrderByType({ type: "inStock" }));
     dispatch(clearOrderByType({ type: "onDemand" }));
+    dispatch(clearItemSelections());
     dispatch(resetItems());
     dispatch(resetOrderHistory());
     dispatch(resetPatchOrders());

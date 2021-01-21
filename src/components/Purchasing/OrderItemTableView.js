@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import {
   updateSelection,
+  updateCurrentWarehouse,
   clearItemSelections,
 } from "../../redux/slices/currentOrderSlice";
 
@@ -40,10 +41,10 @@ const headCells = [
 const EnhancedTableHead = (props) => {
   const {
     classes,
-    rowCount,
-    onSelectAllClick,
-    numSelected,
-    orderLength,
+    // rowCount,
+    // onSelectAllClick,
+    // numSelected,
+    // orderLength,
     type,
     role,
   } = props;
@@ -60,12 +61,12 @@ const EnhancedTableHead = (props) => {
       <TableRow>
         {role !== "read-only" && (
           <TableCell padding="checkbox">
-            <Checkbox
+            {/* <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount - orderLength}
               onChange={onSelectAllClick}
               inputProps={{ "aria-label": "select all items" }}
-            />
+            /> */}
           </TableCell>
         )}
         {currentHeadCells.map((headCell) => (
@@ -93,8 +94,8 @@ EnhancedTableHead.propTypes = {
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
   buttonText: {
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 }));
 
 const OrderItemTableView = ({
@@ -116,9 +117,16 @@ const OrderItemTableView = ({
   const currentOrderItems = useSelector(
     (state) => state.currentOrder[`${type}OrderItems`]
   );
+  const currentWarehouse = useSelector(
+    (state) => state.currentOrder.currentWarehouse
+  );
+  const inStockOrderItems = useSelector(
+    (state) => state.currentOrder.inStockOrderItems
+  );
   const currentUserRole = useSelector((state) => state.user.role);
 
   const handleSelectAllClick = (event) => {
+    //todo update to handle warehouse and reimplement
     if (event.target.checked) {
       const newSelecteds = [];
       currentItems.forEach((item) => {
@@ -137,14 +145,21 @@ const OrderItemTableView = ({
       return;
     }
     dispatch(clearItemSelections());
+    dispatch(updateCurrentWarehouse({ warehouse: null }));
   };
 
-  const handleClick = (_event, id) => {
+  const handleClick = (_event, id, warehouse) => {
     const selectedIndex = selectedItems.indexOf(id);
     let newSelected = [];
-
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selectedItems, id);
+      if (
+        !currentWarehouse &&
+        type === "inStock" &&
+        inStockOrderItems.length === 0
+      ) {
+        dispatch(updateCurrentWarehouse({ warehouse: warehouse }));
+      }
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selectedItems.slice(1));
     } else if (selectedIndex === selectedItems.length - 1) {
@@ -155,7 +170,13 @@ const OrderItemTableView = ({
         selectedItems.slice(selectedIndex + 1)
       );
     }
-
+    if (
+      newSelected.length === 0 &&
+      type === "inStock" &&
+      inStockOrderItems.length === 0
+    ) {
+      dispatch(updateCurrentWarehouse({ warehouse: null }));
+    }
     dispatch(
       updateSelection({ type: formattedType, selectedItems: newSelected })
     );
@@ -207,10 +228,13 @@ const OrderItemTableView = ({
                           disabled={
                             currentOrderItems.filter(
                               (item) => item.itemNumber === row.itemNumber
-                            ).length !== 0
+                            ).length !== 0 ||
+                            (type === "inStock" &&
+                              row.warehouse &&
+                              row.warehouse !== currentWarehouse)
                           }
                           onChange={(event) => {
-                            handleClick(event, row.id);
+                            handleClick(event, row.id, row.warehouse);
                             event.stopPropagation();
                           }}
                         />
@@ -252,7 +276,7 @@ const OrderItemTableView = ({
                             className={classes.largeButton}
                             color="secondary"
                             onClick={() => handleAddInvOpen(row.id)}
-                            classes={{label: classes.buttonText}}
+                            classes={{ label: classes.buttonText }}
                           >
                             ADD INV.
                           </Button>

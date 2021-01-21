@@ -59,6 +59,9 @@ const DistributorSelection = () => {
   const orderSetId = useSelector((state) => state.orderSet.orderId);
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const orderType = useSelector((state) => state.orderSet.type);
+  const currentWarehouse = useSelector(
+    (state) => state.currentOrder.currentWarehouse
+  );
   const favoriteLists = useSelector(
     (state) => state.distributors.favoriteDistributors
   );
@@ -67,7 +70,13 @@ const DistributorSelection = () => {
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
-    dispatch(createSingleOrder(orderSetId, value[0].id, orderType));
+    if (orderType === "in-stock") {
+      dispatch(
+        createSingleOrder(orderSetId, value[0].id, orderType, currentWarehouse)
+      );
+    } else {
+      dispatch(createSingleOrder(orderSetId, value[0].id, orderType));
+    }
   };
 
   const handleClick = (event) => {
@@ -81,18 +90,30 @@ const DistributorSelection = () => {
   const handleAddFavorites = (id) => {
     let currentList = favoriteLists.find((list) => list.id === id);
     let idArray = currentList.distributors.map((dist) => dist.id);
-    dispatch(createMultipleOrders(idArray, orderSetId, orderType));
+    if (orderType === "in-stock") {
+      dispatch(
+        createMultipleOrders(idArray, orderSetId, orderType, currentWarehouse)
+      );
+    } else {
+      dispatch(createMultipleOrders(idArray, orderSetId, orderType));
+    }
   };
 
   const handleAddAll = () => {
-    dispatch(createAllOrders(territoryId, orderSetId, orderType));
+    if (orderType === "in-stock") {
+      dispatch(
+        createAllOrders(territoryId, orderSetId, orderType, currentWarehouse)
+      );
+    } else {
+      dispatch(createAllOrders(territoryId, orderSetId, orderType));
+    }
   };
 
   useEffect(() => {
     if (distributor.length >= 1) {
       dispatch(fetchUserDistributors(distributor, territoryId));
     }
-  }, [distributor, territoryId,  dispatch]);
+  }, [distributor, territoryId, dispatch]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {

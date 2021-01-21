@@ -158,12 +158,14 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <ItemPreviewModal
-        type={"inStock"}
-        currentItem={currentItem}
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-      />
+      {previewModal && (
+        <ItemPreviewModal
+          type={"inStock"}
+          currentItem={currentItem}
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+        />
+      )}
       {isAddInvModalOpen && invItemId && (
         <AddInventoryModal
           itemId={invItemId}
