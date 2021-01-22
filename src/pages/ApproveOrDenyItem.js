@@ -5,13 +5,11 @@ import axios from "axios";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import ImageWrapper from "../components/Utility/ImageWrapper";
 import Logo from "../assets/RTA_Logo_Stacked.png";
 import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
-
 
 const useStyles = makeStyles((theme) => ({
     ...theme.global,
@@ -31,8 +29,9 @@ const ApproveOrDenyItem = () => {
     const [isError, setIsError] = useState(false)
 
     useEffect(() => {
-        // let url = window.location.pathname
-        let url = '?token=56grnPHEdCQ1ggsK3FiY5oQeHzeaCr-n&item_id=123&item_type_id=123'
+        //let url = window.location.pathname
+        let url = '?token=TZBbCeN8IWQd_jryXKNIwAyug3gIfdsP&item_id=123&item_type_id=123'
+        //new token for testing deny= nnzjkUP8WMdCMiUg6l772p_6wcojww8O
         let hash;
         let itemObj = {};
         let hashes = url.slice(url.indexOf('?') + 1).split('&');
@@ -42,72 +41,31 @@ const ApproveOrDenyItem = () => {
         }
         setItem(itemObj)
     }, [])
-      
-    const handleApprove = async () => {
-        setIsLoading(true)
-        await axios
-            .post("/public/update-status",
-                {
-                   data: {
-                    token: item.token,
-                    status: "approved"
-                   },
-                },
-                {   
-                    headers: {
-                    Accept: "application/vnd.api+json",
-                    "Content-Type": "application/vnd.api+json",
-                  }
-                })
-            .then((res) => {
-                console.log(res.data);
-                setIsLoading(false)
-                setIsApproved(true)
-            })
-            .catch((err) => {
-                console.log(err)
-                setIsLoading(false)
-                setIsError(true)
-            })
-    };
 
-    const handleDeny = async () => {
+    const handleAction = async (status) => {
         setIsLoading(true)
-        const response = { status: "", error: null };
-        await axios
+        await(axios)
             .post("/public/update-status",
             {
-                data: {
-                 token: item.token,
-                 status: "approved"
-                },
-             },
-             {   
-                 headers: {
-                 Accept: "application/vnd.api+json",
-                 "Content-Type": "application/vnd.api+json",
-               }
-             })
-            .then((res) => {
-                console.log(res.data);
-                response.status = "ok";
-                setIsLoading(false)
-                setIsDenied(true)
+                token: item.token,
+                status: status
+               })
+            .then((response) => {
+                console.log(response);
+                setIsLoading(false);
+                if (status === "approved") {
+                    setIsApproved(true);
+                } else if (status === "denied") {
+                    setIsDenied(true);
+                }
             })
-            .catch((err) => {
-                setIsLoading(false)
-                setIsError(true)
-                console.log(err)
-                response.status = "error";
-                //response.error = err.response.data.errors[0].title;
+            .catch((error) => {
+                console.log(error);
+                setIsLoading(false);
+                setIsError(true);
             })
-    }
-//200 if status updated and successful
-//404 token not found
-//404 token expired
-// error will be JSON
-// 
-
+    };
+      
     return (
         <>
             <Container className={classes.mainWrapper}>
@@ -122,13 +80,11 @@ const ApproveOrDenyItem = () => {
                         height: "85vh",
                         width: "100%",
                         display: "flex",
+                        flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
                     }}
                 >
-                    <Grid container>
-                        <Grid item sm={2} xs={1} />
-                        <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
                             <Typography className={classes.titleText} variant="h5">
                                 Please approve or deny item: {item.item_id}
                             </Typography>
@@ -141,18 +97,20 @@ const ApproveOrDenyItem = () => {
                                         justifyContent: "center",
                                     }}>
                                     <Button
+                                        disabled={(isApproved || isDenied) ? true : false}
                                         className={classes.largeButton}
                                         style={{ width: "150px", margin: "10px" }}
                                         variant="contained"
-                                        onClick={handleApprove}
+                                        onClick={() => handleAction("approved")}
                                     >
                                         Approve
                                 </Button>
                                     <Button
+                                        disabled={(isApproved || isDenied) ? true : false}
                                         className={classes.largeButton}
                                         style={{ width: "150px", margin: "10px" }}
                                         variant="contained"
-                                        onClick={handleDeny}
+                                        onClick={() => handleAction("denied")}
                                     >
                                         Deny
                                 </Button>
@@ -167,30 +125,16 @@ const ApproveOrDenyItem = () => {
                                 </Typography>
                             )}
 
-                            {isApproved && (
+                            {(isApproved || isDenied) && (
                                 <>
-                                    <Typography className={classes.titleText} variant="h5">
-                                        You have approved item: {item.item_id}. No further action is needed.
-                            </Typography>
-                                    <Typography className={classes.headerText} variant="h5">
+                                <Typography className={classes.titleText} variant="h5">
+                                        You have {isApproved ? "approved" : "denied"} item: {item.item_id}. No further action is needed.
+                                </Typography>
+                                <Typography className={classes.headerText} variant="h5">
                                         You may close this window.
-                            </Typography>
-                                    <br></br>
+                                </Typography>
                                 </>
                             )}
-
-                            {isDenied && (
-                                <>
-                                    <Typography className={classes.titleText} variant="h5">
-                                        You have denied item: {item.item_id}. No further action is needed.
-                            </Typography>
-                                    <Typography className={classes.headerText} variant="h5">
-                                        You may close this window.
-                            </Typography>
-                                </>
-                            )}
-                        </Grid>
-                    </Grid>
                 </div>
                 <Typography className={classes.headerText} style={{ bottom: "0", float: "right" }} variant="h5">
                     need help? Email us: help@readytoactivate.com
