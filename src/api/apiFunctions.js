@@ -23,6 +23,7 @@ export const buildFilters = (
   urlBase,
   type
 ) => {
+  console.log(type);
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
@@ -31,7 +32,21 @@ export const buildFilters = (
             type === "order-set-items" || type === "history-items"
               ? statusMap[type]
               : "status"
-          }]=${filterObject.status}`
+          }]=${
+            type === "po-history" && filterObject.status === "shipping-hold"
+              ? "in-progress"
+              : filterObject.status
+          }`
+      : "";
+  let shipHoldString =
+    type === "po-history"
+      ? filterObject.hasShipHold
+        ? "filter[has-ship-hold]=true"
+        : filterObject.status === "shipping-hold"
+        ? "filter[has-ship-hold]=true"
+        : filterObject.status === "in-progress"
+        ? "filter[has-ship-hold]=false"
+        : ""
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
   let orderTypeString =
@@ -118,15 +133,17 @@ export const buildFilters = (
   let isArchivedString = filterObject.isItemArchived
     ? `filter[is-archived]=true`
     : "";
-  let stateString = filterObject.stateIds && filterObject.stateIds.length > 0
-    ? `filter[state-ids]=${separateByComma(filterObject.stateIds, "id")}`
-    : "";
+  let stateString =
+    filterObject.stateIds && filterObject.stateIds.length > 0
+      ? `filter[state-ids]=${separateByComma(filterObject.stateIds, "id")}`
+      : "";
 
   let queryArray = [
     uniqueFilter,
     typeString,
     orderTypeString,
     statusString,
+    shipHoldString,
     dateString,
     seqString,
     rfqString,

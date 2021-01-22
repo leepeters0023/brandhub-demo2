@@ -259,7 +259,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Act. Freight: ${currentOrder.totalActFreight}`}
+              {`Total Act. Freight: ${formatMoney(currentOrder.totalActFreight, false)}`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Est. Tax: ${formatMoney(

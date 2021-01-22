@@ -48,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
     },
   },
+  supHoldChip: {
+    backgroundColor: "#920000",
+    color: "white",
+  },
 }));
 
 const CollapseRow = ({
@@ -97,18 +101,26 @@ const CollapseRow = ({
           {poStatus === "draft" ? (
             "---"
           ) : shippingInfo.onShipHold ? (
-            <Tooltip title="Click to Reallocate Shipment">
+            role !== "supplier" ? (
+              <Tooltip title="Click to Reallocate Shipment">
+                <Chip
+                  classes={{ root: classes.holdChip }}
+                  color="primary"
+                  label="ON HOLD"
+                  onClick={() => {
+                    if (role !== "supplier") {
+                      handleModalOpen(shippingInfo.id);
+                    }
+                  }}
+                />
+              </Tooltip>
+            ) : (
               <Chip
-                classes={{ root: classes.holdChip }}
+                classes={{ root: classes.supHoldChip }}
                 color="primary"
                 label="ON HOLD"
-                onClick={() => {
-                  if (role !== "supplier") {
-                    handleModalOpen(shippingInfo.id);
-                  }
-                }}
               />
-            </Tooltip>
+            )
           ) : (
             <Chip
               classes={{ root: classes.okChip }}

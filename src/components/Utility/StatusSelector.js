@@ -51,8 +51,8 @@ const StatusSelector = ({
   const poStatusList = [
     { status: "draft", label: "Draft" },
     { status: "submitted", label: "Submitted" },
-    { status: "draft-and-submitted", label: "Not Accepted" },
-    { status: "in-progress", label: "Accepted" },
+    { status: "in-progress", label: "In Progress" },
+    { status: "shipping-hold", label: "Shipping Hold" },
     { status: "complete", label: "Complete" },
     { status: "all", label: "All Status" },
   ];

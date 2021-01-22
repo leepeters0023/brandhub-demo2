@@ -57,8 +57,8 @@ const MoneyCell = ({ initialCost, id, role, span, compliant }) => {
           {...bindCost}
         />
         {!compliant && (
-          <Tooltip title="Not Price Compliant" >
-            <WarningIcon color="error"  style={{marginLeft: "10px"}} />
+          <Tooltip title="Not Price Compliant">
+            <WarningIcon color="error" style={{ marginLeft: "10px" }} />
           </Tooltip>
         )}
       </div>
@@ -234,6 +234,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                         initialCost={formatMoney(row.actCost, true)}
                         id={row.id}
                         role={currentRole}
+                        compliant={true}
                       />
                     ) : (
                       <TableCell align="left">
@@ -294,6 +295,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                   role={currentRole}
                   id={poId}
                   span={2}
+                  compliant={true}
                 />
               </TableRow>
               <TableRow>
