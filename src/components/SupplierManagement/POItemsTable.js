@@ -28,8 +28,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CancelIcon from "@material-ui/icons/Cancel";
+import WarningIcon from "@material-ui/icons/Warning";
 
-const MoneyCell = ({ initialCost, id, role, span }) => {
+const MoneyCell = ({ initialCost, id, role, span, compliant }) => {
   let currentFunc = role !== "supplier" ? setItemActCost : setTotalFreight;
   const { value: cost, bind: bindCost } = useMoneyInput(
     initialCost,
@@ -39,13 +40,28 @@ const MoneyCell = ({ initialCost, id, role, span }) => {
   );
   return (
     <TableCell align="left" colSpan={span ? span : null}>
-      <TextField
-        value={cost}
-        variant="outlined"
-        size="small"
-        fullWidth
-        {...bindCost}
-      />
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <TextField
+          value={cost}
+          variant="outlined"
+          size="small"
+          fullWidth
+          {...bindCost}
+        />
+        {!compliant && (
+          <Tooltip title="Not Price Compliant" >
+            <WarningIcon color="error"  style={{marginLeft: "10px"}} />
+          </Tooltip>
+        )}
+      </div>
     </TableCell>
   );
 };
@@ -151,6 +167,7 @@ const POItemsTable = ({ items, classes, handleDelete, handleSetUpFee }) => {
                     initialCost={formatMoney(row.actCost, true)}
                     id={row.id}
                     role={currentRole}
+                    compliant={row.isPriceCompliant}
                   />
                 ) : (
                   <TableCell align="left">

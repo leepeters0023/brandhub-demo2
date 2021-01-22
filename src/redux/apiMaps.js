@@ -523,6 +523,7 @@ export const mapPOItems = (items) => {
         estCost: "---",
         actCost: stringToCents(item["actual-cost"]),
         totalCost: stringToCents(item["actual-cost"]) * item.qty,
+        isPriceCompliant: true,
         packout: false,
       };
     } else {
@@ -539,6 +540,7 @@ export const mapPOItems = (items) => {
         estCost: stringToCents(item["item-estimated-cost"]),
         actCost: stringToCents(item["actual-cost"]),
         totalCost: stringToCents(item["actual-cost"]) * item.qty,
+        isPriceCompliant: item["is-price-compliant"],
         packOut: item["has-packout"] ? item["has-packout"] : false,
       };
     }

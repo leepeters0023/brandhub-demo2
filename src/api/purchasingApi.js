@@ -853,10 +853,12 @@ export const deletePOItem = async (id) => {
 };
 
 export const submitPO = async (id) => {
-  const response = { status: "", error: null };
+  const response = { status: "", data: null, error: null };
   await axios
     .post(`/api/purchase-orders/${id}/submit`, null, writeHeaders)
-    .then((_res) => {
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
       response.status = "ok";
     })
     .catch((err) => {

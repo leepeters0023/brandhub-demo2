@@ -680,6 +680,8 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
     if (submitStatus.error) {
       throw submitStatus.error;
     }
+    const formattedPO = mapPurchaseOrder(submitStatus.data);
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
     dispatch(submitPOSuccess());
     dispatch(patchSuccess())
   } catch (err) {

@@ -622,7 +622,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "compliance", "super", "read-only"],
+              ["field1", "field2", "compliance", "super", "read-only", "purchaser"],
               currentRole,
               territories
             )}

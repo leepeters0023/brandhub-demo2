@@ -56,6 +56,7 @@ const CollapseRow = ({
   handleTrackingClick,
   poStatus,
   handleModalOpen,
+  role,
 }) => {
   const [open, setOpen] = useCallback(useState(false));
   return (
@@ -101,7 +102,11 @@ const CollapseRow = ({
                 classes={{ root: classes.holdChip }}
                 color="primary"
                 label="ON HOLD"
-                onClick={() => handleModalOpen(shippingInfo.id)}
+                onClick={() => {
+                  if (role !== "supplier") {
+                    handleModalOpen(shippingInfo.id);
+                  }
+                }}
               />
             </Tooltip>
           ) : (
@@ -205,9 +210,10 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
     (state) => state.purchaseOrder.currentPO.shippingParams
   );
   const poStatus = useSelector((state) => state.purchaseOrder.currentPO.status);
+  const currentUserRole = useSelector((state) => state.user.role);
 
   const handleOpenModal = (id) => {
-    console.log(id)
+    console.log(id);
     setParamId(id);
     setReallocateModalOpen(true);
   };
@@ -217,10 +223,9 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
     setReallocateModalOpen(false);
   };
 
-
   return (
     <>
-    {isReallocateModalOpen && paramId && (
+      {isReallocateModalOpen && paramId && (
         <ReallocateShipmentModal
           modalOpen={isReallocateModalOpen}
           paramId={paramId}
@@ -267,6 +272,7 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
                 handleTrackingClick={handleTrackingClick}
                 poStatus={poStatus}
                 handleModalOpen={handleOpenModal}
+                role={currentUserRole}
               />
             ))}
           </TableBody>
