@@ -47,13 +47,13 @@ let headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort, role } = props;
+  const { classes, order, orderBy, onRequestSort, currentUserRole } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   const currentHeadCells =
-    role !== "supplier"
+    currentUserRole !== "supplier"
       ? headCells.filter((cell) => cell.id !== "bidValue")
       : headCells.filter(
           (cell) =>
@@ -145,14 +145,23 @@ const RFQHistoryTable = ({
   supplierId,
 }) => {
   const classes = useStyles();
-  const role = useSelector((state) => state.user.role);
   const dispatch = useDispatch();
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
+
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleStatus = (status, bids) => {
-    if (role === "supplier" && status === "sent") {
-      return "New";
-      //TODO: add further supplier bid status when available
+    if (currentUserRole === "supplier" && status === "sent") {
+      let currentBid = bids.find((bid) => bid.supplierId === supplierId);
+      if (currentBid.status === "sent") {
+        return "New"
+      } else if (currentBid.status === "accepted") {
+        return "In Progress"
+      } else if (currentBid.status === "declined") {
+        return "Declined"
+      }
     }
     if (status === "sent") {
       let bidCount = 0;
@@ -200,7 +209,7 @@ const RFQHistoryTable = ({
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
-            role={role}
+            currentUserRole={currentUserRole}
           />
           <TableBody>
             {!rfqsLoading && rfqs.length === 0 && (
@@ -225,7 +234,7 @@ const RFQHistoryTable = ({
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
-                  {role !== "supplier" && (
+                  {currentUserRole !== "supplier" && (
                     <>
                       <TableCell align="left">{row.program}</TableCell>
                       <TableCell align="left">{row.brand}</TableCell>
@@ -234,7 +243,7 @@ const RFQHistoryTable = ({
                   <TableCell align="left">{row.itemType}</TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
                   <TableCell align="left">{row.totalItems}</TableCell>
-                  {role !== "supplier" && (
+                  {currentUserRole !== "supplier" && (
                     <>
                       <TableCell align="left">
                         {formatMoney(row.estCost, true)}
@@ -251,7 +260,7 @@ const RFQHistoryTable = ({
                   <TableCell align="left">
                     {handleStatus(row.status, row.bids)}
                   </TableCell>
-                  {role === "supplier" && (
+                  {currentUserRole === "supplier" && (
                     <TableCell align="left">
                       {row.bids.find((bid) => bid.supplierId === supplierId)
                         .price
