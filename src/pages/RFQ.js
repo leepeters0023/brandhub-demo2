@@ -51,7 +51,6 @@ const RFQ = ({ handleFiltersClosed }) => {
       !sup.name.includes("Structure")
   );
   const isSuppliersLoading = useSelector((state) => state.suppliers.isLoading);
-  console.log(currentSuppliers);
   const handleSendBids = () => {
     dispatch(sendBids(suppliersSelected, currentRFQ.id));
     setSuppliersSelected([]);

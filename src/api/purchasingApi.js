@@ -241,12 +241,8 @@ export const acceptBid = async (id, price, note) => {
       `/api/bids/${id}/accept`,
       {
         data: {
-          id: id,
-          type: "bid",
-          attributes: {
-            price: price,
-            note: note,
-          },
+          price: price,
+          note: note,
         },
       },
       writeHeaders
@@ -273,7 +269,7 @@ export const acceptBid = async (id, price, note) => {
 export const declineBid = async (id) => {
   const response = { status: "", error: null };
   await axios
-    .post(`/api/bids/${id}/accept`, null, writeHeaders)
+    .post(`/api/bids/${id}/decline`, null, writeHeaders)
     .then((_res) => {
       response.status = "ok";
     })

@@ -480,7 +480,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -769,13 +768,13 @@ export const mapRFQ = (rfq) => {
   const mapBids = (bids) => {
     return bids.map((bid) => ({
       id: bid.id,
+      status: bid.status,
       supplierId: bid.supplier ? bid.supplier.id : bid.id,
-      note: bid.note,
-      price: bid.price ? stringToCents(bid.price) : null,
+      note: bid.note ? bid.note : "",
+      price: bid.price ? stringToCents(bid.price) : 0,
     }));
   };
   const images = handleImages([rfq.item.images]);
-  console.log(images);
   let mappedRFQ = {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",

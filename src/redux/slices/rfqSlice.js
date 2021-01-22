@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { navigate } from "@reach/router";
 
 import {
   fetchRollupItems,
@@ -11,6 +12,11 @@ import {
   acceptBid,
   declineBid,
 } from "../../api/purchasingApi";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 
 import { mapRollupItems, mapRFQ } from "../apiMaps";
 /*
@@ -262,6 +268,7 @@ export const fetchSingleRFQ = (id) => async (dispatch) => {
 
 export const sendBids = (idArray, rfqId) => async (dispatch) => {
   try {
+    dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const bidResponse = await sendBidRequests(idArray, rfqId);
     if (bidResponse.error) {
@@ -269,26 +276,32 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
     }
     let mappedRFQ = mapRFQ(bidResponse.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
+    dispatch(patchSuccess())
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
 export const updateSupplierNote = (id, note) => async (dispatch) => {
   try {
+    dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const noteResponse = await updateRFQNote(id, note);
     if (noteResponse.error) {
       throw noteResponse.error;
     }
     dispatch(updateSuccessful());
+    dispatch(patchSuccess())
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
 export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
   try {
+    dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const dateResponse = await updateRFQDate(id, dateType, date);
     if (dateResponse.error) {
@@ -296,13 +309,16 @@ export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
     }
     dispatch(updateDate({ date: date, type: dateType }));
     dispatch(updateSuccessful());
+    dispatch(patchSuccess())
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 
 export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
   try {
+    dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const acceptResponse = await acceptBid(id, price, note);
     if (acceptResponse.error) {
@@ -310,13 +326,17 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     }
     //todo
     dispatch(updateSuccessful());
+    dispatch(patchSuccess())
+    navigate("/purchasing/rfqHistory/inProgress")
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 }
 
 export const declineCurrentBid = (id) => async (dispatch) => {
   try {
+    dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const acceptResponse = await declineBid(id);
     if (acceptResponse.error) {
@@ -324,7 +344,10 @@ export const declineCurrentBid = (id) => async (dispatch) => {
     }
     //todo
     dispatch(updateSuccessful());
+    dispatch(patchSuccess())
+    navigate("/purchasing/rfqHistory/new")
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 }

@@ -57,12 +57,17 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
                     .name
                 }
               </TableCell>
-              {!bid.note && !bid.price && (
+              {bid.status === "sent" && (
                 <TableCell align="left" colSpan={3}>
-                  Waiting for response ...
+                  Waiting for response
                 </TableCell>
               )}
-              {(bid.note || bid.price) && (
+              {bid.status === "declined" && (
+                <TableCell align="left" colSpan={3}>
+                  Declined to place a bid
+                </TableCell>
+              )}
+              {bid.status === "accepted" && (
                 <>
                   <TableCell align="left">
                     {bid.price && bid.price !== "---" ? formatMoney(bid.price, true) : "---"}
@@ -71,7 +76,7 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
                     {bid.note ? bid.note : "---"}
                   </TableCell>
                   <TableCell align="right">
-                    <div style={{ display: "flex", flexWrap: "nowrap" }}>
+                    <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-end" }}>
                       <Button
                         className={classes.largeButton}
                         variant="contained"

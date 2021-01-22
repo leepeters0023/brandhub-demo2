@@ -107,7 +107,6 @@ const currentOrderSlice = createSlice({
         state.onDemandOrderNumber = order.id;
         state.onDemandOrderItems = itemReference;
       }
-      console.log(state.currentWarehouse);
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.userId = order.userId;

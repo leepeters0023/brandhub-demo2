@@ -47,7 +47,6 @@ export const getUser = async () => {
     .get(`/api/current-user`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
-      console.log(data)
       response.status = "ok";
       response.data = data;
     })

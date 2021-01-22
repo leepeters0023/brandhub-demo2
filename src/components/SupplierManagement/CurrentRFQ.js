@@ -12,6 +12,7 @@ import { formatDate } from "../../utility/utilityFunctions";
 
 import ImageWrapper from "../Utility/ImageWrapper";
 import SpecDetailTable from "./SpecDetailTable";
+import OrderPatchLoading from "../Utility/OrderPatchLoading";
 
 import Grid from "@material-ui/core/Grid";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -304,22 +305,33 @@ const CurrentRFQ = () => {
           </TableContainer>
           <br />
           <br />
-          <TextField
-            label="Supplier Notes"
-            color="secondary"
-            multiline
-            fullWidth
-            variant="outlined"
-            size="small"
-            rows="4"
-            value={currentRFQ.supplierNote}
-            onChange={(event) =>
-              dispatch(updateNote({ note: event.target.value }))
-            }
-            onBlur={(event) =>
-              dispatch(updateSupplierNote(currentRFQ.id, event.target.value))
-            }
-          />
+          {currentUserRole !== "supplier" && (
+            <TextField
+              label="Supplier Notes"
+              color="secondary"
+              multiline
+              fullWidth
+              variant="outlined"
+              size="small"
+              rows="4"
+              value={currentRFQ.supplierNote}
+              onChange={(event) =>
+                dispatch(updateNote({ note: event.target.value }))
+              }
+              onBlur={(event) =>
+                dispatch(updateSupplierNote(currentRFQ.id, event.target.value))
+              }
+            />
+          )}
+          {currentUserRole === "supplier" && (
+            <>
+              <Typography className={classes.headerText}>Notes:</Typography>
+              <br />
+              <Typography className={classes.bodyText}>
+                {currentRFQ.supplierNote}
+              </Typography>
+            </>
+          )}
         </Grid>
         <Grid item lg={6} sm={12}>
           <div className={classes.fullHeightGridItem}>
@@ -364,6 +376,7 @@ const CurrentRFQ = () => {
           </Grid>
         ))}
       </Grid>
+      <OrderPatchLoading />
     </>
   );
 };

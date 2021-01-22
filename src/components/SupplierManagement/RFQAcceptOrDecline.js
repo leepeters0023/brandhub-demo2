@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-//import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useMoneyInput, useInput } from "../../hooks/InputHooks";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MoneyCell = ({ quote }) => {
+const MoneyCell = ({ quote, status }) => {
   const { value: cost, bind: bindCost } = useMoneyInput(
     quote,
     updateCurrentBidPrice,
@@ -37,6 +37,7 @@ const MoneyCell = ({ quote }) => {
       variant="outlined"
       size="small"
       fullWidth
+      disabled={status !== "sent"}
       {...bindCost}
     />
   );
@@ -45,15 +46,18 @@ const MoneyCell = ({ quote }) => {
 const RFQAcceptOrDecline = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const currentBid = useSelector((state) => state.rfq.currentRFQ.bids[0]);
-
+  const supplierId = useSelector((state) => state.user.supplierId);
+  const currentBid = useSelector((state) => state.rfq.currentRFQ.bids).find(
+    (bid) => bid.supplierId === supplierId
+  );
+  console.log(currentBid);
   const { value: note, bind: bindNote, setValue: setNote } = useInput("");
 
   const currentBidPrice = useSelector((state) => state.rfq.currentBidPrice);
   const currentBidNote = useSelector((state) => state.rfq.currentBidNote);
 
   const handleSubmit = () => {
-    dispatch(acceptCurrentBid(currentBid.id, currentBidPrice, currentBidNote))
+    dispatch(acceptCurrentBid(currentBid.id, currentBidPrice, currentBidNote));
   };
 
   const handleDecline = () => {
@@ -79,7 +83,7 @@ const RFQAcceptOrDecline = () => {
         <Typography>Accept or Decline RFQ</Typography>
       </Grid>
       <Grid sm={12} item>
-        <MoneyCell quote={currentBid.price} />
+        <MoneyCell quote={formatMoney(currentBid.price, true)} status={currentBid.status}/>
       </Grid>
       <Grid sm={12} item>
         <TextField
@@ -90,35 +94,38 @@ const RFQAcceptOrDecline = () => {
           variant="outlined"
           size="small"
           rows="4"
+          disabled={currentBid.status !== "sent"}
           {...bindNote}
           onBlur={() => {
             dispatch(updateCurrentBidNote({ note: note }));
           }}
         />
       </Grid>
-      <Grid sm={10} item style={{ alignSelf: "flex-end" }}>
-        <Button
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            handleDecline();
-          }}
-        >
-          Decline
-        </Button>
-        <Button
-          style={{ marginLeft: "10px" }}
-          className={classes.largeButton}
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            handleSubmit();
-          }}
-        >
-          Accept and Submit
-        </Button>
-      </Grid>
+      {currentBid.status === "sent" && (
+        <Grid sm={10} item style={{ alignSelf: "flex-end" }}>
+          <Button
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              handleDecline();
+            }}
+          >
+            Decline
+          </Button>
+          <Button
+            style={{ marginLeft: "10px" }}
+            className={classes.largeButton}
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
+            Accept and Submit
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };

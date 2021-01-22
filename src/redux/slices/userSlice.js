@@ -212,7 +212,7 @@ export const fetchUser = () => async (dispatch) => {
     window.localStorage.setItem("brandhub-role", user.data.role);
     let currentUser = {
       id: user.data.id,
-      supplierId: user.data["supplier-id"] ? user.data["supplier-id"] : null,
+      supplierId: user.data.supplier ? user.data.supplier.id : null,
       firstName: user.data.name.split(" ")[0],
       lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
       initials: `${user.data.name.split(" ")[0][0]}${

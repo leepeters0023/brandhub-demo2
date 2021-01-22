@@ -109,6 +109,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const [currentView, setCurrentView] = useState(filterOption);
 
   const currentUserRole = useSelector((state) => state.user.role);
+  const supplierId = useSelector((state) => state.user.supplierId)
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
@@ -193,6 +194,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
           rfqsLoading={isRFQsLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
+          supplierId={supplierId}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>

@@ -56,12 +56,13 @@ const EnhancedTableHead = (props) => {
     role !== "supplier"
       ? headCells.filter((cell) => cell.id !== "bidValue")
       : headCells.filter(
-        (cell) =>
-          cell.id !== "totalEstCost" &&
-          cell.id !== "estCost" &&
-          cell.id !== "program" &&
-          cell.id !== "brand"
-      );
+          (cell) =>
+            cell.id !== "totalEstCost" &&
+            cell.id !== "estCost" &&
+            cell.id !== "actTotal" &&
+            cell.id !== "program" &&
+            cell.id !== "brand"
+        );
 
   return (
     <TableHead>
@@ -136,7 +137,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
+const RFQHistoryTable = ({
+  rfqs,
+  rfqsLoading,
+  handleSort,
+  scrollRef,
+  supplierId,
+}) => {
   const classes = useStyles();
   const role = useSelector((state) => state.user.role);
   const dispatch = useDispatch();
@@ -235,19 +242,25 @@ const RFQHistoryTable = ({ rfqs, rfqsLoading, handleSort, scrollRef }) => {
                       <TableCell align="left">
                         {formatMoney(row.totalEstCost, true)}
                       </TableCell>
+                      <TableCell align="left">
+                        {row.actTotal ? formatMoney(row.actTotal, true) : "---"}
+                      </TableCell>
                     </>
                   )}
-                  <TableCell align="left">
-                    {row.actTotal ? formatMoney(row.actTotal, true) : "---"}
-                  </TableCell>
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">
                     {handleStatus(row.status, row.bids)}
                   </TableCell>
                   {role === "supplier" && (
                     <TableCell align="left">
-                      {row.bids[0].price
-                        ? formatMoney(row.bids[0].price, true)
+                      {row.bids.find((bid) => bid.supplierId === supplierId)
+                        .price
+                        ? formatMoney(
+                            row.bids.find(
+                              (bid) => bid.supplierId === supplierId
+                            ).price,
+                            true
+                          )
                         : "---"}
                     </TableCell>
                   )}
@@ -272,6 +285,7 @@ RFQHistoryTable.propTypes = {
   handleSort: PropTypes.func.isRequired,
   rfqsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
+  supplierId: PropTypes.string,
 };
 
 export default RFQHistoryTable;
