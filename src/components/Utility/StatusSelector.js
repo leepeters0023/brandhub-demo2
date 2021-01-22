@@ -43,7 +43,7 @@ const StatusSelector = ({
     { status: "all", label: "All Status" },
   ];
   const poSupplierStatusList = [
-    { status: "new", label: "New" },
+    { status: "submitted", label: "New" },
     { status: "in-progress", label: "In Progress" },
     { status: "shipping-hold", label: "Shipping Hold" },
     { status: "all", label: "All Status" },
@@ -56,6 +56,15 @@ const StatusSelector = ({
     { status: "complete", label: "Complete" },
     { status: "all", label: "All Status" },
   ];
+
+  const filterMap = {
+    history: historyStatusList,
+    compliance: complianceStatusList,
+    rfq: rfqStatusList,
+    po: poStatusList,
+    rfqSupplier: rfqSupplierStatusList,
+    poSupplier: poSupplierStatusList,
+  };
 
   const lableMap = {
     history: "Order Status",
@@ -74,10 +83,11 @@ const StatusSelector = ({
   };
 
   useEffect(() => {
-    if (currentStatus !== status) {
+    let currentKeys = filterMap[filterType].map((key) => key.status);
+    if (currentStatus !== status && currentKeys.includes(currentStatus)) {
       setStatus(currentStatus);
     }
-  });
+  }, [currentStatus, status, filterMap, filterType, setStatus]);
 
   return (
     <>
@@ -94,6 +104,7 @@ const StatusSelector = ({
           labelId="status-select"
           id="status"
           value={status}
+          defaultValue=""
           onChange={handleChangeSelect}
           MenuProps={{
             style: { zIndex: "2500" },

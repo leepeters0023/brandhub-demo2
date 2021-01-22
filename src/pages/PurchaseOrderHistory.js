@@ -39,7 +39,7 @@ const defaultSupplierNewFilters = {
   brand: [],
   program: [],
   itemType: [],
-  status: "new",
+  status: "submitted",
   poNum: "",
   itemNumber: "",
   sortOrder: "asc",

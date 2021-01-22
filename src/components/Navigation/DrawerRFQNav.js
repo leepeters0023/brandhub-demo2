@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
+import { useSelector } from "react-redux";
+
 import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,11 +13,13 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-
-//TODO get actual number of each status to display from redux (mock only), add correct statuses
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const DrawerOrdersNav = ({ classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const isLoading = useSelector((state) => state.suppliers.isInitialLoading);
+  const navValues = useSelector((state) => state.suppliers.navValues);
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -70,7 +74,9 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="New:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>8</Avatar>
+            <Avatar className={classes.avatar}>
+              {isLoading ? <CircularProgress size={20} /> : navValues.newRFQ}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} />
@@ -85,7 +91,13 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="In Progress:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>15</Avatar>
+            <Avatar className={classes.avatar}>
+              {isLoading ? (
+                <CircularProgress size={20} />
+              ) : (
+                navValues.inProgressRFQ
+              )}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider2" />
@@ -100,7 +112,13 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="Awarded:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>25</Avatar>
+          <Avatar className={classes.avatar}>
+              {isLoading ? (
+                <CircularProgress size={20} />
+              ) : (
+                navValues.awardedRFQ
+              )}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider3" />

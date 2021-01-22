@@ -35,6 +35,7 @@ import { resetOrderSetHistory } from "./redux/slices/orderSetHistorySlice";
 import { fetchAllItemTypes } from "./redux/slices/itemTypeSlice";
 import {
   fetchAllSuppliers,
+  fetchInitialValues,
   clearSuppliers,
 } from "./redux/slices/supplierSlice";
 import { fetchBUs } from "./redux/slices/businessUnitSlice";
@@ -201,6 +202,7 @@ const App = () => {
           dispatch(clearPrograms());
         }
       } else {
+        dispatch(fetchInitialValues());
         dispatch(clearPrograms());
       }
     } else if (currentUser && JSON.parse(currentUser).access_token) {

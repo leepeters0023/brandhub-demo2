@@ -23,7 +23,6 @@ export const buildFilters = (
   urlBase,
   type
 ) => {
-  console.log(type);
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"

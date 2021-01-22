@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
+import { useSelector } from "react-redux";
+
 import ListItemText from "@material-ui/core/ListItemText";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -11,11 +13,13 @@ import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-
-//TODO get actual number of each status to display from redux (mock only)
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const DrawerOrdersNav = ({ classes }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const isLoading = useSelector((state) => state.suppliers.isInitialLoading);
+  const navValues = useSelector((state) => state.suppliers.navValues);
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -69,7 +73,9 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="New:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>5</Avatar>
+            <Avatar className={classes.avatar}>
+              {isLoading ? <CircularProgress size={20} /> : navValues.newPO}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} />
@@ -84,7 +90,13 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="In Progress:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>10</Avatar>
+            <Avatar className={classes.avatar}>
+              {isLoading ? (
+                <CircularProgress size={20} />
+              ) : (
+                navValues.inProgressPO
+              )}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider2" />
@@ -99,7 +111,13 @@ const DrawerOrdersNav = ({ classes }) => {
             primary="Shipping Hold:"
           />
           <ListItemAvatar>
-            <Avatar className={classes.avatar}>2</Avatar>
+            <Avatar className={classes.avatar}>
+              {isLoading ? (
+                <CircularProgress size={20} />
+              ) : (
+                navValues.shipHoldPO
+              )}
+            </Avatar>
           </ListItemAvatar>
         </MenuItem>
         <Divider className={classes.divider} key="divider3" />
