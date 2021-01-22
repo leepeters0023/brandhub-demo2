@@ -51,6 +51,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   } = useInput("");
   const { value: city, bind: bindCity, reset: resetCity } = useInput("");
   const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
+  const { value: gLCode, bind: bindGlCode, reset: resetGlCode} = useInput("");
   const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
     ""
   );
@@ -80,6 +81,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
       state: state.id,
       zip: zip,
       country: country,
+      gLCode: gLCode,
     };
     dispatch(
       addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null)
@@ -90,6 +92,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     resetCity();
     resetZip();
     resetCountry();
+    resetGlCode();
     handleClose(false);
   };
 
@@ -216,6 +219,16 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               type="text"
               label="Country"
               {...bindCountry}
+            />
+             <TextField
+              fullWidth
+              style={{ marginBottom: "15px" }}
+              variant="outlined"
+              color="secondary"
+              name="gLCode"
+              type="text"
+              label="GL Code"
+              {...bindGlCode}
             />
             <div
               style={{
