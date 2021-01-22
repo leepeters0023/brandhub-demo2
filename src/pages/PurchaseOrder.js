@@ -218,7 +218,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               itemNumber: currentParamItem.itemNumber,
               label: currentParamItem.shippingLabel,
               totalItems: currentParamItem.totalItems,
-              shipStatus: currentParamItem.shipStatus,
+              shipStatus: currentParamItem.onShipHold ? "On Hold" : "Ok",
               carrier:
                 currentParamItem.carrier === "---"
                   ? ""

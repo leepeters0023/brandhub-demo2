@@ -379,8 +379,9 @@ export const mapOrderItems = (items, type) => {
         complianceStatus:
           type !== "order-set-item" &&
           item["triggered-rules"].length > 0 &&
-          item["triggered-rules"].filter((rule) => rule.type === "item-type")
-            .length > 0
+          item["triggered-rules"].filter(
+            (rule) => rule.type === "item-type" || rule.type === "metal-wood"
+          ).length > 0
             ? "not-compliant"
             : "compliant",
         orderType: item.item["order-type"],
@@ -479,6 +480,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -492,7 +494,7 @@ export const mapRollupItems = (items) => {
     itemDescription: item.description ? item.description : "---",
     totalItems: item["total-ordered"],
     orderItemIds: item["order-item-ids"],
-    totalNotCompliant: item["not-compliant-count"],
+    totalNotCompliant: item["qty-pending-compliance"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
@@ -565,6 +567,7 @@ export const mapPOShippingParamItems = (items) => {
       : "---",
     shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${item["shipping-label"].code}`,
     trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
+    onShipHold: item["on-compliance-hold"],
     tax: item.tax ? stringToCents(item.tax) : "---",
   }));
   return mappedItems;
@@ -615,6 +618,7 @@ export const mapPOShippingParams = (params) => {
       method: param.method ? param.method : "---",
       actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
       items: paramItems,
+      onShipHold: param["on-compliance-hold"],
       tax: totalParamTax,
     };
   });
@@ -622,6 +626,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder)
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
 
   const formattedPO = {

@@ -4,7 +4,10 @@ import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector } from "react-redux";
 
+import ReallocateShipmentModal from "./ReallocateShipmentModal";
+
 import Box from "@material-ui/core/Box";
+import Chip from "@material-ui/core/Chip";
 import Collapse from "@material-ui/core/Collapse";
 import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
@@ -14,7 +17,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
+
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
@@ -32,9 +37,26 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+  okChip: {
+    backgroundColor: "#004d00",
+    color: "white",
+  },
+  holdChip: {
+    backgroundColor: "#920000",
+    color: "white",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 
-const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
+const CollapseRow = ({
+  shippingInfo,
+  classes,
+  handleTrackingClick,
+  poStatus,
+  handleModalOpen,
+}) => {
   const [open, setOpen] = useCallback(useState(false));
   return (
     <>
@@ -69,6 +91,26 @@ const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
               )
             ),
           ].join(", ")}
+        </TableCell>
+        <TableCell align="center" padding="checkbox">
+          {poStatus === "draft" ? (
+            "---"
+          ) : shippingInfo.onShipHold ? (
+            <Tooltip title="Click to Reallocate Shipment">
+              <Chip
+                classes={{ root: classes.holdChip }}
+                color="primary"
+                label="ON HOLD"
+                onClick={() => handleModalOpen(shippingInfo.id)}
+              />
+            </Tooltip>
+          ) : (
+            <Chip
+              classes={{ root: classes.okChip }}
+              color="primary"
+              label="OK"
+            />
+          )}
         </TableCell>
       </TableRow>
       <TableRow>
@@ -154,12 +196,37 @@ const CollapseRow = ({ shippingInfo, classes, handleTrackingClick }) => {
 const ShippingParameterTable = ({ handleTrackingClick }) => {
   const classes = useStyles();
 
+  const [isReallocateModalOpen, setReallocateModalOpen] = useCallback(
+    useState(false)
+  );
+  const [paramId, setParamId] = useCallback(useState(null));
+
   const shippingInfo = useSelector(
     (state) => state.purchaseOrder.currentPO.shippingParams
   );
+  const poStatus = useSelector((state) => state.purchaseOrder.currentPO.status);
+
+  const handleOpenModal = (id) => {
+    console.log(id)
+    setParamId(id);
+    setReallocateModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setParamId(null);
+    setReallocateModalOpen(false);
+  };
+
 
   return (
     <>
+    {isReallocateModalOpen && paramId && (
+        <ReallocateShipmentModal
+          modalOpen={isReallocateModalOpen}
+          paramId={paramId}
+          handleClose={handleModalClose}
+        />
+      )}
       <TableContainer
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 300px)" }}
@@ -186,6 +253,9 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
               <TableCell className={classes.headerText} align="left">
                 Act. Ship:
               </TableCell>
+              <TableCell className={classes.headerText} align="left">
+                Ship Status:
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -195,6 +265,8 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
                 classes={classes}
                 shippingInfo={param}
                 handleTrackingClick={handleTrackingClick}
+                poStatus={poStatus}
+                handleModalOpen={handleOpenModal}
               />
             ))}
           </TableBody>

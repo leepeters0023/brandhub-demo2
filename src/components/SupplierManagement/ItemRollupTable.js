@@ -379,9 +379,15 @@ const ItemRollupTable = ({
                     {type === "po" && (
                       <TableCell
                         align="left"
-                        className={classes.clickableCell}
+                        className={
+                          row.totalNotCompliant > 0
+                            ? classes.clickableCell
+                            : null
+                        }
                         onClick={() => {
-                          handleComplianceClick(row.id, row.itemNumber);
+                          if (row.totalNotCompliant > 0) {
+                            handleComplianceClick(row.id, row.itemNumber);
+                          }
                         }}
                       >
                         {row.totalNotCompliant}
