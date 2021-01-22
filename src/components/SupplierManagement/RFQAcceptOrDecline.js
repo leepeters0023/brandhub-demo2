@@ -1,8 +1,15 @@
-import React, { useState } from "react";
-//import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+//import { formatMoney } from "../../utility/utilityFunctions";
 
-import { formatMoney } from "../../utility/utilityFunctions";
-import { useMoneyInput } from "../../hooks/InputHooks";
+import { useMoneyInput, useInput } from "../../hooks/InputHooks";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  updateCurrentBidNote,
+  updateCurrentBidPrice,
+  acceptCurrentBid,
+  declineCurrentBid,
+} from "../../redux/slices/rfqSlice";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -20,11 +27,10 @@ const useStyles = makeStyles((theme) => ({
 const MoneyCell = ({ quote }) => {
   const { value: cost, bind: bindCost } = useMoneyInput(
     quote,
-    undefined,
-    undefined,
+    updateCurrentBidPrice,
+    false,
     true
   );
-  //TODO, write update function and pass to useMoneyInput
   return (
     <TextField
       value={cost}
@@ -36,19 +42,29 @@ const MoneyCell = ({ quote }) => {
   );
 };
 
-// const returnNote = useSelector((state) => state.rfq.currentRFQ.returnNote);
-
-const handleSubmit = (event, id) => {
-  //submit that RFQ!
-};
-
-const handleDecline = (event, id) => {
-  //declined
-};
-
 const RFQAcceptOrDecline = () => {
   const classes = useStyles();
-  const [quoteValue] = useState(0);
+  const dispatch = useDispatch();
+  const currentBid = useSelector((state) => state.rfq.currentRFQ.bids[0]);
+
+  const { value: note, bind: bindNote, setValue: setNote } = useInput("");
+
+  const currentBidPrice = useSelector((state) => state.rfq.currentBidPrice);
+  const currentBidNote = useSelector((state) => state.rfq.currentBidNote);
+
+  const handleSubmit = () => {
+    dispatch(acceptCurrentBid(currentBid.id, currentBidPrice, currentBidNote))
+  };
+
+  const handleDecline = () => {
+    dispatch(declineCurrentBid(currentBid.id));
+  };
+
+  useEffect(() => {
+    if (currentBid && currentBid.note && currentBid.note.length > 0) {
+      setNote(currentBid.note);
+    }
+  }, [currentBid, setNote]);
 
   return (
     <Grid
@@ -63,7 +79,7 @@ const RFQAcceptOrDecline = () => {
         <Typography>Accept or Decline RFQ</Typography>
       </Grid>
       <Grid sm={12} item>
-        <MoneyCell value={quoteValue} quote={formatMoney(quoteValue, true)} />
+        <MoneyCell quote={currentBid.price} />
       </Grid>
       <Grid sm={12} item>
         <TextField
@@ -74,15 +90,10 @@ const RFQAcceptOrDecline = () => {
           variant="outlined"
           size="small"
           rows="4"
-          //value={returnNote}
-          onChange={
-            (event) => {}
-            //update returnNote
-          }
-          onBlur={
-            (event) => {}
-            //update returnNote
-          }
+          {...bindNote}
+          onBlur={() => {
+            dispatch(updateCurrentBidNote({ note: note }));
+          }}
         />
       </Grid>
       <Grid sm={10} item style={{ alignSelf: "flex-end" }}>
@@ -99,7 +110,6 @@ const RFQAcceptOrDecline = () => {
         <Button
           style={{ marginLeft: "10px" }}
           className={classes.largeButton}
-          value={quoteValue.accepted}
           variant="contained"
           color="secondary"
           onClick={() => {
@@ -113,4 +123,4 @@ const RFQAcceptOrDecline = () => {
   );
 };
 
-export default RFQAcceptOrDecline;
+export default React.memo(RFQAcceptOrDecline);

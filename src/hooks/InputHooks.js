@@ -71,7 +71,11 @@ export const useMoneyInput = (initialValue, updateFunc, updateFuncArg, ops) => {
         setValue(newValue);
         if (updateFunc) {
           let cleanValue = parseFloat(newValue.split("$").join("")).toString();
-          dispatch(updateFunc(updateFuncArg, cleanValue))
+          if (updateFuncArg) {
+            dispatch(updateFunc(updateFuncArg, cleanValue))
+          } else {
+            dispatch(updateFunc({ price: cleanValue }))
+          }
         }
       }
     },

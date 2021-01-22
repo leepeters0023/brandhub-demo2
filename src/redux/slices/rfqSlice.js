@@ -8,6 +8,8 @@ import {
   sendBidRequests,
   updateRFQNote,
   updateRFQDate,
+  acceptBid,
+  declineBid,
 } from "../../api/purchasingApi";
 
 import { mapRollupItems, mapRFQ } from "../apiMaps";
@@ -25,6 +27,8 @@ let initialState = {
   nextLink: null,
   rfqItems: [],
   selectedRFQItem: null,
+  currentBidPrice: null,
+  currentBidNote: "",
   currentRFQ: {
     id: null,
     status: null,
@@ -121,6 +125,14 @@ const rfqSlice = createSlice({
       const { bids } = action.payload;
       state.currentRFQ.bids = bids;
     },
+    updateCurrentBidPrice(state, action) {
+      const { price } = action.payload;
+      state.currentBidPrice = price;
+    },
+    updateCurrentBidNote(state, action) {
+      const { note } = action.payload;
+      state.currentBidNote = note;
+    },
     updateDate(state, action) {
       const { date, type } = action.payload;
       if (type === "due-date") {
@@ -128,6 +140,10 @@ const rfqSlice = createSlice({
       } else {
         state.currentRFQ.inMarketDate = date;
       }
+    },
+    clearCurrentBidData(state) {
+      state.currentBidPrice = null;
+      state.currentBidNote = "";
     },
     updateSuccessful(state) {
       state.isUpdateLoading = false;
@@ -168,6 +184,9 @@ export const {
   updateNote,
   updateBids,
   updateDate,
+  updateCurrentBidNote,
+  updateCurrentBidPrice,
+  clearCurrentBidData,
   updateSuccessful,
   resetRFQ,
   setFailure,
@@ -281,3 +300,31 @@ export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const acceptResponse = await acceptBid(id, price, note);
+    if (acceptResponse.error) {
+      throw acceptResponse.error;
+    }
+    //todo
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
+
+export const declineCurrentBid = (id) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    const acceptResponse = await declineBid(id);
+    if (acceptResponse.error) {
+      throw acceptResponse.error;
+    }
+    //todo
+    dispatch(updateSuccessful());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+}
