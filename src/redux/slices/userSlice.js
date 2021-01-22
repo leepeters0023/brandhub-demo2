@@ -31,6 +31,7 @@ let initialState = {
   isLoading: false,
   loggedIn: false,
   id: "",
+  supplierId: "",
   firstName: "",
   lastName: "",
   initials: "",
@@ -107,6 +108,7 @@ const userSlice = createSlice({
     getUserSuccess(state, action) {
       const { user } = action.payload;
       state.id = user.id;
+      state.supplierId = user.supplierId;
       state.firstName = user.firstName;
       state.lastName = user.lastName;
       state.initials = user.initials;
@@ -153,6 +155,7 @@ const userSlice = createSlice({
     removeUser: (state) => {
       state.isLoading = false;
       state.id = "";
+      state.supplierId = "";
       state.firstName = "";
       state.lastName = "";
       state.initials = "";
@@ -209,6 +212,7 @@ export const fetchUser = () => async (dispatch) => {
     window.localStorage.setItem("brandhub-role", user.data.role);
     let currentUser = {
       id: user.data.id,
+      supplierId: user.data["supplier-id"] ? user.data["supplier-id"] : null,
       firstName: user.data.name.split(" ")[0],
       lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
       initials: `${user.data.name.split(" ")[0][0]}${

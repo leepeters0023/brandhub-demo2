@@ -433,6 +433,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     variant="contained"
                     color="secondary"
                     onClick={handlePurchaserSubmit}
+                    disabled={!currentPO.isPriceCompliant}
                   >
                     SUBMIT PURCHASE ORDER
                   </Button>

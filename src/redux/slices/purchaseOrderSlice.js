@@ -65,6 +65,7 @@ let initialState = {
     totalCost: null,
     totalTax: null,
     directShip: null,
+    isPriceCompliant: null,
     shippingParams: [],
   },
   error: null,
@@ -139,6 +140,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.totalTax = purchaseOrder.totalTax;
       state.currentPO.directShip = purchaseOrder.directShip;
       state.currentPO.shippingParams = purchaseOrder.shippingParams;
+      state.currentPO.isPriceCompliant = purchaseOrder.isPriceCompliant;
       state.error = null;
       state.isLoading = false;
     },
@@ -331,6 +333,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.totalCost = null;
       state.currentPO.totalTax = null;
       state.currentPO.directShip = null;
+      state.currentPO.isPriceCompliant = null;
       state.currentPO.shippingParams = [];
       state.error = null;
     },

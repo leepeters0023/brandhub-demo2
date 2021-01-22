@@ -508,7 +508,14 @@ export const mapRollupItems = (items) => {
 };
 
 export const mapPOItems = (items) => {
+  let isPriceCompliant = true;
+  let totalCost = 0;
   const mappedItems = items.map((item) => {
+    if (!item["is-price-compliant"]) {
+      isPriceCompliant = false;
+    }
+    let totalItemCost = stringToCents(item["actual-cost"]) * item.qty;
+    totalCost += totalItemCost;
     if (item["is-direct-cost"]) {
       return {
         id: item.id,
@@ -522,7 +529,7 @@ export const mapPOItems = (items) => {
         totalItems: item.qty,
         estCost: "---",
         actCost: stringToCents(item["actual-cost"]),
-        totalCost: stringToCents(item["actual-cost"]) * item.qty,
+        totalCost: totalItemCost,
         isPriceCompliant: true,
         packout: false,
       };
@@ -539,13 +546,13 @@ export const mapPOItems = (items) => {
         totalItems: item.qty,
         estCost: stringToCents(item["item-estimated-cost"]),
         actCost: stringToCents(item["actual-cost"]),
-        totalCost: stringToCents(item["actual-cost"]) * item.qty,
+        totalCost: totalItemCost,
         isPriceCompliant: item["is-price-compliant"],
         packOut: item["has-packout"] ? item["has-packout"] : false,
       };
     }
   });
-  return mappedItems;
+  return { items: mappedItems, compliant: isPriceCompliant, totalCost: totalCost }
 };
 
 export const mapPOShippingParamItems = (items) => {
@@ -630,6 +637,7 @@ export const mapPOShippingParams = (params) => {
 export const mapPurchaseOrder = (purchaseOrder) => {
   console.log(purchaseOrder)
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
+  const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"])
 
   const formattedPO = {
     id: purchaseOrder.id,
@@ -661,11 +669,9 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     rfqNumber: purchaseOrder["rfq-number"]
       ? purchaseOrder["rfq-number"]
       : "---",
-    poItems: mapPOItems(purchaseOrder["purchase-order-items"]),
+    poItems: itemDetail.items,
     totalFreight: stringToCents(purchaseOrder["total-freight-cost"]),
-    totalCost: mapPOItems(purchaseOrder["purchase-order-items"])
-      .map((item) => item.totalCost)
-      .reduce((a, b) => a + b),
+    totalCost: itemDetail.totalCost,
     directShip: purchaseOrder["is-direct-ship"],
     submittedDate: purchaseOrder["submitted-at"]
       ? format(
@@ -682,6 +688,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
         )
       ),
     ].join(", "),
+    isPriceCompliant: itemDetail.compliant,
     totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
   };
   return formattedPO;
