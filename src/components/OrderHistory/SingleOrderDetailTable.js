@@ -22,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+  cancelRow: {
+    backgroundColor: "#920000",
+  },
+  cancelCell: {
+    color: "white",
+  },
 }));
 
 const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
@@ -69,7 +75,10 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
           </TableHead>
           <TableBody>
             {items.map((item) => (
-              <TableRow key={item.itemNumber}>
+              <TableRow
+                key={item.itemNumber}
+                className={item.isComplianceCanceled ? classes.cancelRow : null}
+              >
                 <TableCell align="left">
                   <ImageWrapper
                     id={item.itemNumber}
@@ -78,30 +87,87 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                     imgUrl={item.imgUrlThumb}
                   />
                 </TableCell>
-                <TableCell align="left">{item.itemNumber}</TableCell>
-                <TableCell align="left">{item.program}</TableCell>
-                <TableCell align="left">{item.brand}</TableCell>
-                <TableCell align="left">{item.itemType}</TableCell>
-                <TableCell align="left">{item.packSize}</TableCell>
-                <TableCell align="left">{`${formatMoney(
-                  item.estCost,
-                  false
-                )}`}</TableCell>
-                <TableCell align="left">{item.totalItems}</TableCell>
-                <TableCell align="left">{`${formatMoney(
-                  item.totalEstCost,
-                  false
-                )}`}</TableCell>
-                <TableCell align="left">{item.actTotal}</TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.itemNumber}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.program}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.brand}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.itemType}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.packSize}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >{`${formatMoney(item.estCost, false)}`}</TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.isComplianceCanceled ? "Canceled" : item.totalItems}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >{`${formatMoney(item.totalEstCost, false)}`}</TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.actTotal}
+                </TableCell>
                 <TableCell
                   align="center"
                   className={
-                    item.tracking !== "---" && item.trackingId
+                    item.tracking !== "---" &&
+                    item.trackingId &&
+                    !item.isComplianceCanceled
                       ? classes.clickableCell
                       : null
                   }
                   onClick={
-                    item.tracking !== "---" && item.trackingId
+                    item.tracking !== "---" &&
+                    item.trackingId &&
+                    !item.isComplianceCanceled
                       ? (evt) => {
                           evt.stopPropagation();
                           handleTrackingClick(item.trackingId);

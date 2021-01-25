@@ -28,7 +28,6 @@ export const getCouponUrl = async (email, url) => {
       }
     )
     .then((res) => {
-      console.log(res);
       response.status = "ok";
       response.data = res.data.AccessUrl;
     })

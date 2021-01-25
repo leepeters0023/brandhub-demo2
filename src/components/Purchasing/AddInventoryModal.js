@@ -49,7 +49,6 @@ const AddInventoryModal = ({ itemId, handleClose, open }) => {
 
   //TODO add RFQ flow when items show up with correct supplier
   const handleAddInventory = () => {
-    console.log(currentItem);
     dispatch(createInventoryPO(itemId, qty, currentWarehouse, currentItem.programIds[0]));
     resetQty();
     navigate("/purchasing/purchaseOrder#new");

@@ -302,7 +302,6 @@ export const loginWithCode = (code) => async (dispatch) => {
 export const getRedirect = () => async (dispatch) => {
   try {
     dispatch(setAuthLoading());
-    console.log("getting url");
     const res = await getLoginURL();
     if (res.error) {
       throw res.error;

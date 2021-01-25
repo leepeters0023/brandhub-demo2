@@ -22,7 +22,6 @@ export const logInUser = async (email, password) => {
     })
     .then((res) => {
       setAuthToken(res.data);
-      console.log(res.data);
       response.status = "ok";
     })
     .catch((err) => {

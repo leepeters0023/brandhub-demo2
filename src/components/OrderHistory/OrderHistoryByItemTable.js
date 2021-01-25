@@ -155,6 +155,16 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
     },
   },
+  cancelRow: {
+    backgroundColor: "#920000",
+    "&&:hover": {
+      cursor: "pointer",
+      backgroundColor: "#920000"
+    },
+  },
+  cancelCell: {
+    color: "white",
+  },
 }));
 
 const OrderHistoryByItemTable = ({
@@ -216,7 +226,11 @@ const OrderHistoryByItemTable = ({
                 <TableRow
                   key={index}
                   hover
-                  className={classes.orderHistoryRow}
+                  className={
+                    row.isComplianceCanceled
+                      ? classes.cancelRow
+                      : classes.orderHistoryRow
+                  }
                   onClick={() => {
                     handleRowClick(row.orderId);
                   }}
@@ -233,50 +247,144 @@ const OrderHistoryByItemTable = ({
                       }}
                     />
                   </TableCell>
-                  <TableCell align="left">{row.itemNumber}</TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.itemNumber}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {orderTypeMap[row.orderType]}
                   </TableCell>
-                  <TableCell align="left">{row.orderId}</TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.orderId}
+                  </TableCell>
                   {row.brand.length > 1 ? (
-                    <TableCell align="left">
+                    <TableCell
+                      align="left"
+                      className={
+                        row.isComplianceCanceled ? classes.cancelCell : null
+                      }
+                    >
                       <Typography variant="body2">{row.brand[0]}</Typography>
                       <Tooltip
                         placement="left"
                         title={`${row.brand.join(", ")}`}
                       >
-                        <MoreHorizIcon fontSize="small" color="inherit" style={{ float: "right" }} />
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ float: "right" }}
+                        />
                       </Tooltip>
                     </TableCell>
                   ) : (
-                    <TableCell align="left">{row.brand[0]}</TableCell>
+                    <TableCell
+                      align="left"
+                      className={
+                        row.isComplianceCanceled ? classes.cancelCell : null
+                      }
+                    >
+                      {row.brand[0]}
+                    </TableCell>
                   )}
-                  <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.program}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                    style={{ whiteSpace: "nowrap" }}
+                  >
                     {row.itemType}
                   </TableCell>
-                  <TableCell align="left">{row.itemDescription}</TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.itemDescription}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {row.distributor.length > 0 ? row.distributor : "---"}
                   </TableCell>
-                  <TableCell align="left">{row.state}</TableCell>
-                  <TableCell align="left">{row.totalItems}</TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.state}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.isComplianceCanceled ? "Canceled" : row.totalItems}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {row.estCost !== "---"
                       ? formatMoney(row.estCost, false)
                       : row.estCost}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {row.actCost !== "---"
                       ? formatMoney(row.actCost, false)
                       : row.actCost}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {row.orderDate !== "---"
                       ? format(new Date(row.orderDate), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
                     {row.shipDate !== "---"
                       ? format(new Date(row.shipDate), "MM/dd/yyyy")
                       : row.shipDate}
@@ -284,7 +392,7 @@ const OrderHistoryByItemTable = ({
                   <TableCell
                     align="center"
                     className={
-                      row.tracking !== "---" && row.trackingId
+                      row.tracking !== "---" && row.trackingId && !row.isComplianceCanceled
                         ? classes.clickableCell
                         : null
                     }
@@ -299,8 +407,13 @@ const OrderHistoryByItemTable = ({
                   >
                     {row.tracking}
                   </TableCell>
-                  <TableCell align="left">
-                    {row.status[0].toUpperCase() + row.status.slice(1)}
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {!row.isComplianceCanceled ? row.status[0].toUpperCase() + row.status.slice(1) : "Canceled"}
                   </TableCell>
                 </TableRow>
               ))}

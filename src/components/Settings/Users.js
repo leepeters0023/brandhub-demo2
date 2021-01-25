@@ -94,7 +94,6 @@ const Users = () => {
   };
 
   const handleSearch = (value, _type, _filter) => {
-    console.log(value);
     dispatch(fetchFilteredUsers(value));
   };
 

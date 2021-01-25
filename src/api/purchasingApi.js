@@ -670,7 +670,6 @@ export const updatePODate = async (id, dateType, date) => {
 
 //Updates the total freight on an PO
 export const updatePOFreight = async (id, freightCost) => {
-  console.log(id, freightCost);
   const response = { status: "", error: null };
   await axios
     .patch(
@@ -690,7 +689,6 @@ export const updatePOFreight = async (id, freightCost) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.response);
       console.log(
         err.response.data.errors
           ? err.response.data.errors[0].title
@@ -935,7 +933,11 @@ export const completePO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(err.response.data.errors[0].title);
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
       response.status = "error";
       response.error = err.response.data.errors
         ? err.response.data.errors[0].title

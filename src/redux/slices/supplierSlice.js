@@ -146,7 +146,6 @@ export const fetchInitialValues = () => async (dispatch) => {
   try {
     dispatch(setInitialLoading());
     let values = await fetchInitialSupplierValues();
-    console.log(values);
     if (values.error) {
       throw values.error;
     }

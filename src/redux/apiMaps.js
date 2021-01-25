@@ -181,7 +181,7 @@ export const mapPrograms = (programs) => {
 
 export const mapSingleOrder = (order) => {
   let orderItems = mapOrderItems(order["order-items"], "history");
-  orderItems.filter((item) => item.actShipDate)
+  orderItems.filter((item) => item.actShipDate);
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
@@ -280,6 +280,7 @@ export const mapOrderHistoryItems = (items) => {
   let mappedItems = items.map((item) => {
     const images = handleImages(item.item.images);
     return {
+      id: item.id,
       itemNumber: item["item-number"],
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
@@ -310,8 +311,8 @@ export const mapOrderHistoryItems = (items) => {
         : "---",
       orderDate: item["order-submitted-at"],
       shipDate: item["shipping-parameter-item"]
-      ? item["shipping-parameter-item"]["actual-ship-date"]
-      : "---",
+        ? item["shipping-parameter-item"]["actual-ship-date"]
+        : "---",
       tracking: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["tracking-number"]
         : "---",
@@ -320,6 +321,13 @@ export const mapOrderHistoryItems = (items) => {
         : null,
       status: item["order-status"],
       user: item["order-user-name"],
+      triggeredRules: item["triggered-rules"]
+        ? item["triggered-rules"].map((rule) => rule.description)
+        : null,
+      triggeredPriorApprovalRules: item["prior-approval-triggered-rules"]
+        ? item["prior-approval-triggered-rules"].map((rule) => rule.description)
+        : null,
+      isComplianceCanceled: item["is-compliance-canceled"],
       orderId: item.order.id,
     };
   });
@@ -391,6 +399,7 @@ export const mapOrderItems = (items, type) => {
           ).length > 0
             ? "not-compliant"
             : "compliant",
+        isComplianceCanceled: item["is-compliance-canceled"],
         orderType: item.item["order-type"],
         standardDeliveryDate: item["standard-delivery-date"]
           ? item["standard-delivery-date"]
@@ -596,7 +605,6 @@ export const mapPOShippingParamItems = (items) => {
 };
 
 export const mapPOShippingParams = (params) => {
-  console.log(params);
   const formatAddress = (shipObj) => {
     let addOne = shipObj["street-address-1"];
     let addTwo = shipObj["street-address-2"]
@@ -648,7 +656,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
   const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"]);
 
@@ -778,7 +785,6 @@ export const mapPOHistoryItems = (items) => {
 };
 
 export const mapRFQ = (rfq) => {
-  console.log(rfq);
   const mapBids = (bids) => {
     return bids.map((bid) => ({
       id: bid.id,
@@ -814,7 +820,6 @@ export const mapRFQ = (rfq) => {
 };
 
 export const mapRFQHistory = (rfqs) => {
-  console.log(rfqs);
   let mappedRFQHistory = rfqs.map((rfq) => mapRFQ(rfq));
   return mappedRFQHistory;
 };

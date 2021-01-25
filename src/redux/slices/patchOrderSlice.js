@@ -28,6 +28,7 @@ import {
   setOrderDetail,
   updateOrderSetItemDate,
   updateOrderSetItemRush,
+  complianceCancelOrderItem,
 } from "../../api/orderApi";
 
 import { setProgramStatus } from "./programsSlice";
@@ -45,6 +46,10 @@ import { clearOrderByType } from "./currentOrderSlice";
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
 import { fetchFilteredPOItems } from "./purchaseOrderSlice";
 import { fetchFilteredRFQItems } from "./rfqSlice";
+import {
+  cancelCompItem,
+  updateCompItemSelection,
+} from "./complianceItemsSlice";
 
 let initialState = {
   isLoading: false,
@@ -202,6 +207,26 @@ export const deleteMultipleOrderItems = (
     } else {
       dispatch(fetchFilteredRFQItems(filters));
     }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
+//cancels all order-items sent with a status of compliance canceled
+export const complianceCancelOrderItems = (itemIds) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    await Promise.all(
+      itemIds.map(async (id) => {
+        const cancelStatus = await complianceCancelOrderItem(id);
+        if (cancelStatus.error) {
+          throw cancelStatus.error;
+        }
+        dispatch(cancelCompItem({ id: id }));
+      })
+    );
+    dispatch(updateCompItemSelection({ selectedItems: [] }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));

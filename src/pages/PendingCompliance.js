@@ -8,10 +8,12 @@ import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { setRetain } from "../redux/slices/filterSlice";
 import { fetchTriggeredRulesByOrders } from "../redux/slices/complianceItemsSlice";
+import { complianceCancelOrderItems } from "../redux/slices/patchOrderSlice";
 
 import PendingComplianceTable from "../components/Compliance/PendingComplianceTable";
 import AreYouSure from "../components/Utility/AreYouSure";
 import Loading from "../components/Utility/Loading";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -31,25 +33,8 @@ const useStyles = makeStyles((theme) => ({
 const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  console.log(orderIds);
 
-  const [itemSelected, setItemSelected] = useCallback(useState(false));
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
-
-  const handleOpenConfirm = useCallback(() => {
-    //TODO
-    setConfirmOpen(true);
-  }, [setConfirmOpen]);
-
-  const handleCloseConfirm = useCallback(() => {
-    setConfirmOpen(false);
-  }, [setConfirmOpen]);
-
-  const handleCancelOrders = useCallback(() => {
-    //TODO
-    setConfirmOpen(false);
-    console.log("cancelling!");
-  }, [setConfirmOpen]);
 
   const currentOrderItems = useSelector(
     (state) => state.complianceItems.pendingOrderItems
@@ -59,6 +44,19 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   );
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
+
+  const handleOpenConfirm = useCallback(() => {
+    setConfirmOpen(true);
+  }, [setConfirmOpen]);
+
+  const handleCloseConfirm = useCallback(() => {
+    setConfirmOpen(false);
+  }, [setConfirmOpen]);
+
+  const handleCancelOrders = useCallback(() => {
+    dispatch(complianceCancelOrderItems(currentSelectedItems))
+    setConfirmOpen(false);
+  }, [setConfirmOpen, currentSelectedItems, dispatch]);
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
 
@@ -146,12 +144,11 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
           <PendingComplianceTable
             items={currentOrderItems}
             itemsLoading={isLoading}
-            itemSelected={itemSelected}
-            setItemSelected={setItemSelected}
           />
         )}
         <br />
       </Container>
+      <OrderPatchLoading />
     </>
   );
 };

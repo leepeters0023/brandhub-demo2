@@ -17,18 +17,12 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 const headCells = [
-  { id: "territory", disablePadding: false, label: "Territory", sort: false },
+  { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "user", disablePadding: false, label: "Person", sort: false },
   {
     id: "distributorName",
     disablePadding: false,
     label: "Distributor",
-    sort: false,
-  },
-  {
-    id: "distributorState",
-    disablePadding: false,
-    label: "State",
     sort: false,
   },
   { id: "qty", disablePadding: false, label: "Total Items", sort: false },
@@ -133,7 +127,6 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
         <Table
           stickyHeader
           className={classes.table}
-          style={{ minWidth: "1325px" }}
         >
           <EnhancedTableHead
             classes={classes}
@@ -162,6 +155,7 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
                       <Checkbox
                         checked={isItemSelected}
                         inputProps={{ "aria-labelledby": labelId }}
+                        disabled={row.isComplianceCanceled}
                         onClick={(event) => event.stopPropagation()}
                         onChange={(event) => {
                           handleClick(event, row.id);
@@ -169,12 +163,21 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
                         }}
                       />
                     </TableCell>
-                    <TableCell align="left">{row.territory}</TableCell>
+                    <TableCell align="left">{row.state}</TableCell>
                     <TableCell align="left">{row.user}</TableCell>
-                    <TableCell align="left">{row.distributorName}</TableCell>
-                    <TableCell align="left">{row.distributorState}</TableCell>
-                    <TableCell align="left">{row.totalItems}</TableCell>
-                    <TableCell align="left">{row.rule}</TableCell>
+                    <TableCell align="left">{row.distributor}</TableCell>
+                    <TableCell align="left">{!row.isComplianceCanceled ? row.totalItems : "Canceled"}</TableCell>
+                    <TableCell align="left">
+                      {row.triggeredRules && row.triggeredPriorApprovalRules
+                        ? row.triggerdRules
+                            .concat(row.triggeredPriorApprovalRules)
+                            .join(", ")
+                        : row.triggeredRules
+                        ? row.triggeredRules.join(", ")
+                        : row.triggeredPriorApprovalRules
+                        ? row.triggeredPriorApprovalRules.join(", ")
+                        : "---"}
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -194,7 +197,6 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
 
 ComplianceItemsTable.propTypes = {
   items: PropTypes.array,
-  //handleSort: PropTypes.func.isRequired,
   itemsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
 };

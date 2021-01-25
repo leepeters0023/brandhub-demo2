@@ -185,7 +185,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         dispatch(fetchFilteredRules(currentFilters));
       }
       if (filterType === "compliance-items" && filter !== "itemNumber") {
-        console.log(currentFilters);
         dispatch(fetchFilteredTriggeredRules(currentFilters));
       }
     },
@@ -222,7 +221,6 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
     resetItemDesc();
     dispatch(clearBrands());
     dispatch(resetFilters());
-    //TODO handle po, compliance (rules / items) fetch here as well
     if (defaultFilters) {
       dispatch(updateMultipleFilters({ filterObject: defaultFilters }));
       if (filterType === "history-orders") {

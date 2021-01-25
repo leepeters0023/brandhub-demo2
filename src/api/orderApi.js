@@ -494,7 +494,6 @@ export const restartOrderSet = async (id) => {
 
 //sets work complete boolean on order set for ui display
 export const setWorkComplete = async (id, status) => {
-  console.log(status);
   const response = { status: "", error: null };
   await axios
     .patch(
@@ -511,7 +510,6 @@ export const setWorkComplete = async (id, status) => {
       writeHeaders
     )
     .then((res) => {
-      console.log(res);
       response.status = "ok";
     })
     .catch((err) => {
@@ -874,9 +872,9 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     orderDate: "order-submitted-at",
     shipDate: "order-shipped-at",
   };
-  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+  let sortString = filterObject.sortOrder ? `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
-  }`;
+  }` : "";
 
   let queryString = buildFilters(
     filterObject,
@@ -1066,6 +1064,36 @@ export const deleteOrderItem = async (id) => {
   await axios
     .delete(
       `/api/order-items/${id}`,
+      {
+        data: {
+          type: "order-item",
+          id: id,
+        },
+      },
+      writeHeaders
+    )
+    .then((res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response;
+};
+
+export const complianceCancelOrderItem = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(
+      `/api/order-items/${id}/compliance-cancel`,
       {
         data: {
           type: "order-item",

@@ -81,7 +81,6 @@ const currentOrderSlice = createSlice({
     setUpdateLoading: startUpdateLoading,
     createNewOrderSuccess(state, action) {
       const { type, orderId, item } = action.payload;
-      console.log(type);
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
       state.orderId = orderId;

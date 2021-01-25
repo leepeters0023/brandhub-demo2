@@ -50,7 +50,6 @@ const RFQAcceptOrDecline = () => {
   const currentBid = useSelector((state) => state.rfq.currentRFQ.bids).find(
     (bid) => bid.supplierId === supplierId
   );
-  console.log(currentBid);
   const { value: note, bind: bindNote, setValue: setNote } = useInput("");
 
   const currentBidPrice = useSelector((state) => state.rfq.currentBidPrice);

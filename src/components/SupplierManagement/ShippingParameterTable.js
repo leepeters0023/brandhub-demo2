@@ -225,7 +225,6 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
   const currentUserRole = useSelector((state) => state.user.role);
 
   const handleOpenModal = (id) => {
-    console.log(id);
     setParamId(id);
     setReallocateModalOpen(true);
   };

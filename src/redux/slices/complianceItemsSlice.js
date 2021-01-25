@@ -79,6 +79,13 @@ const complianceItemsSlice = createSlice({
       const { selectedItems } = action.payload;
       state.selectedItems = selectedItems;
     },
+    cancelCompItem(state, action) {
+      const { id } = action.payload;
+      const filteredItems = state.pendingOrderItems.filter((item) => item.id !== id);
+      state.pendingOrderItems = filteredItems;
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     resetComplianceItems(state) {
       state.isLoading = false;
       state.isNextLoading = false;
@@ -104,6 +111,7 @@ export const {
   getNextComplianceItemsSuccess,
   getPendingOrderItemsSuccess,
   updateCompItemSelection,
+  cancelCompItem,
   resetComplianceItems,
   setFailure,
 } = complianceItemsSlice.actions;
@@ -119,7 +127,6 @@ export const fetchFilteredTriggeredRules = (filterObject) => async (
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
-    console.log(triggeredRules);
     const mappedCompItems = mapCompItems(triggeredRules.data.rules);
     dispatch(
       getComplianceItemsSuccess({
@@ -162,8 +169,7 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
-    console.log(triggeredRules);
-    const mappedCompItems = mapOrderHistoryItems(triggeredRules.data);
+    const mappedCompItems = mapOrderHistoryItems(triggeredRules.data.items);
     dispatch(
       getPendingOrderItemsSuccess({
         items: mappedCompItems,
@@ -176,3 +182,5 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
+
+//todo add next call? will it be necessary?

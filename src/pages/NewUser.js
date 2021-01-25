@@ -90,11 +90,11 @@ const NewUser = ({ handleFiltersClosed, handleLogout }) => {
               </Typography>
               <br />
               <Typography className={classes.headerText}>
-                Please contact your manager, or the Ready to Activate Help Desk
-                for assistance.
+                Please Email Samara Cowler to have your permissions and regions
+                configured.
               </Typography>
               <Typography className={classes.headerText}>
-                help@readytoactivate.com
+                samara.cowler@ejgallo.com
               </Typography>
             </Grid>
             <Grid item sm={2} xs={1} />
