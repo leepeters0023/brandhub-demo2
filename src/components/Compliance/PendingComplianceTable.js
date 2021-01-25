@@ -1,43 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { updateCompItemSelection } from "../../redux/slices/complianceItemsSlice";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableBody from "@material-ui/core/TableBody";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import TableCell from "@material-ui/core/TableCell";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
-//There is no sorting or filtering for this table at the moment, but we are leaving the
-//ability to to add that if need be
-
 const headCells = [
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
   { id: "user", disablePadding: false, label: "Person", sort: false },
-  { id: "distributorName", disablePadding: false, label: "Distributor", sort: false },
-  { id: "distributorState", disablePadding: false, label: "State", sort: false },
+  {
+    id: "distributorName",
+    disablePadding: false,
+    label: "Distributor",
+    sort: false,
+  },
+  {
+    id: "distributorState",
+    disablePadding: false,
+    label: "State",
+    sort: false,
+  },
   { id: "qty", disablePadding: false, label: "Total Items", sort: false },
   { id: "rule", disablePadding: false, label: "Rule", sort: false },
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    classes,
-    rowCount,
-    order,
-    orderBy,
-    onRequestSort,
-    onSelectAllClick,
-    numSelected,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
+  const { classes, rowCount, onSelectAllClick, numSelected } = props;
 
   return (
     <TableHead>
@@ -52,42 +51,15 @@ const EnhancedTableHead = (props) => {
           />
         </TableCell>
         {headCells.map((headCell) => {
-          if (!headCell.sort) {
-            return (
-              <TableCell
-                className={classes.headerText}
-                key={headCell.id}
-                align="left"
-              >
-                {headCell.label}
-              </TableCell>
-            );
-          } else {
-            return (
-              <TableCell
-                className={classes.headerText}
-                key={headCell.id}
-                align="left"
-                padding={headCell.disablePadding ? "none" : "default"}
-                sortDirection={orderBy === headCell.id ? order : false}
-              >
-                <TableSortLabel
-                  active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : "asc"}
-                  onClick={createSortHandler(headCell.id)}
-                >
-                  {headCell.label}
-                  {orderBy === headCell.id ? (
-                    <span className={classes.visuallyHidden}>
-                      {order === "desc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
-                    </span>
-                  ) : null}
-                </TableSortLabel>
-              </TableCell>
-            );
-          }
+          return (
+            <TableCell
+              className={classes.headerText}
+              key={headCell.id}
+              align="left"
+            >
+              {headCell.label}
+            </TableCell>
+          );
         })}
       </TableRow>
     </TableHead>
@@ -96,9 +68,6 @@ const EnhancedTableHead = (props) => {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -116,67 +85,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ComplianceItemsTable = ({
-  items,
-  itemsLoading,
-  handleSort,
-  itemSelected,
-  setItemSelected,
-}) => {
+const ComplianceItemsTable = ({ items, itemsLoading }) => {
   const classes = useStyles();
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("user");
-  const [selected, setSelected] = useState([]);
+  const dispatch = useDispatch();
 
-  const handleRequestSort = (_event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-    handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
-  };
+  const currentSelectedItems = useSelector(
+    (state) => state.complianceItems.selectedItems
+  );
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = items.map((item) => item.id);
-      setSelected(newSelecteds);
+      dispatch(updateCompItemSelection({ selectedItems: newSelecteds }));
       return;
     }
-    setSelected([]);
+    dispatch(updateCompItemSelection({ selectedItems: [] }));
   };
 
   const handleClick = (_event, id) => {
-    const selectedIndex = selected.indexOf(id);
+    const selectedIndex = currentSelectedItems.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(currentSelectedItems, id);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(currentSelectedItems.slice(1));
+    } else if (selectedIndex === currentSelectedItems.length - 1) {
+      newSelected = newSelected.concat(currentSelectedItems.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        currentSelectedItems.slice(0, selectedIndex),
+        currentSelectedItems.slice(selectedIndex + 1)
       );
     }
 
-    setSelected(newSelected);
+    dispatch(updateCompItemSelection({ selectedItems: newSelected }));
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  useEffect(() => {
-    if (selected.length > 0 && !itemSelected) {
-      setItemSelected(true);
-    }
-  }, [selected, setItemSelected, itemSelected]);
-
-  useEffect(() => {
-    if (selected.length === 0 && itemSelected) {
-      setItemSelected(false);
-    }
-  }, [selected, setItemSelected, itemSelected]);
+  const isSelected = (id) => currentSelectedItems.indexOf(id) !== -1;
 
   return (
     <>
@@ -191,10 +137,7 @@ const ComplianceItemsTable = ({
         >
           <EnhancedTableHead
             classes={classes}
-            onRequestSort={handleRequestSort}
-            order={order}
-            orderBy={orderBy}
-            numSelected={selected.length}
+            numSelected={currentSelectedItems.length}
             onSelectAllClick={handleSelectAllClick}
             rowCount={items.length}
           />
@@ -214,7 +157,7 @@ const ComplianceItemsTable = ({
                 const isItemSelected = isSelected(row.id);
                 const labelId = `compliance-Checkbox-${index}`;
                 return (
-                  <TableRow key={index} hover >
+                  <TableRow key={index} hover>
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={isItemSelected}

@@ -136,6 +136,14 @@ export const buildFilters = (
     filterObject.stateIds && filterObject.stateIds.length > 0
       ? `filter[state-ids]=${separateByComma(filterObject.stateIds, "id")}`
       : "";
+  let currentTerritoryString =
+    filterObject.currentTerritoryId && type === "item"
+      ? `filter[program-territory-ids]=${filterObject.currentTerritoryId}`
+      : "";
+  let orderItemIdString =
+    filterObject.orderItemIds && filterObject.orderItemIds.length > 0
+      ? `filter[order-item-ids]=${filterObject.orderItemIds}`
+      : "";
 
   let queryArray = [
     uniqueFilter,
@@ -161,6 +169,8 @@ export const buildFilters = (
     isOrderableString,
     isArchivedString,
     stateString,
+    currentTerritoryString,
+    orderItemIdString,
   ];
 
   let queryStringAppend = queryArray

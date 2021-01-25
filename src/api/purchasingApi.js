@@ -1045,7 +1045,6 @@ export const fetchPOHistory = async (filterObject) => {
         pos: null,
         nextLink: null,
       };
-      console.log(res);
       let data = dataFormatter.deserialize(res.data);
       dataObject.pos = data;
       dataObject.nextLink = res.data.links ? res.data.links.next : null;

@@ -180,7 +180,8 @@ export const mapPrograms = (programs) => {
 };
 
 export const mapSingleOrder = (order) => {
-  console.log(order);
+  let orderItems = mapOrderItems(order["order-items"], "history");
+  orderItems.filter((item) => item.actShipDate)
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
@@ -237,11 +238,14 @@ export const mapSingleOrder = (order) => {
         )
       ),
     ],
-    items: mapOrderItems(order["order-items"], "history"),
+    items: orderItems,
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
-    shipDate: order["shipped-at"] ? order["shipped-at"] : "---",
+    shipDate:
+      orderItems.filter((item) => item.actShipDate).length > 0
+        ? orderItems.filter((item) => item.actShipDate).join(", ")
+        : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
     totalEstFreight: order["total-estimated-shipping-cost"]
@@ -305,7 +309,9 @@ export const mapOrderHistoryItems = (items) => {
         ? stringToCents(item["total-actual-cost"])
         : "---",
       orderDate: item["order-submitted-at"],
-      shipDate: item["order-shipped-at"] ? item["order-shipped-at"] : "---",
+      shipDate: item["shipping-parameter-item"]
+      ? item["shipping-parameter-item"]["actual-ship-date"]
+      : "---",
       tracking: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["tracking-number"]
         : "---",
@@ -391,6 +397,9 @@ export const mapOrderItems = (items, type) => {
           : "---",
         inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
         isRush: item["is-rush"] ? item["is-rush"] : false,
+        actShipDate: item["shipping-parameter-item"]
+          ? item["shipping-parameter-item"]["actual-ship-date"]
+          : null,
         tracking: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["tracking-number"]
             ? item["shipping-parameter-item"]["tracking-number"]
@@ -552,7 +561,11 @@ export const mapPOItems = (items) => {
       };
     }
   });
-  return { items: mappedItems, compliant: isPriceCompliant, totalCost: totalCost }
+  return {
+    items: mappedItems,
+    compliant: isPriceCompliant,
+    totalCost: totalCost,
+  };
 };
 
 export const mapPOShippingParamItems = (items) => {
@@ -635,9 +648,9 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder)
+  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
-  const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"])
+  const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"]);
 
   const formattedPO = {
     id: purchaseOrder.id,
@@ -733,8 +746,8 @@ export const mapPOHistoryItems = (items) => {
         itemId: item.item.id,
         poNum: item["purchase-order"].id,
         itemNumber: item["item-number"],
-        projectNum: item.item["at-task-project-id"]
-          ? item.item["at-task-project-id"]
+        projectNum: item["item-at-task-project-id"]
+          ? item["item-at-task-project-id"]
           : "---",
         supplier: item["supplier-name"] ? item["supplier-name"] : "---",
         itemType: item["item-type-description"],

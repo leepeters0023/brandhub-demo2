@@ -94,9 +94,8 @@ const programsSlice = createSlice({
             ? 1
             : 0;
         });
-        //TODO return to normal when out of testing and fetching appropriately
-        //state.programs = [...newProgramArray];
-        //state.isPrograms = true;
+        state.programs = [...newProgramArray];
+        state.isPrograms = true;
       }
       state.isLoading = false;
       state.error = null;

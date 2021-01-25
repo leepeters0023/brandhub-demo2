@@ -8,6 +8,7 @@ import { updateCurrentTerritory } from "../../redux/slices/userSlice";
 import { fetchPrograms } from "../../redux/slices/programsSlice";
 import { fetchStatesByIds } from "../../redux/slices/territorySlice";
 import { clearDistributors } from "../../redux/slices/distributorSlice";
+import { updateSingleFilter, setSorted } from "../../redux/slices/filterSlice";
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -32,6 +33,8 @@ const RegionSelector = ({ classes }) => {
     dispatch(updateCurrentTerritory({ territory: currentTerritory.id }));
     dispatch(fetchPrograms(currentTerritory.id, marketBool));
     dispatch(fetchStatesByIds([currentTerritory.id]));
+    dispatch(updateSingleFilter({ filter: "currentTerritoryId", value: currentTerritory.id }))
+    dispatch(setSorted());
   };
 
   useEffect(() => {

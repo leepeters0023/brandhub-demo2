@@ -259,8 +259,8 @@ const ItemRollupTable = ({
 
   const isSelected = (id, itemId) => selected.indexOf(`${id}-${itemId}`) !== -1;
 
-  const handleComplianceClick = (id, itemNumber) => {
-    navigate(`/compliance/pending/${id}#${itemNumber}`);
+  const handleComplianceClick = (itemNumber, orderIds) => {
+    navigate(`/compliance/pending/${orderIds.join(",")}#${itemNumber}`);
   };
 
   useEffect(() => {
@@ -386,7 +386,7 @@ const ItemRollupTable = ({
                         }
                         onClick={() => {
                           if (row.totalNotCompliant > 0) {
-                            handleComplianceClick(row.id, row.itemNumber);
+                            handleComplianceClick(row.itemNumber, row.orderItemIds);
                           }
                         }}
                       >

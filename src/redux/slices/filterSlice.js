@@ -21,6 +21,7 @@ let initialState = {
   favItems: [],
   month: [],
   orderType: null,
+  orderItemIds: [],
   poNum: null,
   program: [],
   rfqNum: null,
@@ -37,6 +38,7 @@ let initialState = {
   tag: [],
   stateIds: [],
   territory: [],
+  currentTerritoryId: null,
   type: null,
   user: [],
   userName: null,
@@ -72,6 +74,7 @@ const filterSlice = createSlice({
       state.groupBy = null;
       state.month = [];
       state.orderType = null;
+      state.orderItemIds = [];
       state.poNum = null;
       state.program = [];
       state.itemNumber = null;
@@ -88,6 +91,7 @@ const filterSlice = createSlice({
       state.tag = [];
       state.stateIds = [];
       state.territory = [];
+      state.currentTerritoryId = null;
       state.type = null;
       state.user = [];
       state.userName = null;
@@ -133,6 +137,7 @@ const filterSlice = createSlice({
       state.favItems = [];
       state.month = [];
       state.orderType = null;
+      state.orderItemIds = [];
       state.poNum = null;
       state.program = [];
       state.itemNumber = null;
@@ -149,6 +154,7 @@ const filterSlice = createSlice({
       state.tag = [];
       state.stateIds = [];
       state.territory = [];
+      state.currentTerritoryId = null;
       state.type = null;
       state.user = [];
       state.userName = null;

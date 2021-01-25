@@ -220,11 +220,11 @@ export const fetchUser = () => async (dispatch) => {
       }`,
       email: user.data.email,
       role: user.data.role,
-      isOnPremise: user["is-on-premise"] ? true : false,
+      isOnPremise: user.data["is-on-premise"] ? true : false,
       //todo update when this is coming through
-      isRetail: user["is-retail"]
+      isRetail: user.data["is-retail"]
         ? true
-        : !user["is-on-premise"]
+        : !user.data["is-on-premise"]
         ? true
         : false,
       currentMarket: user["is-retail"]

@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchTriggeredRules, fetchNextTriggeredRules } from "../../api/complianceApi";
+import {
+  fetchTriggeredRules,
+  fetchNextTriggeredRules,
+} from "../../api/complianceApi";
 import { mapCompItems } from "../apiMaps";
 /*
 * Item Rule Model
@@ -16,8 +19,10 @@ let initialState = {
   nextPage: null,
   nextLink: null,
   items: [],
+  pendingOrderItems: [],
+  selectedItems: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -29,7 +34,7 @@ const startNextLoading = (state) => {
 
 const startUpdateLoading = (state) => {
   state.isUpdateLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
@@ -60,6 +65,18 @@ const complianceItemsSlice = createSlice({
       state.isNextLoading = false;
       state.error = null;
     },
+    getPendingOrderItemsSuccess(state, action) {
+      const { items, nextLink } = action.payload;
+      state.nextPage = nextLink ? true : false;
+      state.pendingNextLink = nextLink;
+      state.pendingOrderItems = [...items];
+      state.isLoading = false;
+      state.error = null;
+    },
+    updateCompItemSelection(state, action) {
+      const { selectedItems } = action.payload;
+      state.selectedItems = selectedItems;
+    },
     resetComplianceItems(state) {
       state.isLoading = false;
       state.isNextLoading = false;
@@ -68,11 +85,13 @@ const complianceItemsSlice = createSlice({
       state.nextPage = null;
       state.nextLink = null;
       state.items = [];
+      state.pendingOrderItems = [];
+      state.selectedItems = [];
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,
@@ -80,29 +99,37 @@ export const {
   setUpdateLoading,
   getComplianceItemsSuccess,
   getNextComplianceItemsSuccess,
+  getPendingOrderItemsSuccess,
+  updateCompItemSelection,
   resetComplianceItems,
   setFailure,
 } = complianceItemsSlice.actions;
 
 export default complianceItemsSlice.reducer;
 
-export const fetchFilteredTriggeredRules = (filterObject) => async (dispatch) => {
+export const fetchFilteredTriggeredRules = (filterObject) => async (
+  dispatch
+) => {
   try {
-    dispatch(setIsLoading())
+    dispatch(setIsLoading());
     let triggeredRules = await fetchTriggeredRules(filterObject);
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
-    console.log(triggeredRules)
-    const mappedCompItems = mapCompItems(triggeredRules.data.rules)
-    dispatch(getComplianceItemsSuccess({
-      items: mappedCompItems,
-      nextLink: triggeredRules.data.nextLink ? triggeredRules.data.nextLink : null,
-    }))
+    console.log(triggeredRules);
+    const mappedCompItems = mapCompItems(triggeredRules.data.rules);
+    dispatch(
+      getComplianceItemsSuccess({
+        items: mappedCompItems,
+        nextLink: triggeredRules.data.nextLink
+          ? triggeredRules.data.nextLink
+          : null,
+      })
+    );
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }))
+    dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
   try {
@@ -111,12 +138,38 @@ export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
-    const mappedCompItems = mapCompItems(triggeredRules.data.rules)
-    dispatch(getNextComplianceItemsSuccess({
-      items: mappedCompItems,
-      nextLink: triggeredRules.data.nextLink ? triggeredRules.data.nextLink : null,
-    }))
+    const mappedCompItems = mapCompItems(triggeredRules.data.rules);
+    dispatch(
+      getNextComplianceItemsSuccess({
+        items: mappedCompItems,
+        nextLink: triggeredRules.data.nextLink
+          ? triggeredRules.data.nextLink
+          : null,
+      })
+    );
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }))
+    dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
+
+export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let triggeredRules = await fetchTriggeredRules({ orderItemIds: orderIds });
+    if (triggeredRules.error) {
+      throw triggeredRules.error;
+    }
+    console.log(triggeredRules);
+    const mappedCompItems = mapCompItems(triggeredRules.data.rules);
+    dispatch(
+      getPendingOrderItemsSuccess({
+        items: mappedCompItems,
+        nextLink: triggeredRules.data.nextLink
+          ? triggeredRules.data.nextLink
+          : null,
+      })
+    );
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};

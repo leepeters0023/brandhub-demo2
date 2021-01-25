@@ -51,6 +51,7 @@ import { resetPoHistory } from "./redux/slices/purchaseOrderHistorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
+import { updateSingleFilter } from "./redux/slices/filterSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
 import BudgetVsSpend from "./pages/BudgetVsSpend";
@@ -198,6 +199,7 @@ const App = () => {
           dispatch(fetchStates());
           dispatch(fetchBUs());
           dispatch(fetchWarehouse());
+          dispatch(updateSingleFilter({ filter: "currentTerritoryId", value: currentTerritory.id }))
         } else {
           dispatch(clearPrograms());
         }
@@ -598,7 +600,7 @@ const App = () => {
             )}
             {handleAuth(
               <PendingCompliance
-                path="/compliance/pending/:itemId"
+                path="/compliance/pending/:orderIds"
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/compliance/pending",

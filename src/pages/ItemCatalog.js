@@ -91,6 +91,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
@@ -99,6 +100,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const defaultFilters =
     catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
   defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
+  defaultFilters.currentTerritoryId = currentTerritory;
 
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);

@@ -89,7 +89,8 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   );
 
   defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
-
+  defaultFilters.currentTerritoryId = territoryId;
+  
   const handlePreview = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
     handleCurrentItem(item);
