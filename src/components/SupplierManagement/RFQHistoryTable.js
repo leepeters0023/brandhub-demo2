@@ -166,7 +166,7 @@ const RFQHistoryTable = ({
     if (status === "sent") {
       let bidCount = 0;
       bids.forEach((bid) => {
-        if (bid.status === "sent") {
+        if (bid.status === "accepted" || bid.status === "declined") {
           bidCount += 1;
         }
       });

@@ -2,14 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setSelectedRFQItem } from "../../redux/slices/rfqSlice";
 import { setSelectedPOItems } from "../../redux/slices/purchaseOrderSlice";
+import { deleteMultipleOrderItems } from "../../redux/slices/patchOrderSlice";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
 import ConfirmDeleteRollupItem from "../Utility/ConfirmDeleteRollupItem";
+import OrderPatchLoading from "../Utility/OrderPatchLoading";
 
 import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
@@ -182,27 +184,29 @@ const ItemRollupTable = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
   const [selected, setSelected] = useState([]);
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
-  const [currentId, setCurrentId] = useCallback(useState(null));
+  const [currentIds, setCurrentIds] = useCallback(useState(null));
+
+  const currentFilters = useSelector((state) => state.filters);
 
   const handleOpenConfirm = useCallback(
     (id) => {
-      setCurrentId(id);
+      setCurrentIds(id);
       setConfirmOpen(true);
     },
-    [setConfirmOpen, setCurrentId]
+    [setConfirmOpen, setCurrentIds]
   );
 
   const handleRemove = useCallback(
-    (id) => {
-      //TODO
-      console.log(id);
+    (ids) => {
+      dispatch(deleteMultipleOrderItems(ids, currentFilters, type));
       setConfirmOpen(false);
     },
-    [setConfirmOpen]
+    [setConfirmOpen, currentFilters, type, dispatch]
   );
 
   const handleCloseConfirm = useCallback(() => {
@@ -281,7 +285,7 @@ const ItemRollupTable = ({
         open={confirmOpen}
         handleClose={handleCloseConfirm}
         handleRemove={handleRemove}
-        itemId={currentId}
+        itemIds={currentIds}
         type={type}
       />
       <TableContainer
@@ -386,7 +390,10 @@ const ItemRollupTable = ({
                         }
                         onClick={() => {
                           if (row.totalNotCompliant > 0) {
-                            handleComplianceClick(row.itemNumber, row.orderItemIds);
+                            handleComplianceClick(
+                              row.itemNumber,
+                              row.orderItemIds
+                            );
                           }
                         }}
                       >
@@ -409,7 +416,9 @@ const ItemRollupTable = ({
                           type === "po" ? "Purchase Order Item" : "RFQ Item"
                         }`}
                       >
-                        <IconButton onClick={() => handleOpenConfirm(row.id)}>
+                        <IconButton
+                          onClick={() => handleOpenConfirm(row.orderItemIds)}
+                        >
                           <DeleteIcon color="inherit" />
                         </IconButton>
                       </Tooltip>
@@ -427,6 +436,7 @@ const ItemRollupTable = ({
           </TableBody>
         </Table>
       </TableContainer>
+      <OrderPatchLoading />
     </>
   );
 };

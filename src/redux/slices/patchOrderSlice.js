@@ -18,6 +18,7 @@ import {
   patchOrderItem,
   deleteOrderSetItem,
   deleteOrder,
+  deleteOrderItem,
   startOrderSet,
   restartOrderSet,
   setWorkComplete,
@@ -42,6 +43,8 @@ import {
 } from "./orderSetSlice";
 import { clearOrderByType } from "./currentOrderSlice";
 import { fetchFilteredOrderSets } from "./orderSetHistorySlice";
+import { fetchFilteredPOItems } from "./purchaseOrderSlice";
+import { fetchFilteredRFQItems } from "./rfqSlice";
 
 let initialState = {
   isLoading: false,
@@ -94,8 +97,9 @@ const patchOrderSlice = createSlice({
       currentLoading.splice(currentLoading.indexOf(currentCell), 1);
       let currentErrorCell = currentErrors.find(
         (cell) => cell.id === id && cell.orderNumber === orderNumber
-      )
-      if (currentErrorCell) currentErrors.splice(currentErrors.indexOf(currentErrorCell), 1);
+      );
+      if (currentErrorCell)
+        currentErrors.splice(currentErrors.indexOf(currentErrorCell), 1);
       state.cellsLoading = [...currentLoading];
       state.cellsError = [...currentErrors];
       state.isLoading = false;
@@ -177,19 +181,46 @@ export const deleteSetOrder = (id) => async (dispatch) => {
   }
 };
 
+//Deletes all order items in provided array
+export const deleteMultipleOrderItems = (
+  orderItemArray,
+  filters,
+  type
+) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    await Promise.all(
+      orderItemArray.map(async (id) => {
+        const deleteStatus = await deleteOrderItem(id);
+        if (deleteStatus.error) {
+          throw deleteStatus.error;
+        }
+      })
+    );
+    if (type === "po") {
+      dispatch(fetchFilteredPOItems(filters));
+    } else {
+      dispatch(fetchFilteredRFQItems(filters));
+    }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+  }
+};
+
 export const setSetDate = (id, date) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const dateStatus = await updateOrderSetItemDate(id, date);
     if (dateStatus.error) {
-      throw dateStatus.error
+      throw dateStatus.error;
     }
-    dispatch(updateSetItemDate({id: id, date: date}))
+    dispatch(updateSetItemDate({ id: id, date: date }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const setRush = (id, status) => async (dispatch) => {
   try {
@@ -198,12 +229,12 @@ export const setRush = (id, status) => async (dispatch) => {
     if (rushStatus.error) {
       throw rushStatus.error;
     }
-    dispatch(updateSetItemRush({id: id, status: status}))
+    dispatch(updateSetItemRush({ id: id, status: status }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 //Updates status on order set from inactive to in-progress
 export const startOrdSet = (programId, value, orderSetId) => async (
@@ -277,15 +308,20 @@ export const completeOrderSet = (id, programId, value) => async (dispatch) => {
     dispatch(setIsLoading());
     const completeStatus = await setWorkComplete(id, value);
     if (completeStatus.error) {
-      throw completeStatus.error
+      throw completeStatus.error;
     }
-    dispatch(setProgramStatus({ program: programId, status: value ? "complete" : "in-progress"}));
-    dispatch(setIsComplete({ status: value }))
+    dispatch(
+      setProgramStatus({
+        program: programId,
+        status: value ? "complete" : "in-progress",
+      })
+    );
+    dispatch(setIsComplete({ status: value }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 //updates status on order set from submitted to approved
 export const approveOrdSet = (orderSetId, value, filters) => async (

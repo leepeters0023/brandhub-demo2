@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ConfirmDeleteRollupItem = ({ open, handleClose, handleRemove, itemId, type }) => {
+const ConfirmDeleteRollupItem = ({ open, handleClose, handleRemove, itemIds, type }) => {
   const classes = useStyles();
 
   return (
@@ -55,7 +55,7 @@ const ConfirmDeleteRollupItem = ({ open, handleClose, handleRemove, itemId, type
               className={classes.largeButton}
               color="secondary"
               onClick={() => {
-                handleRemove(itemId);
+                handleRemove(itemIds);
               }}
             >
               REMOVE ITEM
