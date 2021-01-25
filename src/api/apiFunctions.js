@@ -142,7 +142,7 @@ export const buildFilters = (
       : "";
   let orderItemIdString =
     filterObject.orderItemIds && filterObject.orderItemIds.length > 0
-      ? `filter[order-item-ids]=${filterObject.orderItemIds}`
+      ? `filter[ids]=${filterObject.orderItemIds}`
       : "";
 
   let queryArray = [

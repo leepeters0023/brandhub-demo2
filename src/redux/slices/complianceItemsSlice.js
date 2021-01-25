@@ -3,7 +3,8 @@ import {
   fetchTriggeredRules,
   fetchNextTriggeredRules,
 } from "../../api/complianceApi";
-import { mapCompItems } from "../apiMaps";
+import { fetchOrderHistoryByItem } from "../../api/orderApi";
+import { mapCompItems, mapOrderHistoryItems } from "../apiMaps";
 /*
 * Item Rule Model
 
@@ -18,6 +19,7 @@ let initialState = {
   itemsPerPage: 20,
   nextPage: null,
   nextLink: null,
+  pendingNextLink: null,
   items: [],
   pendingOrderItems: [],
   selectedItems: [],
@@ -84,6 +86,7 @@ const complianceItemsSlice = createSlice({
       state.itemsPerPage = 20;
       state.nextPage = null;
       state.nextLink = null;
+      state.pendingNextLink = null;
       state.items = [];
       state.pendingOrderItems = [];
       state.selectedItems = [];
@@ -155,12 +158,12 @@ export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
 export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let triggeredRules = await fetchTriggeredRules({ orderItemIds: orderIds });
+    let triggeredRules = await fetchOrderHistoryByItem({ orderItemIds: orderIds });
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
     console.log(triggeredRules);
-    const mappedCompItems = mapCompItems(triggeredRules.data.rules);
+    const mappedCompItems = mapOrderHistoryItems(triggeredRules.data);
     dispatch(
       getPendingOrderItemsSuccess({
         items: mappedCompItems,

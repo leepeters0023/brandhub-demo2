@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchProgramsByTerritory,
-  fetchNationalPrograms,
   fetchProgramItems,
   fetchProgramsByName,
 } from "../../api/programApi";
@@ -75,26 +74,15 @@ const programsSlice = createSlice({
     getProgramsSuccess(state, action) {
       const { programs } = action.payload;
       if (programs.length === 0) {
+        state.initialLoading = false;
+        state.programs = [];
         state.isPrograms = false;
-      }
-      if (state.programs.length === 0) {
+      } else if (state.programs.length === 0) {
         state.programs = [...programs];
         state.initialLoading = false;
         state.isPrograms = true;
       } else {
-        const currentPrograms = [...state.programs];
-        const natPrograms = currentPrograms.filter(
-          (prog) => prog.type === "national"
-        );
-        const newProgramArray = programs.concat(natPrograms);
-        newProgramArray.sort((a, b) => {
-          return a.name.toLowerCase()[0] < b.name.toLowerCase()[0]
-            ? -1
-            : a.name.toLowerCase()[0] > b.name.toLowerCase()[0]
-            ? 1
-            : 0;
-        });
-        state.programs = [...newProgramArray];
+        state.programs = [...programs];
         state.isPrograms = true;
       }
       state.isLoading = false;
@@ -141,7 +129,7 @@ const programsSlice = createSlice({
     },
     deletePreOrderItems(state, action) {
       const { id } = action.payload;
-      const newIds = state.currentPreOrderItems.filter(i => i !== id);
+      const newIds = state.currentPreOrderItems.filter((i) => i !== id);
       state.currentPreOrderItems = newIds;
     },
     resetPreOrderItems(state) {
@@ -187,19 +175,11 @@ export default programsSlice.reducer;
 export const fetchInitialPrograms = (id, marketBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let terrPrograms;
-    if (id) {
-      terrPrograms = await fetchProgramsByTerritory(id, marketBool);
-      if (terrPrograms.error) {
-        throw terrPrograms.error;
-      }
-    } else terrPrograms = { data: [] };
-    const natPrograms = await fetchNationalPrograms(marketBool);
-    if (natPrograms.error) {
-      throw natPrograms.error;
+    const programs = await fetchProgramsByTerritory(id, marketBool);
+    if (programs.error) {
+      throw programs.error;
     }
-    //const programs = terrPrograms.data.concat(natPrograms.data);
-    const programArray = mapPrograms(terrPrograms.data);
+    const programArray = mapPrograms(programs.data);
     dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
@@ -230,7 +210,7 @@ export const fetchItems = (id) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    let mappedItems = mapItems(items.data)
+    let mappedItems = mapItems(items.data);
     dispatch(getProgramItemsSuccess({ program: id, items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
@@ -255,10 +235,10 @@ export const addItemToPreOrder = (orderId, itemId) => async (dispatch) => {
     dispatch(patchLoading());
     let orderItemStatus = await addOrderSetItem(orderId, itemId);
     if (orderItemStatus.error) {
-      throw orderItemStatus.error
+      throw orderItemStatus.error;
     }
     dispatch(patchSuccess());
   } catch (err) {
-    dispatch(patchFailure(({ error: err.toString() })))
+    dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};

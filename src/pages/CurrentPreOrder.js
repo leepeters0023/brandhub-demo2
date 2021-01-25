@@ -259,6 +259,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (userPrograms.length === 0) {
+    return (
+      <>
+        
+      </>
+    )
+  }
+
   if (isLoading) {
     return <Loading />;
   }

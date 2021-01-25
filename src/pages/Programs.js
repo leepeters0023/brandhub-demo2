@@ -5,8 +5,6 @@ import { Link } from "@reach/router";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
-import { fetchInitialPrograms } from "../redux/slices/programsSlice";
-
 import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
@@ -40,40 +38,18 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
 
   const activePrograms = useSelector((state) => state.programs.programs);
   const isLoading = useSelector((state) => state.programs.isLoading);
-  const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const sortOption = useSelector((state) => state.filters.sortProgramsBy);
   const buFilters = useSelector((state) => state.filters.bu);
   const monthFilters = useSelector((state) => state.filters.month);
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  const isPrograms = useSelector((state) => state.programs.isPrograms);
   const currentUserRole = useSelector((state) => state.user.role);
-  const currentMarket = useSelector((state) => state.user.currentMarket);
 
   const currentPrograms = useProgramSort(
     activePrograms,
     sortOption,
     programFilters
   );
-
-  useEffect(() => {
-    if (
-      activePrograms.length === 0 &&
-      !isPrograms &&
-      currentUserRole &&
-      currentTerritory
-    ) {
-      let marketBool = currentMarket === "On Premise" ? true : false;
-      dispatch(fetchInitialPrograms(currentTerritory, marketBool));
-    }
-  }, [
-    currentUserRole,
-    dispatch,
-    activePrograms,
-    currentTerritory,
-    isPrograms,
-    currentMarket,
-  ]);
 
   useInitialFilters(
     "program",
