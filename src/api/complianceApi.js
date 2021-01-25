@@ -39,6 +39,25 @@ export const fetchAllRules = async (filterObject) => {
   return response;
 };
 
+export const approveOrDenyItem = async (token, itemStatus) => {
+  const response = { status: "", error: null };
+  await (axios)
+    .post("/public/update-status",
+      {
+        token: token,
+        status: itemStatus
+      })
+    .then((res) => {
+      response.status = itemStatus;
+    })
+    .catch((err) => {
+      console.log(err);
+      response.status = "error";
+      response.error = err.response.data.errors[0].title;
+    })
+  return response
+};
+
 export const fetchNextRules = async (url) => {
   const response = { status: "", error: null, data: null };
   await axios
