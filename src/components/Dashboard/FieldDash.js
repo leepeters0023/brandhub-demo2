@@ -9,8 +9,23 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-const FieldDash = ({ classes, name, InfoPopover }) => {
+const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const monthMap = {
+    0: "2",
+    1: "2",
+    2: "3",
+    3: "3",
+    4: "3",
+    5: "4",
+    6: "4",
+    7: "4",
+    8: "1",
+    9: "1",
+    10: "1",
+    11: "2",
+  };
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -37,7 +52,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
 
   const cardData = [
     {
-      titleText: "Q1 Ordering",
+      titleText: `Q${monthMap[currentMonth]} Ordering`,
       ariaOwnsState: preOrderOpen,
       ariaOwnsText: "pre-order",
       id: "pre-order-parent",
@@ -193,6 +208,7 @@ const FieldDash = ({ classes, name, InfoPopover }) => {
 FieldDash.propTypes = {
   classes: PropTypes.object.isRequired,
   InfoPopover: PropTypes.func.isRequired,
+  currentMonth: PropTypes.number,
 };
 
 export default FieldDash;

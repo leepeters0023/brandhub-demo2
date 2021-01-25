@@ -20,8 +20,24 @@ const DrawerOrdersNav = ({
   role,
   handleCouponModal,
   classes,
+  currentMonth,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const monthMap = {
+    0: "2",
+    1: "2",
+    2: "3",
+    3: "3",
+    4: "3",
+    5: "4",
+    6: "4",
+    7: "4",
+    8: "1",
+    9: "1",
+    10: "1",
+    11: "2",
+  };
 
   const hasInStockOrder = useSelector(
     (state) => state.currentOrder.inStockOrderNumber
@@ -84,7 +100,7 @@ const DrawerOrdersNav = ({
               primaryTypographyProps={{
                 className: classes.headerListItemNew,
               }}
-              primary="+ Quarterly Pre-Order"
+              primary={`+ Q${monthMap[currentMonth]} Pre-Order`}
             />
           </MenuItem>
         )}

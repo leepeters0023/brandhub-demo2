@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Router, Redirect, navigate } from "@reach/router";
 import axios from "axios";
+import getMonth from "date-fns/getMonth";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logoutUser } from "./api/userApi";
@@ -112,6 +113,7 @@ const App = () => {
   const [filtersOpen, setFiltersOpen] = useCallback(useState(false));
   const [couponsOpen, setCouponsOpen] = useCallback(useState(false));
   const [logoutTimeout, setLogoutTimeout] = useCallback(useState(null));
+  const [currentMonth, setCurrentMonth] = useCallback(useState(null));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -200,6 +202,7 @@ const App = () => {
           dispatch(fetchBUs());
           dispatch(fetchWarehouse());
           dispatch(updateSingleFilter({ filter: "currentTerritoryId", value: currentTerritory.id }))
+          setCurrentMonth(getMonth(new Date()))
         } else {
           dispatch(clearPrograms());
         }
@@ -292,6 +295,7 @@ const App = () => {
           userType={currentRole}
           handleLogout={handleLogout}
           handleCouponModal={handleCouponModal}
+          currentMonth={currentMonth}
         />
         <Loading partial={true} />
       </MuiThemeProvider>
@@ -324,6 +328,7 @@ const App = () => {
             userType={currentRole}
             handleLogout={handleLogout}
             handleCouponModal={handleCouponModal}
+            currentMonth={currentMonth}
           />
         )}
         <FilterDrawer
@@ -355,6 +360,7 @@ const App = () => {
                 path="/dashboard"
                 userType={currentRole}
                 handleFiltersClosed={handleFiltersClosed}
+                currentMonth={currentMonth}
               />,
               "/dashboard",
               ["field1", "field2", "purchaser", "super", "supplier", "read-only"],

@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "../../assets/RTA_Logo_Stacked_White.png";
+import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
 import { useSelector } from "react-redux";
@@ -103,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
+const TopDrawerNav = ({ handleLogout, handleCouponModal, currentMonth }) => {
   const classes = useStyles();
 
   const initials = useSelector((state) => state.user.initials);
@@ -144,6 +145,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
                       inStockOrderId={inStockOrderId}
                       onDemandOrderId={onDemandOrderId}
                       handleCouponModal={handleCouponModal}
+                      currentMonth={currentMonth}
                     />
                   )}
                 </>
@@ -171,6 +173,12 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal }) => {
       </AppBar>
     </>
   );
+};
+
+TopDrawerNav.propTypes = {
+  handleCouponModal: PropTypes.func.isRequired,
+  handleLogout: PropTypes.func.isRequired,
+  currentMonth: PropTypes.number,
 };
 
 export default React.memo(TopDrawerNav);

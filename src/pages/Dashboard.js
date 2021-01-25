@@ -99,7 +99,7 @@ const InfoPopover = ({
   );
 };
 
-const Dashboard = ({ userType, handleFiltersClosed }) => {
+const Dashboard = ({ userType, handleFiltersClosed, currentMonth }) => {
   const classes = useStyles();
 
   const name = useSelector((state) => state.user.firstName);
@@ -132,7 +132,7 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
           />
         )}
         {userType !== "supplier" && (
-          <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} />
+          <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} currentMonth={currentMonth} />
         )}
       </Container>
       <br />
@@ -144,6 +144,7 @@ const Dashboard = ({ userType, handleFiltersClosed }) => {
 Dashboard.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
   userType: PropTypes.string,
+  currentMonth: PropTypes.number
 };
 
 export default Dashboard;
