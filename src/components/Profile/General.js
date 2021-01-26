@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { FormatListNumberedRtlOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -21,6 +22,7 @@ const General = () => {
   const classes = useStyles();
 
   const currentUser = useSelector((state) => state.user)
+  console.log(currentUser)
   // const [info, setInfo] = useState({
   //   first: currentUser.firstName,
   //   last: currentUser.lastName,
@@ -72,12 +74,11 @@ const General = () => {
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography>Territory: {currentUser.currentTerritory}</Typography>
-          {/* {currentUser.territories.map((item) => item.type ===item.name)}  or looking for territory common name? */}
+          <Typography>Territory: {currentUser.territories.map((item) => item.id === currentUser.currentTerritory ? item.name : null)}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography>State:{currentUser.currentState}</Typography>
+          <Typography>State:{currentUser.states /* will be an array? */}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
