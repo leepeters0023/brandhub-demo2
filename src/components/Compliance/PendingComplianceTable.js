@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ComplianceItemsTable = ({ items, itemsLoading }) => {
+const ComplianceItemsTable = ({ items, itemsLoading, tableRef }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -124,7 +124,7 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 375px)" }}
       >
-        <Table stickyHeader className={classes.table}>
+        <Table stickyHeader className={classes.table} ref={tableRef}>
           <EnhancedTableHead
             classes={classes}
             numSelected={currentSelectedItems.length}
@@ -196,7 +196,7 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
 ComplianceItemsTable.propTypes = {
   items: PropTypes.array,
   itemsLoading: PropTypes.bool.isRequired,
-  scrollRef: PropTypes.any,
+  tableRef: PropTypes.any,
 };
 
 export default ComplianceItemsTable;

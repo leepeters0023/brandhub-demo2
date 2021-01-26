@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const Settings = ({ userType, handleFiltersClosed }) => {
   const classes = useStyles();
   const tabs = ["#general", "#users", "#budgets"];
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
 
@@ -43,7 +43,7 @@ const Settings = ({ userType, handleFiltersClosed }) => {
           <Grid item md={1} xs={false} />
           <Grid item md={2} xs={2} className={classes.borderRight}>
             <List component="nav" aria-label="settings options">
-              <ListItem
+              {/* <ListItem
                 button
                 selected={selectedIndex === 1}
                 onClick={(evt) => {
@@ -51,21 +51,21 @@ const Settings = ({ userType, handleFiltersClosed }) => {
                 }}
               >
                 <ListItemText primary="General" />
-              </ListItem>
+              </ListItem> */}
               {userType !== "field1" && (
                 <>
                   <Divider />
                   <ListItem
                     button
-                    selected={selectedIndex === 2}
+                    selected={selectedIndex === 1}
                     onClick={(evt) => {
-                      handleChangeTab(evt, 2);
+                      handleChangeTab(evt, 1);
                     }}
                   >
                     <ListItemText primary="Users" />
                   </ListItem>
                   <Divider />
-                  <ListItem
+                  {/* <ListItem
                     button
                     selected={selectedIndex === 3}
                     onClick={(evt) => {
@@ -73,14 +73,14 @@ const Settings = ({ userType, handleFiltersClosed }) => {
                     }}
                   >
                     <ListItemText primary="Budgets" />
-                  </ListItem>
+                  </ListItem> */}
                 </>
               )}
             </List>
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
-            {selectedIndex === 1 && <Budgets />}
-            {selectedIndex === 2 && <Users />}
+            {selectedIndex === 2 && <Budgets />}
+            {selectedIndex === 1 && <Users />}
             {selectedIndex === 3 && <Budgets />}
           </Grid>
           <Grid item md={1} xs={false} />

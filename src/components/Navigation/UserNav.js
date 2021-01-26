@@ -17,14 +17,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
-const UserNavMenu = ({
-  initials,
-  handleLogout,
-  classes,
-  role,
-}) => {
-  
-
+const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = (evt) => {
@@ -90,21 +83,23 @@ const UserNavMenu = ({
               <ListItemText primary="Profile" />
             </MenuItem>,
             <Divider key="divider1" />,
-            <MenuItem
-              key="settings"
-              component={Link}
-              to="/settings#general"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <SettingsIcon color="secondary" fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </MenuItem>,
-            <Divider key="divider2" />,
           ]}
+        {role === "super" && [
+          <MenuItem
+            key="settings"
+            component={Link}
+            to="/settings#general"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <SettingsIcon color="secondary" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </MenuItem>,
+          <Divider key="divider2" />,
+        ]}
         <MenuItem
           component={Link}
           to="/help"
