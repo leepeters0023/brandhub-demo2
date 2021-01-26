@@ -22,7 +22,6 @@ const General = () => {
   const classes = useStyles();
 
   const currentUser = useSelector((state) => state.user)
-  console.log(currentUser)
   // const [info, setInfo] = useState({
   //   first: currentUser.firstName,
   //   last: currentUser.lastName,
