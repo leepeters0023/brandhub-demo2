@@ -44,10 +44,9 @@ const orderHeaders = [
   { label: "Brand", key: "brand" },
   { label: "State", key: "state" },
   { label: "Est. Cost", key: "totalEstCost" },
-  { label: "Budget Shipped", key: "shippedBudget" },
-  { label: "Budget Rem.", key: "remainingBudget" },
   { label: "Order Submitted", key: "orderDate" },
-  { label: "Order Due", key: "dueDate" },
+  { label: "Order Window Close", key: "dueDate" },
+  { label: "In Market Date", key: "inMarketDate" },
   { label: "Status", key: "status" },
 ];
 
@@ -202,8 +201,6 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
               brand: order.brand.join(", "),
               state: order.state,
               totalEstCost: formatMoney(order.totalEstCost, false),
-              shippedBudget: /*TODO*/ "---",
-              remainingBudget: order.budget,
               orderDate:
                 order.orderDate !== "---"
                   ? format(new Date(order.orderDate), "MM/dd/yyyy")
@@ -212,6 +209,10 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                 order.dueDate !== "---"
                   ? format(new Date(order.dueDate), "MM/dd/yyyy")
                   : order.dueDate,
+              inMarketDate:
+                order.inMarketDate !== "---"
+                  ? format(new Date(order.inMarketDate), "MM/dd/yyyy")
+                  : order.inMarketDate,
               status: statusConverter(order.status),
             }))
           : quarterlyRollupItems.map((item) => ({

@@ -313,6 +313,9 @@ export const mapOrderHistoryItems = (items) => {
       shipDate: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["actual-ship-date"]
         : "---",
+      carrier: item["shipping-parameter-item"]
+        ? item["shipping-parameter-item"].carrier
+        : "---",
       tracking: item["shipping-parameter-item"]
         ? item["shipping-parameter-item"]["tracking-number"]
         : "---",
@@ -325,7 +328,9 @@ export const mapOrderHistoryItems = (items) => {
         ? item["triggered-rules"].map((rule) => rule.rule.description)
         : null,
       triggeredPriorApprovalRules: item["prior-approval-triggered-rules"]
-        ? item["prior-approval-triggered-rules"].map((rule) => rule.rule.description)
+        ? item["prior-approval-triggered-rules"].map(
+            (rule) => rule.rule.description
+          )
         : null,
       isComplianceCanceled: item["is-compliance-canceled"],
       orderId: item.order.id,
@@ -335,7 +340,6 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
-  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
@@ -410,6 +414,9 @@ export const mapOrderItems = (items, type) => {
         actShipDate: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["actual-ship-date"]
           : null,
+        carrier: item["shipping-parameter-item"]
+          ? item["shipping-parameter-item"].carrier
+          : "---",
         tracking: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["tracking-number"]
             ? item["shipping-parameter-item"]["tracking-number"]
@@ -420,6 +427,9 @@ export const mapOrderItems = (items, type) => {
             ? item["shipping-parameter-item"].id
             : null
           : null,
+        onShipHold: item["shipping-parameter-item"]
+          ? item["shipping-parameter-item"]["on-compliance-hold"]
+          : "---",
       };
     })
     .sort((a, b) => {
@@ -439,7 +449,14 @@ export const mapOrderSet = (order) => {
     userName: order.user.name,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
-    dueDate: order["due-date"] ? order["due-date"] : "---",
+    dueDate:
+      order.program && order.program["order-calendar-month"]
+        ? order.program["order-calendar-month"]["order-window-close-date"]
+        : "---",
+    inMarketDate:
+      order.program && order.program["order-calendar-month"]
+        ? order.program["order-calendar-month"]["in-market-start-date"]
+        : "---",
     type: orderTypeMap[order.type],
     program: order.program
       ? [order.program.name]
@@ -480,10 +497,13 @@ export const mapOrderSet = (order) => {
     status: order.status,
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
-    totalEstCost: stringToCents(order["total-estimated-cost"]),
-    totalActCost: order["total-actual-cost"]
-      ? stringToCents(order["total-actual-cost"])
-      : "---",
+    totalEstCost:
+      order.orders.length > 0
+        ? order.orders
+            .map((ord) => stringToCents(ord["total-estimated-cost"]))
+            .reduce((a, b) => a + b)
+        : 0,
+    totalActCost: "---" /* TODO */,
     budget: order.budget ? stringToCents(order.budget) : "$25,000.00",
     hasRush:
       order["order-set-items"].filter((item) => item["is-rush"]).length > 0,
@@ -642,7 +662,7 @@ export const mapPOShippingParams = (params) => {
       addressOne: param["street-address-1"],
       addressTwo: param["street-address-2"] ? param["street-address-2"] : "---",
       city: param.city,
-      state: param.state,
+      state: param.state.code,
       zip: param.zip,
       country: param.country,
       carrier: carriers,

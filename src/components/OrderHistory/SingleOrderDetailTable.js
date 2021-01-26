@@ -69,6 +69,9 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                 Act. Total
               </TableCell>
               <TableCell className={classes.headerText} align="left">
+                Carrier
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
                 Tracking
               </TableCell>
             </TableRow>
@@ -154,6 +157,14 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                   }
                 >
                   {item.actTotal}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
+                  {item.carrier}
                 </TableCell>
                 <TableCell
                   align="center"

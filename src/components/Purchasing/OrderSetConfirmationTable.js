@@ -20,10 +20,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -70,7 +67,7 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
             </TableCell>
             <TableCell align="left">
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
+                <DatePicker
                   fullWidth
                   color="secondary"
                   disableToolbar
@@ -83,18 +80,17 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
                   onChange={(value) =>
                     dispatch(setSetDate(rowData.id, new Date(value)))
                   }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
                 />
               </MuiPickersUtilsProvider>
             </TableCell>
             <TableCell padding="checkbox">
               <Checkbox
-                disabled={!isBefore(
-                  new Date(rowData.inMarketDate),
-                  new Date(rowData.standardDeliveryDate)
-                )}
+                disabled={
+                  !isBefore(
+                    new Date(rowData.inMarketDate),
+                    new Date(rowData.standardDeliveryDate)
+                  )
+                }
                 checked={rowData.isRush}
                 onChange={() => {
                   dispatch(setRush(rowData.id, !rowData.isRush));
@@ -146,7 +142,8 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
                       if (
                         order.items.find(
                           (item) => item.itemNumber === rowData.itemNumber
-                        ) && order.items.find(
+                        ) &&
+                        order.items.find(
                           (item) => item.itemNumber === rowData.itemNumber
                         ).totalItems > 0
                       ) {
@@ -154,10 +151,14 @@ const CollapseRow = ({ classes, rowData, orders, type, dispatch }) => {
                           <TableRow key={`${rowData.id}-${order.id}`}>
                             <TableCell align="center">{order.id}</TableCell>
                             <TableCell align="center">
-                              {order.distributorId ? order.distributorId : "---"}
+                              {order.distributorId
+                                ? order.distributorId
+                                : "---"}
                             </TableCell>
                             <TableCell align="center">
-                              {order.distributorName ? order.distributorName : "---"}
+                              {order.distributorName
+                                ? order.distributorName
+                                : "---"}
                             </TableCell>
                             <TableCell align="center">
                               {

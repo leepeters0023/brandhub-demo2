@@ -14,10 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -84,7 +81,7 @@ const EditRushDetailModal = ({ itemId, handleClose }) => {
             </Typography>
             <br />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
+              <DatePicker
                 fullWidth
                 color="secondary"
                 disableToolbar
@@ -99,9 +96,6 @@ const EditRushDetailModal = ({ itemId, handleClose }) => {
                     : format(addDays(new Date(), 28), "MM/dd/yyyy")
                 }
                 //onChange={(value) => handle this function!}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
               />
             </MuiPickersUtilsProvider>
             <div

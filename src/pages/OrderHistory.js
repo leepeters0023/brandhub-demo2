@@ -68,6 +68,7 @@ const itemHeaders = [
   { label: "Act. Cost/Unit", key: "actCost" },
   { label: "Order Date", key: "orderDate" },
   { label: "Ship Date", key: "shipDate" },
+  { label: "Carrier", key: "carrier" },
   { label: "Tracking #", key: "tracking" },
   { label: "Status", key: "status" },
 ];
@@ -286,6 +287,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
                 item.shipDate !== "---"
                   ? format(new Date(item.shipDate), "MM/dd/yyyy")
                   : item.shipDate,
+              carrier: item.carrier,
               tracking: item.tracking,
               status: item.status[0].toUpperCase() + item.status.slice(1),
             }));

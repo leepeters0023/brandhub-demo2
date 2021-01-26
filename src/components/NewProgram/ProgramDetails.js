@@ -10,10 +10,7 @@ import { updateName, updateDate } from "../../redux/slices/newProgramSlice";
 
 import TextField from "@material-ui/core/TextField";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 const ProgramDetails = ({ classes }) => {
   const dispatch = useDispatch();
@@ -65,7 +62,7 @@ const ProgramDetails = ({ classes }) => {
       <br />
       <div className={classes.inputRow}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+          <DatePicker
             color="secondary"
             className={classes.inputField}
             disableToolbar
@@ -76,13 +73,10 @@ const ProgramDetails = ({ classes }) => {
             label="Order Window Start"
             value={formatDate(orderStartDate)}
             onChange={(value) => handleDate("orderStartDate", value)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
           />
         </MuiPickersUtilsProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+          <DatePicker
             color="secondary"
             className={classes.inputField}
             disableToolbar
@@ -93,16 +87,13 @@ const ProgramDetails = ({ classes }) => {
             label="Order Window End"
             value={formatDate(orderEndDate)}
             onChange={(value) => handleDate("orderEndDate", value)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
           />
         </MuiPickersUtilsProvider>
       </div>
       <br />
       <div className={classes.inputRow}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+          <DatePicker
             color="secondary"
             className={classes.inputField}
             disableToolbar
@@ -113,13 +104,10 @@ const ProgramDetails = ({ classes }) => {
             label="In Market Start"
             value={formatDate(inMarketStartDate)}
             onChange={(value) => handleDate("inMarketStartDate", value)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
           />
         </MuiPickersUtilsProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
+          <DatePicker
             color="secondary"
             className={classes.inputField}
             disableToolbar
@@ -130,9 +118,6 @@ const ProgramDetails = ({ classes }) => {
             label="In Market End"
             value={formatDate(inMarketEndDate)}
             onChange={(value) => handleDate("inMarketEndDate", value)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
           />
         </MuiPickersUtilsProvider>
       </div>

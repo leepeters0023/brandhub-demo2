@@ -25,10 +25,7 @@ import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -105,7 +102,7 @@ const CurrentRFQ = () => {
             <Grid item sm={6}>
               {currentUserRole !== "supplier" ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
+                  <DatePicker
                     color="secondary"
                     fullWidth
                     className={classes.dateField}
@@ -132,9 +129,6 @@ const CurrentRFQ = () => {
                         )
                       )
                     }
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
                   />
                 </MuiPickersUtilsProvider>
               ) : (
@@ -153,7 +147,7 @@ const CurrentRFQ = () => {
             <Grid item sm={6}>
               {currentUserRole !== "supplier" ? (
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
+                  <DatePicker
                     color="secondary"
                     fullWidth
                     className={classes.dateField}
@@ -180,9 +174,6 @@ const CurrentRFQ = () => {
                         )
                       )
                     }
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
                   />
                 </MuiPickersUtilsProvider>
               ) : (
