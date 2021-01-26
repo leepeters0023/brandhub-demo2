@@ -322,10 +322,10 @@ export const mapOrderHistoryItems = (items) => {
       status: item["order-status"],
       user: item["order-user-name"],
       triggeredRules: item["triggered-rules"]
-        ? item["triggered-rules"].map((rule) => rule.description)
+        ? item["triggered-rules"].map((rule) => rule.rule.description)
         : null,
       triggeredPriorApprovalRules: item["prior-approval-triggered-rules"]
-        ? item["prior-approval-triggered-rules"].map((rule) => rule.description)
+        ? item["prior-approval-triggered-rules"].map((rule) => rule.rule.description)
         : null,
       isComplianceCanceled: item["is-compliance-canceled"],
       orderId: item.order.id,
@@ -335,6 +335,7 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
+  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);

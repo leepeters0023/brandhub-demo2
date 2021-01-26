@@ -124,10 +124,7 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
         className={classes.tableContainer}
         style={{ maxHeight: "Calc(100vh - 375px)" }}
       >
-        <Table
-          stickyHeader
-          className={classes.table}
-        >
+        <Table stickyHeader className={classes.table}>
           <EnhancedTableHead
             classes={classes}
             numSelected={currentSelectedItems.length}
@@ -166,15 +163,16 @@ const ComplianceItemsTable = ({ items, itemsLoading }) => {
                     <TableCell align="left">{row.state}</TableCell>
                     <TableCell align="left">{row.user}</TableCell>
                     <TableCell align="left">{row.distributor}</TableCell>
-                    <TableCell align="left">{!row.isComplianceCanceled ? row.totalItems : "Canceled"}</TableCell>
                     <TableCell align="left">
-                      {row.triggeredRules && row.triggeredPriorApprovalRules
-                        ? row.triggerdRules
-                            .concat(row.triggeredPriorApprovalRules)
-                            .join(", ")
-                        : row.triggeredRules
+                      {!row.isComplianceCanceled ? row.totalItems : "Canceled"}
+                    </TableCell>
+                    <TableCell align="left">
+                      {row.triggeredRules.length > 0 && row.triggeredPriorApprovalRules.length > 0
+                        ? row.triggerdRules.join(", ") + ", " +
+                          row.triggeredPriorApprovalRules.join(", ")
+                        : row.triggeredRules.length > 0
                         ? row.triggeredRules.join(", ")
-                        : row.triggeredPriorApprovalRules
+                        : row.triggeredPriorApprovalRules.length > 0
                         ? row.triggeredPriorApprovalRules.join(", ")
                         : "---"}
                     </TableCell>
