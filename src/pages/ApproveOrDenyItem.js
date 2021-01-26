@@ -27,6 +27,7 @@ const ApproveOrDenyItem = () => {
     const [itemNumber, setItemNumber] = useState("");
     const [token, setToken] = useState("");
     const status = useSelector((state) => state.itemApprovedOrDenied.status);
+    const isError = useSelector((state) => state.itemApprovedOrDenied.error)
     const isLoading = useSelector((state) => state.itemApprovedOrDenied.isLoading);
 
     useEffect(() => {
@@ -34,7 +35,7 @@ const ApproveOrDenyItem = () => {
         setToken(params.get("token"));
         setItemNumber(params.get("item_number"));
     }, [])
-    
+
     return (
         <>
             <Container className={classes.mainWrapper}>
@@ -58,48 +59,48 @@ const ApproveOrDenyItem = () => {
                         Please approve or deny item: {itemNumber}
                     </Typography>
                     <br />
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                            }}>
-                            <Button
-                                disabled={(!!status) ? true : false}
-                                className={classes.largeButton}
-                                style={{ width: "150px", margin: "10px" }}
-                                variant="contained"
-                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "approved"))}
-                            >
-                                Approve
-                                </Button>
-                            <Button
-                                disabled={(!!status) ? true : false}
-                                className={classes.largeButton}
-                                style={{ width: "150px", margin: "10px" }}
-                                variant="contained"
-                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "denied"))}
-                            >
-                                Deny
-                                </Button>
-                        </div>
+                    <div
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                        }}>
+                        <Button
+                            disabled={(!status && !isError) ? false : true}
+                            className={classes.largeButton}
+                            style={{ width: "150px", margin: "10px" }}
+                            variant="contained"
+                            onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "approved"))}
+                        >
+                            Approve
+                        </Button>
+                        <Button
+                            disabled={(!status && !isError) ? false : true}
+                            className={classes.largeButton}
+                            style={{ width: "150px", margin: "10px" }}
+                            variant="contained"
+                            onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "denied"))}
+                        >
+                            Deny
+                        </Button>
+                    </div>
                     <br></br>
                     {isLoading && (<CircularProgress />)}
                     <br></br>
-                    {status === "error" && (
+                    {isError && (
                         <Typography className={classes.headerText} variant="h5">
-                            There was an issue with your request, please contact us at: help@readytoactivate.com
+                            There was an issue with your request, please contact us at: help@readytoactivate.com.
+                            Error message: {isError}
                         </Typography>
                     )}
-
                     {(status === "approved" || status === "denied") && (
                         <>
                             <Typography className={classes.titleText} variant="h5">
                                 You have {status === "approved" ? "approved" : "denied"} item: {itemNumber}. No further action is needed.
-                                </Typography>
+                            </Typography>
                             <Typography className={classes.headerText} variant="h5">
                                 You may close this window.
-                                </Typography>
+                            </Typography>
                         </>
                     )}
                 </div>

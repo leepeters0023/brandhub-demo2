@@ -44,7 +44,6 @@ export const fetchApproveOrDenyItemSlice = (token, itemStatus) => async (dispatc
   try {
     dispatch(setIsLoading());
     const response = await approveOrDenyItem(token, itemStatus);
-
     if (response.error) {
       throw response.error;
     }

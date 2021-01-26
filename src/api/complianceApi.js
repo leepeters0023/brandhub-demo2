@@ -5,12 +5,12 @@ import { buildFilters } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
-// const writeHeaders = {
-//   headers: {
-//     Accept: "application/vnd.api+json",
-//     "Content-Type": "application/vnd.api+json",
-//   },
-// };
+const writeHeaders = {
+  headers: {
+    Accept: "application/vnd.api+json",
+    "Content-Type": "application/vnd.api+json",
+  },
+};
 
 export const fetchAllRules = async (filterObject) => {
   const response = { status: "", error: null, data: null };
@@ -41,10 +41,9 @@ export const fetchAllRules = async (filterObject) => {
 
 export const approveOrDenyItem = async (token, itemStatus) => {
   const response = { status: "", error: null };
-  console.log(`/api/public/triggered-rules/${token}/${itemStatus === "approved" ? "approve" : "deny"}`)
   await (axios)
-    .post(`/api/public/triggered-rules/${token}/${itemStatus === "approved" ? "approve" : "deny"}`,
-      { }
+    .post(`/api/public/triggered-rules/${token}/${itemStatus === "approved" ? "approve" : "deny"}`, { },
+    writeHeaders
     )
     .then((res) => {
       response.status = itemStatus;
@@ -61,7 +60,6 @@ export const approveOrDenyItem = async (token, itemStatus) => {
         ? err.response.data.errors[0].title
         : err.response.data;
     });
-    console.log(response)
   return response
 };
 
