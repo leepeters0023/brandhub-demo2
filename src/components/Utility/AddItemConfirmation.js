@@ -71,10 +71,10 @@ const AddItemConfirmation = ({ item, type }) => {
               ? `You have successfully added ${item.brand}-${
                   item.itemType
                 } to your ${
-                  type === "inStock" ? "In-Stock" : "On-Demand"
+                  type === "inStock" ? "Inventory" : "On-Demand"
                 } order!`
               : `Items successfully added to your ${
-                  type === "inStock" ? "In-Stock" : "On-Demand"
+                  type === "inStock" ? "Inventory" : "On-Demand"
                 } order!`}
           </Alert>
         ) : (

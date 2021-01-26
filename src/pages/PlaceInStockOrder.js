@@ -185,7 +185,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
-            Place an In-Stock Order
+            Place an Inventory Order
           </Typography>
 
           <div className={classes.innerConfigDiv}>
@@ -210,7 +210,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
                   to={
                     currentOrder.inStockOrderItems.length > 0
                       ? `/orders/open/${currentOrder.inStockOrderNumber}`
-                      : "/orders/open/inStock"
+                      : "/orders/open/inventory"
                   }
                   className={classes.largeButton}
                   variant="contained"

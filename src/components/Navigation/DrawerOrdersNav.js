@@ -121,7 +121,7 @@ const DrawerOrdersNav = ({
           button
           onClick={handleClose}
           component={Link}
-          to="/orders/items/inStock"
+          to="/orders/items/inventory"
         >
           <ListItemText
             primaryTypographyProps={{
@@ -194,8 +194,8 @@ const DrawerOrdersNav = ({
               {
                 link: inStockOrderId
                   ? `/orders/open/${inStockOrderId}`
-                  : "/orders/open/inStock",
-                primary: "In-Stock",
+                  : "/orders/open/inventory",
+                primary: "Inventory",
                 disabled: !hasInStockOrder,
               },
             ]}
