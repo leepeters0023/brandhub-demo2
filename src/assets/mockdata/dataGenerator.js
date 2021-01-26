@@ -74,27 +74,4 @@ const generateYearToDateBudgets = (dataPoints) => {
   return data;
 };
 
-export const generatePendingComplianceItems = (dataPoints) => {
-  let data = [];
-  for (let i = 0; i < dataPoints; i++) {
-    let territory = territories[Math.floor(Math.random() * territories.length)];
-    let user = people[Math.floor(Math.random() * people.length)];
-    let distributor =
-      distributors[Math.floor(Math.random() * distributors.length)];
-    let totalItems = Math.floor(Math.random() * 1000) + 500;
-    data.push({
-      id: i + 1,
-      territory: territory,
-      user: user,
-      distributorName: distributor.name,
-      distributorState: distributor.state,
-      totalItems: totalItems,
-      rule:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam gravida cursus purus, sit amet luctus.",
-    });
-  }
-  return data;
-};
-
-export const pendingComplianceItems = generatePendingComplianceItems(6);
 export const yearToDateBudgets = generateYearToDateBudgets(20);

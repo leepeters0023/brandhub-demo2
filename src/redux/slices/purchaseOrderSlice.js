@@ -30,6 +30,7 @@ import {
 } from "./patchOrderSlice";
 import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder, mapPOItems } from "../apiMaps";
+import { navigate } from "@reach/router";
 
 let initialState = {
   isLoading: false,
@@ -686,6 +687,7 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
     dispatch(submitPOSuccess());
     dispatch(patchSuccess())
+    navigate("/purchasing/poHistory/current");
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -702,6 +704,7 @@ export const completePurchaseOrder = (id) => async (dispatch) => {
     }
     dispatch(completePOSuccess());
     dispatch(patchSuccess())
+    navigate("/purchasing/poHistory/all");
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
