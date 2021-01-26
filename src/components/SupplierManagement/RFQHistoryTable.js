@@ -41,7 +41,13 @@ let headCells = [
     sort: false,
   },
   { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
-  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
+  {
+    id: "inMarketDate",
+    disablePadding: false,
+    label: "In-Market Date",
+    sort: true,
+  },
   { id: "status", disablePadding: false, label: "Status", sort: true },
   { id: "bidValue", disablePadding: false, label: "Bid", sort: true },
 ];
@@ -143,6 +149,7 @@ const RFQHistoryTable = ({
   handleSort,
   scrollRef,
   supplierId,
+  tableRef,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -156,11 +163,11 @@ const RFQHistoryTable = ({
     if (currentUserRole === "supplier" && status === "sent") {
       let currentBid = bids.find((bid) => bid.supplierId === supplierId);
       if (currentBid.status === "sent") {
-        return "New"
+        return "New";
       } else if (currentBid.status === "accepted") {
-        return "In Progress"
+        return "In Progress";
       } else if (currentBid.status === "declined") {
-        return "Declined"
+        return "Declined";
       }
     }
     if (status === "sent") {
@@ -203,6 +210,7 @@ const RFQHistoryTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={tableRef}
         >
           <EnhancedTableHead
             classes={classes}
@@ -257,6 +265,7 @@ const RFQHistoryTable = ({
                     </>
                   )}
                   <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
+                  <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
                   <TableCell align="left">
                     {handleStatus(row.status, row.bids)}
                   </TableCell>
@@ -295,6 +304,7 @@ RFQHistoryTable.propTypes = {
   rfqsLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
   supplierId: PropTypes.string,
+  tableRef: PropTypes.any,
 };
 
 export default RFQHistoryTable;

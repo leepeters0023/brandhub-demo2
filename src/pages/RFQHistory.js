@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
+import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
+import { formatMoney } from "../utility/utilityFunctions";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+import { useReactToPrint } from "react-to-print";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
@@ -94,6 +97,12 @@ const useStyles = makeStyles((theme) => ({
 const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const tableRef = useRef(null);
+
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [currentView, setCurrentView] = useState(filterOption);
+
   const nextLink = useSelector((state) => state.rfqHistory.nextLink);
   const isNextLoading = useSelector((state) => state.rfqHistory.isNextLoading);
 
@@ -107,16 +116,49 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
-  const [currentView, setCurrentView] = useState(filterOption);
-
   const currentUserRole = useSelector((state) => state.user.role);
-  const supplierId = useSelector((state) => state.user.supplierId)
+  const supplierId = useSelector((state) => state.user.supplierId);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
   const error = useSelector((state) => state.rfqHistory.error);
 
   const defaultFilters = filterOptionMap[filterOption];
+
+  const handlePrint = useReactToPrint({
+    content: () => tableRef.current,
+  });
+
+  const handleStatus = useCallback(
+    (status, bids) => {
+      if (currentUserRole === "supplier" && status === "sent") {
+        let currentBid = bids.find((bid) => bid.supplierId === supplierId);
+        if (currentBid.status === "sent") {
+          return "New";
+        } else if (currentBid.status === "accepted") {
+          return "In Progress";
+        } else if (currentBid.status === "declined") {
+          return "Declined";
+        }
+      }
+      if (status === "sent") {
+        let bidCount = 0;
+        bids.forEach((bid) => {
+          if (bid.status === "accepted" || bid.status === "declined") {
+            bidCount += 1;
+          }
+        });
+        if (bidCount !== bids.length) {
+          return `Waiting for Resp. ${bidCount}/${bids.length}`;
+        } else {
+          return "Ready for Review";
+        }
+      } else {
+        return status[0].toUpperCase() + status.slice(1);
+      }
+    },
+    [currentUserRole, supplierId]
+  );
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -130,6 +172,90 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     );
     dispatch(setSorted());
   };
+
+  useEffect(() => {
+    if (
+      (currentRFQs.length > 0 && currentCSV.data.length === 0) ||
+      (currentRFQs.length > 0 &&
+        currentCSV.data.length > 0 &&
+        currentRFQs.length !== currentCSV.data.length) ||
+      (currentRFQs.length > 0 &&
+        currentCSV.data.length > 0 &&
+        currentRFQs[0].itemNumber !== currentCSV.data[0].itemNumber)
+    ) {
+      let csvHeaders = [
+        { label: "RFQ #", key: "rfqNum" },
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Program", key: "program" },
+        { label: "Brand", key: "brand" },
+        { label: "Item Type", key: "itemType" },
+        { label: "Item Description", key: "itemDesc" },
+        { label: "Total Ordered", key: "totalItems" },
+        { label: "Est. Cost", key: "estCost" },
+        { label: "Est. Total", key: "totalEstCost" },
+        { label: "Act. Total", key: "actTotal" },
+        { label: "Due Date", key: "dueDate" },
+        { label: "In Market Date", key: "inMarketDate" },
+        { label: "Status", key: "status" },
+      ];
+
+      let csvSupplierHeaders = [
+        { label: "RFQ #", key: "rfqNum" },
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Item Type", key: "itemType" },
+        { label: "Item Description", key: "itemDesc" },
+        { label: "Total Ordered", key: "totalItems" },
+        { label: "Due Date", key: "dueDate" },
+        { label: "In Market Date", key: "inMarketDate" },
+        { label: "Status", key: "status" },
+        { label: "Bid", key: "bidValue" },
+      ];
+
+      let csvData = [];
+      currentRFQs.forEach((rfq) => {
+        if (currentUserRole !== "supplier") {
+          csvData.push({
+            rfqNum: rfq.id,
+            itemNumber: rfq.itemNumber,
+            program: rfq.program,
+            brand: rfq.brand,
+            itemType: rfq.itemType,
+            itemDesc: rfq.itemDescription,
+            totalItems: rfq.totalItems,
+            estCost: formatMoney(rfq.estCost, true),
+            totalEstCost: formatMoney(rfq.totalEstCost, true),
+            actTotal: rfq.actTotal ? formatMoney(rfq.actTotal, true) : "---",
+            dueDate: rfq.dueDate,
+            inMarketDate: rfq.inMarketDate,
+            status: handleStatus(rfq.status, rfq.bids),
+          });
+        } else {
+          csvData.push({
+            rfqNum: rfq.id,
+            itemNumber: rfq.itemNumber,
+            itemType: rfq.itemType,
+            itemDesc: rfq.itemDescription,
+            totalItems: rfq.totalItems,
+            dueDate: rfq.dueDate,
+            inMarketDate: rfq.inMarketDate,
+            status: handleStatus(rfq.status, rfq.bids),
+            bidValue: rfq.bids.find((bid) => bid.supplierId === supplierId)
+              .price
+              ? formatMoney(
+                  rfq.bids.find((bid) => bid.supplierId === supplierId).price,
+                  true
+                )
+              : "---",
+          });
+        }
+      });
+      setCurrentCSV({
+        data: csvData,
+        headers:
+          currentUserRole !== "supplier" ? csvHeaders : csvSupplierHeaders,
+      });
+    }
+  }, [currentRFQs, currentCSV, currentUserRole, handleStatus, supplierId]);
 
   useInitialFilters(
     "history-rfq",
@@ -169,16 +295,16 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             }}
           >
             <Tooltip title="Print RFQs">
-              <IconButton>
+              <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -205,6 +331,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
           handleSort={handleSort}
           scrollRef={scrollRef}
           supplierId={supplierId}
+          tableRef={tableRef}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>
