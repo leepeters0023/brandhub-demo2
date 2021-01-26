@@ -104,7 +104,7 @@ export const fetchNextFilteredRules = (url) => async (dispatch) => {
       throw rules.error;
     }
     const mappedRules = mapRules(rules.data.rules)
-    dispatch(getRulesSuccess({
+    dispatch(getNextRulesSuccess({
       rules: mappedRules,
       nextLink: rules.data.nextLink ? rules.data.nextLink : null,
     }))

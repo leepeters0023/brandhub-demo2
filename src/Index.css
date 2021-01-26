@@ -9,7 +9,6 @@ html {
 
 #main-container {
   margin-top: 87px;
-  margin-bottom: 25px;
   transition: margin 175ms linear;
   -webkit-overflow-scrolling: touch;
   background-color: #ffffff;

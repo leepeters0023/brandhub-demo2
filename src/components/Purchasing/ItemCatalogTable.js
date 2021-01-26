@@ -152,7 +152,7 @@ const ItemCatalogTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 250px)" }}
+        style={{ maxHeight: "Calc(100vh - 275px)" }}
         ref={scrollRef}
       >
         <Table className={classes.table} aria-label="item-catalog" stickyHeader>

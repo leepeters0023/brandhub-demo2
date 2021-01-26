@@ -63,6 +63,10 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   );
   const error = useSelector((state) => state.complianceItems.error);
 
+  const handlePrint = useReactToPrint({
+    content: () => tableRef.current,
+  });
+
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
       if (scrollRef.current.scrollTop !== 0) {
@@ -88,9 +92,10 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     if (
-      (currentItemRules.length > 0 &&
-      currentCSV.data.length === 0) ||
-      (currentCSV.data.length > 0 && currentItemRules.length > 0 && currentCSV.data.length !== currentItemRules.length)
+      (currentItemRules.length > 0 && currentCSV.data.length === 0) ||
+      (currentCSV.data.length > 0 &&
+        currentItemRules.length > 0 &&
+        currentCSV.data.length !== currentItemRules.length)
     ) {
       let csvHeaders = [
         { label: "Sequence #", key: "itemNumber" },
@@ -100,12 +105,24 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
         { label: "State", key: "state" },
         { label: "Rule Type", key: "ruleType" },
         { label: "Rule Description", key: "ruleDesc" },
-        { label: "Status", key: "status" }
-      ]
+        { label: "Status", key: "status" },
+      ];
       let csvData = [];
-      
+      currentItemRules.forEach((rule) => {
+        csvData.push({
+          itemNumber: rule.itemNumber,
+          program: rule.program,
+          brand: rule.brand,
+          itemType: rule.itemType,
+          state: rule.state,
+          ruleType: rule.ruleType,
+          ruleDesc: rule.ruleDesc,
+          status: rule.status,
+        });
+      });
+      setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
-  })
+  }, [currentItemRules, currentCSV]);
 
   useInitialFilters(
     "compliance-items",
@@ -167,17 +184,17 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                 </Button>
               </>
             )}
-            <Tooltip title="Print Items">
-              <IconButton>
+            <Tooltip title="Print Item Rules">
+              <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -205,6 +222,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
+          tableRef={tableRef}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>
