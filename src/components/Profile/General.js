@@ -2,13 +2,13 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
+import Checkbox from '@material-ui/core/Checkbox';
 import Divider from '@material-ui/core/Divider';
-import Typography from "@material-ui/core/Typography";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
-import Checkbox from '@material-ui/core/Checkbox';
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -21,7 +21,6 @@ const General = () => {
   const classes = useStyles();
 
   const currentUser = useSelector((state) => state.user)
-  console.log(currentUser)
   // const [info, setInfo] = useState({
   //   first: currentUser.firstName,
   //   last: currentUser.lastName,
@@ -56,39 +55,39 @@ const General = () => {
       <Typography className={classes.titleText}>Profile Information</Typography>
       <br />
       <List classes={{ root: classes.root }}>
-      <ListItem disableGutters>
-        <Typography>First Name: {currentUser.firstName}</Typography>
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-      <Typography>Last Name: {currentUser.lastName}</Typography>
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-        <Typography>Email: {currentUser.email}</Typography>
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-        <Typography>Role: {currentUser.role}</Typography>
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-        <Typography>Territory: {currentUser.currentTerritory}</Typography>
-         {/* {currentUser.territories.map((item) => item.type ===item.name)}  or looking for territory common name? */}
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-        <Typography>State:{currentUser.currentState}</Typography>
-      </ListItem>
-      <Divider />
-      <ListItem disableGutters>
-      <div style={{ display: "flex", flexDirection: "row",}}>
-        <Typography>On Premise:<Checkbox disabled checked={currentUser.isOnPremise ? true : false} />
-        </Typography>
-        <Typography>Retail:<Checkbox disabled checked={currentUser.isRetail ? true : false} />
-        </Typography>
-      </div>
-      </ListItem>
+        <ListItem disableGutters>
+          <Typography>First Name: {currentUser.firstName}</Typography>
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <Typography>Last Name: {currentUser.lastName}</Typography>
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <Typography>Email: {currentUser.email}</Typography>
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <Typography>Role: {currentUser.role}</Typography>
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <Typography>Territory: {currentUser.currentTerritory}</Typography>
+          {/* {currentUser.territories.map((item) => item.type ===item.name)}  or looking for territory common name? */}
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <Typography>State:{currentUser.currentState}</Typography>
+        </ListItem>
+        <Divider />
+        <ListItem disableGutters>
+          <div style={{ display: "flex", flexDirection: "row", }}>
+            <Typography>On Premise:<Checkbox disabled checked={currentUser.isOnPremise ? true : false} />
+            </Typography>
+            <Typography>Retail:<Checkbox disabled checked={currentUser.isRetail ? true : false} />
+            </Typography>
+          </div>
+        </ListItem>
       </List>
       {/* <Button
           className={classes.largeButton}
