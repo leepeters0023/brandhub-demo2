@@ -42,6 +42,27 @@ export const fetchAllRules = async (filterObject) => {
 export const approveOrDenyItem = async (token, itemStatus) => {
   const response = { status: "", error: null };
   await (axios)
+    .post(`/public/triggered-rules/:${token}/${itemStatus === "approved" ? "approve" : "deny"}`)
+    .then((res) => {
+      response.status = itemStatus;
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response
+};
+
+export const approveItem = async (token, itemStatus) => {
+  const response = { status: "", error: null };
+  await (axios)
     .post("/public/update-status",
       {
         token: token,
