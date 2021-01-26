@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -16,7 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
@@ -55,6 +56,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextLoading = useSelector(
     (state) => state.complianceItems.isNextLoading
   );
+  const error = useSelector((state) => state.complianceItems.error);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -88,6 +90,12 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     currentUserRole
   );
 
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
+
   return (
     <>
       <Container className={classes.mainWrapper}>
@@ -104,35 +112,35 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           >
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
-                <>
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                    disabled={!itemSelected}
-                    style={{ marginRight: "20px" }}
-                    onClick={() => {
-                      //TODO create manual approval function
-                      //navigate("/purchasing/purchaseOrder#new");
-                    }}
-                  >
-                    APPROVE RULE
+              <>
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={!itemSelected}
+                  style={{ marginRight: "20px" }}
+                  onClick={() => {
+                    //TODO create manual approval function
+                    //navigate("/purchasing/purchaseOrder#new");
+                  }}
+                >
+                  APPROVE RULE
                 </Button>
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                    disabled={!itemSelected}
-                    style={{ marginRight: "20px" }}
-                    onClick={() => {
-                      //TODO create override function
-                      //navigate("/purchasing/purchaseOrder#new");
-                    }}
-                  >
-                    OVERRIDE RULE
+                <Button
+                  className={classes.largeButton}
+                  variant="contained"
+                  color="secondary"
+                  disabled={!itemSelected}
+                  style={{ marginRight: "20px" }}
+                  onClick={() => {
+                    //TODO create override function
+                    //navigate("/purchasing/purchaseOrder#new");
+                  }}
+                >
+                  OVERRIDE RULE
                 </Button>
-                </>
-              )}
+              </>
+            )}
             <Tooltip title="Print Items">
               <IconButton>
                 <PrintIcon color="secondary" />

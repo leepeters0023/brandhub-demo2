@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -124,6 +125,7 @@ const PurchaseOrderHistory = ({
     (state) => state.purchaseOrderHistory.isLoading
   );
   const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos);
+  const error = useSelector((state) => state.purchaseOrderHistory.error);
   const defaultFilters = filterOptionMap[filterOption];
 
   const handleSort = (sortObject) => {
@@ -158,6 +160,12 @@ const PurchaseOrderHistory = ({
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>

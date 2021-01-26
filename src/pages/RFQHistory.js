@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -113,7 +114,10 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
+  const error = useSelector((state) => state.rfqHistory.error);
+
   const defaultFilters = filterOptionMap[filterOption];
+
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
     dispatch(
@@ -145,6 +149,12 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>

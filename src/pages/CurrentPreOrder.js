@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -143,6 +144,8 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     (state) => state.preOrderDetails.preOrderTotalMod
   );
   const setTotal = useSelector((state) => state.orderSet.totalEstItemCost);
+  const error = useSelector((state) => state.orderSet.error);
+  const detailError = useSelector((state) => state.preOrderDetails.error);
 
   const handleModalClose = () => {
     handlePreviewModal(false);
@@ -259,12 +262,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
+
   if (userPrograms.length === 0) {
-    return (
-      <>
-        
-      </>
-    )
+    return <></>;
   }
 
   if (isLoading) {
@@ -323,7 +328,22 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                 width: "100%",
               }}
             >
-              <PreOrderSummary />
+              {!detailError ? (
+                <PreOrderSummary />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography className={classes.headerText}>
+                    Error: Cannont display program details at this time...
+                  </Typography>
+                </div>
+              )}
               <br />
               <div
                 style={{
@@ -411,7 +431,13 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                   onClick={() => {
                     setSwitched(false);
                     setOverviewVisible(true);
-                    dispatch(fetchProgramOrders(program, currentUserId, currentTerritory))
+                    dispatch(
+                      fetchProgramOrders(
+                        program,
+                        currentUserId,
+                        currentTerritory
+                      )
+                    );
                   }}
                   disabled={
                     currentItems.length === 0 ||

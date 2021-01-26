@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -16,7 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -45,6 +46,7 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextLoading = useSelector(
     (state) => state.complianceRules.isNextLoading
   );
+  const error = useSelector((state) => state.complianceRules.error);
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -77,6 +79,12 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>

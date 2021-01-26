@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
@@ -96,6 +97,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
   const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
+  const error = useSelector((state) => state.items.error);
 
   const defaultFilters =
     catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
@@ -167,6 +169,12 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       dispatch(setSorted());
     }
   }, [currentMarket, currentMarketBool, dispatch]);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>

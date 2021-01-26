@@ -310,7 +310,7 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         itemNumber: item.item["item-number"],
       }));
     }
-    if (type === "inStock" && order.data[0].orders.length > 0) {
+    if (type === "inStock" && order.data.length > 0 && order.data[0].orders.length > 0) {
       currentWarehouse = order.data[0].orders[0].warehouse;
     }
     dispatch(

@@ -59,7 +59,6 @@ import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
 import ComplianceRules from "./pages/ComplianceRules";
-import Coupons from "./pages/Coupons";
 import CouponsModal from "./components/Coupons/CouponModal";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
@@ -572,16 +571,6 @@ const App = () => {
               />,
               "/rollup/detail",
               ["field2", "purchaser", "super"],
-              currentRole,
-              territories
-            )}
-            {handleAuth(
-              <Coupons
-                path="/coupons"
-                handleFiltersClosed={handleFiltersClosed}
-              />,
-              "/coupons",
-              ["field1", "field2", "purchaser", "super"],
               currentRole,
               territories
             )}

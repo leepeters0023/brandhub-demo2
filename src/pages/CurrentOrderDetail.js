@@ -102,6 +102,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
   const currentFilters = useSelector((state) => state.filters);
+  const error = useSelector((state) => state.orderSet.error);
 
   const handleModalOpen = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -210,6 +211,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops")
+    }
+  }, [error])
 
   if (isLoading) {
     return <Loading />;

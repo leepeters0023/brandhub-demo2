@@ -4,6 +4,7 @@ import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
+import { navigate } from "@reach/router";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useReactToPrint } from "react-to-print";
@@ -26,7 +27,7 @@ import RollupOverviewByItemTable from "../components/OrderManagement/RollupOverv
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import FormControl from "@material-ui/core/FormControl";
@@ -117,6 +118,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const error = useSelector((state) => state.orderSetHistory.error);
 
   const handlePrintOrderTable = useReactToPrint({
     content: () => orderRef.current,
@@ -250,6 +252,12 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     quarterlyRollupItems,
   ]);
 
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
+
   return (
     <>
       <Container className={classes.mainWrapper}>
@@ -283,11 +291,12 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                   style={{
                     marginTop: "10px",
                     marginBottom: "0px",
-                    width: `Calc(${queryTotal && orderCount
-                      ? queryTotal.toString().length +
-                      orderCount.toString().length
-                      : 0
-                      }*15px + 50px)`,
+                    width: `Calc(${
+                      queryTotal && orderCount
+                        ? queryTotal.toString().length +
+                          orderCount.toString().length
+                        : 0
+                    }*15px + 50px)`,
                     minWidth: "100px",
                     readonly: "readonly",
                     pointerEvents: "none",

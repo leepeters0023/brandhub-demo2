@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "@reach/router";
 //import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
+import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -44,6 +45,7 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   );
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
+  const error = useSelector((state) => state.complianceItems.error);
 
   const handleOpenConfirm = useCallback(() => {
     setConfirmOpen(true);
@@ -71,6 +73,12 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   if (isLoading) {
     return <Loading />;

@@ -6,6 +6,7 @@ import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { formatMoney } from "../utility/utilityFunctions";
 import { CSVLink } from "react-csv";
+import { navigate } from "@reach/router";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,7 +30,7 @@ import TrackingModal from "../components/Utility/TrackingModal";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import Tooltip from "@material-ui/core/Tooltip";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
@@ -132,6 +133,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
   );
+  const error = useSelector((state) => state.orderHistory.error);
 
   const handlePrintOrderTable = useReactToPrint({
     content: () => orderRef.current,
@@ -167,7 +169,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     let item = currentOrderItems.find((item) => item.itemNumber === itemNumber);
     setCurrentItem(item);
     handlePreviewModal(true);
-  }
+  };
 
   const handleModalClose = () => {
     handlePreviewModal(false);
@@ -296,6 +298,12 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     currentOrders,
     currentOrderItems,
   ]);
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>

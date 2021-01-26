@@ -12,6 +12,7 @@ const AuthOLanding = ({ code }) => {
   const link = useSelector((state) => state.user.redirectLink)
   const currentRole = useSelector((state) => state.user.role);
   const isLinkLoading = useSelector((state) => state.user.authIsLoading);
+  const error = useSelector((state) => state.user.error);
   
   useEffect(() => {
     if (!currentRole && !link && !code && !isLinkLoading) {
@@ -37,6 +38,12 @@ const AuthOLanding = ({ code }) => {
       navigate("/dashboard");
     }
   }, [currentRole])
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops")
+    }
+  }, [error])
 
   return (
     <Loading />

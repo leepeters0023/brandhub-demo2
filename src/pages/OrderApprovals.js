@@ -1,8 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
+import { navigate } from "@reach/router";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -54,9 +55,9 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
 
   const [selected, setSelected] = useCallback(useState([]));
 
-  const nextLink = useSelector((state) => state.orderHistory.nextLink);
+  const nextLink = useSelector((state) => state.orderSetHistory.nextLink);
   const isNextLoading = useSelector(
-    (state) => state.orderHistory.isNextLoading
+    (state) => state.orderSetHistory.isNextLoading
   );
   const allFilters = useSelector((state) => state.filters);
 
@@ -76,6 +77,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   const currentOrders = useSelector((state) => state.orderSetHistory.orderSets);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  const error = useSelector((state) => state.orderSetHistory.error);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -107,6 +109,12 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
+
+  useEffect(() => {
+    if (error) {
+      navigate("/whoops");
+    }
+  }, [error]);
 
   return (
     <>
