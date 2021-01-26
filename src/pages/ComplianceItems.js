@@ -1,10 +1,12 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+import { useReactToPrint } from "react-to-print";
 
 import { fetchNextFilteredTriggeredRules } from "../redux/slices/complianceItemsSlice";
 
@@ -45,7 +47,10 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const tableRef = useRef(null);
+
   const [itemSelected, setItemSelected] = useCallback(useState(false));
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
@@ -57,6 +62,10 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     (state) => state.complianceItems.isNextLoading
   );
   const error = useSelector((state) => state.complianceItems.error);
+
+  const handlePrint = useReactToPrint({
+    content: () => tableRef.current,
+  });
 
   const handleBottomScroll = () => {
     if (nextLink && !isNextLoading) {
@@ -80,6 +89,43 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     );
     dispatch(setSorted());
   };
+
+  useEffect(() => {
+    if (
+      (currentItemRules.length > 0 && currentCSV.data.length === 0) ||
+      (currentCSV.data.length > 0 &&
+        currentItemRules.length > 0 &&
+        currentCSV.data.length !== currentItemRules.length) ||
+      (currentCSV.data.length > 0 &&
+        currentItemRules.length > 0 &&
+        currentCSV.data[0].itemNumber !== currentItemRules[0].itemNumber)
+    ) {
+      let csvHeaders = [
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Program", key: "program" },
+        { label: "Brand", key: "brand" },
+        { label: "Item Type", key: "itemType" },
+        { label: "State", key: "state" },
+        { label: "Rule Type", key: "ruleType" },
+        { label: "Rule Description", key: "ruleDesc" },
+        { label: "Status", key: "status" },
+      ];
+      let csvData = [];
+      currentItemRules.forEach((rule) => {
+        csvData.push({
+          itemNumber: rule.itemNumber,
+          program: rule.program,
+          brand: rule.brand,
+          itemType: rule.itemType,
+          state: rule.state,
+          ruleType: rule.ruleType,
+          ruleDesc: rule.ruleDesc,
+          status: rule.status,
+        });
+      });
+      setCurrentCSV({ data: csvData, headers: csvHeaders });
+    }
+  }, [currentItemRules, currentCSV]);
 
   useInitialFilters(
     "compliance-items",
@@ -141,17 +187,17 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                 </Button>
               </>
             )}
-            <Tooltip title="Print Items">
-              <IconButton>
+            <Tooltip title="Print Item Rules">
+              <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -179,6 +225,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           scrollRef={scrollRef}
           itemSelected={itemSelected}
           setItemSelected={setItemSelected}
+          tableRef={tableRef}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>

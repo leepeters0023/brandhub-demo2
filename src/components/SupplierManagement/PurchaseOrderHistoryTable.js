@@ -48,7 +48,7 @@ const headCells = [
     label: "In Market Date",
     sort: false,
   },
-  { id: "poCreator", disablePadding: false, label: "PO Creator", sort: true },
+  { id: "poCreator", disablePadding: false, label: "Purchaser", sort: true },
   { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
 ];
 
@@ -145,6 +145,7 @@ const PurchaseOrderHistoryTable = ({
   posLoading,
   handleSort,
   scrollRef,
+  tableRef,
 }) => {
   const classes = useStyles();
   const role = useSelector((state) => state.user.role);
@@ -171,6 +172,7 @@ const PurchaseOrderHistoryTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={tableRef}
         >
           <EnhancedTableHead
             classes={classes}
@@ -274,6 +276,7 @@ PurchaseOrderHistoryTable.propTypes = {
   handleSort: PropTypes.func.isRequired,
   posLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
+  tableRef: PropTypes.any,
 };
 
 export default PurchaseOrderHistoryTable;

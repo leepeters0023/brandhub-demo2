@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "@reach/router";
-//import { CSVLink } from "react-csv";
+import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
+import { useReactToPrint } from "react-to-print";
 
 import { setRetain } from "../redux/slices/filterSlice";
 import { fetchTriggeredRulesByOrders } from "../redux/slices/complianceItemsSlice";
@@ -35,7 +36,10 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const tableRef = useRef(null);
+
   const [confirmOpen, setConfirmOpen] = useCallback(useState(false));
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const currentOrderItems = useSelector(
     (state) => state.complianceItems.pendingOrderItems
@@ -47,6 +51,10 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
   const error = useSelector((state) => state.complianceItems.error);
 
+  const handlePrint = useReactToPrint({
+    content: () => tableRef.current,
+  });
+
   const handleOpenConfirm = useCallback(() => {
     setConfirmOpen(true);
   }, [setConfirmOpen]);
@@ -56,11 +64,48 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   }, [setConfirmOpen]);
 
   const handleCancelOrders = useCallback(() => {
-    dispatch(complianceCancelOrderItems(currentSelectedItems))
+    dispatch(complianceCancelOrderItems(currentSelectedItems));
     setConfirmOpen(false);
   }, [setConfirmOpen, currentSelectedItems, dispatch]);
 
   useRetainFiltersOnPopstate("/purchasing/poRollup", dispatch);
+
+  useEffect(() => {
+    if (
+      currentOrderItems.length > 0 &&
+      currentCSV.data.length === 0 &&
+      orderIds.split(",").length === currentOrderItems.length
+    ) {
+      let csvHeaders = [
+        { label: "State", key: "state" },
+        { label: "Person", key: "user" },
+        { label: "Distributor", key: "distributor" },
+        { label: "Total Items", key: "totalItems" },
+        { label: "Rule", key: "rule" },
+      ];
+      let csvData = [];
+      currentOrderItems.forEach((item) => {
+        csvData.push({
+          state: item.state,
+          user: item.user,
+          distributor: item.distributor,
+          totalItems: item.isComplianceCanceled ? "Canceled" : item.totalItems,
+          rule:
+            item.triggeredRules.length > 0 &&
+            item.triggeredPriorApprovalRules.length > 0
+              ? item.triggerdRules.join(", ") +
+                ", " +
+                item.triggeredPriorApprovalRules.join(", ")
+              : item.triggeredRules.length > 0
+              ? item.triggeredRules.join(", ")
+              : item.triggeredPriorApprovalRules.length > 0
+              ? item.triggeredPriorApprovalRules.join(", ")
+              : "---",
+        });
+      });
+      setCurrentCSV({ data: csvData, headers: csvHeaders });
+    }
+  }, [currentOrderItems, currentCSV.data, orderIds]);
 
   useEffect(() => {
     if (currentUserRole.length > 0) {
@@ -134,15 +179,21 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
             >
               CANCEL ORDER
             </Button>
-            <Tooltip title="Print Order">
-              <IconButton>
+            <Tooltip title="Print Pending Compliance Items">
+              <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
+              <CSVLink
+                data={currentCSV.data}
+                headers={currentCSV.headers}
+                style={{ textDecoration: "none" }}
+              >
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -152,6 +203,7 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
           <PendingComplianceTable
             items={currentOrderItems}
             itemsLoading={isLoading}
+            tableRef={tableRef}
           />
         )}
         <br />

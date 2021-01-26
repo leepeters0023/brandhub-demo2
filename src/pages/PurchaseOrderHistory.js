@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
+import { formatMoney } from "../utility/utilityFunctions";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInitialFilters } from "../hooks/UtilityHooks";
+import { useReactToPrint } from "react-to-print";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 import { fetchNextFilteredPOHistory } from "../redux/slices/purchaseOrderHistorySlice";
@@ -104,6 +107,12 @@ const PurchaseOrderHistory = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const tableRef = useRef(null);
+
+  const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
+  const [currentView, setCurrentView] = useState(filterOption);
+
   const nextLink = useSelector((state) => state.rfqHistory.nextLink);
   const isNextLoading = useSelector((state) => state.rfqHistory.isNextLoading);
 
@@ -117,8 +126,6 @@ const PurchaseOrderHistory = ({
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
 
-  const [currentView, setCurrentView] = useState(filterOption);
-
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isPOsLoading = useSelector(
@@ -127,6 +134,10 @@ const PurchaseOrderHistory = ({
   const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos);
   const error = useSelector((state) => state.purchaseOrderHistory.error);
   const defaultFilters = filterOptionMap[filterOption];
+
+  const handlePrint = useReactToPrint({
+    content: () => tableRef.current,
+  });
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -140,6 +151,88 @@ const PurchaseOrderHistory = ({
     );
     dispatch(setSorted());
   };
+
+  useEffect(() => {
+    if (
+      (currentPOs.length > 0 && currentCSV.data.length === 0) ||
+      (currentPOs.length > 0 &&
+        currentCSV.data.length > 0 &&
+        currentPOs.length !== currentCSV.data.length) ||
+      (currentPOs.length > 0 &&
+        currentCSV.data.length > 0 &&
+        currentPOs[0].itemNumber !== currentCSV.data[0].itemNumber)
+    ) {
+      let csvHeaders = [
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Brand", key: "brand" },
+        { label: "Project #", key: "projectNum" },
+        { label: "Item Description", key: "itemDesc" },
+        { label: "Supplier", key: "supplier" },
+        { label: "Quantity", key: "quantity" },
+        { label: "Est. Cost/Unit", key: "estCost" },
+        { label: "Act. Cost/Unit", key: "actCost" },
+        { label: "Status", key: "status" },
+        { label: "Submitted Date", key: "submittedDate" },
+        { label: "In Market Date", key: "inMarketDate" },
+        { label: "Purchaser", key: "poCreator" },
+        { label: "Allocated", key: "allocated" },
+      ];
+
+      let csvSupplierHeaders = [
+        { label: "Sequence #", key: "itemNumber" },
+        { label: "Brand", key: "brand" },
+        { label: "Project #", key: "projectNum" },
+        { label: "Item Description", key: "itemDesc" },
+        { label: "Quantity", key: "quantity" },
+        { label: "Act. Cost/Unit", key: "actCost" },
+        { label: "Status", key: "status" },
+        { label: "Submitted Date", key: "submittedDate" },
+        { label: "In Market Date", key: "inMarketDate" },
+        { label: "Purchaser", key: "poCreator" },
+        { label: "Allocated", key: "allocated" },
+      ];
+
+      let csvData = [];
+      currentPOs.forEach((po) => {
+        if (currentUserRole !== "supplier") {
+          csvData.push({
+            itemNumber: po.itemNumber,
+            brand: po.brand.join(", "),
+            projectNum: po.projectNum,
+            itemDesc: po.itemDesc,
+            supplier: po.supplier,
+            quantity: po.totalItems,
+            estCost: formatMoney(po.estCost, true),
+            actCost: formatMoney(po.actCost, true),
+            status: po.status[0].toUpperCase() + po.status.slice(1),
+            submittedDate: po.submittedDate,
+            inMarketDate: po.dueDate,
+            poCreator: po.purchasedBy,
+            allocated: po.allocated,
+          });
+        } else {
+          csvData.push({
+            itemNumber: po.itemNumber,
+            brand: po.brand.join(", "),
+            projectNum: po.projectNum,
+            itemDesc: po.itemDesc,
+            quantity: po.totalItems,
+            actCost: formatMoney(po.actCost, true),
+            status: po.status[0].toUpperCase() + po.status.slice(1),
+            submittedDate: po.submittedDate,
+            inMarketDate: po.dueDate,
+            poCreator: po.purchasedBy,
+            allocated: po.allocated,
+          });
+        }
+      });
+      setCurrentCSV({
+        data: csvData,
+        headers:
+          currentUserRole !== "supplier" ? csvHeaders : csvSupplierHeaders,
+      });
+    }
+  }, [currentPOs, currentCSV, currentUserRole]);
 
   useInitialFilters(
     "history-po",
@@ -182,16 +275,16 @@ const PurchaseOrderHistory = ({
             }}
           >
             <Tooltip title="Print POs">
-              <IconButton>
+              <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
             <Tooltip title="Export CSV">
-              {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
-              <IconButton>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-              {/* </CSVLink> */}
+              <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
+                <IconButton>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </CSVLink>
             </Tooltip>
           </div>
         </div>
@@ -217,6 +310,7 @@ const PurchaseOrderHistory = ({
           posLoading={isPOsLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
+          tableRef={tableRef}
         />
         {isNextLoading && (
           <div style={{ width: "100%" }}>

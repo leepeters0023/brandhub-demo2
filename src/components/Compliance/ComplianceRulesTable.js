@@ -118,6 +118,7 @@ const ComplianceRulesTable = ({
   rulesLoading,
   handleSort,
   scrollRef,
+  tableRef,
 }) => {
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
@@ -141,6 +142,7 @@ const ComplianceRulesTable = ({
           stickyHeader
           className={classes.table}
           style={{ minWidth: "1325px" }}
+          ref={tableRef}
         >
           <EnhancedTableHead
             classes={classes}
@@ -194,6 +196,7 @@ ComplianceRulesTable.propTypes = {
   handleSort: PropTypes.func.isRequired,
   rulesLoading: PropTypes.bool.isRequired,
   scrollRef: PropTypes.any,
+  tableRef: PropTypes.any,
 };
 
 export default ComplianceRulesTable;
