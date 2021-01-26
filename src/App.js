@@ -433,12 +433,12 @@ const App = () => {
             )}
             {handleAuth(
               <PlaceInStockOrder
-                path="/orders/items/inStock"
+                path="/orders/items/inventory"
                 userType={currentRole}
                 handleFilterDrawer={setFiltersOpen}
                 filtersOpen={filtersOpen}
               />,
-              "/orders/items/inStock",
+              "/orders/items/inventory",
               ["field1", "field2", "purchaser", "super", "read-only"],
               currentRole,
               territories

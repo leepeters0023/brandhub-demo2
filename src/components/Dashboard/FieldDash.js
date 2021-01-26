@@ -74,11 +74,11 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_On_Demand_Order_zoymv2.png",
     },
     {
-      titleText: "In-Stock Order",
+      titleText: "Inventory Order",
       ariaOwnsState: inStockOpen,
       ariaOwnsText: "in-stock",
       id: "in-stock-parent",
-      link: "/orders/items/inStock",
+      link: "/orders/items/inventory",
       info:
         "Place orders for items that are currently available in our inventory",
       icon:

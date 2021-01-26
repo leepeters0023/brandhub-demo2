@@ -229,7 +229,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           <br />
           {orderId === "inStock" && (
             <Typography className={classes.headerText}>
-              You currently do not have an active In-Stock order.
+              You currently do not have an active Inventory order.
             </Typography>
           )}
           {orderId === "onDemand" && (
@@ -246,7 +246,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             component={Link}
             to={
               orderId === "inStock"
-                ? "/orders/items/inStock"
+                ? "/orders/items/inventory"
                 : "/orders/items/onDemand"
             }
           >
@@ -299,7 +299,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
             (orderStatus === "inactive" || orderStatus === "in-progress") && (
               <>
                 <Typography className={classes.titleText} variant="h5">
-                  Current In-Stock Order
+                  Current Inventory Order
                 </Typography>
                 <div className={classes.configButtons}>
                   <div className={classes.innerConfigDiv}>
@@ -331,7 +331,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                         />
                       }
                       component={Link}
-                      to={"/orders/items/inStock"}
+                      to={"/orders/items/inventory"}
                     >
                       ADD ITEMS
                     </Button>
@@ -426,16 +426,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 {decodeURIComponent(window.location.hash.slice(1)).includes(
                   "approval"
                 ) && (
-                  <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton
-                      component={Link}
-                      to="/orders/approvals"
-                      onClick={() => dispatch(setRetain({ value: true }))}
-                    >
-                      <ArrowBackIcon fontSize="large" color="secondary" />
-                    </IconButton>
-                  </Tooltip>
-                )}
+                    <Tooltip title="Back to Approvals" placement="bottom-start">
+                      <IconButton
+                        component={Link}
+                        to="/orders/approvals"
+                        onClick={() => dispatch(setRetain({ value: true }))}
+                      >
+                        <ArrowBackIcon fontSize="large" color="secondary" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
@@ -460,25 +460,25 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {overviewVisible ||
-        ((orderStatus === "approved" || orderStatus === "submitted") &&
-          (currentUserRole === "field1" ||
-            (!window.location.hash.includes("approval") &&
-              !window.location.href.includes("rollup")))) ? (
-          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-        ) : (
-          <OrderSetTable
-            currentProgram={undefined}
-            handleModalOpen={handleModalOpen}
-            handleOpenConfirm={handleOpenConfirm}
-            handleRemoveOrder={handleDeleteOrderModal}
-            isLoading={isLoading}
-            orderId={currentOrderId}
-            orderStatus={orderStatus}
-            currentItems={currentItems}
-            orders={orders}
-            orderType={currentOrderType}
-          />
-        )}
+          ((orderStatus === "approved" || orderStatus === "submitted") &&
+            (currentUserRole === "field1" ||
+              (!window.location.hash.includes("approval") &&
+                !window.location.href.includes("rollup")))) ? (
+            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+          ) : (
+            <OrderSetTable
+              currentProgram={undefined}
+              handleModalOpen={handleModalOpen}
+              handleOpenConfirm={handleOpenConfirm}
+              handleRemoveOrder={handleDeleteOrderModal}
+              isLoading={isLoading}
+              orderId={currentOrderId}
+              orderStatus={orderStatus}
+              currentItems={currentItems}
+              orders={orders}
+              orderType={currentOrderType}
+            />
+          )}
         <br />
         <br />
         <div className={classes.orderControl}>
@@ -491,7 +491,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 variant="contained"
                 onClick={() => {
                   if (currentOrderType === "in-stock") {
-                    navigate("/orders/items/inStock");
+                    navigate("/orders/items/inventory");
                   } else if (currentOrderType === "on-demand") {
                     navigate("/orders/items/onDemand");
                   }
