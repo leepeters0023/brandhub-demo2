@@ -87,7 +87,10 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
       (currentRules.length > 0 && currentCSV.data.length === 0) ||
       (currentCSV.data.length > 0 &&
         currentRules.length > 0 &&
-        currentCSV.data.length !== currentRules.length)
+        currentCSV.data.length !== currentRules.length) ||
+      (currentCSV.data.length > 0 &&
+        currentRules.length > 0 &&
+        currentCSV.data[0].ruleType !== currentRules[0].ruleType)
     ) {
       let csvHeaders = [
         { label: "Rule Type", key: "ruleType" },

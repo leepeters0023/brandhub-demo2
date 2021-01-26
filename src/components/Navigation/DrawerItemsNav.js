@@ -115,14 +115,14 @@ const DrawerItemsNav = ({ role, classes }) => {
               link: "/compliance/rules",
               primary: "General Rules",
             },
-            {
-              link:
-                role === "compliance" || role === "super"
-                  ? "/compliance/contacts"
-                  : null,
-              primary:
-                role === "compliance" || role === "super" ? "Contacts" : null,
-            },
+            // {
+            //   link:
+            //     role === "compliance" || role === "super"
+            //       ? "/compliance/contacts"
+            //       : null,
+            //   primary:
+            //     role === "compliance" || role === "super" ? "Contacts" : null,
+            // },
           ]}
         />
       </Menu>

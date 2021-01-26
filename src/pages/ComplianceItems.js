@@ -95,7 +95,10 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
       (currentItemRules.length > 0 && currentCSV.data.length === 0) ||
       (currentCSV.data.length > 0 &&
         currentItemRules.length > 0 &&
-        currentCSV.data.length !== currentItemRules.length)
+        currentCSV.data.length !== currentItemRules.length) ||
+      (currentCSV.data.length > 0 &&
+        currentItemRules.length > 0 &&
+        currentCSV.data[0].itemNumber !== currentItemRules[0].itemNumber)
     ) {
       let csvHeaders = [
         { label: "Sequence #", key: "itemNumber" },
