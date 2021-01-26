@@ -78,7 +78,7 @@ const General = () => {
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography>State:{currentUser.states /* will be an array? */}</Typography>
+          <Typography>State:{currentUser.states /* will be an array? state.user.states -> state.code) */}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
