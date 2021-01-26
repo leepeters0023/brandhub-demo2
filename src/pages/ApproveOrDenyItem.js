@@ -24,23 +24,17 @@ const useStyles = makeStyles((theme) => ({
 const ApproveOrDenyItem = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [item, setItem] = useState("")
-    const isApprovedOrDenied = useSelector((state) => state.itemApprovedOrDenied.status);
+    const [itemNumber, setItemNumber] = useState("");
+    const [token, setToken] = useState("");
+    const status = useSelector((state) => state.itemApprovedOrDenied.status);
     const isLoading = useSelector((state) => state.itemApprovedOrDenied.isLoading);
-    const isError = useSelector((state) => state.itemApprovedOrDenied.error);
 
     useEffect(() => {
-        let url = window.location.pathname
-        let hash;
-        let itemObj = {};
-        let hashes = url.slice(url.indexOf('?') + 1).split('&');
-        for (let i = 0; i < hashes.length; i++) {
-            hash = hashes[i].split('=');
-            itemObj[hash[0]] = hash[1];
-        }
-        setItem(itemObj)
+        const params = new URLSearchParams(document.location.search.substring(1));
+        setToken(params.get("token"));
+        setItemNumber(params.get("item_number"));
     }, [])
-
+    
     return (
         <>
             <Container className={classes.mainWrapper}>
@@ -61,7 +55,7 @@ const ApproveOrDenyItem = () => {
                     }}
                 >
                     <Typography className={classes.titleText} variant="h5">
-                        Please approve or deny item: {item.item_id}
+                        Please approve or deny item: {itemNumber}
                     </Typography>
                     <br />
                         <div
@@ -71,20 +65,20 @@ const ApproveOrDenyItem = () => {
                                 justifyContent: "center",
                             }}>
                             <Button
-                                disabled={(!!isApprovedOrDenied || !!isError) ? true : false}
+                                disabled={(!!status) ? true : false}
                                 className={classes.largeButton}
                                 style={{ width: "150px", margin: "10px" }}
                                 variant="contained"
-                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(item.token, "approved"))}
+                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "approved"))}
                             >
                                 Approve
                                 </Button>
                             <Button
-                                disabled={(!!isApprovedOrDenied || !!isError) ? true : false}
+                                disabled={(!!status) ? true : false}
                                 className={classes.largeButton}
                                 style={{ width: "150px", margin: "10px" }}
                                 variant="contained"
-                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(item.token, "denied"))}
+                                onClick={() => dispatch(fetchApproveOrDenyItemSlice(token, "denied"))}
                             >
                                 Deny
                                 </Button>
@@ -92,16 +86,16 @@ const ApproveOrDenyItem = () => {
                     <br></br>
                     {isLoading && (<CircularProgress />)}
                     <br></br>
-                    {isError && (
+                    {status === "error" && (
                         <Typography className={classes.headerText} variant="h5">
                             There was an issue with your request, please contact us at: help@readytoactivate.com
                         </Typography>
                     )}
 
-                    {(isApprovedOrDenied === "approved" || isApprovedOrDenied === "denied") && (
+                    {(status === "approved" || status === "denied") && (
                         <>
                             <Typography className={classes.titleText} variant="h5">
-                                You have {isApprovedOrDenied === "approved" ? "approved" : "denied"} item: {item.item_id}. No further action is needed.
+                                You have {status === "approved" ? "approved" : "denied"} item: {itemNumber}. No further action is needed.
                                 </Typography>
                             <Typography className={classes.headerText} variant="h5">
                                 You may close this window.
