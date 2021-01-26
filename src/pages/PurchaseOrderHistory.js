@@ -288,23 +288,25 @@ const PurchaseOrderHistory = ({
             </Tooltip>
           </div>
         </div>
-        <div
-          className={classes.showHideFilters}
-          onClick={() => {
-            handleFilterDrawer(!filtersOpen);
-          }}
-        >
-          <TuneIcon fontSize="small" color="secondary" />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            style={{ margin: "10px 10px" }}
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+          <div
+            className={classes.showHideFilters}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
           >
-            {filtersOpen ? "Hide Filters" : "Show Filters"}
-          </Typography>
+            <TuneIcon fontSize="small" color="secondary" />
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ margin: "10px 10px" }}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Typography>
+          </div>
           <FilterChipList classes={classes} />
+          <br />
         </div>
-        <br />
         <PurchaseOrderHistoryTable
           pos={currentPOs}
           posLoading={isPOsLoading}

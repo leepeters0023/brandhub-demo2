@@ -247,6 +247,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
           </div>
         </div>
         <>
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
           <div
             className={classes.showHideFilters}
             onClick={() => {
@@ -261,8 +262,10 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
             >
               {filtersOpen ? "Hide Filters" : "Show Filters"}
             </Typography>
-            <FilterChipList classes={classes} />
           </div>
+          <FilterChipList classes={classes} />
+          <br />
+        </div>
           <OrderItemViewControl
             type={"catalog"}
             currentView={currentView}

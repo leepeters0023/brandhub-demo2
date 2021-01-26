@@ -197,51 +197,51 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
       dataObject.data =
         dataObject.group === "order"
           ? currentPreOrders.map((order) => ({
-              user: order.userName,
-              program: order.program.join(", "),
-              brand: order.brand.join(", "),
-              state: order.state,
-              totalEstCost: formatMoney(order.totalEstCost, false),
-              shippedBudget: /*TODO*/ "---",
-              remainingBudget: order.budget,
-              orderDate:
-                order.orderDate !== "---"
-                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
-                  : order.orderDate,
-              dueDate:
-                order.dueDate !== "---"
-                  ? format(new Date(order.dueDate), "MM/dd/yyyy")
-                  : order.dueDate,
-              status: statusConverter(order.status),
-            }))
+            user: order.userName,
+            program: order.program.join(", "),
+            brand: order.brand.join(", "),
+            state: order.state,
+            totalEstCost: formatMoney(order.totalEstCost, false),
+            shippedBudget: /*TODO*/ "---",
+            remainingBudget: order.budget,
+            orderDate:
+              order.orderDate !== "---"
+                ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                : order.orderDate,
+            dueDate:
+              order.dueDate !== "---"
+                ? format(new Date(order.dueDate), "MM/dd/yyyy")
+                : order.dueDate,
+            status: statusConverter(order.status),
+          }))
           : quarterlyRollupItems.map((item) => ({
-              user: item.user,
-              itemNumber: item.itemNumber,
-              program: item.program,
-              brand: item.brand,
-              itemType: item.itemType,
-              itemDescription: item.itemDescription,
-              state: item.state,
-              packSize: item.packSize,
-              totalItems: item.totalItems,
-              estCost:
-                item.estCost !== "---"
-                  ? formatMoney(item.estCost, false)
-                  : item.estCost,
-              totalEstCost:
-                item.totalEstCost !== "---"
-                  ? formatMoney(item.totalEstCost, false)
-                  : item.totalEstCost,
-              orderDate:
-                item.orderDate !== "---"
-                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
-                  : item.orderDate,
-              dueDate:
-                item.orderDue !== "---"
-                  ? format(new Date(item.orderDue), "MM/dd/yyyy")
-                  : item.orderDue,
-              status: statusConverter(item.status),
-            }));
+            user: item.user,
+            itemNumber: item.itemNumber,
+            program: item.program,
+            brand: item.brand,
+            itemType: item.itemType,
+            itemDescription: item.itemDescription,
+            state: item.state,
+            packSize: item.packSize,
+            totalItems: item.totalItems,
+            estCost:
+              item.estCost !== "---"
+                ? formatMoney(item.estCost, false)
+                : item.estCost,
+            totalEstCost:
+              item.totalEstCost !== "---"
+                ? formatMoney(item.totalEstCost, false)
+                : item.totalEstCost,
+            orderDate:
+              item.orderDate !== "---"
+                ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                : item.orderDate,
+            dueDate:
+              item.orderDue !== "---"
+                ? format(new Date(item.orderDue), "MM/dd/yyyy")
+                : item.orderDue,
+            status: statusConverter(item.status),
+          }));
       setCurrentCSVData(dataObject);
     }
   }, [
@@ -291,12 +291,11 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                   style={{
                     marginTop: "10px",
                     marginBottom: "0px",
-                    width: `Calc(${
-                      queryTotal && orderCount
+                    width: `Calc(${queryTotal && orderCount
                         ? queryTotal.toString().length +
-                          orderCount.toString().length
+                        orderCount.toString().length
                         : 0
-                    }*15px + 50px)`,
+                      }*15px + 50px)`,
                     minWidth: "100px",
                     readonly: "readonly",
                     pointerEvents: "none",
@@ -329,23 +328,25 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div
-          className={classes.showHideFilters}
-          onClick={() => {
-            handleFilterDrawer(!filtersOpen);
-          }}
-        >
-          <TuneIcon fontSize="small" color="secondary" />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            style={{ margin: "10px 10px" }}
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+          <div
+            className={classes.showHideFilters}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
           >
-            {filtersOpen ? "Hide Filters" : "Show Filters"}
-          </Typography>
+            <TuneIcon fontSize="small" color="secondary" />
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ margin: "10px 10px" }}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Typography>
+          </div>
           <FilterChipList classes={classes} />
+          <br />
         </div>
-        <br />
         {currentGrouping === "order" && (
           <RollupOverviewTable
             rollupData={currentPreOrders}

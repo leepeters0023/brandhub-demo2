@@ -235,60 +235,60 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       dataObject.data =
         dataObject.group === "order"
           ? currentOrders.map((order) => ({
-              orderNum: order.id,
-              type: order.type,
-              name: order.distributorName ? order.distributorName : "---",
-              state: order.distributorState
-                ? order.distributorState
-                : order.customAddressState,
-              program: order.program,
-              brand: order.brand.join(", "),
-              orderDate: format(new Date(order.orderDate), "MM/dd/yyyy"),
-              shipDate:
-                order.shipDate !== "---"
-                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
-                  : order.shipDate,
-              totalItems: order.totalItems,
-              totalEstCost:
-                order.totalEstCost !== "---"
-                  ? formatMoney(order.totalEstCost, false)
-                  : order.totalEstCost,
-              totalActCost:
-                order.totalActCost !== "---"
-                  ? formatMoney(order.totalActCost, false)
-                  : order.totalActCost,
-              status: order.status[0].toUpperCase() + order.status.slice(1),
-            }))
+            orderNum: order.id,
+            type: order.type,
+            name: order.distributorName ? order.distributorName : "---",
+            state: order.distributorState
+              ? order.distributorState
+              : order.customAddressState,
+            program: order.program,
+            brand: order.brand.join(", "),
+            orderDate: format(new Date(order.orderDate), "MM/dd/yyyy"),
+            shipDate:
+              order.shipDate !== "---"
+                ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                : order.shipDate,
+            totalItems: order.totalItems,
+            totalEstCost:
+              order.totalEstCost !== "---"
+                ? formatMoney(order.totalEstCost, false)
+                : order.totalEstCost,
+            totalActCost:
+              order.totalActCost !== "---"
+                ? formatMoney(order.totalActCost, false)
+                : order.totalActCost,
+            status: order.status[0].toUpperCase() + order.status.slice(1),
+          }))
           : currentOrderItems.map((item) => ({
-              itemNumber: item.itemNumber,
-              orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
-              orderNum: item.orderId,
-              brand: item.brand.join(", "),
-              program: item.program,
-              itemType: item.itemType,
-              itemDesc: item.itemDescription,
-              name: item.distributor.length > 0 ? item.distributor : "---",
-              state: item.state,
-              totalItems: item.totalItems,
-              estCost:
-                item.estCost !== "---"
-                  ? formatMoney(item.estCost, false)
-                  : item.estCost,
-              actCost:
-                item.actCost !== "---"
-                  ? formatMoney(item.actCost, false)
-                  : item.actCost,
-              orderDate:
-                item.orderDate !== "---"
-                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
-                  : item.orderDate,
-              shipDate:
-                item.shipDate !== "---"
-                  ? format(new Date(item.shipDate), "MM/dd/yyyy")
-                  : item.shipDate,
-              tracking: item.tracking,
-              status: item.status[0].toUpperCase() + item.status.slice(1),
-            }));
+            itemNumber: item.itemNumber,
+            orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
+            orderNum: item.orderId,
+            brand: item.brand.join(", "),
+            program: item.program,
+            itemType: item.itemType,
+            itemDesc: item.itemDescription,
+            name: item.distributor.length > 0 ? item.distributor : "---",
+            state: item.state,
+            totalItems: item.totalItems,
+            estCost:
+              item.estCost !== "---"
+                ? formatMoney(item.estCost, false)
+                : item.estCost,
+            actCost:
+              item.actCost !== "---"
+                ? formatMoney(item.actCost, false)
+                : item.actCost,
+            orderDate:
+              item.orderDate !== "---"
+                ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                : item.orderDate,
+            shipDate:
+              item.shipDate !== "---"
+                ? format(new Date(item.shipDate), "MM/dd/yyyy")
+                : item.shipDate,
+            tracking: item.tracking,
+            status: item.status[0].toUpperCase() + item.status.slice(1),
+          }));
       setCurrentCSVData(dataObject);
     }
   }, [
@@ -349,23 +349,25 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             </Tooltip>
           </div>
         </div>
-        <div
-          className={classes.showHideFilters}
-          onClick={() => {
-            handleFilterDrawer(!filtersOpen);
-          }}
-        >
-          <TuneIcon fontSize="small" color="secondary" />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            style={{ margin: "10px 10px" }}
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+          <div
+            className={classes.showHideFilters}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
           >
-            {filtersOpen ? "Hide Filters" : "Show Filters"}
-          </Typography>
+            <TuneIcon fontSize="small" color="secondary" />
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ margin: "10px 10px" }}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Typography>
+          </div>
           <FilterChipList classes={classes} />
+          <br />
         </div>
-        <br />
         {currentGrouping === "order" && (
           <OrderHistoryTable
             orders={currentOrders}
