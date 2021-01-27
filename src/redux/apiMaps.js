@@ -172,6 +172,7 @@ export const mapPrograms = (programs) => {
         ? brandLogoMap[prog.brands[0].name]
         : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607526835/Select/multi-brand_e7vgai.png",
     items: [],
+    isItemsFetched: false,
     status: false,
   }));
   programArray.sort((a, b) => {
