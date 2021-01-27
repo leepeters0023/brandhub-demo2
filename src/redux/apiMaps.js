@@ -182,7 +182,7 @@ export const mapPrograms = (programs) => {
       ? 1
       : 0;
   });
-  programArray = programArray.filter((prog) => prog.brand !== "BRAND")
+  programArray = programArray.filter((prog) => prog.brand[0] !== "BRAND")
   return programArray;
 };
 
