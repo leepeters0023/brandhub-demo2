@@ -170,6 +170,7 @@ export const getFilteredUsers = async (name) => {
   await axios
     .get(querySting)
     .then((res) => {
+      console.log(res);
       let dataObject = { users: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);
       dataObject.users = data;

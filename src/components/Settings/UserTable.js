@@ -103,6 +103,9 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  cellRoot: {
+    minWidth: "500px",
+  },
 }));
 
 const UserTable = ({
@@ -129,10 +132,7 @@ const UserTable = ({
         style={{ maxHeight: "Calc(100vh - 275px)" }}
         ref={scrollRef}
       >
-        <Table
-          stickyHeader
-          className={classes.table}
-        >
+        <Table stickyHeader className={classes.table}>
           <EnhancedTableHead
             classes={classes}
             order={order}
@@ -163,8 +163,21 @@ const UserTable = ({
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.name}</TableCell>
                   <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left">{row.role}</TableCell>
-                  <TableCell align="left">{row.territories.map((terr) => terr.name).join(", ")}</TableCell>
+                  <TableCell align="left">
+                    {row.role[0].toUpperCase() + row.role.slice(1)}
+                  </TableCell>
+                  <TableCell align="left" classes={{ root: classes.cellRoot }}>
+                    {row.territories
+                      .map((terr) => terr.name)
+                      .sort((a, b) => {
+                        return a.toLowerCase()[0] < b.toLowerCase()[0]
+                          ? -1
+                          : a.toLowerCase()[0] > b.toLowerCase()[0]
+                          ? 1
+                          : 0;
+                      })
+                      .join(", ")}
+                  </TableCell>
                 </TableRow>
               ))}
             {isUsersLoading && (
