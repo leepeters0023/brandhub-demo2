@@ -85,10 +85,6 @@ const DrawerReportsNav = ({ classes, role }) => {
               link: "/reports/wrap-up",
               primary: "Wrap Up",
             },
-            {
-              link: "/reports/wrap-up",
-              primary: "*TBD",
-            },
           ]}
         />
         {role !== "compliance" && (
@@ -103,10 +99,7 @@ const DrawerReportsNav = ({ classes, role }) => {
                 {
                   link: "/budgets/ytod",
                   primary: "Budget vs Spend",
-                },
-                {
-                  link: "/reports/wrap-up",
-                  primary: "*TBD",
+                  disabled: true,
                 },
               ]}
             />

@@ -151,6 +151,7 @@ export const mapOrderSetItems = (items) => {
 };
 
 export const mapPrograms = (programs) => {
+  console.log(programs);
   let programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
@@ -166,6 +167,25 @@ export const mapPrograms = (programs) => {
     strategies: prog.strategies,
     startDate: prog["start-date"],
     endDate: prog["end-date"],
+    orderWindow: prog["order-calendar-month"]["order-window-name"],
+    inMarketDate: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["in-market-start-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
+    orderWindowOpen: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["order-window-open-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
+    orderWindowClose: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["order-window-close-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
     focusMonth: monthMap[prog["start-date"].split("-")[1]],
     imgUrl:
       prog.brands.length === 1
@@ -182,7 +202,7 @@ export const mapPrograms = (programs) => {
       ? 1
       : 0;
   });
-  programArray = programArray.filter((prog) => prog.brand[0] !== "BRAND")
+  programArray = programArray.filter((prog) => prog.brand[0] !== "BRAND");
   return programArray;
 };
 

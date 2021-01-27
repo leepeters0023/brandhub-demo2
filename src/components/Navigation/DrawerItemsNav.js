@@ -27,7 +27,7 @@ const DrawerItemsNav = ({ role, classes }) => {
   return (
     <>
       <IconButton
-        style={{padding: 0}}
+        style={{ padding: 0 }}
         onClick={(evt) => {
           handleOpen(evt);
           evt.stopPropagation();
@@ -93,6 +93,7 @@ const DrawerItemsNav = ({ role, classes }) => {
                 role === "field2" || role === "super"
                   ? "Create Ad Hoc Program"
                   : null,
+              disabled: true,
             },
             {
               link: "/programs",

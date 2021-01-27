@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "@reach/router";
 import PropTypes from "prop-types";
-import { formatMoney } from "../../utility/utilityFunctions";
 
 import { useSelector } from "react-redux";
 
@@ -110,10 +109,7 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    {`Budget: ${formatMoney(
-                      Math.floor(Math.random() * 1000000 + 1000000),
-                      false
-                    )}`}
+                    {`Order Window: ${prog.orderWindowOpen} - ${prog.orderWindowClose}`}
                   </Typography>
                 </div>
                 {currentUserRole !== "compliance" &&

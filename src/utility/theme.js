@@ -119,8 +119,8 @@ export default {
       marginRight: "50px",
     },
     headerText: {
-      fontWeight: "400",
-      fontSize: "14px",
+      fontWeight: "500",
+      fontSize: "1rem",
       color: "#4C4C4C",
     },
     headerListItem: {
