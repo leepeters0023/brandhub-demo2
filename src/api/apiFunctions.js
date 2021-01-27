@@ -38,14 +38,12 @@ export const buildFilters = (
           }`
       : "";
   let shipHoldString =
-    type === "po-history"
-      ? filterObject.hasShipHold
-        ? "filter[has-ship-hold]=true"
-        : filterObject.status === "shipping-hold"
-        ? "filter[has-ship-hold]=true"
-        : filterObject.status === "in-progress"
-        ? "filter[has-ship-hold]=false"
-        : ""
+    type === "po-history" &&
+    filterObject.status === "shipping-hold" &&
+    filterObject.hasShipHold
+      ? "filter[has-ship-hold]=true"
+      : type === "po-history" && filterObject.status === "in-progress"
+      ? "filter[has-ship-hold]=false"
       : "";
   let typeString = filterObject.type ? `filter[type]=${filterObject.type}` : "";
   let orderTypeString =

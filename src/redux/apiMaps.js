@@ -151,7 +151,8 @@ export const mapOrderSetItems = (items) => {
 };
 
 export const mapPrograms = (programs) => {
-  const programArray = programs.map((prog) => ({
+  console.log(programs);
+  let programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
     name: prog.name ? prog.name : "---",
@@ -166,6 +167,25 @@ export const mapPrograms = (programs) => {
     strategies: prog.strategies,
     startDate: prog["start-date"],
     endDate: prog["end-date"],
+    orderWindow: prog["order-calendar-month"]["order-window-name"],
+    inMarketDate: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["in-market-start-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
+    orderWindowOpen: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["order-window-open-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
+    orderWindowClose: format(
+      formatDate(
+        new Date(prog["order-calendar-month"]["order-window-close-date"])
+      ),
+      "MM/dd/yyyy"
+    ),
     focusMonth: monthMap[prog["start-date"].split("-")[1]],
     imgUrl:
       prog.brands.length === 1
@@ -182,6 +202,7 @@ export const mapPrograms = (programs) => {
       ? 1
       : 0;
   });
+  programArray = programArray.filter((prog) => prog.brand[0] !== "BRAND");
   return programArray;
 };
 
@@ -736,6 +757,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ),
     ].join(", "),
     isPriceCompliant: itemDetail.compliant,
+    onShipHold: params.filter((param) => param.onShipHold).length > 0,
     totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
   };
   return formattedPO;
@@ -811,22 +833,27 @@ export const mapPOHistoryItems = (items) => {
   return mappedItems;
 };
 
+export const mapBids = (bids) => {
+  return bids.map((bid) => ({
+    id: bid.id,
+    status: bid.status,
+    supplierId: bid.supplier ? bid.supplier.id : bid.id,
+    note: bid.note ? bid.note : "",
+    price: bid.price ? stringToCents(bid.price) : 0,
+  }));
+};
+
 export const mapRFQ = (rfq) => {
-  const mapBids = (bids) => {
-    return bids.map((bid) => ({
-      id: bid.id,
-      status: bid.status,
-      supplierId: bid.supplier ? bid.supplier.id : bid.id,
-      note: bid.note ? bid.note : "",
-      price: bid.price ? stringToCents(bid.price) : 0,
-    }));
-  };
   const images = handleImages([rfq.item.images]);
   let mappedRFQ = {
     id: rfq.id,
     status: rfq.status ? rfq.status : "Pending",
-    dueDate: rfq["due-date"] ? rfq["due-date"] : "---",
-    inMarketDate: rfq["in-market-date"] ? rfq["in-market-date"] : "---",
+    dueDate: rfq["due-date"]
+      ? format(formatDate(new Date(rfq["due-date"])), "MM/dd/yyyy")
+      : "---",
+    inMarketDate: rfq["in-market-date"]
+      ? format(formatDate(new Date(rfq["in-market-date"])), "MM/dd/yyyy")
+      : "---",
     bids: mapBids(rfq.bids),
     program: rfq.program.name,
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),

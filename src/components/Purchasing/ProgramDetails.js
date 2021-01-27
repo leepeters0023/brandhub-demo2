@@ -20,13 +20,22 @@ const useStyles = makeStyles((theme) => ({
 const ProgramDetails = (props) => {
   const classes = useStyles();
   const {
-    program: { name, imgUrl, desc, goals, focusMonth, strategies, brand },
+    program: {
+      name,
+      imgUrl,
+      brand,
+      orderWindowOpen,
+      orderWindowClose,
+      orderWindow,
+      inMarketDate,
+    },
   } = props;
   return (
     <>
       <br />
       <Grid container spacing={5} justify="center" alignItems="center">
-        <Grid item md={3} style={{ textAlign: "center" }}>
+        <Grid item md={1} />
+        <Grid item md={5} style={{ textAlign: "center" }}>
           <div
             style={{
               width: "100%",
@@ -37,13 +46,13 @@ const ProgramDetails = (props) => {
             <div
               style={{
                 position: "absolute",
-                width: "Calc(100% - 50px)",
-                height: "Calc(100% - 50px)",
+                width: "Calc(100% - 100px)",
+                height: "Calc(100% - 100px)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
-                padding: "25px",
+                padding: "50px",
               }}
             >
               <ImageWrapper
@@ -54,11 +63,8 @@ const ProgramDetails = (props) => {
               />
             </div>
           </div>
-          <Typography
-            className={classes.bodyText}
-          >{`Focus Month: ${focusMonth}`}</Typography>
         </Grid>
-        <Grid item md={9}>
+        <Grid item md={5} style={{textAlign: "center"}}>
           <Typography className={classes.headerText}>
             {brand.length === 1 ? "Brand" : "Brands"}
           </Typography>
@@ -66,17 +72,23 @@ const ProgramDetails = (props) => {
             {brand.length === 1 ? brand[0] : brand.join(", ")}
           </Typography>
           <br />
-          <Typography className={classes.headerText}>Description</Typography>
-          <Typography className={classes.bodyText}>{desc}</Typography>
+          <Typography className={classes.headerText}>Order Window Name</Typography>
+          <Typography className={classes.bodyText}>{orderWindow}</Typography>
           <br />
-          <Typography className={classes.headerText}>Goals</Typography>
-          <Typography className={classes.bodyText}>{goals}</Typography>
+          <Typography className={classes.headerText}>Order Window Open</Typography>
+          <Typography className={classes.bodyText}>{orderWindowOpen}</Typography>
           <br />
           <Typography className={classes.headerText}>
-            Marketing Strategy
+            Order Window Close
           </Typography>
-          <Typography className={classes.bodyText}>{strategies}</Typography>
+          <Typography className={classes.bodyText}>{orderWindowClose}</Typography>
+          <br />
+          <Typography className={classes.headerText}>
+            In Market Date
+          </Typography>
+          <Typography className={classes.bodyText}>{inMarketDate}</Typography>
         </Grid>
+        <Grid item md={1} />
       </Grid>
     </>
   );

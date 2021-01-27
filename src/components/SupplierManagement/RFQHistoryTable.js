@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
-import format from "date-fns/format";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -264,8 +263,8 @@ const RFQHistoryTable = ({
                       </TableCell>
                     </>
                   )}
-                  <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
-                  <TableCell>{format(new Date(), "MM/dd/yyyy")}</TableCell>
+                  <TableCell>{row.dueDate}</TableCell>
+                  <TableCell>{row.inMarketDate}</TableCell>
                   <TableCell align="left">
                     {handleStatus(row.status, row.bids)}
                   </TableCell>

@@ -19,6 +19,8 @@ import {
   deletePOItem,
   addToPO,
   submitPO,
+  acceptPO,
+  declinePO,
   completePO,
   updateShippingParams,
   addAdditionalPOCost,
@@ -28,6 +30,7 @@ import {
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
+import { updateValues } from "./supplierSlice";
 import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder, mapPOItems } from "../apiMaps";
 import { navigate } from "@reach/router";
@@ -263,6 +266,15 @@ const purchaseOrderSlice = createSlice({
       state.isUpdateLoading = false;
       state.error = null;
     },
+    acceptPOSuccess(state) {
+      state.currentPO.status = "in-progress";
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
+    declinePOSuccess(state) {
+      state.isUpdateLoading = false;
+      state.error = null;
+    },
     completePOSuccess(state) {
       state.currentPO.status = "complete";
       state.isUpdateLoading = false;
@@ -364,6 +376,8 @@ export const {
   deleteItemSuccess,
   deletePOSuccess,
   submitPOSuccess,
+  acceptPOSuccess,
+  declinePOSuccess,
   completePOSuccess,
   updateParamSuccess,
   resetPurchaseOrder,
@@ -421,7 +435,9 @@ export const fetchSinglePO = (id) => async (dispatch) => {
   }
 };
 
-export const createNewPO = (idArray, orderType, programId) => async (dispatch) => {
+export const createNewPO = (idArray, orderType, programId) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     const newPO = await createPO(idArray, orderType, programId);
@@ -435,7 +451,9 @@ export const createNewPO = (idArray, orderType, programId) => async (dispatch) =
   }
 };
 
-export const createInventoryPO = (itemId, qty, warehouse, programId) => async (dispatch) => {
+export const createInventoryPO = (itemId, qty, warehouse, programId) => async (
+  dispatch
+) => {
   try {
     dispatch(setIsLoading());
     const newPO = await createInvPO(itemId, qty, warehouse, programId);
@@ -447,7 +465,7 @@ export const createInventoryPO = (itemId, qty, warehouse, programId) => async (d
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
   try {
@@ -470,14 +488,14 @@ export const updateDateByType = (id, type, value) => async (dispatch) => {
     "actual-ship-date": "actualShip",
   };
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const dateStatus = updatePODate(id, type, value);
     if (dateStatus.error) {
       throw dateStatus.error;
     }
     dispatch(updateDate({ type: typeMap[type], value: value }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -486,14 +504,14 @@ export const updateDateByType = (id, type, value) => async (dispatch) => {
 
 export const updateShipMethod = (id, method) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const methodStatus = updatePOMethod(id, method);
     if (methodStatus.error) {
       throw methodStatus.error;
     }
     dispatch(updateMethod({ value: method }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -502,14 +520,14 @@ export const updateShipMethod = (id, method) => async (dispatch) => {
 
 export const updateSupplierNote = (id, note) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const noteStatus = updatePONote(id, note);
     if (noteStatus.error) {
       throw noteStatus.error;
     }
     dispatch(updateSupplierNotes({ value: note }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -518,14 +536,14 @@ export const updateSupplierNote = (id, note) => async (dispatch) => {
 
 export const updateKeyAccountTape = (id, tape) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const tapeStatus = updatePOTape(id, tape);
     if (tapeStatus.error) {
       throw tapeStatus.error;
     }
     dispatch(updateKeyAcctTape({ value: tape }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -534,30 +552,30 @@ export const updateKeyAccountTape = (id, tape) => async (dispatch) => {
 
 export const addAdditionalFile = (id, file) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const fileURL = await updatePOFile(id, file);
     if (fileURL.error) {
       throw fileURL.error;
     }
-    dispatch(updateAdditionalFile({file: file}))
-    dispatch(patchSuccess())
+    dispatch(updateAdditionalFile({ file: file }));
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
 
 export const setDirectShip = (id, value) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const shipStatus = updatePODirectShip(id, value);
     if (shipStatus.error) {
       throw shipStatus.error;
     }
     dispatch(updateDirectShip({ value: value }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -566,14 +584,14 @@ export const setDirectShip = (id, value) => async (dispatch) => {
 
 export const setItemPackSize = (id, packSize) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const packSizeStatus = updatePOItemPackSize(id, packSize);
     if (packSizeStatus.error) {
       throw packSizeStatus.error;
     }
     dispatch(updateItemPackSize({ id: id, packSize: packSize }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -582,14 +600,14 @@ export const setItemPackSize = (id, packSize) => async (dispatch) => {
 
 export const setItemPackOut = (id, packout) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const packStatus = updatePOItemPackOut(id, packout);
     if (packStatus.error) {
       throw packStatus.error;
     }
     dispatch(updateItemPackout({ id: id, packOut: packout }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -598,14 +616,14 @@ export const setItemPackOut = (id, packout) => async (dispatch) => {
 
 export const setItemActCost = (id, cost) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const costStatus = updatePOItemCost(id, cost);
     if (costStatus.error) {
       throw costStatus.error;
     }
     dispatch(updateItemActualCost({ id: id, cost: cost }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -623,18 +641,18 @@ export const setTotalFreight = (id, freightCost) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
-}
+};
 
 export const deleteItem = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const deleteStatus = await deletePOItem(id);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
     dispatch(deleteItemSuccess({ id: id }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -643,7 +661,7 @@ export const deleteItem = (id) => async (dispatch) => {
 
 export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const formattedCost = parseFloat(cost).toString();
     const newPOItem = await addAdditionalPOCost(id, desc, formattedCost);
@@ -651,24 +669,24 @@ export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
       throw newPOItem.error;
     }
     let mappedItem = mapPOItems([newPOItem.data]);
-    dispatch(addCost({ item: mappedItem.items[0] }))
-    dispatch(patchSuccess())
+    dispatch(addCost({ item: mappedItem.items[0] }));
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
 
 export const deletePurchaseOrder = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const deleteStatus = await deletePO(id);
     if (deleteStatus.error) {
       throw deleteStatus.error;
     }
     dispatch(deletePOSuccess());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -677,7 +695,7 @@ export const deletePurchaseOrder = (id) => async (dispatch) => {
 
 export const submitPurchaseOrder = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const submitStatus = await submitPO(id);
     if (submitStatus.error) {
@@ -686,8 +704,66 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
     const formattedPO = mapPurchaseOrder(submitStatus.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
     dispatch(submitPOSuccess());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
     navigate("/purchasing/poHistory/current");
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
+
+export const acceptPurchaseOrder = (id) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    dispatch(setUpdateLoading());
+    const acceptStatus = await acceptPO(id);
+    if (acceptStatus.error) {
+      throw acceptStatus.error;
+    }
+    const formattedPO = mapPurchaseOrder(acceptStatus.data);
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+    dispatch(acceptPOSuccess());
+    dispatch(patchSuccess());
+    if (formattedPO.onShipHold) {
+      navigate("/purchasing/poHistory/shippingHold");
+      dispatch(
+        updateValues({
+          values: [
+            { key: "newPO", value: -1 },
+            { key: "shipHoldPO", value: 1 },
+          ],
+        })
+      );
+    } else {
+      navigate("/purchasing/poHistory/inProgress");
+      dispatch(
+        updateValues({
+          values: [
+            { key: "newPO", value: -1 },
+            { key: "inProgressPO", value: 1 },
+          ],
+        })
+      );
+    }
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
+
+export const declinePurchaseOrder = (id) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    dispatch(setUpdateLoading());
+    const declineStatus = await declinePO(id);
+    if (declineStatus.error) {
+      throw declineStatus.error;
+    }
+    dispatch(declinePOSuccess());
+    dispatch(deletePOSuccess());
+    dispatch(patchSuccess());
+    navigate("/purchasing/poHistory/new");
+    dispatch(updateValues({ values: [{ key: "newPO", value: -1 }] }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -696,14 +772,14 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
 
 export const completePurchaseOrder = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const completeStatus = await completePO(id);
     if (completeStatus.error) {
       throw completeStatus.error;
     }
     dispatch(completePOSuccess());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
     navigate("/purchasing/poHistory/all");
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
@@ -715,7 +791,7 @@ export const updateAllShippingParams = (updateArray, id) => async (
   dispatch
 ) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const params = await updateShippingParams(updateArray);
     if (params.error) {
@@ -728,7 +804,7 @@ export const updateAllShippingParams = (updateArray, id) => async (
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
     dispatch(updateParamSuccess());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
