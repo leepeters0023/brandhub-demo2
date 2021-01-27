@@ -9,13 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
-import { FormatListNumberedRtlOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  root: {
-    maxWidth: 400,
-  },
 }));
 
 const General = () => {
@@ -57,34 +53,34 @@ const General = () => {
       <br />
       <List classes={{ root: classes.root }}>
         <ListItem disableGutters>
-          <Typography>First Name: {currentUser.firstName}</Typography>
+          <Typography className={classes.bodyText}>Name: {currentUser.name}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography>Last Name: {currentUser.lastName}</Typography>
+          <Typography className={classes.bodyText}>Email: {currentUser.email}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography>Email: {currentUser.email}</Typography>
+          <Typography className={classes.bodyText}>Role: {currentUser.role[0].toUpperCase() + currentUser.role.slice(1)}</Typography>
         </ListItem>
         <Divider />
-        <ListItem disableGutters>
-          <Typography>Role: {currentUser.role}</Typography>
+        <ListItem disableGutters style={{display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography className={classes.bodyText}>Assigned Territories:</Typography>
+          <br />
+          <Typography className={classes.bodyText}>{currentUser.territories.map((terr) => terr.name).join(", ")}</Typography>
         </ListItem>
         <Divider />
-        <ListItem disableGutters>
-          <Typography>Territory: {currentUser.territories.map((item) => item.id === currentUser.currentTerritory ? item.name : null)}</Typography>
-        </ListItem>
-        <Divider />
-        <ListItem disableGutters>
-          <Typography>State:{currentUser.states /* will be an array? state.user.states -> state.code) */}</Typography>
+        <ListItem disableGutters style={{display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
+          <Typography className={classes.bodyText}>Assigned States:</Typography>
+          <br />
+          <Typography className={classes.bodyText}>{currentUser.states /* will be an array? state.user.states -> state.code) */}</Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
           <div style={{ display: "flex", flexDirection: "row", }}>
-            <Typography>On Premise:<Checkbox disabled checked={currentUser.isOnPremise ? true : false} />
+            <Typography className={classes.bodyText}>On Premise:<Checkbox disabled checked={currentUser.isOnPremise ? true : false} />
             </Typography>
-            <Typography>Retail:<Checkbox disabled checked={currentUser.isRetail ? true : false} />
+            <Typography className={classes.bodyText}>Retail:<Checkbox disabled checked={currentUser.isRetail ? true : false} />
             </Typography>
           </div>
         </ListItem>

@@ -34,6 +34,7 @@ let initialState = {
   supplierId: "",
   firstName: "",
   lastName: "",
+  name: "",
   initials: "",
   email: "",
   role: "",
@@ -109,6 +110,7 @@ const userSlice = createSlice({
       const { user } = action.payload;
       state.id = user.id;
       state.supplierId = user.supplierId;
+      state.name = user.name;
       state.firstName = user.firstName;
       state.lastName = user.lastName;
       state.initials = user.initials;
@@ -156,6 +158,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.id = "";
       state.supplierId = "";
+      state.name = "";
       state.firstName = "";
       state.lastName = "";
       state.initials = "";
@@ -213,6 +216,7 @@ export const fetchUser = () => async (dispatch) => {
     let currentUser = {
       id: user.data.id,
       supplierId: user.data.supplier ? user.data.supplier.id : null,
+      name: user.data.name,
       firstName: user.data.name.split(" ")[0],
       lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
       initials: `${user.data.name.split(" ")[0][0]}${
