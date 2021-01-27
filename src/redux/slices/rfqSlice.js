@@ -12,13 +12,14 @@ import {
   acceptBid,
   declineBid,
 } from "../../api/purchasingApi";
+import { updateValues } from "./supplierSlice";
 import {
   setIsLoading as patchLoading,
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 
-import { mapRollupItems, mapRFQ } from "../apiMaps";
+import { mapRollupItems, mapRFQ, mapBids } from "../apiMaps";
 /*
 * RFQ Item Model (need to determine!)
 
@@ -131,6 +132,15 @@ const rfqSlice = createSlice({
       const { bids } = action.payload;
       state.currentRFQ.bids = bids;
     },
+    updateBid(state, action) {
+      const { bid } = action.payload;
+      const updatedBids = state.currentRFQ.bids.map((b) => {
+        if (b.id === bid.id) {
+          return {...bid}
+        } else return {...b}
+      })
+      state.currentRFQ.bids = updatedBids;
+    },
     updateCurrentBidPrice(state, action) {
       const { price } = action.payload;
       state.currentBidPrice = price;
@@ -189,6 +199,7 @@ export const {
   updateQty,
   updateNote,
   updateBids,
+  updateBid,
   updateDate,
   updateCurrentBidNote,
   updateCurrentBidPrice,
@@ -321,10 +332,18 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const acceptResponse = await acceptBid(id, price, note);
+    console.log(acceptResponse);
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }
-    //todo
+    const bid = mapBids(acceptResponse.data);
+    dispatch(updateBid({ bid: bid }))
+    dispatch(updateValues({
+      values: [
+        { key: "newRFQ", value: -1 },
+        { key: "inProgressRFQ", value: 1}
+      ]
+    }))
     dispatch(updateSuccessful());
     dispatch(patchSuccess())
     navigate("/purchasing/rfqHistory/inProgress")
@@ -342,7 +361,12 @@ export const declineCurrentBid = (id) => async (dispatch) => {
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }
-    //todo
+    dispatch(resetRFQ());
+    dispatch(updateValues({
+      values: [
+        { key: "newRFQ", value: -1 },
+      ]
+    }))
     dispatch(updateSuccessful());
     dispatch(patchSuccess())
     navigate("/purchasing/rfqHistory/new")

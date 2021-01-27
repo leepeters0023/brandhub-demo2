@@ -75,6 +75,14 @@ const supplierSlice = createSlice({
       state.isInitialLoading = false;
       state.error = null;
     },
+    updateValues(state, action) {
+      const { values } = action.payload;
+      let currentValues = {...state.navValues}
+      values.forEach((val) => {
+        currentValues[val.key] = currentValues[val.key] + val.value
+      })
+      state.navValues = { ...currentValues}
+    },
     clearSuppliers(state) {
       state.isLoading = false;
       state.isInitialLoading = false;
@@ -98,6 +106,7 @@ export const {
   getSuppliersSuccess,
   getFilteredSuppliersSuccess,
   getNavValueSuccess,
+  updateValues,
   clearSuppliers,
   setFailure,
 } = supplierSlice.actions;

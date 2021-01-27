@@ -14,6 +14,8 @@ import { setRetain } from "../redux/slices/filterSlice";
 import {
   fetchSinglePO,
   submitPurchaseOrder,
+  acceptPurchaseOrder,
+  declinePurchaseOrder,
   completePurchaseOrder,
   updateAllShippingParams,
   addAdditionalFile,
@@ -76,12 +78,12 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     });
   };
 
-  const handleSupplierSubmit = () => {
-    //TODO
+  const handleSupplierAccept = () => {
+    dispatch(acceptPurchaseOrder(currentPO.id));
   };
 
   const handleSupplierDecline = () => {
-    //TODO
+    dispatch(declinePurchaseOrder(currentPO.id));
   };
 
   const handleSupplierComplete = () => {
@@ -455,7 +457,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                   variant="contained"
                   color="secondary"
                   onClick={() => {
-                    handleSupplierSubmit();
+                    handleSupplierAccept();
                   }}
                 >
                   Accept

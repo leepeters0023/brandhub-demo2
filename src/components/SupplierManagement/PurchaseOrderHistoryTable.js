@@ -151,12 +151,16 @@ const PurchaseOrderHistoryTable = ({
   const role = useSelector((state) => state.user.role);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
+
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
+
   const handleRowClick = (poNum) => {
     navigate(`/purchasing/purchaseOrder#${poNum}`);
   };
@@ -249,7 +253,10 @@ const PurchaseOrderHistoryTable = ({
                     {formatMoney(row.actCost, true)}
                   </TableCell>
                   <TableCell align="left">
-                    {row.status[0].toUpperCase() + row.status.slice(1)}
+                    {currentUserRole === "supplier" &&
+                    row.status === "submitted"
+                      ? "New"
+                      : row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
                   <TableCell align="left">{row.submittedDate}</TableCell>
                   <TableCell align="left">{row.dueDate}</TableCell>

@@ -925,6 +925,52 @@ export const submitPO = async (id) => {
   return response;
 };
 
+export const acceptPO = async (id) => {
+  const response = { status: "", data: null, error: null };
+  await axios
+    .post(`/api/purchase-orders/${id}/accept`, null, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response;
+};
+
+export const declinePO = async (id) => {
+  const response = { status: "", data: null, error: null };
+  await axios
+    .post(`/api/purchase-orders/${id}/decline`, null, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response;
+};
+
 export const completePO = async (id) => {
   const response = { status: "", error: null };
   await axios
