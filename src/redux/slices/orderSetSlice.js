@@ -447,7 +447,9 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     let orderStatus = currentOrders.data[0]
       ? currentOrders.data[0].status
       : null;
-    let complete = currentOrders.data[0] ? currentOrders.data[0]["is-work-complete"] : null;
+    let complete = currentOrders.data[0]
+      ? currentOrders.data[0]["is-work-complete"]
+      : null;
     let totalEstFreight = totalFreight;
     let totalEstTax = totalTax;
     let territories = currentOrders.data[0]
@@ -455,7 +457,10 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
         ? ["National"]
         : currentOrders.data[0]["territory-names"].split(", ")
       : null;
-    let note = currentOrders.data[0] && currentOrders.data[0].notes ? currentOrders.data[0].notes : "";
+    let note =
+      currentOrders.data[0] && currentOrders.data[0].notes
+        ? currentOrders.data[0].notes
+        : "";
     dispatch(
       setPreOrderDetails({
         territories: territories,
@@ -475,7 +480,9 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
         totalEstTax: totalEstTax,
       })
     );
-    dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
+    if (currentItems.length > 0) {
+      dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
