@@ -30,10 +30,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -156,7 +153,7 @@ const CurrentPO = () => {
           >
             {currentRole !== "supplier" && (
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
+                <DatePicker
                   color="secondary"
                   className={classes.dateField}
                   disableToolbar
@@ -175,9 +172,6 @@ const CurrentPO = () => {
                       )
                     )
                   }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
                 />
               </MuiPickersUtilsProvider>
             )}

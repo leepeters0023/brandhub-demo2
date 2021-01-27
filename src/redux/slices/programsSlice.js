@@ -95,6 +95,7 @@ const programsSlice = createSlice({
           return {
             ...prog,
             items: [...items],
+            isItemsFetched: true
           };
         } else {
           return prog;

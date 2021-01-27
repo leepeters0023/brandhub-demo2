@@ -62,6 +62,7 @@ const headCells = [
   },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
   { id: "shipDate", disablePadding: false, label: "Ship Date", sort: true },
+  { id: "carrier", disablePadding: false, label: "Carrier", sort: false },
   { id: "tracking", disablePadding: false, label: "Tracking #", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
@@ -159,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#920000",
     "&&:hover": {
       cursor: "pointer",
-      backgroundColor: "#920000"
+      backgroundColor: "#920000",
     },
   },
   cancelCell: {
@@ -390,9 +391,19 @@ const OrderHistoryByItemTable = ({
                       : row.shipDate}
                   </TableCell>
                   <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.carrier}
+                  </TableCell>
+                  <TableCell
                     align="center"
                     className={
-                      row.tracking !== "---" && row.trackingId && !row.isComplianceCanceled
+                      row.tracking !== "---" &&
+                      row.trackingId &&
+                      !row.isComplianceCanceled
                         ? classes.clickableCell
                         : null
                     }
@@ -413,7 +424,9 @@ const OrderHistoryByItemTable = ({
                       row.isComplianceCanceled ? classes.cancelCell : null
                     }
                   >
-                    {!row.isComplianceCanceled ? row.status[0].toUpperCase() + row.status.slice(1) : "Canceled"}
+                    {!row.isComplianceCanceled
+                      ? row.status[0].toUpperCase() + row.status.slice(1)
+                      : "Canceled"}
                   </TableCell>
                 </TableRow>
               ))}

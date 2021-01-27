@@ -69,7 +69,7 @@ const orderSetSlice = createSlice({
         totalEstFreight,
         totalEstTax,
       } = action.payload;
-      let currentItems = [...items];
+      let currentItems = items && items.length > 0 ? [...items] : [];
       if (orders.length !== 0) {
         let ordTotal = 0;
         orders.forEach((ord) => {
@@ -89,7 +89,7 @@ const orderSetSlice = createSlice({
         state.isComplete = isComplete;
         state.type = type;
         state.items = currentItems;
-        state.orders = [...orders];
+        state.orders = orders && orders.length > 0 ? [...orders] : [];
         state.orderNote = note;
         state.totalEstItemCost = ordTotal;
         state.orderTotal = ordTotal + totalEstFreight + totalEstTax;
@@ -345,23 +345,28 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = mapOrderItems(
-      currentOrders.data["order-set-items"],
-      "order-set-item"
-    );
-    let orders = mapOrderHistoryOrders(currentOrders.data.orders);
-    orders.sort((a, b) => {
-      let aName = a.distributorName ? a.distributorName : a.customAddressName;
-      let bName = b.distributorName ? b.distributorName : b.customAddressName;
-      return aName < bName ? -1 : aName > bName ? 1 : 0;
-    });
+    let currentItems = currentOrders.data["order-set-items"]
+      ? mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
+      : [];
+    let orders = currentOrders.data.orders
+      ? mapOrderHistoryOrders(currentOrders.data.orders)
+      : [];
+    if (orders.length > 0) {
+      orders.sort((a, b) => {
+        let aName = a.distributorName ? a.distributorName : a.customAddressName;
+        let bName = b.distributorName ? b.distributorName : b.customAddressName;
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
+    }
 
     let totalFreight = 0;
     let totalTax = 0;
-    orders.forEach((ord) => {
-      totalFreight += ord.totalEstFreight;
-      totalTax += ord.totalEstTax;
-    });
+    if (orders.length > 0) {
+      orders.forEach((ord) => {
+        totalFreight += ord.totalEstFreight;
+        totalTax += ord.totalEstTax;
+      });
+    }
 
     let type = currentOrders.data.type;
     let orderId = currentOrders.data.id;
@@ -409,35 +414,53 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    let currentItems = mapOrderItems(
-      currentOrders.data[0]["order-set-items"],
-      "order-set-item"
-    );
-    let orders = mapOrderHistoryOrders(currentOrders.data[0].orders);
-    orders.sort((a, b) => {
-      let aName = a.distributorName ? a.distributorName : a.customAddressName;
-      let bName = b.distributorName ? b.distributorName : b.customAddressName;
-      return aName < bName ? -1 : aName > bName ? 1 : 0;
-    });
+    let currentItems =
+      currentOrders.data[0] && currentOrders.data[0]["order-set-items"]
+        ? mapOrderItems(
+            currentOrders.data[0]["order-set-items"],
+            "order-set-item"
+          )
+        : [];
+    let orders =
+      currentOrders.data[0] && currentOrders.data[0].orders
+        ? mapOrderHistoryOrders(currentOrders.data[0].orders)
+        : [];
+    if (orders.length > 0) {
+      orders.sort((a, b) => {
+        let aName = a.distributorName ? a.distributorName : a.customAddressName;
+        let bName = b.distributorName ? b.distributorName : b.customAddressName;
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
+    }
 
     let totalFreight = 0;
     let totalTax = 0;
-    orders.forEach((ord) => {
-      totalFreight += ord.totalEstFreight;
-      totalTax += ord.totalEstTax;
-    });
+    if (orders.length > 0) {
+      orders.forEach((ord) => {
+        totalFreight += ord.totalEstFreight;
+        totalTax += ord.totalEstTax;
+      });
+    }
 
-    let type = currentOrders.data[0].type;
-    let orderId = currentOrders.data[0].id;
-    let orderStatus = currentOrders.data[0].status;
-    let complete = currentOrders.data[0]["is-work-complete"];
+    let type = currentOrders.data[0] ? currentOrders.data[0].type : null;
+    let orderId = currentOrders.data[0] ? currentOrders.data[0].id : null;
+    let orderStatus = currentOrders.data[0]
+      ? currentOrders.data[0].status
+      : null;
+    let complete = currentOrders.data[0]
+      ? currentOrders.data[0]["is-work-complete"]
+      : null;
     let totalEstFreight = totalFreight;
     let totalEstTax = totalTax;
-    let territories =
-      currentOrders.data[0].program.type === "National"
+    let territories = currentOrders.data[0]
+      ? currentOrders.data[0].program.type === "National"
         ? ["National"]
-        : currentOrders.data[0]["territory-names"].split(", ");
-    let note = currentOrders.data[0].notes ? currentOrders.data[0].notes : "";
+        : currentOrders.data[0]["territory-names"].split(", ")
+      : null;
+    let note =
+      currentOrders.data[0] && currentOrders.data[0].notes
+        ? currentOrders.data[0].notes
+        : "";
     dispatch(
       setPreOrderDetails({
         territories: territories,
@@ -457,13 +480,17 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
         totalEstTax: totalEstTax,
       })
     );
-    dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
+    if (currentItems.length > 0) {
+      dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
+    }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
   }
 };
 
-export const createSingleOrder = (id, dist, type, warehouse) => async (dispatch) => {
+export const createSingleOrder = (id, dist, type, warehouse) => async (
+  dispatch
+) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
@@ -481,7 +508,9 @@ export const createSingleOrder = (id, dist, type, warehouse) => async (dispatch)
   }
 };
 
-export const createMultipleOrders = (idArray, id, type, warehouse) => async (dispatch) => {
+export const createMultipleOrders = (idArray, id, type, warehouse) => async (
+  dispatch
+) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
@@ -505,7 +534,9 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (dis
   }
 };
 
-export const createAllOrders = (territoryId, id, type, warehouse) => async (dispatch) => {
+export const createAllOrders = (territoryId, id, type, warehouse) => async (
+  dispatch
+) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());

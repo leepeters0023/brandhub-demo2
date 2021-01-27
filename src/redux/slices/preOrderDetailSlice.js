@@ -73,7 +73,7 @@ const preOrderDetailSlice = createSlice({
     setPreOrderDetails(state, action) {
       const { territories, programId } = action.payload;
       state.programId = programId;
-      state.territories = [...territories];
+      state.territories = territories && territories.length > 0 ? [...territories] : [];
     },
     setProgramName(state, action) {
       const { name } = action.payload;

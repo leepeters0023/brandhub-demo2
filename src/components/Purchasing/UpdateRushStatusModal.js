@@ -13,10 +13,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -41,10 +38,7 @@ const UpdateRushStatusModal = ({ item, open, handleClose }) => {
         style={{ zIndex: "15000" }}
       >
         <DialogContent>
-          <IconButton
-            className={classes.closeButton}
-            onClick={handleClose}
-          >
+          <IconButton className={classes.closeButton} onClick={handleClose}>
             <CancelIcon fontSize="large" color="secondary" />
           </IconButton>
           <br />
@@ -67,7 +61,7 @@ const UpdateRushStatusModal = ({ item, open, handleClose }) => {
             </Typography>
             <br />
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
+              <DatePicker
                 fullWidth
                 color="secondary"
                 disableToolbar
@@ -78,20 +72,21 @@ const UpdateRushStatusModal = ({ item, open, handleClose }) => {
                 label="Required Delivery Date"
                 value={format(formatDate(currentDate), "MM/dd/yyyy")}
                 onChange={(value) => {
-                  dispatch(setSetDate(item.id, new Date(value)))
-                  setCurrentDate(value)
-                  if (isBefore(new Date(value), new Date(item.standardDeliveryDate))) {
-                    dispatch(setRush(item.id, true))
+                  dispatch(setSetDate(item.id, new Date(value)));
+                  setCurrentDate(value);
+                  if (
+                    isBefore(
+                      new Date(value),
+                      new Date(item.standardDeliveryDate)
+                    )
+                  ) {
+                    dispatch(setRush(item.id, true));
                   } else {
-                    dispatch(setRush(item.id, false))
+                    dispatch(setRush(item.id, false));
                   }
-                }
-                }
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
                 }}
                 PopoverProps={{
-                  style: {zIndex: "16000"}
+                  style: { zIndex: "16000" },
                 }}
               />
             </MuiPickersUtilsProvider>
@@ -107,6 +102,6 @@ UpdateRushStatusModal.propTypes = {
   item: PropTypes.object,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-}
+};
 
 export default React.memo(UpdateRushStatusModal);

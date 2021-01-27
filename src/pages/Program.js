@@ -71,7 +71,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
     setCurrentProgram(program);
-    if (program && program.items.length === 0) {
+    if (program && program.items.length === 0 && !program.isItemsFetched) {
       dispatch(fetchItems(programId));
     }
   }, [programId, setCurrentProgram, programs, dispatch]);

@@ -40,18 +40,6 @@ const headCells = [
     sort: false,
   },
   {
-    id: "shippedBudget",
-    disablePadding: false,
-    label: "Budget Shipped",
-    sort: false,
-  },
-  {
-    id: "remainingBudget",
-    disablePadding: false,
-    label: "Budget Rem.",
-    sort: false,
-  },
-  {
     id: "actions",
     disablePadding: false,
     label: "Deny",
@@ -346,8 +334,6 @@ const OrderApprovalTable = ({
                         ? formatMoney(row.totalEstCost, false)
                         : row.totalEstCost}
                     </TableCell>
-                    <TableCell>$5,000.00</TableCell>
-                    <TableCell>$25,000.00</TableCell>
                     {currentUserRole !== "read-only" && (
                       <TableCell align="right">
                         <div style={{ display: "flex", alignItems: "center" }}>

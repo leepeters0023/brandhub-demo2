@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -31,24 +31,13 @@ const headCells = [
     sort: false,
   },
   {
-    id: "shippedBudget",
-    disablePadding: false,
-    label: "Budget Shipped",
-    sort: false,
-  },
-  {
-    id: "remainingBudget",
-    disablePadding: false,
-    label: "Budget Rem.",
-    sort: false,
-  },
-  {
     id: "orderDate",
     disablePadding: false,
     label: "Order Submitted",
-    sort: true,
+    sort: false,
   },
-  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
+  { id: "dueDate", disablePadding: false, label: "Order Window Close", sort: false },
+  { id: "inMarketDate", disablePadding: false, label: "In Market Date", sort: false },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -233,17 +222,20 @@ const RollupOverViewTable = ({
                   <TableCell align="left">
                     {formatMoney(row.totalEstCost, false)}
                   </TableCell>
-                  <TableCell align="left">$5,000.00</TableCell>
-                  <TableCell align="left">{row.budget}</TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.orderDate)), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.dueDate !== "---"
-                      ? format(new Date(row.dueDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.dueDate)), "MM/dd/yyyy")
                       : row.dueDate}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.inMarketDate !== "---"
+                      ? format(formatDate(new Date(row.inMarketDate)), "MM/dd/yyyy")
+                      : row.inMarketDate}
                   </TableCell>
                   <TableCell align="left">
                     {statusConverter(row.status)}

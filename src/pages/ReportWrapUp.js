@@ -19,10 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 import GetAppIcon from "@material-ui/icons/GetApp";
@@ -192,7 +189,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
         <br />
         <div className={classes.searchComponents}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <DatePicker
               fullWidth
               style={{ marginTop: 0 }}
               color="secondary"
@@ -207,13 +204,10 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
               onChange={(value) =>
                 setFromDate(format(formatDate(value), "MM/dd/yyyy"))
               }
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
             />
           </MuiPickersUtilsProvider>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
+            <DatePicker
               fullWidth
               style={{ marginTop: 0 }}
               color="secondary"
@@ -228,9 +222,6 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
               onChange={(value) =>
                 setToDate(format(formatDate(value), "MM/dd/yyyy"))
               }
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
             />
           </MuiPickersUtilsProvider>
           {currentUserRole !== "field1" && (
@@ -286,7 +277,11 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
           </div>
         )}
         {!isLoading && report.length > 0 && currentSuppliers.length > 0 && (
-          <WrapUpTable report={report} orderTypeMap={orderTypeMap} currentSuppliers={currentSuppliers} />
+          <WrapUpTable
+            report={report}
+            orderTypeMap={orderTypeMap}
+            currentSuppliers={currentSuppliers}
+          />
         )}
       </Container>
     </>

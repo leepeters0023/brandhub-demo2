@@ -26,10 +26,7 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Divider from "@material-ui/core/Divider";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 const FiltersHistory = ({
   reset,
@@ -185,7 +182,7 @@ const FiltersHistory = ({
           <>
             <ListItem>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
+                <DatePicker
                   fullWidth
                   color="secondary"
                   className={classes.dateField}
@@ -201,15 +198,15 @@ const FiltersHistory = ({
                   onChange={(value) =>
                     handleFilters(value, "fromDate", "history")
                   }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
+                  PopoverProps={{
+                    style: { zIndex: "16000" },
                   }}
                 />
               </MuiPickersUtilsProvider>
             </ListItem>
             <ListItem>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
+                <DatePicker
                   fullWidth
                   color="secondary"
                   className={classes.dateField}
@@ -223,8 +220,8 @@ const FiltersHistory = ({
                   onChange={(value) =>
                     handleFilters(value, "toDate", "history")
                   }
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
+                  PopoverProps={{
+                    style: { zIndex: "16000" },
                   }}
                 />
               </MuiPickersUtilsProvider>

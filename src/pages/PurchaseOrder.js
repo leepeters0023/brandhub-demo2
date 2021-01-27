@@ -86,12 +86,10 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   const handleSupplierComplete = () => {
     dispatch(completePurchaseOrder(currentPO.id));
-    navigate("/purchasing/poHistory/all");
   };
 
   const handlePurchaserSubmit = () => {
     dispatch(submitPurchaseOrder(currentPO.id));
-    navigate("/purchasing/poHistory/current");
   };
 
   const handleOpenDialog = (evt) => {
