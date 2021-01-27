@@ -151,7 +151,7 @@ export const mapOrderSetItems = (items) => {
 };
 
 export const mapPrograms = (programs) => {
-  const programArray = programs.map((prog) => ({
+  let programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
     name: prog.name ? prog.name : "---",
@@ -182,6 +182,7 @@ export const mapPrograms = (programs) => {
       ? 1
       : 0;
   });
+  programArray = programArray.filter((prog) => prog.brand !== "BRAND")
   return programArray;
 };
 
