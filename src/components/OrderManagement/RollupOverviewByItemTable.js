@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import { useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
-//import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "user", disablePadding: false, label: "Person", sort: true },
@@ -51,9 +51,20 @@ const headCells = [
     id: "orderDate",
     disablePadding: false,
     label: "Order Submitted",
-    sort: true,
+    sort: false,
   },
-  { id: "dueDate", disablePadding: false, label: "In-Market Date", sort: true },
+  {
+    id: "dueDate",
+    disablePadding: false,
+    label: "Order Window Close",
+    sort: false,
+  },
+  {
+    id: "inMarketDate",
+    disablePadding: false,
+    label: "In Market Date",
+    sort: false,
+  },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -221,8 +232,7 @@ const RollupOverviewByItemTable = ({
                   <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">{row.itemNumber}</TableCell>
                   <TableCell align="left">{row.program}</TableCell>
-                  <TableCell align="left">{row.brand}</TableCell>
-                  {/* {row.brand.length > 1 ? (
+                  {row.brand.length > 1 ? (
                     <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
                       <TableCell
                         align="left"
@@ -233,13 +243,13 @@ const RollupOverviewByItemTable = ({
                       </TableCell>
                     </Tooltip>
                   ) : (
-                      <TableCell align="left">{row.brand[0]}</TableCell>
-                    )} */}
+                    <TableCell align="left">{row.brand[0]}</TableCell>
+                  )}
                   <TableCell align="left" style={{ whiteSpace: "nowrap" }}>
                     {row.itemType}
                   </TableCell>
                   <TableCell align="left">{row.itemDescription}</TableCell>
-                  {row.state.length > 2 ? (
+                  {row.state !== "---" && row.state.length > 2 ? (
                     <Tooltip
                       title={`${row.state.split(", ").splice(1).join(", ")}`}
                     >
@@ -266,13 +276,18 @@ const RollupOverviewByItemTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.orderDate)), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDue !== "---"
-                      ? format(new Date(row.orderDue), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.orderDue)), "MM/dd/yyyy")
                       : row.orderDue}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.orderDue !== "---"
+                      ? format(formatDate(new Date(row.inMarketDate)), "MM/dd/yyyy")
+                      : row.inMarketDate}
                   </TableCell>
                   <TableCell align="left">
                     {statusConverter(row.status)}

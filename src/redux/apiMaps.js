@@ -124,7 +124,9 @@ export const mapOrderSetItems = (items) => {
   let mappedItems = items.map((item) => ({
     user: item["user-name"],
     itemNumber: item["sequence-number"],
-    brand: "---",
+    brand: item.program
+      ? item.program.brands.map((brand) => brand.name)
+      : "---",
     program: item["program-name"],
     itemType: item["item-type-description"],
     itemDescription: item.description ? item.description : "---",
@@ -136,8 +138,11 @@ export const mapOrderSetItems = (items) => {
     orderDate: item["order-set-submitted-at"]
       ? item["order-set-submitted-at"]
       : "---",
-    orderDue: item["program-order-due-date"]
-      ? item["program-order-due-date"]
+    orderDue: item.program
+      ? item.program["order-calendar-month"]["order-window-close-date"]
+      : "---",
+    inMarketDate: item.program
+      ? item.program["order-calendar-month"]["in-market-start-date"]
       : "---",
     status: item["order-set-status"],
     orderSetId: item["order-set"].id,

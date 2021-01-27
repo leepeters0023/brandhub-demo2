@@ -95,7 +95,9 @@ const EditRushDetailModal = ({ itemId, handleClose }) => {
                     ? formatDate(currentItem.requestedShip)
                     : format(addDays(new Date(), 28), "MM/dd/yyyy")
                 }
-                //onChange={(value) => handle this function!}
+                PopoverProps={{
+                  style: { zIndex: "16000" },
+                }}
               />
             </MuiPickersUtilsProvider>
             <div

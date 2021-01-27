@@ -198,6 +198,9 @@ const FiltersHistory = ({
                   onChange={(value) =>
                     handleFilters(value, "fromDate", "history")
                   }
+                  PopoverProps={{
+                    style: { zIndex: "16000" },
+                  }}
                 />
               </MuiPickersUtilsProvider>
             </ListItem>
@@ -217,6 +220,9 @@ const FiltersHistory = ({
                   onChange={(value) =>
                     handleFilters(value, "toDate", "history")
                   }
+                  PopoverProps={{
+                    style: { zIndex: "16000" },
+                  }}
                 />
               </MuiPickersUtilsProvider>
             </ListItem>

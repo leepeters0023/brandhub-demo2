@@ -63,7 +63,8 @@ const itemHeaders = [
   { label: "Est. Cost", key: "estCost" },
   { label: "Est. Total", key: "totalEstCost" },
   { label: "Order Submitted", key: "orderDate" },
-  { label: "In-Market Date", key: "dueDate" },
+  { label: "Order Window Close", key: "dueDate" },
+  { label: "In Market Date", key: "inMarketDate" },
   { label: "Status", key: "status" },
 ];
 
@@ -219,7 +220,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
               user: item.user,
               itemNumber: item.itemNumber,
               program: item.program,
-              brand: item.brand,
+              brand: item.brand.join(", "),
               itemType: item.itemType,
               itemDescription: item.itemDescription,
               state: item.state,
@@ -241,6 +242,10 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                 item.orderDue !== "---"
                   ? format(new Date(item.orderDue), "MM/dd/yyyy")
                   : item.orderDue,
+              inMarketDate:
+                item.inMarketDate !== "---"
+                  ? format(new Date(item.inMarketDate), "MM/dd/yyyy")
+                  : item.inMarketDate,
               status: statusConverter(item.status),
             }));
       setCurrentCSVData(dataObject);

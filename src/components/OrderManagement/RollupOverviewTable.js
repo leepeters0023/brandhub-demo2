@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
-import { formatMoney } from "../../utility/utilityFunctions";
+import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -224,17 +224,17 @@ const RollupOverViewTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.orderDate)), "MM/dd/yyyy")
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.dueDate !== "---"
-                      ? format(new Date(row.dueDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.dueDate)), "MM/dd/yyyy")
                       : row.dueDate}
                   </TableCell>
                   <TableCell align="left">
                     {row.inMarketDate !== "---"
-                      ? format(new Date(row.inMarketDate), "MM/dd/yyyy")
+                      ? format(formatDate(new Date(row.inMarketDate)), "MM/dd/yyyy")
                       : row.inMarketDate}
                   </TableCell>
                   <TableCell align="left">
