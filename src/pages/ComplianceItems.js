@@ -158,35 +158,35 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           >
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
-              <>
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create manual approval function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
-                >
-                  APPROVE RULE
+                <>
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!itemSelected}
+                    style={{ marginRight: "20px" }}
+                    onClick={() => {
+                      //TODO create manual approval function
+                      //navigate("/purchasing/purchaseOrder#new");
+                    }}
+                  >
+                    APPROVE RULE
                 </Button>
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create override function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
-                >
-                  OVERRIDE RULE
+                  <Button
+                    className={classes.largeButton}
+                    variant="contained"
+                    color="secondary"
+                    disabled={!itemSelected}
+                    style={{ marginRight: "20px" }}
+                    onClick={() => {
+                      //TODO create override function
+                      //navigate("/purchasing/purchaseOrder#new");
+                    }}
+                  >
+                    OVERRIDE RULE
                 </Button>
-              </>
-            )}
+                </>
+              )}
             <Tooltip title="Print Item Rules">
               <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />
@@ -201,23 +201,25 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div
-          className={classes.showHideFilters}
-          onClick={() => {
-            handleFilterDrawer(!filtersOpen);
-          }}
-        >
-          <TuneIcon fontSize="small" color="secondary" />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            style={{ margin: "10px 10px" }}
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+          <div
+            className={classes.showHideFilters}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
           >
-            {filtersOpen ? "Hide Filters" : "Show Filters"}
-          </Typography>
+            <TuneIcon fontSize="small" color="secondary" />
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ margin: "10px 10px" }}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Typography>
+          </div>
           <FilterChipList classes={classes} />
+          <br />
         </div>
-        <br />
         <ComplianceItemsTable
           items={currentItemRules}
           itemsLoading={isLoading}

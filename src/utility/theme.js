@@ -206,11 +206,12 @@ export default {
     },
     showHideFilters: {
       display: "flex",
+      flexDirection: "row",
       position: "relative",
       alignItems: "center",
+      maxWidth: "150px",
       height: "32px",
       marginRight: "10px",
-      marginBottom: "10px",
       "&:hover": {
         cursor: "pointer",
       },

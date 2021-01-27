@@ -297,12 +297,11 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                   style={{
                     marginTop: "10px",
                     marginBottom: "0px",
-                    width: `Calc(${
-                      queryTotal && orderCount
+                    width: `Calc(${queryTotal && orderCount
                         ? queryTotal.toString().length +
-                          orderCount.toString().length
+                        orderCount.toString().length
                         : 0
-                    }*15px + 50px)`,
+                      }*15px + 50px)`,
                     minWidth: "100px",
                     readonly: "readonly",
                     pointerEvents: "none",
@@ -335,23 +334,25 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div
-          className={classes.showHideFilters}
-          onClick={() => {
-            handleFilterDrawer(!filtersOpen);
-          }}
-        >
-          <TuneIcon fontSize="small" color="secondary" />
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            style={{ margin: "10px 10px" }}
+        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+          <div
+            className={classes.showHideFilters}
+            onClick={() => {
+              handleFilterDrawer(!filtersOpen);
+            }}
           >
-            {filtersOpen ? "Hide Filters" : "Show Filters"}
-          </Typography>
+            <TuneIcon fontSize="small" color="secondary" />
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              style={{ margin: "10px 10px" }}
+            >
+              {filtersOpen ? "Hide Filters" : "Show Filters"}
+            </Typography>
+          </div>
           <FilterChipList classes={classes} />
+          <br />
         </div>
-        <br />
         {currentGrouping === "order" && (
           <RollupOverviewTable
             rollupData={currentPreOrders}
