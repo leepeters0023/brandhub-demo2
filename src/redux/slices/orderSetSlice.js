@@ -447,7 +447,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     let orderStatus = currentOrders.data[0]
       ? currentOrders.data[0].status
       : null;
-    let complete = currentOrders.data[0]["is-work-complete"];
+    let complete = currentOrders.data[0] ? currentOrders.data[0]["is-work-complete"] : null;
     let totalEstFreight = totalFreight;
     let totalEstTax = totalTax;
     let territories = currentOrders.data[0]
