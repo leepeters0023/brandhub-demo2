@@ -69,7 +69,7 @@ const orderSetSlice = createSlice({
         totalEstFreight,
         totalEstTax,
       } = action.payload;
-      let currentItems = [...items];
+      let currentItems = items.length > 0 ? [...items] : [];
       if (orders.length !== 0) {
         let ordTotal = 0;
         orders.forEach((ord) => {
@@ -89,7 +89,7 @@ const orderSetSlice = createSlice({
         state.isComplete = isComplete;
         state.type = type;
         state.items = currentItems;
-        state.orders = [...orders];
+        state.orders = orders.length > 0 ? [...orders] : [];
         state.orderNote = note;
         state.totalEstItemCost = ordTotal;
         state.orderTotal = ordTotal + totalEstFreight + totalEstTax;
