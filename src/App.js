@@ -55,6 +55,7 @@ import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
 import { updateSingleFilter } from "./redux/slices/filterSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
+import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
 import BudgetVsSpend from "./pages/BudgetVsSpend";
 import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
@@ -262,9 +263,19 @@ const App = () => {
   ]);
 
   if (userError) {
-    navigate("/whoops");
+    navigate("/whoops")
   }
-
+  if (window.location.pathname.includes("/approveOrDenyItem")) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <ApproveOrDenyItem
+            path="approveOrDenyItem"
+            handleFiltersClosed={handleFiltersClosed} />
+        </Router>
+      </MuiThemeProvider>
+    );
+  };
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
