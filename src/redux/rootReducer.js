@@ -1,6 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import addressReducer from "./slices/addressSlice";
+import itemApprovedOrDenied from "./slices/approveOrDenyItemSlice";
 import brandReducer from "./slices/brandSlice";
 import businessUnitReducer from "./slices/businessUnitSlice";
 import complianceContactReducer from "./slices/complianceContactSlice";
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   currentOrder: currentOrderReducer,
   distributors: distributorReducer,
   filters: filterReducer,
+  itemApprovedOrDenied: itemApprovedOrDenied, 
   items: itemReducer,
   itemTypes: itemTypeReducer,
   newProgram: newProgramReducer,
