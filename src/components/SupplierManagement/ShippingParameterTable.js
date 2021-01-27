@@ -63,6 +63,14 @@ const CollapseRow = ({
   role,
 }) => {
   const [open, setOpen] = useCallback(useState(false));
+
+  const statusMap = {
+    "prior-approval-pending": "Pending Prior Approval",
+    "approved": "Prior Approval Approved",
+    "denied": "Prior Approval Denied",
+    "ok": "OK"
+  }
+
   return (
     <>
       <TableRow className={classes.root}>
@@ -100,13 +108,18 @@ const CollapseRow = ({
         <TableCell align="center" padding="checkbox">
           {poStatus === "draft" ? (
             "---"
-          ) : shippingInfo.onShipHold ? (
+          ) : shippingInfo.shipHoldStatus !== "approved" &&
+            shippingInfo.shipHoldStatus !== "ok" ? (
             role !== "supplier" ? (
               <Tooltip title="Click to Reallocate Shipment">
                 <Chip
                   classes={{ root: classes.holdChip }}
                   color="primary"
-                  label="ON HOLD"
+                  label={
+                    shippingInfo.shipHoldStatus === "prior-approval-pending"
+                      ? "ON HOLD"
+                      : "DENIED"
+                  }
                   onClick={() => {
                     if (role !== "supplier") {
                       handleModalOpen(shippingInfo.id);
@@ -118,7 +131,11 @@ const CollapseRow = ({
               <Chip
                 classes={{ root: classes.supHoldChip }}
                 color="primary"
-                label="ON HOLD"
+                label={
+                  shippingInfo.shipHoldStatus === "prior-approval-pending"
+                    ? "ON HOLD"
+                    : "DENIED"
+                }
               />
             )
           ) : (
@@ -176,7 +193,7 @@ const CollapseRow = ({
                         <TableCell align="center">{item.itemNumber}</TableCell>
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
-                        <TableCell align="center">{item.shipStatus}</TableCell>
+                        <TableCell align="center">{statusMap[item.shipHoldStatus]}</TableCell>
                         <TableCell
                           align="center"
                           className={

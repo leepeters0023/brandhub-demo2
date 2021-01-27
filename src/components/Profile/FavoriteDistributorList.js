@@ -69,6 +69,7 @@ const FavoriteDistributorList = ({ id }) => {
 
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const userStates = useSelector((state) => state.user.states);
   const options = useSelector((state) => state.distributors.distributorList);
   const userDistributors = useSelector(
     (state) =>
@@ -98,9 +99,9 @@ const FavoriteDistributorList = ({ id }) => {
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor, territoryId));
+      dispatch(fetchUserDistributors(distributor, territoryId, userStates.map((state) => state.id).join(","),));
     }
-  }, [distributor, territoryId, dispatch]);
+  }, [distributor, territoryId, userStates, dispatch]);
 
   useEffect(() => {
     if (userDistributors.length !== currentDistributors.length) {

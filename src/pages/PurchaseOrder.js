@@ -218,7 +218,13 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               itemNumber: currentParamItem.itemNumber,
               label: currentParamItem.shippingLabel,
               totalItems: currentParamItem.totalItems,
-              shipStatus: currentParamItem.onShipHold ? "On Hold" : "Ok",
+              shipStatus:
+                currentParamItem.shipHoldStatus === "approved" ||
+                currentParamItem.shipHoldStatus === "ok"
+                  ? "Ok"
+                  : (currentParamItem.shipHoldStatus === "prior-approval-pending"
+                      ? "Pending - On Hold"
+                      : "Denied - Don't Ship"),
               carrier:
                 currentParamItem.carrier === "---"
                   ? ""
@@ -438,18 +444,9 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     SUBMIT PURCHASE ORDER
                   </Button>
                 )}
-                {currentPO.status === "submitted" && (
-                  <Button
-                    className={classes.largeButton}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    SUBMIT EDITS
-                  </Button>
-                )}
               </>
             )}
-            {currentRole === "supplier" && !currentPO.accepted && (
+            {currentRole === "supplier" && currentPO.status === "submitted" && (
               <div style={{ display: "flex" }}>
                 <Button
                   style={{ marginRight: "10px" }}
@@ -474,7 +471,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                 </Button>
               </div>
             )}
-            {currentRole === "supplier" && currentPO.accepted && (
+            {currentRole === "supplier" && currentPO.status === "in-progress" && (
               <Button
                 className={classes.largeButton}
                 variant="contained"

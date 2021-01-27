@@ -179,7 +179,7 @@ export const {
 
 export default distributorSlice.reducer;
 
-export const fetchUserDistributors = (name, territoryId, attn = false) => async (
+export const fetchUserDistributors = (name, territoryId, stateIds, attn = false) => async (
   dispatch
 ) => {
   try {
@@ -188,7 +188,7 @@ export const fetchUserDistributors = (name, territoryId, attn = false) => async 
     } else {
       dispatch(setIsLoading());
     }
-    let distributors = await fetchDistributors(name, territoryId);
+    let distributors = await fetchDistributors(name, territoryId, stateIds);
     if (distributors.error) {
       throw distributors.error;
     }

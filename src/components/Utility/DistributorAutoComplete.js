@@ -24,6 +24,7 @@ const DistributorAutoComplete = ({
   const isLoading = useSelector((state) => state.distributors.isLoading);
   const options = useSelector((state) => state.distributors.distributorList);
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const userStates = useSelector((state) => state.user.states);
   const currentFiltersDistributor = useSelector(
     (state) => state.filters.distributor
   );
@@ -36,9 +37,15 @@ const DistributorAutoComplete = ({
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor, territoryId));
+      dispatch(
+        fetchUserDistributors(
+          distributor,
+          territoryId,
+          userStates.map((state) => state.id).join(",")
+        )
+      );
     }
-  }, [distributor, territoryId, dispatch]);
+  }, [distributor, territoryId, userStates, dispatch]);
 
   useEffect(() => {
     if (currentFiltersDistributor.length !== currentDistributors.length) {
@@ -65,7 +72,7 @@ const DistributorAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="distributor-auto-complete"
         open={open}

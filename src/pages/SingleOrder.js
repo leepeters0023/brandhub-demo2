@@ -105,7 +105,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
           supplier: supName,
           totalEstCost: formatMoney(item.totalEstCost),
           totalItems: item.totalItems,
-          holdType: item.onShipHold ? "Prior Approval / Pricing Rule" : "OK to ship",
+          holdType: item.onShipHold ? "Compliance Pending" : "OK to ship",
           itemNumber: item.itemNumber,
           program: item.program,
           orderType: item.orderType,

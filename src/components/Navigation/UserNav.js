@@ -13,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SettingsIcon from "@material-ui/icons/Settings";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+// import NotificationsIcon from "@material-ui/icons/Notifications";
 import HelpIcon from "@material-ui/icons/Help";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
@@ -56,7 +56,7 @@ const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             handleClose();
           }}
@@ -66,7 +66,7 @@ const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
           </ListItemIcon>
           <ListItemText primary="Notifications" />
         </MenuItem>
-        <Divider />
+        <Divider /> */}
         {role !== "supplier" &&
           role !== "read-only" && [
             <MenuItem

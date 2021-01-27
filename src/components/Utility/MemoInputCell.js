@@ -37,6 +37,7 @@ const MemoInputCell = React.memo(
       {
         orderNumber,
         compliance,
+        priorApprovalDenied,
         itemNumber,
         itemId,
         index,
@@ -106,6 +107,27 @@ const MemoInputCell = React.memo(
           >
             <Typography className={classes.headerText}>
               NOT COMPLIANT
+            </Typography>
+          </TableCell>
+        );
+      }
+
+      if (priorApprovalDenied) {
+        return (
+          <TableCell
+            ref={cellRef}
+            align="center"
+            classes={{ root: classes.root }}
+            className={classes.borderRight}
+            style={{ zIndex: "-100", backgroundColor: "#999999" }}
+            onFocus={() => {
+              window.addEventListener("keydown", handleKeyEvent);
+              return index === 0 ? handleScrollLeft() : null;
+            }}
+            onBlur={() => window.removeEventListener("keydown", handleKeyEvent)}
+          >
+            <Typography className={classes.headerText}>
+              PRIOR APPROVAL DENIED
             </Typography>
           </TableCell>
         );

@@ -31,16 +31,24 @@ const DistributorOptions = () => {
     (state) => state.distributors.editAttnList
   );
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const userStates = useSelector((state) => state.user.states);
   const isLoading = useSelector((state) => state.distributors.attnIsLoading);
   const currentUserRole = useSelector((state) => state.user.role);
 
   useEffect(() => {
     if (distName.length >= 1) {
       currentUserRole !== "super" && currentUserRole !== "purchaser"
-      ? dispatch(fetchUserDistributors(distName, territoryId, true))
-      : dispatch(fetchUserDistributors(distName, false, true))
+        ? dispatch(
+            fetchUserDistributors(
+              distName,
+              territoryId,
+              userStates.map((state) => state.id).join(","),
+              true
+            )
+          )
+        : dispatch(fetchUserDistributors(distName, false, false, true));
     }
-  }, [distName, territoryId, currentUserRole, dispatch]);
+  }, [distName, territoryId, currentUserRole, userStates, dispatch]);
 
   return (
     <>

@@ -534,13 +534,13 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
   }
 };
 
-export const createAllOrders = (territoryId, id, type, warehouse) => async (
+export const createAllOrders = (territoryId, id, type, warehouse, stateIds) => async (
   dispatch
 ) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    const distributors = await fetchDistributorsByTerritory(territoryId);
+    const distributors = await fetchDistributorsByTerritory(territoryId, stateIds);
     if (distributors.error) {
       throw distributors.error;
     }

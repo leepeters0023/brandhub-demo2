@@ -151,7 +151,6 @@ export const mapOrderSetItems = (items) => {
 };
 
 export const mapPrograms = (programs) => {
-  console.log(programs);
   let programArray = programs.map((prog) => ({
     id: prog.id,
     type: prog.type,
@@ -431,6 +430,10 @@ export const mapOrderItems = (items, type) => {
           ).length > 0
             ? "not-compliant"
             : "compliant",
+        priorApprovalDenied:
+          type !== "order-set-item" && item["prior-approval-denied"]
+            ? item["prior-approval-denied"]
+            : false,
         isComplianceCanceled: item["is-compliance-canceled"],
         orderType: item.item["order-type"],
         standardDeliveryDate: item["standard-delivery-date"]
@@ -455,7 +458,9 @@ export const mapOrderItems = (items, type) => {
             : null
           : null,
         onShipHold: item["shipping-parameter-item"]
-          ? item["shipping-parameter-item"]["on-compliance-hold"]
+          ? item["shipping-parameter-item"]["compliance-status"] ===
+              "prior-approval-pending" ||
+            item["shipping-parameter-item"]["compliance-status"] === "denied"
           : "---",
       };
     })
@@ -547,6 +552,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items)
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -633,7 +639,6 @@ export const mapPOShippingParamItems = (items) => {
       ? item["item-type-description"]
       : "---",
     totalItems: item.qty,
-    shipStatus: item["shipping-status"] ? item["shipping-status"] : "---",
     shipFromZip: item["ship-from-zip"] ? item["ship-from-zip"] : "---",
     carrier: item.carrier ? item.carrier : "---",
     method: item.method ? item.method : "---",
@@ -646,7 +651,7 @@ export const mapPOShippingParamItems = (items) => {
       : "---",
     shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${item["shipping-label"].code}`,
     trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
-    onShipHold: item["on-compliance-hold"],
+    shipHoldStatus: item["compliance-status"],
     tax: item.tax ? stringToCents(item.tax) : "---",
   }));
   return mappedItems;
@@ -667,6 +672,15 @@ export const mapPOShippingParams = (params) => {
       .join(", ");
   };
   const mappedParams = params.map((param) => {
+    const handleCompStatus = (statusArray) => {
+      if (statusArray.includes("denied")) {
+        return "denied";
+      } else if (statusArray.includes("prior-approval-pending")) {
+        return "prior-approval-pending";
+      } else {
+        return "ok";
+      }
+    };
     let paramItems = mapPOShippingParamItems(param["shipping-parameter-items"]);
     let carriers = [...new Set(paramItems.map((item) => item.carrier))].join(
       ", "
@@ -696,7 +710,9 @@ export const mapPOShippingParams = (params) => {
       method: param.method ? param.method : "---",
       actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
       items: paramItems,
-      onShipHold: param["on-compliance-hold"],
+      shipHoldStatus: handleCompStatus(
+        paramItems.map((item) => item.shipHoldStatus)
+      ),
       tax: totalParamTax,
     };
   });
@@ -757,7 +773,12 @@ export const mapPurchaseOrder = (purchaseOrder) => {
       ),
     ].join(", "),
     isPriceCompliant: itemDetail.compliant,
-    onShipHold: params.filter((param) => param.onShipHold).length > 0,
+    onShipHold:
+      params.filter(
+        (param) =>
+          param.shipHoldStatus === "prior-approval-pending" ||
+          param.shipHoldStatus === "denied"
+      ).length > 0,
     totalTax: params.map((param) => param.tax).reduce((a, b) => a + b),
   };
   return formattedPO;

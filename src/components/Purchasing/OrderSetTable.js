@@ -380,6 +380,7 @@ const OrderSetTable = (props) => {
                         <MemoInputCell
                           key={item.id}
                           compliance={item.complianceStatus}
+                          priorApprovalDenied={item.priorApprovalDenied}
                           orderNumber={ord.id}
                           itemNumber={item.itemNumber}
                           itemId={item.id}

@@ -65,6 +65,7 @@ const DistributorSelection = () => {
   const favoriteLists = useSelector(
     (state) => state.distributors.favoriteDistributors
   );
+  const userStates = useSelector((state) => state.user.states);
 
   const loading = open && isLoading;
 
@@ -102,18 +103,18 @@ const DistributorSelection = () => {
   const handleAddAll = () => {
     if (orderType === "in-stock") {
       dispatch(
-        createAllOrders(territoryId, orderSetId, orderType, currentWarehouse)
+        createAllOrders(territoryId, orderSetId, orderType, currentWarehouse, userStates.map((state) => state.id).join(","))
       );
     } else {
-      dispatch(createAllOrders(territoryId, orderSetId, orderType));
+      dispatch(createAllOrders(territoryId, orderSetId, orderType, null, userStates.map((state) => state.id).join(",")));
     }
   };
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor, territoryId));
+      dispatch(fetchUserDistributors(distributor, territoryId, userStates.map((state) => state.id).join(",")));
     }
-  }, [distributor, territoryId, dispatch]);
+  }, [distributor, territoryId, userStates, dispatch]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {

@@ -46,6 +46,7 @@ let initialState = {
   refreshToken: null,
   timeOutSet: false,
   territories: [],
+  states: [],
   managedUsers: [],
   currentTerritory: "",
   favoriteItems: [],
@@ -120,6 +121,7 @@ const userSlice = createSlice({
       state.isRetail = user.isRetail;
       state.currentMarket = user.currentMarket;
       state.territories = [...user.territories];
+      state.states = user.states.length > 0 ? [...user.states] : [];
       state.managedUsers =
         user.managedUsers.length > 0 ? [...user.managedUsers] : [];
       state.currentTerritory = user.currentTerritory;
@@ -172,6 +174,7 @@ const userSlice = createSlice({
       state.sessionExpire = null;
       state.timeOutSet = false;
       state.territories = [];
+      state.states = [];
       state.managedUsers = [];
       state.favoriteItems = [];
       state.error = null;
@@ -244,6 +247,13 @@ export const fetchUser = () => async (dispatch) => {
               type: terr.type,
             }))
           : [],
+      states:
+        user.data.states.length > 0
+          ? user.data.states.map((state) => ({
+              id: state.id,
+              code: state.code,
+            }))
+          : [],
       managedUsers:
         user.data["managed-users"].length > 0
           ? user.data["managed-users"].map((u) => ({
@@ -297,7 +307,12 @@ export const loginWithCode = (code) => async (dispatch) => {
     if (res.error) {
       throw res.error;
     }
-    dispatch(setLoginSuccess({refresh: res.data["refresh_token"], expires: res.data["expires_in"]}));
+    dispatch(
+      setLoginSuccess({
+        refresh: res.data["refresh_token"],
+        expires: res.data["expires_in"],
+      })
+    );
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
   }
@@ -310,7 +325,7 @@ export const getRedirect = () => async (dispatch) => {
     if (res.error) {
       throw res.error;
     }
-    dispatch(setRedirectLink({link: res.data["redirect_url"]}));
+    dispatch(setRedirectLink({ link: res.data["redirect_url"] }));
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
   }

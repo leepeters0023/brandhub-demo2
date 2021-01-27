@@ -2,10 +2,10 @@ import React from "react";
 
 import { useSelector } from "react-redux";
 
-import Checkbox from '@material-ui/core/Checkbox';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Checkbox from "@material-ui/core/Checkbox";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import Typography from "@material-ui/core/Typography";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const General = () => {
   const classes = useStyles();
 
-  const currentUser = useSelector((state) => state.user)
+  const currentUser = useSelector((state) => state.user);
   // const [info, setInfo] = useState({
   //   first: currentUser.firstName,
   //   last: currentUser.lastName,
@@ -53,34 +53,71 @@ const General = () => {
       <br />
       <List classes={{ root: classes.root }}>
         <ListItem disableGutters>
-          <Typography className={classes.bodyText}>Name: {currentUser.name}</Typography>
+          <Typography className={classes.bodyText}>
+            Name: {currentUser.name}
+          </Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography className={classes.bodyText}>Email: {currentUser.email}</Typography>
+          <Typography className={classes.bodyText}>
+            Email: {currentUser.email}
+          </Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <Typography className={classes.bodyText}>Role: {currentUser.role[0].toUpperCase() + currentUser.role.slice(1)}</Typography>
+          <Typography className={classes.bodyText}>
+            Role:{" "}
+            {currentUser.role[0].toUpperCase() + currentUser.role.slice(1)}
+          </Typography>
         </ListItem>
         <Divider />
-        <ListItem disableGutters style={{display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
-          <Typography className={classes.bodyText}>Assigned Territories:</Typography>
+        <ListItem
+          disableGutters
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          <Typography className={classes.bodyText}>
+            Assigned Territories:
+          </Typography>
           <br />
-          <Typography className={classes.bodyText}>{currentUser.territories.map((terr) => terr.name).join(", ")}</Typography>
+          <Typography className={classes.bodyText}>
+            {currentUser.territories.map((terr) => terr.name).join(", ")}
+          </Typography>
         </ListItem>
         <Divider />
-        <ListItem disableGutters style={{display: "flex", flexDirection: "column", alignItems: "flex-start"}}>
+        <ListItem
+          disableGutters
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
           <Typography className={classes.bodyText}>Assigned States:</Typography>
           <br />
-          <Typography className={classes.bodyText}>{currentUser.states /* will be an array? state.user.states -> state.code) */}</Typography>
+          <Typography className={classes.bodyText}>
+            {currentUser.states.map((state) => state.code).join(", ")}
+          </Typography>
         </ListItem>
         <Divider />
         <ListItem disableGutters>
-          <div style={{ display: "flex", flexDirection: "row", }}>
-            <Typography className={classes.bodyText}>On Premise:<Checkbox disabled checked={currentUser.isOnPremise ? true : false} />
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Typography className={classes.bodyText}>
+              On Premise:
+              <Checkbox
+                disabled
+                checked={currentUser.isOnPremise ? true : false}
+              />
             </Typography>
-            <Typography className={classes.bodyText}>Retail:<Checkbox disabled checked={currentUser.isRetail ? true : false} />
+            <Typography className={classes.bodyText}>
+              Retail:
+              <Checkbox
+                disabled
+                checked={currentUser.isRetail ? true : false}
+              />
             </Typography>
           </div>
         </ListItem>
