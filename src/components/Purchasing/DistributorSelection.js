@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -69,6 +69,8 @@ const DistributorSelection = () => {
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
     if (orderType === "in-stock") {
@@ -103,18 +105,46 @@ const DistributorSelection = () => {
   const handleAddAll = () => {
     if (orderType === "in-stock") {
       dispatch(
-        createAllOrders(territoryId, orderSetId, orderType, currentWarehouse, userStates.map((state) => state.id).join(","))
+        createAllOrders(
+          territoryId,
+          orderSetId,
+          orderType,
+          currentWarehouse,
+          userStates.map((state) => state.id).join(",")
+        )
       );
     } else {
-      dispatch(createAllOrders(territoryId, orderSetId, orderType, null, userStates.map((state) => state.id).join(",")));
+      dispatch(
+        createAllOrders(
+          territoryId,
+          orderSetId,
+          orderType,
+          null,
+          userStates.map((state) => state.id).join(",")
+        )
+      );
     }
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(
+        fetchUserDistributors(
+          distributor,
+          territoryId,
+          userStates.map((state) => state.id).join(",")
+        )
+      );
+    }, 250);
+  }, [distributor, territoryId, userStates, dispatch]);
+
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor, territoryId, userStates.map((state) => state.id).join(",")));
+      handleQuery()
     }
-  }, [distributor, territoryId, userStates, dispatch]);
+  }, [distributor, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {

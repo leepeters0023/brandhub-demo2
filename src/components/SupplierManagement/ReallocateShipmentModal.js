@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -36,17 +36,27 @@ const ReallocateShipmentModal = ({ paramId, modalOpen, handleClose }) => {
   const options = useSelector((state) => state.distributors.distributorList);
 
   const loading = open && isLoading;
+  
+  const debounce = useRef(null);
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
     //TODO
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(fetchUserDistributors(distributor));
+    }, 250);
+  }, [distributor, dispatch]);
+
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor));
+      handleQuery();
     }
-  }, [distributor, dispatch]);
+  }, [distributor, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentDistributors.length > 0) {

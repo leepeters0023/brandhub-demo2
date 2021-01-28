@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -31,12 +31,12 @@ const DistributorAutoComplete = ({
 
   const loading = open && isLoading;
 
-  const handleDistributors = (value) => {
-    setCurrentDistributors(value);
-  };
+  const debounce = useRef(null);
 
-  useEffect(() => {
-    if (distributor.length >= 1) {
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
       dispatch(
         fetchUserDistributors(
           distributor,
@@ -44,8 +44,18 @@ const DistributorAutoComplete = ({
           userStates.map((state) => state.id).join(",")
         )
       );
-    }
+    }, 250);
   }, [distributor, territoryId, userStates, dispatch]);
+
+  const handleDistributors = (value) => {
+    setCurrentDistributors(value);
+  };
+
+  useEffect(() => {
+    if (distributor.length >= 1) {
+      handleQuery()
+    }
+  }, [distributor, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFiltersDistributor.length !== currentDistributors.length) {

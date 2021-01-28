@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -27,21 +27,31 @@ const ProgramAutoComplete = ({
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handlePrograms = (value) => {
     setCurrentPrograms(value);
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(fetchProgramList(program));
+    }, 250);
+  }, [program, dispatch]);
+
   useEffect(() => {
     if (program.length >= 1) {
-      dispatch(fetchProgramList(program));
+      handleQuery();
     }
-  }, [program, dispatch]);
+  }, [program, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFilterPrograms.length !== currentPrograms.length) {
       setCurrentPrograms(currentFilterPrograms);
     }
-  }, [currentFilterPrograms, currentPrograms.length])
+  }, [currentFilterPrograms, currentPrograms.length]);
 
   useEffect(() => {
     if (reset) {
@@ -60,7 +70,7 @@ const ProgramAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="program-auto-complete"
         open={open}

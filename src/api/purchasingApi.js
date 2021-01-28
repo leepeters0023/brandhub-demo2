@@ -269,6 +269,29 @@ export const acceptBid = async (id, price, note) => {
   return response;
 };
 
+export const awardBid = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .post(`/api/bids/${id}/award`, null, writeHeaders)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.data = data;
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response;
+};
+
 export const declineBid = async (id) => {
   const response = { status: "", error: null };
   await axios

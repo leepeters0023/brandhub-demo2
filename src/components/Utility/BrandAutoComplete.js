@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -27,15 +27,25 @@ const BrandAutoComplete = ({
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handleBrands = (value) => {
     setCurrentBrands(value);
   }
 
+  const handleQuery = useCallback(() => {
+      clearTimeout(debounce.current);
+
+      debounce.current = setTimeout(() => {
+        dispatch(fetchBrands(brand));
+      }, 250)
+  }, [brand, dispatch])
+
   useEffect(() => {
     if (brand.length >= 1) {
-      dispatch(fetchBrands(brand));
+      handleQuery()
     }
-  }, [brand, dispatch]);
+  }, [brand, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFiltersBrand.length !== currentBrands.length) {

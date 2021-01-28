@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInput } from "../../hooks/InputHooks";
@@ -17,10 +17,6 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-/*
- *TODO tie to api functionality for editing attn
- */
-
 const DistributorOptions = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -35,9 +31,15 @@ const DistributorOptions = () => {
   const isLoading = useSelector((state) => state.distributors.attnIsLoading);
   const currentUserRole = useSelector((state) => state.user.role);
 
-  useEffect(() => {
-    if (distName.length >= 1) {
-      currentUserRole !== "super" && currentUserRole !== "purchaser" && currentUserRole !== "select-purchaser"
+  const debounce = useRef(null);
+
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      currentUserRole !== "super" &&
+      currentUserRole !== "purchaser" &&
+      currentUserRole !== "select-purchaser"
         ? dispatch(
             fetchUserDistributors(
               distName,
@@ -47,8 +49,14 @@ const DistributorOptions = () => {
             )
           )
         : dispatch(fetchUserDistributors(distName, false, false, true));
+    }, 250);
+  }, [distName, territoryId, userStates, currentUserRole, dispatch]);
+
+  useEffect(() => {
+    if (distName.length >= 1) {
+      handleQuery();
     }
-  }, [distName, territoryId, currentUserRole, userStates, dispatch]);
+  }, [distName, handleQuery, dispatch]);
 
   return (
     <>

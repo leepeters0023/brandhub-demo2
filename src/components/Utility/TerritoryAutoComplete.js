@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -22,22 +22,34 @@ const TerritoryAutoComplete = ({
   const [currentTerritories, setCurrentTerritories] = useState([]);
 
   const isLoading = useSelector((state) => state.territories.isLoading);
-  const options = useSelector((state) => state.territories.filteredTerritoryList);;
+  const options = useSelector(
+    (state) => state.territories.filteredTerritoryList
+  );
   const currentFiltersTerritory = useSelector(
     (state) => state.filters.territory
   );
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handleTerritories = (value) => {
     setCurrentTerritories(value);
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(fetchTerritoriesByName(territory));
+    }, 250);
+  }, [territory, dispatch]);
+
   useEffect(() => {
     if (territory.length >= 1) {
-      dispatch(fetchTerritoriesByName(territory));
+      handleQuery();
     }
-  }, [territory, dispatch]);
+  }, [territory, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFiltersTerritory.length !== currentTerritories.length) {

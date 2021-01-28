@@ -37,9 +37,9 @@ const StatusSelector = ({
     { status: "all", label: "All Status" },
   ];
   const rfqSupplierStatusList = [
-    { status: "new", label: "New" },
-    { status: "in-progress", label: "In Progress" },
-    { status: "awarded", label: "Awarded" },
+    { status: "bid-sent", label: "New" },
+    { status: "bid-accepted", label: "In Progress" },
+    { status: "bid-awarded", label: "Awarded" },
     { status: "all", label: "All Status" },
   ];
   const poSupplierStatusList = [

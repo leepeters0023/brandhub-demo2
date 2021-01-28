@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Profile = ({ userType, handleFiltersClosed }) => {
+const Profile = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const tabs = ["#general", "#favoriteDist", "#favoriteItem"];
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -92,7 +92,6 @@ const Profile = ({ userType, handleFiltersClosed }) => {
 };
 
 Profile.propTypes = {
-  userType: PropTypes.string,
   handleFiltersClosed: PropTypes.func.isRequired,
 };
 

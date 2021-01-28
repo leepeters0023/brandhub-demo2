@@ -6,7 +6,11 @@ import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
-import { fetchSingleRFQ, sendBids } from "../redux/slices/rfqSlice";
+import {
+  fetchSingleRFQ,
+  sendBids,
+  awardCurrentBid,
+} from "../redux/slices/rfqSlice";
 
 import { setRetain } from "../redux/slices/filterSlice";
 
@@ -58,13 +62,7 @@ const RFQ = ({ handleFiltersClosed }) => {
   };
 
   const handleAwardBid = (id) => {
-    //TODO tie into api when available
-    console.log(id);
-  };
-
-  const handleBidPO = (id) => {
-    //TODO tie into api when available
-    console.log(id);
+    dispatch(awardCurrentBid(id));
   };
 
   useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch);
@@ -94,96 +92,98 @@ const RFQ = ({ handleFiltersClosed }) => {
 
   return (
     <>
-    <Helmet><title>RTA | RFQ</title></Helmet>
-    <Container role={role} className={classes.mainWrapper}>
-      <div className={classes.titleBar}>
-        <div className={classes.titleImage}>
-          {!isNew && (
-            <Tooltip title="Back to RFQ History" placement="bottom-start">
-              <IconButton
-                component={Link}
-                to="/purchasing/rfqHistory/current"
-                onClick={() => {
-                  dispatch(setRetain({ value: true }));
-                }}
-              >
-                <ArrowBackIcon fontSize="large" color="secondary" />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isNew && (
-            <Tooltip title="Back to RFQ Rollup" placement="bottom-start">
-              <IconButton
-                component={Link}
-                to="/purchasing/rfqRollup"
-                onClick={() => {
-                  dispatch(setRetain({ value: true }));
-                }}
-              >
-                <ArrowBackIcon fontSize="large" color="secondary" />
-              </IconButton>
-            </Tooltip>
-          )}
-          <Typography
-            className={classes.titleText}
-          >{`RFQ #${currentRFQ.id}`}</Typography>
-        </div>
-      </div>
-      <br />
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <CurrentRFQ />
-        <br />
-        <br />
-        <Divider style={{ width: "75%", minWidth: "600px" }} />
-        <br />
-        {role !== "supplier" && (
-          <>
-            {currentRFQ.bids.length !== currentSuppliers.length && (
-              <>
-                <RFQSupplierSentTable
-                  currentSuppliers={currentSuppliers}
-                  isLoading={isSuppliersLoading}
-                  suppliersSelected={suppliersSelected}
-                  setSuppliersSelected={setSuppliersSelected}
-                  currentBids={currentRFQ.bids}
-                />
-                <br />
-                <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  style={{ marginRight: "10px" }}
-                  disabled={suppliersSelected.length === 0}
-                  onClick={handleSendBids}
+      <Helmet>
+        <title>RTA | RFQ</title>
+      </Helmet>
+      <Container role={role} className={classes.mainWrapper}>
+        <div className={classes.titleBar}>
+          <div className={classes.titleImage}>
+            {!isNew && (
+              <Tooltip title="Back to RFQ History" placement="bottom-start">
+                <IconButton
+                  component={Link}
+                  to="/purchasing/rfqHistory/current"
+                  onClick={() => {
+                    dispatch(setRetain({ value: true }));
+                  }}
                 >
-                  SEND RFQ
-                </Button>
-                <br />
-              </>
+                  <ArrowBackIcon fontSize="large" color="secondary" />
+                </IconButton>
+              </Tooltip>
             )}
-            {currentRFQ.bids.length > 0 && (
-              <RFQSupplierBidTable
-                classes={classes}
-                bids={currentRFQ.bids}
-                handleAward={handleAwardBid}
-                handlePO={handleBidPO}
-              />
+            {isNew && (
+              <Tooltip title="Back to RFQ Rollup" placement="bottom-start">
+                <IconButton
+                  component={Link}
+                  to="/purchasing/rfqRollup"
+                  onClick={() => {
+                    dispatch(setRetain({ value: true }));
+                  }}
+                >
+                  <ArrowBackIcon fontSize="large" color="secondary" />
+                </IconButton>
+              </Tooltip>
             )}
-          </>
-        )}
-        {role === "supplier" && <RFQAcceptOrDecline />}
+            <Typography
+              className={classes.titleText}
+            >{`RFQ #${currentRFQ.id}`}</Typography>
+          </div>
+        </div>
         <br />
-      </div>
-      <br />
-      <br />
-    </Container>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <CurrentRFQ />
+          <br />
+          <br />
+          <Divider style={{ width: "75%", minWidth: "600px" }} />
+          <br />
+          {role !== "supplier" && (
+            <>
+              {currentRFQ.bids.length !== currentSuppliers.length &&
+                currentRFQ.status !== "awarded" && (
+                  <>
+                    <RFQSupplierSentTable
+                      currentSuppliers={currentSuppliers}
+                      isLoading={isSuppliersLoading}
+                      suppliersSelected={suppliersSelected}
+                      setSuppliersSelected={setSuppliersSelected}
+                      currentBids={currentRFQ.bids}
+                    />
+                    <br />
+                    <Button
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      style={{ marginRight: "10px" }}
+                      disabled={suppliersSelected.length === 0}
+                      onClick={handleSendBids}
+                    >
+                      SEND BID REQUESTS
+                    </Button>
+                    <br />
+                  </>
+                )}
+              {currentRFQ.bids.length > 0 && (
+                <RFQSupplierBidTable
+                  classes={classes}
+                  bids={currentRFQ.bids}
+                  handleAward={handleAwardBid}
+                />
+              )}
+            </>
+          )}
+          {role === "supplier" && <RFQAcceptOrDecline />}
+          <br />
+        </div>
+        <br />
+        <br />
+      </Container>
     </>
   );
 };

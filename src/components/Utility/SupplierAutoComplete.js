@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,6 @@ import { fetchSuppliersByName } from "../../redux/slices/supplierSlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-
 
 const FocusMonthAutoComplete = ({
   classes,
@@ -27,15 +26,25 @@ const FocusMonthAutoComplete = ({
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handleSuppliers = (value) => {
     setCurrentSuppliers(value);
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(fetchSuppliersByName(supplier));
+    }, 250);
+  }, [supplier, dispatch]);
+
   useEffect(() => {
     if (supplier.length >= 1) {
-      dispatch(fetchSuppliersByName(supplier))
+      handleQuery();
     }
-  }, [supplier, dispatch])
+  }, [supplier, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFiltersSupplier.length !== currentSuppliers.length) {
@@ -60,7 +69,7 @@ const FocusMonthAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="supplier-auto-complete"
         open={open}

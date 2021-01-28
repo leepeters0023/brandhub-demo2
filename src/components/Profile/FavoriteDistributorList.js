@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInput } from "../../hooks/InputHooks";
@@ -86,22 +86,36 @@ const FavoriteDistributorList = ({ id }) => {
 
   const loading = open && isLoading;
 
+  const debounce = useRef(null);
+
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
-    dispatch(
-      updateFavoriteDistributorList(id, name, value)
-    );
+    dispatch(updateFavoriteDistributorList(id, name, value));
   };
 
   const handleDeleteList = () => {
     dispatch(deleteFavoriteDistributorList(id));
   };
 
+  const handleQuery = useCallback(() => {
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(
+        fetchUserDistributors(
+          distributor,
+          territoryId,
+          userStates.map((state) => state.id).join(",")
+        )
+      );
+    }, 250);
+  }, [distributor, territoryId, userStates, dispatch]);
+
   useEffect(() => {
     if (distributor.length >= 1) {
-      dispatch(fetchUserDistributors(distributor, territoryId, userStates.map((state) => state.id).join(","),));
+      handleQuery()
     }
-  }, [distributor, territoryId, userStates, dispatch]);
+  }, [distributor, handleQuery, dispatch]);
 
   useEffect(() => {
     if (userDistributors.length !== currentDistributors.length) {
@@ -110,13 +124,15 @@ const FavoriteDistributorList = ({ id }) => {
   }, [currentDistributors, userDistributors]);
 
   return (
-    <div style={{
-      padding: "10px",
-      width: "97%",
-      boxSizing: "border-box",
-      // marginBottom: "20px",
-      backgroundColor: "white",
-    }}>
+    <div
+      style={{
+        padding: "10px",
+        width: "97%",
+        boxSizing: "border-box",
+        // marginBottom: "20px",
+        backgroundColor: "white",
+      }}
+    >
       <div
         style={{
           width: "100%",
@@ -125,10 +141,7 @@ const FavoriteDistributorList = ({ id }) => {
           alignItems: "center",
         }}
       >
-        <MemoNameInput
-          dispatch={dispatch}
-          id={id}
-        />
+        <MemoNameInput dispatch={dispatch} id={id} />
         <Autocomplete
           style={{ width: "45%" }}
           multiple

@@ -15,10 +15,11 @@ import Table from "@material-ui/core/Table";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 
-const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
+const RFQSupplierBidTable = ({ bids, classes, handleAward }) => {
   const currrentSuppliers = useSelector(
     (state) => state.suppliers.supplierList
   );
+  const rfqStatus = useSelector((state) => state.rfq.currentRFQ.stats);
 
   if (currrentSuppliers.length === 0) {
     return <CircularProgress />;
@@ -58,14 +59,27 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
                 }
               </TableCell>
               {bid.status === "sent" && (
-                <TableCell align="left" colSpan={3}>
+                <TableCell align="right" colSpan={3}>
                   Waiting for response
                 </TableCell>
               )}
               {bid.status === "declined" && (
-                <TableCell align="left" colSpan={3}>
+                <TableCell align="right" colSpan={3}>
                   Declined to place a bid
                 </TableCell>
+              )}
+              {bid.status === "awarded" && (
+                <>
+                <TableCell align="left">
+                  {bid.price && bid.price !== "---" ? formatMoney(bid.price, true) : "---"}
+                </TableCell>
+                <TableCell align="left">
+                  {bid.note ? bid.note : "---"}
+                </TableCell>
+                <TableCell align="right">
+                  AWARDED
+                </TableCell>
+              </>
               )}
               {bid.status === "accepted" && (
                 <>
@@ -83,16 +97,9 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward, handlePO }) => {
                         color="secondary"
                         style={{ marginRight: "20px" }}
                         onClick={() => handleAward(bid.id)}
+                        disabled={rfqStatus === "awarded"}
                       >
                         AWARD
-                      </Button>
-                      <Button
-                        className={classes.largeButton}
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => handlePO(bid.id)}
-                      >
-                        PO
                       </Button>
                     </div>
                   </TableCell>

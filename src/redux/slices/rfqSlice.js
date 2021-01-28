@@ -11,6 +11,7 @@ import {
   updateRFQNote,
   updateRFQDate,
   acceptBid,
+  awardBid,
   declineBid,
 } from "../../api/purchasingApi";
 import { updateValues } from "./supplierSlice";
@@ -164,6 +165,16 @@ const rfqSlice = createSlice({
       state.currentBidPrice = null;
       state.currentBidNote = "";
     },
+    award(state, action) {
+      const { bid } = action.payload;
+      const updatedBids = state.currentRFQ.bids.map((b) => {
+        if (b.id === bid.id) {
+          return {...bid}
+        } else return {...b}
+      })
+      state.currentRFQ.bids = updatedBids;
+      state.currentRFQ.status = "awarded";
+    },
     updateSuccessful(state) {
       state.isUpdateLoading = false;
       state.error = null;
@@ -208,6 +219,7 @@ export const {
   updateCurrentBidNote,
   updateCurrentBidPrice,
   clearCurrentBidData,
+  award,
   updateSuccessful,
   resetRFQ,
   setFailure,
@@ -340,7 +352,8 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }
-    const bid = mapBids(acceptResponse.data);
+    console.log(acceptResponse);
+    const bid = mapBids([acceptResponse.data]);
     dispatch(updateBid({ bid: bid }))
     dispatch(updateValues({
       values: [
@@ -351,6 +364,25 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     dispatch(updateSuccessful());
     dispatch(patchSuccess())
     navigate("/purchasing/rfqHistory/inProgress")
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+}
+
+export const awardCurrentBid = (id) => async (dispatch) => {
+  try {
+    dispatch(patchLoading())
+    dispatch(setUpdateLoading());
+    const awardResponse = await awardBid(id);
+    if (awardResponse.error) {
+      throw awardResponse.error;
+    }
+    const bid = mapBids([awardResponse.data]);
+    dispatch(award({ bid: bid }))
+    dispatch(updateSuccessful());
+    dispatch(patchSuccess())
+    navigate("/purchasing/rfqHistory/awarded")
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
