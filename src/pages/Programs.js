@@ -101,6 +101,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
                   startIcon={<ExitToAppIcon />}
                   component={Link}
                   to="/orders/open/preorder"
+                  disabled={activePrograms.length === 0}
                 >
                   PLACE ORDERS
                 </Button>
@@ -109,7 +110,14 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
           )}
         </div>
         <br />
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {
@@ -128,15 +136,21 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
           <FilterChipList classes={classes} />
           <br />
         </div>
-        {isLoading ? (
-          <CircularProgress color="inherit" />
-        ) : (
-            <CurrentPrograms
-              currentUserRole={currentUserRole}
-              currentPrograms={currentPrograms}
-              filtersOpen={filtersOpen}
-            />
-          )}
+        {isLoading && <CircularProgress color="inherit" />}
+        {!isLoading && activePrograms.length > 0 && (
+          <CurrentPrograms
+            currentUserRole={currentUserRole}
+            currentPrograms={currentPrograms}
+            filtersOpen={filtersOpen}
+          />
+        )}
+        {!isLoading && activePrograms.length === 0 && (
+          <div style={{width: "100%", height: "80vh", display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <Typography className={classes.headerText}>
+              There are currently no active Pre Order Programs ...
+            </Typography>
+          </div>
+        )}
       </Container>
     </>
   );

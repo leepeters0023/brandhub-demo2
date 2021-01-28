@@ -45,6 +45,7 @@ const DrawerOrdersNav = ({
   const hasOnDemandOrder = useSelector(
     (state) => state.currentOrder.onDemandOrderNumber
   );
+  const programs = useSelector((state) => state.programs.programs);
 
   const handleOpen = (evt) => {
     setAnchorEl(evt.target);
@@ -95,6 +96,7 @@ const DrawerOrdersNav = ({
             onClick={handleClose}
             component={Link}
             to="/orders/open/preorder"
+            disabled={programs.length === 0}
           >
             <ListItemText
               primaryTypographyProps={{
