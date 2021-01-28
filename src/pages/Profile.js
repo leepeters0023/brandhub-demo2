@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useWindowHash } from "../hooks/UtilityHooks";
 
@@ -39,6 +40,7 @@ const Profile = ({ userType, handleFiltersClosed }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Profile</title></Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">
           <Grid item md={1} xs={false} />

@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import isBefore from "date-fns/isBefore";
+import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -225,6 +226,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   if (orderId === "inStock" || orderId === "onDemand") {
     return (
       <>
+        <Helmet><title>RTA | Current Order</title></Helmet>
         <Container style={{ textAlign: "center" }}>
           <br />
           {orderId === "inStock" && (

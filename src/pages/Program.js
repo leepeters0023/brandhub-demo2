@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useWindowHash } from "../hooks/UtilityHooks";
@@ -136,6 +137,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Program</title></Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}

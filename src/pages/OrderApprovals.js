@@ -4,6 +4,7 @@ import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -118,6 +119,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Order Approval</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order Approvals</Typography>

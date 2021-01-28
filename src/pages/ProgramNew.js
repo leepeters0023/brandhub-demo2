@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
@@ -134,6 +135,7 @@ const ProgramNew = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | New Program</title></Helmet>
       <ItemPreviewModal
         type="program"
         currentItem={currentItem}

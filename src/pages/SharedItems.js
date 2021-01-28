@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSharedItemsByIds } from "../redux/slices/sharedItemsSlice";
@@ -54,6 +55,7 @@ const SharedItems = ({ handleFiltersClosed, itemIds }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Shared Items</title></Helmet>
       {currentItem && previewModal && (
         <ItemPreviewModal
           type="catalog"

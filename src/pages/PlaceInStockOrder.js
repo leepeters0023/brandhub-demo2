@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
@@ -167,6 +168,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+    <Helmet><title>RTA | Place Inventory Order</title></Helmet>
       {previewModal && (
         <ItemPreviewModal
           type={"inStock"}

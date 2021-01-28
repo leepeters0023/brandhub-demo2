@@ -3,6 +3,7 @@ import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -131,6 +132,7 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Pending complianceCancelOrderItems</title></Helmet>
       <AreYouSure
         open={confirmOpen}
         handleClose={handleCloseConfirm}

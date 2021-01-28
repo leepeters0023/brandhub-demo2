@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 //import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -71,6 +72,7 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+    <Helmet><title>RTA | Budget vs Spend</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

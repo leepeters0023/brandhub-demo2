@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import format from "date-fns/format";
 import subDays from "date-fns/subDays";
 import { formatDate, formatMoney } from "../utility/utilityFunctions";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -163,6 +164,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Report Wrap-Up</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Wrap Up Report</Typography>

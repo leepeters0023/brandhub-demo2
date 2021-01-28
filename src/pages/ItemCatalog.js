@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useDispatch, useSelector } from "react-redux";
@@ -178,6 +179,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Item Catalog</title></Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}

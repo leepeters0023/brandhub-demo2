@@ -7,6 +7,7 @@ import format from "date-fns/format";
 import { formatMoney } from "../utility/utilityFunctions";
 import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -309,6 +310,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Order History</title></Helmet>
       <ItemPreviewModal
         type={"catalog"}
         handleClose={handleModalClose}
