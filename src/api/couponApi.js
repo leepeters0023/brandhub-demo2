@@ -69,7 +69,6 @@ export const getCouponOrderSet = async (code) => {
       .get(`/api/coupon/order-sets/${code}`)
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
-        console.log(data);
         polling = false;
         response.status = "ok";
         response.data = data;

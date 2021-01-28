@@ -336,18 +336,25 @@ export const mapOrderHistoryItems = (items) => {
         ? stringToCents(item["total-actual-cost"])
         : "---",
       orderDate: item["order-submitted-at"],
-      shipDate: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"]["actual-ship-date"]
-        : "---",
-      carrier: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"].carrier
-        : "---",
-      tracking: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"]["tracking-number"]
-        : "---",
-      trackingId: item["shipping-parameter-item"]
-        ? item["shipping-parameter-item"].id
-        : null,
+      shipDate:
+        item["shipping-parameter-item"] &&
+        item["shipping-parameter-item"]["actual-ship-date"]
+          ? item["shipping-parameter-item"]["actual-ship-date"]
+          : "---",
+      carrier:
+        item["shipping-parameter-item"] &&
+        item["shipping-parameter-item"].carrier
+          ? item["shipping-parameter-item"].carrier
+          : "---",
+      tracking:
+        item["shipping-parameter-item"] &&
+        item["shipping-parameter-item"]["tracking-number"]
+          ? item["shipping-parameter-item"]["tracking-number"]
+          : "---",
+      trackingId:
+        item["shipping-parameter-item"] && item["shipping-parameter-item"].id
+          ? item["shipping-parameter-item"].id
+          : null,
       status: item["order-status"],
       user: item["order-user-name"],
       triggeredRules: item["triggered-rules"]
@@ -441,12 +448,16 @@ export const mapOrderItems = (items, type) => {
           : "---",
         inMarketDate: item["in-market-date"] ? item["in-market-date"] : "---",
         isRush: item["is-rush"] ? item["is-rush"] : false,
-        actShipDate: item["shipping-parameter-item"]
-          ? item["shipping-parameter-item"]["actual-ship-date"]
-          : null,
-        carrier: item["shipping-parameter-item"]
-          ? item["shipping-parameter-item"].carrier
-          : "---",
+        actShipDate:
+          item["shipping-parameter-item"] &&
+          item["shipping-parameter-item"]["actual-ship-date"]
+            ? item["shipping-parameter-item"]["actual-ship-date"]
+            : null,
+        carrier:
+          item["shipping-parameter-item"] &&
+          item["shipping-parameter-item"].carrier
+            ? item["shipping-parameter-item"].carrier
+            : "---",
         tracking: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["tracking-number"]
             ? item["shipping-parameter-item"]["tracking-number"]
@@ -552,7 +563,6 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
-  console.log(items)
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -571,7 +581,7 @@ export const mapRollupItems = (items) => {
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
     isRush: item["is-rush"] ? true : false,
-    dueDate: item["in-market-date"]
+    inMarketDate: item["in-market-date"]
       ? format(formatDate(new Date(item["in-market-date"])), "MM/dd/yyyy")
       : "---",
   }));
@@ -728,7 +738,7 @@ export const mapPurchaseOrder = (purchaseOrder) => {
     brand: purchaseOrder["brand-names"],
     status: purchaseOrder.status,
     accepted: false,
-    dueDate: purchaseOrder["in-market-date"]
+    inMarketDate: purchaseOrder["in-market-date"]
       ? purchaseOrder["in-market-date"]
       : addDays(new Date(), 120),
     expectedShip: purchaseOrder["expected-ship-date"]
@@ -809,7 +819,7 @@ export const mapPOHistoryItems = (items) => {
         submittedDate: item["po-submitted-at"]
           ? format(formatDate(new Date(item["po-submitted-at"])), "MM/dd/yyyy")
           : "---",
-        dueDate: item["po-in-market-date"]
+        inMarketDate: item["po-in-market-date"]
           ? format(
               formatDate(new Date(item["po-in-market-date"])),
               "MM/dd/yyyy"
@@ -842,7 +852,7 @@ export const mapPOHistoryItems = (items) => {
         submittedDate: item["po-submitted-at"]
           ? format(formatDate(new Date(item["po-submitted-at"])), "MM/dd/yyyy")
           : "---",
-        dueDate: item["po-in-market-date"]
+        inMarketDate: item["po-in-market-date"]
           ? format(
               formatDate(new Date(item["po-in-market-date"])),
               "MM/dd/yyyy"

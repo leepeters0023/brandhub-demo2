@@ -4,24 +4,6 @@ import { fetchRFQHistory, fetchNextRFQHistory } from "../../api/purchasingApi";
 
 import { mapRFQHistory } from "../apiMaps";
 
-/*
-* RFQ Model
-
-{
-  id: string (read),
-  rfqNum: string (read),
-  itemNumber: string (read),
-  program: string (read),
-  itemType: string (read),
-  totalOrdered: int (read),
-  estCost: int (read),
-  totalEstCost: int (read),
-  dueDate: date string (read),
-  status: string (read),
-}
-
-*/
-
 let initialState = {
   isLoading: false,
   isNextLoading: false,

@@ -160,9 +160,9 @@ const CurrentPO = () => {
                   variant="inline"
                   format="MM/dd/yyyy"
                   margin="normal"
-                  id="dueDate"
+                  id="inMarketDate"
                   label="Delivery Date"
-                  value={formatDate(currentPO.dueDate)}
+                  value={formatDate(currentPO.inMarketDate)}
                   onChange={(value) =>
                     dispatch(
                       updateDateByType(
@@ -178,7 +178,7 @@ const CurrentPO = () => {
             {currentRole === "supplier" && (
               <Typography className={clsx(classes.headerText, classes.POText)}>
                 {`Delivery Date:  ${new Date(
-                  currentPO.dueDate
+                  currentPO.inMarketDate
                 ).toLocaleDateString()}`}
               </Typography>
             )}

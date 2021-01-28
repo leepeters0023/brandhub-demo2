@@ -155,7 +155,7 @@ const CurrentRFQ = () => {
                     variant="inline"
                     format="MM/dd/yyyy"
                     margin="normal"
-                    id="dueDate"
+                    id="inMarketDate"
                     label="In-Market Date"
                     value={
                       currentRFQ.inMarketDate !== "---"

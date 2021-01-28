@@ -18,7 +18,7 @@ export const fetchRollupItems = async (filterObject, type) => {
     itemNumber: "item-number",
     program: "order-program-name",
     itemType: "item-type-description",
-    dueDate: "in-market-date",
+    inMarketDate: "in-market-date",
   };
 
   let typeBool = `filter[is-for-rfq]=${type === "rfq" ? true : false}`;
@@ -87,11 +87,15 @@ export const fetchNextRollupItems = async (url) => {
 };
 
 //Creates a new RFQ based on an item and it's associated program
-export const createRFQ = async (item, program) => {
+export const createRFQ = async (item, program, dueDate, inMarketDate) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
       type: "request-for-quote",
+      attributes: {
+        "due-date": dueDate,
+        "in-market-date": inMarketDate,
+      },
       relationships: {
         item: {
           data: {
@@ -1071,7 +1075,7 @@ export const fetchPOHistory = async (filterObject) => {
   const sortMap = {
     poNum: "po-id",
     supplier: "supplier-name",
-    dueDate: "po-in-market-date",
+    inMarketDate: "po-in-market-date",
     status: "po-status",
   };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${

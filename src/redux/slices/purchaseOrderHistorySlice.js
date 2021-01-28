@@ -2,22 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchPOHistory, fetchNextPOHistory } from "../../api/purchasingApi";
 import { mapPOHistoryItems } from "../apiMaps";
 
-/*
-* PO Model
-
-{
-  id: string (read),
-  poNum: string (read),
-  supplier: string (read),
-  totalOrdered: int (read),
-  totalEstCost: int (read),
-  actTotal: int (read),
-  status: string (read),
-  dueDate: date string (read),
-}
-
-*/
-
 let initialState = {
   isLoading: false,
   isNextLoading: false,

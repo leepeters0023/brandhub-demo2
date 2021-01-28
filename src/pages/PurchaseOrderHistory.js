@@ -207,7 +207,7 @@ const PurchaseOrderHistory = ({
             actCost: formatMoney(po.actCost, true),
             status: po.status[0].toUpperCase() + po.status.slice(1),
             submittedDate: po.submittedDate,
-            inMarketDate: po.dueDate,
+            inMarketDate: po.inMarketDate,
             poCreator: po.purchasedBy,
             allocated: po.allocated,
           });
@@ -221,7 +221,7 @@ const PurchaseOrderHistory = ({
             actCost: formatMoney(po.actCost, true),
             status: po.status[0].toUpperCase() + po.status.slice(1),
             submittedDate: po.submittedDate,
-            inMarketDate: po.dueDate,
+            inMarketDate: po.inMarketDate,
             poCreator: po.purchasedBy,
             allocated: po.allocated,
           });
@@ -289,7 +289,14 @@ const PurchaseOrderHistory = ({
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

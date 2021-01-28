@@ -218,7 +218,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
               disabled={selectedItems.length === 0}
               onClick={handleShareLink}
             >
-              CREATE SHARE LINK
+              CREATE PDF
             </Button>
             <Tooltip title="View List">
               <IconButton

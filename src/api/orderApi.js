@@ -101,7 +101,6 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     state: "distributor-state",
     program: "program-name",
     orderDate: "submitted-at",
-    dueDate: "due-date",
   };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
@@ -194,7 +193,6 @@ export const fetchOrderSetItems = async (filterObject) => {
     itemType: "item-type-description",
     user: "user-name",
     orderDate: "order-set-submitted-at",
-    dueDate: "program-order-due-date",
   };
   let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]

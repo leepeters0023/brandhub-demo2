@@ -70,7 +70,13 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     let currentItem = currentRFQItems.find(
       (item) => item.itemId === selectedRFQItem
     );
-    dispatch(createNewRFQ(selectedRFQItem, currentItem.programId));
+    dispatch(
+      createNewRFQ(
+        selectedRFQItem,
+        currentItem.programId,
+        currentItem.inMarketDate
+      )
+    );
   };
 
   const handleSort = (sortObject) => {
@@ -134,7 +140,14 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip> */}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

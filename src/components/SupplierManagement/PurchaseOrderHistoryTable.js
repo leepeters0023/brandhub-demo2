@@ -259,7 +259,7 @@ const PurchaseOrderHistoryTable = ({
                       : row.status[0].toUpperCase() + row.status.slice(1)}
                   </TableCell>
                   <TableCell align="left">{row.submittedDate}</TableCell>
-                  <TableCell align="left">{row.dueDate}</TableCell>
+                  <TableCell align="left">{row.inMarketDate}</TableCell>
                   <TableCell align="left">{row.purchasedBy}</TableCell>
                   <TableCell align="left">{row.allocated}</TableCell>
                 </TableRow>

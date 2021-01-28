@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { navigate } from "@reach/router";
+import addDays from "date-fns/addDays";
 
 import {
   fetchRollupItems,
@@ -46,6 +47,7 @@ let initialState = {
     brand: null,
     itemType: null,
     itemNumber: null,
+    projectNum: null,
     totalItems: null,
     supplierNote: "",
     itemSpec: null,
@@ -107,6 +109,7 @@ const rfqSlice = createSlice({
       state.currentRFQ.brand = rfq.brand;
       state.currentRFQ.itemType = rfq.itemType;
       state.currentRFQ.itemNumber = rfq.itemNumber;
+      state.currentRFQ.projectNum = rfq.projectNum;
       state.currentRFQ.totalItems = rfq.totalItems;
       state.currentRFQ.supplierNote = rfq.supplierNote;
       state.currentRFQ.itemSpec = rfq.itemSpec ? { ...rfq.itemSpec } : null;
@@ -177,6 +180,7 @@ const rfqSlice = createSlice({
       state.currentRFQ.brand = null;
       state.currentRFQ.itemType = null;
       state.currentRFQ.itemNumber = null;
+      state.currentRFQ.projectNum = null;
       state.currentRFQ.totalItems = null;
       state.currentRFQ.supplierNote = "";
       state.currentRFQ.itemSpec = null;
@@ -249,10 +253,11 @@ export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
   }
 };
 
-export const createNewRFQ = (item, user) => async (dispatch) => {
+export const createNewRFQ = (item, program, inMarketDate) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const newRFQ = await createRFQ(item, user);
+    const dueDate = addDays(new Date(), 5)
+    const newRFQ = await createRFQ(item, program, dueDate, new Date(inMarketDate));
     if (newRFQ.error) {
       throw newRFQ.error;
     }
@@ -332,7 +337,6 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     dispatch(patchLoading())
     dispatch(setUpdateLoading());
     const acceptResponse = await acceptBid(id, price, note);
-    console.log(acceptResponse);
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }

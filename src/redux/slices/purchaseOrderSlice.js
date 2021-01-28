@@ -48,7 +48,7 @@ let initialState = {
     brand: null,
     status: null,
     accepted: false,
-    dueDate: null,
+    inMarketDate: null,
     expectedShip: null,
     actualShip: null,
     terms: null,
@@ -122,7 +122,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.brand = purchaseOrder.brand;
       state.currentPO.status = purchaseOrder.status;
       state.currentPO.accepted = purchaseOrder.accepted;
-      state.currentPO.dueDate = purchaseOrder.dueDate;
+      state.currentPO.inMarketDate = purchaseOrder.inMarketDate;
       state.currentPO.expectedShip = purchaseOrder.expectedShip;
       state.currentPO.actualShip = purchaseOrder.actualShip;
       state.currentPO.terms = purchaseOrder.terms;
@@ -290,7 +290,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.brand = null;
       state.currentPO.status = null;
       state.currentPO.accepted = false;
-      state.currentPO.dueDate = null;
+      state.currentPO.inMarketDate = null;
       state.currentPO.expectedShip = null;
       state.currentPO.actualShip = null;
       state.currentPO.terms = null;
@@ -325,7 +325,7 @@ const purchaseOrderSlice = createSlice({
       state.currentPO.brand = null;
       state.currentPO.status = null;
       state.currentPO.accepted = false;
-      state.currentPO.dueDate = null;
+      state.currentPO.inMarketDate = null;
       state.currentPO.expectedShip = null;
       state.currentPO.actualShip = null;
       state.currentPO.terms = null;
@@ -483,7 +483,7 @@ export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
 
 export const updateDateByType = (id, type, value) => async (dispatch) => {
   const typeMap = {
-    "in-market-date": "dueDate",
+    "in-market-date": "inMarketDate",
     "expected-ship-date": "expectedShip",
     "actual-ship-date": "actualShip",
   };

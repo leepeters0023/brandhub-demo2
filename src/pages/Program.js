@@ -195,7 +195,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
                     disabled={selectedItems.length === 0}
                     onClick={handleShareLink}
                   >
-                    CREATE SHARE LINK
+                    CREATE PDF
                   </Button>
                 </>
               )}
