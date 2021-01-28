@@ -19,21 +19,22 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "preview", label: "Preview" },
   { id: "itemNumber", label: "Sequence #" },
+  { id: "brand", label: "Brand" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
   { id: "itemDescription", label: "Item Desc." },
-  { id: "brand", label: "Brand" },
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
   { id: "estCost", label: "Est. Cost" },
@@ -204,10 +205,23 @@ const ItemCatalogTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
-                    <TableCell align="left">{item.program}</TableCell>
+                    <TableCell align="left">{item.brand}</TableCell>
+                    {item.program.length > 1 ? (
+                    <Tooltip placement="left" title={`${item.program.join(", ")}`}>
+                      <TableCell align="left">
+                        {item.program[0]}
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ float: "right" }}
+                        />
+                      </TableCell>
+                    </Tooltip>
+                  ) : (
+                    <TableCell align="left">{item.program[0]}</TableCell>
+                  )}
                     <TableCell align="left">{item.itemType}</TableCell>
                     <TableCell align="left">{item.itemDescription}</TableCell>
-                    <TableCell align="left">{item.brand}</TableCell>
                     <TableCell align="left">{item.packSize}</TableCell>
                     {catalogType === "in-stock" && (
                       <TableCell align="left">

@@ -81,7 +81,7 @@ export const mapItems = (items) => {
           : "---",
       program:
         item.programs && item.programs.length > 0
-          ? item.programs.map((prog) => prog.name).join(", ")
+          ? item.programs.map((prog) => prog.name)
           : "---",
       programIds:
         item.programs && item.programs.length > 0

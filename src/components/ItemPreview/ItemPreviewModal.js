@@ -240,9 +240,11 @@ const ItemPreviewModal = (props) => {
                     <Typography className={classes.headerText}>
                       {`Brand(s):  ${brand}`}
                     </Typography>
-                    <Typography className={classes.headerText}>
-                      {`Program:  ${program}`}
+                    {program && (
+                      <Typography className={classes.headerText}>
+                      {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
                     </Typography>
+                    )}
                     <Typography className={classes.headerText}>
                       {`Item Type:  ${itemType}`}
                     </Typography>
@@ -342,9 +344,11 @@ const ItemPreviewModal = (props) => {
                   <Typography className={classes.headerText}>
                     {`Brand(s): ${brand}`}
                   </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Program: ${program}`}
-                  </Typography>
+                  {program && (
+                      <Typography className={classes.headerText}>
+                      {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
+                    </Typography>
+                    )}
                   <Typography className={classes.headerText}>
                     {/* {`Item Type: ${itemType}`} */}
                     {"Item Type: Necker Coupon"}
