@@ -182,21 +182,30 @@ const OrderItemGridView = (props) => {
                         />
                       </div>
                       <br />
-                      <Typography className={classes.headerText}>
-                        {`${item.brand} ${item.itemType}`}
-                      </Typography>
+                      {item.brand.length > 1 ? (
+                        <Tooltip placement="left" title={`${item.brand.join(", ")}`}>
+                          <Typography className={classes.headerText}>{`${item.brand[0]} ${item.itemType}`}</Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                          <Typography className={classes.headerText}>{item.brand[0]}</Typography>
+                        )}
                       {item.program.length > 1 ? (
-                    <Tooltip placement="left" title={`${item.program.join(", ")}`}>
-                       <Typography>{item.program[0]}</Typography>
-                        <MoreHorizIcon
-                          fontSize="small"
-                          color="inherit"
-                          style={{ float: "right" }}
-                        />
-                    </Tooltip>
-                  ) : (
-                    <Typography>{item.program[0]}</Typography>
-                  )}
+                        <Tooltip placement="left" title={`${item.program.join(", ")}`}>
+                          <Typography>{item.program[0]}</Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                          <Typography>{item.program[0]}</Typography>
+                        )}
                       <Typography variant="body1" color="textSecondary">
                         {`#${item.itemNumber} | ${item.packSize}`}
                       </Typography>

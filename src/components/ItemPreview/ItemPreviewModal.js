@@ -237,13 +237,15 @@ const ItemPreviewModal = (props) => {
                     <Typography variant="body1" color="textSecondary">
                       {`#${itemNumber}`}
                     </Typography>
-                    <Typography className={classes.headerText}>
-                      {`Brand(s):  ${brand}`}
-                    </Typography>
+                    {brand && (
+                      <Typography className={classes.headerText}>
+                        {`Brand(s):  ${brand.length === 1 ? brand[0] : program.join(", ")}`}
+                      </Typography>
+                    )}
                     {program && (
                       <Typography className={classes.headerText}>
-                      {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
-                    </Typography>
+                        {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
+                      </Typography>
                     )}
                     <Typography className={classes.headerText}>
                       {`Item Type:  ${itemType}`}
@@ -345,10 +347,10 @@ const ItemPreviewModal = (props) => {
                     {`Brand(s): ${brand}`}
                   </Typography>
                   {program && (
-                      <Typography className={classes.headerText}>
+                    <Typography className={classes.headerText}>
                       {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
                     </Typography>
-                    )}
+                  )}
                   <Typography className={classes.headerText}>
                     {/* {`Item Type: ${itemType}`} */}
                     {"Item Type: Necker Coupon"}
@@ -373,26 +375,23 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${
-                      bottleDiscount
+                    {`Bottle Discount: ${bottleDiscount
                         ? formatMoney(bottleDiscount, false)
                         : "---"
-                    }`}
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${
-                      discountAmount
+                    {`Discount Amount: ${discountAmount
                         ? formatMoney(discountAmount, false)
                         : "---"
-                    }`}
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${
-                      expirationDate ? expirationDate : "---"
-                    }`}
+                    {`Expiration Date: ${expirationDate ? expirationDate : "---"
+                      }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}

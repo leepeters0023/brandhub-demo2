@@ -77,7 +77,7 @@ export const mapItems = (items) => {
       itemNumber: item["item-number"],
       brand:
         item.brands.length > 0
-          ? item.brands.map((brand) => brand.name).join(", ")
+          ? item.brands.map((brand) => brand.name)
           : "---",
       program:
         item.programs && item.programs.length > 0

@@ -257,21 +257,34 @@ const OrderItemTableView = ({
                       />
                     </TableCell>
                     <TableCell align="left">{row.itemNumber}</TableCell>
-                    <TableCell align="left">{row.brand}</TableCell>
+                    {row.brand.length > 1 ? (
+                      <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                        <TableCell align="left">
+                          {row.brand[0]}
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                        <TableCell align="left">{row.brand[0]}</TableCell>
+                      )}
                     {row.program.length > 1 ? (
-                    <Tooltip placement="left" title={`${row.program.join(", ")}`}>
-                      <TableCell align="left">
-                        {row.program[0]}
-                        <MoreHorizIcon
-                          fontSize="small"
-                          color="inherit"
-                          style={{ float: "right" }}
-                        />
-                      </TableCell>
-                    </Tooltip>
-                  ) : (
-                    <TableCell align="left">{row.program[0]}</TableCell>
-                  )}
+                      <Tooltip placement="left" title={`${row.program.join(", ")}`}>
+                        <TableCell align="left">
+                          {row.program[0]}
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                        <TableCell align="left">{row.program[0]}</TableCell>
+                      )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
