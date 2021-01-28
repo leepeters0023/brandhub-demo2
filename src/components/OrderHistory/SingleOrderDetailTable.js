@@ -156,7 +156,7 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                     item.isComplianceCanceled ? classes.cancelCell : null
                   }
                 >
-                  {item.actTotal}
+                  {item.totalActCost}
                 </TableCell>
                 <TableCell
                   align="left"

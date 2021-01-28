@@ -108,6 +108,7 @@ const orderSetSlice = createSlice({
         state.totalEstItemCost = 0;
         state.orderTotal = 0;
         state.totalEstFreight = 0;
+        state.totalEstTax = 0;
         state.isLoading = false;
         state.error = null;
       }

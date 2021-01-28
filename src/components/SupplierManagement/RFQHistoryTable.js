@@ -39,7 +39,12 @@ let headCells = [
     label: "Est. Total",
     sort: false,
   },
-  { id: "actTotal", disablePadding: false, label: "Act. Total", sort: false },
+  {
+    id: "totalActCost",
+    disablePadding: false,
+    label: "Act. Total",
+    sort: false,
+  },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   {
     id: "inMarketDate",
@@ -64,7 +69,7 @@ const EnhancedTableHead = (props) => {
           (cell) =>
             cell.id !== "totalEstCost" &&
             cell.id !== "estCost" &&
-            cell.id !== "actTotal" &&
+            cell.id !== "totalActCost" &&
             cell.id !== "program" &&
             cell.id !== "brand"
         );
@@ -259,7 +264,9 @@ const RFQHistoryTable = ({
                         {formatMoney(row.totalEstCost, true)}
                       </TableCell>
                       <TableCell align="left">
-                        {row.actTotal ? formatMoney(row.actTotal, true) : "---"}
+                        {row.totalActCost
+                          ? formatMoney(row.totalActCost, true)
+                          : "---"}
                       </TableCell>
                     </>
                   )}

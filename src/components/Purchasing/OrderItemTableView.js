@@ -51,7 +51,7 @@ const EnhancedTableHead = (props) => {
 
   const currentHeadCells =
     type === "inStock"
-      ? role === "purchaser" || role === "super"
+      ? role === "purchaser" || role === "super" || role === "select-purchaser"
         ? headCells
         : headCells.filter((cell) => cell.id !== "addInv")
       : headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addInv");
@@ -270,6 +270,7 @@ const OrderItemTableView = ({
                     )}`}</TableCell>
                     {type === "inStock" &&
                       (currentUserRole === "purchaser" ||
+                        currentUserRole === "select-purchaser" ||
                         currentUserRole === "super") && (
                         <TableCell align="center">
                           <Button

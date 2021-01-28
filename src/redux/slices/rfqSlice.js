@@ -253,11 +253,11 @@ export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
   }
 };
 
-export const createNewRFQ = (item, program, inMarketDate) => async (dispatch) => {
+export const createNewRFQ = (item, program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     const dueDate = addDays(new Date(), 5)
-    const newRFQ = await createRFQ(item, program, dueDate, new Date(inMarketDate));
+    const newRFQ = await createRFQ(item, program, dueDate);
     if (newRFQ.error) {
       throw newRFQ.error;
     }

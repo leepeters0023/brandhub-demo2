@@ -48,7 +48,7 @@ const headCells = [
     sort: false,
   },
   {
-    id: "actTotal",
+    id: "totalActCost",
     disablePadding: false,
     label: "Act. Total",
     sort: false,

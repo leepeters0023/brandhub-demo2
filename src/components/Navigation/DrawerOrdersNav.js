@@ -132,7 +132,9 @@ const DrawerOrdersNav = ({
             primary="+ New Inventory Order"
           />
         </MenuItem>
-        {(role === "purchaser" || role === "super") && (
+        {(role === "purchaser" ||
+          role === "select-purchaser" ||
+          role === "super") && (
           <div>
             <MenuItem
               button
@@ -147,19 +149,21 @@ const DrawerOrdersNav = ({
                 primary="+ New Purchase Order"
               />
             </MenuItem>
-            <MenuItem
-              button
-              onClick={handleClose}
-              component={Link}
-              to="/purchasing/rfqRollup"
-            >
-              <ListItemText
-                primaryTypographyProps={{
-                  className: classes.headerListItemNew,
-                }}
-                primary="+ New RFQ"
-              />
-            </MenuItem>
+            {role !== "purchaser" && (
+              <MenuItem
+                button
+                onClick={handleClose}
+                component={Link}
+                to="/purchasing/rfqRollup"
+              >
+                <ListItemText
+                  primaryTypographyProps={{
+                    className: classes.headerListItemNew,
+                  }}
+                  primary="+ New RFQ"
+                />
+              </MenuItem>
+            )}
           </div>
         )}
         {role !== "field1" && role !== "read-only" && (
@@ -224,7 +228,9 @@ const DrawerOrdersNav = ({
             ]}
           />
         )}
-        {(role === "purchaser" || role === "super") && (
+        {(role === "purchaser" ||
+          role === "select-purchaser" ||
+          role === "super") && (
           <div>
             <Divider className={classes.divider} key="divider2" />
             <NestedMenuItem
@@ -243,23 +249,27 @@ const DrawerOrdersNav = ({
                 },
               ]}
             />
-            <Divider className={classes.divider} key="divider3" />
-            <NestedMenuItem
-              anchorEl={anchorEl}
-              handleClose={handleClose}
-              label="Request for Quotes"
-              classes={classes}
-              childItems={[
-                {
-                  link: "/purchasing/rfqHistory/current",
-                  primary: "Current",
-                },
-                {
-                  link: "/purchasing/rfqHistory/all",
-                  primary: "History",
-                },
-              ]}
-            />
+            {role !== "purchaser" && (
+              <>
+                <Divider className={classes.divider} key="divider3" />
+                <NestedMenuItem
+                  anchorEl={anchorEl}
+                  handleClose={handleClose}
+                  label="Request for Quotes"
+                  classes={classes}
+                  childItems={[
+                    {
+                      link: "/purchasing/rfqHistory/current",
+                      primary: "Current",
+                    },
+                    {
+                      link: "/purchasing/rfqHistory/all",
+                      primary: "History",
+                    },
+                  ]}
+                />
+              </>
+            )}
           </div>
         )}
       </Menu>

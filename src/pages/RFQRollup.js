@@ -73,8 +73,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     dispatch(
       createNewRFQ(
         selectedRFQItem,
-        currentItem.programId,
-        currentItem.inMarketDate
+        currentItem.programId
       )
     );
   };

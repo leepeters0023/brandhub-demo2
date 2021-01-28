@@ -37,7 +37,7 @@ const DistributorOptions = () => {
 
   useEffect(() => {
     if (distName.length >= 1) {
-      currentUserRole !== "super" && currentUserRole !== "purchaser"
+      currentUserRole !== "super" && currentUserRole !== "purchaser" && currentUserRole !== "select-purchaser"
         ? dispatch(
             fetchUserDistributors(
               distName,

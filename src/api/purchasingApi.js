@@ -87,14 +87,13 @@ export const fetchNextRollupItems = async (url) => {
 };
 
 //Creates a new RFQ based on an item and it's associated program
-export const createRFQ = async (item, program, dueDate, inMarketDate) => {
+export const createRFQ = async (item, program, dueDate) => {
   const response = { status: "", error: null, data: null };
   let requestBody = {
     data: {
       type: "request-for-quote",
       attributes: {
         "due-date": dueDate,
-        "in-market-date": inMarketDate,
       },
       relationships: {
         item: {

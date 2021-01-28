@@ -274,10 +274,12 @@ export const mapSingleOrder = (order) => {
         : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
-    totalEstFreight: order["total-estimated-shipping-cost"]
-      ? stringToCents(order["total-estimated-shipping-cost"])
-      : "---",
-    totalActFreight: order["total-actual-shipping-cost"]
+    totalEstFreight:
+      order["total-estimated-shipping-cost"]
+        ? stringToCents(order["total-estimated-shipping-cost"])
+        : "---",
+    totalActFreight: order["total-actual-shipping-cost"]&&
+    stringToCents(order["total-actual-shipping-cost"]) !== 0
       ? stringToCents(order["total-actual-shipping-cost"])
       : "---",
     totalEstTax: order["total-estimated-tax"]
@@ -287,7 +289,10 @@ export const mapSingleOrder = (order) => {
       ? stringToCents(order["total-actual-tax"])
       : "---",
     totalEstCost: stringToCents(order["total-estimated-cost"]),
-    totalActCost: "---",
+    totalActCost:
+      orderItems.filter((item) => item.totalActCost === 0).length > 0
+        ? "---"
+        : stringToCents(order["total-actual-cost"]),
     note: order.notes ? order.notes : "---",
     attn: order.attn ? order.attn : "---",
   };
@@ -310,7 +315,7 @@ export const mapOrderHistoryItems = (items) => {
       itemNumber: item["item-number"],
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
-      orderType: item.item["order-type"],
+      orderType: item["order-type"],
       specification: mapSpecifications(item.item.specification),
       brand: item.item.brands.map((brand) => brand.name),
       brandCode: item.item.brands
@@ -324,14 +329,21 @@ export const mapOrderHistoryItems = (items) => {
           item.item.brands.map((brand) => brand["business-unit"].name)
         ),
       ].join(", "),
-      distributor: item["distributor-name"],
+      distributor:
+        item["distributor-name"].length > 0
+          ? item["distributor-name"]
+          : item["custom-address-name"].length > 0
+          ? item["custom-address-name"]
+          : "---",
       supplierId: item.item.supplier.id,
       state: item.state ? item.state : "---",
       packSize: item["qty-per-pack"],
       totalItems: item.qty,
       estCost: stringToCents(item["estimated-cost"]),
       totalEstCost: stringToCents(item["total-estimated-cost"]),
-      actCost: item["actual-cost"] ? stringToCents(item["actual-cost"]) : "---",
+      actCost: item["total-actual-cost"]
+        ? stringToCents(item["total-actual-cost"]) / item.qty
+        : "---",
       totalActCost: item["total-actual-cost"]
         ? stringToCents(item["total-actual-cost"])
         : "---",
@@ -428,7 +440,7 @@ export const mapOrderItems = (items, type) => {
           type === "order-set-item"
             ? 0
             : stringToCents(item["total-estimated-cost"]),
-        actTotal: "---",
+        totalActCost: stringToCents(item["total-actual-cost"]),
         complianceStatus:
           type !== "order-set-item" &&
           item["triggered-rules"].length > 0 &&
@@ -442,7 +454,7 @@ export const mapOrderItems = (items, type) => {
             ? item["prior-approval-denied"]
             : false,
         isComplianceCanceled: item["is-compliance-canceled"],
-        orderType: item.item["order-type"],
+        orderType: item["order-type"],
         standardDeliveryDate: item["standard-delivery-date"]
           ? item["standard-delivery-date"]
           : "---",

@@ -193,7 +193,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
         { label: "Total Ordered", key: "totalItems" },
         { label: "Est. Cost", key: "estCost" },
         { label: "Est. Total", key: "totalEstCost" },
-        { label: "Act. Total", key: "actTotal" },
+        { label: "Act. Total", key: "totalActCost" },
         { label: "Due Date", key: "dueDate" },
         { label: "In Market Date", key: "inMarketDate" },
         { label: "Status", key: "status" },
@@ -224,7 +224,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             totalItems: rfq.totalItems,
             estCost: formatMoney(rfq.estCost, true),
             totalEstCost: formatMoney(rfq.totalEstCost, true),
-            actTotal: rfq.actTotal ? formatMoney(rfq.actTotal, true) : "---",
+            totalActCost: rfq.totalActCost
+              ? formatMoney(rfq.totalActCost, true)
+              : "---",
             dueDate: rfq.dueDate,
             inMarketDate: rfq.inMarketDate,
             status: handleStatus(rfq.status, rfq.bids),
@@ -242,9 +244,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             bidValue: rfq.bids.find((bid) => bid.supplierId === supplierId)
               .price
               ? formatMoney(
-                rfq.bids.find((bid) => bid.supplierId === supplierId).price,
-                true
-              )
+                  rfq.bids.find((bid) => bid.supplierId === supplierId).price,
+                  true
+                )
               : "---",
           });
         }
@@ -308,7 +310,14 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

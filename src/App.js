@@ -373,7 +373,7 @@ const App = () => {
                 currentMonth={currentMonth}
               />,
               "/dashboard",
-              ["field1", "field2", "purchaser", "super", "supplier", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "supplier", "read-only"],
               currentRole,
               territories
             )}
@@ -394,7 +394,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/programs",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -406,7 +406,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/programs",
-              ["field1", "field2", "purchaser", "super"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -417,7 +417,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/program",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -427,7 +427,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/orders/open/preorder",
-              ["field1", "field2", "purchaser", "super"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -438,7 +438,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/orders/open",
-              ["field1", "field2", "purchaser", "super"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -450,7 +450,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/inventory",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -462,7 +462,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -473,7 +473,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/purchasing/rfqRollup",
-              ["field2", "purchaser", "super", "read-only"],
+              ["field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -483,7 +483,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/purchasing/rfq",
-              ["field2", "purchaser", "super", "supplier"],
+              ["field2", "purchaser", "select-purchaser", "super", "supplier"],
               currentRole,
               territories
             )}
@@ -494,7 +494,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/purchasing/rfqHistory",
-              ["field2", "purchaser", "super", "supplier"],
+              ["field2", "purchaser", "select-purchaser", "super", "supplier"],
               currentRole,
               territories
             )}
@@ -505,7 +505,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/purchasing/poRollup",
-              ["field2", "purchaser", "super"],
+              ["field2", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -515,7 +515,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/purchasing/purchaseOrder",
-              ["field2", "purchaser", "super", "supplier"],
+              ["field2", "purchaser", "select-purchaser", "super", "supplier"],
               currentRole,
               territories
             )}
@@ -526,7 +526,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/purchasing/poHistory",
-              ["field2", "purchaser", "super", "supplier"],
+              ["field2", "purchaser", "select-purchaser", "super", "supplier"],
               currentRole,
               territories
             )}
@@ -536,7 +536,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/orders/history",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -548,7 +548,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/history",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -560,7 +560,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/approvals",
-              ["field2", "purchaser", "super", "read-only"],
+              ["field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -571,7 +571,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/rollup",
-              ["field2", "purchaser", "super", "read-only"],
+              ["field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -581,7 +581,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/rollup/detail",
-              ["field2", "purchaser", "super"],
+              ["field2", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -597,7 +597,7 @@ const App = () => {
                 "field1",
                 "field2",
                 "compliance",
-                "purchaser",
+                "purchaser", "select-purchaser",
                 "super",
                 "read-only",
               ],
@@ -610,7 +610,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/compliance/pending",
-              ["field2", "compliance", "purchaser", "super", "read-only"],
+              ["field2", "compliance", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -621,7 +621,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/compliance/contacts",
-              ["field2", "compliance", "purchaser", "super", "read-only"],
+              ["field2", "compliance", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -632,7 +632,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "compliance", "super", "read-only", "purchaser"],
+              ["field1", "field2", "compliance", "super", "read-only", "purchaser", "select-purchaser"],
               currentRole,
               territories
             )}
@@ -654,7 +654,7 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/budgets/ytod",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
@@ -665,7 +665,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/profile",
-              ["field1", "field2", "compliance", "purchaser", "super"],
+              ["field1", "field2", "compliance", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -676,7 +676,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/settings",
-              ["field1", "field2", "compliance", "purchaser", "super"],
+              ["field1", "field2", "compliance", "purchaser", "select-purchaser", "super"],
               currentRole,
               territories
             )}
@@ -686,7 +686,7 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/reports/wrap-up",
-              ["field1", "field2", "purchaser", "super", "read-only"],
+              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
               currentRole,
               territories
             )}
