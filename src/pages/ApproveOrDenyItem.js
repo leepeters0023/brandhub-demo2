@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -38,6 +39,7 @@ const ApproveOrDenyItem = () => {
 
     return (
         <>
+        <Helmet><title>RTA | Approve or Deny</title></Helmet>
             <Container className={classes.mainWrapper}>
                 <ImageWrapper
                     imgUrl={Logo}

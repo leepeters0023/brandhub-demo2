@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -92,6 +93,8 @@ const RFQ = ({ handleFiltersClosed }) => {
   }
 
   return (
+    <>
+    <Helmet><title>RTA | RFQ</title></Helmet>
     <Container role={role} className={classes.mainWrapper}>
       <div className={classes.titleBar}>
         <div className={classes.titleImage}>
@@ -181,6 +184,7 @@ const RFQ = ({ handleFiltersClosed }) => {
       <br />
       <br />
     </Container>
+    </>
   );
 };
 

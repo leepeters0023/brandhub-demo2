@@ -5,6 +5,7 @@ import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useReactToPrint } from "react-to-print";
@@ -266,6 +267,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+    <Helmet><title>RTA | Quarterly Rollup</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

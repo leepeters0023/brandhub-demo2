@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "75px",
     border: "solid black .5px",
     width: "150px",
+    maxHeight: "55px",
   }
 }));
 

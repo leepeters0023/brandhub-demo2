@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -102,6 +103,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | RFQ Rollup</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>RFQ Rollup</Typography>

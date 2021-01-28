@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
@@ -87,6 +88,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Programs</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>

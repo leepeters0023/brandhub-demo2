@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useWindowHash } from "../hooks/UtilityHooks";
 
@@ -38,6 +39,7 @@ const Settings = ({ userType, handleFiltersClosed }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Settings</title></Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">
           <Grid item md={1} xs={false} />

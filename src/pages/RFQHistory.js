@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
 import { formatMoney } from "../utility/utilityFunctions";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -286,6 +287,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
+      <Helmet><title>RTA | RFQ History</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>RFQ History</Typography>

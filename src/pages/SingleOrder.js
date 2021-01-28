@@ -3,6 +3,7 @@ import { Link, navigate } from "@reach/router";
 import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -140,6 +141,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Order</title></Helmet>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>

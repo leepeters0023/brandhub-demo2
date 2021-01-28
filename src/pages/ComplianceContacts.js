@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import PropTypes from "prop-types";
+import Helmet from "react-helmet";
 
 import { useSelector } from "react-redux";
 
@@ -44,6 +45,7 @@ const ComplianceContacts = ({ handleFiltersClosed}) => {
 
   return (
     <>
+      <Helmet><title>RTA | Compliance Contacts</title></Helmet>
       <Container className={classes.mainWrapper}>
         {open && <EditContactModal id={id} open={open} handleClose={handleClose} />}
         <div className={classes.titleBar}>

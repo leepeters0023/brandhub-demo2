@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-
+import Helmet from "react-helmet";
 
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
@@ -61,6 +61,8 @@ const Help = ({ handleFiltersClosed }) => {
   }
 
   return (
+    <>
+    <Helmet><title>RTA | Help</title></Helmet>
     <Container
       className={classes.mainWrapper}
       style={{
@@ -127,6 +129,7 @@ const Help = ({ handleFiltersClosed }) => {
         </div>
       </Grid>
     </Container>
+    </>
   );
 };
 

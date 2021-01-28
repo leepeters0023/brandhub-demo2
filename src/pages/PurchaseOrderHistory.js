@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
 import { navigate } from "@reach/router";
 import { formatMoney } from "../utility/utilityFunctions";
+import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -263,6 +264,7 @@ const PurchaseOrderHistory = ({
 
   return (
     <>
+      <Helmet><title>RTA | Purchase Order History</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

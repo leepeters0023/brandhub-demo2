@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -278,6 +279,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Current Pre-Order</title></Helmet>
       <AreYouSure
         open={confirmModal}
         handleClose={handleCloseConfirm}

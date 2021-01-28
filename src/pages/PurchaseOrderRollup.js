@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
+import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useSelector, useDispatch } from "react-redux";
@@ -197,6 +198,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Purchase Order Rollup</title></Helmet>
       <WarningModal
         open={isWarningOpen}
         handleClose={handleCloseWarning}

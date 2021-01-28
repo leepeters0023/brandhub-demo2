@@ -6,6 +6,7 @@ import { CSVReader } from "react-papaparse";
 import { CloudinaryContext } from "cloudinary-react";
 import { openUploadWidget } from "../utility/cloudinary";
 import format from "date-fns/format";
+import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -277,6 +278,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
+      <Helmet><title>RTA | Purchase Order</title></Helmet>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <CloudinaryContext cloudName="brandhub">
         <Container className={classes.mainWrapper}>
