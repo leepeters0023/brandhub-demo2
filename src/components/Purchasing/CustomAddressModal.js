@@ -51,7 +51,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   } = useInput("");
   const { value: city, bind: bindCity, reset: resetCity } = useInput("");
   const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
-  const { value: gLCode, bind: bindGlCode, reset: resetGlCode} = useInput("");
+  const { value: gLCode, bind: bindGlCode, reset: resetGlCode } = useInput("");
   const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
     ""
   );
@@ -67,10 +67,15 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
 
   const handleShipToChampion = () => {
     dispatch(
-      addCustomAddressOrder(null, orderSetId, orderTypeMap[orderType], championId)
+      addCustomAddressOrder(
+        null,
+        orderSetId,
+        orderTypeMap[orderType],
+        championId
+      )
     );
     handleClose(false);
-  }
+  };
 
   const handleSubmit = () => {
     const address = {
@@ -124,7 +129,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               width: "100%",
             }}
           >
-            {currentUserRole !== "field1" && (
+            {currentUserRole !== "field1" && currentUserRole !== "field2" && (
               <>
                 <div
                   style={{
@@ -220,7 +225,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               label="Country"
               {...bindCountry}
             />
-             <TextField
+            <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
               variant="outlined"
