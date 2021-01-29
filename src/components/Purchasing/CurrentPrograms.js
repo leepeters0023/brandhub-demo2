@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -99,9 +100,30 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                   />
                 </Link>
                 <Typography className={classes.headerText}>
-                  {`${prog.brand.join(", ")} - ${prog.name}`}
+                  {`${prog.name}`}
                 </Typography>
                 <div>
+                  {prog.brand.length > 1 ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <Tooltip
+                        placement="left"
+                        title={`Brand(s): ${prog.brand.join(", ")}`}
+                      >
+                        <Typography
+                          className={classes.headerText}
+                        >{`${prog.brand[0]}`}</Typography>
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ marginLeft: "5px" }}
+                        />
+                      </Tooltip>
+                    </div>
+                  ) : (
+                    <Typography
+                      className={classes.headerText}
+                    >{`${prog.brand[0]}`}</Typography>
+                  )}
                   <Typography variant="body2" color="textSecondary">
                     {`Brand(s): ${prog.brand.join(", ")}`}
                   </Typography>
