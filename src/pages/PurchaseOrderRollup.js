@@ -198,7 +198,9 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order Rollup</title></Helmet>
+      <Helmet><title>RTA | Purchase Order Rollup</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <WarningModal
         open={isWarningOpen}
         handleClose={handleCloseWarning}

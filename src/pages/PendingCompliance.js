@@ -124,7 +124,9 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Pending complianceCancelOrderItems</title></Helmet>
+      <Helmet><title>RTA | Pending complianceCancelOrderItems</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <AreYouSure
         open={confirmOpen}
         handleClose={handleCloseConfirm}

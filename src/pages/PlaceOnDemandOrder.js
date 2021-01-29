@@ -147,7 +147,9 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | On-Demand Order</title></Helmet>
+      <Helmet><title>RTA | On-Demand Order</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       {previewModal && (
         <ItemPreviewModal
           type={"onDemand"}

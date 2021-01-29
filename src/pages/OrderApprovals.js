@@ -111,7 +111,9 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order Approval</title></Helmet>
+      <Helmet><title>RTA | Order Approval</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order Approvals</Typography>

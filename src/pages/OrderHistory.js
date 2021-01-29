@@ -302,7 +302,9 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order History</title></Helmet>
+      <Helmet><title>RTA | Order History</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <ItemPreviewModal
         type={"catalog"}
         handleClose={handleModalClose}

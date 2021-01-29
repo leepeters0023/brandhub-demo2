@@ -128,7 +128,9 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Compliance Rules</title></Helmet>
+      <Helmet><title>RTA | Compliance Rules</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

@@ -72,7 +72,9 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-    <Helmet><title>RTA | Budget vs Spend</title></Helmet>
+    <Helmet><title>RTA | Budget vs Spend</title>
+    <script type="text/javascript">{`Beacon('close')`}</script>
+    </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

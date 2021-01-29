@@ -130,7 +130,9 @@ const Program = ({ handleFiltersClosed, programId }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Program</title></Helmet>
+      <Helmet><title>RTA | Program</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}

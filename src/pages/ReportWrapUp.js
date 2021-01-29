@@ -161,10 +161,12 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   return (
     <>
-      <Helmet><title>RTA | Report Wrap-Up</title></Helmet>
+      <Helmet><title>RTA | Report Wrap-Up</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Wrap Up Report</Typography>

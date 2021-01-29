@@ -134,7 +134,9 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order</title></Helmet>
+      <Helmet><title>RTA | Order</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>

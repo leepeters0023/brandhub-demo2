@@ -256,7 +256,9 @@ const PurchaseOrderHistory = ({
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order History</title></Helmet>
+      <Helmet><title>RTA | Purchase Order History</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>

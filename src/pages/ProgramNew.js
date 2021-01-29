@@ -135,7 +135,9 @@ const ProgramNew = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | New Program</title></Helmet>
+      <Helmet><title>RTA | New Program</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       <ItemPreviewModal
         type="program"
         currentItem={currentItem}

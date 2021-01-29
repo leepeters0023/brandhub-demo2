@@ -171,7 +171,9 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Item Catalog</title></Helmet>
+      <Helmet><title>RTA | Item Catalog</title>
+      <script type="text/javascript">{`Beacon('close')`}</script>
+      </Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}
