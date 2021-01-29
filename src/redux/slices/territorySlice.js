@@ -5,6 +5,7 @@ import {
   fetchAllStates,
   fetchFilteredStates,
 } from "../../api/territoryApi";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -100,6 +101,7 @@ export const fetchTerritories = () => async (dispatch) => {
     dispatch(getAllTerritoriesSuccess({ territories: territories.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -113,6 +115,7 @@ export const fetchTerritoriesByName = (name) => async (dispatch) => {
     dispatch(getTerritoriesSuccess({ territories: territories.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -133,6 +136,7 @@ export const fetchStates = () => async (dispatch) => {
     dispatch(getAllStatesSuccess({ states: sortedStates }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -153,5 +157,6 @@ export const fetchStatesByIds = (ids) => async (dispatch) => {
     dispatch(getStatesSuccess({ states: sortedStates }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

@@ -10,6 +10,7 @@ import complianceRulesReducer from "./slices/complianceRulesSlice";
 import couponReducer from "./slices/couponSlice";
 import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
+import errorReducer from "./slices/errorSlice";
 import filterReducer from "./slices/filterSlice";
 import itemReducer from "./slices/itemSlice";
 import itemTypeReducer from "./slices/itemTypeSlice";
@@ -42,6 +43,7 @@ const rootReducer = combineReducers({
   coupons: couponReducer,
   currentOrder: currentOrderReducer,
   distributors: distributorReducer,
+  error: errorReducer,
   filters: filterReducer,
   itemApprovedOrDenied: itemApprovedOrDenied, 
   items: itemReducer,

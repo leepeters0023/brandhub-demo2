@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import { formatMoney } from "../utility/utilityFunctions";
 import Helmet from "react-helmet";
 
@@ -54,7 +53,6 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextLoading = useSelector(
     (state) => state.complianceRules.isNextLoading
   );
-  const error = useSelector((state) => state.complianceRules.error);
 
   const handlePrint = useReactToPrint({
     content: () => tableRef.current,
@@ -127,12 +125,6 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

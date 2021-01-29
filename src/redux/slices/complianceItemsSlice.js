@@ -5,12 +5,7 @@ import {
 } from "../../api/complianceApi";
 import { fetchOrderHistoryByItem } from "../../api/orderApi";
 import { mapCompItems, mapOrderHistoryItems } from "../apiMaps";
-/*
-* Item Rule Model
-
-todo
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -81,7 +76,9 @@ const complianceItemsSlice = createSlice({
     },
     cancelCompItem(state, action) {
       const { id } = action.payload;
-      const filteredItems = state.pendingOrderItems.filter((item) => item.id !== id);
+      const filteredItems = state.pendingOrderItems.filter(
+        (item) => item.id !== id
+      );
       state.pendingOrderItems = filteredItems;
       state.isUpdateLoading = false;
       state.error = null;
@@ -138,6 +135,7 @@ export const fetchFilteredTriggeredRules = (filterObject) => async (
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -159,13 +157,16 @@ export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
 export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let triggeredRules = await fetchOrderHistoryByItem({ orderItemIds: orderIds });
+    let triggeredRules = await fetchOrderHistoryByItem({
+      orderItemIds: orderIds,
+    });
     if (triggeredRules.error) {
       throw triggeredRules.error;
     }
@@ -180,6 +181,7 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 

@@ -5,6 +5,7 @@ import {
   getSingleUser,
   updateUserCreds,
 } from "../../api/userApi";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -169,6 +170,7 @@ export const fetchFilteredUsers = (name) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -197,6 +199,7 @@ export const fetchNextFilteredUsers = (link) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -220,6 +223,7 @@ export const fetchSingleUser = (id) => async (dispatch) => {
     dispatch(getSingleUserSuccess({ user: mappedUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -244,5 +248,6 @@ export const updateUser = (userData) => async (dispatch) => {
     dispatch(setUpdateSuccess({ updateStatus: true }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

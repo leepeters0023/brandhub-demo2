@@ -14,8 +14,8 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
-
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -402,6 +402,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -486,6 +487,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 

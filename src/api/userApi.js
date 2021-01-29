@@ -30,7 +30,7 @@ export const logInUser = async (email, password) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -38,7 +38,7 @@ export const logInUser = async (email, password) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -60,7 +60,7 @@ export const getUser = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -68,7 +68,7 @@ export const getUser = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -87,7 +87,7 @@ export const getLoginURL = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -95,7 +95,7 @@ export const getLoginURL = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -115,7 +115,7 @@ export const loginUserWithAuthO = async (code) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -123,7 +123,7 @@ export const loginUserWithAuthO = async (code) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -175,7 +175,7 @@ export const addFavoriteItems = async (idArray) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -183,7 +183,7 @@ export const addFavoriteItems = async (idArray) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -208,7 +208,7 @@ export const getFilteredUsers = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -216,7 +216,7 @@ export const getFilteredUsers = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -239,7 +239,7 @@ export const getNextFilteredUsers = async (link) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -247,7 +247,7 @@ export const getNextFilteredUsers = async (link) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -267,7 +267,7 @@ export const getSingleUser = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -275,7 +275,7 @@ export const getSingleUser = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -328,7 +328,7 @@ export const updateUserCreds = async (userData) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -336,7 +336,7 @@ export const updateUserCreds = async (userData) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };

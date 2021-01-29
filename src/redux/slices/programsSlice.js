@@ -11,29 +11,7 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { mapPrograms, mapItems } from "../apiMaps";
-
-/*
-* Program Model
-
-single program:
-{
-  id: string (read),
-  type: string (read),
-  name: string (read),
-  brand: string (read),
-  unit: string (read),
-  desc: string (read),
-  goals: string (read),
-  strategies: string (read),
-  startDate: date string (read),
-  endDate: date string (read),
-  focusMonth: string (read, based on start date month),
-  imgUrl: string (read),
-  items: array (read, see item model in itemSlice)
-  status: bool || string (read, write);
-}
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -184,6 +162,7 @@ export const fetchInitialPrograms = (id, marketBool) => async (dispatch) => {
     dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -201,6 +180,7 @@ export const fetchPrograms = (id, marketBool) => async (dispatch) => {
     dispatch(getProgramsSuccess({ programs: programArray }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -215,6 +195,7 @@ export const fetchItems = (id) => async (dispatch) => {
     dispatch(getProgramItemsSuccess({ program: id, items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -228,6 +209,7 @@ export const fetchProgramList = (name) => async (dispatch) => {
     dispatch(getProgramListSuccess({ programs: programs.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 

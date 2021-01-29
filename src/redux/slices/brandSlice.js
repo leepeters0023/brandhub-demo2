@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchBrandsByName } from "../../api/brandApi";
+import { setError } from "./errorSlice";
 
 /*
 * Brand Model
@@ -17,7 +18,7 @@ let initialState = {
   isLoading: false,
   brandList: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -46,8 +47,8 @@ const brandSlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,
@@ -68,6 +69,6 @@ export const fetchBrands = (name) => async (dispatch) => {
     dispatch(getBrandsSuccess({ brands: brands.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
-}
-
+};

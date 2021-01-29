@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Link, navigate } from "@reach/router";
+import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 import { CSVReader } from "react-papaparse";
 import { CloudinaryContext } from "cloudinary-react";
@@ -59,7 +59,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
   const currentRole = useSelector((state) => state.user.role);
-  const poError = useSelector((state) => state.purchaseOrder.error);
 
   const uploadToCloudinary = () => {
     const options = {
@@ -265,12 +264,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     currentPO.poItems,
     currentPO.shippingParams,
   ]);
-
-  useEffect(() => {
-    if (poError) {
-      navigate("/whoops");
-    }
-  }, [poError]);
 
   if (isPOLoading || !currentPO.id) {
     return <Loading />;

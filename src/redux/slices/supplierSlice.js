@@ -4,16 +4,7 @@ import {
   fetchFilteredSuppliers,
   fetchInitialSupplierValues,
 } from "../../api/supplierApi";
-
-/*
-* Supplier Model
-
-{
-  id: string (read),
-  name: string (read),
-}
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -129,6 +120,7 @@ export const fetchAllSuppliers = () => async (dispatch) => {
     dispatch(getSuppliersSuccess({ suppliers: mappedSuppliers }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -148,6 +140,7 @@ export const fetchSuppliersByName = (name) => async (dispatch) => {
     dispatch(getFilteredSuppliersSuccess({ suppliers: mappedSuppliers }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -161,5 +154,6 @@ export const fetchInitialValues = () => async (dispatch) => {
     dispatch(getNavValueSuccess({ navValues: values.data}))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -145,7 +144,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     (state) => state.preOrderDetails.preOrderTotalMod
   );
   const setTotal = useSelector((state) => state.orderSet.totalEstItemCost);
-  const error = useSelector((state) => state.orderSet.error);
   const detailError = useSelector((state) => state.preOrderDetails.error);
 
   const handleModalClose = () => {
@@ -262,12 +260,6 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   if (userPrograms.length === 0) {
     return <></>;

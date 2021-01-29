@@ -7,6 +7,7 @@ import {
 } from "./orderSetSlice";
 import { getCouponUrl, getCouponOrderSet } from "../../api/couponApi";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
+import { setError } from "./errorSlice";
 /*
 * Coupon Model
 notes: Still in the works, nothing set in stone
@@ -84,6 +85,7 @@ export const getIframeUrl = (email, territoryId, userId) => async (
     dispatch(getIframeLinkSuccess({ link: iframeUrl.data, id: id }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -125,5 +127,6 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
     dispatch(clearCoupon());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

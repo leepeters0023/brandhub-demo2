@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Link, navigate } from "@reach/router";
+import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
 import format from "date-fns/format";
@@ -46,7 +46,6 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
   const isLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
-  const error = useSelector((state) => state.orderHistory.error);
 
   const handleTrackingClick = (id) => {
     dispatch(getTracking(id));
@@ -128,12 +127,6 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   if (isLoading || !currentOrder.orderNumber) {
     return <Loading />;

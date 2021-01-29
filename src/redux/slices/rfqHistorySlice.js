@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { fetchRFQHistory, fetchNextRFQHistory } from "../../api/purchasingApi";
-
+import { setError } from "./errorSlice";
 import { mapRFQHistory } from "../apiMaps";
 
 let initialState = {
@@ -90,6 +89,7 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -109,5 +109,6 @@ export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

@@ -1,13 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllRules, fetchNextRules } from "../../api/complianceApi";
 import { mapRules } from "../apiMaps";
-
-/*
-* Rule Model
-
-todo
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -17,7 +11,7 @@ let initialState = {
   nextLink: null,
   rules: [],
   error: null,
-}
+};
 
 const startLoading = (state) => {
   state.isLoading = true;
@@ -65,8 +59,8 @@ const complianceRulesSlice = createSlice({
       state.error = null;
     },
     setFailure: loadingFailed,
-  }
-})
+  },
+});
 
 export const {
   setIsLoading,
@@ -81,20 +75,23 @@ export default complianceRulesSlice.reducer;
 
 export const fetchFilteredRules = (filterObject) => async (dispatch) => {
   try {
-    dispatch(setIsLoading())
+    dispatch(setIsLoading());
     let rules = await fetchAllRules(filterObject);
     if (rules.error) {
       throw rules.error;
     }
-    const mappedRules = mapRules(rules.data.rules)
-    dispatch(getRulesSuccess({
-      rules: mappedRules,
-      nextLink: rules.data.nextLink ? rules.data.nextLink : null,
-    }))
+    const mappedRules = mapRules(rules.data.rules);
+    dispatch(
+      getRulesSuccess({
+        rules: mappedRules,
+        nextLink: rules.data.nextLink ? rules.data.nextLink : null,
+      })
+    );
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }))
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
-}
+};
 
 export const fetchNextFilteredRules = (url) => async (dispatch) => {
   try {
@@ -103,12 +100,15 @@ export const fetchNextFilteredRules = (url) => async (dispatch) => {
     if (rules.error) {
       throw rules.error;
     }
-    const mappedRules = mapRules(rules.data.rules)
-    dispatch(getNextRulesSuccess({
-      rules: mappedRules,
-      nextLink: rules.data.nextLink ? rules.data.nextLink : null,
-    }))
+    const mappedRules = mapRules(rules.data.rules);
+    dispatch(
+      getNextRulesSuccess({
+        rules: mappedRules,
+        nextLink: rules.data.nextLink ? rules.data.nextLink : null,
+      })
+    );
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }))
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
-}
+};

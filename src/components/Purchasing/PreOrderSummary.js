@@ -80,6 +80,8 @@ const PreOrderSummary = () => {
       return "In Progress";
     } else if (status === "submitted") {
       return "Order Submitted";
+    } else if (status === "approved") {
+      return "Approved";
     } else {
       return "Error";
     }

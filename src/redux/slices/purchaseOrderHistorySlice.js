@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchPOHistory, fetchNextPOHistory } from "../../api/purchasingApi";
 import { mapPOHistoryItems } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -88,6 +89,7 @@ export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -107,5 +109,6 @@ export const fetchNextFilteredPOHistory = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

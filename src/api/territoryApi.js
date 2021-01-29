@@ -19,7 +19,7 @@ export const fetchAllTerritories = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -27,7 +27,7 @@ export const fetchAllTerritories = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -49,7 +49,7 @@ export const fetchFilteredTerritories = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -57,7 +57,7 @@ export const fetchFilteredTerritories = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -77,7 +77,7 @@ export const fetchAllStates = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -85,7 +85,7 @@ export const fetchAllStates = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -105,7 +105,7 @@ export const fetchFilteredStates = async (ids) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -113,7 +113,7 @@ export const fetchFilteredStates = async (ids) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };

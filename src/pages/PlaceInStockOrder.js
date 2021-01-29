@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, navigate } from "@reach/router";
+import { Link } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -88,8 +88,6 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
   );
-  const error = useSelector((state) => state.items.error);
-  const orderError = useSelector((state) => state.currentOrder.error);
 
   defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
   defaultFilters.currentTerritoryId = territoryId;
@@ -155,12 +153,6 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
       dispatch(setSorted());
     }
   }, [currentMarket, currentMarketBool, dispatch]);
-
-  useEffect(() => {
-    if (error || orderError) {
-      navigate("/whoops");
-    }
-  }, [error, orderError]);
 
   if (orderLoading) {
     return <Loading />;

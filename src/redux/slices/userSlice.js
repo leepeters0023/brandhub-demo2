@@ -7,22 +7,7 @@ import {
   loginUserWithAuthO,
 } from "../../api/userApi";
 import { mapItems } from "../apiMaps";
-
-/*
-* DataFormat:
-user: {
-  loginIsLoading: bool,
-  isLoading: bool,
-  loggedIn: bool,
-  firstName: string,
-  lastName: string,
-  email: string,
-  roles: [ ...array of permissions as strings ],
-  territories: [ ...array of regions and key accounts assigned to user ],
-  currentTerritory: string
-  error: null || string
-}
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   authIsLoading: false,
@@ -270,6 +255,7 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -283,6 +269,7 @@ export const logIn = (email, password) => async (dispatch) => {
     dispatch(setLoginSuccess());
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -297,6 +284,7 @@ export const addToFavoriteItems = (idArray) => async (dispatch) => {
     dispatch(updateFavoriteItems({ items: items }));
   } catch (err) {
     dispatch(setUpdateFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -315,6 +303,7 @@ export const loginWithCode = (code) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -328,5 +317,6 @@ export const getRedirect = () => async (dispatch) => {
     dispatch(setRedirectLink({ link: res.data["redirect_url"] }));
   } catch (err) {
     dispatch(setLogInFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "@reach/router";
 import { CSVLink } from "react-csv";
 import PropTypes from "prop-types";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -50,7 +49,6 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
   );
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
-  const error = useSelector((state) => state.complianceItems.error);
 
   const handlePrint = useReactToPrint({
     content: () => tableRef.current,
@@ -119,12 +117,6 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   if (isLoading) {
     return <Loading />;

@@ -6,7 +6,6 @@ import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { formatMoney } from "../utility/utilityFunctions";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -135,7 +134,6 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const isNextLoading = useSelector(
     (state) => state.orderHistory.isNextLoading
   );
-  const error = useSelector((state) => state.orderHistory.error);
 
   const handlePrintOrderTable = useReactToPrint({
     content: () => orderRef.current,
@@ -301,12 +299,6 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     currentOrders,
     currentOrderItems,
   ]);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

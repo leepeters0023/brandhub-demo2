@@ -4,7 +4,6 @@ import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -119,7 +118,6 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  const error = useSelector((state) => state.orderSetHistory.error);
 
   const handlePrintOrderTable = useReactToPrint({
     content: () => orderRef.current,
@@ -258,12 +256,6 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     currentPreOrders,
     quarterlyRollupItems,
   ]);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

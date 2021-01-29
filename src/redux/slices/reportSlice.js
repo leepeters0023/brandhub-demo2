@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchWrapUpReport } from "../../api/reportApi";
 import { mapOrderHistoryItems } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -61,5 +62,6 @@ export const getWrapUp = (filterObject) => async (dispatch) => {
     dispatch(getReportsSuccess({type: "wrap-up", reportData: mappedItems}))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

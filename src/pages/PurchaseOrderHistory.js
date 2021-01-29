@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import { formatMoney } from "../utility/utilityFunctions";
 import Helmet from "react-helmet";
 
@@ -134,7 +133,6 @@ const PurchaseOrderHistory = ({
     (state) => state.purchaseOrderHistory.isLoading
   );
   const currentPOs = useSelector((state) => state.purchaseOrderHistory.pos);
-  const error = useSelector((state) => state.purchaseOrderHistory.error);
   const defaultFilters = filterOptionMap[filterOption];
 
   const handlePrint = useReactToPrint({
@@ -255,12 +253,6 @@ const PurchaseOrderHistory = ({
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

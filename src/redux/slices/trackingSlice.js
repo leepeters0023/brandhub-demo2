@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { trackItem } from "../../api/purchasingApi";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -51,5 +52,6 @@ export const getTracking = (id) => async (dispatch) => {
     dispatch(getTrackingSucces({ tracking: tracking.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

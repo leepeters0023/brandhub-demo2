@@ -1,27 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { fetchAllPreOrders } from "../../api/orderApi";
-
 import { setProgramStatus } from "./programsSlice";
-
+import { setError } from "./errorSlice";
 import { stringToCents } from "../../utility/utilityFunctions";
-
-/*
-* Pre Order Detail Model
-notes: This slice is responsible for managing the details of all current pre order programs
-and displaying that information in the accordian component while placing pre orders.
-
-pre order summary object:
-{
-  preOrderId: string (read),
-  programId: string (read),
-  territories: array (read, comes as a string of names, we break it into an array)
-  totalItems: int (read, write (updates when users update orders withing the order set corresponding to the pre order program)),
-  totalEstCost: int (read, calculated from item totals in order set),
-  status: string (read, write (editable by field2 or higher)),
-}
-
-*/
 
 let initialState = {
   isLoading: false,
@@ -163,5 +144,6 @@ export const fetchPreOrders = (id, type, program, terrId) => async (
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

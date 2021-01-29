@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import "date-fns";
 import subDays from "date-fns/subDays";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useBottomScrollListener } from "react-bottom-scroll-listener";
@@ -78,7 +77,6 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   const currentOrders = useSelector((state) => state.orderSetHistory.orderSets);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
-  const error = useSelector((state) => state.orderSetHistory.error);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;
@@ -110,12 +108,6 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

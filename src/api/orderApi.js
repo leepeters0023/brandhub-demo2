@@ -32,7 +32,7 @@ export const fetchOrdersByProgram = async (program, userId, terrId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -40,7 +40,7 @@ export const fetchOrdersByProgram = async (program, userId, terrId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -61,7 +61,7 @@ export const fetchOrderSetById = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -69,7 +69,7 @@ export const fetchOrderSetById = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -95,7 +95,7 @@ export const fetchAllPreOrders = async (id, terrId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -103,7 +103,7 @@ export const fetchAllPreOrders = async (id, terrId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -154,7 +154,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -162,7 +162,7 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -197,7 +197,7 @@ export const fetchNextOrderSets = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -205,7 +205,7 @@ export const fetchNextOrderSets = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -248,7 +248,7 @@ export const fetchOrderSetItems = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -256,7 +256,7 @@ export const fetchOrderSetItems = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -282,7 +282,7 @@ export const fetchNextOrderSetItems = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -290,7 +290,7 @@ export const fetchNextOrderSetItems = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -315,7 +315,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -323,7 +323,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -354,7 +354,7 @@ export const setOrderSetNote = async (id, note) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -362,7 +362,7 @@ export const setOrderSetNote = async (id, note) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -428,7 +428,7 @@ export const addSingleOrderToSet = async (id, dist, type, warehouse) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -436,7 +436,7 @@ export const addSingleOrderToSet = async (id, dist, type, warehouse) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -481,7 +481,7 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -489,7 +489,7 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -515,7 +515,7 @@ export const startOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -523,7 +523,7 @@ export const startOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -542,7 +542,7 @@ export const restartOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -550,7 +550,7 @@ export const restartOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -581,7 +581,7 @@ export const setWorkComplete = async (id, status) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -589,7 +589,7 @@ export const setWorkComplete = async (id, status) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -608,7 +608,7 @@ export const submitOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -616,7 +616,7 @@ export const submitOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -635,7 +635,7 @@ export const approveOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -643,7 +643,7 @@ export const approveOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -671,7 +671,7 @@ export const deleteOrderSetItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -679,7 +679,7 @@ export const deleteOrderSetItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -707,7 +707,7 @@ export const deleteOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -715,7 +715,7 @@ export const deleteOrderSet = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -756,7 +756,7 @@ export const createOrderSet = async (type, territoryId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -764,7 +764,7 @@ export const createOrderSet = async (type, territoryId) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -807,7 +807,7 @@ export const addOrderSetItem = async (id, item) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -815,7 +815,7 @@ export const addOrderSetItem = async (id, item) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -845,7 +845,7 @@ export const updateOrderSetItemDate = async (id, date) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -853,7 +853,7 @@ export const updateOrderSetItemDate = async (id, date) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -883,7 +883,7 @@ export const updateOrderSetItemRush = async (id, status) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -891,7 +891,7 @@ export const updateOrderSetItemRush = async (id, status) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -935,7 +935,7 @@ export const fetchOrderHistory = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -943,7 +943,7 @@ export const fetchOrderHistory = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -968,7 +968,7 @@ export const fetchNextHistory = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -976,7 +976,7 @@ export const fetchNextHistory = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1020,7 +1020,7 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1028,7 +1028,7 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1051,7 +1051,7 @@ export const fetchNextOrderHistoryByItem = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1059,7 +1059,7 @@ export const fetchNextOrderHistoryByItem = async (url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1080,7 +1080,7 @@ export const fetchSingleOrder = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1088,7 +1088,7 @@ export const fetchSingleOrder = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1119,7 +1119,7 @@ export const patchOrderItem = async (id, qty) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1127,7 +1127,7 @@ export const patchOrderItem = async (id, qty) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1159,7 +1159,7 @@ export const setOrderDetail = async (id, note, attn) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1167,7 +1167,7 @@ export const setOrderDetail = async (id, note, attn) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1195,7 +1195,7 @@ export const deleteOrder = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1203,7 +1203,7 @@ export const deleteOrder = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1231,7 +1231,7 @@ export const deleteOrderItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1239,7 +1239,7 @@ export const deleteOrderItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -1266,7 +1266,7 @@ export const complianceCancelOrderItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -1274,7 +1274,7 @@ export const complianceCancelOrderItem = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };

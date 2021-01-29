@@ -39,7 +39,7 @@ export const getCouponUrl = async (email, url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -47,7 +47,7 @@ export const getCouponUrl = async (email, url) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -92,7 +92,7 @@ export const getCouponOrderSet = async (code) => {
             ? err.response.data.errors[0].title
             : err.response
             ? err.response.data
-            : "Something went wrong";
+            : "Request Timeout";
       });
   };
   await getSet();

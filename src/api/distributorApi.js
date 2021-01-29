@@ -27,7 +27,7 @@ export const fetchDistributorsByTerritory = async (id, stateIds) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -35,7 +35,7 @@ export const fetchDistributorsByTerritory = async (id, stateIds) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -59,7 +59,7 @@ export const fetchDistributors = async (name, territoryId, stateIds) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -67,7 +67,7 @@ export const fetchDistributors = async (name, territoryId, stateIds) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -87,7 +87,7 @@ export const getFavDistributors = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -95,7 +95,7 @@ export const getFavDistributors = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -126,7 +126,7 @@ export const newFavDistList = async (index) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -134,7 +134,7 @@ export const newFavDistList = async (index) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -170,7 +170,7 @@ export const updateFavDistList = async (id, name, distArray) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -178,7 +178,7 @@ export const updateFavDistList = async (id, name, distArray) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -196,7 +196,7 @@ export const deleteFavDistList = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -204,7 +204,7 @@ export const deleteFavDistList = async (id) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -230,7 +230,7 @@ export const editCustomAttentionLine = async (id, attn) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -238,7 +238,7 @@ export const editCustomAttentionLine = async (id, attn) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };

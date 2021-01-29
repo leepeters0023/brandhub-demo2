@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { navigate } from "@reach/router";
-import addDays from "date-fns/addDays";
-
 import {
   fetchRollupItems,
   fetchNextRollupItems,
@@ -21,13 +19,9 @@ import {
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
-
+import { setError } from "./errorSlice";
 import { mapRollupItems, mapRFQ, mapBids } from "../apiMaps";
-/*
-* RFQ Item Model (need to determine!)
-
-
-*/
+import addDays from "date-fns/addDays";
 
 let initialState = {
   isLoading: false,
@@ -244,6 +238,7 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -263,6 +258,7 @@ export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -278,6 +274,7 @@ export const createNewRFQ = (item, program) => async (dispatch) => {
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -292,6 +289,7 @@ export const fetchSingleRFQ = (id) => async (dispatch) => {
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -424,9 +422,7 @@ export const completeCurrentRFQ = (id) => async (dispatch) => {
     }
     dispatch(
       updateValues({
-        values: [
-          { key: "awardedRFQ", value: -1 },
-        ],
+        values: [{ key: "awardedRFQ", value: -1 }],
       })
     );
     dispatch(updateSuccessful());

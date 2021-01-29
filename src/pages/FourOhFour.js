@@ -55,7 +55,7 @@ const FourOhFour = () => {
             </Typography>
             <br />
             <Button
-              href="/"
+              href="/dashboard"
               color="secondary"
               variant="contained"
               className={classes.largeButton}

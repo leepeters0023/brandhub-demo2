@@ -47,12 +47,13 @@ import {
   fetchStates,
   clearTerritories,
 } from "./redux/slices/territorySlice";
-import { resetRfqHistory } from "./redux/slices/rfqHistorySlice"
+import { resetRfqHistory } from "./redux/slices/rfqHistorySlice";
 import { resetPoHistory } from "./redux/slices/purchaseOrderHistorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
 import { updateSingleFilter } from "./redux/slices/filterSlice";
+import { clearError } from "./redux/slices/errorSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
 import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
@@ -64,6 +65,7 @@ import CouponsModal from "./components/Coupons/CouponModal";
 import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
+import ErrorModal from "./components/Utility/ErrorModal";
 import FilterDrawer from "./components/Filtering/FilterDrawer";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
@@ -103,8 +105,6 @@ axios.defaults.timeout = 20000;
 
 const theme = createMuiTheme(themeFile);
 
-
-
 const App = () => {
   const dispatch = useDispatch();
   const [currentUser, setCurrentUser] = useState(
@@ -114,6 +114,7 @@ const App = () => {
   const [couponsOpen, setCouponsOpen] = useCallback(useState(false));
   const [logoutTimeout, setLogoutTimeout] = useCallback(useState(null));
   const [currentMonth, setCurrentMonth] = useCallback(useState(null));
+  const [isErrorOpen, setErrorOpen] = useCallback(useState(false));
 
   const currentRole = useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
@@ -129,6 +130,7 @@ const App = () => {
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  const currentError = useSelector((state) => state.error.currentError);
 
   const handleFiltersClosed = () => {
     setFiltersOpen(false);
@@ -136,6 +138,11 @@ const App = () => {
 
   const handleCouponModal = () => {
     setCouponsOpen(!couponsOpen);
+  };
+
+  const handleErrorClose = () => {
+    setErrorOpen(false);
+    dispatch(clearError());
   };
 
   const handleLogout = useCallback(() => {
@@ -201,8 +208,13 @@ const App = () => {
           dispatch(fetchStates());
           dispatch(fetchBUs());
           dispatch(fetchWarehouse());
-          dispatch(updateSingleFilter({ filter: "currentTerritoryId", value: currentTerritory.id }))
-          setCurrentMonth(getMonth(new Date()))
+          dispatch(
+            updateSingleFilter({
+              filter: "currentTerritoryId",
+              value: currentTerritory.id,
+            })
+          );
+          setCurrentMonth(getMonth(new Date()));
         } else {
           dispatch(clearPrograms());
         }
@@ -262,25 +274,36 @@ const App = () => {
     logoutTimeout,
   ]);
 
+  useEffect(() => {
+    if (currentError) {
+      setErrorOpen(true);
+    }
+  })
+
   if (userError) {
-    navigate("/whoops")
+    navigate("/whoops");
   }
+
   if (window.location.pathname.includes("/approveOrDenyItem")) {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
           <ApproveOrDenyItem
             path="approveOrDenyItem"
-            handleFiltersClosed={handleFiltersClosed} />
+            handleFiltersClosed={handleFiltersClosed}
+          />
         </Router>
       </MuiThemeProvider>
     );
-  };
+  }
   if (!loggedIn && !currentUser) {
     return (
       <MuiThemeProvider theme={theme}>
         {!window.location.pathname.includes("/login") && (
           <Redirect noThrow to="/" />
+        )}
+        {isErrorOpen && (
+          <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
         )}
         {/* {!link && <Redirect noThrow to="/login/initial" />} */}
         <Router>
@@ -295,12 +318,18 @@ const App = () => {
   } else if (currentUser && (isLoading || isPreOrdersLoading)) {
     return (
       <MuiThemeProvider theme={theme}>
+        {isErrorOpen && (
+          <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
+        )}
         <Loading partial={false} />;
       </MuiThemeProvider>
     );
   } else if (currentUser && programsIsLoading) {
     return (
       <MuiThemeProvider theme={theme}>
+        {isErrorOpen && (
+          <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
+        )}
         <TopDrawerNav
           userType={currentRole}
           handleLogout={handleLogout}
@@ -319,6 +348,9 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         {currentRole === "read-only" && territories.length === 0 && (
           <Redirect noThrow to="/newUser" />
+        )}
+        {isErrorOpen && (
+          <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
         )}
         <Router>
           <NewUser
@@ -341,6 +373,9 @@ const App = () => {
             currentMonth={currentMonth}
           />
         )}
+        {isErrorOpen && (
+          <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
+        )}
         <FilterDrawer
           open={filtersOpen}
           handleDrawerClose={handleFiltersClosed}
@@ -360,8 +395,8 @@ const App = () => {
           )}
           {(window.location.pathname === "/" ||
             window.location.pathname.includes("/login")) && (
-              <Redirect noThrow to="/dashboard" />
-            )}
+            <Redirect noThrow to="/dashboard" />
+          )}
 
           <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
             <Landing path="/" />
@@ -373,7 +408,15 @@ const App = () => {
                 currentMonth={currentMonth}
               />,
               "/dashboard",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "supplier", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "supplier",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -394,7 +437,14 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/programs",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -417,7 +467,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/program",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -450,7 +507,14 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/inventory",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -462,7 +526,14 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -536,7 +607,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/orders/history",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -548,7 +626,14 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/history",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -597,7 +682,8 @@ const App = () => {
                 "field1",
                 "field2",
                 "compliance",
-                "purchaser", "select-purchaser",
+                "purchaser",
+                "select-purchaser",
                 "super",
                 "read-only",
               ],
@@ -610,7 +696,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/compliance/pending",
-              ["field2", "compliance", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field2",
+                "compliance",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -621,7 +714,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/compliance/contacts",
-              ["field2", "compliance", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field2",
+                "compliance",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -632,7 +732,15 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "compliance", "super", "read-only", "purchaser", "select-purchaser"],
+              [
+                "field1",
+                "field2",
+                "compliance",
+                "super",
+                "read-only",
+                "purchaser",
+                "select-purchaser",
+              ],
               currentRole,
               territories
             )}
@@ -654,7 +762,14 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/budgets/ytod",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}
@@ -665,7 +780,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/profile",
-              ["field1", "field2", "compliance", "purchaser", "select-purchaser", "super"],
+              [
+                "field1",
+                "field2",
+                "compliance",
+                "purchaser",
+                "select-purchaser",
+                "super",
+              ],
               currentRole,
               territories
             )}
@@ -676,7 +798,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/settings",
-              ["field1", "field2", "compliance", "purchaser", "select-purchaser", "super"],
+              [
+                "field1",
+                "field2",
+                "compliance",
+                "purchaser",
+                "select-purchaser",
+                "super",
+              ],
               currentRole,
               territories
             )}
@@ -686,7 +815,14 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/reports/wrap-up",
-              ["field1", "field2", "purchaser", "select-purchaser", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+              ],
               currentRole,
               territories
             )}

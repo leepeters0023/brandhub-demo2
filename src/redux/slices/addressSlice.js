@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchWarehouseAddress } from "../../api/addressApi";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -71,5 +72,6 @@ export const fetchWarehouse = () => async (dispatch) => {
     dispatch(getWarehouseSuccess({ rapid: rapid, champion: champion }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import { formatMoney } from "../utility/utilityFunctions";
 import Helmet from "react-helmet";
 
@@ -122,7 +121,6 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isRFQsLoading = useSelector((state) => state.rfqHistory.isLoading);
   const currentRFQs = useSelector((state) => state.rfqHistory.rfqs);
-  const error = useSelector((state) => state.rfqHistory.error);
 
   const defaultFilters = filterOptionMap[filterOption];
 
@@ -278,12 +276,6 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       dispatch(setSorted());
     }
   }, [currentView, setCurrentView, filterOption, dispatch]);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

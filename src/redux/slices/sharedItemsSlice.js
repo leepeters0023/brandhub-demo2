@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchSharedItems } from "../../api/itemApi";
 import { mapItems } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -58,5 +59,6 @@ export const fetchSharedItemsByIds = (ids) => async (dispatch) => {
     dispatch(getItemsSuccess({ items: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

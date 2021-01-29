@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link, navigate } from "@reach/router";
+import { Link } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -45,7 +45,6 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentUserRole = useSelector((state) => state.user.role);
-  const error = useSelector((state) => state.programs.error);
 
   const currentPrograms = useProgramSort(
     activePrograms,
@@ -79,12 +78,6 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
       );
     }
   }, [brandFilter, buFilters, monthFilters, setProgramFilters]);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>

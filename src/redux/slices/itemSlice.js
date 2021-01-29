@@ -1,12 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchItems, fetchNextItems } from "../../api/itemApi";
 import { mapItems } from "../apiMaps";
-
-/*
-* Item Model
-notes: Items still in flux, will update when format is nailed down
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -128,6 +123,7 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({error: err.toString()}));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -148,5 +144,6 @@ export const fetchNextFilteredItems = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({error: err.toString()}));
+    dispatch(setError({ error: err.toString() }));
   }
 }

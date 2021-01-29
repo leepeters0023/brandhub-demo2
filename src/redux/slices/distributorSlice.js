@@ -12,21 +12,7 @@ import {
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
-
-/*
-* Distributor Model
-notes: notes: This slice is users soley to build the distributor auto complete fields
-
-{
-  type: string (read),
-  id: string (read),
-  state: string (read),
-  name: string (read),
-  city: string (read),
-  links: object (read),
-}
-
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -205,6 +191,7 @@ export const fetchUserDistributors = (name, territoryId, stateIds, attn = false)
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -223,6 +210,7 @@ export const fetchFavDistributors = () => async (dispatch) => {
     dispatch(getFavDistributorsSuccess({ distLists: mappedDistList }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 

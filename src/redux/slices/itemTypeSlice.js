@@ -1,16 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchItemTypes } from "../../api/itemApi";
-
-/*
-* Item Type Model
-
-{
-  id: string (read),
-  categoryCode: string (read),
-  name: string (read),
-  packSize: string (read)
-}
-*/
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -73,5 +63,6 @@ export const fetchAllItemTypes = () => async (dispatch) => {
     dispatch(getItemTypesSuccess({ itemTypes: mappedItemTypes }))
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 }

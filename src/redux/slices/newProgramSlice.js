@@ -2,11 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 
-/*
-* New Program Model
-TODO
-*/
-
 let initialState = {
   isLoading: false,
   name: "",

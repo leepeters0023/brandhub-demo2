@@ -19,7 +19,7 @@ export const fetchFilteredSuppliers = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -27,7 +27,7 @@ export const fetchFilteredSuppliers = async (name) => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -48,7 +48,7 @@ export const fetchSuppliers = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       response.status = "error";
       response.error =
@@ -56,7 +56,7 @@ export const fetchSuppliers = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong";
+          : "Request Timeout";
     });
   return response;
 };
@@ -85,7 +85,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -105,7 +105,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -127,7 +127,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -147,7 +147,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -169,7 +169,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -191,7 +191,7 @@ export const fetchInitialSupplierValues = async () => {
           ? err.response.data.errors[0].title
           : err.response
           ? err.response.data
-          : "Something went wrong"
+          : "Request Timeout"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title

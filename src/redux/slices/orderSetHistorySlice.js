@@ -1,13 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import {
   fetchAllFilteredOrderSets,
   fetchNextOrderSets,
   fetchOrderSetItems,
   fetchNextOrderSetItems,
 } from "../../api/orderApi";
-
 import { mapOrderSetHistory, mapOrderSetItems } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -128,6 +127,7 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -153,6 +153,7 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -176,6 +177,7 @@ export const fetchFilteredOrderSetItems = (filterObject) => async (
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -197,5 +199,6 @@ export const fetchNextFilteredOrderSetItems = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

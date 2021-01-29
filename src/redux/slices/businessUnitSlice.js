@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchBusinessUnits } from "../../api/itemApi";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -54,5 +55,6 @@ export const fetchBUs = () => async (dispatch) => {
     dispatch(getBuSuccess({ bus: mappedBus }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

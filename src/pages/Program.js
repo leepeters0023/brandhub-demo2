@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
-import { Link, navigate } from "@reach/router";
+import { Link } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -67,7 +67,6 @@ const Program = ({ handleFiltersClosed, programId }) => {
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const currentUserRole = useSelector((state) => state.user.role);
-  const error = useSelector((state) => state.programs.error);
 
   useEffect(() => {
     let program = programs.find((prog) => prog.id === programId);
@@ -124,12 +123,6 @@ const Program = ({ handleFiltersClosed, programId }) => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   if (!currentProgram) {
     return <CircularProgress />;

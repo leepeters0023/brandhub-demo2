@@ -6,13 +6,13 @@ import {
   fetchOrderHistoryByItem,
   fetchNextOrderHistoryByItem,
 } from "../../api/orderApi";
-
 import {
   mapOrderHistoryOrders,
   mapSingleOrder,
   mapOrderItems,
   mapOrderHistoryItems,
 } from "../apiMaps";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -210,6 +210,7 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -230,6 +231,7 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -247,6 +249,7 @@ export const fetchOrder = (id) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -268,6 +271,7 @@ export const fetchFilteredOrderHistoryByItem = (filterObject) => async (
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -289,5 +293,6 @@ export const fetchNextFilteredOrderHistoryByItem = (url) => async (
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };

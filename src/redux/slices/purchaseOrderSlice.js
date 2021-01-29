@@ -31,6 +31,7 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { updateValues } from "./supplierSlice";
+import { setError } from "./errorSlice";
 import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder, mapPOItems } from "../apiMaps";
 import { navigate } from "@reach/router";
@@ -399,6 +400,7 @@ export const fetchFilteredPOItems = (filterObject) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -418,6 +420,7 @@ export const fetchNextFilteredPOItems = (url) => async (dispatch) => {
     );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -432,6 +435,7 @@ export const fetchSinglePO = (id) => async (dispatch) => {
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -448,6 +452,7 @@ export const createNewPO = (idArray, orderType, programId) => async (
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -464,6 +469,7 @@ export const createInventoryPO = (itemId, qty, warehouse, programId) => async (
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -478,6 +484,7 @@ export const addItemsToPO = (idArray, poNum) => async (dispatch) => {
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -632,14 +639,17 @@ export const setItemActCost = (id, cost) => async (dispatch) => {
 
 export const setTotalFreight = (id, freightCost) => async (dispatch) => {
   try {
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const freightStatus = updatePOFreight(id, freightCost);
     if (freightStatus.error) {
       throw freightStatus.error;
     }
     dispatch(updateFreight({ freightCost: freightCost }));
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
   }
 };
 

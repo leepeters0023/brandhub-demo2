@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
-import { navigate } from "@reach/router";
 import Helmet from "react-helmet";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -62,7 +61,6 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const isNextLoading = useSelector(
     (state) => state.complianceItems.isNextLoading
   );
-  const error = useSelector((state) => state.complianceItems.error);
 
   const handlePrint = useReactToPrint({
     content: () => tableRef.current,
@@ -136,12 +134,6 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
     handleFilterDrawer,
     currentUserRole
   );
-
-  useEffect(() => {
-    if (error) {
-      navigate("/whoops");
-    }
-  }, [error]);
 
   return (
     <>
