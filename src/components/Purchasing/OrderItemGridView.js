@@ -116,7 +116,7 @@ const OrderItemGridView = (props) => {
           <br />
           <Grid
             container
-            spacing={10}
+            spacing={5}
             className={classes.itemGridContainer}
             style={{
               height: "Calc(100% + 50px)",
@@ -183,8 +183,13 @@ const OrderItemGridView = (props) => {
                       </div>
                       <br />
                       {item.brand.length > 1 ? (
-                        <Tooltip placement="left" title={`${item.brand.join(", ")}`}>
-                          <Typography className={classes.headerText}>{`${item.brand[0]} ${item.itemType}`}</Typography>
+                        <Tooltip
+                          placement="left"
+                          title={`${item.brand.join(", ")}`}
+                        >
+                          <Typography
+                            className={classes.headerText}
+                          >{`${item.brand[0]}`}</Typography>
                           <MoreHorizIcon
                             fontSize="small"
                             color="inherit"
@@ -192,10 +197,19 @@ const OrderItemGridView = (props) => {
                           />
                         </Tooltip>
                       ) : (
-                          <Typography className={classes.headerText}>{item.brand[0]}</Typography>
-                        )}
+                        <Typography
+                          className={classes.headerText}
+                        >{`${item.brand[0]}`}</Typography>
+                      )}
+                      <br />
+                      <Typography
+                        className={classes.headerText}
+                      >{`${item.itemType}`}</Typography>
                       {item.program.length > 1 ? (
-                        <Tooltip placement="left" title={`${item.program.join(", ")}`}>
+                        <Tooltip
+                          placement="left"
+                          title={`${item.program.join(", ")}`}
+                        >
                           <Typography>{item.program[0]}</Typography>
                           <MoreHorizIcon
                             fontSize="small"
@@ -204,17 +218,20 @@ const OrderItemGridView = (props) => {
                           />
                         </Tooltip>
                       ) : (
-                          <Typography>{item.program[0]}</Typography>
-                        )}
+                        <Typography>{item.program[0]}</Typography>
+                      )}
                       <Typography variant="body1" color="textSecondary">
-                        {`#${item.itemNumber} | ${item.packSize}`}
+                        {`#${item.itemNumber}`}
+                      </Typography>
+                      <Typography variant="body1" color="textSecondary">
+                        {`Pack Size: ${item.packSize}`}
                       </Typography>
                       {type === "inStock" && (
                         <Typography variant="body1" color="textSecondary">
                           {`Available: ${item.stock}`}
                         </Typography>
                       )}
-                      <Typography variant="body1" color="textSecondary">
+                      <Typography className={classes.headerText}>
                         {`${formatMoney(item.estCost, false)}`}
                       </Typography>
                       <br />
