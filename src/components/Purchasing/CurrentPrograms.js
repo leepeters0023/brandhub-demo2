@@ -109,24 +109,23 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                         placement="left"
                         title={`Brand(s): ${prog.brand.join(", ")}`}
                       >
-                        <Typography
-                          className={classes.headerText}
-                        >{`${prog.brand[0]}`}</Typography>
-                        <MoreHorizIcon
-                          fontSize="small"
-                          color="inherit"
-                          style={{ marginLeft: "5px" }}
-                        />
+                        <span>
+                          <Typography
+                            className={classes.headerText}
+                          >{`${prog.brand[0]}`}</Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ marginLeft: "5px" }}
+                          />
+                        </span>
                       </Tooltip>
                     </div>
                   ) : (
                     <Typography
                       className={classes.headerText}
-                    >{`${prog.brand[0]}`}</Typography>
+                    >{`Brand(s): ${prog.brand[0]}`}</Typography>
                   )}
-                  <Typography variant="body2" color="textSecondary">
-                    {`Brand(s): ${prog.brand.join(", ")}`}
-                  </Typography>
                   <Typography variant="body2" color="textSecondary">
                     {`Focus Month: ${prog.focusMonth}`}
                   </Typography>

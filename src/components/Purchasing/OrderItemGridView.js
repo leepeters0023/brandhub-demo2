@@ -187,14 +187,16 @@ const OrderItemGridView = (props) => {
                           placement="left"
                           title={`${item.brand.join(", ")}`}
                         >
-                          <Typography
-                            className={classes.headerText}
-                          >{`${item.brand[0]}`}</Typography>
-                          <MoreHorizIcon
-                            fontSize="small"
-                            color="inherit"
-                            style={{ float: "right" }}
-                          />
+                          <span>
+                            <Typography
+                              className={classes.headerText}
+                            >{`${item.brand[0]}`}</Typography>
+                            <MoreHorizIcon
+                              fontSize="small"
+                              color="inherit"
+                              style={{ float: "right" }}
+                            />
+                          </span>
                         </Tooltip>
                       ) : (
                         <Typography
@@ -210,12 +212,14 @@ const OrderItemGridView = (props) => {
                           placement="left"
                           title={`${item.program.join(", ")}`}
                         >
-                          <Typography>{item.program[0]}</Typography>
-                          <MoreHorizIcon
-                            fontSize="small"
-                            color="inherit"
-                            style={{ float: "right" }}
-                          />
+                          <span>
+                            <Typography>{item.program[0]}</Typography>
+                            <MoreHorizIcon
+                              fontSize="small"
+                              color="inherit"
+                              style={{ float: "right" }}
+                            />
+                          </span>
                         </Tooltip>
                       ) : (
                         <Typography>{item.program[0]}</Typography>
