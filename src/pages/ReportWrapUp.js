@@ -12,6 +12,7 @@ import { getWrapUp, clearReports } from "../redux/slices/reportSlice";
 import { updateSingleFilter, resetFilters } from "../redux/slices/filterSlice";
 
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
+import UserSuperAutoComplete from "../components/Utility/UserSuperAutoComplete";
 import WrapUpTable from "../components/Reporting/WrapUpTable";
 
 import Container from "@material-ui/core/Container";
@@ -164,7 +165,9 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Report Wrap-Up</title></Helmet>
+      <Helmet>
+        <title>RTA | Report Wrap-Up</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Wrap Up Report</Typography>
@@ -226,16 +229,27 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
               }
             />
           </MuiPickersUtilsProvider>
-          {currentUserRole !== "field1" && (
-            <UserAutoComplete
-              classes={classes}
-              handleChange={handleUser}
-              reset={reset}
-              setReset={setReset}
-              filterType="report"
-              id="report-user-complete"
-            />
-          )}
+          {currentUserRole !== "field1" ? (
+            currentUserRole === "super" ? (
+              <UserSuperAutoComplete
+                classes={classes}
+                handleChange={handleUser}
+                reset={reset}
+                setReset={setReset}
+                filterType="report"
+                id="report-user-complete"
+              />
+            ) : (
+              <UserAutoComplete
+                classes={classes}
+                handleChange={handleUser}
+                reset={reset}
+                setReset={setReset}
+                filterType="report"
+                id="report-user-complete"
+              />
+            )
+          ) : null}         
         </div>
         <br />
         <div className={classes.chipRow}>

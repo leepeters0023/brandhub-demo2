@@ -518,15 +518,13 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
     dispatch(setOrderLoading());
     dispatch(patchLoading());
     const orders = [];
-    await Promise.all(
-      idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type, warehouse);
+    for (let i = 0; i < idArray.length; i ++) {
+      const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
         if (order.error) {
           throw order.error;
         }
         orders.push(order.data);
-      })
-    );
+    }
     let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
     dispatch(setRebuildRef());
@@ -549,15 +547,13 @@ export const createAllOrders = (territoryId, id, type, warehouse, stateIds) => a
     }
     let idArray = distributors.data.map((dist) => dist.id);
     const orders = [];
-    await Promise.all(
-      idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type, warehouse);
+    for (let i = 0; i < idArray.length; i ++) {
+      const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
         if (order.error) {
           throw order.error;
         }
         orders.push(order.data);
-      })
-    );
+    }
     let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
     dispatch(setRebuildRef());

@@ -8,6 +8,7 @@ import { setClear } from "../../redux/slices/filterSlice";
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import TerritoryAutoComplete from "../Utility/TerritoryAutoComplete";
 import UserAutoComplete from "../Utility/UserAutoComplete";
+import UserSuperAutoComplete from "../Utility/UserSuperAutoComplete";
 import StateAutoComplete from "../Utility/StateAutoComplete";
 
 import List from "@material-ui/core/List";
@@ -31,13 +32,23 @@ const FiltersBudget = ({
       <List>
         {currentUserRole !== "field1" && budgetType !== "ytod" && (
           <ListItem>
-            <UserAutoComplete
-              classes={classes}
-              handleChange={handleFilters}
-              reset={reset}
-              setReset={setReset}
-              filterType={"budget"}
-            />
+            {currentUserRole === "super" ? (
+              <UserSuperAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"budget"}
+              />
+            ) : (
+              <UserAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"budget"}
+              />
+            )}
           </ListItem>
         )}
         <ListItem>

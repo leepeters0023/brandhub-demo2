@@ -1,43 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { fetchFilteredUsers } from "../../redux/slices/userUpdateSlice";
 
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-const UserAutoComplete = ({
+const UserSuperAutoComplete = ({
   classes,
   handleChange,
   reset,
   setReset,
   filterType,
-  id,
 }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
   const [currentUsers, setCurrentUsers] = useState([]);
-  const [currentUserList, setCurrentUserList] = useState([]);
 
-  const fieldUsers = useSelector((state) => state.user.managedUsers);
-  const currentUser = useSelector((state) => state.user);
+  const isLoading = useSelector((state) => state.userUpdate.isLoading);
+  const options = useSelector((state) => state.userUpdate.userList);
   const currentFiltersUser = useSelector((state) => state.filters.user);
+
+  const loading = open && isLoading;
+
+  const debounce = useRef(null);
 
   const handleUsers = (value) => {
     setCurrentUsers(value);
-  };
+  }
+
+  const handleQuery = useCallback(() => {
+      clearTimeout(debounce.current);
+
+      debounce.current = setTimeout(() => {
+        dispatch(fetchFilteredUsers(user));
+      }, 250)
+  }, [user, dispatch])
 
   useEffect(() => {
-    if (currentUserList.length === 0 && fieldUsers && currentUser) {
-      let userArray = fieldUsers.concat([
-        {
-          name: `${currentUser.firstName} ${currentUser.lastName}`,
-          id: currentUser.id,
-        },
-      ]);
-      setCurrentUserList(userArray);
+    if (user.length >= 1) {
+      handleQuery()
     }
-  }, [currentUserList, currentUser, fieldUsers]);
+  }, [user, handleQuery, dispatch]);
 
   useEffect(() => {
     if (currentFiltersUser.length !== currentUsers.length) {
@@ -59,12 +67,12 @@ const UserAutoComplete = ({
         multiple
         freeSolo
         renderTags={() => null}
+        fullWidth
+        className={classes.queryField}
         classes={{
           popper: classes.liftedPopper
         }}
-        fullWidth
-        className={classes.queryField}
-        id={id ? id : "field-auto-complete"}
+        id="user-auto-complete"
         open={open}
         onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
@@ -75,8 +83,9 @@ const UserAutoComplete = ({
           handleUsers(value);
         }}
         getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(user) => user.name}
-        options={currentUserList}
+        getOptionLabel={(option) => option.name}
+        options={options}
+        loading={loading}
         value={currentUsers}
         renderInput={(params) => (
           <TextField
@@ -88,7 +97,14 @@ const UserAutoComplete = ({
             InputProps={{
               ...params.InputProps,
               autoComplete: "new-password",
-              endAdornment: <>{params.InputProps.endAdornment}</>,
+              endAdornment: (
+                <>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={15} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
             }}
           />
         )}
@@ -97,13 +113,12 @@ const UserAutoComplete = ({
   );
 };
 
-UserAutoComplete.propTypes = {
+UserSuperAutoComplete.propTypes = {
   classes: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   reset: PropTypes.bool.isRequired,
   setReset: PropTypes.func.isRequired,
   filterType: PropTypes.string.isRequired,
-  id: PropTypes.string,
 };
 
-export default UserAutoComplete;
+export default UserSuperAutoComplete;
