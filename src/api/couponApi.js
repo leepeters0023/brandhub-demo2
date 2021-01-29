@@ -1,6 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
-import { encode } from 'js-base64';
+import { encode } from "js-base64";
 
 const dataFormatter = new Jsona();
 
@@ -23,7 +23,9 @@ export const getCouponUrl = async (email, url) => {
       },
       {
         headers: {
-          "Authorization":  `Basic ${encode("GalloAPI-Prod:6326iTc8mXEDGRVUEL4y")}`,
+          Authorization: `Basic ${encode(
+            "GalloAPI-Prod:6326iTc8mXEDGRVUEL4y"
+          )}`,
         },
       }
     )
@@ -33,14 +35,19 @@ export const getCouponUrl = async (email, url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -80,9 +87,12 @@ export const getCouponOrderSet = async (code) => {
             : err.response.data
         );
         response.status = "error";
-        response.error = err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response.data;
+        response.error =
+          err.response && err.response.data.errors
+            ? err.response.data.errors[0].title
+            : err.response
+            ? err.response.data
+            : "Something went wrong";
       });
   };
   await getSet();

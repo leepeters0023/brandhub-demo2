@@ -21,14 +21,19 @@ export const fetchWarehouseAddress = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -69,14 +74,19 @@ export const addAddress = async (address) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };

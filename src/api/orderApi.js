@@ -28,14 +28,19 @@ export const fetchOrdersByProgram = async (program, userId, terrId) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -52,14 +57,19 @@ export const fetchOrderSetById = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -81,14 +91,19 @@ export const fetchAllPreOrders = async (id, terrId) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -135,14 +150,19 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -173,14 +193,19 @@ export const fetchNextOrderSets = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -219,14 +244,19 @@ export const fetchOrderSetItems = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -248,14 +278,19 @@ export const fetchNextOrderSetItems = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -276,14 +311,19 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -310,14 +350,19 @@ export const setOrderSetNote = async (id, note) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -379,14 +424,19 @@ export const addSingleOrderToSet = async (id, dist, type, warehouse) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -427,14 +477,19 @@ export const addCustomAddressOrderToSet = async (id, addId, type) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -456,14 +511,19 @@ export const startOrderSet = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -478,14 +538,19 @@ export const restartOrderSet = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -512,14 +577,19 @@ export const setWorkComplete = async (id, status) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -534,14 +604,19 @@ export const submitOrderSet = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -556,14 +631,19 @@ export const approveOrderSet = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -587,14 +667,19 @@ export const deleteOrderSetItem = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -618,14 +703,19 @@ export const deleteOrderSet = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -662,14 +752,19 @@ export const createOrderSet = async (type, territoryId) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -708,14 +803,19 @@ export const addOrderSetItem = async (id, item) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -741,14 +841,19 @@ export const updateOrderSetItemDate = async (id, date) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -774,14 +879,19 @@ export const updateOrderSetItemRush = async (id, status) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -821,14 +931,19 @@ export const fetchOrderHistory = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -849,14 +964,19 @@ export const fetchNextHistory = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -870,9 +990,11 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     orderDate: "order-submitted-at",
     shipDate: "order-shipped-at",
   };
-  let sortString = filterObject.sortOrder ? `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
-    sortMap[filterObject.sortOrderBy]
-  }` : "";
+  let sortString = filterObject.sortOrder
+    ? `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+        sortMap[filterObject.sortOrderBy]
+      }`
+    : "";
 
   let queryString = buildFilters(
     filterObject,
@@ -894,14 +1016,19 @@ export const fetchOrderHistoryByItem = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -920,14 +1047,19 @@ export const fetchNextOrderHistoryByItem = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -944,14 +1076,19 @@ export const fetchSingleOrder = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -978,14 +1115,19 @@ export const patchOrderItem = async (id, qty) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -1013,14 +1155,19 @@ export const setOrderDetail = async (id, note, attn) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -1044,14 +1191,19 @@ export const deleteOrder = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -1075,14 +1227,19 @@ export const deleteOrderItem = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -1105,14 +1262,19 @@ export const complianceCancelOrderItem = async (id) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };

@@ -33,14 +33,19 @@ export const fetchAllRules = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -59,14 +64,19 @@ export const fetchNextRules = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -92,14 +102,19 @@ export const fetchTriggeredRules = async (filterObject) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -118,38 +133,52 @@ export const fetchNextTriggeredRules = async (url) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
 
 export const approveOrDenyItem = async (token, itemStatus) => {
   const response = { status: "", error: null };
-  await (axios)
-    .post(`/api/public/triggered-rules/${token}/${itemStatus === "approved" ? "approve" : "deny"}`, { },
-    writeHeaders
+  await axios
+    .post(
+      `/api/public/triggered-rules/${token}/${
+        itemStatus === "approved" ? "approve" : "deny"
+      }`,
+      {},
+      writeHeaders
     )
     .then((res) => {
       response.status = itemStatus;
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
-  return response
+  return response;
 };

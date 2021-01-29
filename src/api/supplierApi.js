@@ -15,14 +15,19 @@ export const fetchFilteredSuppliers = async (name) => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -39,14 +44,19 @@ export const fetchSuppliers = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       response.status = "error";
-      response.error = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      response.error =
+        err.response && err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response
+          ? err.response.data
+          : "Something went wrong";
     });
   return response;
 };
@@ -71,9 +81,11 @@ export const fetchInitialSupplierValues = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -89,9 +101,11 @@ export const fetchInitialSupplierValues = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -100,16 +114,20 @@ export const fetchInitialSupplierValues = async () => {
     });
 
   await axios
-    .get("/api/request-for-quotes?filter[bid-status]=awarded&filter[status]=awarded")
+    .get(
+      "/api/request-for-quotes?filter[bid-status]=awarded&filter[status]=awarded"
+    )
     .then((res) => {
       valueObj.awardedRFQ = res.data.meta.total_entries;
       currentError = null;
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -125,9 +143,11 @@ export const fetchInitialSupplierValues = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -145,9 +165,11 @@ export const fetchInitialSupplierValues = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title
@@ -165,9 +187,11 @@ export const fetchInitialSupplierValues = async () => {
     })
     .catch((err) => {
       console.log(
-        err.response.data.errors
+        err.response && err.response.data.errors
           ? err.response.data.errors[0].title
-          : err.response.data
+          : err.response
+          ? err.response.data
+          : "Something went wrong"
       );
       currentError = err.response.data.errors
         ? err.response.data.errors[0].title

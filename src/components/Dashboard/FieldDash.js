@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
+import { useSelector } from "react-redux";
+
 import ImageWrapper from "../Utility/ImageWrapper";
 
 import Divider from "@material-ui/core/Divider";
@@ -11,6 +13,8 @@ import Paper from "@material-ui/core/Paper";
 
 const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const programs = useSelector((state) => state.programs.programs);
 
   const monthMap = {
     0: "2",
@@ -58,7 +62,9 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
       id: "pre-order-parent",
       link: "/programs",
       info:
-        "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts",
+        programs.length > 0
+          ? "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts"
+          : "There are currently no active pre order programs",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Q1_Ordering_tg2ryl.png",
     },
