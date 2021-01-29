@@ -13,6 +13,7 @@ import {
   acceptBid,
   awardBid,
   declineBid,
+  completeRFQ,
 } from "../../api/purchasingApi";
 import { updateValues } from "./supplierSlice";
 import {
@@ -140,9 +141,9 @@ const rfqSlice = createSlice({
       const { bid } = action.payload;
       const updatedBids = state.currentRFQ.bids.map((b) => {
         if (b.id === bid.id) {
-          return {...bid}
-        } else return {...b}
-      })
+          return { ...bid };
+        } else return { ...b };
+      });
       state.currentRFQ.bids = updatedBids;
     },
     updateCurrentBidPrice(state, action) {
@@ -169,9 +170,9 @@ const rfqSlice = createSlice({
       const { bid } = action.payload;
       const updatedBids = state.currentRFQ.bids.map((b) => {
         if (b.id === bid.id) {
-          return {...bid}
-        } else return {...b}
-      })
+          return { ...bid };
+        } else return { ...b };
+      });
       state.currentRFQ.bids = updatedBids;
       state.currentRFQ.status = "awarded";
     },
@@ -268,7 +269,7 @@ export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
 export const createNewRFQ = (item, program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const dueDate = addDays(new Date(), 5)
+    const dueDate = addDays(new Date(), 5);
     const newRFQ = await createRFQ(item, program, dueDate);
     if (newRFQ.error) {
       throw newRFQ.error;
@@ -296,7 +297,7 @@ export const fetchSingleRFQ = (id) => async (dispatch) => {
 
 export const sendBids = (idArray, rfqId) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const bidResponse = await sendBidRequests(idArray, rfqId);
     if (bidResponse.error) {
@@ -304,7 +305,7 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
     }
     let mappedRFQ = mapRFQ(bidResponse.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -313,14 +314,14 @@ export const sendBids = (idArray, rfqId) => async (dispatch) => {
 
 export const updateSupplierNote = (id, note) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const noteResponse = await updateRFQNote(id, note);
     if (noteResponse.error) {
       throw noteResponse.error;
     }
     dispatch(updateSuccessful());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -329,7 +330,7 @@ export const updateSupplierNote = (id, note) => async (dispatch) => {
 
 export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const dateResponse = await updateRFQDate(id, dateType, date);
     if (dateResponse.error) {
@@ -337,7 +338,7 @@ export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
     }
     dispatch(updateDate({ date: date, type: dateType }));
     dispatch(updateSuccessful());
-    dispatch(patchSuccess())
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
@@ -346,7 +347,7 @@ export const updateRFQDates = (id, dateType, date) => async (dispatch) => {
 
 export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const acceptResponse = await acceptBid(id, price, note);
     if (acceptResponse.error) {
@@ -354,60 +355,84 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     }
     console.log(acceptResponse);
     const bid = mapBids([acceptResponse.data]);
-    dispatch(updateBid({ bid: bid }))
-    dispatch(updateValues({
-      values: [
-        { key: "newRFQ", value: -1 },
-        { key: "inProgressRFQ", value: 1}
-      ]
-    }))
+    dispatch(updateBid({ bid: bid }));
+    dispatch(
+      updateValues({
+        values: [
+          { key: "newRFQ", value: -1 },
+          { key: "inProgressRFQ", value: 1 },
+        ],
+      })
+    );
     dispatch(updateSuccessful());
-    dispatch(patchSuccess())
-    navigate("/purchasing/rfqHistory/inProgress")
+    dispatch(patchSuccess());
+    navigate("/purchasing/rfqHistory/inProgress");
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
 
 export const awardCurrentBid = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const awardResponse = await awardBid(id);
     if (awardResponse.error) {
       throw awardResponse.error;
     }
     const bid = mapBids([awardResponse.data]);
-    dispatch(award({ bid: bid }))
+    dispatch(award({ bid: bid }));
     dispatch(updateSuccessful());
-    dispatch(patchSuccess())
-    navigate("/purchasing/rfqHistory/awarded")
+    dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
 
 export const declineCurrentBid = (id) => async (dispatch) => {
   try {
-    dispatch(patchLoading())
+    dispatch(patchLoading());
     dispatch(setUpdateLoading());
     const acceptResponse = await declineBid(id);
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }
     dispatch(resetRFQ());
-    dispatch(updateValues({
-      values: [
-        { key: "newRFQ", value: -1 },
-      ]
-    }))
+    dispatch(
+      updateValues({
+        values: [{ key: "newRFQ", value: -1 }],
+      })
+    );
     dispatch(updateSuccessful());
-    dispatch(patchSuccess())
-    navigate("/purchasing/rfqHistory/new")
+    dispatch(patchSuccess());
+    navigate("/purchasing/rfqHistory/new");
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
-}
+};
+
+export const completeCurrentRFQ = (id) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    dispatch(setUpdateLoading());
+    const completeResponse = await completeRFQ(id);
+    if (completeResponse.error) {
+      throw completeResponse.error;
+    }
+    dispatch(
+      updateValues({
+        values: [
+          { key: "awardedRFQ", value: -1 },
+        ],
+      })
+    );
+    dispatch(updateSuccessful());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 import { useInitialFilters } from "../../hooks/UtilityHooks";
 import { useSelector, useDispatch } from "react-redux";
@@ -68,6 +68,7 @@ const Users = () => {
   };
 
   const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const debounce = useRef(null);
 
   const handleUserClick = (user) => {
     setCurrentUserId(user);
@@ -94,7 +95,11 @@ const Users = () => {
   };
 
   const handleSearch = (value, _type, _filter) => {
-    dispatch(fetchFilteredUsers(value));
+    clearTimeout(debounce.current);
+
+    debounce.current = setTimeout(() => {
+      dispatch(fetchFilteredUsers(value));
+    }, 250)
   };
 
   const { value: search, bind: bindSearch } = useDetailedInput(

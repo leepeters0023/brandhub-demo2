@@ -887,6 +887,7 @@ export const mapBids = (bids) => {
 };
 
 export const mapRFQ = (rfq) => {
+  console.log(rfq)
   const images = handleImages([rfq.item.images]);
   let mappedRFQ = {
     id: rfq.id,
@@ -894,8 +895,8 @@ export const mapRFQ = (rfq) => {
     dueDate: rfq["due-date"]
       ? format(formatDate(new Date(rfq["due-date"])), "MM/dd/yyyy")
       : "---",
-    inMarketDate: rfq["in-market-date"]
-      ? format(formatDate(new Date(rfq["in-market-date"])), "MM/dd/yyyy")
+    inMarketDate: rfq.program
+      ? format(formatDate(new Date(rfq.program["start-date"])), "MM/dd/yyyy")
       : "---",
     bids: mapBids(rfq.bids),
     program: rfq.program.name,

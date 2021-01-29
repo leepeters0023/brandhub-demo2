@@ -10,6 +10,7 @@ import {
   fetchSingleRFQ,
   sendBids,
   awardCurrentBid,
+  completeCurrentRFQ,
 } from "../redux/slices/rfqSlice";
 
 import { setRetain } from "../redux/slices/filterSlice";
@@ -66,6 +67,12 @@ const RFQ = ({ handleFiltersClosed }) => {
   };
 
   useRetainFiltersOnPopstate("/purchasing/rfqRollup", dispatch);
+
+  useEffect(() => {
+    if (currentRFQ.status === "awarded" && role === "supplier") {
+      dispatch(completeCurrentRFQ(currentRFQ.id))
+    }
+  }, [currentRFQ.status, currentRFQ.id, role, dispatch])
 
   useEffect(() => {
     handleFiltersClosed();

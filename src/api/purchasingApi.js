@@ -313,6 +313,27 @@ export const declineBid = async (id) => {
   return response;
 };
 
+export const completeRFQ = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(`/api/request-for-quotes/${id}/complete`, null, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      console.log(
+        err.response.data.errors
+          ? err.response.data.errors[0].title
+          : err.response.data
+      );
+      response.status = "error";
+      response.error = err.response.data.errors
+        ? err.response.data.errors[0].title
+        : err.response.data;
+    });
+  return response;
+}
+
 //Returns rfqs based on filters, paginated in groups of 20
 export const fetchRFQHistory = async (filterObject) => {
   const sortMap = {

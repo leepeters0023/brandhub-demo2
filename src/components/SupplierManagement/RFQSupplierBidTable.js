@@ -116,7 +116,6 @@ const RFQSupplierBidTable = ({ bids, classes, handleAward }) => {
 RFQSupplierBidTable.propTypes = {
   bids: PropTypes.array,
   handleAward: PropTypes.func.isRequired,
-  handlePO: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
 }
 

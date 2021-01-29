@@ -64,7 +64,7 @@ export const fetchInitialSupplierValues = async () => {
   const errors = [];
   let currentError = null;
   await axios
-    .get("/api/request-for-quotes?filter[status]=new")
+    .get("/api/request-for-quotes?filter[bid-status]=sent")
     .then((res) => {
       valueObj.newRFQ = res.data.meta.total_entries;
       currentError = null;
@@ -82,7 +82,7 @@ export const fetchInitialSupplierValues = async () => {
     });
 
   await axios
-    .get("/api/request-for-quotes?filter[status]=in-progress")
+    .get("/api/request-for-quotes?filter[bid-status]=accepted")
     .then((res) => {
       valueObj.inProgressRFQ = res.data.meta.total_entries;
       currentError = null;
@@ -100,7 +100,7 @@ export const fetchInitialSupplierValues = async () => {
     });
 
   await axios
-    .get("/api/request-for-quotes?filter[status]=awarded")
+    .get("/api/request-for-quotes?filter[bid-status]=awarded&filter[status]=awarded")
     .then((res) => {
       valueObj.awardedRFQ = res.data.meta.total_entries;
       currentError = null;

@@ -28,7 +28,13 @@ export const buildFilters = (
       ? filterObject.status === "all"
         ? ""
         : filterObject.status.includes("bid-")
-        ? `filter[bid-status]=${filterObject.status.split("-")[1]}`
+        ? `${
+            filterObject.status === "bid-awarded"
+              ? `filter[bid-status]=${
+                  filterObject.status.split("-")[1]
+                }&filter[status]=awarded`
+              : `filter[bid-status]=${filterObject.status.split("-")[1]}`
+          }`
         : `filter[${
             type === "order-set-items" || type === "history-items"
               ? statusMap[type]
