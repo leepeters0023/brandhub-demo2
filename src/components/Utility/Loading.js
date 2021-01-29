@@ -16,7 +16,7 @@ const Loading = ({ partial }) => {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: partial ? "rgb(0,0,0,0)" : "white",
-        zIndex: "9998",
+        zIndex: "2499", // when a user filters for a program or other item then clears said filter, the loading state renders above TopDrawerNav which has a zIndex of 2500. I don't see what else this change might impact but wanted to check with you first. 
       }}
     >
       <br />

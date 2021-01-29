@@ -77,11 +77,11 @@ export const mapItems = (items) => {
       itemNumber: item["item-number"],
       brand:
         item.brands.length > 0
-          ? item.brands.map((brand) => brand.name).join(", ")
+          ? item.brands.map((brand) => brand.name)
           : "---",
       program:
         item.programs && item.programs.length > 0
-          ? item.programs.map((prog) => prog.name).join(", ")
+          ? item.programs.map((prog) => prog.name)
           : "---",
       programIds:
         item.programs && item.programs.length > 0

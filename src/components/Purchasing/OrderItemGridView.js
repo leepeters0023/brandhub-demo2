@@ -18,9 +18,12 @@ import Loading from "../Utility/Loading";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -113,7 +116,7 @@ const OrderItemGridView = (props) => {
           <br />
           <Grid
             container
-            spacing={10}
+            spacing={5}
             className={classes.itemGridContainer}
             style={{
               height: "Calc(100% + 50px)",
@@ -179,18 +182,56 @@ const OrderItemGridView = (props) => {
                         />
                       </div>
                       <br />
-                      <Typography className={classes.headerText}>
-                        {`${item.brand} ${item.itemType}`}
+                      {item.brand.length > 1 ? (
+                        <Tooltip
+                          placement="left"
+                          title={`${item.brand.join(", ")}`}
+                        >
+                          <Typography
+                            className={classes.headerText}
+                          >{`${item.brand[0]}`}</Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Typography
+                          className={classes.headerText}
+                        >{`${item.brand[0]}`}</Typography>
+                      )}
+                      <br />
+                      <Typography
+                        className={classes.headerText}
+                      >{`${item.itemType}`}</Typography>
+                      {item.program.length > 1 ? (
+                        <Tooltip
+                          placement="left"
+                          title={`${item.program.join(", ")}`}
+                        >
+                          <Typography>{item.program[0]}</Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Typography>{item.program[0]}</Typography>
+                      )}
+                      <Typography variant="body1" color="textSecondary">
+                        {`#${item.itemNumber}`}
                       </Typography>
                       <Typography variant="body1" color="textSecondary">
-                        {`#${item.itemNumber} | ${item.packSize}`}
+                        {`Pack Size: ${item.packSize}`}
                       </Typography>
                       {type === "inStock" && (
                         <Typography variant="body1" color="textSecondary">
                           {`Available: ${item.stock}`}
                         </Typography>
                       )}
-                      <Typography variant="body1" color="textSecondary">
+                      <Typography className={classes.headerText}>
                         {`${formatMoney(item.estCost, false)}`}
                       </Typography>
                       <br />

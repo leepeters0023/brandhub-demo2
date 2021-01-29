@@ -20,18 +20,21 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+
 const headCells = [
   { id: "preview", label: "Preview" },
   { id: "itemNumber", label: "Sequence #" },
+  { id: "brand", label: "Brand" },
   { id: "program", label: "Program" },
   { id: "itemType", label: "Item Type" },
   { id: "itemDescription", label: "Item Desc." },
-  { id: "brand", label: "Brand" },
   { id: "packSize", label: "Pack Size" },
   { id: "stock", label: "On Hand" },
   { id: "estCost", label: "Est. Cost" },
@@ -254,10 +257,36 @@ const OrderItemTableView = ({
                       />
                     </TableCell>
                     <TableCell align="left">{row.itemNumber}</TableCell>
-                    <TableCell align="left">{row.program}</TableCell>
+                    {row.brand.length > 1 ? (
+                      <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                        <TableCell align="left">
+                          {row.brand[0]}
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                        <TableCell align="left">{row.brand[0]}</TableCell>
+                      )}
+                    {row.program.length > 1 ? (
+                      <Tooltip placement="left" title={`${row.program.join(", ")}`}>
+                        <TableCell align="left">
+                          {row.program[0]}
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                        <TableCell align="left">{row.program[0]}</TableCell>
+                      )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
-                    <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
                     {type === "inStock" && (
                       <TableCell align="left">
