@@ -104,12 +104,19 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                 </Typography>
                 <div>
                   {prog.brand.length > 1 ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                      }}
+                    >
                       <Tooltip
                         placement="left"
                         title={`Brand(s): ${prog.brand.join(", ")}`}
                       >
-                        <span>
+                        <span style={{ display: "flex" }}>
                           <Typography
                             className={classes.headerText}
                           >{`${prog.brand[0]}`}</Typography>
