@@ -148,8 +148,11 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet><title>RTA | On-Demand Order</title>
-      {(currentUserRole === "field2" || currentUserRole === "field1")  && (
-       <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d','5ffdf334b9a8501b295cf995'])`}</script>
+      {(currentUserRole === "field2" && !filtersOpen) && (
+       <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
+      )}
+      {(currentUserRole === "field1" && !filtersOpen) && (
+        <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['5ffdf334b9a8501b295cf995'])`}</script>
       )}
       </Helmet>
       {previewModal && (

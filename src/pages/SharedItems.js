@@ -55,9 +55,7 @@ const SharedItems = ({ handleFiltersClosed, itemIds }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Shared Items</title>
-
-      </Helmet>
+      <Helmet><title>RTA | Shared Items</title></Helmet>
       {currentItem && previewModal && (
         <ItemPreviewModal
           type="catalog"

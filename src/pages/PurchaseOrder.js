@@ -271,9 +271,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order</title>
-
-      </Helmet>
+      <Helmet><title>RTA | Purchase Order</title></Helmet>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <CloudinaryContext cloudName="brandhub">
         <Container className={classes.mainWrapper}>

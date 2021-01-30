@@ -135,9 +135,7 @@ const ProgramNew = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | New Program</title>
-
-      </Helmet>
+      <Helmet><title>RTA | New Program</title></Helmet>
       <ItemPreviewModal
         type="program"
         currentItem={currentItem}

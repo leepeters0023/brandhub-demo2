@@ -103,9 +103,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | RFQ Rollup</title>
-
-      </Helmet>
+      <Helmet><title>RTA | RFQ Rollup</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>RFQ Rollup</Typography>

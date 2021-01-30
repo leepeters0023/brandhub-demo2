@@ -81,9 +81,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Programs</title>
-
-      </Helmet>
+      <Helmet><title>RTA | Programs</title></Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>

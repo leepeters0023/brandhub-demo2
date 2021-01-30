@@ -260,7 +260,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet><title>RTA | Quarterly Rollup</title>
-      {currentUserRole === "field2"  && (
+      {(currentUserRole === "field2" && !filtersOpen) && (
        <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
       )} 
       </Helmet>

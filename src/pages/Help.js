@@ -58,9 +58,6 @@ const Help = ({ handleFiltersClosed }) => {
     // },
   ]
 
-  // {currentUserRole === "field2"  && (
-  //   <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
-  //  )}
 
   useEffect(() => {
     handleFiltersClosed();

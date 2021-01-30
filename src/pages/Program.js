@@ -130,9 +130,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Program</title>
-
-      </Helmet>
+      <Helmet><title>RTA | Program</title></Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}

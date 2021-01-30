@@ -171,10 +171,10 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet><title>RTA | Item Catalog</title>
-        {currentUserRole === "purchaser" && (
+        {(currentUserRole === "purchaser" && !filtersOpen) && (
           <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}
-        {currentUserRole === "read-only" && (
+        {(currentUserRole === "read-only" && !filtersOpen) && (
           <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
         )}
       </Helmet>

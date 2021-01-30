@@ -99,10 +99,7 @@ const RFQ = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet>
-        <title>RTA | RFQ</title>
-
-      </Helmet>
+      <Helmet><title>RTA | RFQ</title></Helmet>
       <Container role={role} className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
