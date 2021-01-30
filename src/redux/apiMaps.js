@@ -75,7 +75,7 @@ export const mapItems = (items) => {
     if (programs.length === 1) {
       return [programs[0].name];
     } else {
-      programs
+      return programs
         .sort((a, b) => {
           return new Date(a["start-date"]) - new Date(b["start-date"]);
         })
