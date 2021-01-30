@@ -10,7 +10,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import * as serviceWorker from "./serviceWorker";
 import Helmet from "react-helmet";
 
-const isProd = true //process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "production";
 
 
 ReactDOM.render(
@@ -29,9 +29,6 @@ ReactDOM.render(
             name="insight-app-sec-validation"
             content="b0e47055-1c1d-42af-ac4c-c21e7b18370e"
           />
-          {isProd && (
-            <script type="text/javascript">{`!function(e,t,n){function a(){var e=t.getElementsByTagName("script")[0],n=t.createElement("script");n.type="text/javascript",n.async=!0,n.src="https://beacon-v2.helpscout.net",e.parentNode.insertBefore(n,e)}if(e.Beacon=n=function(t,n,a){e.Beacon.readyQueue.push({method:t,options:n,data:a})},n.readyQueue=[],"complete"===t.readyState)return a();e.attachEvent?e.attachEvent("onload",a):e.addEventListener("load",a,!1)}(window,document,window.Beacon||function(){});window.Beacon('init', '521f5954-7022-46e2-9707-6a82501f23e7')`}</script>
-          )}
         </Helmet>
         <App />
 
