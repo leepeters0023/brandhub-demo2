@@ -200,7 +200,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     <>
       <Helmet><title>RTA | Purchase Order Rollup</title>
         {currentUserRole === "purchaser" && (
-          <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
+          <script type="text/javascript">{` Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}
       </Helmet>
       <WarningModal

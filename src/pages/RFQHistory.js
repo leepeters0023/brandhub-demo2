@@ -280,8 +280,8 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   return (
     <>
       <Helmet><title>RTA | RFQ History</title>
-      {(currentUserRole === "supplier" && !filtersOpen) && (
-          <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['601438c22042ff6d1b2a8abb'])`}</script>
+        {(currentUserRole === "supplier" && !filtersOpen) && (
+          <script type="text/javascript">{` Beacon('suggest', ['601438c22042ff6d1b2a8abb'])`}</script>
         )}
       </Helmet>
       <Container className={classes.mainWrapper}>

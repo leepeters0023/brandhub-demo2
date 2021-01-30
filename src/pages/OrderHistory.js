@@ -303,11 +303,11 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   return (
     <>
       <Helmet><title>RTA | Order History</title>
-      {(currentUserRole === "field2"  || currentUserRole === "field1")  && (
-       <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d','5ffdf334b9a8501b295cf995'])`}</script>
-      )}
-       {currentUserRole === "read-only" && (
-          <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
+        {(currentUserRole === "field2" || currentUserRole === "field1") && (
+          <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d','5ffdf334b9a8501b295cf995'])`}</script>
+        )}
+        {currentUserRole === "read-only" && (
+          <script type="text/javascript">{` Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
         )}
       </Helmet>
       <ItemPreviewModal
