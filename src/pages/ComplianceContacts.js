@@ -46,9 +46,7 @@ const ComplianceContacts = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Compliance Contacts</title>
-
-      </Helmet>
+      <Helmet><title>RTA | Compliance Contacts</title></Helmet>
       <Container className={classes.mainWrapper}>
         {open && <EditContactModal id={id} open={open} handleClose={handleClose} />}
         <div className={classes.titleBar}>
