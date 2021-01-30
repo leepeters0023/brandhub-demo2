@@ -252,23 +252,24 @@ const FiltersHistory = ({
           historyType !== "rfq" &&
           historyType !== "po" && (
             <ListItem>
-              {currentUserRole === "super" ? (
-              <UserSuperAutoComplete
-                classes={classes}
-                handleChange={handleFilters}
-                reset={reset}
-                setReset={setReset}
-                filterType={"budget"}
-              />
-            ) : (
-              <UserAutoComplete
-                classes={classes}
-                handleChange={handleFilters}
-                reset={reset}
-                setReset={setReset}
-                filterType={"budget"}
-              />
-            )}
+              {currentUserRole === "super" ||
+              currentUserRole === "read-only" ? (
+                <UserSuperAutoComplete
+                  classes={classes}
+                  handleChange={handleFilters}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType={"budget"}
+                />
+              ) : (
+                <UserAutoComplete
+                  classes={classes}
+                  handleChange={handleFilters}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType={"budget"}
+                />
+              )}
             </ListItem>
           )}
         <ListItem>

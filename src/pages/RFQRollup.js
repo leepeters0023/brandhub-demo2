@@ -71,12 +71,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     let currentItem = currentRFQItems.find(
       (item) => item.itemId === selectedRFQItem
     );
-    dispatch(
-      createNewRFQ(
-        selectedRFQItem,
-        currentItem.programId
-      )
-    );
+    dispatch(createNewRFQ(selectedRFQItem, currentItem.programId));
   };
 
   const handleSort = (sortObject) => {
@@ -103,7 +98,9 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | RFQ Rollup</title></Helmet>
+      <Helmet>
+        <title>RTA | RFQ Rollup</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>RFQ Rollup</Typography>
@@ -132,7 +129,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentOrders} headers={csvHeaders}>
               <IconButton>
                 <GetAppIcon color="secondary" />

@@ -256,7 +256,9 @@ const PurchaseOrderHistory = ({
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order History</title></Helmet>
+      <Helmet>
+        <title>RTA | Purchase Order History</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>
@@ -274,7 +276,7 @@ const PurchaseOrderHistory = ({
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
                   <GetAppIcon color="secondary" />

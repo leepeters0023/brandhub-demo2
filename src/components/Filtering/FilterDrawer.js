@@ -104,8 +104,15 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "itemDesc" ||
         filter === "stateIds"
       ) {
-        dispatch(updateSingleFilter({ filter: filter, value: value }));
-        currentFilters[filter] = value;
+        let trimmedValue =
+          filter === "itemNumber" ||
+          filter === "rfqNum" ||
+          filter === "poNum" ||
+          filter === "itemDesc"
+            ? value.trim()
+            : value;
+        dispatch(updateSingleFilter({ filter: filter, value: trimmedValue }));
+        currentFilters[filter] = trimmedValue;
         if (
           filter !== "itemNumber" &&
           filter !== "rfqNum" &&

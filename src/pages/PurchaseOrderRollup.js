@@ -126,7 +126,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
         itemIdArray.forEach((id) => {
           if (item.itemId === id[1] && item.id === id[0]) {
             idArray = idArray.concat(item.orderItemIds);
-            programId = item.programId
+            programId = item.programId;
           }
         });
       });
@@ -198,7 +198,9 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order Rollup</title></Helmet>
+      <Helmet>
+        <title>RTA | Purchase Order Rollup</title>
+      </Helmet>
       <WarningModal
         open={isWarningOpen}
         handleClose={handleCloseWarning}
@@ -255,7 +257,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentOrders} headers={csvHeaders}>
               <IconButton>
                 <GetAppIcon color="secondary" />
@@ -264,7 +266,14 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip> */}
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

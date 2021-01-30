@@ -17,26 +17,26 @@ import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
 const useStyles = makeStyles((theme) => ({
-  ...theme.global
-}))
+  ...theme.global,
+}));
 
-const ComplianceContacts = ({ handleFiltersClosed}) => {
-  const classes = useStyles()
-  
-  const [open, setOpen] = useCallback(useState(false))
-  const [id, setId] = useCallback(useState(null))
+const ComplianceContacts = ({ handleFiltersClosed }) => {
+  const classes = useStyles();
+
+  const [open, setOpen] = useCallback(useState(false));
+  const [id, setId] = useCallback(useState(null));
 
   const isLoading = useSelector((state) => state.complianceContacts.isLoading);
   const contacts = useSelector((state) => state.complianceContacts.contacts);
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
   const handleRowClick = (id) => {
     setId(id);
     setOpen(true);
-  }
+  };
 
   useEffect(() => {
     handleFiltersClosed();
@@ -45,11 +45,17 @@ const ComplianceContacts = ({ handleFiltersClosed}) => {
 
   return (
     <>
-      <Helmet><title>RTA | Compliance Contacts</title></Helmet>
+      <Helmet>
+        <title>RTA | Compliance Contacts</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
-        {open && <EditContactModal id={id} open={open} handleClose={handleClose} />}
+        {open && (
+          <EditContactModal id={id} open={open} handleClose={handleClose} />
+        )}
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Compliance Contacts</Typography>
+          <Typography className={classes.titleText}>
+            Compliance Contacts
+          </Typography>
           <div
             style={{
               display: "flex",
@@ -62,7 +68,7 @@ const ComplianceContacts = ({ handleFiltersClosed}) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
               <IconButton>
                 <GetAppIcon color="secondary" />
@@ -79,11 +85,11 @@ const ComplianceContacts = ({ handleFiltersClosed}) => {
         />
       </Container>
     </>
-  )
-}
+  );
+};
 
 ComplianceContacts.propTypes = {
-  handleFiltersClosed: PropTypes.func.isRequired
-}
+  handleFiltersClosed: PropTypes.func.isRequired,
+};
 
 export default ComplianceContacts;

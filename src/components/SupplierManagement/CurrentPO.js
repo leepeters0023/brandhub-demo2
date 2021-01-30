@@ -133,7 +133,7 @@ const CurrentPO = () => {
           <Typography className={clsx(classes.headerText, classes.POText)}>
             {`Supplier: ${currentPO.supplier}`}
           </Typography>
-          <Typography className={clsx(classes.headerText, classes.POText)}>
+          {/* <Typography className={clsx(classes.headerText, classes.POText)}>
             {`Contact Name: ${currentPO.contactName}`}
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
@@ -141,6 +141,12 @@ const CurrentPO = () => {
           </Typography>
           <Typography className={clsx(classes.headerText, classes.POText)}>
             {`Phone: ${currentPO.phone}`}
+          </Typography> */}
+          <Typography className={clsx(classes.headerText, classes.POText)}>
+            {`Terms: ${currentPO.terms}`}
+          </Typography>
+          <Typography className={clsx(classes.headerText, classes.POText)}>
+            {`Purchased By: ${currentPO.purchasedBy}`}
           </Typography>
         </Grid>
         <Grid item sm={6}>
@@ -184,12 +190,6 @@ const CurrentPO = () => {
             )}
           </div>
           <br />
-          <Typography className={clsx(classes.headerText, classes.POText)}>
-            {`Terms: ${currentPO.terms}`}
-          </Typography>
-          <Typography className={clsx(classes.headerText, classes.POText)}>
-            {`Purchased By: ${currentPO.purchasedBy}`}
-          </Typography>
         </Grid>
       </Grid>
       <br />

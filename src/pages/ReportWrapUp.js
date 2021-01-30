@@ -115,31 +115,25 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
         { label: "Market", key: "state" },
         { label: "Brand", key: "brandCode" },
         { label: "BU", key: "unit" },
+        { label: "Item Type", key: "itemType" },
         { label: "Month in Market", key: "inMarketDate" },
-        { label: "Tactic", key: "tactic" },
-        { label: "Vendor", key: "supplier" },
         { label: "Estimated Cost", key: "totalEstCost" },
         { label: "Qty Ordered", key: "totalItems" },
-        { label: "Hold Type", key: "holdType" },
         { label: "Seq #", key: "itemNumber" },
         { label: "Program", key: "program" },
         { label: "Order Type", key: "orderType" },
       ];
       let csvData = [];
       report.forEach((item) => {
-        let supName = currentSuppliers.find((sup) => sup.id === item.supplierId)
-          .name;
         let dataObject = {
           user: item.user,
           state: item.state,
           brandCode: item.brandCode,
           unit: item.unit,
-          inMarketDate: /*TODO*/ "---",
-          tactic: /*TODO*/ "---",
-          supplier: supName,
+          itemType: item.itemType,
+          inMarketDate: item.inMarketDate,
           totalEstCost: formatMoney(item.totalEstCost),
           totalItems: item.totalItems,
-          holdType: /*TODO*/ "---",
           itemNumber: item.itemNumber,
           program: item.program,
           orderType: orderTypeMap[item.orderType],

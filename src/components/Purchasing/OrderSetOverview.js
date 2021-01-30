@@ -33,14 +33,19 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const typeMap = {
+    "pre-order": "Pre Order",
+    "on-demand": "On Demand",
+    "in-stock": "Inventory",
+  }
+
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
   const [orderType, setOrderType] = useState("");
 
   const orderSet = useSelector((state) => state.orderSet);
   const programId = useSelector((state) => state.preOrderDetails.programId);
   const currentUserRoll = useSelector((state) => state.user.role);
-  const firstName = useSelector((state) => state.user.firstName);
-  const lastName = useSelector((state) => state.user.lastName);
+  const name = useSelector((state) => state.user.name);
   const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
 
   const handleEditOrder = () => {
@@ -62,36 +67,31 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
         { label: "Market", key: "state" },
         { label: "Brand", key: "brandCode" },
         { label: "BU", key: "unit" },
+        { label: "Item Type", key: "itemType" },
         { label: "Month in Market", key: "inMarketDate" },
-        { label: "Tactic", key: "tactic" },
-        { label: "Vendor", key: "supplier" },
         { label: "Estimated Cost", key: "totalEstCost" },
         { label: "Qty Ordered", key: "totalItems" },
-        { label: "Hold Type", key: "holdType" },
         { label: "Seq #", key: "itemNumber" },
         { label: "Program", key: "program" },
         { label: "Order Type", key: "orderType" },
+        { lable: "On Rush", key: "isRush" },
       ];
       let csvData = [];
       orderSet.orders.forEach((ord) => {
         ord.items.forEach((item) => {
-          let supName = currentSuppliers.find(
-            (sup) => sup.id === item.supplierId
-          ).name;
           let dataObject = {
-            user: `${firstName} ${lastName}`,
+            user: `${name}`,
             state: item.state,
             brandCode: item.brandCode,
             unit: item.unit,
-            inMarketDate: /*TODO*/ "---",
-            tactic: /*TODO*/ "---",
-            supplier: supName,
+            itemType: item.itemType,
+            inMarketDate: orderSet.items.find((i) => i.itemId === item.itemId).inMarketDate,
             totalEstCost: formatMoney(item.totalEstCost),
             totalItems: item.totalItems,
-            holdType: /*TODO*/ "---",
             itemNumber: item.itemNumber,
             program: item.program,
-            orderType: item.orderType,
+            orderType: typeMap[orderSet.type],
+            isRush: orderSet.items.find((i) => i.itemId === item.itemId)
           };
           csvData.push(dataObject);
         });
@@ -105,7 +105,7 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
       });
       setCurrentCSV({ data: csvData, headers: csvHeaders });
     }
-  }, [currentCSV.data, orderSet, currentSuppliers, firstName, lastName]);
+  }, [currentCSV.data, orderSet, currentSuppliers, name, typeMap]);
 
   useEffect(() => {
     if (orderType.length === 0 && orderSet.type) {

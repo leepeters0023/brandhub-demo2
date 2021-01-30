@@ -351,7 +351,6 @@ export const acceptCurrentBid = (id, price, note) => async (dispatch) => {
     if (acceptResponse.error) {
       throw acceptResponse.error;
     }
-    console.log(acceptResponse);
     const bid = mapBids([acceptResponse.data]);
     dispatch(updateBid({ bid: bid }));
     dispatch(

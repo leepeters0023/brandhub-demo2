@@ -18,7 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 //import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -72,7 +72,9 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-    <Helmet><title>RTA | Budget vs Spend</title></Helmet>
+      <Helmet>
+        <title>RTA | Budget vs Spend</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>
@@ -90,7 +92,7 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               {/* <CSVLink data={currentOrders} headers={csvHeaders}> */}
               <IconButton>
                 <GetAppIcon color="secondary" />
@@ -99,7 +101,14 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {
@@ -122,7 +131,7 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
           budgets={yearToDateBudgets}
           budgetsLoading={false}
           handleSort={handleSort}
-        // scrollRef={scrollRef}
+          // scrollRef={scrollRef}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>

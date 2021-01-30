@@ -279,7 +279,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
-      <Helmet><title>RTA | RFQ History</title></Helmet>
+      <Helmet>
+        <title>RTA | RFQ History</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>RFQ History</Typography>
@@ -295,7 +297,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
                   <GetAppIcon color="secondary" />

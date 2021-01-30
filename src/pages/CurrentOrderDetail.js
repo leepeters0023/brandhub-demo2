@@ -7,8 +7,8 @@ import Helmet from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
-import { fetchOrderSet } from "../redux/slices/orderSetSlice";
-
+import { fetchOrderSet, setIsOrdering } from "../redux/slices/orderSetSlice";
+import { updateCurrentTerritory } from "../redux/slices/userSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
@@ -96,6 +96,12 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const orders = useSelector((state) => state.orderSet.orders);
   const currentTotal = useSelector((state) => state.orderSet.totalEstItemCost);
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserTerritory = useSelector(
+    (state) => state.user.currentTerritory
+  );
+  const currentOrderTerritory = useSelector(
+    (state) => state.orderSet.territoryId
+  );
   const inStockItems = useSelector(
     (state) => state.currentOrder.inStockOrderItems
   );
@@ -194,10 +200,10 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       if (
         (currentUserRole.length > 0 && !currentOrderId) ||
         (currentUserRole.length > 0 && currentOrderId !== orderId) ||
-        (orderStatus === "in-progress" &&
+        ((orderStatus === "in-progress" || orderStatus === "inactive") &&
           currentOrderType === "in-stock" &&
           currentItems.length !== inStockItems.length) ||
-        (orderStatus === "in-progress" &&
+        ((orderStatus === "in-progress" || orderStatus === "inactive") &&
           currentOrderType === "on-demand" &&
           currentItems.length !== onDemandItems.length)
       ) {
@@ -206,6 +212,21 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
+
+  useEffect(() => {
+    if (
+      currentOrderTerritory &&
+      currentUserTerritory !== currentOrderTerritory
+    ) {
+      dispatch(updateCurrentTerritory({ territory: currentOrderTerritory }));
+    }
+  }, [currentUserTerritory, currentOrderTerritory, dispatch]);
+
+  useEffect(() => {
+    dispatch(setIsOrdering({ status: true }));
+    return () => dispatch(setIsOrdering({ status: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     handleFiltersClosed();
@@ -219,7 +240,9 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   if (orderId === "inStock" || orderId === "onDemand") {
     return (
       <>
-        <Helmet><title>RTA | Current Order</title></Helmet>
+        <Helmet>
+          <title>RTA | Current Order</title>
+        </Helmet>
         <Container style={{ textAlign: "center" }}>
           <br />
           {orderId === "inStock" && (
@@ -421,16 +444,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 {decodeURIComponent(window.location.hash.slice(1)).includes(
                   "approval"
                 ) && (
-                    <Tooltip title="Back to Approvals" placement="bottom-start">
-                      <IconButton
-                        component={Link}
-                        to="/orders/approvals"
-                        onClick={() => dispatch(setRetain({ value: true }))}
-                      >
-                        <ArrowBackIcon fontSize="large" color="secondary" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Back to Approvals" placement="bottom-start">
+                    <IconButton
+                      component={Link}
+                      to="/orders/approvals"
+                      onClick={() => dispatch(setRetain({ value: true }))}
+                    >
+                      <ArrowBackIcon fontSize="large" color="secondary" />
+                    </IconButton>
+                  </Tooltip>
+                )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
@@ -455,25 +478,25 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {overviewVisible ||
-          ((orderStatus === "approved" || orderStatus === "submitted") &&
-            (currentUserRole === "field1" ||
-              (!window.location.hash.includes("approval") &&
-                !window.location.href.includes("rollup")))) ? (
-            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-          ) : (
-            <OrderSetTable
-              currentProgram={undefined}
-              handleModalOpen={handleModalOpen}
-              handleOpenConfirm={handleOpenConfirm}
-              handleRemoveOrder={handleDeleteOrderModal}
-              isLoading={isLoading}
-              orderId={currentOrderId}
-              orderStatus={orderStatus}
-              currentItems={currentItems}
-              orders={orders}
-              orderType={currentOrderType}
-            />
-          )}
+        ((orderStatus === "approved" || orderStatus === "submitted") &&
+          (currentUserRole === "field1" ||
+            (!window.location.hash.includes("approval") &&
+              !window.location.href.includes("rollup")))) ? (
+          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+        ) : (
+          <OrderSetTable
+            currentProgram={undefined}
+            handleModalOpen={handleModalOpen}
+            handleOpenConfirm={handleOpenConfirm}
+            handleRemoveOrder={handleDeleteOrderModal}
+            isLoading={isLoading}
+            orderId={currentOrderId}
+            orderStatus={orderStatus}
+            currentItems={currentItems}
+            orders={orders}
+            orderType={currentOrderType}
+          />
+        )}
         <br />
         <br />
         <div className={classes.orderControl}>
@@ -513,8 +536,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 color="secondary"
                 variant="contained"
                 onClick={() => {
-                  setOverviewVisible(true)
-                  dispatch(fetchOrderSet(orderId))
+                  setOverviewVisible(true);
+                  dispatch(fetchOrderSet(orderId));
                 }}
                 disabled={
                   orders.length === 0 ||

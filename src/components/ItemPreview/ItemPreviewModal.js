@@ -239,7 +239,7 @@ const ItemPreviewModal = (props) => {
                     </Typography>
                     {brand && (
                       <Typography className={classes.headerText}>
-                        {`Brand(s):  ${brand.length === 1 ? brand[0] : program.join(", ")}`}
+                        {`Brand(s):  ${brand.length === 1 ? brand[0] : brand.join(", ")}`}
                       </Typography>
                     )}
                     {program && (
