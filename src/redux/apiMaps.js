@@ -79,7 +79,7 @@ export const mapItems = (items) => {
         .sort((a, b) => {
           return new Date(a["start-date"]) - new Date(b["start-date"]);
         })
-        .revers()
+        .reverse()
         .map((prog) => prog.name);
     }
   };
