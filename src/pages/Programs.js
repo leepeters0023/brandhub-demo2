@@ -82,7 +82,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet><title>RTA | Programs</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
@@ -142,7 +142,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
           />
         )}
         {!isLoading && activePrograms.length === 0 && (
-          <div style={{width: "100%", height: "60vh", display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <div style={{ width: "100%", height: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Typography className={classes.headerText}>
               There are currently no active Pre Order Programs ...
             </Typography>

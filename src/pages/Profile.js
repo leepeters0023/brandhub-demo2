@@ -41,7 +41,7 @@ const Profile = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet><title>RTA | Profile</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">

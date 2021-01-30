@@ -101,7 +101,7 @@ const RFQ = ({ handleFiltersClosed }) => {
     <>
       <Helmet>
         <title>RTA | RFQ</title>
-        <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       <Container role={role} className={classes.mainWrapper}>
         <div className={classes.titleBar}>

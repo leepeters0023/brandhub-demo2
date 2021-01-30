@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global
 }))
 
-const ComplianceContacts = ({ handleFiltersClosed}) => {
+const ComplianceContacts = ({ handleFiltersClosed }) => {
   const classes = useStyles()
-  
+
   const [open, setOpen] = useCallback(useState(false))
   const [id, setId] = useCallback(useState(null))
 
@@ -47,7 +47,7 @@ const ComplianceContacts = ({ handleFiltersClosed}) => {
   return (
     <>
       <Helmet><title>RTA | Compliance Contacts</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       <Container className={classes.mainWrapper}>
         {open && <EditContactModal id={id} open={open} handleClose={handleClose} />}

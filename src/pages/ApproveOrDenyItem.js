@@ -39,9 +39,9 @@ const ApproveOrDenyItem = () => {
 
     return (
         <>
-        <Helmet><title>RTA | Approve or Deny</title>
-        <script type="text/javascript">{`Beacon('close')`}</script>
-        </Helmet>
+            <Helmet><title>RTA | Approve or Deny</title>
+
+            </Helmet>
             <Container className={classes.mainWrapper}>
                 <ImageWrapper
                     imgUrl={Logo}

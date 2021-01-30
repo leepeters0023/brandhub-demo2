@@ -220,7 +220,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     return (
       <>
         <Helmet><title>RTA | Current Order</title>
-        <script type="text/javascript">{`Beacon('close')`}</script>
+
         </Helmet>
         <Container style={{ textAlign: "center" }}>
           <br />

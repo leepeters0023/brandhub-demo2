@@ -148,7 +148,9 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet><title>RTA | On-Demand Order</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+      {(currentUserRole === "field2" || currentUserRole === "field1")  && (
+       <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d','5ffdf334b9a8501b295cf995'])`}</script>
+      )}
       </Helmet>
       {previewModal && (
         <ItemPreviewModal

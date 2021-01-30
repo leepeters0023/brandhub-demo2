@@ -58,6 +58,10 @@ const Help = ({ handleFiltersClosed }) => {
     // },
   ]
 
+  // {currentUserRole === "field2"  && (
+  //   <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
+  //  )}
+
   useEffect(() => {
     handleFiltersClosed();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,75 +73,75 @@ const Help = ({ handleFiltersClosed }) => {
 
   return (
     <>
-    <Helmet><title>RTA | Help</title>
-    <script type="text/javascript">{`Beacon('close')`}</script>
-    </Helmet>
-    <Container
-      className={classes.mainWrapper}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <br />
-      <br />
-      <Grid container spacing={3} justify="flex-start" style={{ width: "80%" }}>
-        <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left", marginBottom: "50px", }}>
-          <Typography
-            style={{
-              fontWeight: "400",
-              fontSize: "2rem",
-              color: "#4C4C4C",
-            }}
-          >
-            How can we help?
+      <Helmet><title>RTA | Help</title>
+
+      </Helmet>
+      <Container
+        className={classes.mainWrapper}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <br />
+        <br />
+        <Grid container spacing={3} justify="flex-start" style={{ width: "80%" }}>
+          <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left", marginBottom: "50px", }}>
+            <Typography
+              style={{
+                fontWeight: "400",
+                fontSize: "2rem",
+                color: "#4C4C4C",
+              }}
+            >
+              How can we help?
           </Typography>
-        </div>
-        {helpData.map((data, i) => (
-          <Grid
-            item
-            lg={4}
-            md={6}
-            sm={12}
-            xs={12}
-            key={i}
-          >
-            <Divider className={classes.divider} />
-            <div style={{ display: "flex", height: "175px", flexDirection: "row", alignItems: "center", }}>
-              <Typography className={classes.titleText}>
-                {data.text}
-              </Typography>
-              <IconButton
-                onClick={() => openGuide(data.linkTo)}>
-                <GetAppIcon color="secondary" />
-              </IconButton>
-            </div>
-            <Divider className={classes.divider} />
-          </Grid>
-        ))}
-        <div style={{ width: "100%", textAlign: "center", marginTop: "75px", }}>
-          <Typography className={classes.bodyText}>
-            If you have any immediate questions, please contact Select
-            Design. We are happy to help!
+          </div>
+          {helpData.map((data, i) => (
+            <Grid
+              item
+              lg={4}
+              md={6}
+              sm={12}
+              xs={12}
+              key={i}
+            >
+              <Divider className={classes.divider} />
+              <div style={{ display: "flex", height: "175px", flexDirection: "row", alignItems: "center", }}>
+                <Typography className={classes.titleText}>
+                  {data.text}
+                </Typography>
+                <IconButton
+                  onClick={() => openGuide(data.linkTo)}>
+                  <GetAppIcon color="secondary" />
+                </IconButton>
+              </div>
+              <Divider className={classes.divider} />
+            </Grid>
+          ))}
+          <div style={{ width: "100%", textAlign: "center", marginTop: "75px", }}>
+            <Typography className={classes.bodyText}>
+              If you have any immediate questions, please contact Select
+              Design. We are happy to help!
             </Typography>
-          <br />
-          <Typography className={classes.headerText}>
-            General Contact Information
+            <br />
+            <Typography className={classes.headerText}>
+              General Contact Information
             </Typography>
-          <Typography className={classes.bodyText}>
-            Phone: 802-864-9075
+            <Typography className={classes.bodyText}>
+              Phone: 802-864-9075
             </Typography>
-          <Typography className={classes.bodyText}>
-            Email: help@readytoactivate.com
+            <Typography className={classes.bodyText}>
+              Email: help@readytoactivate.com
             </Typography>
-          <Typography className={classes.bodyText}>
-            Please allow up to 12 hours to receive a response from us.
+            <Typography className={classes.bodyText}>
+              Please allow up to 12 hours to receive a response from us.
             </Typography>
-        </div>
-      </Grid>
-    </Container>
+          </div>
+        </Grid>
+      </Container>
     </>
   );
 };

@@ -56,7 +56,7 @@ const SharedItems = ({ handleFiltersClosed, itemIds }) => {
   return (
     <>
       <Helmet><title>RTA | Shared Items</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       {currentItem && previewModal && (
         <ItemPreviewModal

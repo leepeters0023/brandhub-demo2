@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: "300px",
-    zIndex: "2001",
+    zIndex: "1000", // to be below HelpScout. Beacon's zIndex can also be raised in app if this is conflicting
   },
   selectedButton: {
     fontWeight: "600",

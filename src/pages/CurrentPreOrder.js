@@ -131,6 +131,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [switched, setSwitched] = useCallback(useState(false));
 
   const currentUserId = useSelector((state) => state.user.id);
+  const currentUserRole = useSelector((state) => state.user.role);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
@@ -271,7 +272,11 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Current Pre-Order</title></Helmet>
+      <Helmet><title>RTA | Current Pre-Order</title>
+      {(currentUserRole === "field2"  || currentUserRole === "field1")  && (
+       <script type="text/javascript">{`Beacon('open'), Beacon('suggest', ['600af2ff1c64ad47e4b7201d', '5ffdf334b9a8501b295cf995'])`}</script>
+      )}
+      </Helmet>
       <AreYouSure
         open={confirmModal}
         handleClose={handleCloseConfirm}

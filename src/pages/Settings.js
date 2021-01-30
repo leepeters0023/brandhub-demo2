@@ -40,7 +40,7 @@ const Settings = ({ userType, handleFiltersClosed }) => {
   return (
     <>
       <Helmet><title>RTA | Settings</title>
-      <script type="text/javascript">{`Beacon('close')`}</script>
+
       </Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">
