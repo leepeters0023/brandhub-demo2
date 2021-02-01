@@ -290,8 +290,7 @@ const ItemPreviewModal = (props) => {
                       {orderStartDate && orderEndDate
                         ? `Available to Order: ${orderStartDate} - ${orderEndDate}`
                         : ""}
-                    </Typography>{" "}
-                    TODO update this
+                    </Typography>
                     <br />
                     {type &&
                       type !== "program" &&

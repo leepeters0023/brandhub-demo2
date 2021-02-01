@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredItems } from "../redux/slices/itemSlice";
-
+import { setIsOrdering } from "../redux/slices/orderSetSlice";
+import { updateCurrentTerritory } from "../redux/slices/userSlice";
 import {
   fetchCurrentOrderByType,
   addBulkOrderItems,
@@ -84,6 +85,9 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const userId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const orderTerritoryId = useSelector(
+    (state) => state.currentOrder.inStockOrderTerritory
+  );
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
@@ -153,6 +157,14 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
       dispatch(setSorted());
     }
   }, [currentMarket, currentMarketBool, dispatch]);
+
+  useEffect(() => {
+    if (orderTerritoryId && orderTerritoryId !== territoryId) {
+      dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
+      dispatch(setIsOrdering({ status: true }));
+    }
+    return () => dispatch(setIsOrdering({ status: false }));
+  }, [orderTerritoryId, territoryId, dispatch]);
 
   if (orderLoading) {
     return <Loading />;

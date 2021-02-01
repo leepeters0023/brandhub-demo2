@@ -20,9 +20,11 @@ let initialState = {
   inStockOrderItems: [],
   selectedInStockItems: [],
   currentWarehouse: null,
+  inStockOrderTerritory: null,
   onDemandOrderNumber: null,
   selectedOnDemandItems: [],
   onDemandOrderItems: [],
+  onDemandOrderTerritory: null,
   userId: null,
   userName: null,
   orderId: null,
@@ -78,9 +80,11 @@ const currentOrderSlice = createSlice({
       if (order.type === "In Stock") {
         state.inStockOrderNumber = order.id;
         state.inStockOrderItems = itemReference;
+        state.inStockOrderTerritory = order.territoryId;
       } else if (order.type === "On Demand") {
         state.onDemandOrderNumber = order.id;
         state.onDemandOrderItems = itemReference;
+        state.onDemandOrderTerritory = order.territoryId;
       }
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -155,9 +159,11 @@ const currentOrderSlice = createSlice({
       if (type === "inStock") {
         state.inStockOrderNumber = null;
         state.inStockOrderItems = [];
+        state.inStockOrderTerritory = null;
       } else if (type === "onDemand") {
         state.onDemandOrderNumber = null;
         state.onDemandOrderItems = [];
+        state.onDemandOrderTerritory = null;
       }
     },
     updateSuccess(state) {

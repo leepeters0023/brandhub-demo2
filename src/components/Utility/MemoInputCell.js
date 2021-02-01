@@ -223,7 +223,9 @@ const MemoInputCell = React.memo(
             />
             {loading && <CircularProgress size={20} />}
             {error && (
-              <Tooltip title={error.toString()}>
+              <Tooltip
+                title={error.error ? error.error : "Something went wrong"}
+              >
                 <WarningIcon color="error" />
               </Tooltip>
             )}
