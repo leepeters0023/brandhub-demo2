@@ -86,7 +86,7 @@ export const mapItems = (items) => {
           new Date(prog["order-calendar-month"]["order-window-open-date"]) <=
             new Date() &&
           new Date() <=
-            new Date(["order-calendar-month"]["order-window-close-date"])
+            new Date(prog["order-calendar-month"]["order-window-close-date"])
       );
       console.log(currentProgram);
       if (currentProgram) {
