@@ -1,6 +1,7 @@
 import { navigate } from "@reach/router";
 import axios from "axios";
 import Jsona from "jsona";
+import { handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -25,20 +26,10 @@ export const logInUser = async (email, password) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -55,20 +46,10 @@ export const getUser = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -82,20 +63,10 @@ export const getLoginURL = async () => {
       response.data = res.data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -110,20 +81,10 @@ export const loginUserWithAuthO = async (code) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -170,20 +131,10 @@ export const addFavoriteItems = async (idArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -203,20 +154,10 @@ export const getFilteredUsers = async (name) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -234,20 +175,10 @@ export const getNextFilteredUsers = async (link) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -262,20 +193,10 @@ export const getSingleUser = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -323,20 +244,10 @@ export const updateUserCreds = async (userData) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };

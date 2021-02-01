@@ -416,9 +416,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
               orderType="preOrder"
             />
           )}
-        {!programsLoading && currentItems.length === 0 && (
+        {!programsLoading && preOrderId && currentItems.length === 0 && (
           <Typography className={classes.headerText}>
             There are no items in this program
+          </Typography>
+        )}
+        {!programsLoading && !preOrderId && currentItems.length === 0 && (
+          <Typography className={classes.headerText}>
+            
           </Typography>
         )}
         <br />

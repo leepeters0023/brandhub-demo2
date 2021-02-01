@@ -187,3 +187,17 @@ export const buildFilters = (
   let queryString = urlBase + filterPreCursor + queryStringAppend;
   return queryString;
 };
+
+export const handleErrors = (err) => {
+  if (err.response) {
+    if (err.response.data.errors[0] && err.response.data.errors[0].title) {
+      return err.response.data.errors[0].title;
+    } else if (err.response.data.errors.detail) {
+      return err.response.data.errors.detail;
+    } else if (err.response.errors.detail) {
+      return err.response.errors.detail;
+    } else return "Unknown Error";
+  } else {
+    return "Unknown Error";
+  }
+};

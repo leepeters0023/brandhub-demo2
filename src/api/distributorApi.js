@@ -1,5 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
+import { handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -22,20 +23,10 @@ export const fetchDistributorsByTerritory = async (id, stateIds) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -54,20 +45,10 @@ export const fetchDistributors = async (name, territoryId, stateIds) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -82,20 +63,10 @@ export const getFavDistributors = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -121,20 +92,10 @@ export const newFavDistList = async (index) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -165,20 +126,10 @@ export const updateFavDistList = async (id, name, distArray) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -191,20 +142,10 @@ export const deleteFavDistList = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -225,20 +166,10 @@ export const editCustomAttentionLine = async (id, attn) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };

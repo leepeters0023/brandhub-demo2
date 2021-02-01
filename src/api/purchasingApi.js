@@ -1,7 +1,7 @@
 import axios from "axios";
 import Jsona from "jsona";
 
-import { buildFilters } from "./apiFunctions";
+import { buildFilters, handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -46,20 +46,10 @@ export const fetchRollupItems = async (filterObject, type) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -78,20 +68,10 @@ export const fetchNextRollupItems = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -129,20 +109,10 @@ export const createRFQ = async (item, program, dueDate) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -168,20 +138,10 @@ export const updateRFQNote = async (id, note) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -209,20 +169,10 @@ export const updateRFQDate = async (id, dateType, date) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -249,20 +199,10 @@ export const sendBidRequests = async (idArray, rfqId) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -286,20 +226,10 @@ export const acceptBid = async (id, price, note) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -314,20 +244,10 @@ export const awardBid = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -340,20 +260,10 @@ export const declineBid = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -366,20 +276,10 @@ export const completeRFQ = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -420,20 +320,10 @@ export const fetchRFQHistory = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -455,20 +345,10 @@ export const fetchNextRFQHistory = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -484,20 +364,10 @@ export const fetchRFQ = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -523,20 +393,10 @@ export const createPO = async (ids, orderType, programId) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -570,20 +430,10 @@ export const createInvPO = async (id, qty, warehouse, programId) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -606,20 +456,10 @@ export const addToPO = async (ids, poNum) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -645,20 +485,10 @@ export const updatePOMethod = async (id, method) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   response.status = "ok";
   return response;
@@ -685,20 +515,10 @@ export const updatePOFile = async (id, file) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   response.status = "ok";
   return response;
@@ -725,20 +545,10 @@ export const updatePONote = async (id, note) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -763,20 +573,10 @@ export const updatePOTape = async (id, tape) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -802,20 +602,10 @@ export const updatePODate = async (id, dateType, date) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -841,20 +631,10 @@ export const updatePOFreight = async (id, freightCost) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   response.status = "ok";
   return response;
@@ -880,20 +660,10 @@ export const updatePODirectShip = async (id, value) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -930,20 +700,10 @@ export const addAdditionalPOCost = async (id, desc, cost) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -969,20 +729,10 @@ export const updatePOItemCost = async (id, cost) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1007,20 +757,10 @@ export const updatePOItemPackSize = async (id, packSize) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1045,20 +785,10 @@ export const updatePOItemPackOut = async (id, value) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1071,20 +801,10 @@ export const deletePOItem = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1099,20 +819,10 @@ export const submitPO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1127,20 +837,10 @@ export const acceptPO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1155,20 +855,10 @@ export const declinePO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1181,20 +871,10 @@ export const completePO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1207,20 +887,10 @@ export const deletePO = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1242,20 +912,10 @@ export const updateShippingParams = async (updateArray) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1270,20 +930,10 @@ export const trackItem = async (id) => {
       response.status = "ok";
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1322,20 +972,10 @@ export const fetchPOHistory = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1357,20 +997,10 @@ export const fetchNextPOHistory = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -1386,20 +1016,10 @@ export const fetchPO = async (id) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
+import { handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -14,20 +15,10 @@ export const fetchBrandsByName = async (name) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };

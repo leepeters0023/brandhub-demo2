@@ -1,7 +1,7 @@
 import axios from "axios";
 import Jsona from "jsona";
 
-import { buildFilters } from "./apiFunctions";
+import { buildFilters, handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -28,16 +28,10 @@ export const fetchWrapUpReport = async (filterObject) => {
       })
       // eslint-disable-next-line no-loop-func
       .catch((err) => {
-        console.log(
-          err.response.data.errors
-            ? err.response.data.errors[0].title
-            : err.response.data
-        );
-        next = null;
+        const error = handleErrors(err);
+        console.log(error);
         response.status = "error";
-        response.error = err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response.data;
+        response.error = error;
       });
   }
   if (!response.error) {

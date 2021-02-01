@@ -71,6 +71,7 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
+  console.log(items);
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
       return [programs[0].name];

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Jsona from "jsona";
 
-import { buildFilters } from "./apiFunctions";
+import { buildFilters, handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -32,20 +32,10 @@ export const fetchItems = async (filterObject) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -66,20 +56,10 @@ export const fetchNextItems = async (url) => {
       response.data = dataObject;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -95,20 +75,10 @@ export const fetchItemTypes = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -123,20 +93,10 @@ export const fetchSharedItems = async (ids) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -151,20 +111,10 @@ export const fetchBusinessUnits = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };

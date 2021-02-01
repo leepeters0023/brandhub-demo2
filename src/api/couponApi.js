@@ -1,6 +1,7 @@
 import axios from "axios";
 import Jsona from "jsona";
 import { encode } from "js-base64";
+import { handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -34,20 +35,10 @@ export const getCouponUrl = async (email, url) => {
       response.data = res.data.AccessUrl;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -81,18 +72,10 @@ export const getCouponOrderSet = async (code) => {
         response.data = data;
       })
       .catch((err) => {
-        console.log(
-          err.response.data.errors
-            ? err.response.data.errors[0].title
-            : err.response.data
-        );
+        const error = handleErrors(err);
+        console.log(error);
         response.status = "error";
-        response.error =
-          err.response && err.response.data.errors
-            ? err.response.data.errors[0].title
-            : err.response
-            ? err.response.data
-            : "Request Timeout";
+        response.error = error;
       });
   };
   await getSet();

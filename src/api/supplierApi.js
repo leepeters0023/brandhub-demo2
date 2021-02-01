@@ -1,5 +1,6 @@
 import axios from "axios";
 import Jsona from "jsona";
+import { handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
@@ -14,20 +15,10 @@ export const fetchFilteredSuppliers = async (name) => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -43,20 +34,10 @@ export const fetchSuppliers = async () => {
       response.data = data;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
+      const error = handleErrors(err);
+      console.log(error);
       response.status = "error";
-      response.error =
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout";
+      response.error = error;
     });
   return response;
 };
@@ -80,16 +61,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
@@ -100,16 +73,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
@@ -122,16 +87,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
@@ -142,16 +99,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
@@ -164,16 +113,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
@@ -186,16 +127,8 @@ export const fetchInitialSupplierValues = async () => {
       currentError = null;
     })
     .catch((err) => {
-      console.log(
-        err.response && err.response.data.errors
-          ? err.response.data.errors[0].title
-          : err.response
-          ? err.response.data
-          : "Request Timeout"
-      );
-      currentError = err.response.data.errors
-        ? err.response.data.errors[0].title
-        : err.response.data;
+      currentError = handleErrors(err);
+      console.log(currentError);
       errors.push(currentError);
     });
 
