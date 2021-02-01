@@ -160,21 +160,20 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   }, [currentMarket, currentMarketBool, dispatch]);
 
   useEffect(() => {
-    if (orderTerritoryId && orderTerritoryId !== territoryId) {
+    if (
+      (orderTerritoryId && orderTerritoryId !== territoryId) ||
+      (orderTerritoryId && orderTerritoryId === territoryId && !isOrdering)
+    ) {
       dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
       dispatch(setIsOrdering({ status: true }));
       dispatch(setSorted());
     }
-  }, [orderTerritoryId, territoryId, dispatch]);
-
-  useEffect(() => {
     return () => {
       if (isOrdering) {
         dispatch(setIsOrdering({ status: false }));
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [orderTerritoryId, isOrdering, territoryId, dispatch]);
 
   if (orderLoading) {
     return <Loading />;
