@@ -85,6 +85,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const userId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
   const territoryId = useSelector((state) => state.user.currentTerritory);
+  const isOrdering = useSelector((state) => state.orderSet.isOrdering);
   const orderTerritoryId = useSelector(
     (state) => state.currentOrder.inStockOrderTerritory
   );
@@ -162,9 +163,18 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
     if (orderTerritoryId && orderTerritoryId !== territoryId) {
       dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
       dispatch(setIsOrdering({ status: true }));
+      dispatch(setSorted());
     }
-    return () => dispatch(setIsOrdering({ status: false }));
   }, [orderTerritoryId, territoryId, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      if (isOrdering) {
+        dispatch(setIsOrdering({ status: false }));
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (orderLoading) {
     return <Loading />;
