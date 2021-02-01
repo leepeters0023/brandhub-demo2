@@ -83,9 +83,9 @@ export const mapItems = (items) => {
         .reverse();
       let currentProgram = sortedPrograms.find(
         (prog) =>
-          new Date(prog["order-calendar-month"]["order-window-open-date"]) <
+          new Date(prog["order-calendar-month"]["order-window-open-date"]) <=
             new Date() &&
-          new Date() <
+          new Date() <=
             new Date(["order-calendar-month"]["order-window-close-date"])
       );
       console.log(currentProgram);
