@@ -124,7 +124,7 @@ export const mapItems = (items) => {
       specification: item.specification
         ? mapSpecifications(item.specification)
         : "---",
-      itemDescription: item.description ? item.description : "---",
+      itemDescription: item.comment ? item.comment : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
       stock: Math.floor(Math.random() * 25 + 26),
@@ -159,7 +159,7 @@ export const mapOrderSetItems = (items) => {
       : "---",
     program: item["program-name"],
     itemType: item["item-type-description"],
-    itemDescription: item.description ? item.description : "---",
+    itemDescription: item.comment ? item.comment : "---",
     state: item["state-names"] ? item["state-names"] : "---",
     packSize: item["qty-per-pack"],
     totalItems: item["total-item-qty"],
@@ -353,7 +353,7 @@ export const mapOrderHistoryItems = (items) => {
         .join(", "),
       program: item["program-names"].join(", "),
       itemType: item["item-type-description"],
-      itemDescription: item.description ? item.description : "---",
+      itemDescription: item.item.comment ? item.item.comment : "---",
       unit: [
         ...new Set(
           item.item.brands.map((brand) => brand["business-unit"].name)
@@ -438,7 +438,7 @@ export const mapOrderItems = (items, type) => {
           ? item["program-names"].join(", ")
           : item.item.programs.map((prog) => prog.name).join(", "),
         itemType: item.item.type,
-        itemDescription: item.item.description ? item.item.description : "---",
+        itemDescription: item.item.comment ? item.item.comment : "---",
         unit:
           item.item.brands.length > 0
             ? [
@@ -616,7 +616,7 @@ export const mapRollupItems = (items) => {
     program: item["order-program-name"],
     programId: item["order-program"].id,
     itemType: item["item-type-description"],
-    itemDescription: item.description ? item.description : "---",
+    itemDescription: item.item.comment ? item.item.comment : "---",
     totalItems: item["total-ordered"],
     orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["qty-pending-compliance"],
@@ -666,6 +666,7 @@ export const mapPOItems = (items) => {
         program:
           item["program-names"].length > 0 ? item["program-names"] : "---",
         itemType: item["item-type-description"],
+        itemDescription: item.item.comment ? item.item.comment : "---",
         packSize: item["actual-qty-per-pack"],
         itemSpec: item["item-specification"],
         totalItems: item.qty,
@@ -933,7 +934,7 @@ export const mapRFQ = (rfq) => {
     program: rfq.program.name,
     brand: rfq.item.brands.map((brand) => brand.name).join(", "),
     itemType: rfq.item.type,
-    itemDescription: rfq.item.description ? rfq.item.description : "---",
+    itemDescription: rfq.item.comment ? rfq.item.comment : "---",
     projectNum: rfq.item["at-task-project-id"],
     itemNumber: rfq.item["item-number"],
     totalItems: rfq.qty,
