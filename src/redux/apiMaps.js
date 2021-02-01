@@ -76,12 +76,28 @@ export const mapItems = (items) => {
     if (programs.length === 1) {
       return [programs[0].name];
     } else {
-      return programs
+      let sortedPrograms = programs
         .sort((a, b) => {
           return new Date(a["start-date"]) - new Date(b["start-date"]);
         })
-        .reverse()
-        .map((prog) => prog.name);
+        .reverse();
+      let currentProgram = sortedPrograms.find(
+        (prog) =>
+          new Date(prog["order-calendar-month"]["order-window-open-date"]) <
+            new Date() &&
+          new Date() <
+            new Date(["order-calendar-month"]["order-window-close-date"])
+      );
+      if (currentProgram) {
+        sortedPrograms.sort((a, b) =>
+          a.name === currentProgram.name
+            ? -1
+            : b.name === currentProgram.name
+            ? 1
+            : 0
+        );
+      }
+      return sortedPrograms.map((prog) => prog.name);
     }
   };
 
@@ -975,10 +991,7 @@ export const mapCompItems = (items) => {
     state: item.state.code,
     //These two are placeholder for now
     active: true,
-    emailSent:
-      item.rule.type === "prior-approval"
-        ? "---" /* todo */
-        : "---",
+    emailSent: item.rule.type === "prior-approval" ? "---" /* todo */ : "---",
   }));
   return mappedItems;
 };
