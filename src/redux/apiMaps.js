@@ -71,7 +71,6 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
       return [programs[0].name];
@@ -88,7 +87,6 @@ export const mapItems = (items) => {
           new Date() <=
             new Date(prog["order-calendar-month"]["order-window-close-date"])
       );
-      console.log(currentProgram);
       if (currentProgram) {
         sortedPrograms.sort((a, b) =>
           a.id === currentProgram.id

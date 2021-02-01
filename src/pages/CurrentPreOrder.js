@@ -206,6 +206,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     [setSwitched]
   );
 
+  const generatePreOrder = () => {
+    console.log("generating!")
+  }
+
   useEffect(() => {
     if (window.location.hash.length === 0) {
       if (userPrograms.length > 0 && !program) {
@@ -422,9 +426,16 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           </Typography>
         )}
         {!programsLoading && !preOrderId && currentItems.length === 0 && (
-          <Typography className={classes.headerText}>
-            
-          </Typography>
+          <Button
+            className={classes.largeButton}
+            color="secondary"
+            variant="contained"
+            onClick={() => {
+              generatePreOrder()
+            }}
+          >
+            GENERATE PRE ORDER
+          </Button>
         )}
         <br />
         <br />
