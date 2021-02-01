@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     width: "100%",
     marginBottom: "50px",
-    bottom: "0"
+    bottom: "0",
   },
   image: {
     minHeight: "100vh",
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     left: "0",
     opacity: ".5",
     transform: "scale(1.12)",
-    objectFit: "cover"
+    objectFit: "cover",
   },
   loginButton: {
     fontWeight: "600",
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     border: "solid black .5px",
     width: "150px",
     maxHeight: "55px",
-  }
+  },
 }));
 
 const Landing = () => {
@@ -74,7 +74,7 @@ const Landing = () => {
           />
           <Button className={classes.loginButton} component={Link} to="/login">
             LOG IN
-           </Button>
+          </Button>
         </div>
         <div
           style={{
@@ -85,14 +85,20 @@ const Landing = () => {
           }}
         >
           <ImageWrapper
-            imgUrl={'https://images.unsplash.com/photo-1585803085621-7eea6581caec?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80'}
+            imgUrl={
+              "https://images.unsplash.com/photo-1585803085621-7eea6581caec?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80"
+            }
             alt={"guy-drinking-wine"}
             imgClass={classes.image}
             id={"landing-splash"}
           />
         </div>
         <div className={classes.footer}>
-          <Typography className={classes.headerText} style={{ marginRight: "75px"}} variant="h5">
+          <Typography
+            className={classes.headerText}
+            style={{ marginRight: "75px" }}
+            variant="h5"
+          >
             &#169; brandHub 2021
           </Typography>
         </div>

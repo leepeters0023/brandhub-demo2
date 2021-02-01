@@ -160,7 +160,8 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Place Inventory Order</title>
+      <Helmet>
+        <title>RTA | Place Inventory Order</title>
       </Helmet>
       {previewModal && (
         <ItemPreviewModal
@@ -242,7 +243,14 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

@@ -256,8 +256,9 @@ const PurchaseOrderHistory = ({
 
   return (
     <>
-      <Helmet><title>RTA | Purchase Order History</title>
-        {(currentUserRole === "supplier" && !filtersOpen) && (
+      <Helmet>
+        <title>RTA | Purchase Order History</title>
+        {currentUserRole === "supplier" && !filtersOpen && (
           <script type="text/javascript">{` Beacon('suggest', ['601438c22042ff6d1b2a8abb'])`}</script>
         )}
       </Helmet>

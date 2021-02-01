@@ -284,12 +284,12 @@ const ComplianceItemsTable = ({
                             >
                               {`Email sent on ${row.emailSent}`}
                             </Typography>
-                            <Typography
+                            {/* <Typography
                               variant="body2"
                               className={classes.emailButton}
                             >
                               {"(resend)"}
-                            </Typography>
+                            </Typography> */}
                           </div>
                         </div>
                       ) : (

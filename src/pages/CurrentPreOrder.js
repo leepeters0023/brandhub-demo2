@@ -272,7 +272,8 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Current Pre-Order</title>
+      <Helmet>
+        <title>RTA | Current Pre-Order</title>
         {currentUserRole === "field2" && (
           <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
         )}
@@ -333,19 +334,19 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
               {!detailError ? (
                 <PreOrderSummary />
               ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography className={classes.headerText}>
-                      Error: Cannont display program details at this time...
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography className={classes.headerText}>
+                    Error: Cannont display program details at this time...
                   </Typography>
-                  </div>
-                )}
+                </div>
+              )}
               <br />
               <div
                 style={{
@@ -375,8 +376,9 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                     style={{
                       marginTop: "10px",
                       marginBottom: "0px",
-                      width: `Calc(${(grandTotalMod + setTotal).toString().length
-                        }*15px + 20px)`,
+                      width: `Calc(${
+                        (grandTotalMod + setTotal).toString().length
+                      }*15px + 20px)`,
                       minWidth: "100px",
                       readonly: "readonly",
                       pointerEvents: "none",

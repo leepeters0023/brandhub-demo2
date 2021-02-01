@@ -40,7 +40,9 @@ const Profile = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Profile</title></Helmet>
+      <Helmet>
+        <title>RTA | Profile</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">
           <Grid item md={1} xs={false} />

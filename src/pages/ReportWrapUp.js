@@ -159,7 +159,8 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Report Wrap-Up</title>
+      <Helmet>
+        <title>RTA | Report Wrap-Up</title>
         {currentUserRole === "super" && (
           <script type="text/javascript">{` Beacon('suggest', ['600ed398cfe30d219ccdb224'])`}</script>
         )}
@@ -248,7 +249,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
                 id="report-user-complete"
               />
             )
-          ) : null}         
+          ) : null}
         </div>
         <br />
         <div className={classes.chipRow}>

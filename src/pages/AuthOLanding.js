@@ -8,46 +8,44 @@ import { getRedirect, loginWithCode } from "../redux/slices/userSlice";
 import Loading from "../components/Utility/Loading";
 
 const AuthOLanding = ({ code }) => {
-  const dispatch = useDispatch()
-  const link = useSelector((state) => state.user.redirectLink)
+  const dispatch = useDispatch();
+  const link = useSelector((state) => state.user.redirectLink);
   const currentRole = useSelector((state) => state.user.role);
   const isLinkLoading = useSelector((state) => state.user.authIsLoading);
   const error = useSelector((state) => state.user.error);
-  
+
   useEffect(() => {
     if (!currentRole && !link && !code && !isLinkLoading) {
       dispatch(getRedirect());
     }
-  }, [link, isLinkLoading, code, dispatch, currentRole])
+  }, [link, isLinkLoading, code, dispatch, currentRole]);
 
   useEffect(() => {
     if (!currentRole && link && !code) {
       //window.open(link);
       window.location = link;
     }
-  }, [link, code, currentRole])
+  }, [link, code, currentRole]);
 
   useEffect(() => {
     if (code && !currentRole) {
-      dispatch(loginWithCode(code))
+      dispatch(loginWithCode(code));
     }
-  })
+  });
 
   useEffect(() => {
     if (currentRole) {
       navigate("/dashboard");
     }
-  }, [currentRole])
+  }, [currentRole]);
 
   useEffect(() => {
     if (error) {
-      navigate("/whoops")
+      navigate("/whoops");
     }
-  }, [error])
+  }, [error]);
 
-  return (
-    <Loading />
-  )
-}
+  return <Loading />;
+};
 
 export default AuthOLanding;

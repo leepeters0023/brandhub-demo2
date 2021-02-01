@@ -137,8 +137,9 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Compliance Items</title>
-        {(currentUserRole === "purchaser" && !filtersOpen) && (
+      <Helmet>
+        <title>RTA | Compliance Items</title>
+        {currentUserRole === "purchaser" && !filtersOpen && (
           <script type="text/javascript">{`Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}
       </Helmet>
@@ -170,7 +171,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                 >
                   APPROVE RULE
                 </Button>
-                <Button
+                {/* <Button
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"
@@ -182,7 +183,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                   }}
                 >
                   OVERRIDE RULE
-                </Button>
+                </Button> */}
               </>
             )}
             <Tooltip title="Print Item Rules">

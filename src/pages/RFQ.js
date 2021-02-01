@@ -70,9 +70,9 @@ const RFQ = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     if (currentRFQ.status === "awarded" && role === "supplier") {
-      dispatch(completeCurrentRFQ(currentRFQ.id))
+      dispatch(completeCurrentRFQ(currentRFQ.id));
     }
-  }, [currentRFQ.status, currentRFQ.id, role, dispatch])
+  }, [currentRFQ.status, currentRFQ.id, role, dispatch]);
 
   useEffect(() => {
     handleFiltersClosed();
@@ -99,7 +99,9 @@ const RFQ = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | RFQ</title></Helmet>
+      <Helmet>
+        <title>RTA | RFQ</title>
+      </Helmet>
       <Container role={role} className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>

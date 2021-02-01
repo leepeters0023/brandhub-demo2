@@ -24,7 +24,7 @@ import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import TuneIcon from '@material-ui/icons/Tune';
+import TuneIcon from "@material-ui/icons/Tune";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -111,8 +111,9 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order Approval</title>
-        {(currentUserRole === "field2" && !filtersOpen) && (
+      <Helmet>
+        <title>RTA | Order Approval</title>
+        {currentUserRole === "field2" && !filtersOpen && (
           <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
         )}
       </Helmet>
@@ -139,10 +140,17 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
               </Button>
             </div>
           ) : (
-              <div></div>
-            )}
+            <div></div>
+          )}
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

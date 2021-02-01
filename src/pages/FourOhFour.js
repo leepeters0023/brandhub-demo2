@@ -29,8 +29,8 @@ const FourOhFour = () => {
       }, 5000);
     }
     return () => {
-      clearTimeout(redirectTime)
-    }
+      clearTimeout(redirectTime);
+    };
   }, []);
 
   return (
@@ -77,7 +77,7 @@ const FourOhFour = () => {
 };
 
 FourOhFour.propTypes = {
-  handleFiltersClosed: PropTypes.func
-}
+  handleFiltersClosed: PropTypes.func,
+};
 
 export default FourOhFour;

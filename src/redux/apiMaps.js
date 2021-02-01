@@ -976,7 +976,7 @@ export const mapCompItems = (items) => {
     active: true,
     emailSent:
       item.rule.type === "prior-approval"
-        ? format(new Date(), "MM/dd/yyyy")
+        ? "---" /* todo */
         : "---",
   }));
   return mappedItems;

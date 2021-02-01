@@ -81,7 +81,9 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Programs</title></Helmet>
+      <Helmet>
+        <title>RTA | Programs</title>
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Pre-Orders</Typography>
@@ -140,7 +142,15 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
           />
         )}
         {!isLoading && activePrograms.length === 0 && (
-          <div style={{ width: "100%", height: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              width: "100%",
+              height: "60vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Typography className={classes.headerText}>
               There are currently no active Pre Order Programs ...
             </Typography>

@@ -132,7 +132,12 @@ const Dashboard = ({ userType, handleFiltersClosed, currentMonth }) => {
           />
         )}
         {userType !== "supplier" && (
-          <FieldDash name={name} classes={classes} InfoPopover={InfoPopover} currentMonth={currentMonth} />
+          <FieldDash
+            name={name}
+            classes={classes}
+            InfoPopover={InfoPopover}
+            currentMonth={currentMonth}
+          />
         )}
       </Container>
       <br />
@@ -144,7 +149,7 @@ const Dashboard = ({ userType, handleFiltersClosed, currentMonth }) => {
 Dashboard.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
   userType: PropTypes.string,
-  currentMonth: PropTypes.number
+  currentMonth: PropTypes.number,
 };
 
 export default Dashboard;
