@@ -9,7 +9,7 @@ import {
   setIsLoading as setOrderSetLoading,
   fetchProgramOrders,
 } from "./orderSetSlice";
-import { fetchPreOrders } from './preOrderDetailSlice'
+import { fetchPreOrders } from "./preOrderDetailSlice";
 import { setError } from "./errorSlice";
 import { mapOrderSet } from "../apiMaps";
 
@@ -58,18 +58,20 @@ const currentOrderSlice = createSlice({
     setIsLoading: startLoading,
     setUpdateLoading: startUpdateLoading,
     createNewOrderSuccess(state, action) {
-      const { type, orderId, item } = action.payload;
+      const { type, orderId, item, territoryId } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
+      state[`${type}OrderTerritory`] = territoryId;
       state.orderId = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.error = null;
     },
     createNewBulkOrderSuccess(state, action) {
-      const { type, orderId, itemArray } = action.payload;
+      const { type, orderId, itemArray, territoryId } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = itemArray;
+      state[`${type}OrderTerritory`] = territoryId;
       state.orderId = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -215,6 +217,7 @@ export const createNewOrder = (type, itemNumber, territoryId) => async (
           id: orderItem.data.id,
           itemNumber: orderItem.data.item["item-number"],
         },
+        territoryId: territoryId,
       })
     );
   } catch (err) {
@@ -268,11 +271,12 @@ export const createNewBulkItemOrder = (
           orderId: newOrder.data.id,
           itemArray: orderItems,
           type: type,
+          territoryId: territoryId,
         })
       );
       if (type === "preOrder") {
         dispatch(fetchProgramOrders(programId, userId, territoryId));
-        dispatch(fetchPreOrders(userId, "summary", programId, territoryId))
+        dispatch(fetchPreOrders(userId, "summary", programId, territoryId));
       }
     }
     if (orderErrors.length > 0) {
