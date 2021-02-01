@@ -167,6 +167,12 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
       dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
       dispatch(setIsOrdering({ status: true }));
       if (orderTerritoryId !== territoryId) {
+        dispatch(
+          updateSingleFilter({
+            filter: "currentTerritoryId",
+            value: orderTerritoryId,
+          })
+        );
         dispatch(setSorted());
       }
     }
