@@ -153,7 +153,9 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     ) {
       dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
       dispatch(setIsOrdering({ status: true }));
-      dispatch(setSorted());
+      if (orderTerritoryId !== territoryId) {
+        dispatch(setSorted());
+      }
     }
     return () => {
       if (isOrdering) {
