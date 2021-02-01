@@ -10,9 +10,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import * as serviceWorker from "./serviceWorker";
 import Helmet from "react-helmet";
 
-const isProd = true //process.env.NODE_ENV === "production";
-
-
 ReactDOM.render(
   <Provider store={store}>
     <ErrorBoundary>
