@@ -175,6 +175,12 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
     };
   }, [orderTerritoryId, isOrdering, territoryId, dispatch]);
 
+  useEffect(() => {
+    if (!orderTerritoryId && isOrdering) {
+      dispatch(setIsOrdering({ status: false }));
+    }
+  }, [orderTerritoryId, isOrdering, dispatch]);
+
   if (orderLoading) {
     return <Loading />;
   }
