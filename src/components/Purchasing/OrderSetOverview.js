@@ -190,9 +190,9 @@ const OrderSetOverview = ({ setOverviewVisible }) => {
           <Typography className={classes.headerText}>
             {`Total Est. Item Cost: ${formatMoney(orderSet.totalEstItemCost, false)}`}
           </Typography>
-          <Typography className={classes.headerText}>
+          {/* <Typography className={classes.headerText}>
             {`Est. Freight Charge: ${formatMoney(orderSet.totalEstFreight, false)}`}
-          </Typography>
+          </Typography> */}
           <Typography
             className={classes.headerText}
           >{`Est. Tax: ${formatMoney(orderSet.totalEstTax, false)}`}</Typography>

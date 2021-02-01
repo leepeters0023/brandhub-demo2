@@ -261,12 +261,12 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
                   : "---"
               }`}
             </Typography>
-            <Typography className={classes.headerText}>
+            {/* <Typography className={classes.headerText}>
               {`Total Est. Freight: ${formatMoney(
                 currentOrder.totalEstFreight,
                 false
               )}`}
-            </Typography>
+            </Typography> */}
             <Typography className={classes.headerText}>
               {`Total Act. Freight: ${
                 currentOrder.totalActFreight !== "---"
