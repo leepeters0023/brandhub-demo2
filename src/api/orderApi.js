@@ -302,7 +302,7 @@ export const fetchSingleOrderSetByType = async (type, userId) => {
   let formattedType = type === "inStock" ? "in-stock" : "on-demand";
   await axios
     .get(
-      `/api/order-sets?filter[user-ids]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress`
+      `/api/order-sets?filter[user-ids]=${userId}&filter[type]=${formattedType}&filter[status]=in-progress,inactive`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);

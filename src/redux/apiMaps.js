@@ -1,6 +1,7 @@
 import { stringToCents, formatDate } from "../utility/utilityFunctions";
 import { brandLogoMap } from "../utility/constants";
 import addDays from "date-fns/addDays";
+import getYear from "date-fns/getYear";
 import format from "date-fns/format";
 
 /*
@@ -70,18 +71,29 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
+  const sortPrograms = (programs) => {
+    if (programs.length === 1) {
+      return [programs[0].name];
+    } else {
+      return programs
+        .sort((a, b) => {
+          return new Date(a["start-date"]) - new Date(b["start-date"]);
+        })
+        .reverse()
+        .map((prog) => prog.name);
+    }
+  };
+
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     return {
       id: item.id,
       itemNumber: item["item-number"],
       brand:
-        item.brands.length > 0
-          ? item.brands.map((brand) => brand.name)
-          : "---",
+        item.brands.length > 0 ? item.brands.map((brand) => brand.name) : "---",
       program:
         item.programs && item.programs.length > 0
-          ? item.programs.map((prog) => prog.name)
+          ? sortPrograms(item.programs)
           : "---",
       programIds:
         item.programs && item.programs.length > 0
@@ -274,14 +286,14 @@ export const mapSingleOrder = (order) => {
         : "---",
     trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
-    totalEstFreight:
-      order["total-estimated-shipping-cost"]
-        ? stringToCents(order["total-estimated-shipping-cost"])
-        : "---",
-    totalActFreight: order["total-actual-shipping-cost"]&&
-    stringToCents(order["total-actual-shipping-cost"]) !== 0
-      ? stringToCents(order["total-actual-shipping-cost"])
+    totalEstFreight: order["total-estimated-shipping-cost"]
+      ? stringToCents(order["total-estimated-shipping-cost"])
       : "---",
+    totalActFreight:
+      order["total-actual-shipping-cost"] &&
+      stringToCents(order["total-actual-shipping-cost"]) !== 0
+        ? stringToCents(order["total-actual-shipping-cost"])
+        : "---",
     totalEstTax: order["total-estimated-tax"]
       ? stringToCents(order["total-estimated-tax"])
       : "---",
@@ -537,6 +549,7 @@ export const mapOrderSet = (order) => {
             )
           ),
         ],
+    territoryId: order.territory.id,
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: [
       ...new Set(
@@ -654,6 +667,7 @@ export const mapPOItems = (items) => {
 };
 
 export const mapPOShippingParamItems = (items) => {
+  let currentYear = getYear(new Date()).toString().slice(2);
   const mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"] ? item["item-number"] : "---",
@@ -671,7 +685,7 @@ export const mapPOShippingParamItems = (items) => {
     expectedArrival: item["expected-arrival-date"]
       ? item["expected-arrival-date"]
       : "---",
-    shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${item["shipping-label"].code}`,
+    shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${currentYear}-${item["shipping-label"].code}`,
     trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
     shipHoldStatus: item["compliance-status"],
     tax: item.tax ? stringToCents(item.tax) : "---",
@@ -887,7 +901,6 @@ export const mapBids = (bids) => {
 };
 
 export const mapRFQ = (rfq) => {
-  console.log(rfq)
   const images = handleImages([rfq.item.images]);
   let mappedRFQ = {
     id: rfq.id,

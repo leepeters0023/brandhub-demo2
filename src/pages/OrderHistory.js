@@ -235,30 +235,30 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
       dataObject.data =
         dataObject.group === "order"
           ? currentOrders.map((order) => ({
-            orderNum: order.id,
-            type: order.type,
-            name: order.distributorName ? order.distributorName : "---",
-            state: order.distributorState
-              ? order.distributorState
-              : order.customAddressState,
-            program: order.program,
-            brand: order.brand.join(", "),
-            orderDate: format(new Date(order.orderDate), "MM/dd/yyyy"),
-            shipDate:
-              order.shipDate !== "---"
-                ? format(new Date(order.orderDate), "MM/dd/yyyy")
-                : order.shipDate,
-            totalItems: order.totalItems,
-            totalEstCost:
-              order.totalEstCost !== "---"
-                ? formatMoney(order.totalEstCost, false)
-                : order.totalEstCost,
-            totalActCost:
-              order.totalActCost !== "---"
-                ? formatMoney(order.totalActCost, false)
-                : order.totalActCost,
-            status: order.status[0].toUpperCase() + order.status.slice(1),
-          }))
+              orderNum: order.id,
+              type: order.type,
+              name: order.distributorName ? order.distributorName : "---",
+              state: order.distributorState
+                ? order.distributorState
+                : order.customAddressState,
+              program: order.program,
+              brand: order.brand.join(", "),
+              orderDate: format(new Date(order.orderDate), "MM/dd/yyyy"),
+              shipDate:
+                order.shipDate !== "---"
+                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                  : order.shipDate,
+              totalItems: order.totalItems,
+              totalEstCost:
+                order.totalEstCost !== "---"
+                  ? formatMoney(order.totalEstCost, false)
+                  : order.totalEstCost,
+              totalActCost:
+                order.totalActCost !== "---"
+                  ? formatMoney(order.totalActCost, false)
+                  : order.totalActCost,
+              status: order.status[0].toUpperCase() + order.status.slice(1),
+            }))
           : currentOrderItems.map((item) => ({
             itemNumber: item.itemNumber,
             orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
@@ -340,7 +340,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink
                 data={currentCSVData.data}
                 headers={currentCSVData.headers}
@@ -352,7 +352,14 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

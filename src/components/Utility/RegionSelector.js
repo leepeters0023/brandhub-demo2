@@ -23,6 +23,7 @@ const RegionSelector = ({ classes }) => {
   const regions = useSelector((state) => state.user.territories);
   const currentRegion = useSelector((state) => state.user.currentTerritory);
   const currentMarket = useSelector((state) => state.user.currentMarket);
+  const isOrdering = useSelector((state) => state.orderSet.isOrdering);
 
   const handleChangeSelect = (evt) => {
     window.location.hash = "";
@@ -83,6 +84,7 @@ const RegionSelector = ({ classes }) => {
             MenuProps={{
               style: { zIndex: "10001" },
             }}
+            disabled={isOrdering}
           >
             {regions.map((region, index) => (
               <MenuItem value={region.name} key={index}>

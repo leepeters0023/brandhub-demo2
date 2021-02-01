@@ -194,6 +194,56 @@ export const {
 export default userSlice.reducer;
 
 export const fetchUser = () => async (dispatch) => {
+  const handleTerritories = (terrArray) => {
+    if (terrArray.length === 0) {
+      return [];
+    } else if (terrArray.length === 1) {
+      return [
+        {
+          name: terrArray[0].name,
+          id: terrArray[0].id,
+          type: terrArray[0].type,
+        },
+      ];
+    } else {
+      let regional = [];
+      let customer = [];
+      terrArray.forEach((terr) => {
+        if (terr.type === "Regional") {
+          regional.push(terr);
+        } else {
+          customer.push(terr);
+        }
+      });
+      regional = regional
+        .map((terr) => ({
+          name: terr.name,
+          id: terr.id,
+          type: terr.type,
+        }))
+        .sort((a, b) => {
+          return a.name[0].toLowerCase() < b.name[0].toLowerCase()
+            ? -1
+            : a.name[0].toLowerCase() > b.name[0].toLowerCase()
+            ? 1
+            : 0;
+        });
+      customer = customer
+        .map((terr) => ({
+          name: terr.name,
+          id: terr.id,
+          type: terr.type,
+        }))
+        .sort((a, b) => {
+          return a.name[0].toLowerCase() < b.name[0].toLowerCase()
+            ? -1
+            : a.name[0].toLowerCase() > b.name[0].toLowerCase()
+            ? 1
+            : 0;
+        });
+      return regional.concat(customer);
+    }
+  };
   try {
     dispatch(setIsLoading());
     const user = await getUser();
@@ -204,12 +254,16 @@ export const fetchUser = () => async (dispatch) => {
     let currentUser = {
       id: user.data.id,
       supplierId: user.data.supplier ? user.data.supplier.id : null,
-      name: user.data.name,
-      firstName: user.data.name.split(" ")[0],
-      lastName: user.data.name.split(" ")[user.data.name.split(" ").length - 1],
-      initials: `${user.data.name.split(" ")[0][0]}${
-        user.data.name.split(" ")[user.data.name.split(" ").length - 1][0]
-      }`,
+      name: user.data.name.includes(",")
+        ? user.data.name.split(", ")[1] + user.data.name.split(", ")[0]
+        : user.data.name,
+      firstName: user.data.name.includes(",")
+        ? user.data.name.split(", ")[1]
+        : user.data.name.split(" ")[0],
+      lastName: user.data.name.includes(",")
+        ? user.data.name.split(", ")[0]
+        : user.data.name.split(" ")[user.data.name.split(" ").length - 1],
+      initials: "",
       email: user.data.email,
       role: user.data.role,
       isOnPremise: user.data["is-on-premise"] ? true : false,
@@ -224,14 +278,7 @@ export const fetchUser = () => async (dispatch) => {
         : user["is-on-premise"]
         ? "On Premise"
         : "Retail",
-      territories:
-        user.data.territories.length > 0
-          ? user.data.territories.map((terr) => ({
-              name: terr.name,
-              id: terr.id,
-              type: terr.type,
-            }))
-          : [],
+      territories: handleTerritories(user.data.territories),
       states:
         user.data.states.length > 0
           ? user.data.states.map((state) => ({
@@ -248,10 +295,12 @@ export const fetchUser = () => async (dispatch) => {
               id: u.id,
             }))
           : [],
-      currentTerritory:
-        user.data.territories.length > 0 ? user.data.territories[0].id : null,
+      currentTerritory: "",
       favoriteItems: mapItems(user.data["favorite-items"]),
     };
+    currentUser.initials = `${currentUser.firstName[0]}${currentUser.lastName[0]}`;
+    currentUser.currentTerritory =
+      currentUser.territories.length > 0 ? currentUser.territories[0].id : null;
     dispatch(getUserSuccess({ user: currentUser }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString }));

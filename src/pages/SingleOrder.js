@@ -38,6 +38,12 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const typeMap = {
+    "pre-order": "Pre Order",
+    "on-demand": "On Demand",
+    "in-stock": "Inventory",
+  };
+
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
@@ -80,34 +86,28 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
         { label: "Market", key: "state" },
         { label: "Brand", key: "brandCode" },
         { label: "BU", key: "unit" },
+        { label: "Item Type", key: "itemType" },
         { label: "Month in Market", key: "inMarketDate" },
-        { label: "Tactic", key: "tactic" },
-        { label: "Vendor", key: "supplier" },
         { label: "Estimated Cost", key: "totalEstCost" },
         { label: "Qty Ordered", key: "totalItems" },
-        { label: "Hold Type", key: "holdType" },
         { label: "Seq #", key: "itemNumber" },
         { label: "Program", key: "program" },
         { label: "Order Type", key: "orderType" },
       ];
       let csvData = [];
       currentOrder.items.forEach((item) => {
-        let supName = currentSuppliers.find((sup) => sup.id === item.supplierId)
-          .name;
         let dataObject = {
           user: currentOrder.user,
           state: item.state,
           brandCode: item.brandCode,
           unit: item.unit,
+          itemType: item.itemType,
           inMarketDate: item.inMarketDate,
-          tactic: /*TODO*/ "---",
-          supplier: supName,
           totalEstCost: formatMoney(item.totalEstCost),
           totalItems: item.totalItems,
-          holdType: item.onShipHold ? "Compliance Pending" : "OK to ship",
           itemNumber: item.itemNumber,
           program: item.program,
-          orderType: item.orderType,
+          orderType: typeMap[item.orderType],
         };
         csvData.push(dataObject);
       });
@@ -120,6 +120,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
     currentCSV.data.length,
     currentSuppliers,
     orderId,
+    typeMap,
   ]);
 
   useEffect(() => {
@@ -133,7 +134,9 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order</title></Helmet>
+      <Helmet>
+        <title>RTA | Order</title>
+      </Helmet>
       <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>

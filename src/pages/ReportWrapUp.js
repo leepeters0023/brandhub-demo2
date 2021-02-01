@@ -12,6 +12,7 @@ import { getWrapUp, clearReports } from "../redux/slices/reportSlice";
 import { updateSingleFilter, resetFilters } from "../redux/slices/filterSlice";
 
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
+import UserSuperAutoComplete from "../components/Utility/UserSuperAutoComplete";
 import WrapUpTable from "../components/Reporting/WrapUpTable";
 
 import Container from "@material-ui/core/Container";
@@ -114,31 +115,25 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
         { label: "Market", key: "state" },
         { label: "Brand", key: "brandCode" },
         { label: "BU", key: "unit" },
+        { label: "Item Type", key: "itemType" },
         { label: "Month in Market", key: "inMarketDate" },
-        { label: "Tactic", key: "tactic" },
-        { label: "Vendor", key: "supplier" },
         { label: "Estimated Cost", key: "totalEstCost" },
         { label: "Qty Ordered", key: "totalItems" },
-        { label: "Hold Type", key: "holdType" },
         { label: "Seq #", key: "itemNumber" },
         { label: "Program", key: "program" },
         { label: "Order Type", key: "orderType" },
       ];
       let csvData = [];
       report.forEach((item) => {
-        let supName = currentSuppliers.find((sup) => sup.id === item.supplierId)
-          .name;
         let dataObject = {
           user: item.user,
           state: item.state,
           brandCode: item.brandCode,
           unit: item.unit,
-          inMarketDate: /*TODO*/ "---",
-          tactic: /*TODO*/ "---",
-          supplier: supName,
+          itemType: item.itemType,
+          inMarketDate: item.inMarketDate,
           totalEstCost: formatMoney(item.totalEstCost),
           totalItems: item.totalItems,
-          holdType: /*TODO*/ "---",
           itemNumber: item.itemNumber,
           program: item.program,
           orderType: orderTypeMap[item.orderType],
@@ -233,16 +228,27 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
               }
             />
           </MuiPickersUtilsProvider>
-          {currentUserRole !== "field1" && (
-            <UserAutoComplete
-              classes={classes}
-              handleChange={handleUser}
-              reset={reset}
-              setReset={setReset}
-              filterType="report"
-              id="report-user-complete"
-            />
-          )}
+          {currentUserRole !== "field1" ? (
+            currentUserRole === "super" ? (
+              <UserSuperAutoComplete
+                classes={classes}
+                handleChange={handleUser}
+                reset={reset}
+                setReset={setReset}
+                filterType="report"
+                id="report-user-complete"
+              />
+            ) : (
+              <UserAutoComplete
+                classes={classes}
+                handleChange={handleUser}
+                reset={reset}
+                setReset={setReset}
+                filterType="report"
+                id="report-user-complete"
+              />
+            )
+          ) : null}         
         </div>
         <br />
         <div className={classes.chipRow}>

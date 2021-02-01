@@ -74,19 +74,23 @@ const DrawerReportsNav = ({ classes, role }) => {
             ]}
           />
         )}
-        <Divider className={classes.divider} key="divider1" />
-        <NestedMenuItem
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          label="Reporting"
-          classes={classes}
-          childItems={[
-            {
-              link: "/reports/wrap-up",
-              primary: "Wrap Up",
-            },
-          ]}
-        />
+        {role !== "read-only" && (
+          <div>
+            <Divider className={classes.divider} key="divider1" />
+            <NestedMenuItem
+              anchorEl={anchorEl}
+              handleClose={handleClose}
+              label="Reporting"
+              classes={classes}
+              childItems={[
+                {
+                  link: "/reports/wrap-up",
+                  primary: "Wrap Up",
+                },
+              ]}
+            />
+          </div>
+        )}
         {role !== "compliance" && (
           <div>
             <Divider className={classes.divider} key="divider2" />

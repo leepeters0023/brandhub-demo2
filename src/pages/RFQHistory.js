@@ -299,7 +299,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
                   <GetAppIcon color="secondary" />

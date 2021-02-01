@@ -21,6 +21,7 @@ let initialState = {
   isLoading: false,
   isOrderLoading: false,
   orderId: null,
+  territoryId: null,
   type: null,
   status: null,
   isComplete: null,
@@ -33,6 +34,7 @@ let initialState = {
   totalEstTax: 0,
   orderNote: "",
   rebuildRef: false,
+  isOrdering: false,
   error: null,
 };
 
@@ -60,6 +62,7 @@ const orderSetSlice = createSlice({
     buildTableFromOrders(state, action) {
       const {
         orderId,
+        territoryId,
         type,
         orders,
         items,
@@ -85,6 +88,7 @@ const orderSetSlice = createSlice({
           });
         });
         state.orderId = orderId;
+        state.territoryId = territoryId;
         state.status = status;
         state.isComplete = isComplete;
         state.type = type;
@@ -100,6 +104,7 @@ const orderSetSlice = createSlice({
       } else {
         state.orders = [];
         state.orderId = orderId;
+        state.territoryId = territoryId;
         state.status = status;
         state.isComplete = isComplete;
         state.type = type;
@@ -295,9 +300,14 @@ const orderSetSlice = createSlice({
       const { stateCode } = action.payload;
       state.stateFilter = stateCode;
     },
+    setIsOrdering(state, action) {
+      const { status } = action.payload;
+      state.isOrdering = status;
+    },
     clearOrderSet(state) {
       state.isLoading = false;
       state.orderId = null;
+      state.territoryId = null;
       state.type = null;
       state.status = null;
       state.isComplete = null;
@@ -309,6 +319,8 @@ const orderSetSlice = createSlice({
       state.totalEstFreight = 0;
       state.totalEstTax = 0;
       state.orderNote = "";
+      state.rebuildRef = false;
+      state.isOrdering = false;
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -334,6 +346,7 @@ export const {
   addOrderSuccess,
   addMultipleOrdersSuccess,
   setStateFilter,
+  setIsOrdering,
   setFailure,
 } = orderSetSlice.actions;
 
@@ -379,6 +392,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       currentOrders.data["territory-names"].length === 0
         ? ["National"]
         : currentOrders.data["territory-names"].split(", ");
+    let territoryId = currentOrders.data.territory.id;
     let note = currentOrders.data.notes ? currentOrders.data.notes : "";
     dispatch(
       setPreOrderDetails({
@@ -386,10 +400,10 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         programId: null,
       })
     );
-
     dispatch(
       buildTableFromOrders({
         orderId: orderId,
+        territoryId: territoryId,
         type: type,
         orders: orders,
         items: currentItems,
@@ -518,15 +532,13 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
     dispatch(setOrderLoading());
     dispatch(patchLoading());
     const orders = [];
-    await Promise.all(
-      idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type, warehouse);
-        if (order.error) {
-          throw order.error;
-        }
-        orders.push(order.data);
-      })
-    );
+    for (let i = 0; i < idArray.length; i++) {
+      const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
+      if (order.error) {
+        throw order.error;
+      }
+      orders.push(order.data);
+    }
     let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
     dispatch(setRebuildRef());
@@ -537,27 +549,32 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
   }
 };
 
-export const createAllOrders = (territoryId, id, type, warehouse, stateIds) => async (
-  dispatch
-) => {
+export const createAllOrders = (
+  territoryId,
+  id,
+  type,
+  warehouse,
+  stateIds
+) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    const distributors = await fetchDistributorsByTerritory(territoryId, stateIds);
+    const distributors = await fetchDistributorsByTerritory(
+      territoryId,
+      stateIds
+    );
     if (distributors.error) {
       throw distributors.error;
     }
     let idArray = distributors.data.map((dist) => dist.id);
     const orders = [];
-    await Promise.all(
-      idArray.map(async (distId) => {
-        const order = await addSingleOrderToSet(id, distId, type, warehouse);
-        if (order.error) {
-          throw order.error;
-        }
-        orders.push(order.data);
-      })
-    );
+    for (let i = 0; i < idArray.length; i++) {
+      const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
+      if (order.error) {
+        throw order.error;
+      }
+      orders.push(order.data);
+    }
     let mappedOrders = mapOrderHistoryOrders(orders);
     dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
     dispatch(setRebuildRef());

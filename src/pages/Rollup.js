@@ -295,11 +295,12 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                   style={{
                     marginTop: "10px",
                     marginBottom: "0px",
-                    width: `Calc(${queryTotal && orderCount
-                      ? queryTotal.toString().length +
-                      orderCount.toString().length
-                      : 0
-                      }*15px + 50px)`,
+                    width: `Calc(${
+                      queryTotal && orderCount
+                        ? queryTotal.toString().length +
+                          orderCount.toString().length
+                        : 0
+                    }*15px + 50px)`,
                     minWidth: "100px",
                     readonly: "readonly",
                     pointerEvents: "none",
@@ -320,7 +321,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink
                 data={currentCSVData.data}
                 headers={currentCSVData.headers}
@@ -332,7 +333,14 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

@@ -150,7 +150,7 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
                 <PrintIcon color="secondary" />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Export CSV">
+            <Tooltip title="Export File">
               <CSVLink data={currentCSV.data} headers={currentCSV.headers}>
                 <IconButton>
                   <GetAppIcon color="secondary" />
@@ -159,7 +159,14 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
             </Tooltip>
           </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "row", alignContent: "center", marginBottom: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignContent: "center",
+            marginBottom: "10px",
+          }}
+        >
           <div
             className={classes.showHideFilters}
             onClick={() => {

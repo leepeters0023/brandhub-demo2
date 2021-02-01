@@ -11,6 +11,7 @@ import { setClear } from "../../redux/slices/filterSlice";
 import BrandAutoComplete from "../Utility/BrandAutoComplete";
 import DistributorAutoComplete from "../Utility/DistributorAutoComplete";
 import UserAutoComplete from "../Utility/UserAutoComplete";
+import UserSuperAutoComplete from "../Utility/UserSuperAutoComplete";
 import StatusSelector from "../Utility/StatusSelector";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
@@ -251,13 +252,24 @@ const FiltersHistory = ({
           historyType !== "rfq" &&
           historyType !== "po" && (
             <ListItem>
-              <UserAutoComplete
-                classes={classes}
-                handleChange={handleFilters}
-                reset={reset}
-                setReset={setReset}
-                filterType={"history"}
-              />
+              {currentUserRole === "super" ||
+              currentUserRole === "read-only" ? (
+                <UserSuperAutoComplete
+                  classes={classes}
+                  handleChange={handleFilters}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType={"budget"}
+                />
+              ) : (
+                <UserAutoComplete
+                  classes={classes}
+                  handleChange={handleFilters}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType={"budget"}
+                />
+              )}
             </ListItem>
           )}
         <ListItem>
@@ -291,7 +303,7 @@ const FiltersHistory = ({
             filterType={"history"}
           />
         </ListItem>
-        {historyType === "po" && (
+        {historyType === "po" && currentUserRole !== "supplier" && (
           <>
             <ListItem>
               <SupplierAutoComplete

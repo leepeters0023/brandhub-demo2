@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
 import format from "date-fns/format";
 
+import { useSelector } from "react-redux";
+
 import { formatMoney, formatDate } from "../../utility/utilityFunctions";
 
 import Table from "@material-ui/core/Table";
@@ -36,8 +38,18 @@ const headCells = [
     label: "Order Submitted",
     sort: false,
   },
-  { id: "dueDate", disablePadding: false, label: "Order Window Close", sort: false },
-  { id: "inMarketDate", disablePadding: false, label: "In Market Date", sort: false },
+  {
+    id: "dueDate",
+    disablePadding: false,
+    label: "Order Window Close",
+    sort: false,
+  },
+  {
+    id: "inMarketDate",
+    disablePadding: false,
+    label: "In Market Date",
+    sort: false,
+  },
   { id: "status", disablePadding: false, label: "Status", sort: false },
 ];
 
@@ -130,6 +142,9 @@ const RollupOverViewTable = ({
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("user");
+
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -179,11 +194,17 @@ const RollupOverViewTable = ({
                 <TableRow
                   key={row.id}
                   hover
-                  className={classes.orderHistoryRow}
+                  className={
+                    currentUserRole !== "read-only"
+                      ? classes.orderHistoryRow
+                      : null
+                  }
                   onClick={() => {
-                    navigate(
-                      `/rollup/detail/${row.id}#${row.userName} - ${row.program}`
-                    );
+                    if (currentUserRole !== "read-only") {
+                      navigate(
+                        `/rollup/detail/${row.id}#${row.userName} - ${row.program}`
+                      );
+                    }
                   }}
                 >
                   <TableCell align="left">{row.userName}</TableCell>
@@ -224,7 +245,10 @@ const RollupOverViewTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.orderDate !== "---"
-                      ? format(formatDate(new Date(row.orderDate)), "MM/dd/yyyy")
+                      ? format(
+                          formatDate(new Date(row.orderDate)),
+                          "MM/dd/yyyy"
+                        )
                       : row.orderDate}
                   </TableCell>
                   <TableCell align="left">
@@ -234,7 +258,10 @@ const RollupOverViewTable = ({
                   </TableCell>
                   <TableCell align="left">
                     {row.inMarketDate !== "---"
-                      ? format(formatDate(new Date(row.inMarketDate)), "MM/dd/yyyy")
+                      ? format(
+                          formatDate(new Date(row.inMarketDate)),
+                          "MM/dd/yyyy"
+                        )
                       : row.inMarketDate}
                   </TableCell>
                   <TableCell align="left">
