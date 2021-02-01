@@ -4,7 +4,7 @@ import {
   addOrderSetItem,
   createOrderSet,
 } from "../../api/orderApi";
-import { fetchProgramItems } from "./programsSlice";
+import { fetchItems } from "./programsSlice";
 import {
   setIsLoading as setOrderSetLoading,
   fetchProgramOrders,
@@ -234,7 +234,7 @@ export const createNewBulkItemOrder = (
     }
     let currentItems = itemArray.length > 0 ? [...itemArray] : [];
     if (type === "preOrder" && itemArray.length === 0) {
-      let programItems = await fetchProgramItems(programId);
+      let programItems = await fetchItems(programId);
       if (programItems.error) {
         throw programItems.error;
       }
