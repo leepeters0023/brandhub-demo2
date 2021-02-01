@@ -541,13 +541,38 @@ export const deleteOrderSet = async (id) => {
 };
 
 //Creates a new order set and returns the new order set
-export const createOrderSet = async (type, territoryId) => {
+export const createOrderSet = async (type, territoryId, programId) => {
   const response = { status: "", error: null, data: null };
-  let formattedType = type === "inStock" ? "in-stock" : "on-demand";
-  await axios
-    .post(
-      "/api/order-sets",
-      {
+  let formattedType =
+    type === "inStock"
+      ? "in-stock"
+      : type === "onDemand"
+      ? "on-demand"
+      : "pre-order";
+  const requestData = programId
+    ? {
+        data: {
+          type: "order-set",
+          attributes: {
+            type: formattedType,
+          },
+          relationships: {
+            territory: {
+              data: {
+                type: "territory",
+                id: territoryId,
+              },
+              program: {
+                data: {
+                  type: "program",
+                  id: programId,
+                },
+              },
+            },
+          },
+        },
+      }
+    : {
         data: {
           type: "order-set",
           attributes: {
@@ -562,9 +587,9 @@ export const createOrderSet = async (type, territoryId) => {
             },
           },
         },
-      },
-      writeHeaders
-    )
+      };
+  await axios
+    .post("/api/order-sets", requestData, writeHeaders)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.data = data;

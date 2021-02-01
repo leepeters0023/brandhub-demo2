@@ -4,6 +4,11 @@ import {
   addOrderSetItem,
   createOrderSet,
 } from "../../api/orderApi";
+import { fetchProgramItems } from "./programsSlice";
+import {
+  setIsLoading as setOrderSetLoading,
+  fetchProgramOrders,
+} from "./orderSetSlice";
 import { setError } from "./errorSlice";
 import { mapOrderSet } from "../apiMaps";
 
@@ -211,19 +216,34 @@ export const createNewOrder = (type, itemNumber, territoryId) => async (
   }
 };
 
-export const createNewBulkItemOrder = (type, itemArray, territoryId) => async (
-  dispatch
-) => {
+export const createNewBulkItemOrder = (
+  type,
+  itemArray,
+  territoryId,
+  programId,
+  userId
+) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    let newOrder = await createOrderSet(type, territoryId);
+    if (type === "preOrder") {
+      dispatch(setOrderSetLoading());
+    }
+    let newOrder = await createOrderSet(type, territoryId, programId);
     if (newOrder.error) {
       throw newOrder.error;
+    }
+    let currentItems = itemArray.length > 0 ? [...itemArray] : [];
+    if (type === "preOrder" && itemArray.length === 0) {
+      let programItems = await fetchProgramItems(programId);
+      if (programItems.error) {
+        throw programItems.error;
+      }
+      currentItems = programItems.data.map((item) => item.id);
     }
     let orderItems = [];
     let orderErrors = [];
     await Promise.all(
-      itemArray.map(async (id) => {
+      currentItems.map(async (id) => {
         const itemStatus = await addOrderSetItem(newOrder.data.id, id);
         if (itemStatus.error) {
           orderErrors.push(itemStatus.error);
@@ -243,6 +263,9 @@ export const createNewBulkItemOrder = (type, itemArray, territoryId) => async (
           type: type,
         })
       );
+      if (type === "preOrder") {
+        dispatch(fetchProgramOrders(programId, userId, territoryId));
+      }
     }
     if (orderErrors.length > 0) {
       throw orderErrors.join(", ");
@@ -282,7 +305,11 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         itemNumber: item.item["item-number"],
       }));
     }
-    if (type === "inStock" && order.data.length > 0 && order.data[0].orders.length > 0) {
+    if (
+      type === "inStock" &&
+      order.data.length > 0 &&
+      order.data[0].orders.length > 0
+    ) {
       currentWarehouse = order.data[0].orders[0].warehouse;
     }
     dispatch(

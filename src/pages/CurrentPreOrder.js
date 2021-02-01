@@ -7,7 +7,7 @@ import {
   setProgramName,
   fetchPreOrders,
 } from "../redux/slices/preOrderDetailSlice";
-
+import { createNewBulkItemOrder } from "../redux/slices/currentOrderSlice";
 import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
 
 import {
@@ -207,7 +207,13 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   );
 
   const generatePreOrder = () => {
-    console.log("generating!")
+    let currentProgram = userPrograms.find((prog) => prog.id === program);
+    if (currentProgram.items.length > 0) {
+      let itemIds = currentProgram.items.map((item) => item.id);
+      dispatch(createNewBulkItemOrder("preOrder", itemIds, currentTerritory, program, currentUserId))
+    } else {
+      dispatch(createNewBulkItemOrder("preOrder", [], currentTerritory, program, currentUserRole))
+    }
   }
 
   useEffect(() => {

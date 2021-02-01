@@ -53,8 +53,9 @@ import { resetPoHistory } from "./redux/slices/purchaseOrderHistorySlice";
 import { resetComplianceRules } from "./redux/slices/complianceRulesSlice";
 import { resetComplianceItems } from "./redux/slices/complianceItemsSlice";
 import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
-import { updateSingleFilter } from "./redux/slices/filterSlice";
+import { updateSingleFilter, resetFilters } from "./redux/slices/filterSlice";
 import { clearError } from "./redux/slices/errorSlice";
+import { clearUserUpdate } from "./redux/slices/userUpdateSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
 import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
@@ -171,6 +172,8 @@ const App = () => {
     dispatch(resetAddresses());
     dispatch(resetRfqHistory());
     dispatch(resetPoHistory());
+    dispatch(clearUserUpdate());
+    dispatch(resetFilters());
     navigate("/");
   }, [dispatch]);
 

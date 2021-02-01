@@ -141,7 +141,9 @@ const ItemPreviewModal = (props) => {
   const currentWarehouse = useSelector(
     (state) => state.currentOrder.currentWarehouse
   );
-  const inStockOrderItems = useSelector((state) => state.currentOrder.inStockOrderItems);
+  const inStockOrderItems = useSelector(
+    (state) => state.currentOrder.inStockOrderItems
+  );
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const currentUserRole = useSelector((state) => state.user.role);
 
@@ -160,7 +162,11 @@ const ItemPreviewModal = (props) => {
     };
 
     setCurrentItem(newItem);
-    if (!currentWarehouse && type === "inStock" && inStockOrderItems.length === 0) {
+    if (
+      !currentWarehouse &&
+      type === "inStock" &&
+      inStockOrderItems.length === 0
+    ) {
       dispatch(updateCurrentWarehouse({ warehouse: warehouse }));
     }
     if (!currentOrderId) {
@@ -239,12 +245,24 @@ const ItemPreviewModal = (props) => {
                     </Typography>
                     {brand && (
                       <Typography className={classes.headerText}>
-                        {`Brand(s):  ${brand.length === 1 ? brand[0] : brand.join(", ")}`}
+                        {`Brand(s):  ${
+                          typeof brand !== "string" && brand.length === 1
+                            ? brand[0]
+                            : typeof brand !== "string"
+                            ? brand.join(", ")
+                            : brand
+                        }`}
                       </Typography>
                     )}
                     {program && (
                       <Typography className={classes.headerText}>
-                        {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
+                        {`Program:  ${
+                          typeof program !== "string" && program.length === 1
+                          ? program[0]
+                          : typeof program !== "string"
+                          ? program.join(", ")
+                          : program
+                        }`}
                       </Typography>
                     )}
                     <Typography className={classes.headerText}>
@@ -348,7 +366,9 @@ const ItemPreviewModal = (props) => {
                   </Typography>
                   {program && (
                     <Typography className={classes.headerText}>
-                      {`Program:  ${program.length === 1 ? program[0] : program.join(", ")}`}
+                      {`Program:  ${
+                        program.length === 1 ? program[0] : program.join(", ")
+                      }`}
                     </Typography>
                   )}
                   <Typography className={classes.headerText}>
@@ -375,23 +395,26 @@ const ItemPreviewModal = (props) => {
                     {`Bottles: ${bottles ? bottles : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${bottleDiscount
+                    {`Bottle Discount: ${
+                      bottleDiscount
                         ? formatMoney(bottleDiscount, false)
                         : "---"
-                      }`}
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${discountAmount
+                    {`Discount Amount: ${
+                      discountAmount
                         ? formatMoney(discountAmount, false)
                         : "---"
-                      }`}
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Promotion Start: ${startDate ? startDate : "---"}`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${expirationDate ? expirationDate : "---"
-                      }`}
+                    {`Expiration Date: ${
+                      expirationDate ? expirationDate : "---"
+                    }`}
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {`Available to Order: 10/01/2020 - 12/01/2020`}
