@@ -266,9 +266,9 @@ const ItemPreviewModal = (props) => {
                     <Typography variant="body1" color="textSecondary">
                       {`Pack Size: ${packSize}`}
                     </Typography>
-                    <Typography variant="body1" color="textSecondary">
+                    {/* <Typography variant="body1" color="textSecondary">
                       {`Available to Order: 10/01/2020 - 12/01/2020`}
-                    </Typography>
+                    </Typography> TODO update this*/}
                     <br />
                     {type &&
                       type !== "program" &&

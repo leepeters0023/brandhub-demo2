@@ -88,11 +88,12 @@ export const mapItems = (items) => {
           new Date() <
             new Date(["order-calendar-month"]["order-window-close-date"])
       );
+      console.log(currentProgram);
       if (currentProgram) {
         sortedPrograms.sort((a, b) =>
-          a.name === currentProgram.name
+          a.id === currentProgram.id
             ? -1
-            : b.name === currentProgram.name
+            : b.id === currentProgram.id
             ? 1
             : 0
         );
