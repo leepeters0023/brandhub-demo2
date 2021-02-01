@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
-import { useSelector } from "react-redux";
-
 import ImageWrapper from "../Utility/ImageWrapper";
 
 import Divider from "@material-ui/core/Divider";
@@ -11,25 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
+const ComplianceDash = ({ classes, name, InfoPopover }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const programs = useSelector((state) => state.programs.programs);
-
-  const monthMap = {
-    0: "2",
-    1: "2",
-    2: "3",
-    3: "3",
-    4: "3",
-    5: "4",
-    6: "4",
-    7: "4",
-    8: "1",
-    9: "1",
-    10: "1",
-    11: "2",
-  };
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,10 +20,6 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
     setAnchorEl(null);
   };
 
-  const preOrderOpen = anchorEl ? anchorEl.id === "pre-order-parent" : false;
-  const inStockOpen = anchorEl ? anchorEl.id === "in-stock-parent" : false;
-  const onDemandOpen = anchorEl ? anchorEl.id === "on-demand-parent" : false;
-  const historyOpen = anchorEl ? anchorEl.id === "history-parent" : false;
   const catalogCurrentOpen = anchorEl
     ? anchorEl.id === "catalog-current-parent"
     : false;
@@ -50,57 +27,11 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
     ? anchorEl.id === "catalog-archive-parent"
     : false;
   const itemRulesOpen = anchorEl ? anchorEl.id === "item-rules-parent" : false;
-  const wrapReportOpen = anchorEl
-    ? anchorEl.id === "wrap-report-parent"
+  const generalRulesOpen = anchorEl
+    ? anchorEl.id === "general-rules-parent"
     : false;
 
   const cardData = [
-    {
-      titleText: `Q${monthMap[currentMonth]} Ordering`,
-      ariaOwnsState: preOrderOpen,
-      ariaOwnsText: "pre-order",
-      id: "pre-order-parent",
-      link: "/programs",
-      info:
-        programs.length > 0
-          ? "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts"
-          : "There are currently no active pre order programs",
-      icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Q1_Ordering_tg2ryl.png",
-    },
-    {
-      titleText: "On-Demand Order",
-      ariaOwnsState: onDemandOpen,
-      ariaOwnsText: "on-demand",
-      id: "on-demand-parent",
-      link: "/orders/items/onDemand",
-      info:
-        "Place orders for items that will need to be produced for your order",
-      icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_On_Demand_Order_zoymv2.png",
-    },
-    {
-      titleText: "Inventory Order",
-      ariaOwnsState: inStockOpen,
-      ariaOwnsText: "in-stock",
-      id: "in-stock-parent",
-      link: "/orders/items/inventory",
-      info:
-        "Place orders for items that are currently available in our inventory",
-      icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_In_Stock_Order_skvxpj.png",
-    },
-    {
-      titleText: "Order History",
-      ariaOwnsState: historyOpen,
-      ariaOwnsText: "order-history",
-      id: "history-parent",
-      link: "/orders/history/group/byOrder",
-      info:
-        "View order history grouped by item or order & get tracking information",
-      icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Order_History_jvvgmh.png",
-    },
     {
       titleText: "Item Catalog: Current",
       ariaOwnsState: catalogCurrentOpen,
@@ -133,11 +64,11 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
     },
     {
       titleText: "Wrap Up Report",
-      ariaOwnsState: wrapReportOpen,
+      ariaOwnsState: generalRulesOpen,
       ariaOwnsText: "wrap-up-report",
-      id: "wrap-report-parent",
-      link: "/reports/wrap-up",
-      info: "View wrap up report",
+      id: "general-rules-parent",
+      link: "/compliance/rules",
+      info: "View details bout specific rules",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Wrap_Up_Reports_hwy0en.png",
     },
@@ -210,10 +141,10 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
   );
 };
 
-FieldDash.propTypes = {
+ComplianceDash.propTypes = {
   classes: PropTypes.object.isRequired,
   InfoPopover: PropTypes.func.isRequired,
   currentMonth: PropTypes.number,
 };
 
-export default FieldDash;
+export default ComplianceDash;

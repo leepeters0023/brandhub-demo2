@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 import FieldDash from "../components/Dashboard/FieldDash";
 import SupplierDash from "../components/Dashboard/SupplierDash";
+import ComplianceDash from "../components/Dashboard/ComplianceDash";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -131,7 +132,14 @@ const Dashboard = ({ userType, handleFiltersClosed, currentMonth }) => {
             InfoPopover={InfoPopover}
           />
         )}
-        {userType !== "supplier" && (
+        {userType === "compliance" && (
+          <ComplianceDash
+            name={name}
+            classes={classes}
+            InfoPopover={InfoPopover}
+          />
+        )}
+        {userType !== "supplier" && userType !== "compliance" && (
           <FieldDash
             name={name}
             classes={classes}

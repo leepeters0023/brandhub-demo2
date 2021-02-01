@@ -148,10 +148,6 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal, currentMonth }) => {
                       currentMonth={currentMonth}
                     />
                   )}
-                </>
-              )}
-              {role !== "purchasing" && role !== "supplier" && (
-                <>
                   <DrawerReportsNav role={role} classes={classes} />
                 </>
               )}
