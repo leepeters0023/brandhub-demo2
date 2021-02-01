@@ -196,57 +196,57 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
       dataObject.data =
         dataObject.group === "order"
           ? currentPreOrders.map((order) => ({
-              user: order.userName,
-              program: order.program.join(", "),
-              brand: order.brand.join(", "),
-              state: order.state,
-              totalEstCost: formatMoney(order.totalEstCost, false),
-              orderDate:
-                order.orderDate !== "---"
-                  ? format(new Date(order.orderDate), "MM/dd/yyyy")
-                  : order.orderDate,
-              dueDate:
-                order.dueDate !== "---"
-                  ? format(new Date(order.dueDate), "MM/dd/yyyy")
-                  : order.dueDate,
-              inMarketDate:
-                order.inMarketDate !== "---"
-                  ? format(new Date(order.inMarketDate), "MM/dd/yyyy")
-                  : order.inMarketDate,
-              status: statusConverter(order.status),
-            }))
+            user: order.userName,
+            program: order.program.join(", "),
+            brand: order.brand.join(", "),
+            state: order.state,
+            totalEstCost: formatMoney(order.totalEstCost, false),
+            orderDate:
+              order.orderDate !== "---"
+                ? format(new Date(order.orderDate), "MM/dd/yyyy")
+                : order.orderDate,
+            dueDate:
+              order.dueDate !== "---"
+                ? format(new Date(order.dueDate), "MM/dd/yyyy")
+                : order.dueDate,
+            inMarketDate:
+              order.inMarketDate !== "---"
+                ? format(new Date(order.inMarketDate), "MM/dd/yyyy")
+                : order.inMarketDate,
+            status: statusConverter(order.status),
+          }))
           : quarterlyRollupItems.map((item) => ({
-              user: item.user,
-              itemNumber: item.itemNumber,
-              program: item.program,
-              brand: item.brand.join(", "),
-              itemType: item.itemType,
-              itemDescription: item.itemDescription,
-              state: item.state,
-              packSize: item.packSize,
-              totalItems: item.totalItems,
-              estCost:
-                item.estCost !== "---"
-                  ? formatMoney(item.estCost, false)
-                  : item.estCost,
-              totalEstCost:
-                item.totalEstCost !== "---"
-                  ? formatMoney(item.totalEstCost, false)
-                  : item.totalEstCost,
-              orderDate:
-                item.orderDate !== "---"
-                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
-                  : item.orderDate,
-              dueDate:
-                item.orderDue !== "---"
-                  ? format(new Date(item.orderDue), "MM/dd/yyyy")
-                  : item.orderDue,
-              inMarketDate:
-                item.inMarketDate !== "---"
-                  ? format(new Date(item.inMarketDate), "MM/dd/yyyy")
-                  : item.inMarketDate,
-              status: statusConverter(item.status),
-            }));
+            user: item.user,
+            itemNumber: item.itemNumber,
+            program: item.program,
+            brand: item.brand.join(", "),
+            itemType: item.itemType,
+            itemDescription: item.itemDescription,
+            state: item.state,
+            packSize: item.packSize,
+            totalItems: item.totalItems,
+            estCost:
+              item.estCost !== "---"
+                ? formatMoney(item.estCost, false)
+                : item.estCost,
+            totalEstCost:
+              item.totalEstCost !== "---"
+                ? formatMoney(item.totalEstCost, false)
+                : item.totalEstCost,
+            orderDate:
+              item.orderDate !== "---"
+                ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                : item.orderDate,
+            dueDate:
+              item.orderDue !== "---"
+                ? format(new Date(item.orderDue), "MM/dd/yyyy")
+                : item.orderDue,
+            inMarketDate:
+              item.inMarketDate !== "---"
+                ? format(new Date(item.inMarketDate), "MM/dd/yyyy")
+                : item.inMarketDate,
+            status: statusConverter(item.status),
+          }));
       setCurrentCSVData(dataObject);
     }
   }, [
@@ -256,11 +256,13 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     currentPreOrders,
     quarterlyRollupItems,
   ]);
-
+  // TODO this instance of helpscout appears over the 'clear filters' button on filter. Asking Zach to move from the lower L to lower R
   return (
     <>
-      <Helmet>
-        <title>RTA | Quarterly Rollup</title>
+      <Helmet><title>RTA | Quarterly Rollup</title>
+        {(currentUserRole === "field2" && !filtersOpen) && (
+          <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
+        )}
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>

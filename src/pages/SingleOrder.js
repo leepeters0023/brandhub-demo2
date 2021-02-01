@@ -59,8 +59,7 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
   };
 
   useRetainFiltersOnPopstate(
-    `/orders/history/group/by${
-      currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
+    `/orders/history/group/by${currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
     }`,
     dispatch
   );
@@ -145,9 +144,8 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Tooltip title="Back to Order History" placement="bottom-start">
               <IconButton
                 component={Link}
-                to={`/orders/history/group/by${
-                  currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
-                }`}
+                to={`/orders/history/group/by${currentGrouping[0].toUpperCase() + currentGrouping.slice(1)
+                  }`}
                 onClick={() => {
                   dispatch(setRetain({ value: true }));
                 }}
@@ -200,10 +198,9 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Divider />
             <br />
             <Typography className={classes.headerText}>
-              {`Status: ${
-                currentOrder.status[0].toUpperCase() +
+              {`Status: ${currentOrder.status[0].toUpperCase() +
                 currentOrder.status.slice(1)
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Order Type: ${currentOrder.type}`}
@@ -215,29 +212,25 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Ship Date: ${
-                currentOrder.shipDate !== "---"
+              {`Ship Date: ${currentOrder.shipDate !== "---"
                   ? format(new Date(currentOrder.shipDate))
                   : currentOrder.shipDate
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Shipping Location: ${
-                currentOrder.distributorName
+              {`Shipping Location: ${currentOrder.distributorName
                   ? currentOrder.distributorName
                   : currentOrder.customAddressName
-              } - ${
-                currentOrder.distributorId
+                } - ${currentOrder.distributorId
                   ? currentOrder.distributorId
                   : currentOrder.customAddressId
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Address: ${
-                currentOrder.distributorAddress
+              {`Address: ${currentOrder.distributorAddress
                   ? currentOrder.distributorAddress
                   : currentOrder.customAddressAddress
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Attention: ${currentOrder.attn}`}
@@ -255,11 +248,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Item Act. Cost: ${
-                currentOrder.totalActCost !== "---"
+              {`Total Item Act. Cost: ${currentOrder.totalActCost !== "---"
                   ? formatMoney(currentOrder.totalActCost, false)
                   : "---"
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Est. Freight: ${formatMoney(
@@ -268,11 +260,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Act. Freight: ${
-                currentOrder.totalActFreight !== "---"
+              {`Total Act. Freight: ${currentOrder.totalActFreight !== "---"
                   ? formatMoney(currentOrder.totalActFreight, false)
                   : "---"
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Est. Tax: ${formatMoney(
@@ -281,11 +272,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Total Act. Tax: ${
-                currentOrder.totalActTax !== "---"
+              {`Total Act. Tax: ${currentOrder.totalActTax !== "---"
                   ? formatMoney(currentOrder.totalActTax, false)
                   : "---"
-              }`}
+                }`}
             </Typography>
             <Typography className={classes.headerText}>
               {`Total Est. Cost: ${formatMoney(

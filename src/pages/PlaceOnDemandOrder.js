@@ -147,7 +147,14 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | On-Demand Order</title></Helmet>
+      <Helmet><title>RTA | On-Demand Order</title>
+      {(currentUserRole === "field2" && !filtersOpen) && (
+       <script type="text/javascript">{`Beacon('suggest', ['600af2ff1c64ad47e4b7201d'], )`}</script>
+      )}
+      {(currentUserRole === "field1" && !filtersOpen) && (
+        <script type="text/javascript">{`Beacon('suggest', ['5ffdf334b9a8501b295cf995'])`}</script>
+      )}
+      </Helmet>
       {previewModal && (
         <ItemPreviewModal
           type={"onDemand"}

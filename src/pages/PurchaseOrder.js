@@ -220,11 +220,11 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               totalItems: currentParamItem.totalItems,
               shipStatus:
                 currentParamItem.shipHoldStatus === "approved" ||
-                currentParamItem.shipHoldStatus === "ok"
+                  currentParamItem.shipHoldStatus === "ok"
                   ? "Ok"
                   : (currentParamItem.shipHoldStatus === "prior-approval-pending"
-                      ? "Pending - On Hold"
-                      : "Denied - Don't Ship"),
+                    ? "Pending - On Hold"
+                    : "Denied - Don't Ship"),
               carrier:
                 currentParamItem.carrier === "---"
                   ? ""
@@ -392,8 +392,8 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                             {isUploadLoading ? (
                               <CircularProgress size={27.78} />
                             ) : (
-                              "SHIPPING"
-                            )}
+                                "SHIPPING"
+                              )}
                           </Button>
                           {file && (
                             <Typography

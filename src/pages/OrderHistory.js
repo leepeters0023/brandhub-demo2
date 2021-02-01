@@ -260,36 +260,36 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
               status: order.status[0].toUpperCase() + order.status.slice(1),
             }))
           : currentOrderItems.map((item) => ({
-              itemNumber: item.itemNumber,
-              orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
-              orderNum: item.orderId,
-              brand: item.brand.join(", "),
-              program: item.program,
-              itemType: item.itemType,
-              itemDesc: item.itemDescription,
-              name: item.distributor.length > 0 ? item.distributor : "---",
-              state: item.state,
-              totalItems: item.totalItems,
-              estCost:
-                item.estCost !== "---"
-                  ? formatMoney(item.estCost, false)
-                  : item.estCost,
-              actCost:
-                item.actCost !== "---"
-                  ? formatMoney(item.actCost, false)
-                  : item.actCost,
-              orderDate:
-                item.orderDate !== "---"
-                  ? format(new Date(item.orderDate), "MM/dd/yyyy")
-                  : item.orderDate,
-              shipDate:
-                item.shipDate !== "---"
-                  ? format(new Date(item.shipDate), "MM/dd/yyyy")
-                  : item.shipDate,
-              carrier: item.carrier,
-              tracking: item.tracking,
-              status: item.status[0].toUpperCase() + item.status.slice(1),
-            }));
+            itemNumber: item.itemNumber,
+            orderType: item.orderType ? orderTypeMap[item.orderType] : "---",
+            orderNum: item.orderId,
+            brand: item.brand.join(", "),
+            program: item.program,
+            itemType: item.itemType,
+            itemDesc: item.itemDescription,
+            name: item.distributor.length > 0 ? item.distributor : "---",
+            state: item.state,
+            totalItems: item.totalItems,
+            estCost:
+              item.estCost !== "---"
+                ? formatMoney(item.estCost, false)
+                : item.estCost,
+            actCost:
+              item.actCost !== "---"
+                ? formatMoney(item.actCost, false)
+                : item.actCost,
+            orderDate:
+              item.orderDate !== "---"
+                ? format(new Date(item.orderDate), "MM/dd/yyyy")
+                : item.orderDate,
+            shipDate:
+              item.shipDate !== "---"
+                ? format(new Date(item.shipDate), "MM/dd/yyyy")
+                : item.shipDate,
+            carrier: item.carrier,
+            tracking: item.tracking,
+            status: item.status[0].toUpperCase() + item.status.slice(1),
+          }));
       setCurrentCSVData(dataObject);
     }
   }, [
@@ -302,8 +302,13 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   return (
     <>
-      <Helmet>
-        <title>RTA | Order History</title>
+      <Helmet><title>RTA | Order History</title>
+        {(currentUserRole === "field2" || currentUserRole === "field1") && (
+          <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d','5ffdf334b9a8501b295cf995'])`}</script>
+        )}
+        {currentUserRole === "read-only" && (
+          <script type="text/javascript">{` Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
+        )}
       </Helmet>
       <ItemPreviewModal
         type={"catalog"}

@@ -39,7 +39,7 @@ const ApproveOrDenyItem = () => {
 
     return (
         <>
-        <Helmet><title>RTA | Approve or Deny</title></Helmet>
+            <Helmet><title>RTA | Approve or Deny</title></Helmet>
             <Container className={classes.mainWrapper}>
                 <ImageWrapper
                     imgUrl={Logo}

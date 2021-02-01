@@ -111,7 +111,11 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Order Approval</title></Helmet>
+      <Helmet><title>RTA | Order Approval</title>
+        {(currentUserRole === "field2" && !filtersOpen) && (
+          <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
+        )}
+      </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order Approvals</Typography>

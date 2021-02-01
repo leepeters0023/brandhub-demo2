@@ -91,15 +91,15 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
           totalItems: item.isComplianceCanceled ? "Canceled" : item.totalItems,
           rule:
             item.triggeredRules.length > 0 &&
-            item.triggeredPriorApprovalRules.length > 0
+              item.triggeredPriorApprovalRules.length > 0
               ? item.triggerdRules.join(", ") +
-                ", " +
-                item.triggeredPriorApprovalRules.join(", ")
+              ", " +
+              item.triggeredPriorApprovalRules.join(", ")
               : item.triggeredRules.length > 0
-              ? item.triggeredRules.join(", ")
-              : item.triggeredPriorApprovalRules.length > 0
-              ? item.triggeredPriorApprovalRules.join(", ")
-              : "---",
+                ? item.triggeredRules.join(", ")
+                : item.triggeredPriorApprovalRules.length > 0
+                  ? item.triggeredPriorApprovalRules.join(", ")
+                  : "---",
         });
       });
       setCurrentCSV({ data: csvData, headers: csvHeaders });
@@ -124,9 +124,7 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
 
   return (
     <>
-      <Helmet>
-        <title>RTA | Pending complianceCancelOrderItems</title>
-      </Helmet>
+      <Helmet><title>RTA | Pending complianceCancelOrderItems</title></Helmet>
       <AreYouSure
         open={confirmOpen}
         handleClose={handleCloseConfirm}

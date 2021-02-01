@@ -159,8 +159,13 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet>
-        <title>RTA | Report Wrap-Up</title>
+      <Helmet><title>RTA | Report Wrap-Up</title>
+        {currentUserRole === "super" && (
+          <script type="text/javascript">{` Beacon('suggest', ['600ed398cfe30d219ccdb224'])`}</script>
+        )}
+        {currentUserRole === "read-only" && (
+          <script type="text/javascript">{` Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
+        )}
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>

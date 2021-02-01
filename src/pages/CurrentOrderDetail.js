@@ -240,9 +240,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   if (orderId === "inStock" || orderId === "onDemand") {
     return (
       <>
-        <Helmet>
-          <title>RTA | Current Order</title>
-        </Helmet>
+        <Helmet><title>RTA | Current Order</title></Helmet>
         <Container style={{ textAlign: "center" }}>
           <br />
           {orderId === "inStock" && (

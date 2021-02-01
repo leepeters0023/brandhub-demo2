@@ -131,6 +131,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [switched, setSwitched] = useCallback(useState(false));
 
   const currentUserId = useSelector((state) => state.user.id);
+  const currentUserRole = useSelector((state) => state.user.role);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
@@ -271,7 +272,14 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   return (
     <>
-      <Helmet><title>RTA | Current Pre-Order</title></Helmet>
+      <Helmet><title>RTA | Current Pre-Order</title>
+        {currentUserRole === "field2" && (
+          <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
+        )}
+        {currentUserRole === "field1" && (
+          <script type="text/javascript">{` Beacon('suggest', ['5ffdf334b9a8501b295cf995'])`}</script>
+        )}
+      </Helmet>
       <AreYouSure
         open={confirmModal}
         handleClose={handleCloseConfirm}
@@ -325,19 +333,19 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
               {!detailError ? (
                 <PreOrderSummary />
               ) : (
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography className={classes.headerText}>
-                    Error: Cannont display program details at this time...
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography className={classes.headerText}>
+                      Error: Cannont display program details at this time...
                   </Typography>
-                </div>
-              )}
+                  </div>
+                )}
               <br />
               <div
                 style={{
@@ -367,9 +375,8 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                     style={{
                       marginTop: "10px",
                       marginBottom: "0px",
-                      width: `Calc(${
-                        (grandTotalMod + setTotal).toString().length
-                      }*15px + 20px)`,
+                      width: `Calc(${(grandTotalMod + setTotal).toString().length
+                        }*15px + 20px)`,
                       minWidth: "100px",
                       readonly: "readonly",
                       pointerEvents: "none",
