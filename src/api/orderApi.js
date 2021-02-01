@@ -562,11 +562,11 @@ export const createOrderSet = async (type, territoryId, programId) => {
                 type: "territory",
                 id: territoryId,
               },
-              program: {
-                data: {
-                  type: "program",
-                  id: programId,
-                },
+            },
+            program: {
+              data: {
+                type: "program",
+                id: programId,
               },
             },
           },
