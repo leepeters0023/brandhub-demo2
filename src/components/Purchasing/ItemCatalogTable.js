@@ -244,7 +244,7 @@ const ItemCatalogTable = ({
                     <TableCell align="left">{item.packSize}</TableCell>
                     {catalogType === "in-stock" && (
                       <TableCell align="left">
-                        {/* {item.stock ? item.stock : "---"} */ "---"}
+                        {item.stock ? item.stock : "---"}
                       </TableCell>
                     )}
                     <TableCell>{`${formatMoney(

@@ -232,7 +232,7 @@ const OrderItemGridView = (props) => {
                       </Typography>
                       {type === "inStock" && (
                         <Typography variant="body1" color="textSecondary">
-                          {`Available: ${/*item.stock*/ "---"}`}
+                          {`Available: ${item.stock}`}
                         </Typography>
                       )}
                       <Typography className={classes.headerText}>

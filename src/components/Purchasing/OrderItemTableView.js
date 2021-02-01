@@ -296,7 +296,7 @@ const OrderItemTableView = ({
                     <TableCell align="left">{row.packSize}</TableCell>
                     {type === "inStock" && (
                       <TableCell align="left">
-                        {/* {row.stock ? row.stock : "---"} */ "---"}
+                        {row.stock ? row.stock : "---"}
                       </TableCell>
                     )}
                     <TableCell>{`${formatMoney(

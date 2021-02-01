@@ -128,6 +128,8 @@ const ItemPreviewModal = (props) => {
       startDate,
       expirationDate,
       specification,
+      orderStartDate,
+      orderEndDate,
     },
     handleClose,
     previewModal,
@@ -258,10 +260,10 @@ const ItemPreviewModal = (props) => {
                       <Typography className={classes.headerText}>
                         {`Program:  ${
                           typeof program !== "string" && program.length === 1
-                          ? program[0]
-                          : typeof program !== "string"
-                          ? program.join(", ")
-                          : program
+                            ? program[0]
+                            : typeof program !== "string"
+                            ? program.join(", ")
+                            : program
                         }`}
                       </Typography>
                     )}
@@ -284,9 +286,12 @@ const ItemPreviewModal = (props) => {
                     <Typography variant="body1" color="textSecondary">
                       {`Pack Size: ${packSize}`}
                     </Typography>
-                    {/* <Typography variant="body1" color="textSecondary">
-                      {`Available to Order: 10/01/2020 - 12/01/2020`}
-                    </Typography> TODO update this*/}
+                    <Typography variant="body1" color="textSecondary">
+                      {orderStartDate && orderEndDate
+                        ? `Available to Order: ${orderStartDate} - ${orderEndDate}`
+                        : ""}
+                    </Typography>{" "}
+                    TODO update this
                     <br />
                     {type &&
                       type !== "program" &&

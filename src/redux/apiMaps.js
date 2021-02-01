@@ -89,11 +89,7 @@ export const mapItems = (items) => {
       );
       if (currentProgram) {
         sortedPrograms.sort((a, b) =>
-          a.id === currentProgram.id
-            ? -1
-            : b.id === currentProgram.id
-            ? 1
-            : 0
+          a.id === currentProgram.id ? -1 : b.id === currentProgram.id ? 1 : 0
         );
       }
       return sortedPrograms.map((prog) => prog.name);
@@ -125,7 +121,18 @@ export const mapItems = (items) => {
       itemDescription: item.comment ? item.comment : "---",
       estCost: stringToCents(item["estimated-cost"]),
       packSize: item["qty-per-pack"],
-      stock: Math.floor(Math.random() * 25 + 26),
+      stock: item["cached-warehouse-qty"]
+        ? item["cached-warehouse-qty"]
+        : "---",
+      orderStartDate: item["orderable-start-date"]
+        ? format(
+            formatDate(new Date(item["orderable-start-date"])),
+            "MM/dd/yyyy"
+          )
+        : "---",
+      orderEndDate: item["orderable-end-date"]
+        ? format(formatDate(new Date(item["orderable-end-date"])), "MM/dd/yyyy")
+        : "---",
       inMarketDate: item["in-market-date"]
         ? format(item["in-market-date"], "MM/dd/yyyy")
         : "---",
@@ -397,6 +404,15 @@ export const mapOrderHistoryItems = (items) => {
           : null,
       status: item["order-status"],
       user: item["order-user-name"],
+      orderStartDate: item.item["orderable-start-date"]
+        ? format(
+            formatDate(new Date(item.item["orderable-start-date"])),
+            "MM/dd/yyyy"
+          )
+        : "---",
+      orderEndDate: item.item["orderable-end-date"]
+        ? format(formatDate(new Date(item.item["orderable-end-date"])), "MM/dd/yyyy")
+        : "---",
       triggeredRules: item["triggered-rules"]
         ? item["triggered-rules"].map((rule) => rule.rule.description)
         : null,
@@ -483,6 +499,15 @@ export const mapOrderItems = (items, type) => {
             : false,
         isComplianceCanceled: item["is-compliance-canceled"],
         orderType: item["order-type"],
+        orderStartDate: item.item["orderable-start-date"]
+        ? format(
+            formatDate(new Date(item.item["orderable-start-date"])),
+            "MM/dd/yyyy"
+          )
+        : "---",
+      orderEndDate: item.item["orderable-end-date"]
+        ? format(formatDate(new Date(item.item["orderable-end-date"])), "MM/dd/yyyy")
+        : "---",
         standardDeliveryDate: item["standard-delivery-date"]
           ? item["standard-delivery-date"]
           : "---",
