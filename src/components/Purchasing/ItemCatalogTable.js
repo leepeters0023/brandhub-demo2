@@ -56,12 +56,12 @@ const EnhancedTableHead = (props) => {
     type === "in-stock"
       ? headCells.filter((cell) => cell.id !== "addItem")
       : !forProgram
-        ? headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addItem")
-        : role !== "read-only"
-          ? headCells.filter((cell) => cell.id !== "stock")
-          : headCells.filter(
-            (cell) => cell.id !== "stock" && cell.id !== "addItem"
-          );
+      ? headCells.filter((cell) => cell.id !== "stock" && cell.id !== "addItem")
+      : role !== "read-only"
+      ? headCells.filter((cell) => cell.id !== "stock")
+      : headCells.filter(
+          (cell) => cell.id !== "stock" && cell.id !== "addItem"
+        );
 
   return (
     <TableHead>
@@ -206,7 +206,10 @@ const ItemCatalogTable = ({
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
                     {item.brand.length > 1 ? (
-                      <Tooltip placement="left" title={`${item.brand.join(", ")}`}>
+                      <Tooltip
+                        placement="left"
+                        title={`${item.brand.join(", ")}`}
+                      >
                         <TableCell align="left">
                           {item.brand[0]}
                           <MoreHorizIcon
@@ -217,10 +220,13 @@ const ItemCatalogTable = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                        <TableCell align="left">{item.brand[0]}</TableCell>
-                      )}
+                      <TableCell align="left">{item.brand[0]}</TableCell>
+                    )}
                     {item.program.length > 1 ? (
-                      <Tooltip placement="left" title={`${item.program.join(", ")}`}>
+                      <Tooltip
+                        placement="left"
+                        title={`${item.program.join(", ")}`}
+                      >
                         <TableCell align="left">
                           {item.program[0]}
                           <MoreHorizIcon
@@ -231,14 +237,14 @@ const ItemCatalogTable = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                        <TableCell align="left">{item.program[0]}</TableCell>
-                      )}
+                      <TableCell align="left">{item.program[0]}</TableCell>
+                    )}
                     <TableCell align="left">{item.itemType}</TableCell>
                     <TableCell align="left">{item.itemDescription}</TableCell>
                     <TableCell align="left">{item.packSize}</TableCell>
                     {catalogType === "in-stock" && (
                       <TableCell align="left">
-                        {item.stock ? item.stock : "---"}
+                        {/* {item.stock ? item.stock : "---"} */ "---"}
                       </TableCell>
                     )}
                     <TableCell>{`${formatMoney(

@@ -258,7 +258,10 @@ const OrderItemTableView = ({
                     </TableCell>
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     {row.brand.length > 1 ? (
-                      <Tooltip placement="left" title={`${row.brand.join(", ")}`}>
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
+                      >
                         <TableCell align="left">
                           {row.brand[0]}
                           <MoreHorizIcon
@@ -269,10 +272,13 @@ const OrderItemTableView = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                        <TableCell align="left">{row.brand[0]}</TableCell>
-                      )}
+                      <TableCell align="left">{row.brand[0]}</TableCell>
+                    )}
                     {row.program.length > 1 ? (
-                      <Tooltip placement="left" title={`${row.program.join(", ")}`}>
+                      <Tooltip
+                        placement="left"
+                        title={`${row.program.join(", ")}`}
+                      >
                         <TableCell align="left">
                           {row.program[0]}
                           <MoreHorizIcon
@@ -283,14 +289,14 @@ const OrderItemTableView = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                        <TableCell align="left">{row.program[0]}</TableCell>
-                      )}
+                      <TableCell align="left">{row.program[0]}</TableCell>
+                    )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.packSize}</TableCell>
                     {type === "inStock" && (
                       <TableCell align="left">
-                        {row.stock ? row.stock : "---"}
+                        {/* {row.stock ? row.stock : "---"} */ "---"}
                       </TableCell>
                     )}
                     <TableCell>{`${formatMoney(

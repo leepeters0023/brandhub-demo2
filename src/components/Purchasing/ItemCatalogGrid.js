@@ -190,7 +190,7 @@ const OrderItemGridView = (props) => {
                       </Typography>
                       {catalogType === "inStock" && (
                         <Typography variant="body1" color="textSecondary">
-                          {`Available: ${item.stock}`}
+                          {`Available: ${/*item.stock*/ "---"}`}
                         </Typography>
                       )}
                       <br />

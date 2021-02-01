@@ -212,7 +212,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
       let itemIds = currentProgram.items.map((item) => item.id);
       dispatch(createNewBulkItemOrder("preOrder", itemIds, currentTerritory, program, currentUserId))
     } else {
-      dispatch(createNewBulkItemOrder("preOrder", [], currentTerritory, program, currentUserRole))
+      dispatch(createNewBulkItemOrder("preOrder", [], currentTerritory, program, currentUserId))
     }
   }
 

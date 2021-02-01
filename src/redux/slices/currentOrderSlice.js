@@ -9,6 +9,7 @@ import {
   setIsLoading as setOrderSetLoading,
   fetchProgramOrders,
 } from "./orderSetSlice";
+import { fetchPreOrders } from './preOrderDetailSlice'
 import { setError } from "./errorSlice";
 import { mapOrderSet } from "../apiMaps";
 
@@ -265,6 +266,7 @@ export const createNewBulkItemOrder = (
       );
       if (type === "preOrder") {
         dispatch(fetchProgramOrders(programId, userId, territoryId));
+        dispatch(fetchPreOrders(userId, "summary", programId, territoryId))
       }
     }
     if (orderErrors.length > 0) {
