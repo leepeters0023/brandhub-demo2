@@ -14,7 +14,7 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
-import { getCouponOrderSet } from "./couponSlice";
+import { getCouponOrderSet } from "../../api/couponApi";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 import { setError } from "./errorSlice";
 
