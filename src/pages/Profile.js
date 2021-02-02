@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Profile = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const tabs = ["#general", "#favoriteDist", "#favoriteItem"];
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
 

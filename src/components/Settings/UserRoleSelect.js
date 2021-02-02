@@ -71,6 +71,19 @@ const UserRoleSelect = ({role, setRole}) => {
           </Button>
           <Button
             className={
+              role === "select-purchaser"
+                ? classes.largeButton
+                : classes.selectedButton
+            }
+            variant={role === "select-purchaser" ? "contained" : "outlined"}
+            onClick={() => {
+              setRole("select-purchaser");
+            }}
+          >
+            SELECT PURCHASER
+          </Button>
+          <Button
+            className={
               role === "super" ? classes.largeButton : classes.selectedButton
             }
             variant={role === "super" ? "contained" : "outlined"}
