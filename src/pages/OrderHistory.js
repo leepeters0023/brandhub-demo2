@@ -311,13 +311,17 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
           <script type="text/javascript">{` Beacon('suggest', ['600ed315c64fe14d0e1fe351'])`}</script>
         )}
       </Helmet>
-      <ItemPreviewModal
-        type={"catalog"}
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-        currentItem={currentItem}
-      />
-      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
+      {previewModal && currentItem && (
+        <ItemPreviewModal
+          type={"catalog"}
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+          currentItem={currentItem}
+        />
+      )}
+      {isTrackingOpen && (
+        <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText}>Order History</Typography>
