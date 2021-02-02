@@ -91,7 +91,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
   const handleShareClose = () => {
     setLinkModalOpen(false);
     dispatch(clearItemSelection());
-  }
+  };
 
   const handleAddItem = (itemId) => {
     dispatch(addItemToPreOrder(preOrderId, itemId));
@@ -153,7 +153,6 @@ const Program = ({ handleFiltersClosed, programId }) => {
           previewModal={previewModal}
         />
       )}
-      )
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
