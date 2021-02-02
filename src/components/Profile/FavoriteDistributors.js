@@ -35,6 +35,7 @@ const FavoriteDistributors = () => {
   const isDistListLoading = useSelector(
     (state) => state.distributors.distListIsLoading
   );
+  const currentTerritory = useSelector((state) => state.user.currentTerritory);
 
   const handleExpand = (id) => (evt, isExpanded) => {
     setCurrentList(isExpanded ? id : false);
@@ -52,7 +53,7 @@ const FavoriteDistributors = () => {
 
   useEffect(() => {
     if (currentDistributorLists.length === 0) {
-      dispatch(fetchFavDistributors());
+      dispatch(fetchFavDistributors(currentTerritory));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

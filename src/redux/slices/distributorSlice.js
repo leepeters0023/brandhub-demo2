@@ -195,10 +195,10 @@ export const fetchUserDistributors = (name, territoryId, stateIds, attn = false)
   }
 };
 
-export const fetchFavDistributors = () => async (dispatch) => {
+export const fetchFavDistributors = (territoryId) => async (dispatch) => {
   try {
     dispatch(setDistLoading());
-    const distLists = await getFavDistributors();
+    const distLists = await getFavDistributors(territoryId);
     if (distLists.error) {
       throw distLists.error;
     }

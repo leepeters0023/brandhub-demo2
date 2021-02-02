@@ -53,10 +53,10 @@ export const fetchDistributors = async (name, territoryId, stateIds) => {
   return response;
 };
 
-export const getFavDistributors = async () => {
+export const getFavDistributors = async (territoryId) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get("/api/distributor-favorite-sets")
+    .get(`/api/distributor-favorite-sets?filter[territory-ids]=${territoryId}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";

@@ -9,6 +9,7 @@ import {
 } from "../redux/slices/preOrderDetailSlice";
 import { createNewBulkItemOrder } from "../redux/slices/currentOrderSlice";
 import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
+import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 
 import {
   deleteSetItem,
@@ -266,6 +267,10 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
       setSwitched(false);
     }
   });
+  useEffect(() => {
+    dispatch(fetchFavDistributors(currentTerritory));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     handleFiltersClosed();
@@ -440,7 +445,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
               generatePreOrder()
             }}
           >
-            GENERATE PRE ORDER
+            GENERATE PROGRAM PRE ORDER
           </Button>
         )}
         <br />

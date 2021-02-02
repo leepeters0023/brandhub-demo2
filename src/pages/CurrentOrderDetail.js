@@ -9,6 +9,7 @@ import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrderSet, setIsOrdering } from "../redux/slices/orderSetSlice";
 import { updateCurrentTerritory } from "../redux/slices/userSlice";
+import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
@@ -227,6 +228,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     return () => dispatch(setIsOrdering({ status: false }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchFavDistributors(currentUserTerritory));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     handleFiltersClosed();
