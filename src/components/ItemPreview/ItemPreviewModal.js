@@ -253,7 +253,10 @@ const ItemPreviewModal = (props) => {
                       {`#${itemNumber}`}
                     </Typography>
                     {currentBrands.length > 1 ? (
-                      <Tooltip title={`${currentBrands.join(", ")}`}>
+                      <Tooltip
+                        title={`${currentBrands.join(", ")}`}
+                        style={{ zIndex: "16000" }}
+                      >
                         <span style={{ display: "flex" }}>
                           <Typography className={classes.headerText}>
                             {`Brand(s): ${currentBrands[0]}`}
@@ -271,7 +274,10 @@ const ItemPreviewModal = (props) => {
                       </Typography>
                     )}
                     {currentPrograms.length > 1 ? (
-                      <Tooltip title={`${currentPrograms.join(", ")}`}>
+                      <Tooltip
+                        title={`${currentPrograms.join(", ")}`}
+                        style={{ zIndex: "16000" }}
+                      >
                         <span style={{ display: "flex" }}>
                           <Typography className={classes.headerText}>
                             {`Brand(s): ${currentPrograms[0]}`}
