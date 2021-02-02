@@ -84,7 +84,7 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const userId = useSelector((state) => state.user.id);
   const isOrdering = useSelector((state) => state.orderSet.isOrdering);
   const orderTerritoryId = useSelector(
-    (state) => state.currentOrder.inStockOrderTerritory
+    (state) => state.currentOrder.onDemandOrderTerritory
   );
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isUpdateLoading = useSelector(
