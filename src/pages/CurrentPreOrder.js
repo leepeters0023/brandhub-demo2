@@ -211,11 +211,27 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     let currentProgram = userPrograms.find((prog) => prog.id === program);
     if (currentProgram.items.length > 0) {
       let itemIds = currentProgram.items.map((item) => item.id);
-      dispatch(createNewBulkItemOrder("preOrder", itemIds, currentTerritory, program, currentUserId))
+      dispatch(
+        createNewBulkItemOrder(
+          "preOrder",
+          itemIds,
+          currentTerritory,
+          program,
+          currentUserId
+        )
+      );
     } else {
-      dispatch(createNewBulkItemOrder("preOrder", [], currentTerritory, program, currentUserId))
+      dispatch(
+        createNewBulkItemOrder(
+          "preOrder",
+          [],
+          currentTerritory,
+          program,
+          currentUserId
+        )
+      );
     }
-  }
+  };
 
   useEffect(() => {
     if (window.location.hash.length === 0) {
@@ -270,7 +286,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   useEffect(() => {
     dispatch(fetchFavDistributors(currentTerritory));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
     handleFiltersClosed();
@@ -296,25 +312,31 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           <script type="text/javascript">{` Beacon('suggest', ['5ffdf334b9a8501b295cf995'])`}</script>
         )}
       </Helmet>
-      <AreYouSure
-        open={confirmModal}
-        handleClose={handleCloseConfirm}
-        handleRemove={handleRemoveItem}
-        itemNumber={currentItemNum}
-        type="order"
-      />
-      <ItemPreviewModal
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-        currentItem={currentItem}
-        type={"catalog"}
-      />
-      <ConfirmDeleteOrder
-        open={isConfirmDeleteOpen}
-        handleClose={handleModalClose}
-        handleRemove={handleRemoveOrder}
-        orderId={deleteOrderId}
-      />
+      {confirmModal && (
+        <AreYouSure
+          open={confirmModal}
+          handleClose={handleCloseConfirm}
+          handleRemove={handleRemoveItem}
+          itemNumber={currentItemNum}
+          type="order"
+        />
+      )}
+      {previewModal && currentItem && (
+        <ItemPreviewModal
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+          currentItem={currentItem}
+          type={"catalog"}
+        />
+      )}
+      {isConfirmDeleteOpen && (
+        <ConfirmDeleteOrder
+          open={isConfirmDeleteOpen}
+          handleClose={handleModalClose}
+          handleRemove={handleRemoveOrder}
+          orderId={deleteOrderId}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         {/* eslint-disable-next-line no-dupe-keys */}
         <Accordion style={{ backgroundColor: "#fafafa" }}>
@@ -442,7 +464,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
             color="secondary"
             variant="contained"
             onClick={() => {
-              generatePreOrder()
+              generatePreOrder();
             }}
           >
             GENERATE PROGRAM PRE ORDER
