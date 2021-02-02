@@ -231,7 +231,7 @@ export const mapPrograms = (programs) => {
     imgUrl:
       prog.brands.length === 1
         ? brandLogoMap[prog.brands[0].name]
-        : "https://res.cloudinary.com/joshdowns-dev/image/upload/v1607526835/Select/multi-brand_e7vgai.png",
+        : "https://res.cloudinary.com/brandhub/image/upload/v1612303566/prod/BrandLogos/Logo_EJG_Crest_uatj0x.png",
     items: [],
     isItemsFetched: false,
     status: false,
