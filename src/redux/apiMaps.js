@@ -74,7 +74,7 @@ const handleImages = (images) => {
 export const mapItems = (items) => {
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
-      return [programs[0].name];
+      return [programs[0]];
     } else {
       let sortedPrograms = programs
         .sort((a, b) => {
@@ -137,7 +137,12 @@ export const mapItems = (items) => {
         ? format(formatDate(new Date(item["orderable-end-date"])), "MM/dd/yyyy")
         : "---",
       inMarketDate:
-        itemPrograms !== "---" ? itemPrograms[0]["start-date"] : "---",
+        itemPrograms !== "---"
+          ? format(
+              formatDate(new Date(itemPrograms[0]["start-date"])),
+              "MM/dd/yyyy"
+            )
+          : "---",
       warehouse: item.warehouse,
       supplierId: item.supplier.id,
       imgUrlThumb: images.imgUrlThumb,
