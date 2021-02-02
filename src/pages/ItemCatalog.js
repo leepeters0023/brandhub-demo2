@@ -186,12 +186,14 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
           shareLink={currentLink}
         />
       )}
-      <ItemPreviewModal
-        type={"catalog"}
-        currentItem={currentItem}
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-      />
+      {previewModal && currentItem && (
+        <ItemPreviewModal
+          type={"catalog"}
+          currentItem={currentItem}
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+        />
+      )}
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <Typography className={classes.titleText} variant="h5">
