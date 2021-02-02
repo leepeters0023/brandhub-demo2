@@ -12,6 +12,7 @@ export const getCouponUrl = async (email, url) => {
   const response = { status: "", error: null, data: null };
   const requestUrl = process.env.REACT_APP_COUPON_REQUEST_URL;
   const siteId = process.env.REACT_APP_COUPON_REQUEST_SITE_ID;
+  const userNamePassword = process.env.REACT_APP_COUPON_USERNAME_PASSWORD;
   await instance
     .post(
       requestUrl,
@@ -24,9 +25,7 @@ export const getCouponUrl = async (email, url) => {
       },
       {
         headers: {
-          Authorization: `Basic ${encode(
-            "GalloAPI-Prod:6326iTc8mXEDGRVUEL4y"
-          )}`,
+          Authorization: `Basic ${encode(userNamePassword)}`,
         },
       }
     )

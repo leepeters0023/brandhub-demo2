@@ -140,13 +140,15 @@ const Program = ({ handleFiltersClosed, programId }) => {
           shareLink={currentLink}
         />
       )}
-      <ItemPreviewModal
-        type="program"
-        currentItem={currentItem}
-        handleClose={handleModalClose}
-        previewModal={previewModal}
-      />
-
+      {previewModal && currentItem && (
+        <ItemPreviewModal
+          type="program"
+          currentItem={currentItem}
+          handleClose={handleModalClose}
+          previewModal={previewModal}
+        />
+      )}
+      )
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
           <div className={classes.titleImage}>
