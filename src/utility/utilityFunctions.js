@@ -117,9 +117,9 @@ export const groupByThree = (array) => {
   }, {});
   const sortedArray = Object.values(progGroupObj)
     .sort((a, b) => {
-      return a[0].brand.toLowerCase()[0] < b[0].brand.toLowerCase()[0]
+      return a[0].brand[0].toLowerCase()[0] < b[0].brand[0].toLowerCase()[0]
         ? -1
-        : a[0].brand.toLowerCase()[0] > b[0].brand.toLowerCase()[0]
+        : a[0].brand[0].toLowerCase()[0] > b[0].brand[0].toLowerCase()[0]
         ? 1
         : 0;
     })
