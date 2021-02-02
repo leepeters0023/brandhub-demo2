@@ -42,16 +42,26 @@ const styles = StyleSheet.create({
     height: 225,
   },
   imageSection: {
-    width: 250,
-    padding: 20,
+    width: 195,
+    padding: 10,
   },
   image: {
     objectFit: "contain",
   },
-  textSection: {
-    width: 175,
+  detailSection: {
+    width: 145,
     height: 225,
     padding: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "space-around",
+  },
+  textSection: {
+    width: 190,
+    height: 225,
+    padding: 10,
+    marginRight: 10,
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",

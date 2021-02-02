@@ -93,21 +93,23 @@ export const mapItems = (items) => {
           a.id === currentProgram.id ? -1 : b.id === currentProgram.id ? 1 : 0
         );
       }
-      return sortedPrograms.map((prog) => prog.name);
+      return sortedPrograms;
     }
   };
 
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
+    const itemPrograms =
+      item.programs && item.programs.length > 0
+        ? sortPrograms(item.programs)
+        : "---";
     return {
       id: item.id,
       itemNumber: item["item-number"],
       brand:
         item.brands.length > 0 ? item.brands.map((brand) => brand.name) : "---",
       program:
-        item.programs && item.programs.length > 0
-          ? sortPrograms(item.programs)
-          : "---",
+        itemPrograms !== "---" ? itemPrograms.map((prog) => prog.name) : "---",
       programIds:
         item.programs && item.programs.length > 0
           ? item.programs.map((prog) => prog.id)
@@ -134,9 +136,8 @@ export const mapItems = (items) => {
       orderEndDate: item["orderable-end-date"]
         ? format(formatDate(new Date(item["orderable-end-date"])), "MM/dd/yyyy")
         : "---",
-      inMarketDate: item["in-market-date"]
-        ? format(item["in-market-date"], "MM/dd/yyyy")
-        : "---",
+      inMarketDate:
+        itemPrograms !== "---" ? itemPrograms[0]["start-date"] : "---",
       warehouse: item.warehouse,
       supplierId: item.supplier.id,
       imgUrlThumb: images.imgUrlThumb,
@@ -412,7 +413,10 @@ export const mapOrderHistoryItems = (items) => {
           )
         : "---",
       orderEndDate: item.item["orderable-end-date"]
-        ? format(formatDate(new Date(item.item["orderable-end-date"])), "MM/dd/yyyy")
+        ? format(
+            formatDate(new Date(item.item["orderable-end-date"])),
+            "MM/dd/yyyy"
+          )
         : "---",
       triggeredRules: item["triggered-rules"]
         ? item["triggered-rules"].map((rule) => rule.rule.description)
@@ -501,14 +505,17 @@ export const mapOrderItems = (items, type) => {
         isComplianceCanceled: item["is-compliance-canceled"],
         orderType: item["order-type"],
         orderStartDate: item.item["orderable-start-date"]
-        ? format(
-            formatDate(new Date(item.item["orderable-start-date"])),
-            "MM/dd/yyyy"
-          )
-        : "---",
-      orderEndDate: item.item["orderable-end-date"]
-        ? format(formatDate(new Date(item.item["orderable-end-date"])), "MM/dd/yyyy")
-        : "---",
+          ? format(
+              formatDate(new Date(item.item["orderable-start-date"])),
+              "MM/dd/yyyy"
+            )
+          : "---",
+        orderEndDate: item.item["orderable-end-date"]
+          ? format(
+              formatDate(new Date(item.item["orderable-end-date"])),
+              "MM/dd/yyyy"
+            )
+          : "---",
         standardDeliveryDate: item["standard-delivery-date"]
           ? item["standard-delivery-date"]
           : "---",
