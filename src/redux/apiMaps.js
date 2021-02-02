@@ -564,7 +564,6 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
-  console.log(order)
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,
@@ -604,7 +603,7 @@ export const mapOrderSet = (order) => {
             )
           ),
         ],
-    territoryId: order.territory.id,
+    territoryId: order.territory ? order.territory.id : "---",
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state: [
       ...new Set(
