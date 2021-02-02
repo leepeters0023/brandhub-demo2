@@ -112,6 +112,11 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     handlePreviewModal(false);
   };
 
+  const handleShareClose = () => {
+    setLinkModalOpen(false);
+    dispatch(clearItemSelection());
+  }
+
   const handleFavoriteItems = () => {
     const uniqueArray = [
       ...new Set(selectedItems.concat(favoriteItems.map((i) => i.id))),
@@ -182,7 +187,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}
-          handleClose={setLinkModalOpen}
+          handleClose={handleShareClose}
           shareLink={currentLink}
         />
       )}

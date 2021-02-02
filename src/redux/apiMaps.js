@@ -564,6 +564,7 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
+  console.log(order)
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,

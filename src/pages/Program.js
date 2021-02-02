@@ -88,6 +88,11 @@ const Program = ({ handleFiltersClosed, programId }) => {
     handlePreviewModal(false);
   };
 
+  const handleShareClose = () => {
+    setLinkModalOpen(false);
+    dispatch(clearItemSelection());
+  }
+
   const handleAddItem = (itemId) => {
     dispatch(addItemToPreOrder(preOrderId, itemId));
     dispatch(addPreOrderItems({ ids: [itemId] }));
@@ -136,7 +141,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
       {isLinkModalOpen && (
         <ItemShareModal
           modalOpen={isLinkModalOpen}
-          handleClose={setLinkModalOpen}
+          handleClose={handleShareClose}
           shareLink={currentLink}
         />
       )}

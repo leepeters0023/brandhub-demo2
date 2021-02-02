@@ -23,7 +23,7 @@ import {
   fetchFilteredOrderSetItems,
 } from "../../redux/slices/orderSetHistorySlice";
 import { clearBrands } from "../../redux/slices/brandSlice";
-import { fetchFilteredItems } from "../../redux/slices/itemSlice";
+import { fetchFilteredItems, clearItemSelection } from "../../redux/slices/itemSlice";
 import { fetchFilteredRFQItems } from "../../redux/slices/rfqSlice";
 import { fetchFilteredRFQHistory } from "../../redux/slices/rfqHistorySlice";
 import { fetchFilteredPOItems } from "../../redux/slices/purchaseOrderSlice";
@@ -187,6 +187,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter !== "itemDesc"
       ) {
         dispatch(fetchFilteredItems(currentFilters));
+        dispatch(clearItemSelection());
       }
       if (filterType === "compliance-rules") {
         dispatch(fetchFilteredRules(currentFilters));
@@ -251,6 +252,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-all"
       ) {
         dispatch(fetchFilteredItems(defaultFilters));
+        dispatch(clearItemSelection());
       }
       if (filterType === "itemRollup-rfq") {
         dispatch(fetchFilteredRFQItems(defaultFilters));
@@ -310,6 +312,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
   const handleFilteredItemFetch = () => {
     dispatch(setChips({ filterType: "item-all" }));
     dispatch(fetchFilteredItems(allFilters));
+    dispatch(clearItemSelection());
   };
 
   const handleFilteredRFQFetch = () => {
@@ -390,6 +393,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-all"
       ) {
         dispatch(fetchFilteredItems(allFilters));
+        dispatch(clearItemSelection());
       }
       if (filterType === "history-rfq") {
         dispatch(fetchFilteredRFQHistory(allFilters));

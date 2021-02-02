@@ -87,7 +87,7 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
         open={modalOpen}
         disableScrollLock
         onClose={() => {
-          handleClose(false);
+          handleClose();
           setGroupedItems(null);
         }}
         fullWidth
@@ -98,7 +98,7 @@ const ItemShareModal = ({ modalOpen, handleClose, shareLink }) => {
           <IconButton
             className={classes.closeButton}
             onClick={() => {
-              handleClose(false);
+              handleClose();
               setGroupedItems(null);
             }}
           >
