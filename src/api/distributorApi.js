@@ -84,8 +84,10 @@ export const newFavDistList = async (index, territoryId) => {
           },
           relationships: {
             territory: {
-              type: "territory",
-              id: territoryId,
+              data: {
+                type: "territory",
+                id: territoryId,
+              },
             },
           },
         },
@@ -106,7 +108,7 @@ export const newFavDistList = async (index, territoryId) => {
   return response;
 };
 
-export const updateFavDistList = async (id, name, distArray) => {
+export const updateFavDistList = async (id, name, distArray, territoryId) => {
   const response = { status: "", error: null, data: null };
   await axios
     .patch(
@@ -120,6 +122,12 @@ export const updateFavDistList = async (id, name, distArray) => {
           relationships: {
             distributors: {
               data: distArray,
+            },
+            territory: {
+              data: {
+                type: "territory",
+                id: territoryId,
+              },
             },
           },
         },

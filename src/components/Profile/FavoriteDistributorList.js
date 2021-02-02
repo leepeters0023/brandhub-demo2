@@ -21,7 +21,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const MemoNameInput = React.memo(
-  ({ dispatch, id }) => {
+  ({ dispatch, id, territoryId }) => {
     const currentValue = useSelector(
       (state) =>
         state.distributors.favoriteDistributors.find(
@@ -47,7 +47,14 @@ const MemoNameInput = React.memo(
         value={name}
         {...bindName}
         onBlur={() =>
-          dispatch(updateFavoriteDistributorList(id, name, userDistributors))
+          dispatch(
+            updateFavoriteDistributorList(
+              id,
+              name,
+              userDistributors,
+              territoryId
+            )
+          )
         }
       />
     );
@@ -90,7 +97,7 @@ const FavoriteDistributorList = ({ id }) => {
 
   const handleDistributors = (value) => {
     setCurrentDistributors(value);
-    dispatch(updateFavoriteDistributorList(id, name, value));
+    dispatch(updateFavoriteDistributorList(id, name, value, territoryId));
   };
 
   const handleDeleteList = () => {
@@ -113,7 +120,7 @@ const FavoriteDistributorList = ({ id }) => {
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [distributor, handleQuery, dispatch]);
 
@@ -141,7 +148,7 @@ const FavoriteDistributorList = ({ id }) => {
           alignItems: "center",
         }}
       >
-        <MemoNameInput dispatch={dispatch} id={id} />
+        <MemoNameInput dispatch={dispatch} id={id} territoryId={territoryId} />
         <Autocomplete
           style={{ width: "45%" }}
           multiple

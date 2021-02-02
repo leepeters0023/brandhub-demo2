@@ -235,7 +235,7 @@ export const newFavoriteDistList = (index, territoryId) => async (dispatch) => {
   }
 };
 
-export const updateFavoriteDistributorList = (id, name, distArray) => async (
+export const updateFavoriteDistributorList = (id, name, distArray, territoryId) => async (
   dispatch
 ) => {
   try {
@@ -245,7 +245,7 @@ export const updateFavoriteDistributorList = (id, name, distArray) => async (
       id: list.id,
       type: "distributor",
     }));
-    const updatedList = await updateFavDistList(id, name, formattedDistArray);
+    const updatedList = await updateFavDistList(id, name, formattedDistArray, territoryId);
     if (updatedList.error) {
       throw updatedList.error;
     }

@@ -255,7 +255,7 @@ const ItemPreviewModal = (props) => {
                     {currentBrands.length > 1 ? (
                       <Tooltip
                         title={`${currentBrands.join(", ")}`}
-                        style={{ zIndex: "16000" }}
+                        PopperProps={{ style: { zIndex: "16000" } }}
                       >
                         <span style={{ display: "flex" }}>
                           <Typography className={classes.headerText}>
@@ -276,7 +276,7 @@ const ItemPreviewModal = (props) => {
                     {currentPrograms.length > 1 ? (
                       <Tooltip
                         title={`${currentPrograms.join(", ")}`}
-                        style={{ zIndex: "16000" }}
+                        PopperProps={{ style: { zIndex: "16000" } }}
                       >
                         <span style={{ display: "flex" }}>
                           <Typography className={classes.headerText}>

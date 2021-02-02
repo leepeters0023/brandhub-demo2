@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { deleteSingleDistributor, updateFavoriteDistributorList } from "../../redux/slices/distributorSlice";
 
@@ -27,9 +27,11 @@ const DistributorTable = ({ distributors, name, isLoading, id }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const territoryId = useSelector((state) => state.user.currentTerritory)
+
   const handleDelete = (distId) => {
     let filteredDistList = distributors.filter((dist) => dist.id !== distId)
-    dispatch(updateFavoriteDistributorList(id, name, filteredDistList))
+    dispatch(updateFavoriteDistributorList(id, name, filteredDistList, territoryId))
     dispatch(deleteSingleDistributor({ id: id, distId: distId}))
   };
 
