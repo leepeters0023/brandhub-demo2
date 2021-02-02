@@ -214,11 +214,11 @@ export const fetchFavDistributors = (territoryId) => async (dispatch) => {
   }
 };
 
-export const newFavoriteDistList = (index) => async (dispatch) => {
+export const newFavoriteDistList = (index, territoryId) => async (dispatch) => {
   try {
     dispatch(setisUpdateLoading());
     dispatch(patchLoading());
-    const newList = await newFavDistList(index + 1);
+    const newList = await newFavDistList(index + 1, territoryId);
     if (newList.error) {
       throw newList.error;
     }

@@ -99,7 +99,7 @@ const FavoriteDistributors = () => {
         variant="contained"
         color="secondary"
         onClick={() => {
-          dispatch(newFavoriteDistList(currentDistributorLists.length));
+          dispatch(newFavoriteDistList(currentDistributorLists.length, currentTerritory));
         }}
       >
         ADD NEW LIST

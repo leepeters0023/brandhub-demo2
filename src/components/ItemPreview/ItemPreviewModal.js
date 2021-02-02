@@ -26,6 +26,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
+import Tooltip from "@material-ui/core/Tooltip";
 // import Tabs from "@material-ui/core/Tabs";
 // import Tab from "@material-ui/core/Tab";
 import Carousel from "react-material-ui-carousel";
@@ -35,6 +36,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
@@ -153,6 +155,11 @@ const ItemPreviewModal = (props) => {
   //   setValue(newValue);
   // };
 
+  const currentBrands =
+    typeof brand === "string" ? brand.split(", ") : [...brand];
+  const currentPrograms =
+    typeof program === "string" ? program.split(", ") : [...program];
+
   const handleModalClose = () => {
     setCurrentItem(null);
     handleClose();
@@ -245,26 +252,40 @@ const ItemPreviewModal = (props) => {
                     <Typography variant="body1" color="textSecondary">
                       {`#${itemNumber}`}
                     </Typography>
-                    {brand && (
+                    {currentBrands.length > 1 ? (
+                      <Tooltip title={`${currentBrands.join(", ")}`}>
+                        <span style={{ display: "flex" }}>
+                          <Typography className={classes.headerText}>
+                            {`Brand(s): ${currentBrands[0]}`}
+                          </Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ marginLeft: "5px" }}
+                          />
+                        </span>
+                      </Tooltip>
+                    ) : (
                       <Typography className={classes.headerText}>
-                        {`Brand(s):  ${
-                          typeof brand !== "string" && brand.length === 1
-                            ? brand[0]
-                            : typeof brand !== "string"
-                            ? brand.join(", ")
-                            : brand
-                        }`}
+                        {`Brand(s): ${currentBrands[0]}`}
                       </Typography>
                     )}
-                    {program && (
+                    {currentPrograms.length > 1 ? (
+                      <Tooltip title={`${currentPrograms.join(", ")}`}>
+                        <span style={{ display: "flex" }}>
+                          <Typography className={classes.headerText}>
+                            {`Brand(s): ${currentPrograms[0]}`}
+                          </Typography>
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ marginLeft: "5px" }}
+                          />
+                        </span>
+                      </Tooltip>
+                    ) : (
                       <Typography className={classes.headerText}>
-                        {`Program:  ${
-                          typeof program !== "string" && program.length === 1
-                            ? program[0]
-                            : typeof program !== "string"
-                            ? program.join(", ")
-                            : program
-                        }`}
+                        {`Program(s): ${currentPrograms[0]}`}
                       </Typography>
                     )}
                     <Typography className={classes.headerText}>
@@ -365,14 +386,40 @@ const ItemPreviewModal = (props) => {
                   <Typography variant="body1" color="textSecondary">
                     {`#${itemNumber}`}
                   </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Brand(s): ${brand}`}
-                  </Typography>
-                  {program && (
+                  {currentBrands.length > 1 ? (
+                    <Tooltip title={`${currentBrands.join(", ")}`}>
+                      <span style={{ display: "flex" }}>
+                        <Typography className={classes.headerText}>
+                          {`Brand(s): ${currentBrands[0]}`}
+                        </Typography>
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ marginLeft: "5px" }}
+                        />
+                      </span>
+                    </Tooltip>
+                  ) : (
                     <Typography className={classes.headerText}>
-                      {`Program:  ${
-                        program.length === 1 ? program[0] : program.join(", ")
-                      }`}
+                      {`Brand(s): ${currentBrands[0]}`}
+                    </Typography>
+                  )}
+                  {currentPrograms.length > 1 ? (
+                    <Tooltip title={`${currentPrograms.join(", ")}`}>
+                      <span style={{ display: "flex" }}>
+                        <Typography className={classes.headerText}>
+                          {`Brand(s): ${currentPrograms[0]}`}
+                        </Typography>
+                        <MoreHorizIcon
+                          fontSize="small"
+                          color="inherit"
+                          style={{ marginLeft: "5px" }}
+                        />
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <Typography className={classes.headerText}>
+                      {`Program(s): ${currentPrograms[0]}`}
                     </Typography>
                   )}
                   <Typography className={classes.headerText}>

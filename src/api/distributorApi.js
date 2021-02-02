@@ -71,7 +71,7 @@ export const getFavDistributors = async (territoryId) => {
   return response;
 };
 
-export const newFavDistList = async (index) => {
+export const newFavDistList = async (index, territoryId) => {
   const response = { status: "", error: null, data: null };
   await axios
     .post(
@@ -81,6 +81,12 @@ export const newFavDistList = async (index) => {
           type: "distributor-favorite-list",
           attributes: {
             name: `New List ${index}`,
+          },
+          relationships: {
+            territory: {
+              type: "territory",
+              id: territoryId,
+            },
           },
         },
       },
