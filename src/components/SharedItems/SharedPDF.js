@@ -26,6 +26,10 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 8,
   },
+  specText: {
+    fontFamily: "Roboto",
+    fontSize: 7,
+  },
   sectionWrapper: {
     display: "flex",
     flexDirection: "column",
@@ -98,7 +102,7 @@ const SharedPDF = ({ items }) => {
                     style={styles.image}
                   />
                 </View>
-                <View style={styles.textSection}>
+                <View style={styles.detailSection}>
                   <Text style={styles.text}>{`#${item.itemNumber}`}</Text>
                   <Text style={styles.text}>{`Brand(s):  ${item.brand}`}</Text>
                   <Text style={styles.text}>{`Program:  ${item.program}`}</Text>
@@ -120,7 +124,7 @@ const SharedPDF = ({ items }) => {
                 </View>
                 <View style={styles.textSection}>
                   {item.specification.map((spec, index) => (
-                    <Text style={styles.text} key={index}>
+                    <Text style={styles.specText} key={index}>
                       {`${spec.key}:  ${spec.value}`}
                     </Text>
                   ))}
