@@ -43,7 +43,7 @@ export const getCouponUrl = async (email, url) => {
 };
 
 export const getCouponOrderSet = async (code) => {
-  const response = { status: "", error: null, data: null };
+  const response = { status: "", error: "404", data: null };
   let polling = true;
   const sleep = (ms, cancelToken, cb) => {
     return new Promise((resolve, reject) => () => {
@@ -51,35 +51,48 @@ export const getCouponOrderSet = async (code) => {
         reject(new Error("sleep() cancelled"));
       };
       setTimeout(() => {
-        cb();
+        cb && cb(cancelToken);
         resolve();
       }, ms);
     });
   };
-  const breakPoll = () => {
+  const pollSleep = (ms) => {
+    return new Promise((resolve, _reject) => () => {
+      setTimeout(()=>{resolve()}, ms)
+    })
+  }
+  const breakPoll = (token) => {
     polling = false;
+    token.cancel()
   };
   const token = {};
-  await sleep(10000, token, breakPoll);
+  await sleep(5000, token, breakPoll);
   const getSet = async () => {
     await axios
       .get(`/api/order-sets/coupon/${code}`)
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
+        console.log(data);
         polling = false;
         response.status = "ok";
         response.data = data;
+        response.error = null;
       })
       .catch((err) => {
         const error = handleErrors(err);
         console.log(error);
         response.status = "error";
-        response.error = error;
+        if (err.response.status !== "404") {
+          response.error = error;
+        } else {
+          response.error = "404"
+        }
       });
   };
   await getSet();
-  while (polling && !response.data) {
+  while (polling && !response.data && response.error === "404") {
     await getSet();
+    await pollSleep(500);
   }
   return response;
 };

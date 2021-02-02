@@ -14,6 +14,7 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
+import { getCouponOrderSet } from "./couponSlice";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 import { setError } from "./errorSlice";
 
@@ -500,6 +501,64 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     if (currentItems.length > 0) {
       dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
     }
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+};
+
+export const fetchCouponOrderSet = (code) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const currentOrders = await getCouponOrderSet(code);
+    if (currentOrders.error) {
+      throw currentOrders.error;
+    }
+    let currentItems = currentOrders.data["order-set-items"]
+      ? mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
+      : [];
+    let orders = currentOrders.data.orders
+      ? mapOrderHistoryOrders(currentOrders.data.orders)
+      : [];
+    if (orders.length > 0) {
+      orders.sort((a, b) => {
+        let aName = a.distributorName ? a.distributorName : a.customAddressName;
+        let bName = b.distributorName ? b.distributorName : b.customAddressName;
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
+    }
+
+    let totalFreight = 0;
+    let totalTax = 0;
+    if (orders.length > 0) {
+      orders.forEach((ord) => {
+        totalFreight += ord.totalEstFreight;
+        totalTax += ord.totalEstTax;
+      });
+    }
+
+    let type = currentOrders.data.type;
+    let orderId = currentOrders.data.id;
+    let orderStatus = currentOrders.data.status;
+    let complete = currentOrders.data["is-work-complete"];
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
+    let territoryId = currentOrders.data.territory.id;
+    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
+    dispatch(
+      buildTableFromOrders({
+        orderId: orderId,
+        territoryId: territoryId,
+        type: type,
+        orders: orders,
+        items: currentItems,
+        status: orderStatus,
+        isComplete: complete,
+        note: note,
+        totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax,
+      })
+    );
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));

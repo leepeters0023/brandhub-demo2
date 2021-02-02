@@ -37,6 +37,7 @@ const typeMap = {
 };
 
 const handleImages = (images) => {
+  //update if no thumbnail
   if (images.length === 0) {
     return {
       imgUrlThumb:

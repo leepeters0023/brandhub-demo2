@@ -20,7 +20,7 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import TuneIcon from "@material-ui/icons/Tune";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -158,7 +158,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
               <>
-                <Button
+                {/* <Button
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"
@@ -170,7 +170,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                   }}
                 >
                   APPROVE RULE
-                </Button>
+                </Button> */}
                 {/* <Button
                   className={classes.largeButton}
                   variant="contained"
