@@ -49,13 +49,7 @@ const RFQ = ({ handleFiltersClosed }) => {
   const currentRFQ = useSelector((state) => state.rfq.currentRFQ);
   const currentSuppliers = useSelector(
     (state) => state.suppliers.supplierList
-  ).filter(
-    (sup) =>
-      (sup.name.includes("Curtis") ||
-        sup.name.includes("Halo") ||
-        sup.name.includes("Willey")) &&
-      !sup.name.includes("Structure")
-  );
+  ).filter((sup) => sup.isSelect);
   const isSuppliersLoading = useSelector((state) => state.suppliers.isLoading);
   const handleSendBids = () => {
     dispatch(sendBids(suppliersSelected, currentRFQ.id));

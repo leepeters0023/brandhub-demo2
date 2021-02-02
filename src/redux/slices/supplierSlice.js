@@ -28,7 +28,7 @@ const startLoading = (state) => {
 
 const startInitialLoading = (state) => {
   state.isInitialLoading = true;
-}
+};
 
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
@@ -68,11 +68,11 @@ const supplierSlice = createSlice({
     },
     updateValues(state, action) {
       const { values } = action.payload;
-      let currentValues = {...state.navValues}
+      let currentValues = { ...state.navValues };
       values.forEach((val) => {
-        currentValues[val.key] = currentValues[val.key] + val.value
-      })
-      state.navValues = { ...currentValues}
+        currentValues[val.key] = currentValues[val.key] + val.value;
+      });
+      state.navValues = { ...currentValues };
     },
     clearSuppliers(state) {
       state.isLoading = false;
@@ -115,6 +115,7 @@ export const fetchAllSuppliers = () => async (dispatch) => {
       .map((supplier) => ({
         id: supplier.id,
         name: supplier.name,
+        isSelect: supplier["is-select"],
       }))
       .filter((sup) => sup.id !== "4");
     dispatch(getSuppliersSuccess({ suppliers: mappedSuppliers }));
@@ -151,9 +152,9 @@ export const fetchInitialValues = () => async (dispatch) => {
     if (values.error) {
       throw values.error;
     }
-    dispatch(getNavValueSuccess({ navValues: values.data}))
+    dispatch(getNavValueSuccess({ navValues: values.data }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
   }
-}
+};
