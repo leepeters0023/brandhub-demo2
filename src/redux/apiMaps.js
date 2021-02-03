@@ -583,30 +583,36 @@ export const mapOrderSet = (order) => {
         ? order.program["order-calendar-month"]["in-market-start-date"]
         : "---",
     type: orderTypeMap[order.type],
-    program: order.program
-      ? [order.program.name]
-      : [
-          ...new Set(
-            [].concat.apply(
-              [],
-              order["order-set-items"].map((item) =>
-                item.item.programs.map((prog) => prog.name)
+    program:
+      order.program && order.program.name
+        ? [order.program.name]
+        : order["order-set-items"] && order["order-set-items"].length > 0
+        ? [
+            ...new Set(
+              [].concat.apply(
+                [],
+                order["order-set-items"].map((item) =>
+                  item.item.programs.map((prog) => prog.name)
+                )
               )
-            )
-          ),
-        ],
-    brand: order.program
-      ? order.program.brands.map((brand) => brand.name)
-      : [
-          ...new Set(
-            [].concat.apply(
-              [],
-              order["order-set-items"].map((item) =>
-                item.item.brands.map((brand) => brand.name)
+            ),
+          ]
+        : ["---"],
+    brand:
+      order.program && order.program.brands && order.program.brands.length > 0
+        ? order.program.brands.map((brand) => brand.name)
+        : order["order-set-items"] && order["order-set-items"].length > 0
+        ? [
+            ...new Set(
+              [].concat.apply(
+                [],
+                order["order-set-items"].map((item) =>
+                  item.item.brands.map((brand) => brand.name)
+                )
               )
-            )
-          ),
-        ],
+            ),
+          ]
+        : ["---"],
     territoryId: order.territory ? order.territory.id : "---",
     territories: order["territory-names"] ? order["territory-names"] : "---",
     state:
