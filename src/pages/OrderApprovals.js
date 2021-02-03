@@ -42,7 +42,7 @@ const defaultFilters = {
   type: "not-pre-order",
   status: "submitted",
   sortOrder: "asc",
-  sortOrderBy: "user",
+  sortOrderBy: "orderDate",
 };
 
 const useStyles = makeStyles((theme) => ({

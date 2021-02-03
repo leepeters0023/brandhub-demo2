@@ -28,8 +28,8 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: false },
   { id: "type", disablePadding: false, label: "Type", sort: false },
-  { id: "user", disablePadding: false, label: "Person", sort: true },
-  { id: "program", disablePadding: false, label: "Program", sort: false },
+  { id: "user", disablePadding: false, label: "Person", sort: false },
+  { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "state", disablePadding: false, label: "State", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },

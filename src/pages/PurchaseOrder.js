@@ -171,6 +171,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "Key Account (y/n)", key: "isKeyAccount" },
         { label: "Key Account Name", key: "keyAccountName" },
         { label: "Requested Ship Date", key: "expectedShip" },
+        { label: "Order Notes", key: "orderNote" },
         { label: "ABN", key: "abn" },
         { label: "Distributor Name", key: "distributor" },
         { label: "Address1", key: "addressOne" },
@@ -201,12 +202,13 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
             let dataObject = {
               paramItemId: currentParamItem.id,
               poNum: currentPO.id,
-              isKeyAccount: "* TODO *",
-              keyAccountName: "* TODO *",
+              isKeyAccount: param.isKeyAccount ? "Yes" : "No",
+              keyAccountName: param.keyAccountName,
               expectedShip: format(
                 new Date(currentPO.expectedShip),
                 "MM/dd/yyyy"
               ),
+              orderNote: param.orderNote,
               abn: param.distributorId ? param.distributorId : "---",
               distributor: param.distributor ? param.distributor : param.name,
               addressOne: param.addressOne,

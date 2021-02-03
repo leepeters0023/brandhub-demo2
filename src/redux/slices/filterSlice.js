@@ -32,6 +32,7 @@ let initialState = {
   isItemOrderable: null,
   isItemArchived: null,
   isOnPremise: null,
+  isPreOrderActive: null,
   hasShipHold: false,
   status: "",
   supplier: [],
@@ -83,6 +84,7 @@ const filterSlice = createSlice({
       state.isItemOrderable = null;
       state.isItemArchived = null;
       state.isOnPremise = null;
+      state.isPreOrderActive = null;
       state.hasShipHold = null;
       state.rfqNum = null;
       state.ruleType = null;
@@ -146,6 +148,7 @@ const filterSlice = createSlice({
       state.isItemOrderable = null;
       state.isItemArchived = null;
       state.isOnPremise = null;
+      state.isPreOrderActive = null;
       state.hasShipHold = null;
       state.supplier = [];
       state.rfqNum = null;

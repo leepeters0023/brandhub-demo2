@@ -431,7 +431,6 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders);
     let currentItems =
       currentOrders.data[0] && currentOrders.data[0]["order-set-items"]
         ? mapOrderItems(

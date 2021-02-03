@@ -567,7 +567,6 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
-  console.log(order);
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,
@@ -647,7 +646,6 @@ export const mapOrderSet = (order) => {
 };
 
 export const mapOrderSetHistory = (orders) => {
-  console.log(orders);
   let mappedOrders = orders.map((order, i) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;
@@ -815,8 +813,11 @@ export const mapPOShippingParams = (params) => {
       country: param.country,
       carrier: carriers,
       method: param.method ? param.method : "---",
+      orderNote: param.notes ? param.notes : "---",
       actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
       items: paramItems,
+      isKeyAccount: param.territory && param.territory.type === "Customer",
+      keyAccountName: param.territory && param.territory.type === "Customer" ? param.territory.name : "---",
       shipHoldStatus: handleCompStatus(
         paramItems.map((item) => item.shipHoldStatus)
       ),
@@ -827,7 +828,6 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
-  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
   const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"]);
 

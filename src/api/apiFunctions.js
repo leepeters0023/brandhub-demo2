@@ -150,6 +150,10 @@ export const buildFilters = (
     filterObject.orderItemIds && filterObject.orderItemIds.length > 0
       ? `filter[ids]=${filterObject.orderItemIds}`
       : "";
+  let isPreOrderActiveString =
+    filterObject.isPreOrderActive
+      ? "filter[is-pre-order-active]=true"
+      : "";
 
   let queryArray = [
     uniqueFilter,
@@ -177,6 +181,7 @@ export const buildFilters = (
     stateString,
     currentTerritoryString,
     orderItemIdString,
+    isPreOrderActiveString,
   ];
 
   let queryStringAppend = queryArray
