@@ -12,7 +12,7 @@ import {
   updateShipMethod,
   updateSupplierNote,
   updateKeyAccountTape,
-  setDirectShip,
+  //setDirectShip,
   deleteItem,
   deletePurchaseOrder,
 } from "../../redux/slices/purchaseOrderSlice";
@@ -26,9 +26,9 @@ import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import RadioGroup from "@material-ui/core/RadioGroup";
+// import Radio from "@material-ui/core/Radio";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
@@ -72,9 +72,9 @@ const CurrentPO = () => {
   const { value: keyAcctTape, bind: bindKeyAcctTape } = useInput(
     currentPO.keyAcctTape
   );
-  const [shippingOption, setShippingOption] = useState(
-    currentPO.directShip ? "direct" : "cdc"
-  );
+  // const [shippingOption, setShippingOption] = useState(
+  //   currentPO.directShip ? "direct" : "cdc"
+  // );
 
   const deletePOItem = (id) => {
     let initialLength = currentPO.poItems.length;
@@ -105,14 +105,14 @@ const CurrentPO = () => {
     setSetUpFeeModalOpen(false);
   };
 
-  const handleRadioChange = (event) => {
-    setShippingOption(event.target.value);
-    if (event.target.value === "direct") {
-      dispatch(setDirectShip(currentPO.id, true));
-    } else {
-      dispatch(setDirectShip(currentPO.id, false));
-    }
-  };
+  // const handleRadioChange = (event) => {
+  //   setShippingOption(event.target.value);
+  //   if (event.target.value === "direct") {
+  //     dispatch(setDirectShip(currentPO.id, true));
+  //   } else {
+  //     dispatch(setDirectShip(currentPO.id, false));
+  //   }
+  // };
 
   return (
     <>
@@ -327,10 +327,10 @@ const CurrentPO = () => {
           width: "75%",
           minWidth: "1000px",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
         }}
       >
-        {currentRole !== "supplier" && (
+        {/* {currentRole !== "supplier" && (
           <RadioGroup
             aria-label="shipping-options"
             name="shipping-options"
@@ -349,7 +349,7 @@ const CurrentPO = () => {
               label="Ship to CDC"
             />
           </RadioGroup>
-        )}
+        )} */}
         {currentRole === "supplier" && (
           <Typography className={classes.headerText}>Direct Ship</Typography>
         )}

@@ -149,7 +149,6 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   );
 
   useEffect(() => {
-    console.log(catalogType)
     if (catalogType && currentType !== catalogType) {
       setCurrentType(catalogType);
       if (catalogType === "all") {
