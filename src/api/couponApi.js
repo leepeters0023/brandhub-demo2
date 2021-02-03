@@ -45,6 +45,9 @@ export const getCouponUrl = async (email, url) => {
 export const getCouponOrderSet = async (code) => {
   const response = { status: "", error: "404", data: null };
   let polling = true;
+  setTimeout(() => {
+    polling = false
+  }, 5000)
   // const sleep = (ms, cancelToken, cb) => {
   //   return new Promise((resolve, reject) => () => {
   //     cancelToken.cancel = () => {
@@ -85,7 +88,7 @@ export const getCouponOrderSet = async (code) => {
         const error = handleErrors(err);
         console.log(error);
         response.status = "error";
-        if (err.response.status !== "404") {
+        if (error !== "Not Found") {
           response.error = error;
         } else {
           response.error = "404";
