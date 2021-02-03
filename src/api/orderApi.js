@@ -103,18 +103,10 @@ export const fetchAllFilteredOrderSets = async (filterObject) => {
       let dataObject = {
         orders: null,
         nextLink: null,
-        orderCount: null,
-        queryTotal: null,
       };
       let data = dataFormatter.deserialize(res.data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      dataObject.orderCount = res.data.meta["total_entries"]
-        ? res.data.meta["total_entries"]
-        : null;
-      dataObject.queryTotal = res.data.meta["total_cost"]
-        ? res.data.meta["total_cost"]
-        : null;
       response.status = "ok";
       response.data = dataObject;
     })
@@ -136,18 +128,10 @@ export const fetchNextOrderSets = async (url) => {
       let dataObject = {
         orders: null,
         nextLink: null,
-        orderCount: null,
-        queryTotal: null,
       };
       let data = dataFormatter.deserialize(res.data);
       dataObject.orders = data;
       dataObject.nextLink = res.data.links.next ? res.data.links.next : null;
-      dataObject.orderCount = res.data.meta["total_entries"]
-        ? res.data.meta["total_entries"]
-        : null;
-      dataObject.queryTotal = res.data.meta["total_cost"]
-        ? res.data.meta["total_cost"]
-        : null;
       response.status = "ok";
       response.data = dataObject;
     })

@@ -12,8 +12,6 @@ let initialState = {
   isLoading: false,
   isNextLoading: false,
   nextLink: null,
-  orderCount: null,
-  queryTotal: null,
   orderSets: [],
   itemGroups: [],
   error: null,
@@ -40,24 +38,16 @@ const orderSetHistorySlice = createSlice({
     setIsLoading: startLoading,
     setNextIsLoading: startNextLoading,
     getOrderSetsSuccess(state, action) {
-      const { orderSets, nextLink, orderCount, queryTotal } = action.payload;
+      const { orderSets, nextLink } = action.payload;
       state.nextLink = nextLink;
       state.orderSets = [...orderSets];
-      state.orderCount = orderCount;
-      state.queryTotal = queryTotal;
       state.isLoading = false;
       state.error = null;
     },
     getNextOrderSetsSuccess(state, action) {
-      const { orderSets, nextLink, orderCount, queryTotal } = action.payload;
+      const { orderSets, nextLink } = action.payload;
       state.nextLink = nextLink;
       state.orderSets = state.orderSets.concat(orderSets);
-      if (state.orderCount !== orderCount) {
-        state.orderCount = orderCount;
-      }
-      if (state.queryTotal !== queryTotal) {
-        state.queryTotal = queryTotal;
-      }
       state.isNextLoading = false;
       state.error = null;
     },
@@ -117,12 +107,6 @@ export const fetchFilteredOrderSets = (filterObject) => async (dispatch) => {
       getOrderSetsSuccess({
         orderSets: mappedOrderSets,
         nextLink: orderSets.data.nextLink ? orderSets.data.nextLink : null,
-        orderCount: orderSets.data.orderCount
-          ? orderSets.data.orderCount
-          : null,
-        queryTotal: orderSets.data.queryTotal
-          ? orderSets.data.queryTotal
-          : null,
       })
     );
   } catch (err) {
@@ -143,12 +127,6 @@ export const fetchNextFilteredOrderSets = (url) => async (dispatch) => {
       getNextOrderSetsSuccess({
         orderSets: mappedOrderSets,
         nextLink: orderSets.data.nextLink ? orderSets.data.nextLink : null,
-        orderCount: orderSets.data.orderCount
-          ? orderSets.data.orderCount
-          : null,
-        queryTotal: orderSets.data.queryTotal
-          ? orderSets.data.queryTotal
-          : null,
       })
     );
   } catch (err) {

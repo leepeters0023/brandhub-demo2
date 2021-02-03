@@ -30,9 +30,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TuneIcon from "@material-ui/icons/Tune";
 import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import FormControl from "@material-ui/core/FormControl";
-import InputBase from "@material-ui/core/InputBase";
-import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 
 import PrintIcon from "@material-ui/icons/Print";
@@ -106,8 +103,6 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
   const quarterlyRollupItems = useSelector(
     (state) => state.orderSetHistory.itemGroups
   );
-  const orderCount = useSelector((state) => state.orderSetHistory.orderCount);
-  const queryTotal = useSelector((state) => state.orderSetHistory.queryTotal);
   const isPreOrdersLoading = useSelector(
     (state) => state.orderSetHistory.isLoading
   );
@@ -277,38 +272,6 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
               justifyContent: "flex-end",
             }}
           >
-            {queryTotal && (
-              <FormControl style={{ pointerEvents: "none", minWidth: "100px" }}>
-                <InputLabel
-                  htmlFor="program-total"
-                  style={{ whiteSpace: "nowrap" }}
-                >
-                  Pre-Order Count / Total
-                </InputLabel>
-                <InputBase
-                  className={classes.titleText}
-                  id="program-total"
-                  value={`${orderCount} / ${formatMoney(queryTotal, false)}`}
-                  inputProps={{
-                    "aria-label": "naked",
-                    "data-lpignore": "true",
-                  }}
-                  style={{
-                    marginTop: "10px",
-                    marginBottom: "0px",
-                    width: `Calc(${
-                      queryTotal && orderCount
-                        ? queryTotal.toString().length +
-                          orderCount.toString().length
-                        : 0
-                    }*15px + 50px)`,
-                    minWidth: "100px",
-                    readonly: "readonly",
-                    pointerEvents: "none",
-                  }}
-                />
-              </FormControl>
-            )}
             <Tooltip title="Print Order History">
               <IconButton
                 onClick={() => {

@@ -255,7 +255,7 @@ export const fetchUser = () => async (dispatch) => {
       id: user.data.id,
       supplierId: user.data.supplier ? user.data.supplier.id : null,
       name: user.data.name.includes(",")
-        ? user.data.name.split(", ")[1] + user.data.name.split(", ")[0]
+        ? user.data.name.split(", ")[1] + " " + user.data.name.split(", ")[0]
         : user.data.name,
       firstName: user.data.name.includes(",")
         ? user.data.name.split(", ")[1]

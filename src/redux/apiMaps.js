@@ -48,6 +48,9 @@ const handleImages = (images) => {
     };
   } else {
     let thumb = images.find((img) => img.type === "thumbnail");
+    if (!thumb) {
+      thumb = images[0]
+    }
     let largeArray = images
       .filter((img) => img.type === "large")
       .sort((a, b) => {
@@ -605,22 +608,25 @@ export const mapOrderSet = (order) => {
         ],
     territoryId: order.territory ? order.territory.id : "---",
     territories: order["territory-names"] ? order["territory-names"] : "---",
-    state: [
-      ...new Set(
-        order.orders.map((ord) => {
-          if (ord.distributor) {
-            return ord.distributor.state;
-          } else {
-            return ord["custom-address"].state.code;
-          }
-        })
-      ),
-    ].join(", "),
+    state:
+      order.orders && order.orders.length > 0
+        ? [
+            ...new Set(
+              order.orders.map((ord) => {
+                if (ord.distributor) {
+                  return ord.distributor.state;
+                } else {
+                  return ord["custom-address"].state.code;
+                }
+              })
+            ),
+          ].join(", ")
+        : "---",
     status: order.status,
     orderCount: order["order-count"],
     totalItems: order["total-quantity"],
     totalEstCost:
-      order.orders.length > 0
+      order.orders && order.orders.length > 0
         ? order.orders
             .map((ord) => stringToCents(ord["total-estimated-cost"]))
             .reduce((a, b) => a + b)
