@@ -567,6 +567,7 @@ export const mapOrderItems = (items, type) => {
 };
 
 export const mapOrderSet = (order) => {
+  console.log(order);
   let formattedOrder = {
     id: order.id,
     userId: order.user.id,
@@ -640,6 +641,7 @@ export const mapOrderSet = (order) => {
 };
 
 export const mapOrderSetHistory = (orders) => {
+  console.log(orders);
   let mappedOrders = orders.map((order, i) => {
     let formattedOrder = mapOrderSet(order);
     return formattedOrder;

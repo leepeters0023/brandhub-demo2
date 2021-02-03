@@ -77,7 +77,7 @@ const defaultFilters = {
   itemNumber: "",
   status: "submitted",
   sortOrder: "asc",
-  sortOrderBy: "user",
+  sortOrderBy: "program",
 };
 
 const useStyles = makeStyles((theme) => ({
