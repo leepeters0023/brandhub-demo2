@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AreYouSure = ({ open, handleClose }) => {
+const ErrorModal = ({ open, handleClose }) => {
   const classes = useStyles();
 
   const error = useSelector((state) => state.error.currentError);
@@ -70,10 +70,9 @@ const AreYouSure = ({ open, handleClose }) => {
   );
 };
 
-AreYouSure.propTypes = {
+ErrorModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  store: PropTypes.string.isRequired,
 };
 
-export default AreYouSure;
+export default ErrorModal;

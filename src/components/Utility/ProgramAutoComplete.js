@@ -41,6 +41,16 @@ const ProgramAutoComplete = ({
     }, 250);
   }, [program, dispatch]);
 
+  const handleProgramDisplay = (prog) => {
+    if (prog.brands && prog.brands.length === 1) {
+      return `${prog.name} - ${prog.brands[0].name}`
+    } else if (prog.brands && prog.brands.length > 1) {
+      return `${prog.name} - Multiple Brands`
+    } else {
+      return `${prog.name}`
+    }
+  }
+
   useEffect(() => {
     if (program.length >= 1) {
       handleQuery();
@@ -82,8 +92,8 @@ const ProgramAutoComplete = ({
           handleChange(value, "program", filterType);
           handlePrograms(value);
         }}
-        getOptionSelected={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
+        getOptionSelected={(option, value) => handleProgramDisplay(option) === handleProgramDisplay(value)}
+        getOptionLabel={(option) => handleProgramDisplay(option)}
         options={options}
         loading={loading}
         value={currentPrograms}

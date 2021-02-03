@@ -142,7 +142,7 @@ const DistributorSelection = () => {
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [distributor, handleQuery, dispatch]);
 
@@ -177,6 +177,7 @@ const DistributorSelection = () => {
           renderTags={() => null}
           fullWidth
           disableClearable
+          disabled={isOrderLoading}
           className={classes.queryField}
           id="distributor-auto-complete"
           open={open}
@@ -232,7 +233,7 @@ const DistributorSelection = () => {
           className={classes.largeButton}
           color="secondary"
           variant="contained"
-          disabled={favoriteLists.length === 0}
+          disabled={favoriteLists.length === 0 || isOrderLoading}
           aria-controls="favorite-dist-menu"
           aria-haspopup="true"
           onClick={handleClick}
@@ -241,9 +242,15 @@ const DistributorSelection = () => {
         </Button>
 
         <Tooltip title={"Add Custom Address"}>
-          <IconButton edge="end" onClick={() => setModalOpen(true)}>
-            <AddCircleIcon color="inherit" fontSize="large" />
-          </IconButton>
+          <span>
+            <IconButton
+              edge="end"
+              disabled={isOrderLoading}
+              onClick={() => setModalOpen(true)}
+            >
+              <AddCircleIcon color="inherit" fontSize="large" />
+            </IconButton>
+          </span>
         </Tooltip>
       </div>
       {favoriteLists.length > 0 && (

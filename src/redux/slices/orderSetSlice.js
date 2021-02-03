@@ -289,7 +289,6 @@ const orderSetSlice = createSlice({
           : 0;
       });
       state.orders = [...currentOrders];
-      state.isOrderLoading = false;
       state.error = null;
     },
     addMultipleOrdersSuccess(state, action) {
@@ -305,8 +304,10 @@ const orderSetSlice = createSlice({
           : 0;
       });
       state.orders = [...currentOrders];
-      state.isOrderLoading = false;
       state.error = null;
+    },
+    completeAddingOrders(state) {
+      state.isOrderLoading = false;
     },
     setStateFilter(state, action) {
       const { stateCode } = action.payload;
@@ -360,6 +361,7 @@ export const {
   updateSetItemRush,
   addOrderSuccess,
   addMultipleOrdersSuccess,
+  completeAddingOrders,
   setStateFilter,
   setIsOrdering,
   setFailure,
@@ -600,9 +602,13 @@ export const createSingleOrder = (id, dist, type, warehouse) => async (
     }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     dispatch(addOrderSuccess({ order: formattedOrder }));
+    dispatch(completeAddingOrders());
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
   } catch (err) {
+    if (err === "has already been taken") {
+      dispatch(setError({ error: "Cannot add duplicate distributors" }));
+    }
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
@@ -614,19 +620,25 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    const orders = [];
+    // const orders = [];
     for (let i = 0; i < idArray.length; i++) {
       const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
       if (order.error) {
         throw order.error;
       }
-      orders.push(order.data);
+      const formattedOrder = mapOrderHistoryOrders([order.data]);
+      dispatch(addOrderSuccess({ order: formattedOrder }));
+      dispatch(setRebuildRef());
     }
-    let mappedOrders = mapOrderHistoryOrders(orders);
-    dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
-    dispatch(setRebuildRef());
+    // let mappedOrders = mapOrderHistoryOrders(orders);
+    // dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
+    // dispatch(setRebuildRef());
+    dispatch(completeAddingOrders());
     dispatch(patchSuccess());
   } catch (err) {
+    if (err === "has already been taken") {
+      dispatch(setError({ error: "Cannot add duplicate distributors" }));
+    }
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
@@ -650,19 +662,25 @@ export const createAllOrders = (
       throw distributors.error;
     }
     let idArray = distributors.data.map((dist) => dist.id);
-    const orders = [];
+    // const orders = [];
     for (let i = 0; i < idArray.length; i++) {
       const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
       if (order.error) {
         throw order.error;
       }
-      orders.push(order.data);
+      const formattedOrder = mapOrderHistoryOrders([order.data]);
+      dispatch(addOrderSuccess({ order: formattedOrder }));
+      dispatch(setRebuildRef());
     }
-    let mappedOrders = mapOrderHistoryOrders(orders);
-    dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
-    dispatch(setRebuildRef());
+    // let mappedOrders = mapOrderHistoryOrders(orders);
+    // dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
+    // dispatch(setRebuildRef());
+    dispatch(completeAddingOrders());
     dispatch(patchSuccess());
   } catch (err) {
+    if (err === "has already been taken") {
+      dispatch(setError({ error: "Cannot add duplicate distributors" }));
+    }
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
@@ -691,6 +709,9 @@ export const addCustomAddressOrder = (address, id, type, addId) => async (
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
   } catch (err) {
+    if (err === "has already been taken") {
+      dispatch(setError({ error: "Cannot add duplicate addresses" }));
+    }
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }
