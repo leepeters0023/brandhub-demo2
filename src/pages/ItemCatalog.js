@@ -47,6 +47,7 @@ const defaultCurrentFilters = {
   orderType: "",
   itemNumber: "",
   itemDesc: "",
+  isItemArchived: false,
   isItemVisible: true,
   isItemOrderable: true,
 };
@@ -61,6 +62,8 @@ const defaultArchiveFilters = {
   itemNumber: "",
   itemDesc: "",
   isItemArchived: true,
+  isItemOrderable: false,
+  isItemVisible: true,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -146,6 +149,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   );
 
   useEffect(() => {
+    console.log(catalogType)
     if (catalogType && currentType !== catalogType) {
       setCurrentType(catalogType);
       if (catalogType === "all") {

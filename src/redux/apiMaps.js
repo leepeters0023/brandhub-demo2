@@ -49,7 +49,7 @@ const handleImages = (images) => {
   } else {
     let thumb = images.find((img) => img.type === "thumbnail");
     if (!thumb) {
-      thumb = images[0]
+      thumb = images[0];
     }
     let largeArray = images
       .filter((img) => img.type === "large")
@@ -746,7 +746,9 @@ export const mapPOShippingParamItems = (items) => {
     expectedArrival: item["expected-arrival-date"]
       ? item["expected-arrival-date"]
       : "---",
-    shippingLabel: `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${currentYear}-${item["shipping-label"].code}`,
+    shippingLabel: item["shipping-label"]
+      ? `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${currentYear}-${item["shipping-label"].code}`
+      : "---",
     trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
     shipHoldStatus: item["compliance-status"],
     tax: item.tax ? stringToCents(item.tax) : "---",
@@ -817,6 +819,7 @@ export const mapPOShippingParams = (params) => {
 };
 
 export const mapPurchaseOrder = (purchaseOrder) => {
+  console.log(purchaseOrder);
   const params = mapPOShippingParams(purchaseOrder["shipping-parameters"]);
   const itemDetail = mapPOItems(purchaseOrder["purchase-order-items"]);
 
