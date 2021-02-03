@@ -46,34 +46,15 @@ export const getCouponOrderSet = async (code) => {
   const response = { status: "", error: "404", data: null };
   let polling = true;
   setTimeout(() => {
-    polling = false
-  }, 5000)
-  // const sleep = (ms, cancelToken, cb) => {
-  //   return new Promise((resolve, reject) => () => {
-  //     cancelToken.cancel = () => {
-  //       reject(new Error("sleep() cancelled"));
-  //     };
-  //     setTimeout(() => {
-  //       cb && cb(cancelToken);
-  //       resolve();
-  //     }, ms);
-  //   });
-  // };
+    polling = false;
+    console.log("no pole");
+  }, 10000);
   const pollSleep = (ms) => {
-    return new Promise((resolve, _reject) => () => {
-      setTimeout(() => {
-        resolve();
-      }, ms);
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
     });
   };
-  // const breakPoll = (token) => {
-  //   polling = false;
-  //   token.cancel()
-  // };
-  // const token = {};
-  // await sleep(5000, token, breakPoll);
   const getSet = async () => {
-    console.log("fetching");
     await axios
       .get(`/api/order-sets/coupon/${code}`)
       .then((res) => {
