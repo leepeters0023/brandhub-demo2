@@ -5,6 +5,7 @@ import {
   addSingleOrderToSet,
   addCustomAddressOrderToSet,
 } from "../../api/orderApi";
+import { createNewOrderSuccess } from "./currentOrderSlice";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
 import { addAddress } from "../../api/addressApi";
 import { setPreOrderDetails } from "./preOrderDetailSlice";
@@ -17,10 +18,12 @@ import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 import { getCouponOrderSet } from "../../api/couponApi";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { navigate } from "@reach/router";
 
 let initialState = {
   isLoading: false,
   isOrderLoading: false,
+  isCouponLoading: false,
   orderId: null,
   territoryId: null,
   type: null,
@@ -47,10 +50,15 @@ const startOrderLoading = (state) => {
   state.isOrderLoading = true;
 };
 
+const startCouponLoading = (state) => {
+  state.isCouponLoading = true;
+};
+
 const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.isOrderLoading = false;
+  state.isCouponLoading = false;
   state.error = error;
 };
 
@@ -60,6 +68,7 @@ const orderSetSlice = createSlice({
   reducers: {
     setIsLoading: startLoading,
     setOrderLoading: startOrderLoading,
+    setCouponLoading: startCouponLoading,
     buildTableFromOrders(state, action) {
       const {
         orderId,
@@ -101,6 +110,7 @@ const orderSetSlice = createSlice({
         state.totalEstFreight = totalEstFreight;
         state.totalEstTax = totalEstTax;
         state.isLoading = false;
+        state.isCouponLoading = false;
         state.error = null;
       } else {
         state.orders = [];
@@ -116,6 +126,7 @@ const orderSetSlice = createSlice({
         state.totalEstFreight = 0;
         state.totalEstTax = 0;
         state.isLoading = false;
+        state.isCouponLoading = false;
         state.error = null;
       }
     },
@@ -307,6 +318,8 @@ const orderSetSlice = createSlice({
     },
     clearOrderSet(state) {
       state.isLoading = false;
+      state.isCouponLoading = false;
+      state.isOrderLoading = false;
       state.orderId = null;
       state.territoryId = null;
       state.type = null;
@@ -331,6 +344,7 @@ const orderSetSlice = createSlice({
 export const {
   setIsLoading,
   setOrderLoading,
+  setCouponLoading,
   buildTableFromOrders,
   setGridItem,
   setItemTotal,
@@ -508,7 +522,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
 
 export const fetchCouponOrderSet = (code) => async (dispatch) => {
   try {
-    dispatch(setIsLoading());
+    dispatch(setCouponLoading());
     const currentOrders = await getCouponOrderSet(code);
     if (currentOrders.error) {
       throw currentOrders.error;
@@ -559,6 +573,15 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
         totalEstTax: totalEstTax,
       })
     );
+    dispatch(
+      createNewOrderSuccess({
+        type: "onDemand",
+        orderId: orderId,
+        item: currentItems[0].itemId,
+        territoryId: territoryId,
+      })
+    );
+    navigate(`/orders/open/${orderId}`);
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));

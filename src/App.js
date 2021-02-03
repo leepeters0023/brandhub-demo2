@@ -41,7 +41,10 @@ import {
   clearSuppliers,
 } from "./redux/slices/supplierSlice";
 import { fetchBUs } from "./redux/slices/businessUnitSlice";
-import { clearOrderSet } from "./redux/slices/orderSetSlice";
+import {
+  clearOrderSet,
+  fetchCouponOrderSet,
+} from "./redux/slices/orderSetSlice";
 import { resetNewProgram } from "./redux/slices/newProgramSlice";
 import {
   fetchTerritories,
@@ -131,6 +134,10 @@ const App = () => {
     (state) => state.preOrderDetails.isPreOrdersLoading
   );
   const programsIsLoading = useSelector((state) => state.programs.isLoading);
+  const couponIsLoading = useSelector(
+    (state) => state.orderSet.isCouponLoading
+  );
+  const couponCode = useSelector((state) => state.coupons.iframeId);
   const loggedIn = useSelector((state) => state.user.loggedIn);
   const currentError = useSelector((state) => state.error.currentError);
 
@@ -139,6 +146,9 @@ const App = () => {
   };
 
   const handleCouponModal = () => {
+    if (couponsOpen) {
+      dispatch(fetchCouponOrderSet(couponCode))
+    }
     setCouponsOpen(!couponsOpen);
   };
 
@@ -328,7 +338,10 @@ const App = () => {
         <Loading partial={false} />;
       </MuiThemeProvider>
     );
-  } else if (currentUser && programsIsLoading) {
+  } else if (
+    (currentUser && programsIsLoading) ||
+    (currentUser && couponIsLoading)
+  ) {
     return (
       <MuiThemeProvider theme={theme}>
         {isErrorOpen && (
