@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
 import { useWindowHash } from "../hooks/UtilityHooks";
+import { useSelector } from "react-redux";
 
 import General from "../components/Profile/General";
 import DistributorOptions from "../components/Profile/DistributorOptions";
@@ -31,6 +32,8 @@ const Profile = ({ handleFiltersClosed }) => {
   const tabs = ["#general", "#favoriteDist", "#favoriteItem"];
   const [selectedIndex, setSelectedIndex] = useState(1);
 
+  const currentUserRole = useSelector((state) => state.user.role);
+
   const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
 
   useEffect(() => {
@@ -57,26 +60,30 @@ const Profile = ({ handleFiltersClosed }) => {
               >
                 <ListItemText primary="General" />
               </ListItem>
-              <Divider />
-              <ListItem
-                button
-                selected={selectedIndex === 2}
-                onClick={(evt) => {
-                  handleChangeTab(evt, 2);
-                }}
-              >
-                <ListItemText primary="Distributor Options" />
-              </ListItem>
-              <Divider />
-              <ListItem
-                button
-                selected={selectedIndex === 3}
-                onClick={(evt) => {
-                  handleChangeTab(evt, 3);
-                }}
-              >
-                <ListItemText primary="Favorite Items" />
-              </ListItem>
+              {currentUserRole !== "read-only" && (
+                <>
+                  <Divider />
+                  <ListItem
+                    button
+                    selected={selectedIndex === 2}
+                    onClick={(evt) => {
+                      handleChangeTab(evt, 2);
+                    }}
+                  >
+                    <ListItemText primary="Distributor Options" />
+                  </ListItem>
+                  <Divider />
+                  <ListItem
+                    button
+                    selected={selectedIndex === 3}
+                    onClick={(evt) => {
+                      handleChangeTab(evt, 3);
+                    }}
+                  >
+                    <ListItemText primary="Favorite Items" />
+                  </ListItem>
+                </>
+              )}
             </List>
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>

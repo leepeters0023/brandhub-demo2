@@ -147,7 +147,7 @@ const App = () => {
 
   const handleCouponModal = () => {
     if (couponsOpen) {
-      dispatch(fetchCouponOrderSet(couponCode))
+      dispatch(fetchCouponOrderSet(couponCode));
     }
     setCouponsOpen(!couponsOpen);
   };
@@ -319,9 +319,7 @@ const App = () => {
         {isErrorOpen && (
           <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
         )}
-        {/* {!link && <Redirect noThrow to="/login/initial" />} */}
         <Router>
-          {/* <LogIn setAuth={handleLogIn} path="/login" /> */}
           <Landing path="/" />
           <AuthOLanding path="/login" />
           <AuthOLanding path="/login/:code" />
@@ -815,6 +813,7 @@ const App = () => {
                 "purchaser",
                 "select-purchaser",
                 "super",
+                "read-only",
               ],
               currentRole,
               territories

@@ -67,23 +67,22 @@ const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
           <ListItemText primary="Notifications" />
         </MenuItem>
         <Divider /> */}
-        {role !== "supplier" &&
-          role !== "read-only" && [
-            <MenuItem
-              key="profile"
-              component={Link}
-              to="/profile#general"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <AccountBoxIcon color="secondary" fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </MenuItem>,
-            <Divider key="divider1" />,
-          ]}
+        {role !== "supplier" && [
+          <MenuItem
+            key="profile"
+            component={Link}
+            to="/profile#general"
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <AccountBoxIcon color="secondary" fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </MenuItem>,
+          <Divider key="divider1" />,
+        ]}
         {role === "super" && [
           <MenuItem
             key="settings"
