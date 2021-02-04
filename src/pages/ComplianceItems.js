@@ -58,11 +58,8 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentItemRules = useSelector((state) => state.complianceItems.items);
-  const selectedCompItem = useSelector(
-    (state) => state.complianceItems.selectedItem
-  );
-  const selectedItemType = useSelector(
-    (state) => state.complianceItems.selectedItemType
+  const selectedCompItems = useSelector(
+    (state) => state.complianceItems.selectedItems
   );
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
   const nextLink = useSelector((state) => state.complianceItems.nextLink);
@@ -98,11 +95,11 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleApprove = () => {
-    dispatch(approvePriorApprovalItem(selectedCompItem));
+    dispatch(approvePriorApprovalItem(selectedCompItems));
   };
 
   const handleDeny = () => {
-    dispatch(denyPriorApprovalItem(selectedCompItem));
+    dispatch(denyPriorApprovalItem(selectedCompItems));
   };
 
   useEffect(() => {
@@ -183,11 +180,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                       className={classes.largeButton}
                       variant="contained"
                       color="secondary"
-                      disabled={
-                        !selectedCompItem ||
-                        (selectedCompItem &&
-                          selectedItemType !== "Prior Approval")
-                      }
+                      disabled={selectedCompItems.length === 0}
                       style={{ marginRight: "20px" }}
                       onClick={() => {
                         handleApprove();
@@ -206,11 +199,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
                       className={classes.largeButton}
                       variant="contained"
                       color="secondary"
-                      disabled={
-                        !selectedCompItem ||
-                        (selectedCompItem &&
-                          selectedItemType !== "Prior Approval")
-                      }
+                      disabled={selectedCompItems.length === 0}
                       style={{ marginRight: "20px" }}
                       onClick={() => {
                         handleDeny();

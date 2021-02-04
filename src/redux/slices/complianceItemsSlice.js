@@ -24,8 +24,7 @@ let initialState = {
   pendingNextLink: null,
   items: [],
   pendingOrderItems: [],
-  selectedItem: null,
-  selectedItemType: null,
+  selectedItems: [],
   error: null,
 };
 
@@ -80,16 +79,12 @@ const complianceItemsSlice = createSlice({
     },
     approveDenySuccess(state) {
       state.isUpdateLoading = false;
-      state.selectedItem = null;
+      state.selectedItems = [];
       state.error = null;
     },
     updateCompItemSelection(state, action) {
-      const { selectedItem } = action.payload;
-      state.selectedItem = selectedItem;
-    },
-    updateSelectedType(state, action) {
-      const { type } = action.payload;
-      state.selectedItemType = type;
+      const { selectedItems } = action.payload;
+      state.selectedItems = selectedItems;
     },
     cancelCompItem(state, action) {
       const { id } = action.payload;
@@ -110,7 +105,7 @@ const complianceItemsSlice = createSlice({
       state.pendingNextLink = null;
       state.items = [];
       state.pendingOrderItems = [];
-      state.selectedItems = [];
+      state.selectedItemss = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -126,7 +121,6 @@ export const {
   getPendingOrderItemsSuccess,
   approveDenySuccess,
   updateCompItemSelection,
-  updateSelectedType,
   cancelCompItem,
   resetComplianceItems,
   setFailure,
@@ -206,34 +200,40 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
 
 //todo add next call? will it be necessary?
 
-export const approvePriorApprovalItem = (id) => async (dispatch) => {
+export const approvePriorApprovalItem = (ids) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     dispatch(patchLoading());
-    const approveStatus = await approvePriorApproval(id);
-    if (approveStatus.error) {
-      throw approveStatus.error
+    for (let i = 0; i < ids.length; i++) {
+      const approveStatus = await approvePriorApproval(ids[i]);
+      if (approveStatus.error) {
+        throw approveStatus.error;
+      }
     }
     dispatch(approveDenySuccess());
     dispatch(patchSuccess());
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-    dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setFailure({ error: err }));
+    dispatch(patchFailure({ error: err }));
+    dispatch(setError({ error: err }));
   }
-}
+};
 
-export const denyPriorApprovalItem = (id) => async (dispatch) => {
+export const denyPriorApprovalItem = (ids) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
     dispatch(patchLoading());
-    const denyStatus = await denyPriorApproval(id);
-    if (denyStatus.error) {
-      throw denyStatus.error
+    for (let i = 0; i < ids.length; i++) {
+      const denyStatus = await denyPriorApproval(ids[i]);
+      if (denyStatus.error) {
+        throw denyStatus.error;
+      }
     }
     dispatch(approveDenySuccess());
     dispatch(patchSuccess());
   } catch (err) {
-    dispatch(setFailure({ error: err.toString() }));
-    dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setFailure({ error: err }));
+    dispatch(patchFailure({ error: err }));
+    dispatch(setError({ error: err }));
   }
-}
+};
