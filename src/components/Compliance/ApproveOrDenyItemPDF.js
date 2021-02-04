@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ApproveOrDenyItemPDF = ({ itemNumber, status, token }) => {
+const ApproveOrDenyItemPDF = ({ itemNumber, status, token, notes }) => {
     const date = new Date();
     const dateString = date.toDateString();
     const time = date.toLocaleTimeString();
@@ -72,7 +72,8 @@ const ApproveOrDenyItemPDF = ({ itemNumber, status, token }) => {
                         <Text style={styles.text}>Gallo Item Number: {itemNumber}</Text>
                         <Text style={styles.text}>Compliance Status: {status}</Text>
                         <Text style={styles.text}>Verification number: {token}</Text>
-                        <Text style={styles.text}>{status[0].toUpperCase() + status.slice(1)} on {dateString}, {time}</Text>
+                        <Text style={styles.text}>{status[0].toUpperCase() + status.slice(1)} on: {dateString}, {time}</Text>
+                        <Text style={styles.text}>Notes: {notes}</Text>   
                     </View>
                 </View>
             </Page>
