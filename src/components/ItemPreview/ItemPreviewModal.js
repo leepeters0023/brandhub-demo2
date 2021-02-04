@@ -361,7 +361,7 @@ const ItemPreviewModal = (props) => {
                     <br />
                     <Table size="small">
                       <TableBody>
-                        {specification &&
+                        {specification && specification !== "---" &&
                           specification.map((spec, index) => (
                             <TableRow key={index}>
                               <TableCell
