@@ -256,6 +256,7 @@ export const mapSingleOrder = (order) => {
   let formattedOrder = {
     id: order.id,
     user: order.user.name,
+    distId: order.distributor ? order.distributor.id : null,
     distributorId: order.distributor
       ? order.distributor["external-source-id"]
       : null,
@@ -817,7 +818,10 @@ export const mapPOShippingParams = (params) => {
       actualShip: param["actual-ship-date"] ? param["actual-ship-date"] : "---",
       items: paramItems,
       isKeyAccount: param.territory && param.territory.type === "Customer",
-      keyAccountName: param.territory && param.territory.type === "Customer" ? param.territory.name : "---",
+      keyAccountName:
+        param.territory && param.territory.type === "Customer"
+          ? param.territory.name
+          : "---",
       shipHoldStatus: handleCompStatus(
         paramItems.map((item) => item.shipHoldStatus)
       ),

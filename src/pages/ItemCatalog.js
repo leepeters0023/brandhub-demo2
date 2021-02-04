@@ -139,15 +139,6 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     setLinkModalOpen(true);
   };
 
-  useInitialFilters(
-    `item-${catalogType}`,
-    defaultFilters,
-    retainFilters,
-    dispatch,
-    handleFilterDrawer,
-    currentUserRole
-  );
-
   useEffect(() => {
     if (catalogType && currentType !== catalogType) {
       setCurrentType(catalogType);
@@ -175,6 +166,15 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
       dispatch(setSorted());
     }
   }, [currentMarket, currentMarketBool, dispatch]);
+
+  useInitialFilters(
+    `item-${catalogType}`,
+    defaultFilters,
+    retainFilters,
+    dispatch,
+    handleFilterDrawer,
+    currentUserRole
+  );
 
   return (
     <>

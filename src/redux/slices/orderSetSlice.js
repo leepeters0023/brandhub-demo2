@@ -614,13 +614,17 @@ export const createSingleOrder = (id, dist, type, warehouse) => async (
   }
 };
 
-export const createMultipleOrders = (idArray, id, type, warehouse) => async (
-  dispatch
-) => {
+export const createMultipleOrders = (
+  distIds,
+  id,
+  type,
+  warehouse,
+  activeDistIds
+) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
     dispatch(patchLoading());
-    // const orders = [];
+    let idArray = distIds.filter((id) => !activeDistIds.includes(id));
     for (let i = 0; i < idArray.length; i++) {
       const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
       if (order.error) {
@@ -630,9 +634,6 @@ export const createMultipleOrders = (idArray, id, type, warehouse) => async (
       dispatch(addOrderSuccess({ order: formattedOrder }));
       dispatch(setRebuildRef());
     }
-    // let mappedOrders = mapOrderHistoryOrders(orders);
-    // dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
-    // dispatch(setRebuildRef());
     dispatch(completeAddingOrders());
     dispatch(patchSuccess());
   } catch (err) {
@@ -649,7 +650,8 @@ export const createAllOrders = (
   id,
   type,
   warehouse,
-  stateIds
+  stateIds,
+  distIds
 ) => async (dispatch) => {
   try {
     dispatch(setOrderLoading());
@@ -661,8 +663,9 @@ export const createAllOrders = (
     if (distributors.error) {
       throw distributors.error;
     }
-    let idArray = distributors.data.map((dist) => dist.id);
-    // const orders = [];
+    let idArray = distributors.data
+      .map((dist) => dist.id)
+      .filter((id) => !distIds.includes(id));
     for (let i = 0; i < idArray.length; i++) {
       const order = await addSingleOrderToSet(id, idArray[i], type, warehouse);
       if (order.error) {
@@ -672,9 +675,6 @@ export const createAllOrders = (
       dispatch(addOrderSuccess({ order: formattedOrder }));
       dispatch(setRebuildRef());
     }
-    // let mappedOrders = mapOrderHistoryOrders(orders);
-    // dispatch(addMultipleOrdersSuccess({ orders: mappedOrders }));
-    // dispatch(setRebuildRef());
     dispatch(completeAddingOrders());
     dispatch(patchSuccess());
   } catch (err) {

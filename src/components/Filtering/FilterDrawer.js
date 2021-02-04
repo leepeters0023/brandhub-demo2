@@ -250,7 +250,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-in-stock" ||
         filterType === "item-onDemand" ||
         filterType === "item-on-demand" ||
-        filterType === "item-all"
+        filterType === "item-all" ||
+        filterType === "item-archive"
       ) {
         dispatch(fetchFilteredItems(defaultFilters));
         dispatch(clearItemSelection());
@@ -391,7 +392,8 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-in-stock" ||
         filterType === "item-onDemand" ||
         filterType === "item-on-demand" ||
-        filterType === "item-all"
+        filterType === "item-all" ||
+        filterType === "item-archive"
       ) {
         dispatch(fetchFilteredItems(allFilters));
         dispatch(clearItemSelection());

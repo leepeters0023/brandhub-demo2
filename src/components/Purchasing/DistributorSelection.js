@@ -57,6 +57,7 @@ const DistributorSelection = () => {
   const isOrderLoading = useSelector((state) => state.orderSet.isOrderLoading);
   const options = useSelector((state) => state.distributors.distributorList);
   const orderSetId = useSelector((state) => state.orderSet.orderId);
+  const currentOrders = useSelector((state) => state.orderSet.orders);
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const orderType = useSelector((state) => state.orderSet.type);
   const currentWarehouse = useSelector(
@@ -93,16 +94,36 @@ const DistributorSelection = () => {
   const handleAddFavorites = (id) => {
     let currentList = favoriteLists.find((list) => list.id === id);
     let idArray = currentList.distributors.map((dist) => dist.id);
+    const currentDistIds = currentOrders
+      .filter((ord) => ord.distId)
+      .map((ord) => ord.distId);
     if (orderType === "in-stock") {
       dispatch(
-        createMultipleOrders(idArray, orderSetId, orderType, currentWarehouse)
+        createMultipleOrders(
+          idArray,
+          orderSetId,
+          orderType,
+          currentWarehouse,
+          currentDistIds
+        )
       );
     } else {
-      dispatch(createMultipleOrders(idArray, orderSetId, orderType));
+      dispatch(
+        createMultipleOrders(
+          idArray,
+          orderSetId,
+          orderType,
+          null,
+          currentDistIds
+        )
+      );
     }
   };
 
   const handleAddAll = () => {
+    const currentDistIds = currentOrders
+      .filter((ord) => ord.distId)
+      .map((ord) => ord.distId);
     if (orderType === "in-stock") {
       dispatch(
         createAllOrders(
@@ -110,7 +131,8 @@ const DistributorSelection = () => {
           orderSetId,
           orderType,
           currentWarehouse,
-          userStates.map((state) => state.id).join(",")
+          userStates.map((state) => state.id).join(","),
+          currentDistIds
         )
       );
     } else {
@@ -120,7 +142,8 @@ const DistributorSelection = () => {
           orderSetId,
           orderType,
           null,
-          userStates.map((state) => state.id).join(",")
+          userStates.map((state) => state.id).join(","),
+          currentDistIds
         )
       );
     }
