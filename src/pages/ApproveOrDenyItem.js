@@ -4,6 +4,8 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
+import ApproveOrDenyItemPDF from '../components/Compliance/ApproveOrDenyItemPDF'
+
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
@@ -29,18 +31,20 @@ const useStyles = makeStyles((theme) => ({
 const ApproveOrDenyItem = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [itemNumber, setItemNumber] = useState("");
-  const [token, setToken] = useState("");
-  const status = useSelector((state) => state.itemApprovedOrDenied.status);
+  //const [itemNumber, setItemNumber] = useState("");
+  let itemNumber = 12345
+  let token = 6789
+  //const [token, setToken] = useState("");
+  const status = 'approved' //useSelector((state) => state.itemApprovedOrDenied.status);
   const isError = useSelector((state) => state.itemApprovedOrDenied.error);
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
-
+  
   useEffect(() => {
     const params = new URLSearchParams(document.location.search.substring(1));
-    setToken(params.get("token"));
-    setItemNumber(params.get("item_number"));
+    // setToken(params.get("token"));
+    // setItemNumber(params.get("item_number"));
   }, []);
 
   return (
@@ -125,9 +129,14 @@ const ApproveOrDenyItem = () => {
                   <span>
                     <PDFDownloadLink
                       document={
-                        <SharedPDF items={groupedItems} isLoading={isLoading} />
+                        <ApproveOrDenyItemPDF 
+                          itemNumber={itemNumber} 
+                          token={token} 
+                          status={status} 
+                          isLoading={isLoading} 
+                          />
                       }
-                      fileName="shared-items.pdf"
+                      fileName={`Gallo-item-compliance-${itemNumber}`}
                     >
                       {({ loading, error }) =>
                         loading ? (

@@ -1,142 +1,83 @@
 import React from "react";
 import {
-  Document,
-  Page,
-  Text,
-  View,
-  Image,
-  Font,
-  StyleSheet,
+    Document,
+    Page,
+    Text,
+    View,
+    Image,
+    Font,
+    StyleSheet,
 } from "@react-pdf/renderer";
 
-import { formatMoney } from "../../utility/utilityFunctions";
 
 Font.register({
-  family: "Roboto",
-  src: "/fonts/Roboto-Regular.ttf",
+    family: "Roboto",
+    src: "/fonts/Roboto-Regular.ttf",
 });
 
 const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  text: {
-    fontFamily: "Roboto",
-    fontSize: 8,
-  },
-  specText: {
-    fontFamily: "Roboto",
-    fontSize: 7,
-  },
-  sectionWrapper: {
-    display: "flex",
-    flexDirection: "column",
-    width: 600,
-    heigth: 230,
-    alignItems: "center",
-  },
-  section: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    width: 600,
-    height: 225,
-  },
-  imageSection: {
-    width: 195,
-    padding: 10,
-  },
-  image: {
-    objectFit: "contain",
-  },
-  detailSection: {
-    width: 145,
-    height: 225,
-    padding: 10,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "space-around",
-  },
-  textSection: {
-    width: 190,
-    height: 225,
-    padding: 10,
-    marginRight: 10,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "space-around",
-  },
-  pageBreak: {
-    width: 600,
-    height: 1,
-    marginTop: 10,
-    backgroundColor: "black",
-  },
+    page: {
+        flexDirection: "column",
+        alignItems: "center",
+        justifyItems: "center",
+        marginTop: 25,
+    },
+    text: {
+        fontFamily: "Roboto",
+        fontSize: 10,
+    },
+    sectionWrapper: {
+        display: "flex",
+        flexDirection: "column",
+        width: 600,
+        heigth: 230,
+        alignItems: "center",
+    },
+    imageSection: {
+        display: "flex",
+        alignSelf: "flex-start",
+        justifySelf: "flex-start",
+        width: 195,
+        marginLeft: 20,
+    },
+    image: {
+        objectFit: "contain",
+    },
+    textSection: {
+        width: 190,
+        height: 225,
+        lineHeight: 3,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+    },
 });
 
-const SharedPDF = ({ items }) => {
-  return (
-    <Document>
-      {items.map((group, index) => (
-        <Page key={index} size="LETTER" style={styles.page}>
-          {group.map((item, i) => (
-            <View key={`${index}-${i}`} style={styles.sectionWrapper}>
-              <View style={styles.section}>
+const ApproveOrDenyItemPDF = ({ itemNumber, status, token }) => {
+    const date = new Date();
+    const dateString = date.toDateString();
+    const time = date.toLocaleTimeString();
+
+    return (
+        <Document>
+            <Page size="LETTER" style={styles.page}>
                 <View style={styles.imageSection}>
-                  <Image
-                    source={{
-                      uri: item.imgUrlLg[0],
-                      method: "get",
-                      headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        crossOrigin: "anonymous",
-                      },
-                    }}
-                    cache="reload"
-                    allowDangerousPaths={true}
-                    style={styles.image}
-                  />
+                    <Image
+                        source="https://res.cloudinary.com/brandhub/image/upload/v1612467445/prod/gallo_logo_bxfey2.png"
+                        style={styles.image}
+                    />
                 </View>
-                <View style={styles.detailSection}>
-                  <Text style={styles.text}>{`#${item.itemNumber}`}</Text>
-                  <Text style={styles.text}>{`Brand(s):  ${item.brand}`}</Text>
-                  <Text style={styles.text}>{`Program:  ${item.program}`}</Text>
-                  <Text style={styles.text}>
-                    {`Item Type:  ${item.itemType}`}
-                  </Text>
-                  <Text style={styles.text}>
-                    {`Item Description:  ${item.itemDescription}`}
-                  </Text>
-                  <Text style={styles.text}>
-                    {`Pack Size: ${item.packSize}`}
-                  </Text>
-                  <Text style={styles.text}>
-                    {`Est Cost: ${formatMoney(item.estCost)}`}
-                  </Text>
-                  <Text style={styles.text}>
-                    {`In Market: ${item.inMarketDate}`}
-                  </Text>
+                <View style={styles.sectionWrapper}>
+                    <View style={styles.textSection}>
+                        <Text style={styles.text}>Gallo Item Number: {itemNumber}</Text>
+                        <Text style={styles.text}>Compliance Status: {status}</Text>
+                        <Text style={styles.text}>Verification number: {token}</Text>
+                        <Text style={styles.text}>{status[0].toUpperCase() + status.slice(1)} on {dateString}, {time}</Text>
+                    </View>
                 </View>
-                <View style={styles.textSection}>
-                  {item.specification.map((spec, index) => (
-                    <Text style={styles.specText} key={index}>
-                      {`${spec.key}:  ${spec.value}`}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-              {i !== group.length - 1 && <View style={styles.pageBreak} />}
-            </View>
-          ))}
-        </Page>
-      ))}
-    </Document>
-  );
+            </Page>
+        </Document>
+    );
 };
 
-export default SharedPDF;
+export default ApproveOrDenyItemPDF;
