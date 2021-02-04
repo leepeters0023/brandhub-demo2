@@ -134,7 +134,9 @@ export const buildFilters = (
         : `filter[type]=${filterObject.ruleType}`
       : "";
   let isVisibleString = filterObject.isItemVisible
-    ? `filter[is-visible]=true`
+    ? filterObject.isItemArchived
+      ? `filter[is-visible]=true`
+      : `filter[is-visible]=true&filter[is-active]=true`
     : "";
   let isOrderableString = filterObject.isItemOrderable
     ? `filter[is-orderable]=true`
@@ -210,7 +212,7 @@ export const handleErrors = (err) => {
     } else if (err.response.errors && err.response.errors.detail) {
       return err.response.errors.detail;
     } else if (err.response.data) {
-      return err.response.data
+      return err.response.data;
     } else return "Unknown Error";
   } else {
     return "Unknown Error";
