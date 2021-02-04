@@ -77,7 +77,17 @@ const complianceItemsSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-    approveDenySuccess(state) {
+    approveDenySuccess(state, action) {
+      const { ids, status } = action.payload;
+      const updatedRules = state.items.map((item) => {
+        if (ids.includes(item.id)) {
+          return {
+            ...item,
+            status: status,
+          };
+        } else return { ...item };
+      });
+      state.items = updatedRules;
       state.isUpdateLoading = false;
       state.selectedItems = [];
       state.error = null;
@@ -210,7 +220,7 @@ export const approvePriorApprovalItem = (ids) => async (dispatch) => {
         throw approveStatus.error;
       }
     }
-    dispatch(approveDenySuccess());
+    dispatch(approveDenySuccess({ ids: ids, status: "Approved" }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err }));
@@ -229,7 +239,7 @@ export const denyPriorApprovalItem = (ids) => async (dispatch) => {
         throw denyStatus.error;
       }
     }
-    dispatch(approveDenySuccess());
+    dispatch(approveDenySuccess({ ids: ids, status: "Denied" }));
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err }));

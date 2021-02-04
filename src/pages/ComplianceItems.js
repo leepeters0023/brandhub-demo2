@@ -18,6 +18,7 @@ import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import ComplianceItemsTable from "../components/Compliance/ComplianceItemsTable";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -265,6 +266,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
         )}
         {!isNextLoading && <div style={{ width: "100%", height: "4px" }}></div>}
       </Container>
+      <OrderPatchLoading />
       <br />
     </>
   );
