@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { CSVLink } from "react-csv";
 import Helmet from "react-helmet";
@@ -8,7 +8,11 @@ import { useBottomScrollListener } from "react-bottom-scroll-listener";
 import { useInitialFilters } from "../hooks/UtilityHooks";
 import { useReactToPrint } from "react-to-print";
 
-import { fetchNextFilteredTriggeredRules } from "../redux/slices/complianceItemsSlice";
+import {
+  fetchNextFilteredTriggeredRules,
+  approvePriorApprovalItem,
+  denyPriorApprovalItem,
+} from "../redux/slices/complianceItemsSlice";
 
 import { updateMultipleFilters, setSorted } from "../redux/slices/filterSlice";
 
@@ -20,7 +24,7 @@ import Container from "@material-ui/core/Container";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import TuneIcon from "@material-ui/icons/Tune";
-//import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -49,13 +53,17 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
 
   const tableRef = useRef(null);
 
-  const [itemSelected, setItemSelected] = useCallback(useState(false));
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
 
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentItemRules = useSelector((state) => state.complianceItems.items);
-
+  const selectedCompItem = useSelector(
+    (state) => state.complianceItems.selectedItem
+  );
+  const selectedItemType = useSelector(
+    (state) => state.complianceItems.selectedItemType
+  );
   const isLoading = useSelector((state) => state.complianceItems.isLoading);
   const nextLink = useSelector((state) => state.complianceItems.nextLink);
   const isNextLoading = useSelector(
@@ -87,6 +95,14 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
       })
     );
     dispatch(setSorted());
+  };
+
+  const handleApprove = () => {
+    dispatch(approvePriorApprovalItem(selectedCompItem));
+  };
+
+  const handleDeny = () => {
+    dispatch(denyPriorApprovalItem(selectedCompItem));
   };
 
   useEffect(() => {
@@ -158,32 +174,52 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
               <>
-                {/* <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create manual approval function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
+                <Tooltip
+                  title="Approves a Prior Approval Rule"
+                  PopperProps={{ style: { marginRight: "20px" } }}
                 >
-                  APPROVE RULE
-                </Button> */}
-                {/* <Button
-                  className={classes.largeButton}
-                  variant="contained"
-                  color="secondary"
-                  disabled={!itemSelected}
-                  style={{ marginRight: "20px" }}
-                  onClick={() => {
-                    //TODO create override function
-                    //navigate("/purchasing/purchaseOrder#new");
-                  }}
+                  <span>
+                    <Button
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      disabled={
+                        !selectedCompItem ||
+                        (selectedCompItem &&
+                          selectedItemType !== "Prior Approval")
+                      }
+                      style={{ marginRight: "20px" }}
+                      onClick={() => {
+                        handleApprove();
+                      }}
+                    >
+                      APPROVE RULE
+                    </Button>
+                  </span>
+                </Tooltip>
+                <Tooltip
+                  title="Denies a Prior Approval Rule"
+                  PopperProps={{ style: { marginRight: "20px" } }}
                 >
-                  OVERRIDE RULE
-                </Button> */}
+                  <span>
+                    <Button
+                      className={classes.largeButton}
+                      variant="contained"
+                      color="secondary"
+                      disabled={
+                        !selectedCompItem ||
+                        (selectedCompItem &&
+                          selectedItemType !== "Prior Approval")
+                      }
+                      style={{ marginRight: "20px" }}
+                      onClick={() => {
+                        handleDeny();
+                      }}
+                    >
+                      DENY RULE
+                    </Button>
+                  </span>
+                </Tooltip>
               </>
             )}
             <Tooltip title="Print Item Rules">
@@ -231,8 +267,6 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           itemsLoading={isLoading}
           handleSort={handleSort}
           scrollRef={scrollRef}
-          itemSelected={itemSelected}
-          setItemSelected={setItemSelected}
           tableRef={tableRef}
         />
         {isNextLoading && (

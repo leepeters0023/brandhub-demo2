@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { useSelector /*, useDispatch*/ } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  updateCompItemSelection,
+  updateSelectedType,
+} from "../../redux/slices/complianceItemsSlice";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -31,32 +36,17 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const {
-    classes,
-    rowCount,
-    order,
-    orderBy,
-    onRequestSort,
-    onSelectAllClick,
-    numSelected,
-  } = props;
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
   const currentUserRole = useSelector((state) => state.user.role);
-  
+
   return (
     <TableHead>
       <TableRow>
         {(currentUserRole === "compliance" || currentUserRole === "super") && (
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{ "aria-label": "select all items" }}
-            />
-          </TableCell>
+          <TableCell padding="checkbox"></TableCell>
         )}
         {headCells.map((headCell) => {
           if (!headCell.sort) {
@@ -134,31 +124,28 @@ const ComplianceItemsTable = ({
   itemsLoading,
   handleSort,
   scrollRef,
-  itemSelected,
-  setItemSelected,
   tableRef,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemNumber");
   const [selected, setSelected] = useState([]);
+
   const currentUserRole = useSelector((state) => state.user.role);
+  const selectedCompItem = useSelector(
+    (state) => state.complianceItems.selectedItem
+  );
+
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = items.map((item) => item.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
 
-  const handleClick = (_event, id) => {
+  const handleClick = (_event, id, ruleType) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -174,23 +161,23 @@ const ComplianceItemsTable = ({
         selected.slice(selectedIndex + 1)
       );
     }
-
+    if (newSelected.length === 1) {
+      dispatch(updateCompItemSelection({ selectedItem: id }));
+      dispatch(updateSelectedType({ type: ruleType }));
+    } else {
+      dispatch(updateCompItemSelection({ selectedItem: null }));
+      dispatch(updateSelectedType({ type: null }));
+    }
     setSelected(newSelected);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   useEffect(() => {
-    if (selected.length > 0 && !itemSelected) {
-      setItemSelected(true);
+    if (!selectedCompItem && selected.length > 0) {
+      setSelected([]);
     }
-  }, [selected, setItemSelected, itemSelected]);
-
-  useEffect(() => {
-    if (selected.length === 0 && itemSelected) {
-      setItemSelected(false);
-    }
-  }, [selected, setItemSelected, itemSelected]);
+  }, [selectedCompItem, selected]);
 
   return (
     <>
@@ -210,9 +197,6 @@ const ComplianceItemsTable = ({
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
-            numSelected={selected.length}
-            onSelectAllClick={handleSelectAllClick}
-            rowCount={items.length}
           />
           <TableBody>
             {!itemsLoading && items.length === 0 && (
@@ -238,10 +222,11 @@ const ComplianceItemsTable = ({
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
+                              disabled={!isItemSelected && selected.length > 0}
                               inputProps={{ "aria-labelledby": labelId }}
                               onClick={(event) => event.stopPropagation()}
                               onChange={(event) => {
-                                handleClick(event, row.id);
+                                handleClick(event, row.id, row.ruleType);
                                 event.stopPropagation();
                               }}
                             />

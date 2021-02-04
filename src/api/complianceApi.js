@@ -120,7 +120,7 @@ export const approveOrDenyItem = async (token, itemStatus) => {
       {},
       writeHeaders
     )
-    .then((res) => {
+    .then((_res) => {
       response.status = itemStatus;
     })
     .catch((err) => {
@@ -131,3 +131,43 @@ export const approveOrDenyItem = async (token, itemStatus) => {
     });
   return response;
 };
+
+export const approvePriorApproval = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(
+      `/api/triggered-rules/${id}/approve`,
+      {},
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
+  return response;
+}
+
+export const denyPriorApproval = async (id) => {
+  const response = { status: "", error: null };
+  await axios
+    .post(
+      `/api/triggered-rules/${id}/deny`,
+      {},
+      writeHeaders
+    )
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
+  return response;
+}

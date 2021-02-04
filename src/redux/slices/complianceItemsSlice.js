@@ -2,7 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchTriggeredRules,
   fetchNextTriggeredRules,
+  approvePriorApproval,
+  denyPriorApproval,
 } from "../../api/complianceApi";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 import { fetchOrderHistoryByItem } from "../../api/orderApi";
 import { mapCompItems, mapOrderHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
@@ -17,7 +24,8 @@ let initialState = {
   pendingNextLink: null,
   items: [],
   pendingOrderItems: [],
-  selectedItems: [],
+  selectedItem: null,
+  selectedItemType: null,
   error: null,
 };
 
@@ -70,9 +78,18 @@ const complianceItemsSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    approveDenySuccess(state) {
+      state.isUpdateLoading = false;
+      state.selectedItem = null;
+      state.error = null;
+    },
     updateCompItemSelection(state, action) {
-      const { selectedItems } = action.payload;
-      state.selectedItems = selectedItems;
+      const { selectedItem } = action.payload;
+      state.selectedItem = selectedItem;
+    },
+    updateSelectedType(state, action) {
+      const { type } = action.payload;
+      state.selectedItemType = type;
     },
     cancelCompItem(state, action) {
       const { id } = action.payload;
@@ -107,7 +124,9 @@ export const {
   getComplianceItemsSuccess,
   getNextComplianceItemsSuccess,
   getPendingOrderItemsSuccess,
+  approveDenySuccess,
   updateCompItemSelection,
+  updateSelectedType,
   cancelCompItem,
   resetComplianceItems,
   setFailure,
@@ -186,3 +205,35 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
 };
 
 //todo add next call? will it be necessary?
+
+export const approvePriorApprovalItem = (id) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    dispatch(patchLoading());
+    const approveStatus = await approvePriorApproval(id);
+    if (approveStatus.error) {
+      throw approveStatus.error
+    }
+    dispatch(approveDenySuccess());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+}
+
+export const denyPriorApprovalItem = (id) => async (dispatch) => {
+  try {
+    dispatch(setUpdateLoading());
+    dispatch(patchLoading());
+    const denyStatus = await denyPriorApproval(id);
+    if (denyStatus.error) {
+      throw denyStatus.error
+    }
+    dispatch(approveDenySuccess());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+}
