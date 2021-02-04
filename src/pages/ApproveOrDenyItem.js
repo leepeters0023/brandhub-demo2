@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
+import IconButton from "@material-ui/core/IconButton";
 import ImageWrapper from "../components/Utility/ImageWrapper";
 import Logo from "../assets/RTA_Logo_Stacked.png";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { fetchApproveOrDenyItemSlice } from "../redux/slices/approveOrDenyItemSlice.js";
 
@@ -113,6 +117,43 @@ const ApproveOrDenyItem = () => {
               <Typography className={classes.headerText} variant="h5">
                 You may close this window.
               </Typography>
+              <Tooltip
+                  title="Download as PDF"
+                  PopperProps={{ style: { zIndex: "16000" } }}
+                  placement="right"
+                >
+                  <span>
+                    <PDFDownloadLink
+                      document={
+                        <SharedPDF items={groupedItems} isLoading={isLoading} />
+                      }
+                      fileName="shared-items.pdf"
+                    >
+                      {({ loading, error }) =>
+                        loading ? (
+                          <div
+                            style={{
+                              width: "58.99px",
+                              height: "58.99px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <CircularProgress />
+                          </div>
+                        ) : (
+                          <IconButton>
+                            <PictureAsPdfIcon
+                              fontSize="large"
+                              color="secondary"
+                            />
+                          </IconButton>
+                        )
+                      }
+                    </PDFDownloadLink>
+                  </span>
+                </Tooltip>
             </>
           )}
         </div>
