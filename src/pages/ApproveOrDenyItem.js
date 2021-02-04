@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
+
+import ApproveOrDenyItemPDF from '../components/Compliance/ApproveOrDenyItemPDF'
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
+import IconButton from "@material-ui/core/IconButton";
 import ImageWrapper from "../components/Utility/ImageWrapper";
 import Logo from "../assets/RTA_Logo_Stacked.png";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
+import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 import { fetchApproveOrDenyItemSlice } from "../redux/slices/approveOrDenyItemSlice.js";
 
@@ -27,12 +34,16 @@ const ApproveOrDenyItem = () => {
   const dispatch = useDispatch();
   const [itemNumber, setItemNumber] = useState("");
   const [token, setToken] = useState("");
+  const [notes, setNotes] = useState("");
   const status = useSelector((state) => state.itemApprovedOrDenied.status);
   const isError = useSelector((state) => state.itemApprovedOrDenied.error);
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
-
+  
+  const handleNotes = (e) => {
+    setNotes(e.target.value)
+  }
   useEffect(() => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
@@ -96,6 +107,16 @@ const ApproveOrDenyItem = () => {
             </Button>
           </div>
           <br></br>
+          <TextField
+              disabled={!status && !isError ? false : true}
+              id="notes-input"
+              style={{ width: "400px" }}
+              variant="outlined"
+              color="secondary"
+              type="text"
+              label="Notes (for your reference only)"
+              onChange={(e) => handleNotes(e)}
+            />
           {isLoading && <CircularProgress />}
           <br></br>
           {isError && (
@@ -110,9 +131,55 @@ const ApproveOrDenyItem = () => {
                 You have {status === "approved" ? "approved" : "denied"} item:{" "}
                 {itemNumber}. No further action is needed.
               </Typography>
+              <br></br>
               <Typography className={classes.headerText} variant="h5">
                 You may close this window.
               </Typography>
+              <br></br>
+              <Typography className={classes.headerText}>Download for your records</Typography>
+              <Tooltip
+                  title="Download as PDF"
+                  PopperProps={{ style: { zIndex: "16000" } }}
+                  placement="right"
+                >
+                  <span>
+                    <PDFDownloadLink
+                      document={
+                        <ApproveOrDenyItemPDF 
+                          itemNumber={itemNumber} 
+                          token={token} 
+                          status={status} 
+                          isLoading={isLoading} 
+                          notes={notes}
+                          />
+                      }
+                      fileName={`Gallo-item-compliance-${itemNumber}`}
+                    >
+                      {({ loading, error }) =>
+                        loading ? (
+                          <div
+                            style={{
+                              width: "58.99px",
+                              height: "58.99px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <CircularProgress />
+                          </div>
+                        ) : (
+                          <IconButton>
+                            <PictureAsPdfIcon
+                              fontSize="large"
+                              color="secondary"
+                            />
+                          </IconButton>
+                        )
+                      }
+                    </PDFDownloadLink>
+                  </span>
+                </Tooltip>
             </>
           )}
         </div>
