@@ -3,10 +3,7 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  updateCompItemSelection,
-  updateSelectedType,
-} from "../../redux/slices/complianceItemsSlice";
+import { updateCompItemSelection } from "../../redux/slices/complianceItemsSlice";
 
 import Table from "@material-ui/core/Table";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -36,7 +33,15 @@ const headCells = [
 ];
 
 const EnhancedTableHead = (props) => {
-  const { classes, order, orderBy, onRequestSort } = props;
+  const {
+    classes,
+    rowCount,
+    order,
+    orderBy,
+    onRequestSort,
+    onSelectAllClick,
+    numSelected,
+  } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -46,7 +51,14 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         {(currentUserRole === "compliance" || currentUserRole === "super") && (
-          <TableCell padding="checkbox"></TableCell>
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{ "aria-label": "select all items" }}
+            />
+          </TableCell>
         )}
         {headCells.map((headCell) => {
           if (!headCell.sort) {
@@ -134,9 +146,21 @@ const ComplianceItemsTable = ({
   const [selected, setSelected] = useState([]);
 
   const currentUserRole = useSelector((state) => state.user.role);
-  const selectedCompItem = useSelector(
-    (state) => state.complianceItems.selectedItem
+  const selectedCompItems = useSelector(
+    (state) => state.complianceItems.selectedItems
   );
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = items
+        .filter((item) => item.ruleType === "Prior Approval")
+        .map((item) => item.id);
+      setSelected(newSelecteds);
+      dispatch(updateCompItemSelection({ selectedItems: newSelecteds }));
+      return;
+    }
+    setSelected([]);
+  };
 
   const handleRequestSort = (_event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -145,7 +169,7 @@ const ComplianceItemsTable = ({
     handleSort({ order: isAsc ? "desc" : "asc", orderBy: property });
   };
 
-  const handleClick = (_event, id, ruleType) => {
+  const handleClick = (_event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -161,12 +185,10 @@ const ComplianceItemsTable = ({
         selected.slice(selectedIndex + 1)
       );
     }
-    if (newSelected.length === 1) {
-      dispatch(updateCompItemSelection({ selectedItem: id }));
-      dispatch(updateSelectedType({ type: ruleType }));
+    if (newSelected.length >= 1) {
+      dispatch(updateCompItemSelection({ selectedItems: newSelected }));
     } else {
-      dispatch(updateCompItemSelection({ selectedItem: null }));
-      dispatch(updateSelectedType({ type: null }));
+      dispatch(updateCompItemSelection({ selectedItems: [] }));
     }
     setSelected(newSelected);
   };
@@ -174,10 +196,10 @@ const ComplianceItemsTable = ({
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   useEffect(() => {
-    if (!selectedCompItem && selected.length > 0) {
+    if (selectedCompItems.length === 0 && selected.length > 0) {
       setSelected([]);
     }
-  }, [selectedCompItem, selected]);
+  }, [selectedCompItems, selected]);
 
   return (
     <>
@@ -197,6 +219,9 @@ const ComplianceItemsTable = ({
             onRequestSort={handleRequestSort}
             order={order}
             orderBy={orderBy}
+            numSelected={selected.length}
+            onSelectAllClick={handleSelectAllClick}
+            rowCount={items.length}
           />
           <TableBody>
             {!itemsLoading && items.length === 0 && (
@@ -222,11 +247,11 @@ const ComplianceItemsTable = ({
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              disabled={!isItemSelected && selected.length > 0}
+                              disabled={row.ruleType !== "Prior Approval"}
                               inputProps={{ "aria-labelledby": labelId }}
                               onClick={(event) => event.stopPropagation()}
                               onChange={(event) => {
-                                handleClick(event, row.id, row.ruleType);
+                                handleClick(event, row.id);
                                 event.stopPropagation();
                               }}
                             />
