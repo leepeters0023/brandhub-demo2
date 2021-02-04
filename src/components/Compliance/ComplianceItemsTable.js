@@ -185,7 +185,6 @@ const ComplianceItemsTable = ({
         selected.slice(selectedIndex + 1)
       );
     }
-    console.log(newSelected);
     if (newSelected.length >= 1) {
       dispatch(updateCompItemSelection({ selectedItems: newSelected }));
     } else {
