@@ -96,6 +96,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter === "program" ||
         filter === "brand" ||
         filter === "user" ||
+        filter === "purchaser" ||
         filter === "distributor" ||
         filter === "orderType" ||
         filter === "territory" ||

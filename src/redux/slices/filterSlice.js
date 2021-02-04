@@ -42,6 +42,7 @@ let initialState = {
   currentTerritoryId: null,
   type: null,
   user: [],
+  purchaser: [],
   userName: null,
   sortOrder: null,
   sortOrderBy: null,
@@ -96,6 +97,7 @@ const filterSlice = createSlice({
       state.currentTerritoryId = null;
       state.type = null;
       state.user = [];
+      state.purchaser = [];
       state.userName = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -160,6 +162,7 @@ const filterSlice = createSlice({
       state.currentTerritoryId = null;
       state.type = null;
       state.user = [];
+      state.purchaser = [];
       state.userName = null;
       state.sortOrder = null;
       state.sortOrderBy = null;
@@ -199,6 +202,7 @@ const filterSlice = createSlice({
           "rfqNum",
           "poNum",
           "supplier",
+          "purchaser",
         ];
       }
       if (filterType === "program") {
@@ -233,7 +237,8 @@ const filterSlice = createSlice({
             filter === "territory" ||
             filter === "tag" ||
             filter === "supplier" ||
-            filter === "bu"
+            filter === "bu" ||
+            filter === "purchaser"
           ) {
             stateObject[filter].forEach((f) => {
               filters.push({ type: filter, value: f.name });

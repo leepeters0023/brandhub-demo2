@@ -16,6 +16,7 @@ import StatusSelector from "../Utility/StatusSelector";
 import ProgramAutoComplete from "../Utility/ProgramAutoComplete";
 import ItemTypeAutoComplete from "../Utility/ItemTypeAutoComplete";
 import SupplierAutoComplete from "../Utility/SupplierAutoComplete";
+import PurchaserAutoComplete from "../Utility/PurchaserAutoComplete";
 
 import { useSelector } from "react-redux";
 
@@ -303,6 +304,15 @@ const FiltersHistory = ({
             filterType={"history"}
           />
         </ListItem>
+        <ListItem>
+          <ItemTypeAutoComplete
+            classes={classes}
+            handleChange={handleFilters}
+            reset={reset}
+            setReset={setReset}
+            filterType={"history"}
+          />
+        </ListItem>
         {historyType === "po" && currentUserRole !== "supplier" && (
           <>
             <ListItem>
@@ -314,17 +324,17 @@ const FiltersHistory = ({
                 filterType={"history"}
               />
             </ListItem>
+            <ListItem>
+              <PurchaserAutoComplete
+                classes={classes}
+                handleChange={handleFilters}
+                reset={reset}
+                setReset={setReset}
+                filterType={"history"}
+              />
+            </ListItem>
           </>
         )}
-        <ListItem>
-          <ItemTypeAutoComplete
-            classes={classes}
-            handleChange={handleFilters}
-            reset={reset}
-            setReset={setReset}
-            filterType={"history"}
-          />
-        </ListItem>
         <Divider />
         <ListItem />
         <ListItem>

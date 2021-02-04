@@ -139,12 +139,27 @@ export const addFavoriteItems = async (idArray) => {
   return response;
 };
 
-export const getFilteredUsers = async (name) => {
+export const getFilteredUsers = async (name, role) => {
   const response = { status: "", error: null, data: null };
-  const querySting =
+  let queryString =
     name.length > 0 ? `/api/users?filter[name]=${name}` : "/api/users";
+  if (role && role === "super") {
+    queryString += queryString.includes("?")
+      ? "&filter[roles]=purchaser,select-purchaser,super"
+      : "?filter[roles]=purchaser,select-purchaser,super";
+  }
+  if (role && role === "purchaser") {
+    queryString += queryString.includes("?")
+      ? "&filter[roles]=purchaser,super"
+      : "?filter[roles]=purchaser,super";
+  }
+  if (role && role === "select-purchaser") {
+    queryString += queryString.includes("?")
+      ? "&filter[roles]=select-purchaser,super"
+      : "?filter[roles]=select-purchaser,super";
+  }
   await axios
-    .get(querySting)
+    .get(queryString)
     .then((res) => {
       let dataObject = { users: null, nextLink: null };
       let data = dataFormatter.deserialize(res.data);

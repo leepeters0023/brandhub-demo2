@@ -99,6 +99,10 @@ export const buildFilters = (
     filterObject.user && filterObject.user.length > 0
       ? `filter[user-ids]=${separateByComma(filterObject.user, "id")}`
       : "";
+  let purchaserString =
+    filterObject.purchaser && filterObject.purchaser.length > 0
+      ? `filter[purchaser-ids]=${separateByComma(filterObject.purchaser, "id")}`
+      : "";
   let progString =
     filterObject.program && filterObject.program.length > 0
       ? `filter[program-ids]=${separateByComma(filterObject.program, "id")}`
@@ -150,10 +154,9 @@ export const buildFilters = (
     filterObject.orderItemIds && filterObject.orderItemIds.length > 0
       ? `filter[ids]=${filterObject.orderItemIds}`
       : "";
-  let isPreOrderActiveString =
-    filterObject.isPreOrderActive
-      ? "filter[is-pre-order-active]=true"
-      : "";
+  let isPreOrderActiveString = filterObject.isPreOrderActive
+    ? "filter[is-pre-order-active]=true"
+    : "";
 
   let queryArray = [
     uniqueFilter,
@@ -172,6 +175,7 @@ export const buildFilters = (
     buString,
     favItemString,
     userString,
+    purchaserString,
     supplierString,
     sortString,
     ruleTypeString,
@@ -195,12 +199,18 @@ export const buildFilters = (
 
 export const handleErrors = (err) => {
   if (err.response) {
-    if (err.response.data.errors[0] && err.response.data.errors[0].title) {
+    if (
+      err.response.data.errors &&
+      err.response.data.errors[0] &&
+      err.response.data.errors[0].title
+    ) {
       return err.response.data.errors[0].title;
-    } else if (err.response.data.errors.detail) {
+    } else if (err.response.data.errors && err.response.data.errors.detail) {
       return err.response.data.errors.detail;
-    } else if (err.response.errors.detail) {
+    } else if (err.response.errors && err.response.errors.detail) {
       return err.response.errors.detail;
+    } else if (err.response.data) {
+      return err.response.data
     } else return "Unknown Error";
   } else {
     return "Unknown Error";

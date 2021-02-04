@@ -145,10 +145,10 @@ export const {
 
 export default userUpdateSlice.reducer;
 
-export const fetchFilteredUsers = (name) => async (dispatch) => {
+export const fetchFilteredUsers = (name, role) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    let users = await getFilteredUsers(name);
+    let users = await getFilteredUsers(name, role);
     if (users.error) {
       throw users.error;
     }
