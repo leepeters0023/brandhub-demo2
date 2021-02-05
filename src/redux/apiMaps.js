@@ -75,7 +75,6 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
-  console.log(items);
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
       return [programs[0]];
@@ -153,18 +152,25 @@ export const mapItems = (items) => {
       couponInfo: item["coupon-custom-raw-payload"]
         ? {
             startDate: format(
-              formatDate(new Date(item["coupon-custom-raw-payload"].CouponStartDate)),
+              formatDate(
+                new Date(item["coupon-custom-raw-payload"].CouponStartDate)
+              ),
               "MM/dd/yyyy"
             ),
             expirationDate: format(
-              formatDate(new Date(item["coupon-custom-raw-payload"].CouponExpirationDate)),
+              formatDate(
+                new Date(item["coupon-custom-raw-payload"].CouponExpirationDate)
+              ),
               "MM/dd/yyyy"
             ),
             typeCode: item["coupon-custom-raw-payload"].CouponTypeCode,
             offerType: item["coupon-custom-raw-payload"].CouponOfferTypeCode,
-            description: item["coupon-custom-raw-payload"].CouponOfferDescription,
+            description:
+              item["coupon-custom-raw-payload"].CouponOfferDescription,
             bottles: item["coupon-custom-raw-payload"].Quantity,
-            bottleDiscount: stringToCents(item["coupon-custom-raw-payload"].CouponFaceValue),
+            bottleDiscount: stringToCents(
+              item["coupon-custom-raw-payload"].CouponFaceValue
+            ),
           }
         : null,
       imgUrlThumb: images.imgUrlThumb,
@@ -462,6 +468,7 @@ export const mapOrderHistoryItems = (items) => {
 };
 
 export const mapOrderItems = (items, type) => {
+  console.log(items);
   let mappedItems = items
     .map((item) => {
       const images = handleImages(item.item.images);
@@ -574,6 +581,33 @@ export const mapOrderItems = (items, type) => {
               "prior-approval-pending" ||
             item["shipping-parameter-item"]["compliance-status"] === "denied"
           : "---",
+        isCoupon: item.item["is-coupon"],
+        couponInfo: item.item["coupon-custom-raw-payload"]
+          ? {
+              startDate: format(
+                formatDate(
+                  new Date(item.item["coupon-custom-raw-payload"].CouponStartDate)
+                ),
+                "MM/dd/yyyy"
+              ),
+              expirationDate: format(
+                formatDate(
+                  new Date(
+                    item.item["coupon-custom-raw-payload"].CouponExpirationDate
+                  )
+                ),
+                "MM/dd/yyyy"
+              ),
+              typeCode: item.item["coupon-custom-raw-payload"].CouponTypeCode,
+              offerType: item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
+              description:
+                item.item["coupon-custom-raw-payload"].CouponOfferDescription,
+              bottles: item.item["coupon-custom-raw-payload"].Quantity,
+              bottleDiscount: stringToCents(
+                item.item["coupon-custom-raw-payload"].CouponFaceValue
+              ),
+            }
+          : null,
       };
     })
     .sort((a, b) => {
