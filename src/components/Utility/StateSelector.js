@@ -21,6 +21,7 @@ const StateSelector = ({ handleState, currentState, type }) => {
   const states = useSelector((state) => state.territories.filteredStateList);
   const isLoading = useSelector((state) => state.territories.isStatesLoading);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
+  const userStates = useSelector((state) => state.user.states);
 
   const handleChangeSelect = (evt) => {
     handleState(evt.target.value);
@@ -31,9 +32,11 @@ const StateSelector = ({ handleState, currentState, type }) => {
       (currentStates.length === 0 && states.length > 0) ||
       (states.length > 0 && states.length !== currentStates.length)
     ) {
-      setCurrentStates(states);
+      let userStateCodes = userStates.map((st) => st.code);
+      let filteredStates = states.filter((st) => userStateCodes.includes(st.code));
+      setCurrentStates(filteredStates);
     }
-  }, [currentStates.length, states, setCurrentStates]);
+  }, [currentStates.length, states, userStates, setCurrentStates]);
 
   useEffect(() => {
     if (states.length === 0) {
@@ -44,9 +47,11 @@ const StateSelector = ({ handleState, currentState, type }) => {
 
   useEffect(() => {
     if (states.length === 0 && allStates.length > 0) {
-      setCurrentStates(allStates);
+      let userStateCodes = userStates.map((st) => st.code);
+      let filteredStates = allStates.filter((st) => userStateCodes.includes(st.code));
+      setCurrentStates(filteredStates);
     }
-  }, [states, allStates, setCurrentStates]);
+  }, [states, allStates, userStates, setCurrentStates]);
 
   if (isLoading) {
     return <CircularProgress />;

@@ -529,7 +529,6 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
     if (currentOrders.error) {
       throw currentOrders.error;
     }
-    console.log(currentOrders);
     let currentItems = currentOrders.data["order-set-items"]
       ? mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
       : [];
