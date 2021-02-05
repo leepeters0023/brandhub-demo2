@@ -47,7 +47,6 @@ export const getCouponOrderSet = async (code) => {
   let polling = true;
   setTimeout(() => {
     polling = false;
-    console.log("no pole");
   }, 10000);
   const pollSleep = (ms) => {
     return new Promise((resolve) => {
