@@ -554,7 +554,12 @@ export const mapOrderItems = (items, type) => {
           type !== "order-set-item" &&
           item["triggered-rules"].length > 0 &&
           item["triggered-rules"].filter(
-            (rule) => rule.type === "item-type" || rule.type === "metal-wood"
+            (rule) =>
+              rule.type === "item-type" ||
+              rule.type === "metal-wood" ||
+              rule.type === "coupon-item-type" ||
+              rule.type === "coupon-offer-type" ||
+              rule.type === "coupon-face-vale"
           ).length > 0
             ? "not-compliant"
             : "compliant",
