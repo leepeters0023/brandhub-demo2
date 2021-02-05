@@ -148,6 +148,24 @@ export const mapItems = (items) => {
           : "---",
       warehouse: item.warehouse,
       supplierId: item.supplier.id,
+      isCoupon: item["is-coupon"],
+      couponInfo: item["coupon-custom-raw-payload"]
+        ? {
+            startDate: format(
+              formatDate(new Date(item["coupon-custom-raw-payload"].CouponStartDate)),
+              "MM/dd/yyyy"
+            ),
+            expirationDate: format(
+              formatDate(new Date(item["coupon-custom-raw-payload"].CouponExpirationDate)),
+              "MM/dd/yyyy"
+            ),
+            typeCode: item["coupon-custom-raw-payload"].CouponTypeCode,
+            offerType: item["coupon-custom-raw-payload"].CouponOfferTypeCode,
+            description: item["coupon-custom-raw-payload"].CouponOfferDescription,
+            bottles: item["coupon-custom-raw-payload"].Quantity,
+            bottleDiscount: stringToCents(item["coupon-custom-raw-payload"].CouponFaceValue),
+          }
+        : null,
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
     };

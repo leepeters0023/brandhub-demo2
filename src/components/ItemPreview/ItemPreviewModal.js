@@ -121,14 +121,8 @@ const ItemPreviewModal = (props) => {
       imgUrlLg,
       packSize,
       stock,
-      coupon = false,
-      couponType = "MIR",
-      offerType = "Dual AB/NAB",
-      bottles,
-      bottleDiscount,
-      discountAmount,
-      startDate,
-      expirationDate,
+      isCoupon,
+      couponInfo,
       specification,
       orderStartDate,
       orderEndDate,
@@ -240,160 +234,22 @@ const ItemPreviewModal = (props) => {
               </Carousel>
             </Grid>
             <Grid item className={classes.detailGrid} md={5} xs={12}>
-              {!coupon && (
-                <div
-                  style={{
-                    display: "flex",
-                    height: "Calc(100vh - 300px)",
-                    alignItems: "center",
-                  }}
-                >
-                  <div className={classes.scrollDiv}>
-                    <Typography variant="body1" color="textSecondary">
-                      {`#${itemNumber}`}
-                    </Typography>
-                    {currentBrands.length > 1 ? (
-                      <Tooltip
-                        title={`${currentBrands.join(", ")}`}
-                        PopperProps={{ style: { zIndex: "16000" } }}
-                      >
-                        <span style={{ display: "flex" }}>
-                          <Typography className={classes.headerText}>
-                            {`Brand(s): ${currentBrands[0]}`}
-                          </Typography>
-                          <MoreHorizIcon
-                            fontSize="small"
-                            color="inherit"
-                            style={{ marginLeft: "5px" }}
-                          />
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      <Typography className={classes.headerText}>
-                        {`Brand(s): ${currentBrands[0]}`}
-                      </Typography>
-                    )}
-                    {currentPrograms.length > 1 ? (
-                      <Tooltip
-                        title={`${currentPrograms.join(", ")}`}
-                        PopperProps={{ style: { zIndex: "16000" } }}
-                      >
-                        <span style={{ display: "flex" }}>
-                          <Typography className={classes.headerText}>
-                            {`Brand(s): ${currentPrograms[0]}`}
-                          </Typography>
-                          <MoreHorizIcon
-                            fontSize="small"
-                            color="inherit"
-                            style={{ marginLeft: "5px" }}
-                          />
-                        </span>
-                      </Tooltip>
-                    ) : (
-                      <Typography className={classes.headerText}>
-                        {`Program(s): ${currentPrograms[0]}`}
-                      </Typography>
-                    )}
-                    <Typography className={classes.headerText}>
-                      {`Item Type:  ${itemType}`}
-                    </Typography>
-                    <Typography className={classes.headerText}>
-                      {`Item Description:  ${itemDescription}`}
-                    </Typography>
-                    <br />
-                    <Box
-                      bgcolor="primary.main"
-                      className={classes.dividerBox}
-                    />
-                    <br />
-                    <Typography className={classes.headerText}>
-                      {`Est. Cost: ${formatMoney(estCost, false)}`}
-                    </Typography>
-                    <br />
-                    <Typography variant="body1" color="textSecondary">
-                      {`Pack Size: ${packSize}`}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                      {orderStartDate && orderEndDate
-                        ? `Available to Order: ${orderStartDate} - ${orderEndDate}`
-                        : ""}
-                    </Typography>
-                    <br />
-                    {type &&
-                      type !== "program" &&
-                      type !== "catalog" &&
-                      currentUserRole !== "read-only" && (
-                        <>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.largeButton}
-                            style={{
-                              width: "150px",
-                              marginTop: "10px",
-                            }}
-                            onClick={handleAddItem}
-                            disabled={
-                              currentOrderItems.filter(
-                                (item) => item.itemNumber === itemNumber
-                              ).length !== 0 ||
-                              (type === "inStock" &&
-                                currentWarehouse &&
-                                warehouse &&
-                                warehouse !== currentWarehouse)
-                            }
-                          >
-                            ADD TO ORDER
-                          </Button>
-                          <br />
-                          <br />
-                          <Box
-                            bgcolor="primary.main"
-                            className={classes.dividerBox}
-                          />
-                          <br />
-                          <br />
-                        </>
-                      )}
-                    <Typography className={classes.headerText}>
-                      Specifications:{" "}
-                    </Typography>
-                    <br />
-                    <Table size="small">
-                      <TableBody>
-                        {specification && specification !== "---" &&
-                          specification.map((spec, index) => (
-                            <TableRow key={index}>
-                              <TableCell
-                                classes={{ root: classes.specTableCellRoot }}
-                                align="left"
-                                className={classes.headerText}
-                              >
-                                {spec.key}
-                              </TableCell>
-                              <TableCell
-                                classes={{
-                                  root: classes.specTableCellRootDesc,
-                                }}
-                                align="left"
-                                className={classes.bodyText}
-                              >
-                                {spec.value}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </div>
-              )}
-              {coupon && (
-                <>
+              <div
+                style={{
+                  display: "flex",
+                  height: "Calc(100vh - 300px)",
+                  alignItems: "center",
+                }}
+              >
+                <div className={classes.scrollDiv}>
                   <Typography variant="body1" color="textSecondary">
                     {`#${itemNumber}`}
                   </Typography>
                   {currentBrands.length > 1 ? (
-                    <Tooltip title={`${currentBrands.join(", ")}`}>
+                    <Tooltip
+                      title={`${currentBrands.join(", ")}`}
+                      PopperProps={{ style: { zIndex: "16000" } }}
+                    >
                       <span style={{ display: "flex" }}>
                         <Typography className={classes.headerText}>
                           {`Brand(s): ${currentBrands[0]}`}
@@ -410,8 +266,11 @@ const ItemPreviewModal = (props) => {
                       {`Brand(s): ${currentBrands[0]}`}
                     </Typography>
                   )}
-                  {currentPrograms.length > 1 ? (
-                    <Tooltip title={`${currentPrograms.join(", ")}`}>
+                  {!isCoupon && currentPrograms.length > 1 ? (
+                    <Tooltip
+                      title={`${currentPrograms.join(", ")}`}
+                      PopperProps={{ style: { zIndex: "16000" } }}
+                    >
                       <span style={{ display: "flex" }}>
                         <Typography className={classes.headerText}>
                           {`Brand(s): ${currentPrograms[0]}`}
@@ -425,64 +284,146 @@ const ItemPreviewModal = (props) => {
                     </Tooltip>
                   ) : (
                     <Typography className={classes.headerText}>
-                      {`Program(s): ${currentPrograms[0]}`}
+                      {`Program(s): ${
+                        isCoupon ? "Dynamic Coupons" : currentPrograms[0]
+                      }`}
                     </Typography>
                   )}
                   <Typography className={classes.headerText}>
-                    {/* {`Item Type: ${itemType}`} */}
-                    {"Item Type: Necker Coupon"}
+                    {`Item Type:  ${itemType}`}
                   </Typography>
                   <Typography className={classes.headerText}>
-                    {`Coupon Type: ${couponType}`}
-                  </Typography>
-                  <Typography className={classes.headerText}>
-                    {`Offer Type: ${offerType}`}
+                    {`Item Description:  ${itemDescription}`}
                   </Typography>
                   <br />
                   <Box bgcolor="primary.main" className={classes.dividerBox} />
                   <br />
-                  <Typography className={classes.headerText} variant="h5">
+                  <Typography className={classes.headerText}>
                     {`Est. Cost: ${formatMoney(estCost, false)}`}
                   </Typography>
                   <br />
                   <Typography variant="body1" color="textSecondary">
                     {`Pack Size: ${packSize}`}
                   </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Bottles: ${bottles ? bottles : "---"}`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Bottle Discount: ${
-                      bottleDiscount
-                        ? formatMoney(bottleDiscount, false)
-                        : "---"
-                    }`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Discount Amount: ${
-                      discountAmount
-                        ? formatMoney(discountAmount, false)
-                        : "---"
-                    }`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Promotion Start: ${startDate ? startDate : "---"}`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Expiration Date: ${
-                      expirationDate ? expirationDate : "---"
-                    }`}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {`Available to Order: 10/01/2020 - 12/01/2020`}
-                  </Typography>
-                  {type === "inStock" && (
-                    <Typography variant="body1" color="textSecondary">
-                      {`Amount Available: ${stock}`}
-                    </Typography>
+                  {!isCoupon && (
+                    <>
+                      <Typography variant="body1" color="textSecondary">
+                        {orderStartDate && orderEndDate
+                          ? `Available to Order: ${orderStartDate} - ${orderEndDate}`
+                          : ""}
+                      </Typography>
+                      <br />
+                    </>
                   )}
-                </>
-              )}
+                  {isCoupon && (
+                    <>
+                      <Typography variant="body1" color="textSecondary">
+                        {`Coupon Offer Date Range: ${couponInfo.startDate} - ${couponInfo.expirationDate}`}
+                      </Typography>
+                      <br />
+                      <Typography className={classes.headerText}>
+                        {`Coupon Description: ${couponInfo.description}`}
+                      </Typography>
+                      <br />
+                      <Typography className={classes.headerText}>
+                        {`Coupon Bottle Count: ${couponInfo.bottles}`}
+                      </Typography>
+                      <br />
+                      <Typography className={classes.headerText}>
+                        {`Coupon Bottle Discount: ${formatMoney(
+                          couponInfo.bottleDiscount
+                        )}`}
+                      </Typography>
+                      <br />
+                      <Typography className={classes.headerText}>
+                        {`Coupon Type Code: ${couponInfo.typeCode}`}
+                      </Typography>
+                      <br />
+                      <Typography className={classes.headerText}>
+                        {`Offer Type Code: ${couponInfo.offerType}`}
+                      </Typography>
+                    </>
+                  )}
+                  {type === "inStock" && (
+                    <>
+                      <br />
+                      <Typography variant="body1" color="textSecondary">
+                        {`Amount Available: ${stock}`}
+                      </Typography>
+                    </>
+                  )}
+                  {type &&
+                    type !== "program" &&
+                    type !== "catalog" &&
+                    currentUserRole !== "read-only" && (
+                      <>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className={classes.largeButton}
+                          style={{
+                            width: "150px",
+                            marginTop: "10px",
+                          }}
+                          onClick={handleAddItem}
+                          disabled={
+                            currentOrderItems.filter(
+                              (item) => item.itemNumber === itemNumber
+                            ).length !== 0 ||
+                            (type === "inStock" &&
+                              currentWarehouse &&
+                              warehouse &&
+                              warehouse !== currentWarehouse)
+                          }
+                        >
+                          ADD TO ORDER
+                        </Button>
+                        <br />
+                        <br />
+                        <Box
+                          bgcolor="primary.main"
+                          className={classes.dividerBox}
+                        />
+                        <br />
+                        <br />
+                      </>
+                    )}
+                  {!couponInfo && (
+                    <>
+                      <Typography className={classes.headerText}>
+                        Specifications:{" "}
+                      </Typography>
+                      <br />
+                      <Table size="small">
+                        <TableBody>
+                          {specification &&
+                            specification !== "---" &&
+                            specification.map((spec, index) => (
+                              <TableRow key={index}>
+                                <TableCell
+                                  classes={{ root: classes.specTableCellRoot }}
+                                  align="left"
+                                  className={classes.headerText}
+                                >
+                                  {spec.key}
+                                </TableCell>
+                                <TableCell
+                                  classes={{
+                                    root: classes.specTableCellRootDesc,
+                                  }}
+                                  align="left"
+                                  className={classes.bodyText}
+                                >
+                                  {spec.value}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </>
+                  )}
+                </div>
+              </div>
             </Grid>
           </Grid>
           <br />
