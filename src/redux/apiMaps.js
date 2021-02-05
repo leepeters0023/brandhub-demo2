@@ -49,7 +49,7 @@ const handleImages = (images) => {
   } else {
     let thumb = images.find((img) => img.type === "thumbnail");
     if (!thumb) {
-      thumb = images[0];
+      thumb = images[1] ? images[1] : images[0];
     }
     let largeArray = images
       .filter((img) => img.type === "large")
@@ -75,6 +75,7 @@ const handleImages = (images) => {
 };
 
 export const mapItems = (items) => {
+  console.log(items);
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
       return [programs[0]];
