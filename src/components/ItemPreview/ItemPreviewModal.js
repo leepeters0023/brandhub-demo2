@@ -315,7 +315,7 @@ const ItemPreviewModal = (props) => {
                       <br />
                     </>
                   )}
-                  {isCoupon && (
+                  {isCoupon && couponInfo && (
                     <>
                       <Typography variant="body1" color="textSecondary">
                         {`Coupon Offer Date Range: ${couponInfo.startDate} - ${couponInfo.expirationDate}`}
