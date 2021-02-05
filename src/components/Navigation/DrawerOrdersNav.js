@@ -169,7 +169,8 @@ const DrawerOrdersNav = ({
         {role !== "field1" && role !== "read-only" && (
           <MenuItem
             button
-            disabled={Boolean(hasOnDemandOrder)}
+            // disabled={Boolean(hasOnDemandOrder)}
+            disabled={true}
             onClick={() => {
               handleClose();
               handleCouponModal();
