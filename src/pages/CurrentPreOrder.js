@@ -253,17 +253,19 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   ]);
 
   useEffect(() => {
-    if (program) {
+    if (program && !isNaN(parseInt(program))) {
       dispatch(
         fetchPreOrders(currentUserId, "summary", program, currentTerritory)
       );
       dispatch(fetchProgramOrders(program, currentUserId, currentTerritory));
       let currentProg = userPrograms.find((prog) => prog.id === program);
-      dispatch(
-        setProgramName({
-          name: `${currentProg.name}-${currentProg.focusMonth}`,
-        })
-      );
+      if (currentProg) {
+        dispatch(
+          setProgramName({
+            name: `${currentProg.name}-${currentProg.focusMonth}`,
+          })
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [program, dispatch, userPrograms.length]);

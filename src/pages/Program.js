@@ -176,6 +176,17 @@ const Program = ({ handleFiltersClosed, programId }) => {
           </div>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
+              <Button
+                className={classes.largeButton}
+                style={{ marginRight: value !== 1 ? "20px" : "0px" }}
+                variant="contained"
+                color="secondary"
+                startIcon={<ExitToAppIcon />}
+                component={Link}
+                to={`/orders/open/preorder#${programId}`}
+              >
+                ORDER
+              </Button>
               {value !== 1 && (
                 <>
                   {currentUserRole !== "read-only" && (
