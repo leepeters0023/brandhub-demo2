@@ -168,9 +168,8 @@ export const mapItems = (items) => {
             description:
               item["coupon-custom-raw-payload"].CouponOfferDescription,
             bottles: item["coupon-custom-raw-payload"].Quantity,
-            bottleDiscount: stringToCents(
-              item["coupon-custom-raw-payload"].CouponFaceValue
-            ),
+            bottleDiscount:
+              item["coupon-custom-raw-payload"].CouponFaceValue * 100,
           }
         : null,
       imgUrlThumb: images.imgUrlThumb,
@@ -462,6 +461,33 @@ export const mapOrderHistoryItems = (items) => {
         : null,
       isComplianceCanceled: item["is-compliance-canceled"],
       orderId: item.order.id,
+      isCoupon: item.item["is-coupon"],
+      couponInfo: item.item["coupon-custom-raw-payload"]
+        ? {
+            startDate: format(
+              formatDate(
+                new Date(item.item["coupon-custom-raw-payload"].CouponStartDate)
+              ),
+              "MM/dd/yyyy"
+            ),
+            expirationDate: format(
+              formatDate(
+                new Date(
+                  item.item["coupon-custom-raw-payload"].CouponExpirationDate
+                )
+              ),
+              "MM/dd/yyyy"
+            ),
+            typeCode: item.item["coupon-custom-raw-payload"].CouponTypeCode,
+            offerType:
+              item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
+            description:
+              item.item["coupon-custom-raw-payload"].CouponOfferDescription,
+            bottles: item.item["coupon-custom-raw-payload"].Quantity,
+            bottleDiscount:
+              item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
+          }
+        : null,
     };
   });
   return mappedItems;
@@ -586,7 +612,9 @@ export const mapOrderItems = (items, type) => {
           ? {
               startDate: format(
                 formatDate(
-                  new Date(item.item["coupon-custom-raw-payload"].CouponStartDate)
+                  new Date(
+                    item.item["coupon-custom-raw-payload"].CouponStartDate
+                  )
                 ),
                 "MM/dd/yyyy"
               ),
@@ -599,13 +627,13 @@ export const mapOrderItems = (items, type) => {
                 "MM/dd/yyyy"
               ),
               typeCode: item.item["coupon-custom-raw-payload"].CouponTypeCode,
-              offerType: item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
+              offerType:
+                item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
               description:
                 item.item["coupon-custom-raw-payload"].CouponOfferDescription,
               bottles: item.item["coupon-custom-raw-payload"].Quantity,
-              bottleDiscount: stringToCents(
-                item.item["coupon-custom-raw-payload"].CouponFaceValue
-              ),
+              bottleDiscount:
+                item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
             }
           : null,
       };
