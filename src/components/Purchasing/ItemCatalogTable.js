@@ -205,7 +205,7 @@ const ItemCatalogTable = ({
                       />
                     </TableCell>
                     <TableCell align="left">{item.itemNumber}</TableCell>
-                    {item.brand.length > 1 ? (
+                    {item.brand !== "---" && item.brand.length > 1 ? (
                       <Tooltip
                         placement="left"
                         title={`${item.brand.join(", ")}`}
@@ -220,9 +220,11 @@ const ItemCatalogTable = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                      <TableCell align="left">{item.brand[0]}</TableCell>
+                      <TableCell align="left">
+                        {item.brand !== "---" ? item.brand[0] : "---"}
+                      </TableCell>
                     )}
-                    {item.program.length > 1 ? (
+                    {item.program !== "---" && item.program.length > 1 ? (
                       <Tooltip
                         placement="left"
                         title={`${item.program.join(", ")}`}
@@ -237,7 +239,9 @@ const ItemCatalogTable = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                      <TableCell align="left">{item.program[0]}</TableCell>
+                      <TableCell align="left">
+                        {item.program !== "---" ? item.program[0] : "---"}
+                      </TableCell>
                     )}
                     <TableCell align="left">{item.itemType}</TableCell>
                     <TableCell align="left">{item.itemDescription}</TableCell>
