@@ -34,6 +34,10 @@ const typeMap = {
   price: "Price",
   "item-type": "Item Type",
   material: "Material",
+  "metal-wood": "Metal / Wood",
+  "coupon-offer-type": "Coupon Offer Type",
+  "coupon-item-type": "Coupon Item Type",
+  "coupon-face-value": "Coupon Face Value"
 };
 
 const handleImages = (images) => {
@@ -386,7 +390,7 @@ export const mapOrderHistoryItems = (items) => {
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
       orderType: item["order-type"],
-      specification: mapSpecifications(item.item.specification),
+      specification: item.item.specification ? mapSpecifications(item.item.specification) : "---",
       brand: item.item.brands.map((brand) => brand.name),
       brandCode: item.item.brands
         .map((brand) => brand["external-id"])
