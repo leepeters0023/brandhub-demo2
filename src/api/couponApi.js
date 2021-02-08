@@ -80,7 +80,7 @@ export const getCouponOrderSet = async (code) => {
     await pollSleep(500);
   }
   if (response.error && response.error === "404") {
-    response.error = "There was not a coupon created"
+    response.error = "Coupon Creation Process Abandoned.  If this was deliberate, click below to go back home.  If it was not, please contact the help desk."
   }
   return response;
 };
