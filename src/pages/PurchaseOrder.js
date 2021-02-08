@@ -170,7 +170,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
         { label: "PO Number", key: "poNum" },
         { label: "Key Account (y/n)", key: "isKeyAccount" },
         { label: "Key Account Name", key: "keyAccountName" },
-        { label: "Requested Ship Date", key: "expectedShip" },
+        { label: "Delivery Date", key: "inMarketDate" },
         { label: "Order Notes", key: "orderNote" },
         { label: "ABN", key: "abn" },
         { label: "Distributor Name", key: "distributor" },
@@ -204,8 +204,8 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               poNum: currentPO.id,
               isKeyAccount: param.isKeyAccount ? "Yes" : "No",
               keyAccountName: param.keyAccountName,
-              expectedShip: format(
-                new Date(currentPO.expectedShip),
+              inMarketDate: format(
+                new Date(currentPO.inMarketDate),
                 "MM/dd/yyyy"
               ),
               orderNote: param.orderNote,
@@ -261,7 +261,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     }
   }, [
     currentCSV.data.length,
-    currentPO.expectedShip,
+    currentPO.inMarketDate,
     currentPO.id,
     currentPO.poItems,
     currentPO.shippingParams,
