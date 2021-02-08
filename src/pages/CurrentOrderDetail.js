@@ -136,8 +136,18 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   }, [handleConfirmModal]);
 
   const handleRemoveItem = (itemNum) => {
-    dispatch(deleteSetItem(currentItemId, itemNum));
+    let length = currentItems.length;
     handleConfirmModal(false);
+    if (length === 1) {
+      if (currentOrderType === "in-stock") {
+        navigate("/orders/items/inventory");
+      } else if (currentOrderType === "on-demand") {
+        navigate("/orders/items/onDemand");
+      }
+      handleDeleteOrderSet();
+    } else {
+      dispatch(deleteSetItem(currentItemId, itemNum));
+    }
   };
 
   const handleDeleteOrderModal = (id) => {
@@ -232,7 +242,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   useEffect(() => {
     dispatch(fetchFavDistributors(currentUserTerritory));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
     handleFiltersClosed();

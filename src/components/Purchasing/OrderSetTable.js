@@ -103,7 +103,7 @@ const OrderSetTable = (props) => {
   const tableRef = useRef(null);
 
   const [refTable, setRefTable] = useState(null);
-  const [itemLength, setItemLength] = useState(null);
+  const [itemLength, setItemLength] = useState(0);
   const [isRushModalOpen, setRushModalOpen] = useCallback(useState(false));
   const [currentItem, setCurrentItem] = useCallback(useState(null));
   const [isEditOpen, setEditOpen] = useState(false);
@@ -205,12 +205,12 @@ const OrderSetTable = (props) => {
   ]);
 
   useEffect(() => {
-    if ((currentItems && !itemLength) || itemLength !== currentItems.length) {
+    if ((currentItems && currentItems.length > 0 && itemLength === 0) || itemLength !== currentItems.length) {
       setItemLength(currentItems.length);
     }
   }, [itemLength, currentItems, currentItems.length]);
 
-  if (isLoading || !itemLength || (!refTable && orders.length > 0)) {
+  if (isLoading || (!refTable && orders.length > 0)) {
     return <CircularProgress color="inherit" />;
   }
 

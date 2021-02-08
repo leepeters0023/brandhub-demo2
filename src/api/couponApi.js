@@ -58,7 +58,6 @@ export const getCouponOrderSet = async (code) => {
       .get(`/api/order-sets/coupon/${code}`)
       .then((res) => {
         let data = dataFormatter.deserialize(res.data);
-        console.log(data);
         polling = false;
         response.status = "ok";
         response.data = data;
@@ -79,6 +78,9 @@ export const getCouponOrderSet = async (code) => {
   while (polling && !response.data && response.error === "404") {
     await getSet();
     await pollSleep(500);
+  }
+  if (response.error && response.error === "404") {
+    response.error = "There was not a coupon created"
   }
   return response;
 };
