@@ -24,7 +24,7 @@ const StatusSelector = ({
   ];
   const complianceStatusList = [
     { status: "approved", label: "Approved" },
-    { status: "in-violation", label: "Denied" },
+    { status: "in-violation", label: "In Violation" },
     { status: "prior-approval-pending", label: "Pending" },
     { status: "all", label: "All Status" },
   ];
