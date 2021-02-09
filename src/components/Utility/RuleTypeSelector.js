@@ -19,9 +19,14 @@ const RuleTypeSelector = ({
   const ruleTypes = [
     { id: "all", label: "All" },
     { id: "prior-approval", label: "Prior Approval" },
+    { id: "coupon-prior-approval", label: "Coupon Prior Approval" },
+    { id: "internal-approval", label: "Internal Approval" },
     { id: "item-type", label: "Item Type" },
-    { id: "material", label: "Material" },
+    { id: "metal-wood", label: "Metal / Wood" },
     { id: "price", label: "Pricing" },
+    { id: "coupon-offer-type", label: "Coupon Offer Type" },
+    { id: "coupon-item-type", label: "Coupon Item Type" },
+    { id: "coupon-face-value", label: "Coupon Face Value" },
   ];
 
   const currentRuleType = useSelector((state) => state.filters.ruleType);

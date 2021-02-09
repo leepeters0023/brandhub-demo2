@@ -31,6 +31,8 @@ const monthMap = {
 
 const typeMap = {
   "prior-approval": "Prior Approval",
+  "coupon-prior-approval": "Coupon Prior Approval",
+  "internal-approval": "Internal Approval",
   price: "Price",
   "item-type": "Item Type",
   material: "Material",
@@ -1125,7 +1127,7 @@ export const mapRules = (rules) => {
 export const mapCompItems = (items) => {
   const statusMap = {
     "prior-approval-pending": "Pending",
-    "in-violation": "Denied",
+    "in-violation": "In Violation",
     approved: "Approved",
   };
   let mappedItems = items.map((item) => ({
