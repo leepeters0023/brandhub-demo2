@@ -153,7 +153,12 @@ const ComplianceItemsTable = ({
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = items
-        .filter((item) => item.ruleType === "Prior Approval")
+        .filter(
+          (item) =>
+            item.ruleType === "Prior Approval" ||
+            item.ruleType === "Internal Approval" ||
+            item.ruleType === "Coupon Prior Approval"
+        )
         .map((item) => item.id);
       setSelected(newSelecteds);
       dispatch(updateCompItemSelection({ selectedItems: newSelecteds }));
@@ -247,7 +252,11 @@ const ComplianceItemsTable = ({
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              disabled={row.ruleType !== "Prior Approval"}
+                              disabled={
+                                row.ruleType !== "Prior Approval" &&
+                                row.ruleType !== "Internal Approval" &&
+                                row.ruleType !== "Coupon Prior Approval"
+                              }
                               inputProps={{ "aria-labelledby": labelId }}
                               onClick={(event) => event.stopPropagation()}
                               onChange={(event) => {
