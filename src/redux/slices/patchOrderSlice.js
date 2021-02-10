@@ -50,6 +50,7 @@ import {
   cancelCompItem,
   updateCompItemSelection,
 } from "./complianceItemsSlice";
+import { setError } from "./errorSlice";
 
 let initialState = {
   isLoading: false,
@@ -168,6 +169,7 @@ export const deleteSetItem = (id, itemNum) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -183,6 +185,7 @@ export const deleteSetOrder = (id) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -210,6 +213,7 @@ export const deleteMultipleOrderItems = (
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -230,6 +234,7 @@ export const complianceCancelOrderItems = (itemIds) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -244,6 +249,7 @@ export const setSetDate = (id, date) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -258,6 +264,7 @@ export const setRush = (id, status) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -318,6 +325,7 @@ export const submitOrdSet = (programId, value, orderSetId, role) => async (
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -361,6 +369,7 @@ export const approveOrdSet = (orderSetId, value, filters) => async (
     }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -382,6 +391,7 @@ export const approveMultipleOrderSets = (orderSetArray, filters) => async (
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -413,6 +423,7 @@ export const deleteOrdSet = (orderSetId, filters, type, orderType) => async (
     }
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -428,5 +439,6 @@ export const setOrderDetails = (id, note, attn, type) => async (dispatch) => {
     dispatch(patchSuccess());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
