@@ -876,55 +876,27 @@ export const mapPOItems = (items) => {
         totalCost: totalItemCost,
         isPriceCompliant: item["is-price-compliant"],
         packOut: item["has-packout"] ? item["has-packout"] : false,
-        isCoupon: item.item["is-coupon"],
-        couponInfo: item.item["coupon-custom-raw-payload"]
-          ? {
-              startDate: format(
-                formatDate(
-                  new Date(
-                    item.item["coupon-custom-raw-payload"].CouponStartDate
-                  )
-                ),
-                "MM/dd/yyyy"
-              ),
-              expirationDate: format(
-                formatDate(
-                  new Date(
-                    item.item["coupon-custom-raw-payload"].CouponExpirationDate
-                  )
-                ),
-                "MM/dd/yyyy"
-              ),
-              typeCode: item.item["coupon-custom-raw-payload"].CouponTypeCode,
-              offerType:
-                item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
-              description:
-                item.item["coupon-custom-raw-payload"].CouponOfferDescription,
-              bottles: item.item["coupon-custom-raw-payload"].Quantity,
-              bottleDiscount:
-                item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
-            }
-          : null,
-        couponStartDate: item.item["coupon-issue_date"]
+        isCoupon: item["item-is-coupon"],
+        couponStartDate: item["item-coupon-issue_date"]
           ? format(
-              formatDate(new Date(item.item["coupon-issue-date"])),
+              formatDate(new Date(item["item-coupon-issue-date"])),
               "MM/dd/yyyy"
             )
           : null,
-        couponExpirationDate: item.item["coupon-expiration-date"]
+        couponExpirationDate: item["item-coupon-expiration-date"]
           ? format(
-              formatDate(new Date(item.item["coupon-expiration-date"])),
+              formatDate(new Date(item["item-coupon-expiration-date"])),
               "MM/dd/yyyy"
             )
           : null,
-        couponOfferType: item.item["coupon-offer-type-code"]
-          ? item.item["coupon-offer-type-code"]
+        couponOfferType: item["item-coupon-offer-type-code"]
+          ? item["item-coupon-offer-type-code"]
           : null,
-        couponOfferDescription: item.item["coupon-offer-description"]
-          ? item.item["coupon-offer-description"]
+        couponOfferDescription: item["item-coupon-offer-description"]
+          ? item["item-coupon-offer-description"]
           : null,
-        couponTypeCode: item.item["coupon-type-code"]
-          ? item.item["coupon-type-code"]
+        couponTypeCode: item["item-coupon-type-code"]
+          ? item["item-coupon-type-code"]
           : null,
       };
     }
