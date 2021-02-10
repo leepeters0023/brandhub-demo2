@@ -319,18 +319,6 @@ const CurrentPO = () => {
                 .map((item) => (
                   <>
                     <Typography className={classes.bodyText}>
-                      {`Start Date: ${
-                        item.couponStartDate ? item.couponStartDate : "---"
-                      }`}
-                    </Typography>
-                    <Typography className={classes.bodyText}>
-                      {`Expiration Date: ${
-                        item.couponExpirationDate
-                          ? item.couponExpirationDate
-                          : "---"
-                      }`}
-                    </Typography>
-                    <Typography className={classes.bodyText}>
                       {`Coupon Type: ${
                         item.couponTypeCode ? item.couponTypeCode : "---"
                       }`}
