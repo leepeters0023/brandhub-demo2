@@ -39,11 +39,10 @@ const typeMap = {
   "metal-wood": "Metal / Wood",
   "coupon-offer-type": "Coupon Offer Type",
   "coupon-item-type": "Coupon Item Type",
-  "coupon-face-value": "Coupon Face Value"
+  "coupon-face-value": "Coupon Face Value",
 };
 
 const handleImages = (images) => {
-  //update if no thumbnail
   if (images.length === 0) {
     return {
       imgUrlThumb:
@@ -177,6 +176,24 @@ export const mapItems = (items) => {
             bottleDiscount:
               item["coupon-custom-raw-payload"].CouponFaceValue * 100,
           }
+        : null,
+      couponStartDate: item["coupon-issue_date"]
+        ? format(formatDate(new Date(item["coupon-issue-date"])), "MM/dd/yyyy")
+        : null,
+      couponExpirationDate: item["coupon-expiration-date"]
+        ? format(
+            formatDate(new Date(item["coupon-expiration-date"])),
+            "MM/dd/yyyy"
+          )
+        : null,
+      couponOfferType: item["coupon-offer-type-code"]
+        ? item["coupon-offer-type-code"]
+        : null,
+      couponOfferDescription: item["coupon-offer-description"]
+        ? item.item["coupon-offer-description"]
+        : null,
+      couponTypeCode: item["coupon-type-code"]
+        ? item["coupon-type-code"]
         : null,
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
@@ -392,7 +409,9 @@ export const mapOrderHistoryItems = (items) => {
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
       orderType: item["order-type"],
-      specification: item.item.specification ? mapSpecifications(item.item.specification) : "---",
+      specification: item.item.specification
+        ? mapSpecifications(item.item.specification)
+        : "---",
       brand: item.item.brands.map((brand) => brand.name),
       brandCode: item.item.brands
         .map((brand) => brand["external-id"])
@@ -493,6 +512,27 @@ export const mapOrderHistoryItems = (items) => {
             bottleDiscount:
               item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
           }
+        : null,
+      couponStartDate: item.item["coupon-issue_date"]
+        ? format(
+            formatDate(new Date(item.item["coupon-issue-date"])),
+            "MM/dd/yyyy"
+          )
+        : null,
+      couponExpirationDate: item.item["coupon-expiration-date"]
+        ? format(
+            formatDate(new Date(item.item["coupon-expiration-date"])),
+            "MM/dd/yyyy"
+          )
+        : null,
+      couponOfferType: item.item["coupon-offer-type-code"]
+        ? item.item["coupon-offer-type-code"]
+        : null,
+      couponOfferDescription: item.item["coupon-offer-description"]
+        ? item.item["coupon-offer-description"]
+        : null,
+      couponTypeCode: item.item["coupon-type-code"]
+        ? item.item["coupon-type-code"]
         : null,
     };
   });
@@ -645,6 +685,27 @@ export const mapOrderItems = (items, type) => {
               bottleDiscount:
                 item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
             }
+          : null,
+        couponStartDate: item.item["coupon-issue_date"]
+          ? format(
+              formatDate(new Date(item.item["coupon-issue-date"])),
+              "MM/dd/yyyy"
+            )
+          : null,
+        couponExpirationDate: item.item["coupon-expiration-date"]
+          ? format(
+              formatDate(new Date(item.item["coupon-expiration-date"])),
+              "MM/dd/yyyy"
+            )
+          : null,
+        couponOfferType: item.item["coupon-offer-type-code"]
+          ? item.item["coupon-offer-type-code"]
+          : null,
+        couponOfferDescription: item.item["coupon-offer-description"]
+          ? item.item["coupon-offer-description"]
+          : null,
+        couponTypeCode: item.item["coupon-type-code"]
+          ? item.item["coupon-type-code"]
           : null,
       };
     })
@@ -815,6 +876,56 @@ export const mapPOItems = (items) => {
         totalCost: totalItemCost,
         isPriceCompliant: item["is-price-compliant"],
         packOut: item["has-packout"] ? item["has-packout"] : false,
+        isCoupon: item.item["is-coupon"],
+        couponInfo: item.item["coupon-custom-raw-payload"]
+          ? {
+              startDate: format(
+                formatDate(
+                  new Date(
+                    item.item["coupon-custom-raw-payload"].CouponStartDate
+                  )
+                ),
+                "MM/dd/yyyy"
+              ),
+              expirationDate: format(
+                formatDate(
+                  new Date(
+                    item.item["coupon-custom-raw-payload"].CouponExpirationDate
+                  )
+                ),
+                "MM/dd/yyyy"
+              ),
+              typeCode: item.item["coupon-custom-raw-payload"].CouponTypeCode,
+              offerType:
+                item.item["coupon-custom-raw-payload"].CouponOfferTypeCode,
+              description:
+                item.item["coupon-custom-raw-payload"].CouponOfferDescription,
+              bottles: item.item["coupon-custom-raw-payload"].Quantity,
+              bottleDiscount:
+                item.item["coupon-custom-raw-payload"].CouponFaceValue * 100,
+            }
+          : null,
+        couponStartDate: item.item["coupon-issue_date"]
+          ? format(
+              formatDate(new Date(item.item["coupon-issue-date"])),
+              "MM/dd/yyyy"
+            )
+          : null,
+        couponExpirationDate: item.item["coupon-expiration-date"]
+          ? format(
+              formatDate(new Date(item.item["coupon-expiration-date"])),
+              "MM/dd/yyyy"
+            )
+          : null,
+        couponOfferType: item.item["coupon-offer-type-code"]
+          ? item.item["coupon-offer-type-code"]
+          : null,
+        couponOfferDescription: item.item["coupon-offer-description"]
+          ? item.item["coupon-offer-description"]
+          : null,
+        couponTypeCode: item.item["coupon-type-code"]
+          ? item.item["coupon-type-code"]
+          : null,
       };
     }
   });

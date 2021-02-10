@@ -307,6 +307,74 @@ const CurrentPO = () => {
               </div>
             );
           })}
+          {currentPO.poItems.filter((item) => item.isCoupon).length > 0 && (
+            <>
+              <br />
+              <Typography className={clsx(classes.headerText, classes.POText)}>
+                Coupon Details:
+              </Typography>
+              <br />
+              {currentPO.poItems
+                .filter((item) => item.isCoupon)
+                .map((item) => {
+                  if (item.couponInfo) {
+                    return (
+                      <>
+                        <Typography className={classes.bodyText}>
+                          {`Start Date: ${item.couponInfo.startDate}`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Expiration Date: ${item.couponInfo.expirationDate}`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Type: ${item.couponInfo.typeCode}`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Offer Type: ${item.couponInfo.offerType}`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Description: ${item.couponInfo.description}`}
+                        </Typography>
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <Typography className={classes.bodyText}>
+                          {`Start Date: ${
+                            item.couponStartDate ? item.couponStartDate : "---"
+                          }`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Expiration Date: ${
+                            item.couponExpirationDate
+                              ? item.couponExpirationDate
+                              : "---"
+                          }`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Type: ${
+                            item.couponTypeCode ? item.couponTypeCode : "---"
+                          }`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Offer Type: ${
+                            item.couponOfferType ? item.couponOfferType : "---"
+                          }`}
+                        </Typography>
+                        <Typography className={classes.bodyText}>
+                          {`Coupon Description: ${
+                            item.couponOfferDescription
+                              ? item.couponOfferDescription
+                              : "---"
+                          }`}
+                        </Typography>
+                      </>
+                    );
+                  }
+                })}
+            </>
+          )}
         </Grid>
       </Grid>
       <br />
