@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import Carousel from "react-material-ui-carousel";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
@@ -27,6 +28,12 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
     marginLeft: "25px",
   },
+  previewImage: {
+    maxHeight: "500px",
+    minHeight: "500px", //small images come through low res but placement on the page is preserved
+    width: "auto",
+    objectFit: "contain",
+  },
 }));
 
 const ApproveOrDenyItem = () => {
@@ -35,12 +42,13 @@ const ApproveOrDenyItem = () => {
   const [itemNumber, setItemNumber] = useState("");
   const [token, setToken] = useState("");
   const [notes, setNotes] = useState("");
+  const [imgs, setImgs] = useState([]);
   const status = useSelector((state) => state.itemApprovedOrDenied.status);
   const isError = useSelector((state) => state.itemApprovedOrDenied.error);
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
-  
+ 
   const handleNotes = (e) => {
     setNotes(e.target.value)
   }
@@ -48,6 +56,7 @@ const ApproveOrDenyItem = () => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
+    setImgs(params.get("cloudinary_ids").split(","))
   }, []);
 
   return (
@@ -72,6 +81,24 @@ const ApproveOrDenyItem = () => {
             alignItems: "center",
           }}
         >
+          <Carousel
+            autoPlay=""
+            navButtonsAlwaysInvisible={
+              imgs && imgs.length === 1 ? true : false
+            }
+          >
+            {imgs &&
+              imgs.map((cloudinaryId, index) => (
+                <ImageWrapper
+                  key={index}
+                  imgUrl={`https://res.cloudinary.com/brandhub/image/upload/${cloudinaryId}`}
+                  alt={`compliance-image${index}`}
+                  imgClass={classes.previewImage}
+                  id={`compliance-image${cloudinaryId}`}
+                />
+              ))}
+          </Carousel>
+          <br />
           <Typography className={classes.titleText} variant="h5">
             Please approve or deny item: {itemNumber}
           </Typography>
@@ -108,15 +135,15 @@ const ApproveOrDenyItem = () => {
           </div>
           <br></br>
           <TextField
-              disabled={!status && !isError ? false : true}
-              id="notes-input"
-              style={{ width: "400px" }}
-              variant="outlined"
-              color="secondary"
-              type="text"
-              label="Notes (for your reference only)"
-              onChange={(e) => handleNotes(e)}
-            />
+            disabled={!status && !isError ? false : true}
+            id="notes-input"
+            style={{ width: "400px" }}
+            variant="outlined"
+            color="secondary"
+            type="text"
+            label="Notes (for your reference only)"
+            onChange={(e) => handleNotes(e)}
+          />
           {isLoading && <CircularProgress />}
           <br></br>
           {isError && (
@@ -138,37 +165,37 @@ const ApproveOrDenyItem = () => {
               <br></br>
               <Typography className={classes.headerText}>Download for your records</Typography>
               <Tooltip
-                  title="Download as PDF"
-                  PopperProps={{ style: { zIndex: "16000" } }}
-                  placement="right"
-                >
-                  <span>
-                    <PDFDownloadLink
-                      document={
-                        <ApproveOrDenyItemPDF 
-                          itemNumber={itemNumber} 
-                          token={token} 
-                          status={status} 
-                          isLoading={isLoading} 
-                          notes={notes}
-                          />
-                      }
-                      fileName={`Gallo-item-compliance-${itemNumber}`}
-                    >
-                      {({ loading, error }) =>
-                        loading ? (
-                          <div
-                            style={{
-                              width: "58.99px",
-                              height: "58.99px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <CircularProgress />
-                          </div>
-                        ) : (
+                title="Download as PDF"
+                PopperProps={{ style: { zIndex: "16000" } }}
+                placement="right"
+              >
+                <span>
+                  <PDFDownloadLink
+                    document={
+                      <ApproveOrDenyItemPDF
+                        itemNumber={itemNumber}
+                        token={token}
+                        status={status}
+                        isLoading={isLoading}
+                        notes={notes}
+                      />
+                    }
+                    fileName={`Gallo-item-compliance-${itemNumber}`}
+                  >
+                    {({ loading, error }) =>
+                      loading ? (
+                        <div
+                          style={{
+                            width: "58.99px",
+                            height: "58.99px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <CircularProgress />
+                        </div>
+                      ) : (
                           <IconButton>
                             <PictureAsPdfIcon
                               fontSize="large"
@@ -176,10 +203,10 @@ const ApproveOrDenyItem = () => {
                             />
                           </IconButton>
                         )
-                      }
-                    </PDFDownloadLink>
-                  </span>
-                </Tooltip>
+                    }
+                  </PDFDownloadLink>
+                </span>
+              </Tooltip>
             </>
           )}
         </div>
