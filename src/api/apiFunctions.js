@@ -68,8 +68,7 @@ export const buildFilters = (
       : "";
   let dateString =
     filterObject.fromDate &&
-    filterObject.toDate &&
-    filterObject.status === "submitted"
+    filterObject.toDate
       ? `filter[${
           type === "order-set-items" || type === "history-items"
             ? dateMap[type]
@@ -179,7 +178,6 @@ export const buildFilters = (
     userString,
     purchaserString,
     supplierString,
-    sortString,
     ruleTypeString,
     isVisibleString,
     isOrderableString,
@@ -188,6 +186,7 @@ export const buildFilters = (
     currentTerritoryString,
     orderItemIdString,
     isPreOrderActiveString,
+    sortString,
   ];
 
   let queryStringAppend = queryArray

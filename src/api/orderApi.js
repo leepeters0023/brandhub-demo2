@@ -698,7 +698,7 @@ export const fetchOrderHistory = async (filterObject) => {
     shipDate: "ship-date",
     status: "status",
   };
-  let sortString = `&sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
+  let sortString = `sort=${filterObject.sortOrder === "desc" ? "-" : ""}${
     sortMap[filterObject.sortOrderBy]
   }`;
   let queryString = buildFilters(

@@ -430,8 +430,12 @@ export const mapOrderHistoryItems = (items) => {
           : item["custom-address-name"].length > 0
           ? item["custom-address-name"]
           : "---",
-      supplierId: item.item.supplier.id,
+      addressOne: item["street-address-1"],
+      addressTwo: item["street-address-2"],
+      city: item.city,
       state: item.state ? item.state : "---",
+      zip: item.zip,
+      supplierId: item.item.supplier.id,
       packSize: item["qty-per-pack"],
       totalItems: item.qty,
       estCost: stringToCents(item["estimated-cost"]),
@@ -475,6 +479,9 @@ export const mapOrderHistoryItems = (items) => {
             formatDate(new Date(item.item["orderable-end-date"])),
             "MM/dd/yyyy"
           )
+        : "---",
+      inMarketDate: item["in-market-date"]
+        ? format(formatDate(new Date(item["in-market-date"])), "MM/dd/yyyy")
         : "---",
       triggeredRules: item["triggered-rules"]
         ? item["triggered-rules"].map((rule) => rule.rule.description)
