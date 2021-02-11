@@ -20,6 +20,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import AutorenewIcon from "@material-ui/icons/Autorenew";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
@@ -282,14 +283,34 @@ const ComplianceItemsTable = ({
 
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
-                    <TableCell align="left">{row.brand}</TableCell>
+                    {row.brand !== "---" && row.brand.length > 1 ? (
+                      <Tooltip
+                        placement="left"
+                        title={`${row.brand.join(", ")}`}
+                      >
+                        <TableCell align="left">
+                          {row.brand[0]}
+                          <MoreHorizIcon
+                            fontSize="small"
+                            color="inherit"
+                            style={{ float: "right" }}
+                          />
+                        </TableCell>
+                      </Tooltip>
+                    ) : (
+                      <TableCell align="left">
+                        {row.brand !== "---" ? row.brand[0] : "---"}
+                      </TableCell>
+                    )}
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.state}</TableCell>
                     <TableCell align="left">{row.ruleType}</TableCell>
                     <TableCell align="left">{row.ruleDesc}</TableCell>
                     <TableCell align="left">
                       {row.status === "Pending" &&
-                      row.ruleType === "Prior Approval" ? (
+                      (row.ruleType === "Prior Approval" ||
+                        row.ruleType === "Coupon Prior Approval" ||
+                        row.ruleType === "Internal Approval") ? (
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >

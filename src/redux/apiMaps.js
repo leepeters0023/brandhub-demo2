@@ -1220,10 +1220,12 @@ export const mapCompItems = (items) => {
     "in-violation": "In Violation",
     approved: "Approved",
   };
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],
     program: item["most-recent-program-name"],
+    brand: item["brand-names"],
     itemType: item["item-type-description"],
     ruleType: typeMap[item.rule.type],
     ruleDesc: item.rule.description,
@@ -1231,7 +1233,9 @@ export const mapCompItems = (items) => {
     state: item.state.code,
     //These two are placeholder for now
     active: true,
-    emailSent: item.rule.type === "prior-approval" ? "---" /* todo */ : "---",
+    emailSent: item["email-sent-at"]
+      ? format(formatDate(new Date(item["email-sent-at"])), "MM/dd/yyyy")
+      : "---",
   }));
   return mappedItems;
 };
