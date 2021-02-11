@@ -920,6 +920,47 @@ export const updateShippingParams = async (updateArray) => {
   return response;
 };
 
+export const updateShippingParameterAddress = async (type, value, id) => {
+  const response = { status: "", error: null };
+  const dataObject =
+    type === "dist"
+      ? {
+          data: {
+            type: "shipping-parameter",
+            id: id,
+            relationships: {
+              distributor: {
+                data: {
+                  type: "distributor",
+                  id: value,
+                },
+              },
+            },
+          },
+        }
+      : {
+          data: {
+            type: "shipping-parameter",
+            id: id,
+            attributes: {
+              warehouse: value,
+            },
+          },
+        };
+  await axios
+    .patch(`/api/shipping-parameters/${id}`, dataObject, writeHeaders)
+    .then((_res) => {
+      response.status = "ok";
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
+  return response;
+};
+
 //Tracks package
 export const trackItem = async (id) => {
   const response = { status: "", error: null, data: null };
