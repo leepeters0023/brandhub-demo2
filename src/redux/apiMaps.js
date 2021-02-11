@@ -1220,7 +1220,6 @@ export const mapCompItems = (items) => {
     "in-violation": "In Violation",
     approved: "Approved",
   };
-  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemNumber: item["item-number"],
