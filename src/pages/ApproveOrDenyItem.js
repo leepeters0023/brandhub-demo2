@@ -48,13 +48,6 @@ const ApproveOrDenyItem = () => {
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
-
-  let paramSample = 'v1612997323/prod/Gallo/nrcgldork0kjwjehgrlk.jpg,v1612919514/prod/Gallo/ptlsixxizcsav5wd1hqt.jpg,v1612815444/prod/Gallo/oggeqqyppbpnsaxukpfu.jpg,v1612804011/prod/Gallo/ycvfdraiirwirqwkoghi.jpg,v1612567236/prod/Gallo/xesuiz5zyijxcrdu1zu2.jpg,v1612562779/prod/Gallo/xgmu9rss468pb9ixhjlq.jpg'
-
-  useEffect(() => {
-    setImgs(paramSample.split(","))
-  }, [])
- //  will delete ^ ^ ^ 
  
   const handleNotes = (e) => {
     setNotes(e.target.value)
@@ -63,7 +56,7 @@ const ApproveOrDenyItem = () => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
-    //setImgs(params.get("cloudinary_ids").split(","))
+    setImgs(params.get("cloudinary_ids").split(","))
   }, []);
 
   return (
