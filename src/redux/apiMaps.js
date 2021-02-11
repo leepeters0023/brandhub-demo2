@@ -1224,7 +1224,7 @@ export const mapCompItems = (items) => {
     id: item.id,
     itemNumber: item["item-number"],
     program: item["most-recent-program-name"],
-    brand: item["brand-names"],
+    brand: item["brand-names"] ? item["brand-names"] : "---",
     itemType: item["item-type-description"],
     ruleType: typeMap[item.rule.type],
     ruleDesc: item.rule.description,
