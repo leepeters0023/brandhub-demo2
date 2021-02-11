@@ -114,3 +114,4 @@ EditContactModal.propTypes = {
 };
 
 export default EditContactModal;
+

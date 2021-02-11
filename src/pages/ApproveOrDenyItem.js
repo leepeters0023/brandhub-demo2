@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import Carousel from "react-material-ui-carousel";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
