@@ -36,12 +36,19 @@ const ApproveOrDenyItem = () => {
   const [itemNumber, setItemNumber] = useState("");
   const [token, setToken] = useState("");
   const [notes, setNotes] = useState("");
+  //const [imgs, setImgs] = useState([]);
   const status = useSelector((state) => state.itemApprovedOrDenied.status);
   const isError = useSelector((state) => state.itemApprovedOrDenied.error);
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
   
+  const sampleImgsToDelete = [ 
+    'https://res.cloudinary.com/brandhub/image/upload/v1611764233/prod/BrandLogos/GALLO.2101.RTA_2021_LOGOS_WORKING_118471_Vin_Vault_k7kwfv.png',
+    'https://res.cloudinary.com/brandhub/image/upload/v1611764230/prod/BrandLogos/GALLO.2101.RTA_2021_LOGOS_WORKING_118471_Vecchia_Romagna_Brandy_l8wvkf.png',
+    'https://res.cloudinary.com/brandhub/image/upload/v1611764220/prod/BrandLogos/GALLO.2101.RTA_2021_LOGOS_WORKING_118471_Tisdale_zciher.png',
+  ];
+
   const handleNotes = (e) => {
     setNotes(e.target.value)
   }
@@ -49,6 +56,7 @@ const ApproveOrDenyItem = () => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
+    //setImgs(params.get('imgs').split(","))
   }, []);
 
   return (
