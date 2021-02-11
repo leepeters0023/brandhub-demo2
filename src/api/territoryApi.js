@@ -82,7 +82,7 @@ export const fetchFilteredStates = async (ids) => {
 export const fetchCompliantStates = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/states?filter[valid-for-shipping-parameter-id]=${id}`)
+    .get(`/api/states?filter[compliant-for-shipping-parameter-id]=${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
