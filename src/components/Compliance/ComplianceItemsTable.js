@@ -322,7 +322,9 @@ const ComplianceItemsTable = ({
                               variant="body2"
                               style={{ marginRight: "10px" }}
                             >
-                              {`Email sent on ${row.emailSent}`}
+                              {row.emailSent !== "---"
+                                ? `Email sent on ${row.emailSent}`
+                                : "Email not sent"}
                             </Typography>
                             {/* <Typography
                               variant="body2"
