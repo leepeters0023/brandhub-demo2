@@ -16,12 +16,10 @@ const headCells = [
   { id: "state", label: "Market" },
   { id: "brandCode", label: "Brand" },
   { id: "unit", label: "BU" },
+  { id: "itemType", label: "Item Type" },
   { id: "inMarketDate", label: "Month in Market" },
-  { id: "tactic", label: "Tactic" },
-  { id: "supplier", label: "Vendor" },
   { id: "totalEstCost", label: "Estimated Cost" },
   { id: "totalItems", label: "Qty Ordered" },
-  { id: "holdType", label: "Hold Type" },
   { id: "itemNumber", label: "Seq #" },
   { id: "program", label: "Program" },
   { id: "orderType", label: "Order Type" },
@@ -60,19 +58,12 @@ const WrapUpTable = ({ report, orderTypeMap, currentSuppliers }) => {
               <TableCell align="left">{item.state}</TableCell>
               <TableCell align="left">{item.brandCode}</TableCell>
               <TableCell align="left">{item.unit}</TableCell>
-              <TableCell align="left">{"---"}</TableCell>
-              <TableCell align="left">{"---"}</TableCell>
-              <TableCell align="left">
-                {
-                  currentSuppliers.find((sup) => sup.id === item.supplierId)
-                    .name
-                }
-              </TableCell>
+              <TableCell align="left">{item.itemType}</TableCell>
+              <TableCell align="left">{item.inMarketDate}</TableCell>
               <TableCell align="left">
                 {formatMoney(item.totalEstCost)}
               </TableCell>
               <TableCell align="left">{item.totalItems}</TableCell>
-              <TableCell align="left">{"---"}</TableCell>
               <TableCell align="left">{item.itemNumber}</TableCell>
               <TableCell align="left">{item.program}</TableCell>
               <TableCell align="left">{orderTypeMap[item.orderType]}</TableCell>
