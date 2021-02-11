@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "25px",
   },
   previewImage: {
-   height: "500px",
-   width: "auto"
+    maxHeight: "500px",
+    width: "auto",
+    objectFit: "contain",
   },
-  
 }));
 
 const ApproveOrDenyItem = () => {
@@ -47,11 +47,13 @@ const ApproveOrDenyItem = () => {
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
-  
+
+  let paramSample = 'v1612997323/prod/Gallo/nrcgldork0kjwjehgrlk.jpg,v1612919514/prod/Gallo/ptlsixxizcsav5wd1hqt.jpg,v1612815444/prod/Gallo/oggeqqyppbpnsaxukpfu.jpg,v1612804011/prod/Gallo/ycvfdraiirwirqwkoghi.jpg'
+
   useEffect(() => {
-    setImgs(['v1612997323/prod/Gallo/nrcgldork0kjwjehgrlk.jpg', 'v1612919514/prod/Gallo/ptlsixxizcsav5wd1hqt.jpg', 'v1612815444/prod/Gallo/oggeqqyppbpnsaxukpfu.jpg'])
-  } )
- 
+    setImgs(paramSample.split(","))
+  }, [])
+
   const handleNotes = (e) => {
     setNotes(e.target.value)
   }
@@ -84,21 +86,25 @@ const ApproveOrDenyItem = () => {
             alignItems: "center",
           }}
         >
-          <Carousel 
+          <Carousel
             autoPlay=""
-            classes={{root: classes.imgCarousel}}
-            >
-                {imgs &&
-                  imgs.map((cloudinaryId, index) => (
-                    <ImageWrapper
-                      key={index}
-                      imgUrl={`https://res.cloudinary.com/brandhub/image/upload/${cloudinaryId}`}
-                      alt={`compliance-image${index}`}
-                      imgClass={classes.previewImage}
-                    />
-                  ))}
-              </Carousel>
-              <br />
+            classes={{ root: classes.imgCarousel }}
+            navButtonsAlwaysInvisible={
+              imgs && imgs.length === 1 ? true : false
+            }
+          >
+            {imgs &&
+              imgs.map((cloudinaryId, index) => (
+                <ImageWrapper
+                  key={index}
+                  imgUrl={`https://res.cloudinary.com/brandhub/image/upload/${cloudinaryId}`}
+                  alt={`compliance-image${index}`}
+                  imgClass={classes.previewImage}
+                  id={`compliance-image${cloudinaryId}`}
+                />
+              ))}
+          </Carousel>
+          <br />
           <Typography className={classes.titleText} variant="h5">
             Please approve or deny item: {itemNumber}
           </Typography>
@@ -135,15 +141,15 @@ const ApproveOrDenyItem = () => {
           </div>
           <br></br>
           <TextField
-              disabled={!status && !isError ? false : true}
-              id="notes-input"
-              style={{ width: "400px" }}
-              variant="outlined"
-              color="secondary"
-              type="text"
-              label="Notes (for your reference only)"
-              onChange={(e) => handleNotes(e)}
-            />
+            disabled={!status && !isError ? false : true}
+            id="notes-input"
+            style={{ width: "400px" }}
+            variant="outlined"
+            color="secondary"
+            type="text"
+            label="Notes (for your reference only)"
+            onChange={(e) => handleNotes(e)}
+          />
           {isLoading && <CircularProgress />}
           <br></br>
           {isError && (
@@ -165,37 +171,37 @@ const ApproveOrDenyItem = () => {
               <br></br>
               <Typography className={classes.headerText}>Download for your records</Typography>
               <Tooltip
-                  title="Download as PDF"
-                  PopperProps={{ style: { zIndex: "16000" } }}
-                  placement="right"
-                >
-                  <span>
-                    <PDFDownloadLink
-                      document={
-                        <ApproveOrDenyItemPDF 
-                          itemNumber={itemNumber} 
-                          token={token} 
-                          status={status} 
-                          isLoading={isLoading} 
-                          notes={notes}
-                          />
-                      }
-                      fileName={`Gallo-item-compliance-${itemNumber}`}
-                    >
-                      {({ loading, error }) =>
-                        loading ? (
-                          <div
-                            style={{
-                              width: "58.99px",
-                              height: "58.99px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <CircularProgress />
-                          </div>
-                        ) : (
+                title="Download as PDF"
+                PopperProps={{ style: { zIndex: "16000" } }}
+                placement="right"
+              >
+                <span>
+                  <PDFDownloadLink
+                    document={
+                      <ApproveOrDenyItemPDF
+                        itemNumber={itemNumber}
+                        token={token}
+                        status={status}
+                        isLoading={isLoading}
+                        notes={notes}
+                      />
+                    }
+                    fileName={`Gallo-item-compliance-${itemNumber}`}
+                  >
+                    {({ loading, error }) =>
+                      loading ? (
+                        <div
+                          style={{
+                            width: "58.99px",
+                            height: "58.99px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <CircularProgress />
+                        </div>
+                      ) : (
                           <IconButton>
                             <PictureAsPdfIcon
                               fontSize="large"
@@ -203,10 +209,10 @@ const ApproveOrDenyItem = () => {
                             />
                           </IconButton>
                         )
-                      }
-                    </PDFDownloadLink>
-                  </span>
-                </Tooltip>
+                    }
+                  </PDFDownloadLink>
+                </span>
+              </Tooltip>
             </>
           )}
         </div>
