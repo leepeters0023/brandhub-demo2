@@ -53,7 +53,8 @@ const ApproveOrDenyItem = () => {
   useEffect(() => {
     setImgs(paramSample.split(","))
   }, [])
-
+ //  will delete ^ ^ ^ 
+ 
   const handleNotes = (e) => {
     setNotes(e.target.value)
   }
@@ -61,7 +62,7 @@ const ApproveOrDenyItem = () => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
-    //setImgs(params.get('cloudinary_ids').split(","))
+    //setImgs(params.get("cloudinary_ids").split(","))
   }, []);
 
   return (
@@ -88,7 +89,6 @@ const ApproveOrDenyItem = () => {
         >
           <Carousel
             autoPlay=""
-            classes={{ root: classes.imgCarousel }}
             navButtonsAlwaysInvisible={
               imgs && imgs.length === 1 ? true : false
             }
