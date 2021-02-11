@@ -239,6 +239,7 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
     (state) => state.purchaseOrder.currentPO.shippingParams
   );
   const poStatus = useSelector((state) => state.purchaseOrder.currentPO.status);
+  const poId = useSelector((state) => state.purchaseOrder.currentPO.id);
   const currentUserRole = useSelector((state) => state.user.role);
 
   const handleOpenModal = (id) => {
@@ -258,6 +259,7 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
           modalOpen={isReallocateModalOpen}
           paramId={paramId}
           handleClose={handleModalClose}
+          poId={poId}
         />
       )}
       <TableContainer

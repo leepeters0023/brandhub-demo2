@@ -78,3 +78,21 @@ export const fetchFilteredStates = async (ids) => {
     });
   return response;
 };
+
+export const fetchCompliantStates = async (id) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/states?filter[valid-for-shipping-parameter-id]=${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
+  return response;
+};

@@ -22,6 +22,7 @@ import {
   addAdditionalFile,
 } from "../redux/slices/purchaseOrderSlice";
 import { getTracking } from "../redux/slices/trackingSlice";
+import { setError } from "../redux/slices/errorSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
 import Loading from "../components/Utility/Loading";
@@ -126,7 +127,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleFileUploadError = (err, file, inputElem, reason) => {
-    //todo, modal?
+    dispatch(setError({ error: err.toString() }))
     console.log(err, file, inputElem, reason);
   };
 

@@ -24,6 +24,7 @@ import {
   completePO,
   updateShippingParams,
   addAdditionalPOCost,
+  updateShippingParameterAddress,
 } from "../../api/purchasingApi";
 import {
   setIsLoading as patchLoading,
@@ -796,6 +797,25 @@ export const completePurchaseOrder = (id) => async (dispatch) => {
     dispatch(patchFailure({ error: err.toString() }));
   }
 };
+
+export const updateShippingParamAddress = (type, value, id, poId) => async (dispatch) => {
+  try{
+    dispatch(setIsLoading());
+    const paramStatus = await updateShippingParameterAddress(type, value, id);
+    if (paramStatus.error) {
+      throw paramStatus.error
+    }
+    const newPO = await fetchPO(poId);
+    if (newPO.error) {
+      throw newPO.error;
+    }
+    const formattedPO = mapPurchaseOrder(newPO.data);
+    dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+}
 
 export const updateAllShippingParams = (updateArray, id) => async (
   dispatch

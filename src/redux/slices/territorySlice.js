@@ -4,6 +4,7 @@ import {
   fetchFilteredTerritories,
   fetchAllStates,
   fetchFilteredStates,
+  fetchCompliantStates,
 } from "../../api/territoryApi";
 import { setError } from "./errorSlice";
 
@@ -14,6 +15,7 @@ let initialState = {
   filteredTerritoryList: [],
   stateList: [],
   filteredStateList: [],
+  compliantStateList: [],
   error: null,
 };
 
@@ -62,6 +64,12 @@ const territorySlice = createSlice({
       state.isStatesLoading = false;
       state.error = null;
     },
+    getCompliantStatesSuccess(state, action) {
+      const { states } = action.payload;
+      state.compliantStateList = states;
+      state.isStatesLoading = false;
+      state.error = null;
+    },
     clearFilteredStates(state) {
       state.filteredStateList = [];
     },
@@ -71,6 +79,7 @@ const territorySlice = createSlice({
       state.filteredTerritoryList = [];
       state.stateList = [];
       state.filteredStateList = [];
+      state.compliantStateList = [];
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -84,6 +93,7 @@ export const {
   getAllTerritoriesSuccess,
   getStatesSuccess,
   getAllStatesSuccess,
+  getCompliantStatesSuccess,
   clearFilteredStates,
   clearTerritories,
   setFailure,
@@ -160,3 +170,17 @@ export const fetchStatesByIds = (ids) => async (dispatch) => {
     dispatch(setError({ error: err.toString() }));
   }
 };
+
+export const fetchAllCompliantStates = (id) => async (dispatch) => {
+  try {
+    dispatch(setStatesLoading());
+    const states = await fetchCompliantStates(id);
+    if (states.error) {
+      throw states.error;
+    }
+    dispatch(getCompliantStatesSuccess({ states: states.data }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+}
