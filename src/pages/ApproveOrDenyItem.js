@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   previewImage: {
     maxHeight: "500px",
+    minHeight: "500px", //small images come through low res but placement on the page is preserved
     width: "auto",
     objectFit: "contain",
   },
@@ -48,7 +49,7 @@ const ApproveOrDenyItem = () => {
     (state) => state.itemApprovedOrDenied.isLoading
   );
 
-  let paramSample = 'v1612997323/prod/Gallo/nrcgldork0kjwjehgrlk.jpg,v1612919514/prod/Gallo/ptlsixxizcsav5wd1hqt.jpg,v1612815444/prod/Gallo/oggeqqyppbpnsaxukpfu.jpg,v1612804011/prod/Gallo/ycvfdraiirwirqwkoghi.jpg'
+  let paramSample = 'v1612997323/prod/Gallo/nrcgldork0kjwjehgrlk.jpg,v1612919514/prod/Gallo/ptlsixxizcsav5wd1hqt.jpg,v1612815444/prod/Gallo/oggeqqyppbpnsaxukpfu.jpg,v1612804011/prod/Gallo/ycvfdraiirwirqwkoghi.jpg,v1612567236/prod/Gallo/xesuiz5zyijxcrdu1zu2.jpg,v1612562779/prod/Gallo/xgmu9rss468pb9ixhjlq.jpg'
 
   useEffect(() => {
     setImgs(paramSample.split(","))
