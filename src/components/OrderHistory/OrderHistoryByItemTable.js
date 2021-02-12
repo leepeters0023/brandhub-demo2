@@ -376,9 +376,7 @@ const OrderHistoryByItemTable = ({
                       row.isComplianceCanceled ? classes.cancelCell : null
                     }
                   >
-                    {row.orderDate !== "---"
-                      ? format(new Date(row.orderDate), "MM/dd/yyyy")
-                      : row.orderDate}
+                    {row.orderDate}
                   </TableCell>
                   <TableCell
                     align="left"

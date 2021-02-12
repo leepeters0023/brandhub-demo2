@@ -5,7 +5,7 @@ import { buildFilters, handleErrors } from "./apiFunctions";
 
 const dataFormatter = new Jsona();
 
-export const fetchWrapUpReport = async (filterObject) => {
+export const fetchOrderItemReport = async (filterObject) => {
   let sortString = `sort=item-number`;
   let queryString = buildFilters(
     filterObject,

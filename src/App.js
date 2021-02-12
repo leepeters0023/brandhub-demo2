@@ -92,6 +92,7 @@ import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
+import ReportOrderHistoryDetail from "./pages/ReportOrderHistoryDetail";
 import ReportWrapUp from "./pages/ReportWrapUp";
 import RFQ from "./pages/RFQ";
 import RFQHistory from "./pages/RFQHistory";
@@ -776,7 +777,15 @@ const App = () => {
                 filtersOpen={filtersOpen}
               />,
               "/orders/items/onDemand",
-              ["field1", "field2", "compliance", "super", "read-only"],
+              [
+                "field1",
+                "field2",
+                "compliance",
+                "super",
+                "read-only",
+                "purchaser",
+                "select-purchaser",
+              ],
               currentRole,
               territories
             )}
@@ -842,6 +851,24 @@ const App = () => {
                 handleFiltersClosed={handleFiltersClosed}
               />,
               "/reports/wrap-up",
+              [
+                "field1",
+                "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+                "compliance",
+              ],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ReportOrderHistoryDetail
+                path="/reports/order-history-detail"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/reports/order-history-detail",
               [
                 "field1",
                 "field2",

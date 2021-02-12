@@ -13,7 +13,7 @@ import { updateSingleFilter, resetFilters } from "../redux/slices/filterSlice";
 
 import UserAutoComplete from "../components/Utility/UserAutoComplete";
 import UserSuperAutoComplete from "../components/Utility/UserSuperAutoComplete";
-import WrapUpTable from "../components/Reporting/WrapUpTable";
+import OrderHistoryDetailTable from "../components/Reporting/OrderHistoryDetailTable";
 
 import Container from "@material-ui/core/Container";
 import Chip from "@material-ui/core/Chip";
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.reports,
 }));
 
-const ReportWrapUp = ({ handleFiltersClosed }) => {
+const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -52,6 +52,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
   );
   const [currentUsers, setCurrentUsers] = useState([]);
 
+  const currentSuppliers = useSelector((state) => state.suppliers.supplierList);
   const currentUserRole = useSelector((state) => state.user.role);
   const isLoading = useSelector((state) => state.reports.isLoading);
   const report = useSelector((state) => state.reports.reportData);
@@ -75,7 +76,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
       fromDate: fromDate,
       toDate: toDate,
       user: currentUsers,
-      status: "approved",
+      status: "not-draft"
     };
     dispatch(getOrderItemReport(filterObject));
     setHasGenerated(true);
@@ -87,32 +88,84 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
       (report.length > 0 && currentCSV.data.length === 0)
     ) {
       let csvHeaders = [
-        { label: "Ordered By", key: "user" },
-        { label: "Market", key: "state" },
-        { label: "Brand", key: "brandCode" },
-        { label: "BU", key: "unit" },
-        { label: "Item Type", key: "itemType" },
-        { label: "Month in Market", key: "inMarketDate" },
-        { label: "Estimated Cost", key: "totalEstCost" },
-        { label: "Qty Ordered", key: "totalItems" },
         { label: "Seq #", key: "itemNumber" },
-        { label: "Program", key: "program" },
+        { label: "Cart Type", key: "territoryType" },
+        { label: "Territory", key: "territoryName" },
         { label: "Order Type", key: "orderType" },
+        { label: "Program", key: "program" },
+        { label: "BU", key: "unit" },
+        { label: "Brand", key: "brandCode" },
+        { label: "Item Type Code", key: "itemTypeCode" },
+        { label: "Item Type", key: "itemType" },
+        { label: "Vendor", key: "supplier" },
+        { label: "Address 1", key: "addressOne" },
+        { label: "Address 2", key: "addressTwo" },
+        { label: "City", key: "city" },
+        { label: "State", key: "state" },
+        { label: "Zip", key: "zip" },
+        { label: "Distributor Name", key: "distributorName" },
+        { label: "ABN", key: "abn" },
+        { label: "Tactic", key: "tactic" },
+        { label: "Qty Ordered", key: "totalItems" },
+        { label: "Est. Cost", key: "estCost" },
+        { label: "Total Est. Cost", key: "totalEstCost" },
+        { label: "Act. Cost", key: "actCost" },
+        { label: "Total Act. Cost", key: "totalActCost" },
+        { label: "Ordered By", key: "user" },
+        { label: "Compliance Status", key: "complianceStatus" },
+        { label: "In Market Date", key: "inMarketDate" },
+        { label: "Order Date", key: "orderDate" },
+        { label: "Order Number", key: "orderNumber" },
+        { label: "Shipped Date", key: "shippedDate" },
+        { label: "Order Status", key: "status" },
       ];
       let csvData = [];
       report.forEach((item) => {
         let dataObject = {
-          user: item.user,
-          state: item.state,
-          brandCode: item.brandCode,
-          unit: item.unit,
-          itemType: item.itemType,
-          inMarketDate: item.inMarketDate,
-          totalEstCost: formatMoney(item.totalEstCost),
-          totalItems: item.totalItems,
           itemNumber: item.itemNumber,
-          program: item.program,
+          territoryType: item.territoryType,
+          territoryName: item.territoryName,
           orderType: orderTypeMap[item.orderType],
+          program: item.program,
+          unit: item.unit,
+          brandCode: item.brandCode,
+          itemTypeCode: item.itemTypeCode,
+          itemType: item.itemType,
+          supplier: currentSuppliers.find((sup) => sup.id === item.supplierId)
+            .name,
+          addressOne: item.addressOne,
+          addressTwo: item.addressTwo,
+          city: item.city,
+          state: item.state,
+          zip: item.zip,
+          distributorName: item.distributor,
+          abn: item.distributorAbn,
+          tactic: item.isCoupon ? "Coupon" : "POS",
+          totalItems: item.totalItems,
+          estCost: formatMoney(item.estCost),
+          totalEstCost: formatMoney(item.totalEstCost),
+          actCost: item.actCost !== "---" ? formatMoney(item.actCost) : "---",
+          totalActCost:
+            item.totalActCost !== "---"
+              ? formatMoney(item.totalActCost)
+              : "---",
+          user: item.user,
+          complianceStatus:
+            !item.triggeredRules &&
+            !item.triggeredPriorApprovalRules &&
+            !item.isComplianceCanceled
+              ? "Ok"
+              : item.isComplianceCanceled
+              ? "Compliance Canceled"
+              : item.triggeredRules.length > 0 ||
+                item.triggeredPriorApprovalRules.length > 0
+              ? "On Hold"
+              : "Ok",
+          inMarketDate: item.inMarketDate,
+          orderDate: item.orderDate,
+          orderNumber: item.orderNumber,
+          shippedDate: item.shipDate,
+          status: item.status,
         };
         csvData.push(dataObject);
       });
@@ -121,6 +174,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
     }
   }, [
     report,
+    currentSuppliers,
     hasGenerated,
     isLoading,
     currentCSV.data,
@@ -140,7 +194,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Report Wrap-Up</title>
+        <title>RTA | Order History Detail</title>
         {currentUserRole === "super" && (
           <script type="text/javascript">{` Beacon('suggest', ['600ed398cfe30d219ccdb224'])`}</script>
         )}
@@ -150,7 +204,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Wrap Up Report</Typography>
+          <Typography className={classes.titleText}>Order History Detail Report</Typography>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               <CSVLink
@@ -272,10 +326,11 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
             <CircularProgress size={100} style={{ marginTop: "50px" }} />
           </div>
         )}
-        {!isLoading && report.length > 0 && (
-          <WrapUpTable
+        {!isLoading && report.length > 0 && currentSuppliers.length > 0 && (
+          <OrderHistoryDetailTable
             report={report}
             orderTypeMap={orderTypeMap}
+            currentSuppliers={currentSuppliers}
           />
         )}
       </Container>
@@ -283,8 +338,8 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
   );
 };
 
-ReportWrapUp.propTypes = {
+ReportOrderHistoryDetail.propTypes = {
   handleFiltersClosed: PropTypes.func.isRequired,
 };
 
-export default ReportWrapUp;
+export default ReportOrderHistoryDetail;

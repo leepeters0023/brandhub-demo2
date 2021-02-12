@@ -87,6 +87,10 @@ const DrawerReportsNav = ({ classes, role }) => {
                   link: "/reports/wrap-up",
                   primary: "Wrap Up",
                 },
+                {
+                  link: "/reports/order-history-detail",
+                  primary: "Order History Detail",
+                },
               ]}
             />
           </div>

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWrapUpReport } from "../../api/reportApi";
+import { fetchOrderItemReport } from "../../api/reportApi";
 import { mapOrderHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
 
@@ -51,15 +51,16 @@ export const {
 
 export default reportSlice.reducer;
 
-export const getWrapUp = (filterObject) => async (dispatch) => {
+export const getOrderItemReport = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const items = await fetchWrapUpReport(filterObject);
+    const items = await fetchOrderItemReport(filterObject);
     if (items.error) {
       throw items.error;
     }
+    console.log(items.data);
     let mappedItems = mapOrderHistoryItems(items.data);
-    dispatch(getReportsSuccess({type: "wrap-up", reportData: mappedItems}))
+    dispatch(getReportsSuccess({ type: "wrap-up", reportData: mappedItems }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));

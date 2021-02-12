@@ -211,7 +211,7 @@ const ComplianceItemsTable = ({
     <>
       <TableContainer
         className={classes.tableContainer}
-        style={{ maxHeight: "Calc(100vh - 375px)" }}
+        style={{ maxHeight: "Calc(100vh - 250px)" }}
         ref={scrollRef}
       >
         <Table
@@ -283,7 +283,7 @@ const ComplianceItemsTable = ({
 
                     <TableCell align="left">{row.itemNumber}</TableCell>
                     <TableCell align="left">{row.program}</TableCell>
-                    {row.brand !== "---" && row.brand.length > 1 ? (
+                    {row.brand && row.brand !== "---" && row.brand.length > 1 ? (
                       <Tooltip
                         placement="left"
                         title={`${row.brand.join(", ")}`}
@@ -299,7 +299,7 @@ const ComplianceItemsTable = ({
                       </Tooltip>
                     ) : (
                       <TableCell align="left">
-                        {row.brand !== "---" ? row.brand[0] : "---"}
+                        {row.brand && row.brand !== "---" ? row.brand[0] : "---"}
                       </TableCell>
                     )}
                     <TableCell align="left">{row.itemType}</TableCell>

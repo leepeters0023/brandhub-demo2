@@ -409,6 +409,7 @@ export const mapOrderHistoryItems = (items) => {
       imgUrlThumb: images.imgUrlThumb,
       imgUrlLg: images.imgUrlLg,
       orderType: item["order-type"],
+      orderNumber: item.order.id,
       specification: item.item.specification
         ? mapSpecifications(item.item.specification)
         : "---",
@@ -418,6 +419,9 @@ export const mapOrderHistoryItems = (items) => {
         .join(", "),
       program: item["program-names"].join(", "),
       itemType: item["item-type-description"],
+      itemTypeCode: item["item-type-external-id"]
+        ? item["item-type-external-id"]
+        : "---",
       itemDescription: item.item.comment ? item.item.comment : "---",
       unit: [
         ...new Set(
@@ -430,12 +434,17 @@ export const mapOrderHistoryItems = (items) => {
           : item["custom-address-name"].length > 0
           ? item["custom-address-name"]
           : "---",
+      distributorAbn: item["distributor-external-id"]
+        ? item["distributor-external-id"]
+        : "---",
       addressOne: item["street-address-1"],
       addressTwo: item["street-address-2"],
       city: item.city,
       state: item.state ? item.state : "---",
       zip: item.zip,
       supplierId: item.item.supplier.id,
+      territoryType: item["territory-type"] ? item["territory-type"] : "---",
+      territoryName: item["territory-name"] ? item["territory-name"] : "---",
       packSize: item["qty-per-pack"],
       totalItems: item.qty,
       estCost: stringToCents(item["estimated-cost"]),
@@ -446,11 +455,19 @@ export const mapOrderHistoryItems = (items) => {
       totalActCost: item["total-actual-cost"]
         ? stringToCents(item["total-actual-cost"])
         : "---",
-      orderDate: item["order-submitted-at"],
+      orderDate: format(
+        formatDate(new Date(item["order-submitted-at"])),
+        "MM/dd/yyyy"
+      ),
       shipDate:
         item["shipping-parameter-item"] &&
         item["shipping-parameter-item"]["actual-ship-date"]
-          ? item["shipping-parameter-item"]["actual-ship-date"]
+          ? format(
+              formatDate(
+                new Date(item["shipping-parameter-item"]["actual-ship-date"])
+              ),
+              "MM/dd/yyyy"
+            )
           : "---",
       carrier:
         item["shipping-parameter-item"] &&

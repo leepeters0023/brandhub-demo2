@@ -5,7 +5,7 @@ import Carousel from "react-material-ui-carousel";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 
-import ApproveOrDenyItemPDF from '../components/Compliance/ApproveOrDenyItemPDF'
+import ApproveOrDenyItemPDF from "../components/Compliance/ApproveOrDenyItemPDF";
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -48,15 +48,15 @@ const ApproveOrDenyItem = () => {
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
- 
+
   const handleNotes = (e) => {
-    setNotes(e.target.value)
-  }
+    setNotes(e.target.value);
+  };
   useEffect(() => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
-    setImgs(params.get("cloudinary_ids").split(","))
+    setImgs(params.get("cloudinary_ids").split(","));
   }, []);
 
   return (
@@ -83,9 +83,7 @@ const ApproveOrDenyItem = () => {
         >
           <Carousel
             autoPlay=""
-            navButtonsAlwaysInvisible={
-              imgs && imgs.length === 1 ? true : false
-            }
+            navButtonsAlwaysInvisible={imgs && imgs.length === 1 ? true : false}
           >
             {imgs &&
               imgs.map((cloudinaryId, index) => (
@@ -163,7 +161,9 @@ const ApproveOrDenyItem = () => {
                 You may close this window.
               </Typography>
               <br></br>
-              <Typography className={classes.headerText}>Download for your records</Typography>
+              <Typography className={classes.headerText}>
+                Download for your records
+              </Typography>
               <Tooltip
                 title="Download as PDF"
                 PopperProps={{ style: { zIndex: "16000" } }}
@@ -196,13 +196,13 @@ const ApproveOrDenyItem = () => {
                           <CircularProgress />
                         </div>
                       ) : (
-                          <IconButton>
-                            <PictureAsPdfIcon
-                              fontSize="large"
-                              color="secondary"
-                            />
-                          </IconButton>
-                        )
+                        <IconButton>
+                          <PictureAsPdfIcon
+                            fontSize="large"
+                            color="secondary"
+                          />
+                        </IconButton>
+                      )
                     }
                   </PDFDownloadLink>
                 </span>

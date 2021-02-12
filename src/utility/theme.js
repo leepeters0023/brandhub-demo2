@@ -63,6 +63,32 @@ export default {
       padding: "0px",
     },
   },
+  reports: {
+    searchComponents: {
+      width: "60%",
+      minWidth: "600px",
+      display: "flex",
+      justifyContent: "space-around",
+      alignItems: "center",
+      margin: "0 auto",
+    },
+    queryField: {
+      width: "32%",
+      maxWidth: "250px",
+    },
+    buttonRow: {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    chipRow: {
+      height: "32px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
   global: {
     titleImage: {
       display: "flex",
