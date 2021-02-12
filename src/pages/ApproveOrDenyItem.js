@@ -48,7 +48,7 @@ const ApproveOrDenyItem = () => {
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
- 
+
   const handleNotes = (e) => {
     setNotes(e.target.value)
   }
@@ -56,7 +56,8 @@ const ApproveOrDenyItem = () => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
     setItemNumber(params.get("item_number"));
-    setImgs(params.get("cloudinary_ids").split(","))
+    let ids = params.get("cloudinary_ids");
+    if (ids) { setImgs(ids.split(",")) };
   }, []);
 
   return (
@@ -81,24 +82,28 @@ const ApproveOrDenyItem = () => {
             alignItems: "center",
           }}
         >
-          <Carousel
-            autoPlay=""
-            navButtonsAlwaysInvisible={
-              imgs && imgs.length === 1 ? true : false
-            }
-          >
-            {imgs &&
-              imgs.map((cloudinaryId, index) => (
-                <ImageWrapper
-                  key={index}
-                  imgUrl={`https://res.cloudinary.com/brandhub/image/upload/${cloudinaryId}`}
-                  alt={`compliance-image${index}`}
-                  imgClass={classes.previewImage}
-                  id={`compliance-image${cloudinaryId}`}
-                />
-              ))}
-          </Carousel>
-          <br />
+          {imgs && (
+            <>
+              <Carousel
+                autoPlay=""
+                navButtonsAlwaysInvisible={
+                  imgs && imgs.length === 1 ? true : false
+                }
+              >
+                {imgs &&
+                  imgs.map((cloudinaryId, index) => (
+                    <ImageWrapper
+                      key={index}
+                      imgUrl={`https://res.cloudinary.com/brandhub/image/upload/${cloudinaryId}`}
+                      alt={`compliance-image${index}`}
+                      imgClass={classes.previewImage}
+                      id={`compliance-image${cloudinaryId}`}
+                    />
+                  ))}
+              </Carousel>
+              <br />
+            </>
+          )}
           <Typography className={classes.titleText} variant="h5">
             Please approve or deny item: {itemNumber}
           </Typography>
