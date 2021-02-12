@@ -213,22 +213,6 @@ const Program = ({ handleFiltersClosed, programId }) => {
                   </Button>
                 </>
               )}
-              {currentUserRole === "field1" && (
-                <Tooltip title="Place Pre-Order">
-                  <span>
-                    <Button
-                      component={Link}
-                      to={`/orders/open/preorder#${programId}`}
-                      className={classes.largeButton}
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<ExitToAppIcon />}
-                    >
-                      ORDER
-                    </Button>
-                  </span>
-                </Tooltip>
-              )}
               {value !== 1 && (
                 <>
                   <Tooltip title="View List">
