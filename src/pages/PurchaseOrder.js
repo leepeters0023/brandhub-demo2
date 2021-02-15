@@ -21,7 +21,6 @@ import {
   updateAllShippingParams,
   addAdditionalFile,
 } from "../redux/slices/purchaseOrderSlice";
-import { getTracking } from "../redux/slices/trackingSlice";
 import { setError } from "../redux/slices/errorSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
@@ -99,11 +98,6 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     if (csvRef.current) {
       csvRef.current.open(evt);
     }
-  };
-
-  const handleTrackingClick = (id) => {
-    dispatch(getTracking(id));
-    setTrackingOpen(true);
   };
 
   const handleFileUpload = (data) => {
@@ -496,9 +490,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
               </div>
               <br />
               <br />
-              <ShippingParameterTable
-                handleTrackingClick={handleTrackingClick}
-              />
+              <ShippingParameterTable />
               <br />
               <br />
             </div>

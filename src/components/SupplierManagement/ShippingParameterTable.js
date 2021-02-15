@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 const CollapseRow = ({
   shippingInfo,
   classes,
-  handleTrackingClick,
   poStatus,
   handleModalOpen,
   role,
@@ -66,10 +65,10 @@ const CollapseRow = ({
 
   const statusMap = {
     "prior-approval-pending": "Pending Prior Approval",
-    "approved": "Prior Approval Approved",
-    "denied": "Prior Approval Denied",
-    "ok": "OK"
-  }
+    approved: "Prior Approval Approved",
+    denied: "Prior Approval Denied",
+    ok: "OK",
+  };
 
   return (
     <>
@@ -193,22 +192,10 @@ const CollapseRow = ({
                         <TableCell align="center">{item.itemNumber}</TableCell>
                         <TableCell align="center">{item.itemType}</TableCell>
                         <TableCell align="center">{item.totalItems}</TableCell>
-                        <TableCell align="center">{statusMap[item.shipHoldStatus]}</TableCell>
-                        <TableCell
-                          align="center"
-                          className={
-                            item.trackingNum !== "---"
-                              ? classes.clickableCell
-                              : null
-                          }
-                          onClick={
-                            item.trackingNum !== "---"
-                              ? () => handleTrackingClick(item.id)
-                              : null
-                          }
-                        >
-                          {item.trackingNum}
+                        <TableCell align="center">
+                          {statusMap[item.shipHoldStatus]}
                         </TableCell>
+                        <TableCell align="center">{item.trackingNum}</TableCell>
                         <TableCell align="center">
                           {item.tax === "---"
                             ? item.tax
@@ -227,7 +214,7 @@ const CollapseRow = ({
   );
 };
 
-const ShippingParameterTable = ({ handleTrackingClick }) => {
+const ShippingParameterTable = () => {
   const classes = useStyles();
 
   const [isReallocateModalOpen, setReallocateModalOpen] = useCallback(
@@ -299,7 +286,6 @@ const ShippingParameterTable = ({ handleTrackingClick }) => {
                 key={index}
                 classes={classes}
                 shippingInfo={param}
-                handleTrackingClick={handleTrackingClick}
                 poStatus={poStatus}
                 handleModalOpen={handleOpenModal}
                 role={currentUserRole}

@@ -215,13 +215,6 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
               )}`}
             </Typography>
             <Typography className={classes.headerText}>
-              {`Ship Date: ${
-                currentOrder.shipDate !== "---"
-                  ? format(new Date(currentOrder.shipDate))
-                  : currentOrder.shipDate
-              }`}
-            </Typography>
-            <Typography className={classes.headerText}>
               {`Shipping Location: ${
                 currentOrder.distributorName
                   ? currentOrder.distributorName

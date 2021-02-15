@@ -69,6 +69,9 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                 Act. Total
               </TableCell>
               <TableCell className={classes.headerText} align="left">
+                Ship Date
+              </TableCell>
+              <TableCell className={classes.headerText} align="left">
                 Carrier
               </TableCell>
               <TableCell className={classes.headerText} align="left">
@@ -164,24 +167,30 @@ const SingleOrderDetailTable = ({ items, handleTrackingClick }) => {
                     item.isComplianceCanceled ? classes.cancelCell : null
                   }
                 >
+                  {item.actShipDate}
+                </TableCell>
+                <TableCell
+                  align="left"
+                  className={
+                    item.isComplianceCanceled ? classes.cancelCell : null
+                  }
+                >
                   {item.carrier}
                 </TableCell>
                 <TableCell
                   align="center"
                   className={
                     item.tracking !== "---" &&
-                    item.trackingId &&
                     !item.isComplianceCanceled
                       ? classes.clickableCell
                       : null
                   }
                   onClick={
                     item.tracking !== "---" &&
-                    item.trackingId &&
                     !item.isComplianceCanceled
                       ? (evt) => {
                           evt.stopPropagation();
-                          handleTrackingClick(item.trackingId);
+                          handleTrackingClick(item.id);
                         }
                       : null
                   }
