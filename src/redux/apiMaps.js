@@ -930,7 +930,9 @@ export const mapPOShippingParamItems = (items) => {
     totalItems: item.qty,
     shipFromZip: item["ship-from-zip"] ? item["ship-from-zip"] : "---",
     carrier:
-      item["order-items"] && item["order-items"].length > 0
+      item["order-items"] &&
+      item["order-items"].length > 0 &&
+      item["order-items"][0].tracking_data
         ? item["order-items"][0].tracking_data.carrier
         : "---",
     method: item.method ? item.method : "---",
@@ -945,7 +947,9 @@ export const mapPOShippingParamItems = (items) => {
       ? `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${currentYear}-${item["shipping-label"].code}`
       : "---",
     trackingNum:
-      item["order-items"] && item["order-items"].length > 0
+      item["order-items"] &&
+      item["order-items"].length > 0 &&
+      item["order-items"][0].tracking_data
         ? item["order-items"][0].tracking_data.number
         : "---",
     shipHoldStatus: item["compliance-status"],

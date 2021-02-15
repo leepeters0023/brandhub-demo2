@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchWarehouseAddress } from "../../api/addressApi";
+import { fetchWarehouseAddress, fetchFilteredAddresses } from "../../api/addressApi";
 import { setError } from "./errorSlice";
 
 let initialState = {
@@ -27,8 +27,7 @@ const addressSlice = createSlice({
     setIsLoading: startLoading,
     getAddressesSuccess(state, action) {
       const { addresses } = action.payload;
-      const currentAddresses = state.customAddressList.concat(addresses);
-      state.customAddressList = currentAddresses;
+      state.customAddressList = addresses;
       state.isLoading = false;
       state.error = null;
     },
@@ -75,3 +74,17 @@ export const fetchWarehouse = () => async (dispatch) => {
     dispatch(setError({ error: err.toString() }));
   }
 };
+
+export const fetchAddresses = (name) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    const addresses = await fetchFilteredAddresses(name);
+    if (addresses.error) {
+      throw addresses.error;
+    }
+    dispatch(getAddressesSuccess({ addresses: addresses.data }));
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+}

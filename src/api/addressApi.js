@@ -29,6 +29,24 @@ export const fetchWarehouseAddress = async () => {
   return response;
 };
 
+export const fetchFilteredAddresses = async (name) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/addresses?filter[type]=custom&filter[name]=${name}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
+  return response;
+};
+
 export const addAddress = async (address) => {
   const response = { status: "", error: null, data: null };
   await axios

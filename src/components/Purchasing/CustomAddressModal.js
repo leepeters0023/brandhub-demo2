@@ -8,6 +8,7 @@ import { addCustomAddressOrder } from "../../redux/slices/orderSetSlice";
 import { useInput } from "../../hooks/InputHooks";
 
 import StateSelector from "../Utility/StateSelector";
+import AddressAutoComplete from "../Utility/AddressAutoComplete";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -22,6 +23,9 @@ import CancelIcon from "@material-ui/icons/Cancel";
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
+  popper: {
+    zIndex: "16000",
+  },
 }));
 
 const orderTypeMap = {
@@ -38,25 +42,52 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const championId = useSelector((state) => state.addresses.championAddress.id);
   const currentUserRole = useSelector((state) => state.user.role);
 
-  const { value: name, bind: bindName, reset: resetName } = useInput("");
+  const {
+    value: name,
+    bind: bindName,
+    setValue: setName,
+    reset: resetName,
+  } = useInput("");
   const {
     value: addressOne,
     bind: bindAddressOne,
+    setValue: setAddressOne,
     reset: resetAddressOne,
   } = useInput("");
   const {
     value: addressTwo,
     bind: bindAddressTwo,
+    setValue: setAddressTwo,
     reset: resetAddressTwo,
   } = useInput("");
-  const { value: city, bind: bindCity, reset: resetCity } = useInput("");
-  const { value: zip, bind: bindZip, reset: resetZip } = useInput("");
-  const { value: gLCode, bind: bindGlCode, reset: resetGlCode } = useInput("");
-  const { value: country, bind: bindCountry, reset: resetCountry } = useInput(
-    ""
-  );
+  const {
+    value: city,
+    bind: bindCity,
+    setValue: setCity,
+    reset: resetCity,
+  } = useInput("");
+  const {
+    value: zip,
+    bind: bindZip,
+    setValue: setZip,
+    reset: resetZip,
+  } = useInput("");
+  // const {
+  //   value: gLCode,
+  //   bind: bindGlCode,
+  //   setValue: setGLCode,
+  //   reset: resetGlCode,
+  // } = useInput("");
+  const {
+    value: country,
+    bind: bindCountry,
+    setValue: setCountry,
+    reset: resetCountry,
+  } = useInput("");
 
   const [state, setState] = useState("");
+  const [isCustomAddress, setIsCustomAddress] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleShipToRapid = () => {
     dispatch(
@@ -77,27 +108,69 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
     handleClose(false);
   };
 
+  const handleCustomAddressSelection = (address) => {
+    if (address) {
+      setName(address.name);
+      setAddressOne(address["street-address-1"]);
+      setAddressTwo(
+        address["street-address-2"] ? address["street-address-2"] : "---"
+      );
+      setCity(address.city);
+      setState(address.state);
+      setZip(address.zip);
+      setCountry(address.country);
+      setIsCustomAddress(true);
+      setSelectedAddress(address);
+    } else {
+      resetName();
+      resetAddressOne();
+      resetAddressTwo();
+      resetCity();
+      resetZip();
+      resetCountry();
+      setState("");
+      setIsCustomAddress(false);
+      setSelectedAddress(null);
+    }
+  };
+
   const handleSubmit = () => {
-    const address = {
-      name: name,
-      addressOne: addressOne,
-      addressTwo: addressTwo,
-      city: city,
-      state: state.id,
-      zip: zip,
-      country: country,
-      gLCode: gLCode,
-    };
-    dispatch(
-      addCustomAddressOrder(address, orderSetId, orderTypeMap[orderType], null)
-    );
+    if (isCustomAddress) {
+      dispatch(
+        addCustomAddressOrder(
+          null,
+          orderSetId,
+          orderTypeMap[orderType],
+          selectedAddress.id
+        )
+      );
+    } else {
+      const address = {
+        name: name,
+        addressOne: addressOne,
+        addressTwo: addressTwo,
+        city: city,
+        state: state.id,
+        zip: zip,
+        country: country,
+        //gLCode: gLCode,
+      };
+      dispatch(
+        addCustomAddressOrder(
+          address,
+          orderSetId,
+          orderTypeMap[orderType],
+          null
+        )
+      );
+    }
     resetName();
     resetAddressOne();
     resetAddressTwo();
     resetCity();
     resetZip();
     resetCountry();
-    resetGlCode();
+    //resetGlCode();
     handleClose(false);
   };
 
@@ -164,6 +237,17 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               {`Custom Address for ${orderType} order #${orderSetId}`}
             </Typography>
             <br />
+            <Typography className={classes.bodyText}>
+              {`Ship to pre existing address:`}
+            </Typography>
+            <br />
+            <AddressAutoComplete
+              classes={classes}
+              handleChange={handleCustomAddressSelection}
+            />
+            <br />
+            <Divider />
+            <br />
             <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
@@ -172,6 +256,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               name="name"
               type="text"
               label="Address Name"
+              disabled={isCustomAddress}
               {...bindName}
             />
             <TextField
@@ -182,6 +267,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               name="address-one"
               type="text"
               label="Address Line One"
+              disabled={isCustomAddress}
               {...bindAddressOne}
             />
             <TextField
@@ -202,9 +288,25 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               name="city"
               type="text"
               label="City"
+              disabled={isCustomAddress}
               {...bindCity}
             />
-            <StateSelector handleState={setState} currentState={state} />
+            {!isCustomAddress && (
+              <StateSelector handleState={setState} currentState={state} />
+            )}
+            {isCustomAddress && state.code && (
+              <TextField
+                fullWidth
+                style={{ marginBottom: "15px" }}
+                variant="outlined"
+                color="secondary"
+                name="zip"
+                type="text"
+                label="Zip Code"
+                disabled={isCustomAddress}
+                value={state.code}
+              />
+            )}
             <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
@@ -213,6 +315,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               name="zip"
               type="text"
               label="Zip Code"
+              disabled={isCustomAddress}
               {...bindZip}
             />
             <TextField
@@ -223,9 +326,10 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               name="country"
               type="text"
               label="Country"
+              disabled={isCustomAddress}
               {...bindCountry}
             />
-            <TextField
+            {/* <TextField
               fullWidth
               style={{ marginBottom: "15px" }}
               variant="outlined"
@@ -234,7 +338,7 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
               type="text"
               label="GL Code"
               {...bindGlCode}
-            />
+            /> */}
             <div
               style={{
                 width: "100%",
