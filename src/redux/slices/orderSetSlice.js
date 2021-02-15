@@ -705,6 +705,7 @@ export const addCustomAddressOrder = (address, id, type, addId) => async (
     }
     const formattedOrder = mapOrderHistoryOrders([order.data]);
     dispatch(addOrderSuccess({ order: formattedOrder }));
+    dispatch(completeAddingOrders());
     dispatch(setRebuildRef());
     dispatch(patchSuccess());
   } catch (err) {
