@@ -6,7 +6,8 @@ import { useWindowHash } from "../hooks/UtilityHooks";
 
 //import General from "../components/Settings/General";
 import Users from "../components/Settings/Users";
-import Budgets from "../components/Settings/Budgets";
+import Territories from "../components/Settings/Territories";
+import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = ({ userType, handleFiltersClosed }) => {
   const classes = useStyles();
-  const tabs = ["#general", "#users", "#budgets"];
+  const tabs = ["#users", "#territories"];
   const [selectedIndex, setSelectedIndex] = useState(1);
 
   const handleChangeTab = useWindowHash(tabs, setSelectedIndex);
@@ -69,28 +70,28 @@ const Settings = ({ userType, handleFiltersClosed }) => {
                     <ListItemText primary="Users" />
                   </ListItem>
                   <Divider />
-                  {/* <ListItem
+                  <ListItem
                     button
-                    selected={selectedIndex === 3}
+                    selected={selectedIndex === 2}
                     onClick={(evt) => {
-                      handleChangeTab(evt, 3);
+                      handleChangeTab(evt, 2);
                     }}
                   >
-                    <ListItemText primary="Budgets" />
-                  </ListItem> */}
+                    <ListItemText primary="Territories" />
+                  </ListItem>
                 </>
               )}
             </List>
           </Grid>
           <Grid item md={8} xs={10} style={{ paddingLeft: "20px" }}>
-            {selectedIndex === 2 && <Budgets />}
             {selectedIndex === 1 && <Users />}
-            {selectedIndex === 3 && <Budgets />}
+            {selectedIndex === 2 && <Territories />}
           </Grid>
           <Grid item md={1} xs={false} />
         </Grid>
       </Container>
       <br />
+      <OrderPatchLoading />
     </>
   );
 };

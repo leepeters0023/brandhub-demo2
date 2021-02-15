@@ -195,7 +195,7 @@ const UserTable = ({
 };
 
 UserTable.propTypes = {
-  handleUserClick: PropTypes.func.isRequired,
+  handleUserClick: PropTypes.func,
 };
 
 export default UserTable;

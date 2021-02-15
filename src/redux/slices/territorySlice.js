@@ -5,22 +5,36 @@ import {
   fetchAllStates,
   fetchFilteredStates,
   fetchCompliantStates,
+  createTerritory,
+  updateTerritory,
 } from "../../api/territoryApi";
+import {
+  setIsLoading as patchLoading,
+  patchSuccess,
+  setFailure as patchFailure,
+} from "./patchOrderSlice";
 import { setError } from "./errorSlice";
+import { sortTerritories } from "../apiMaps";
 
 let initialState = {
   isLoading: false,
+  isUpdateLoading: false,
   isStatesLoading: false,
   territoryList: [],
   filteredTerritoryList: [],
   stateList: [],
   filteredStateList: [],
   compliantStateList: [],
+  updateStatus: false,
   error: null,
 };
 
 const startLoading = (state) => {
   state.isLoading = true;
+};
+
+const startUpdateLoading = (state) => {
+  state.isUpdateLoading = true;
 };
 
 const startStatesLoading = (state) => {
@@ -31,6 +45,7 @@ const loadingFailed = (state, action) => {
   const { error } = action.payload;
   state.isLoading = false;
   state.isStatesLoading = false;
+  state.isUpdateLoading = false;
   state.error = error;
 };
 
@@ -39,6 +54,7 @@ const territorySlice = createSlice({
   initialState,
   reducers: {
     setIsLoading: startLoading,
+    setUpdateLoading: startUpdateLoading,
     setStatesLoading: startStatesLoading,
     getTerritoriesSuccess(state, action) {
       const { territories } = action.payload;
@@ -70,16 +86,40 @@ const territorySlice = createSlice({
       state.isStatesLoading = false;
       state.error = null;
     },
+    updateTerritorySuccess(state, action) {
+      const { id, territory } = action.payload;
+      const updatedTerritories = state.territoryList.map((terr) => {
+        if (terr.id === id) {
+          return territory;
+        } else return { ...terr };
+      });
+      state.territoryList = updatedTerritories;
+      state.isUpdateLoading = false;
+      state.updateStatus = true;
+      state.error = null;
+    },
+    addTerritorySuccess(state) {
+      state.isUpdateLoading = false;
+      state.updateStatus = true;
+      state.error = null;
+    },
+    setUpdateSuccess(state, action) {
+      const { updateStatus } = action.payload;
+      state.updateStatus = updateStatus;
+    },
     clearFilteredStates(state) {
       state.filteredStateList = [];
     },
     clearTerritories(state) {
       state.isLoading = false;
+      state.isUpdateLoading = false;
+      state.isStatesLoading = false;
       state.territoryList = [];
       state.filteredTerritoryList = [];
       state.stateList = [];
       state.filteredStateList = [];
       state.compliantStateList = [];
+      state.updateStatus = false;
       state.error = null;
     },
     setFailure: loadingFailed,
@@ -88,12 +128,16 @@ const territorySlice = createSlice({
 
 export const {
   setIsLoading,
+  setUpdateLoading,
   setStatesLoading,
   getTerritoriesSuccess,
   getAllTerritoriesSuccess,
   getStatesSuccess,
   getAllStatesSuccess,
   getCompliantStatesSuccess,
+  updateTerritorySuccess,
+  addTerritorySuccess,
+  setUpdateSuccess,
   clearFilteredStates,
   clearTerritories,
   setFailure,
@@ -108,7 +152,8 @@ export const fetchTerritories = () => async (dispatch) => {
     if (territories.error) {
       throw territories.error;
     }
-    dispatch(getAllTerritoriesSuccess({ territories: territories.data }));
+    const sortedTerritories = sortTerritories(territories.data);
+    dispatch(getAllTerritoriesSuccess({ territories: sortedTerritories }));
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
@@ -183,4 +228,50 @@ export const fetchAllCompliantStates = (id) => async (dispatch) => {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
   }
-}
+};
+
+export const updateTerritoryById = (name, states, id) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    dispatch(setUpdateLoading());
+    const territory = await updateTerritory(name, states, id);
+    if (territory.error) {
+      throw territory.error;
+    }
+    const formattedTerritory = sortTerritories([territory.data]);
+    dispatch(updateTerritorySuccess({ id: id, territory: formattedTerritory[0] }));
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+};
+
+export const addNewTerritory = (
+  name,
+  states,
+  externalId,
+  type
+) => async (dispatch) => {
+  try {
+    dispatch(patchLoading());
+    dispatch(setUpdateLoading());
+    const territory = await createTerritory(name, states, externalId, type);
+    if (territory.error) {
+      throw territory.error;
+    }
+    const territories = await fetchAllTerritories();
+    if (territories.error) {
+      throw territories.error;
+    }
+    const sortedTerritories = sortTerritories(territories.data);
+    dispatch(getAllTerritoriesSuccess({ territories: sortedTerritories }));
+    dispatch(addTerritorySuccess());
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+};

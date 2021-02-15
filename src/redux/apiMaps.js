@@ -1255,3 +1255,60 @@ export const mapCompItems = (items) => {
   }));
   return mappedItems;
 };
+
+export const sortTerritories = (terrArray) => {
+  if (terrArray.length === 0) {
+    return [];
+  } else if (terrArray.length === 1) {
+    return [
+      {
+        name: terrArray[0].name,
+        id: terrArray[0].id,
+        type: terrArray[0].type,
+        code: terrArray[0]["external-id"],
+        states: terrArray[0].states,
+      },
+    ];
+  } else {
+    let regional = [];
+    let customer = [];
+    terrArray.forEach((terr) => {
+      if (terr.type === "Regional") {
+        regional.push(terr);
+      } else {
+        customer.push(terr);
+      }
+    });
+    regional = regional
+      .map((terr) => ({
+        name: terr.name,
+        id: terr.id,
+        type: terr.type,
+        code: terr["external-id"],
+        states: terr.states,
+      }))
+      .sort((a, b) => {
+        return a.name[0].toLowerCase() < b.name[0].toLowerCase()
+          ? -1
+          : a.name[0].toLowerCase() > b.name[0].toLowerCase()
+          ? 1
+          : 0;
+      });
+    customer = customer
+      .map((terr) => ({
+        name: terr.name,
+        id: terr.id,
+        type: terr.type,
+        code: terr["external-id"],
+        states: terr.states,
+      }))
+      .sort((a, b) => {
+        return a.name[0].toLowerCase() < b.name[0].toLowerCase()
+          ? -1
+          : a.name[0].toLowerCase() > b.name[0].toLowerCase()
+          ? 1
+          : 0;
+      });
+    return regional.concat(customer);
+  }
+};

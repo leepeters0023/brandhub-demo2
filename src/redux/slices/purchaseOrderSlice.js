@@ -507,6 +507,7 @@ export const updateDateByType = (id, type, value) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -523,6 +524,7 @@ export const updateShipMethod = (id, method) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -539,6 +541,7 @@ export const updateSupplierNote = (id, note) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -555,6 +558,7 @@ export const updateKeyAccountTape = (id, tape) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -571,6 +575,7 @@ export const addAdditionalFile = (id, file) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -587,6 +592,7 @@ export const setDirectShip = (id, value) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -603,6 +609,7 @@ export const setItemPackSize = (id, packSize) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -619,6 +626,7 @@ export const setItemPackOut = (id, packout) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -635,6 +643,7 @@ export const setItemActCost = (id, cost) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -651,6 +660,7 @@ export const setTotalFreight = (id, freightCost) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -667,6 +677,7 @@ export const deleteItem = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -685,6 +696,7 @@ export const addSetUpFee = (id, desc, cost) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -701,6 +713,7 @@ export const deletePurchaseOrder = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -720,6 +733,7 @@ export const submitPurchaseOrder = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -759,6 +773,7 @@ export const acceptPurchaseOrder = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -795,6 +810,7 @@ export const completePurchaseOrder = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -838,5 +854,6 @@ export const updateAllShippingParams = (updateArray, id) => async (
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
