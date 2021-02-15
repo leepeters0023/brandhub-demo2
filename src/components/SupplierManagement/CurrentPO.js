@@ -359,7 +359,8 @@ const CurrentPO = () => {
           width: "75%",
           minWidth: "1000px",
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         {/* {currentRole !== "supplier" && (

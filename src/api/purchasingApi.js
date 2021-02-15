@@ -965,7 +965,7 @@ export const updateShippingParameterAddress = async (type, value, id) => {
 export const trackItem = async (id) => {
   const response = { status: "", error: null, data: null };
   await axios
-    .get(`/api/shipping-parameter-items/${id}/track`)
+    .get(`/api/order-items/${id}/track`)
     .then((res) => {
       response.data = res.data["api_response"];
       response.status = "ok";

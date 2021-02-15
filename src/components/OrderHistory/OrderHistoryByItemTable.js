@@ -400,16 +400,16 @@ const OrderHistoryByItemTable = ({
                     align="center"
                     className={
                       row.tracking !== "---" &&
-                      row.trackingId &&
                       !row.isComplianceCanceled
                         ? classes.clickableCell
                         : null
                     }
                     onClick={
-                      row.tracking !== "---" && row.trackingId
+                      row.tracking !== "---" &&
+                      !row.isComplianceCanceled
                         ? (evt) => {
                             evt.stopPropagation();
-                            handleTrackingClick(row.trackingId);
+                            handleTrackingClick(row.id);
                           }
                         : null
                     }

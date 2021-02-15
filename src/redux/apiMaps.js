@@ -361,11 +361,6 @@ export const mapSingleOrder = (order) => {
     status: order.status === "submitted" ? "Pending" : order.status,
     orderDate: order["submitted-at"] ? order["submitted-at"] : "---",
     approvedDate: order["approved-at"] ? order["approved-at"] : "---",
-    shipDate:
-      orderItems.filter((item) => item.actShipDate).length > 0
-        ? orderItems.filter((item) => item.actShipDate).join(", ")
-        : "---",
-    trackingNum: order["tracking-number"] ? order["tracking-number"] : "---",
     totalItems: order["total-quantity"],
     totalEstFreight: order["total-estimated-shipping-cost"]
       ? stringToCents(order["total-estimated-shipping-cost"])
@@ -470,19 +465,13 @@ export const mapOrderHistoryItems = (items) => {
             )
           : "---",
       carrier:
-        item["shipping-parameter-item"] &&
-        item["shipping-parameter-item"].carrier
-          ? item["shipping-parameter-item"].carrier
+        item["tracking-data"] && item["tracking-data"].carrier
+          ? item["tracking-data"].carrier
           : "---",
       tracking:
-        item["shipping-parameter-item"] &&
-        item["shipping-parameter-item"]["tracking-number"]
-          ? item["shipping-parameter-item"]["tracking-number"]
+        item["tracking-data"] && item["tracking-data"].number
+          ? item["tracking-data"].number
           : "---",
-      trackingId:
-        item["shipping-parameter-item"] && item["shipping-parameter-item"].id
-          ? item["shipping-parameter-item"].id
-          : null,
       status: item["order-status"],
       user: item["order-user-name"],
       orderStartDate: item.item["orderable-start-date"]
@@ -659,23 +648,21 @@ export const mapOrderItems = (items, type) => {
         actShipDate:
           item["shipping-parameter-item"] &&
           item["shipping-parameter-item"]["actual-ship-date"]
-            ? item["shipping-parameter-item"]["actual-ship-date"]
-            : null,
-        carrier:
-          item["shipping-parameter-item"] &&
-          item["shipping-parameter-item"].carrier
-            ? item["shipping-parameter-item"].carrier
+            ? format(
+                formatDate(
+                  new Date(item["shipping-parameter-item"]["actual-ship-date"])
+                ),
+                "MM/dd/yyyy"
+              )
             : "---",
-        tracking: item["shipping-parameter-item"]
-          ? item["shipping-parameter-item"]["tracking-number"]
-            ? item["shipping-parameter-item"]["tracking-number"]
-            : "---"
-          : "---",
-        trackingId: item["shipping-parameter-item"]
-          ? item["shipping-parameter-item"].id
-            ? item["shipping-parameter-item"].id
-            : null
-          : null,
+        carrier:
+          item["tracking-data"] && item["tracking-data"].carrier
+            ? item["tracking-data"].carrier
+            : "---",
+        tracking:
+          item["tracking-data"] && item["tracking-data"].number
+            ? item["tracking-data"].number
+            : "---",
         onShipHold: item["shipping-parameter-item"]
           ? item["shipping-parameter-item"]["compliance-status"] ===
               "prior-approval-pending" ||
@@ -942,7 +929,10 @@ export const mapPOShippingParamItems = (items) => {
       : "---",
     totalItems: item.qty,
     shipFromZip: item["ship-from-zip"] ? item["ship-from-zip"] : "---",
-    carrier: item.carrier ? item.carrier : "---",
+    carrier:
+      item["order-items"] && item["order-items"].length > 0
+        ? item["order-items"][0].tracking_data.carrier
+        : "---",
     method: item.method ? item.method : "---",
     actShipDate: item["actual-ship-date"] ? item["actual-ship-date"] : "---",
     shippedQuantity: item["shipped-qty"] ? item["shipped-qty"] : "---",
@@ -954,7 +944,10 @@ export const mapPOShippingParamItems = (items) => {
     shippingLabel: item["shipping-label"]
       ? `${item["shipping-label"].title} - ${item["shipping-label"].desc} - ${currentYear}-${item["shipping-label"].code}`
       : "---",
-    trackingNum: item["tracking-number"] ? item["tracking-number"] : "---",
+    trackingNum:
+      item["order-items"] && item["order-items"].length > 0
+        ? item["order-items"][0].tracking_data.number
+        : "---",
     shipHoldStatus: item["compliance-status"],
     tax: item.tax ? stringToCents(item.tax) : "---",
   }));
