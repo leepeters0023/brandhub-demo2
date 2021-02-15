@@ -68,7 +68,16 @@ export const buildFilters = (
       : "";
   let dateString =
     filterObject.fromDate &&
-    filterObject.toDate
+    filterObject.toDate &&
+    type === "order-set-history" &&
+    filterObject.status === "submitted"
+      ? `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
+      : filterObject.fromDate &&
+        filterObject.toDate &&
+        type === "order-set-history" &&
+        filterObject.status !== "submitted"
+      ? ""
+      : filterObject.fromDate && filterObject.toDate
       ? `filter[${
           type === "order-set-items" || type === "history-items"
             ? dateMap[type]
