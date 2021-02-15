@@ -21,9 +21,11 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import IconButton from "@material-ui/core/IconButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Popper from "@material-ui/core/Popper";
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CancelIcon from "@material-ui/icons/Cancel";
+import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
 
 const TopPopper = (props) => <Popper {...props} placement="top" />;
 
@@ -91,6 +93,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     color: "#737373",
   },
+  completeRow: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
 }));
 
 const TerritoryModal = ({ open, handleClose, type, id, territoryList }) => {
@@ -142,6 +150,10 @@ const TerritoryModal = ({ open, handleClose, type, id, territoryList }) => {
     },
     [setCurrentStates]
   );
+
+  const handleAllStates = () => {
+    setCurrentStates(stateList);
+  };
 
   useEffect(() => {
     if (
@@ -278,12 +290,27 @@ const TerritoryModal = ({ open, handleClose, type, id, territoryList }) => {
               Territory State Assignment
             </Typography>
             <br />
-            <StateSelector
-              classes={classes}
-              handleStates={handleStates}
-              states={stateList}
-              territoryStates={currentStates}
-            />
+            <div className={classes.completeRow}>
+              <StateSelector
+                classes={classes}
+                handleStates={handleStates}
+                states={stateList}
+                territoryStates={currentStates}
+              />
+              <Tooltip
+                  PopperProps={{ style: { zIndex: "16000" } }}
+                  title="Assign All"
+                >
+                  <span>
+                  <IconButton
+                      disabled={currentStates.length === stateList.length}
+                      onClick={handleAllStates}
+                    >
+                      <AddToPhotosIcon color="secondary" />
+                    </IconButton>
+                  </span>
+              </Tooltip>
+            </div>
             <br />
             <br />
             <Button
