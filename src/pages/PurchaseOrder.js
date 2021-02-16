@@ -116,7 +116,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleFileUploadError = (err, file, inputElem, reason) => {
-    dispatch(setError({ error: err.toString() }))
+    dispatch(setError({ error: err.toString() }));
     console.log(err, file, inputElem, reason);
   };
 
@@ -327,7 +327,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     )}
                   </div>
                 )}
-                {currentRole === "supplier" && (
+                {(currentRole === "supplier" || currentRole === "super") && (
                   <>
                     <CSVLink
                       data={currentCSV.data}
@@ -344,19 +344,21 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                         SHIPPING
                       </Button>
                     </CSVLink>
-                    <Button
-                      className={classes.largeButton}
-                      style={{ marginRight: "10px" }}
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<GetAppIcon />}
-                      component={MuiLink}
-                      target="_blank"
-                      href={`https://res.cloudinary.com/brandhub/image/upload/fl_attachment/${currentPO.additionalFile}`}
-                      disabled={!currentPO.additionalFile}
-                    >
-                      ORDER INFO
-                    </Button>
+                    {currentRole === "supplier" && (
+                      <Button
+                        className={classes.largeButton}
+                        style={{ marginRight: "10px" }}
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<GetAppIcon />}
+                        component={MuiLink}
+                        target="_blank"
+                        href={`https://res.cloudinary.com/brandhub/image/upload/fl_attachment/${currentPO.additionalFile}`}
+                        disabled={!currentPO.additionalFile}
+                      >
+                        ORDER INFO
+                      </Button>
+                    )}
                     <CSVReader
                       ref={csvRef}
                       onFileLoad={handleFileUpload}
