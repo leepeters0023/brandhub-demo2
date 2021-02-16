@@ -44,10 +44,14 @@ const FavoriteDistributors = () => {
   useEffect(() => {
     if (
       (!lists && currentDistributorLists.length > 0) ||
-      (lists && lists.length !== currentDistributorLists.length)
+      (lists &&
+        lists.length !== currentDistributorLists.length &&
+        currentDistributorLists.length > 0)
     ) {
       setLists(currentDistributorLists);
-      setCurrentList(currentDistributorLists[currentDistributorLists.length - 1].id);
+      setCurrentList(
+        currentDistributorLists[currentDistributorLists.length - 1].id
+      );
     }
   }, [lists, currentDistributorLists]);
 
@@ -99,7 +103,12 @@ const FavoriteDistributors = () => {
         variant="contained"
         color="secondary"
         onClick={() => {
-          dispatch(newFavoriteDistList(currentDistributorLists.length, currentTerritory));
+          dispatch(
+            newFavoriteDistList(
+              currentDistributorLists.length,
+              currentTerritory
+            )
+          );
         }}
       >
         ADD NEW LIST

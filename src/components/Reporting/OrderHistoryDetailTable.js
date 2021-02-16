@@ -21,6 +21,7 @@ const headCells = [
   { id: "brandCode", label: "Brand" },
   { id: "itemTypeCode", label: "Item Type Code" },
   { id: "itemType", label: "Item Type" },
+  { id: "itemDescription", label: "Item Desc." },
   { id: "supplier", label: "Vendor" },
   { id: "addressOne", label: "Address 1" },
   { id: "addressTwo", label: "Address 2" },
@@ -86,6 +87,7 @@ const OrderHistoryDetailTable = ({
               <TableCell align="left">{item.brandCode}</TableCell>
               <TableCell align="left">{item.itemTypeCode}</TableCell>
               <TableCell align="left">{item.itemType}</TableCell>
+              <TableCell align="left">{item.itemDescription}</TableCell>
               <TableCell align="left">
                 {
                   currentSuppliers.find((sup) => sup.id === item.supplierId)

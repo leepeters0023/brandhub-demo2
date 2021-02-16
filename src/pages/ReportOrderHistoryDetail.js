@@ -97,6 +97,7 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
         { label: "Brand", key: "brandCode" },
         { label: "Item Type Code", key: "itemTypeCode" },
         { label: "Item Type", key: "itemType" },
+        { label: "Item Desc.", key: "itemDescription" },
         { label: "Vendor", key: "supplier" },
         { label: "Address 1", key: "addressOne" },
         { label: "Address 2", key: "addressTwo" },
@@ -131,6 +132,7 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
           brandCode: item.brandCode,
           itemTypeCode: item.itemTypeCode,
           itemType: item.itemType,
+          itemDescription: item.itemDescription,
           supplier: currentSuppliers.find((sup) => sup.id === item.supplierId)
             .name,
           addressOne: item.addressOne,

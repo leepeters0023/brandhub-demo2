@@ -165,9 +165,12 @@ export const {
 
 export default distributorSlice.reducer;
 
-export const fetchUserDistributors = (name, territoryId, stateIds, attn = false) => async (
-  dispatch
-) => {
+export const fetchUserDistributors = (
+  name,
+  territoryId,
+  stateIds,
+  attn = false
+) => async (dispatch) => {
   try {
     if (attn) {
       dispatch(setAttnisLoading());
@@ -232,20 +235,31 @@ export const newFavoriteDistList = (index, territoryId) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
-export const updateFavoriteDistributorList = (id, name, distArray, territoryId) => async (
-  dispatch
-) => {
+export const updateFavoriteDistributorList = (
+  id,
+  name,
+  distArray,
+  territoryId
+) => async (dispatch) => {
   try {
     dispatch(setisUpdateLoading());
     dispatch(patchLoading());
-    const formattedDistArray = distArray.map((list) => ({
-      id: list.id,
-      type: "distributor",
-    }));
-    const updatedList = await updateFavDistList(id, name, formattedDistArray, territoryId);
+    const formattedDistArray = distArray
+      .map((list) => ({
+        id: list.id,
+        type: "distributor",
+      }))
+      .filter((dist) => dist.id);
+    const updatedList = await updateFavDistList(
+      id,
+      name,
+      formattedDistArray,
+      territoryId
+    );
     if (updatedList.error) {
       throw updatedList.error;
     }
@@ -259,6 +273,7 @@ export const updateFavoriteDistributorList = (id, name, distArray, territoryId) 
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -275,6 +290,7 @@ export const deleteFavoriteDistributorList = (id) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
 
@@ -291,5 +307,6 @@ export const setCustomAttention = (id, attn) => async (dispatch) => {
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
   }
 };
