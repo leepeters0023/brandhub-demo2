@@ -82,7 +82,7 @@ export const newFavDistList = async (index, territoryId) => {
         data: {
           type: "distributor-favorite-list",
           attributes: {
-            name: `New List ${index}`,
+            name: `New List ${territoryId} - ${index}`,
           },
           relationships: {
             territory: {
