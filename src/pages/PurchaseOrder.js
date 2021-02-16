@@ -103,18 +103,13 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const handleFileUpload = (data) => {
     const mappedData = data.map((dataPoint) => ({
       id: dataPoint.data["Param Item Id"],
-      "ship-from-zip": dataPoint.data["Ship From Zip"],
-      carrier: dataPoint.data["Carrier"],
+      carrier: dataPoint.data["Carrier"].toLowerCase(),
       method: dataPoint.data["Ship Method"],
       "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
       "shipped-qty": dataPoint.data["Shipped Quantity"],
       "package-count": dataPoint.data["Package Count"],
-      "package-type": dataPoint.data["Package Type"],
       "tracking-number": dataPoint.data["Tracking Number"],
       tax: dataPoint.data["Tax"],
-      "expected-arrival-date": new Date(
-        dataPoint.data["Expected Arrival Date"]
-      ),
     }));
     dispatch(updateAllShippingParams(mappedData, currentPO.id));
     setUploadLoading(false);

@@ -21,6 +21,7 @@ const OnPremiseRetailSelector = ({ classes }) => {
   const isOnPremise = useSelector((state) => state.user.isOnPremise);
   const currentMarket = useSelector((state) => state.user.currentMarket);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
+  const isOrdering = useSelector((state) => state.orderSet.isOrdering);
 
   const handleChangeSelect = (evt) => {
     setMarket(evt.target.value);
@@ -71,6 +72,7 @@ const OnPremiseRetailSelector = ({ classes }) => {
             labelId="region-select"
             id="regions"
             value={market}
+            disabled={isOrdering}
             onChange={handleChangeSelect}
             MenuProps={{
               style: { zIndex: "10001" },

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   header: {
     display: "flex",
     flexDirection: "row",
-    position: "fixed",
+    //position: "fixed",
     zIndex: "1",
     width: "100%",
     justifyContent: "space-between",
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     zIndex: "1",
-    position: "fixed",
+    //position: "fixed",
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -78,7 +78,7 @@ const Landing = () => {
         </div>
         <div
           style={{
-            height: "90vh",
+            height: "80vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

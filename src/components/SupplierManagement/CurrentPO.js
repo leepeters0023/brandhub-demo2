@@ -296,6 +296,13 @@ const CurrentPO = () => {
                 >
                   {`Sequence Number: ${item.itemNumber}`}
                 </Typography>
+                <br />
+                <Typography
+                  className={clsx(classes.headerText, classes.POText)}
+                >
+                  {`Is Permanent Material: ${item.isMetalOrWood ? "Yes" : "No"}`}
+                </Typography>
+                <br />
                 <SpecDetailTable classes={classes} specArray={specArray} />
                 {index !== currentPO.poItems.length - 1 && (
                   <>

@@ -79,6 +79,18 @@ const handleImages = (images) => {
   }
 };
 
+const handleTriggeredRules = (rules) => {
+  if (rules.length === 0) {
+    return false;
+  } else {
+    if (
+      rules.filter((rule) => rule.status === "approved").length !== rules.length
+    ) {
+      return true;
+    } else return false;
+  }
+};
+
 export const mapItems = (items) => {
   const sortPrograms = (programs) => {
     if (programs.length === 1) {
@@ -104,7 +116,6 @@ export const mapItems = (items) => {
       return sortedPrograms;
     }
   };
-
   let mappedItems = items.map((item) => {
     const images = handleImages(item.images);
     const itemPrograms =
@@ -489,14 +500,20 @@ export const mapOrderHistoryItems = (items) => {
       inMarketDate: item["in-market-date"]
         ? format(formatDate(new Date(item["in-market-date"])), "MM/dd/yyyy")
         : "---",
-      triggeredRules: item["triggered-rules"]
-        ? item["triggered-rules"].map((rule) => rule.rule.description)
-        : null,
-      triggeredPriorApprovalRules: item["prior-approval-triggered-rules"]
-        ? item["prior-approval-triggered-rules"].map(
-            (rule) => rule.rule.description
-          )
-        : null,
+      isNotCompliant: item["triggered-rules"]
+        ? handleTriggeredRules(item["triggered-rules"])
+        : false,
+      triggeredRules:
+        item["triggered-rules"] && item["triggered-rules"].length > 0
+          ? item["triggered-rules"].map((rule) => rule.rule.description)
+          : null,
+      triggeredPriorApprovalRules:
+        item["prior-approval-triggered-rules"] &&
+        item["prior-approval-triggered-rules"].length > 0
+          ? item["prior-approval-triggered-rules"].map(
+              (rule) => rule.rule.description
+            )
+          : null,
       isComplianceCanceled: item["is-compliance-canceled"],
       orderId: item.order.id,
       isCoupon: item.item["is-coupon"],
@@ -614,11 +631,12 @@ export const mapOrderItems = (items, type) => {
           item["triggered-rules"].length > 0 &&
           item["triggered-rules"].filter(
             (rule) =>
-              rule.type === "item-type" ||
-              rule.type === "metal-wood" ||
-              rule.type === "coupon-item-type" ||
-              rule.type === "coupon-offer-type" ||
-              rule.type === "coupon-face-vale"
+              (rule.type === "item-type" ||
+                rule.type === "metal-wood" ||
+                rule.type === "coupon-item-type" ||
+                rule.type === "coupon-offer-type" ||
+                rule.type === "coupon-face-vale") &&
+              rule.status !== "approved"
           ).length > 0
             ? "not-compliant"
             : "compliant",
@@ -868,6 +886,7 @@ export const mapPOItems = (items) => {
         actCost: stringToCents(item["actual-cost"]),
         totalCost: totalItemCost,
         isPriceCompliant: true,
+        isMetalOrWood: false,
         packout: false,
       };
     } else {
@@ -887,6 +906,7 @@ export const mapPOItems = (items) => {
         totalCost: totalItemCost,
         isPriceCompliant: item["is-price-compliant"],
         packOut: item["has-packout"] ? item["has-packout"] : false,
+        isMetalOrWood: item["item-is-metal-or-wood"] ? true : false,
         isCoupon: item["item-is-coupon"],
         couponStartDate: item["item-coupon-issue_date"]
           ? format(
