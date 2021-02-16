@@ -308,6 +308,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                       className={classes.largeButton}
                       variant="contained"
                       color="secondary"
+                      style={{ marginRight: "10px" }}
                       startIcon={<PublishIcon />}
                       onClick={uploadToCloudinary}
                     >
