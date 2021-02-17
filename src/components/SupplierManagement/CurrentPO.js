@@ -297,11 +297,24 @@ const CurrentPO = () => {
                   {`Sequence Number: ${item.itemNumber}`}
                 </Typography>
                 <br />
-                <Typography
-                  className={clsx(classes.headerText, classes.POText)}
+                <div
+                  style={{
+                    width: "100%",
+                    padding: "20px",
+                    boxSizing: "border-box",
+                    display: "flex",
+                    justifyContent: "center",
+                    border: "2px solid rgba(224, 224, 224, 1)"
+                  }}
                 >
-                  {`Is Permanent Material: ${item.isMetalOrWood ? "Yes" : "No"}`}
-                </Typography>
+                  <Typography
+                    className={clsx(classes.headerText, classes.POText)}
+                  >
+                    {`Is Permanent Material: ${
+                      item.isMetalOrWood ? "Yes" : "No"
+                    }`}
+                  </Typography>
+                </div>
                 <br />
                 <SpecDetailTable classes={classes} specArray={specArray} />
                 {index !== currentPO.poItems.length - 1 && (

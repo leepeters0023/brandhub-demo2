@@ -24,6 +24,7 @@ import {
 import { setError } from "../redux/slices/errorSlice";
 
 import CurrentPO from "../components/SupplierManagement/CurrentPO";
+import VASubmitModal from "../components/SupplierManagement/VASubmitModal";
 import Loading from "../components/Utility/Loading";
 import ShippingParameterTable from "../components/SupplierManagement/ShippingParameterTable";
 import TrackingModal from "../components/Utility/TrackingModal";
@@ -55,6 +56,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   const [currentCSV, setCurrentCSV] = useState({ data: [], headers: [] });
   const [currentFile, setCurrentFile] = useState(null);
   const [isTrackingOpen, setTrackingOpen] = useCallback(useState(false));
+  const [isVAModalOpen, setIsVAModalOpen] = useCallback(useState(false));
 
   const isPOLoading = useSelector((state) => state.purchaseOrder.isLoading);
   const currentPO = useSelector((state) => state.purchaseOrder.currentPO);
@@ -90,14 +92,25 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
     dispatch(completePurchaseOrder(currentPO.id));
   };
 
-  const handlePurchaserSubmit = () => {
-    dispatch(submitPurchaseOrder(currentPO.id));
+  const handlePurchaserSubmit = (isFromModal) => {
+    const isVA =
+      currentPO.shippingParams.filter((param) => param.state === "VA").length >
+      0;
+    if (isVA && !isFromModal) {
+      setIsVAModalOpen(true);
+    } else {
+      dispatch(submitPurchaseOrder(currentPO.id));
+    }
   };
 
   const handleOpenDialog = (evt) => {
     if (csvRef.current) {
       csvRef.current.open(evt);
     }
+  };
+
+  const handleCloseVAModal = () => {
+    setIsVAModalOpen(false);
   };
 
   const handleFileUpload = (data) => {
@@ -266,7 +279,17 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
       <Helmet>
         <title>RTA | Purchase Order</title>
       </Helmet>
-      <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
+      {isTrackingOpen && (
+        <TrackingModal open={isTrackingOpen} handleClose={setTrackingOpen} />
+      )}
+      {isVAModalOpen && (
+        <VASubmitModal
+          open={isVAModalOpen}
+          handleClose={handleCloseVAModal}
+          handleSubmit={handlePurchaserSubmit}
+          poId={currentPO.id}
+        />
+      )}
       <CloudinaryContext cloudName="brandhub">
         <Container className={classes.mainWrapper}>
           <div className={classes.titleBar}>
@@ -430,7 +453,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     className={classes.largeButton}
                     variant="contained"
                     color="secondary"
-                    onClick={handlePurchaserSubmit}
+                    onClick={() => handlePurchaserSubmit(false)}
                     disabled={!currentPO.isPriceCompliant}
                   >
                     SUBMIT PURCHASE ORDER
@@ -449,7 +472,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     handleSupplierAccept();
                   }}
                 >
-                  Accept
+                  ACCEPT
                 </Button>
                 <Button
                   className={classes.largeButton}
@@ -459,7 +482,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                     handleSupplierDecline();
                   }}
                 >
-                  Decline
+                  DECLINE
                 </Button>
               </div>
             )}
