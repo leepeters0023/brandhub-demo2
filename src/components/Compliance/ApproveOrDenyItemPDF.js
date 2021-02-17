@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ApproveOrDenyItemPDF = ({ itemNumber, status, token, notes }) => {
+const ApproveOrDenyItemPDF = ({ itemNumber, token, status, notes }) => {
     const date = new Date();
     const dateString = date.toDateString();
     const time = date.toLocaleTimeString();

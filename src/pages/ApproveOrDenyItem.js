@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   previewImage: {
     maxHeight: "500px",
-    minHeight: "500px", //small images come through low res but placement on the page is preserved
+    minHeight: "500px",
     width: "auto",
     objectFit: "contain",
   },
@@ -43,15 +43,27 @@ const ApproveOrDenyItem = () => {
   const [token, setToken] = useState("");
   const [notes, setNotes] = useState("");
   const [imgs, setImgs] = useState([]);
+  const [clicked, setClicked] = useState(false)
   const status = useSelector((state) => state.itemApprovedOrDenied.status);
   const isError = useSelector((state) => state.itemApprovedOrDenied.error);
   const isLoading = useSelector(
     (state) => state.itemApprovedOrDenied.isLoading
   );
 
-  const handleNotes = (e) => {
-    setNotes(e.target.value);
+  const handleApprove = () => {
+    dispatch(fetchApproveOrDenyItemSlice(token, "approved"));
+    setClicked(true);
   };
+
+  const handleDeny = () => {
+    dispatch(fetchApproveOrDenyItemSlice(token, "denied"));
+    setClicked(true);
+  };
+
+  const handleNotes = (e) => {
+      setNotes(e.target.value);
+  };
+
   useEffect(() => {
     const params = new URLSearchParams(document.location.search.substring(1));
     setToken(params.get("token"));
@@ -120,9 +132,7 @@ const ApproveOrDenyItem = () => {
               className={classes.largeButton}
               style={{ width: "150px", margin: "10px" }}
               variant="contained"
-              onClick={() =>
-                dispatch(fetchApproveOrDenyItemSlice(token, "approved"))
-              }
+              onClick={() => handleApprove()}
             >
               Approve
             </Button>
@@ -131,9 +141,7 @@ const ApproveOrDenyItem = () => {
               className={classes.largeButton}
               style={{ width: "150px", margin: "10px" }}
               variant="contained"
-              onClick={() =>
-                dispatch(fetchApproveOrDenyItemSlice(token, "denied"))
-              }
+              onClick={() => handleDeny()}
             >
               Deny
             </Button>
@@ -168,52 +176,55 @@ const ApproveOrDenyItem = () => {
                 You may close this window.
               </Typography>
               <br></br>
-              <Typography className={classes.headerText}>
-                Download for your records
-              </Typography>
-              <Tooltip
-                title="Download as PDF"
-                PopperProps={{ style: { zIndex: "16000" } }}
-                placement="right"
-              >
-                <span>
-                  <PDFDownloadLink
-                    document={
-                      <ApproveOrDenyItemPDF
-                        itemNumber={itemNumber}
-                        token={token}
-                        status={status}
-                        isLoading={isLoading}
-                        notes={notes}
-                      />
-                    }
-                    fileName={`Gallo-item-compliance-${itemNumber}`}
+              {clicked && (
+                <>
+                  <Typography className={classes.headerText}>
+                    Download for your records
+                   </Typography>
+                  <Tooltip
+                    title="Download as PDF"
+                    PopperProps={{ style: { zIndex: "16000" } }}
+                    placement="right"
                   >
-                    {({ loading, error }) =>
-                      loading ? (
-                        <div
-                          style={{
-                            width: "58.99px",
-                            height: "58.99px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          <CircularProgress />
-                        </div>
-                      ) : (
-                        <IconButton>
-                          <PictureAsPdfIcon
-                            fontSize="large"
-                            color="secondary"
+                    <span>
+                      <PDFDownloadLink
+                        document={
+                          <ApproveOrDenyItemPDF
+                            itemNumber={itemNumber}
+                            token={token}
+                            status={status}
+                            notes={notes}
                           />
-                        </IconButton>
-                      )
-                    }
-                  </PDFDownloadLink>
-                </span>
-              </Tooltip>
+                        }
+                        fileName={`Gallo-item-compliance-${itemNumber}`}
+                      >
+                        {({ loading, error }) =>
+                          loading ? (
+                            <div
+                              style={{
+                                width: "58.99px",
+                                height: "58.99px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <CircularProgress />
+                            </div>
+                          ) : (
+                              <IconButton>
+                                <PictureAsPdfIcon
+                                  fontSize="large"
+                                  color="secondary"
+                                />
+                              </IconButton>
+                            )
+                        }
+                      </PDFDownloadLink>
+                    </span>
+                  </Tooltip>
+                </>
+                )}
             </>
           )}
         </div>
