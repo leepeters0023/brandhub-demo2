@@ -58,7 +58,6 @@ export const getOrderItemReport = (filterObject) => async (dispatch) => {
     if (items.error) {
       throw items.error;
     }
-    console.log(items.data);
     let mappedItems = mapOrderHistoryItems(items.data);
     dispatch(getReportsSuccess({ type: "wrap-up", reportData: mappedItems }));
   } catch (err) {

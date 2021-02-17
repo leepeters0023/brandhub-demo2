@@ -144,6 +144,7 @@ const ItemPreviewModal = (props) => {
   );
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
 
   // const handleChangeTab = (_evt, newValue) => {
   //   setValue(newValue);
@@ -173,7 +174,8 @@ const ItemPreviewModal = (props) => {
       dispatch(updateCurrentWarehouse({ warehouse: warehouse }));
     }
     if (!currentOrderId) {
-      dispatch(createNewOrder(type, id, territoryId));
+      let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
+      dispatch(createNewOrder(type, id, territoryId, channel));
     } else {
       dispatch(addNewOrderItem(currentOrderId, id, type));
     }
@@ -189,6 +191,7 @@ const ItemPreviewModal = (props) => {
     currentOrderId,
     type,
     territoryId,
+    currentChannel,
   ]);
 
   return (

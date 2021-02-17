@@ -32,7 +32,8 @@ const OrderItemViewControl = (props) => {
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
 
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
-  const territoryId = useSelector((state) => state.user.currentTerritory)
+  const territoryId = useSelector((state) => state.user.currentTerritory);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
 
   const handleAddItem = useCallback(
     (item, remove) => {
@@ -45,12 +46,20 @@ const OrderItemViewControl = (props) => {
 
       setCurrentItemAdded(newItem);
       if (!currentOrderId) {
-        dispatch(createNewOrder(type, item.id, territoryId));
+        let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
+        dispatch(createNewOrder(type, item.id, territoryId, channel));
       } else {
         dispatch(addNewOrderItem(currentOrderId, item.id, type));
       }
     },
-    [dispatch, setCurrentItemAdded, currentOrderId, type, territoryId]
+    [
+      dispatch,
+      setCurrentItemAdded,
+      currentOrderId,
+      type,
+      territoryId,
+      currentChannel,
+    ]
   );
 
   return (

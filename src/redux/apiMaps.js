@@ -796,6 +796,7 @@ export const mapOrderSet = (order) => {
         : ["---"],
     territoryId: order.territory ? order.territory.id : "---",
     territories: order["territory-names"] ? order["territory-names"] : "---",
+    channel: order.channel ? order.channel : null,
     state:
       order.orders && order.orders.length > 0
         ? [

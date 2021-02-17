@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
 import { fetchOrderSet, setIsOrdering } from "../redux/slices/orderSetSlice";
-import { updateCurrentTerritory } from "../redux/slices/userSlice";
+import {
+  updateCurrentTerritory,
+  updateCurrentChannel,
+} from "../redux/slices/userSlice";
 import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 import {
   deleteSetItem,
@@ -100,9 +103,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const currentUserTerritory = useSelector(
     (state) => state.user.currentTerritory
   );
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const currentOrderTerritory = useSelector(
     (state) => state.orderSet.territoryId
   );
+  const currentOrderChannel = useSelector((state) => state.orderSet.channel);
   const inStockItems = useSelector(
     (state) => state.currentOrder.inStockOrderItems
   );
@@ -232,6 +237,26 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       dispatch(updateCurrentTerritory({ territory: currentOrderTerritory }));
     }
   }, [currentUserTerritory, currentOrderTerritory, dispatch]);
+
+  useEffect(() => {
+    if (
+      currentOrderChannel !== null &&
+      currentOrderChannel === "on_premise" &&
+      currentChannel === "Retail"
+    ) {
+      dispatch(updateCurrentChannel({ channel: "On Premise" }));
+    }
+  });
+
+  useEffect(() => {
+    if (
+      currentOrderChannel !== null &&
+      currentOrderChannel === "retail" &&
+      currentChannel === "On Premise"
+    ) {
+      dispatch(updateCurrentChannel({ channel: "Retail" }));
+    }
+  });
 
   useEffect(() => {
     dispatch(setIsOrdering({ status: true }));

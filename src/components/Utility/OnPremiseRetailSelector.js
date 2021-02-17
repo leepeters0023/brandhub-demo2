@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { updateCurrentMarket } from "../../redux/slices/userSlice";
+import { updateCurrentChannel } from "../../redux/slices/userSlice";
 
 import { fetchPrograms } from "../../redux/slices/programsSlice";
 
@@ -15,26 +15,26 @@ import Typography from "@material-ui/core/Typography";
 const OnPremiseRetailSelector = ({ classes }) => {
   const dispatch = useDispatch();
 
-  const [market, setMarket] = useState("");
+  const [channel, setChannel] = useState("");
 
   const isRetail = useSelector((state) => state.user.isRetail);
   const isOnPremise = useSelector((state) => state.user.isOnPremise);
-  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
   const isOrdering = useSelector((state) => state.orderSet.isOrdering);
 
   const handleChangeSelect = (evt) => {
-    setMarket(evt.target.value);
-    let marketBool = evt.target.value === "On Premise" ? true : false;
-    dispatch(fetchPrograms(currentTerritory, marketBool));
-    dispatch(updateCurrentMarket({ market: evt.target.value }));
+    setChannel(evt.target.value);
+    let channelBool = evt.target.value === "On Premise" ? true : false;
+    dispatch(fetchPrograms(currentTerritory, channelBool));
+    dispatch(updateCurrentChannel({ channel: evt.target.value }));
   };
 
   useEffect(() => {
-    if (currentMarket !== market) {
-      setMarket(currentMarket);
+    if (currentChannel !== channel) {
+      setChannel(currentChannel);
     }
-  }, [currentMarket, market]);
+  }, [currentChannel, channel]);
 
   if ((isRetail && !isOnPremise) || (!isRetail && !isOnPremise)) {
     return (
@@ -51,7 +51,7 @@ const OnPremiseRetailSelector = ({ classes }) => {
         }}
       >
         <Typography className={classes.regionText} variant="body2">
-          {currentMarket}
+          {currentChannel}
         </Typography>
       </div>
     );
@@ -71,7 +71,7 @@ const OnPremiseRetailSelector = ({ classes }) => {
             name="regions"
             labelId="region-select"
             id="regions"
-            value={market}
+            value={channel}
             disabled={isOrdering}
             onChange={handleChangeSelect}
             MenuProps={{

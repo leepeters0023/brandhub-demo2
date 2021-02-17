@@ -134,6 +134,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const currentUserId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const programsLoading = useSelector((state) => state.programs.isLoading);
   const preOrderId = useSelector((state) => state.orderSet.orderId);
@@ -209,6 +210,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
 
   const generatePreOrder = () => {
     let currentProgram = userPrograms.find((prog) => prog.id === program);
+    let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
     if (currentProgram.items.length > 0) {
       let itemIds = currentProgram.items.map((item) => item.id);
       dispatch(
@@ -216,6 +218,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           "preOrder",
           itemIds,
           currentTerritory,
+          channel,
           program,
           currentUserId
         )
@@ -226,6 +229,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           "preOrder",
           [],
           currentTerritory,
+          channel,
           program,
           currentUserId
         )

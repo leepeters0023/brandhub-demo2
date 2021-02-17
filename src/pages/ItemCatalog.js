@@ -79,7 +79,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [currentLink, setCurrentLink] = useCallback(useState(null));
   const [isLinkModalOpen, setLinkModalOpen] = useCallback(useState(false));
-  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const nextLink = useSelector((state) => state.items.nextLink);
   const isNextLoading = useSelector((state) => state.items.isNextLoading);
 
@@ -99,10 +99,10 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const selectedItems = useSelector((state) => state.items.selectedItems);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
-  const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
+  const currentChannelBool = useSelector((state) => state.filters.isOnPremise);
   const defaultFilters =
     catalogType === "all" ? defaultCurrentFilters : defaultArchiveFilters;
-  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
+  defaultFilters.isOnPremise = currentChannel === "On Premise" ? true : false;
   defaultFilters.currentTerritoryId = currentTerritory;
 
   const handlePreview = (itemNumber) => {
@@ -118,7 +118,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   const handleShareClose = () => {
     setLinkModalOpen(false);
     dispatch(clearItemSelection());
-  }
+  };
 
   const handleFavoriteItems = () => {
     const uniqueArray = [
@@ -157,15 +157,18 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
 
   useEffect(() => {
     if (
-      (currentMarket === "On Premise" && !currentMarketBool) ||
-      (currentMarket === "Retail" && currentMarketBool)
+      (currentChannel === "On Premise" && !currentChannelBool) ||
+      (currentChannel === "Retail" && currentChannelBool)
     ) {
       dispatch(
-        updateSingleFilter({ filter: "isOnPremise", value: !currentMarketBool })
+        updateSingleFilter({
+          filter: "isOnPremise",
+          value: !currentChannelBool,
+        })
       );
       dispatch(setSorted());
     }
-  }, [currentMarket, currentMarketBool, dispatch]);
+  }, [currentChannel, currentChannelBool, dispatch]);
 
   useInitialFilters(
     `item-${catalogType}`,

@@ -9,14 +9,12 @@ import { useInitialFilters } from "../hooks/UtilityHooks";
 
 import { fetchNextFilteredItems } from "../redux/slices/itemSlice";
 import { setIsOrdering } from "../redux/slices/orderSetSlice";
-import { updateCurrentTerritory } from "../redux/slices/userSlice";
 import {
   fetchCurrentOrderByType,
   addBulkOrderItems,
   createNewBulkItemOrder,
   clearItemSelections,
 } from "../redux/slices/currentOrderSlice";
-import { updateSingleFilter, setSorted } from "../redux/slices/filterSlice";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 import OrderItemViewControl from "../components/Purchasing/OrderItemViewControl";
@@ -52,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   ...theme.global,
 }));
 
-const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
+const PlaceOnDemandOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const nextLink = useSelector((state) => state.items.nextLink);
@@ -71,8 +69,7 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const currentItems = useSelector((state) => state.items.items);
-  const currentMarket = useSelector((state) => state.user.currentMarket);
-  const currentMarketBool = useSelector((state) => state.filters.isOnPremise);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const territoryId = useSelector((state) => state.user.currentTerritory);
@@ -86,12 +83,15 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const orderTerritoryId = useSelector(
     (state) => state.currentOrder.onDemandOrderTerritory
   );
+  const orderChannel = useSelector(
+    (state) => state.currentOrder.onDemandChannel
+  );
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
   );
 
-  defaultFilters.isOnPremise = currentMarket === "On Premise" ? true : false;
+  defaultFilters.isOnPremise = currentChannel === "On Premise" ? true : false;
   defaultFilters.currentTerritoryId = territoryId;
 
   const handlePreview = (itemNumber) => {
@@ -106,8 +106,11 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleAddToOrder = () => {
+    let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
     if (currentOrder.onDemandOrderItems.length === 0) {
-      dispatch(createNewBulkItemOrder("onDemand", selectedItems, territoryId));
+      dispatch(
+        createNewBulkItemOrder("onDemand", selectedItems, territoryId, channel)
+      );
     } else
       dispatch(
         addBulkOrderItems(currentOrder.orderId, selectedItems, "onDemand")
@@ -131,44 +134,13 @@ const PlaceOnDemandOrder = ({ userType, handleFilterDrawer, filtersOpen }) => {
     retainFilters,
     dispatch,
     handleFilterDrawer,
-    currentUserRole
+    currentUserRole,
+    orderTerritoryId,
+    territoryId,
+    orderChannel,
+    currentChannel,
+    isOrdering
   );
-
-  useEffect(() => {
-    if (
-      (currentMarket === "On Premise" && !currentMarketBool) ||
-      (currentMarket === "Retail" && currentMarketBool)
-    ) {
-      dispatch(
-        updateSingleFilter({ filter: "isOnPremise", value: !currentMarketBool })
-      );
-      dispatch(setSorted());
-    }
-  }, [currentMarket, currentMarketBool, dispatch]);
-
-  useEffect(() => {
-    if (
-      (orderTerritoryId && orderTerritoryId !== territoryId) ||
-      (orderTerritoryId && orderTerritoryId === territoryId && !isOrdering)
-    ) {
-      dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
-      dispatch(setIsOrdering({ status: true }));
-      if (orderTerritoryId !== territoryId) {
-        dispatch(
-          updateSingleFilter({
-            filter: "currentTerritoryId",
-            value: orderTerritoryId,
-          })
-        );
-        dispatch(setSorted());
-      }
-    }
-    return () => {
-      if (isOrdering) {
-        dispatch(setIsOrdering({ status: false }));
-      }
-    };
-  }, [orderTerritoryId, isOrdering, territoryId, dispatch]);
 
   useEffect(() => {
     if (!orderTerritoryId && isOrdering) {

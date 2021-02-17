@@ -25,7 +25,7 @@ let initialState = {
   role: "",
   isOnPremise: null,
   isRetail: null,
-  currentMarket: null,
+  currentChannel: null,
   redirectLink: null,
   sessionExpire: null,
   refreshToken: null,
@@ -104,7 +104,7 @@ const userSlice = createSlice({
       state.role = user.role;
       state.isOnPremise = user.isOnPremise;
       state.isRetail = user.isRetail;
-      state.currentMarket = user.currentMarket;
+      state.currentChannel = user.currentChannel;
       state.territories = [...user.territories];
       state.states = user.states.length > 0 ? [...user.states] : [];
       state.managedUsers =
@@ -125,9 +125,9 @@ const userSlice = createSlice({
       const { territory } = action.payload;
       state.currentTerritory = territory;
     },
-    updateCurrentMarket(state, action) {
-      const { market } = action.payload;
-      state.currentMarket = market;
+    updateCurrentChannel(state, action) {
+      const { channel } = action.payload;
+      state.currentChannel = channel;
     },
     setRedirectLink(state, action) {
       const { link } = action.payload;
@@ -153,7 +153,7 @@ const userSlice = createSlice({
       state.role = "";
       state.isOnPremise = null;
       state.isRetail = null;
-      state.currentMarket = null;
+      state.currentChannel = null;
       state.redirectLink = null;
       state.refreshToken = null;
       state.sessionExpire = null;
@@ -184,7 +184,7 @@ export const {
   setExpires,
   setTimeoutSet,
   updateCurrentTerritory,
-  updateCurrentMarket,
+  updateCurrentChannel,
   removeUser,
   setLogInFailure,
   setUpdateFailure,
@@ -223,7 +223,7 @@ export const fetchUser = () => async (dispatch) => {
         : !user.data["is-on-premise"]
         ? true
         : false,
-      currentMarket: user["is-retail"]
+      currentChannel: user["is-retail"]
         ? "Retail"
         : user["is-on-premise"]
         ? "On Premise"

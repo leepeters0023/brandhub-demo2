@@ -525,8 +525,14 @@ export const deleteOrderSet = async (id) => {
 };
 
 //Creates a new order set and returns the new order set
-export const createOrderSet = async (type, territoryId, programId) => {
+export const createOrderSet = async (
+  type,
+  territoryId,
+  channelBool,
+  programId
+) => {
   const response = { status: "", error: null, data: null };
+  const channel = channelBool ? "on_premise" : "retail";
   let formattedType =
     type === "inStock"
       ? "in-stock"
@@ -539,6 +545,7 @@ export const createOrderSet = async (type, territoryId, programId) => {
           type: "order-set",
           attributes: {
             type: formattedType,
+            channel: channel,
           },
           relationships: {
             territory: {
@@ -561,6 +568,7 @@ export const createOrderSet = async (type, territoryId, programId) => {
           type: "order-set",
           attributes: {
             type: formattedType,
+            channel: channel,
           },
           relationships: {
             territory: {

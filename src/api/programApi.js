@@ -5,12 +5,13 @@ import { handleErrors } from "./apiFunctions";
 const dataFormatter = new Jsona();
 
 //Returns all active programs based on current users territory
-export const fetchProgramsByTerritory = async (id, marketBool) => {
+export const fetchProgramsByTerritory = async (id, channelBool) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(
-      `/api/programs?filter[territory-id]=${id}&filter[is-pre-order]=true&filter[is-pre-order-active]=true&filter[is-on-premise]=${marketBool}`
-      //`/api/programs?filter[territory-id]=${id}&filter[is-pre-order]=true&filter[is-pre-order-active]=true`
+      `/api/programs?filter[territory-id]=${id}&filter[is-pre-order]=true&filter[is-pre-order-active]=true&filter[channel]=${
+        channelBool ? "on_premise" : "retail"
+      }`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
@@ -27,12 +28,13 @@ export const fetchProgramsByTerritory = async (id, marketBool) => {
 };
 
 //Returns all active National programs (not dependant on a territory)
-export const fetchNationalPrograms = async (marketBool) => {
+export const fetchNationalPrograms = async (channelBool) => {
   const response = { status: "", error: null, data: null };
   await axios
     .get(
-      `/api/programs?filter[type]=National&filter[is-pre-order]=true&filter[is-pre-order-active]=true&filter[is-on-premise]=${marketBool}`
-      //`/api/programs?filter[type]=National&filter[is-pre-order]=true&filter[is-pre-order-active]=true`
+      `/api/programs?filter[type]=National&filter[is-pre-order]=true&filter[is-pre-order-active]=true&filter[channel]=${
+        channelBool ? "on_premise" : "retail"
+      }`
     )
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);

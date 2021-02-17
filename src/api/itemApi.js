@@ -8,9 +8,9 @@ const dataFormatter = new Jsona();
 //Returns items based on filters, see todo above.
 export const fetchItems = async (filterObject) => {
   const response = { status: "", error: null, data: null };
-  let marketString = `filter[is-on-premise]=${
-    filterObject.isOnPremise ? true : false
-  }`;
+  let marketString = filterObject.isOnPremise
+    ? "filter[channel]=on_premise"
+    : "filter[channel]=retail";
   const queryString = filterObject.isItemArchived
     ? "/api/items?filter[is-archived]=true"
     : buildFilters(filterObject, marketString, "", "/api/items", "item");

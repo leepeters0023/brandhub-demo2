@@ -7,7 +7,10 @@ import { updateCurrentTerritory } from "../../redux/slices/userSlice";
 
 import { fetchPrograms } from "../../redux/slices/programsSlice";
 import { fetchStatesByIds } from "../../redux/slices/territorySlice";
-import { clearDistributors, fetchFavDistributors } from "../../redux/slices/distributorSlice";
+import {
+  clearDistributors,
+  fetchFavDistributors,
+} from "../../redux/slices/distributorSlice";
 import { updateSingleFilter, setSorted } from "../../redux/slices/filterSlice";
 
 import FormControl from "@material-ui/core/FormControl";
@@ -17,24 +20,29 @@ import Typography from "@material-ui/core/Typography";
 
 const RegionSelector = ({ classes }) => {
   const dispatch = useDispatch();
-  
+
   const [region, updateRegion] = useState("");
-  
+
   const regions = useSelector((state) => state.user.territories);
   const currentRegion = useSelector((state) => state.user.currentTerritory);
-  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const isOrdering = useSelector((state) => state.orderSet.isOrdering);
 
   const handleChangeSelect = (evt) => {
     window.location.hash = "";
     updateRegion(evt.target.value);
     let currentTerritory = regions.find((reg) => reg.name === evt.target.value);
-    let marketBool = currentMarket === "On Premise" ? true : false;
+    let channelBool = currentChannel === "On Premise" ? true : false;
     dispatch(clearDistributors());
     dispatch(updateCurrentTerritory({ territory: currentTerritory.id }));
-    dispatch(fetchPrograms(currentTerritory.id, marketBool));
+    dispatch(fetchPrograms(currentTerritory.id, channelBool));
     dispatch(fetchStatesByIds([currentTerritory.id]));
-    dispatch(updateSingleFilter({ filter: "currentTerritoryId", value: currentTerritory.id }))
+    dispatch(
+      updateSingleFilter({
+        filter: "currentTerritoryId",
+        value: currentTerritory.id,
+      })
+    );
     dispatch(fetchFavDistributors(currentTerritory.id));
     dispatch(setSorted());
   };
@@ -100,6 +108,6 @@ const RegionSelector = ({ classes }) => {
 
 RegionSelector.propTypes = {
   classes: PropTypes.object.isRequired,
-}
+};
 
 export default React.memo(RegionSelector);

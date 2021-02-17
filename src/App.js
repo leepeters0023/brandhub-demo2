@@ -130,7 +130,7 @@ const App = () => {
   const userError = useSelector((state) => state.user.error);
   const territories = useSelector((state) => state.user.territories);
   const currentTerritory = useSelector((state) => state.user.territories[0]);
-  const currentMarket = useSelector((state) => state.user.currentMarket);
+  const currentChannel = useSelector((state) => state.user.currentChannel);
   const isLoading = useSelector((state) => state.user.isLoading);
   const isPreOrdersLoading = useSelector(
     (state) => state.preOrderDetails.isPreOrdersLoading
@@ -205,8 +205,8 @@ const App = () => {
     if (currentUser && currentRole.length > 0) {
       if (currentRole !== "supplier") {
         if (territories.length > 0) {
-          let marketBool = currentMarket === "On Premise" ? true : false;
-          dispatch(fetchInitialPrograms(currentTerritory.id, marketBool));
+          let channelBool = currentChannel === "On Premise" ? true : false;
+          dispatch(fetchInitialPrograms(currentTerritory.id, channelBool));
           if (currentRole !== "read-only") {
             dispatch(
               fetchPreOrders(

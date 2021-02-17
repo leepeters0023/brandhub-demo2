@@ -9,7 +9,13 @@ import {
   setClear,
   setRetain,
   setFetchCurrent,
+  setSorted
 } from "../redux/slices/filterSlice";
+import {
+  updateCurrentTerritory,
+  updateCurrentChannel,
+} from "../redux/slices/userSlice";
+import { setIsOrdering } from "../redux/slices/orderSetSlice";
 
 /*
 Manages sorting and filtering of programs in the Pre Order Program view
@@ -125,25 +131,56 @@ export const useInitialFilters = (
   retainFilters,
   dispatch,
   handleFilterDrawer,
-  currentUserRole
+  currentUserRole,
+  orderTerritoryId,
+  territoryId,
+  orderChannel,
+  currentChannel,
+  isOrdering
 ) => {
+  const [needsToFetch, setNeedsToFetch] = useState(false);
   useEffect(() => {
+    let currentFilters = { ...defaultFilters };
+    if (filterType === "item-onDemand" || filterType === "item-inStock") {
+      if (
+        (orderTerritoryId && orderTerritoryId !== territoryId) ||
+        (orderTerritoryId && orderTerritoryId === territoryId && !isOrdering)
+      ) {
+        dispatch(updateCurrentTerritory({ territory: orderTerritoryId }));
+        currentFilters.currentTerritoryId = orderTerritoryId;
+        setNeedsToFetch(true);
+      }
+      if (orderChannel === "retail" && currentChannel === "On Premise") {
+        dispatch(updateCurrentChannel({ channel: "Retail" }));
+        currentFilters.isOnPremise = false;
+        setNeedsToFetch(true);
+      }
+      if (orderChannel === "on_premise" && currentChannel === "Retail") {
+        dispatch(updateCurrentChannel({ channel: "On Premise" }));
+        currentFilters.isOnPremise = true;
+        setNeedsToFetch(true);
+      }
+    }
     dispatch(setFilterType({ type: filterType }));
     if (!retainFilters) {
       dispatch(
         setDefaultFilters({
-          filterObject: defaultFilters,
+          filterObject: currentFilters,
         })
       );
       dispatch(
         updateMultipleFilters({
-          filterObject: defaultFilters,
+          filterObject: currentFilters,
         })
       );
+      if (needsToFetch) {
+        dispatch(setSorted())
+        setNeedsToFetch(false);
+      }
     }
     handleFilterDrawer && handleFilterDrawer(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChannel, orderChannel, territoryId, orderTerritoryId]);
 
   useEffect(() => {
     if (currentUserRole.length > 0 && !retainFilters) {
@@ -154,6 +191,14 @@ export const useInitialFilters = (
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (orderTerritoryId && (filterType === "item-onDemand" || filterType === "item-inStock")) {
+      dispatch(setIsOrdering({ status: true }));
+    }
+    return () => dispatch(setIsOrdering({ status: false }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderTerritoryId]);
 };
 
 /*

@@ -73,7 +73,7 @@ const programsSlice = createSlice({
           return {
             ...prog,
             items: [...items],
-            isItemsFetched: true
+            isItemsFetched: true,
           };
         } else {
           return prog;
@@ -151,10 +151,10 @@ export const {
 
 export default programsSlice.reducer;
 
-export const fetchInitialPrograms = (id, marketBool) => async (dispatch) => {
+export const fetchInitialPrograms = (id, channelBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const programs = await fetchProgramsByTerritory(id, marketBool);
+    const programs = await fetchProgramsByTerritory(id, channelBool);
     if (programs.error) {
       throw programs.error;
     }
@@ -166,10 +166,10 @@ export const fetchInitialPrograms = (id, marketBool) => async (dispatch) => {
   }
 };
 
-export const fetchPrograms = (id, marketBool) => async (dispatch) => {
+export const fetchPrograms = (id, channelBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
-    const programs = await fetchProgramsByTerritory(id, marketBool);
+    const programs = await fetchProgramsByTerritory(id, channelBool);
     if (programs.error) {
       throw programs.error;
     }

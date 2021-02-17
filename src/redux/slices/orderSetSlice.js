@@ -26,6 +26,7 @@ let initialState = {
   isCouponLoading: false,
   orderId: null,
   territoryId: null,
+  channel: null,
   type: null,
   status: null,
   isComplete: null,
@@ -73,6 +74,7 @@ const orderSetSlice = createSlice({
       const {
         orderId,
         territoryId,
+        channel,
         type,
         orders,
         items,
@@ -99,6 +101,7 @@ const orderSetSlice = createSlice({
         });
         state.orderId = orderId;
         state.territoryId = territoryId;
+        state.channel = channel;
         state.status = status;
         state.isComplete = isComplete;
         state.type = type;
@@ -116,6 +119,7 @@ const orderSetSlice = createSlice({
         state.orders = [];
         state.orderId = orderId;
         state.territoryId = territoryId;
+        state.channel = channel;
         state.status = status;
         state.isComplete = isComplete;
         state.type = type;
@@ -323,6 +327,7 @@ const orderSetSlice = createSlice({
       state.isOrderLoading = false;
       state.orderId = null;
       state.territoryId = null;
+      state.channel = null;
       state.type = null;
       state.status = null;
       state.isComplete = null;
@@ -410,6 +415,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         ? ["National"]
         : currentOrders.data["territory-names"].split(", ");
     let territoryId = currentOrders.data.territory.id;
+    let channel = currentOrders.data.channel;
     let note = currentOrders.data.notes ? currentOrders.data.notes : "";
     dispatch(
       setPreOrderDetails({
@@ -421,6 +427,7 @@ export const fetchOrderSet = (id) => async (dispatch) => {
       buildTableFromOrders({
         orderId: orderId,
         territoryId: territoryId,
+        channel: channel,
         type: type,
         orders: orders,
         items: currentItems,
@@ -490,6 +497,8 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
         ? ["National"]
         : currentOrders.data[0]["territory-names"].split(", ")
       : null;
+    let territoryId = currentOrders.data[0] ? currentOrders.data[0].territory.id : null;
+    let channel = currentOrders.data[0] ? currentOrders.data[0].channel : null;
     let note =
       currentOrders.data[0] && currentOrders.data[0].notes
         ? currentOrders.data[0].notes
@@ -503,6 +512,8 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     dispatch(
       buildTableFromOrders({
         orderId: orderId,
+        territoryId: territoryId,
+        channel: channel,
         type: type,
         orders: orders,
         items: currentItems,
@@ -564,6 +575,7 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
       buildTableFromOrders({
         orderId: orderId,
         territoryId: territoryId,
+        channel: false,
         type: type,
         orders: orders,
         items: currentItems,

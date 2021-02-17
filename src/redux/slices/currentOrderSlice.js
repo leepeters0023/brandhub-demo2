@@ -21,10 +21,12 @@ let initialState = {
   selectedInStockItems: [],
   currentWarehouse: null,
   inStockOrderTerritory: null,
+  inStockChannel: null,
   onDemandOrderNumber: null,
   selectedOnDemandItems: [],
   onDemandOrderItems: [],
   onDemandOrderTerritory: null,
+  onDemandChannel: null,
   userId: null,
   userName: null,
   orderId: null,
@@ -58,20 +60,28 @@ const currentOrderSlice = createSlice({
     setIsLoading: startLoading,
     setUpdateLoading: startUpdateLoading,
     createNewOrderSuccess(state, action) {
-      const { type, orderId, item, territoryId } = action.payload;
+      const { type, orderId, item, territoryId, channel } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = [{ item }];
       state[`${type}OrderTerritory`] = territoryId;
+      state[`${type}Channel`] = channel;
       state.orderId = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
       state.error = null;
     },
     createNewBulkOrderSuccess(state, action) {
-      const { type, orderId, itemArray, territoryId } = action.payload;
+      const {
+        type,
+        orderId,
+        itemArray,
+        territoryId,
+        channel,
+      } = action.payload;
       state[`${type}OrderNumber`] = orderId;
       state[`${type}OrderItems`] = itemArray;
       state[`${type}OrderTerritory`] = territoryId;
+      state[`${type}Channel`] = channel;
       state.orderId = orderId;
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -83,10 +93,12 @@ const currentOrderSlice = createSlice({
         state.inStockOrderNumber = order.id;
         state.inStockOrderItems = itemReference;
         state.inStockOrderTerritory = order.territoryId;
+        state.inStockChannel = order.channel;
       } else if (order.type === "On Demand") {
         state.onDemandOrderNumber = order.id;
         state.onDemandOrderItems = itemReference;
         state.onDemandOrderTerritory = order.territoryId;
+        state.onDemandChannel = order.channel;
       }
       state.isLoading = false;
       state.orderUpdateLoading = false;
@@ -162,10 +174,12 @@ const currentOrderSlice = createSlice({
         state.inStockOrderNumber = null;
         state.inStockOrderItems = [];
         state.inStockOrderTerritory = null;
+        state.inStockChannel = null;
       } else if (type === "onDemand") {
         state.onDemandOrderNumber = null;
         state.onDemandOrderItems = [];
         state.onDemandOrderTerritory = null;
+        state.onDemandChannel = null;
       }
     },
     updateSuccess(state) {
@@ -196,12 +210,15 @@ export const {
 
 export default currentOrderSlice.reducer;
 
-export const createNewOrder = (type, itemNumber, territoryId) => async (
-  dispatch
-) => {
+export const createNewOrder = (
+  type,
+  itemNumber,
+  territoryId,
+  channel
+) => async (dispatch) => {
   try {
     dispatch(setUpdateLoading());
-    let newOrder = await createOrderSet(type, territoryId);
+    let newOrder = await createOrderSet(type, territoryId, channel);
     if (newOrder.error) {
       throw newOrder.error;
     }
@@ -218,6 +235,7 @@ export const createNewOrder = (type, itemNumber, territoryId) => async (
           itemNumber: orderItem.data.item["item-number"],
         },
         territoryId: territoryId,
+        channel: channel,
       })
     );
   } catch (err) {
@@ -230,6 +248,7 @@ export const createNewBulkItemOrder = (
   type,
   itemArray,
   territoryId,
+  channel,
   programId,
   userId
 ) => async (dispatch) => {
@@ -238,7 +257,12 @@ export const createNewBulkItemOrder = (
     if (type === "preOrder") {
       dispatch(setOrderSetLoading());
     }
-    let newOrder = await createOrderSet(type, territoryId, programId);
+    let newOrder = await createOrderSet(
+      type,
+      territoryId,
+      channel,
+      programId
+    );
     if (newOrder.error) {
       throw newOrder.error;
     }
@@ -272,6 +296,7 @@ export const createNewBulkItemOrder = (
           itemArray: orderItems,
           type: type,
           territoryId: territoryId,
+          channel: channel,
         })
       );
       if (type === "preOrder") {
