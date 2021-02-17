@@ -125,8 +125,9 @@ const OrderHistoryDetailTable = ({
                   ? "Ok"
                   : item.isComplianceCanceled
                   ? "Compliance Canceled"
-                  : item.triggeredRules.length > 0 ||
-                    item.triggeredPriorApprovalRules.length > 0
+                  : (item.triggeredRules && item.triggeredRules.length > 0) ||
+                    (item.triggeredPriorApprovalRules &&
+                      item.triggeredPriorApprovalRules.length > 0)
                   ? "On Hold"
                   : "Ok"}
               </TableCell>

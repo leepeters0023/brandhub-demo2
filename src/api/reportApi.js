@@ -14,6 +14,7 @@ export const fetchOrderItemReport = async (filterObject) => {
     "/api/order-items",
     "history-items"
   );
+  queryString += "&page[size]=10"
   let next = "start";
   let dataArray = [];
   const response = { status: "", error: null, data: null };
