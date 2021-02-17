@@ -23,6 +23,7 @@ export const buildFilters = (
   urlBase,
   type
 ) => {
+  console.log(type)
   let statusString =
     filterObject.status && filterObject.status.length > 0
       ? filterObject.status === "all"
@@ -69,12 +70,12 @@ export const buildFilters = (
   let dateString =
     filterObject.fromDate &&
     filterObject.toDate &&
-    type === "order-set-history" &&
+    (type === "order-set-history" || type === "order-set-items") &&
     filterObject.status === "submitted"
       ? `filter[submitted-at-range]=${filterObject.fromDate} - ${filterObject.toDate}`
       : filterObject.fromDate &&
         filterObject.toDate &&
-        type === "order-set-history" &&
+        (type === "order-set-history" || type === "order-set-items") &&
         filterObject.status !== "submitted"
       ? ""
       : filterObject.fromDate && filterObject.toDate
