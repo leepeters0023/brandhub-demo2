@@ -53,6 +53,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
   const [currentUsers, setCurrentUsers] = useState([]);
 
   const currentUserRole = useSelector((state) => state.user.role);
+  const currentUserFilter = useSelector((state) => state.filters.user);
   const isLoading = useSelector((state) => state.reports.isLoading);
   const report = useSelector((state) => state.reports.reportData);
 
@@ -61,10 +62,17 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
     dispatch(updateSingleFilter({ filter: "user", value: value }));
   };
 
+  const handleChipClick = (id) => {
+    let currentUserArray = currentUserFilter.filter((user) => user.id !== id);
+    setCurrentUsers(currentUserArray);
+    dispatch(updateSingleFilter({ filter: "user", value: currentUserArray }));
+  }
+
   const handleReset = () => {
     setFromDate(format(formatDate(subDays(new Date(), 7)), "MM/dd/yyyy"));
     setToDate(format(formatDate(new Date()), "MM/dd/yyyy"));
     setReset(true);
+    setCurrentUsers([]);
     dispatch(clearReports());
     dispatch(resetFilters());
     setCurrentCSV({ data: [], headers: [] });
@@ -240,6 +248,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
                 color="primary"
                 key={user.id}
                 label={user.name}
+                onDelete={() => handleChipClick(user.id)}
               />
             ))}
         </div>
@@ -260,7 +269,7 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
             color="secondary"
             onClick={handleReset}
           >
-            RESET
+            CLEAR FILTERS
           </Button>
         </div>
         <br />
