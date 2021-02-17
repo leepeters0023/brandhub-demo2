@@ -59,6 +59,7 @@ import { clearSharedItems } from "./redux/slices/sharedItemsSlice";
 import { updateSingleFilter, resetFilters } from "./redux/slices/filterSlice";
 import { clearError } from "./redux/slices/errorSlice";
 import { clearUserUpdate } from "./redux/slices/userUpdateSlice";
+import { clearReports } from "./redux/slices/reportSlice";
 
 import AuthOLanding from "./pages/AuthOLanding";
 import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
@@ -185,6 +186,7 @@ const App = () => {
     dispatch(resetPoHistory());
     dispatch(clearUserUpdate());
     dispatch(resetFilters());
+    dispatch(clearReports());
     navigate("/");
   }, [dispatch]);
 
