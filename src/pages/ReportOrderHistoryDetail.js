@@ -76,7 +76,7 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
       fromDate: fromDate,
       toDate: toDate,
       user: currentUsers,
-      status: "not-draft"
+      status: "not-draft",
     };
     dispatch(getOrderItemReport(filterObject));
     setHasGenerated(true);
@@ -159,8 +159,9 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
               ? "Ok"
               : item.isComplianceCanceled
               ? "Compliance Canceled"
-              : item.triggeredRules.length > 0 ||
-                item.triggeredPriorApprovalRules.length > 0
+              : (item.triggeredRules && item.triggeredRules.length > 0) ||
+                (item.triggeredPriorApprovalRules &&
+                  item.triggeredPriorApprovalRules.length > 0)
               ? "On Hold"
               : "Ok",
           inMarketDate: item.inMarketDate,
@@ -189,9 +190,9 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
   }, []);
 
   useEffect(() => {
-    dispatch(clearReports())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(clearReports());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -206,7 +207,9 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
-          <Typography className={classes.titleText}>Order History Detail Report</Typography>
+          <Typography className={classes.titleText}>
+            Order History Detail Report
+          </Typography>
           <div className={classes.configButtons}>
             <div className={classes.innerConfigDiv}>
               <CSVLink
