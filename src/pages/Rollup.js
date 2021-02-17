@@ -74,7 +74,6 @@ const defaultFilters = {
   brand: [],
   itemType: [],
   groupBy: "order",
-  isPreOrderActive: true,
   itemNumber: "",
   status: "submitted",
   sortOrder: "asc",
