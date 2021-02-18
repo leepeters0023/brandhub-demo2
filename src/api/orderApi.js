@@ -528,11 +528,10 @@ export const deleteOrderSet = async (id) => {
 export const createOrderSet = async (
   type,
   territoryId,
-  channelBool,
+  channel,
   programId
 ) => {
   const response = { status: "", error: null, data: null };
-  const channel = channelBool ? "on_premise" : "retail";
   let formattedType =
     type === "inStock"
       ? "in-stock"
