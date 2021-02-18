@@ -11,9 +11,7 @@ export const fetchItems = async (filterObject) => {
   let marketString = filterObject.isOnPremise
     ? "filter[channel]=on_premise"
     : "filter[channel]=retail";
-  const queryString = filterObject.isItemArchived
-    ? "/api/items?filter[is-archived]=true"
-    : buildFilters(filterObject, marketString, "", "/api/items", "item");
+  const queryString = buildFilters(filterObject, marketString, "", "/api/items", "item");
   await axios
     .get(queryString)
     .then((res) => {

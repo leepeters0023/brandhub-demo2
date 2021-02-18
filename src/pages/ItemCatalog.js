@@ -14,6 +14,8 @@ import {
   updateMultipleFilters,
   updateSingleFilter,
   setSorted,
+  setClear,
+  setDefaultFilters,
 } from "../redux/slices/filterSlice";
 import { addToFavoriteItems } from "../redux/slices/userSlice";
 import {
@@ -146,12 +148,22 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
         dispatch(
           updateMultipleFilters({ filterObject: defaultCurrentFilters })
         );
+        dispatch(
+          setDefaultFilters({
+            filterObject: defaultCurrentFilters,
+          })
+        );
       } else {
         dispatch(
           updateMultipleFilters({ filterObject: defaultArchiveFilters })
         );
+        dispatch(
+          setDefaultFilters({
+            filterObject: defaultArchiveFilters,
+          })
+        );
       }
-      dispatch(setSorted());
+      dispatch(setClear());
     }
   }, [catalogType, currentType, dispatch, setCurrentType]);
 
