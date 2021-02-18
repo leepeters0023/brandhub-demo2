@@ -69,7 +69,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const isOrdersLoading = useSelector(
     (state) => state.orderSetHistory.isLoading

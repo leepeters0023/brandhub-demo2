@@ -67,7 +67,7 @@ const Users = () => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
   const debounce = useRef(null);
 
   const handleUserClick = (user) => {
@@ -77,8 +77,8 @@ const Users = () => {
 
   const handleModalClose = () => {
     handleModal(false);
-    dispatch(setUpdateSuccess({updateStatus: false}))
-    dispatch(clearCurrentUser())
+    dispatch(setUpdateSuccess({ updateStatus: false }));
+    dispatch(clearCurrentUser());
   };
 
   const handleSort = (sortObject) => {
@@ -99,7 +99,7 @@ const Users = () => {
 
     debounce.current = setTimeout(() => {
       dispatch(fetchFilteredUsers(value));
-    }, 250)
+    }, 250);
   };
 
   const { value: search, bind: bindSearch } = useDetailedInput(

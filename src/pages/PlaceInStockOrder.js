@@ -65,7 +65,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));

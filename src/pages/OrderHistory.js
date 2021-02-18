@@ -155,7 +155,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);

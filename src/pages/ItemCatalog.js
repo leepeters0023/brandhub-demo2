@@ -93,7 +93,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
   const currentItems = useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);

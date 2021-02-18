@@ -57,7 +57,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 

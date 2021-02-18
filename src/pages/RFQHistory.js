@@ -114,7 +114,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const currentUserRole = useSelector((state) => state.user.role);
   const supplierId = useSelector((state) => state.user.supplierId);

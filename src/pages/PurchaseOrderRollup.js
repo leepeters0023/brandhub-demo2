@@ -65,7 +65,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const [itemSelected, setItemSelected] = useCallback(useState(false));
   const [isWarningOpen, setWarningOpen] = useCallback(useState(false));

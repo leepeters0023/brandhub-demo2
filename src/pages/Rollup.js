@@ -146,7 +146,7 @@ const Rollup = ({ handleFilterDrawer, filtersOpen }) => {
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const handleSort = (sortObject) => {
     scrollRef.current.scrollTop = 0;

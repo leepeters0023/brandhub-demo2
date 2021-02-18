@@ -49,7 +49,7 @@ const AddItems = ({
     }
   };
 
-  const scrollRef = useBottomScrollListener(handleBottomScroll);
+  const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
 
   const handleAddItems = useCallback(() => {
     let newItems = [];
