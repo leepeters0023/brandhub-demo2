@@ -30,6 +30,7 @@ const RuleTypeSelector = ({
   ];
 
   const currentRuleType = useSelector((state) => state.filters.ruleType);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleChangeSelect = (evt) => {
     setType(evt.target.value);
@@ -49,6 +50,7 @@ const RuleTypeSelector = ({
         variant="outlined"
         size="small"
         className={classes.queryField}
+        disabled={isGlobalLoading}
       >
         <InputLabel id="ruleType-select">Rule Type</InputLabel>
         <Select

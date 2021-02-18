@@ -13,6 +13,7 @@ import {
   mapOrderHistoryItems,
 } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -197,6 +198,7 @@ export default orderHistorySlice.reducer;
 export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let orders = await fetchOrderHistory(filterObject);
     if (orders.error) {
       throw orders.error;
@@ -208,15 +210,18 @@ export const fetchFilteredOrderHistory = (filterObject) => async (dispatch) => {
         nextLink: orders.data.nextLink ? orders.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextOrderHistory = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     let orders = await fetchNextHistory(url);
     if (orders.error) {
       throw orders.error;
@@ -229,15 +234,18 @@ export const fetchNextOrderHistory = (url) => async (dispatch) => {
         nextLink: orders.data.nextLink ? orders.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchOrder = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let order = await fetchSingleOrder(id);
     if (order.error) {
       throw order.error;
@@ -247,9 +255,11 @@ export const fetchOrder = (id) => async (dispatch) => {
     dispatch(
       getSingleOrderSuccess({ order: formattedOrder, items: formattedItems })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -258,6 +268,7 @@ export const fetchFilteredOrderHistoryByItem = (filterObject) => async (
 ) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let items = await fetchOrderHistoryByItem(filterObject);
     if (items.error) {
       throw items.error;
@@ -269,9 +280,11 @@ export const fetchFilteredOrderHistoryByItem = (filterObject) => async (
         nextLink: items.data.nextLink ? items.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -280,6 +293,7 @@ export const fetchNextFilteredOrderHistoryByItem = (url) => async (
 ) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     let items = await fetchNextOrderHistoryByItem(url);
     if (items.error) {
       throw items.error;
@@ -291,8 +305,10 @@ export const fetchNextFilteredOrderHistoryByItem = (url) => async (
         nextLink: items.data.nextLink ? items.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };

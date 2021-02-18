@@ -19,6 +19,7 @@ const BUAutoComplete = ({
 
   const currentFiltersBU = useSelector((state) => state.filters.bu);
   const units = useSelector((state) => state.businessUnits.bus);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleBUs = (value) => {
     setCurrentBUs(value);
@@ -47,7 +48,7 @@ const BUAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="bu-auto-complete"
         open={open}
@@ -63,6 +64,7 @@ const BUAutoComplete = ({
         getOptionLabel={(bu) => bu.name}
         options={units}
         value={currentBUs}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -73,9 +75,7 @@ const BUAutoComplete = ({
             InputProps={{
               ...params.InputProps,
               autoComplete: "new-password",
-              endAdornment: <>
-                {params.InputProps.endAdornment}
-              </>,
+              endAdornment: <>{params.InputProps.endAdornment}</>,
             }}
           />
         )}

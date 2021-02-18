@@ -20,6 +20,7 @@ import {
   setFailure as patchFailure,
 } from "./patchOrderSlice";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { mapRollupItems, mapRFQ, mapBids } from "../apiMaps";
 import addDays from "date-fns/addDays";
 
@@ -225,6 +226,7 @@ export default rfqSlice.reducer;
 export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchRollupItems(filterObject, "rfq");
     if (items.error) {
       throw items.error;
@@ -236,15 +238,18 @@ export const fetchFilteredRFQItems = (filterObject) => async (dispatch) => {
         nextLink: items.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchNextRollupItems(url);
     if (items.error) {
       throw items.error;
@@ -256,15 +261,18 @@ export const fetchNextFilteredRFQItems = (url) => async (dispatch) => {
         nextLink: items.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const createNewRFQ = (item, program) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const dueDate = addDays(new Date(), 5);
     const newRFQ = await createRFQ(item, program, dueDate);
     if (newRFQ.error) {
@@ -272,24 +280,29 @@ export const createNewRFQ = (item, program) => async (dispatch) => {
     }
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchSingleRFQ = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const newRFQ = await fetchRFQ(id);
     if (newRFQ.error) {
       throw newRFQ.error;
     }
     let mappedRFQ = mapRFQ(newRFQ.data);
     dispatch(getSingleRFQSuccess({ rfq: mappedRFQ }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

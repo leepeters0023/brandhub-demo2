@@ -25,6 +25,7 @@ const PurchaserAutoComplete = ({
   const options = useSelector((state) => state.userUpdate.userList);
   const currentFiltersUser = useSelector((state) => state.filters.user);
   const currentUserRole = useSelector((state) => state.user.role);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -32,19 +33,19 @@ const PurchaserAutoComplete = ({
 
   const handleUsers = (value) => {
     setCurrentUsers(value);
-  }
+  };
 
   const handleQuery = useCallback(() => {
-      clearTimeout(debounce.current);
+    clearTimeout(debounce.current);
 
-      debounce.current = setTimeout(() => {
-        dispatch(fetchFilteredUsers(user, currentUserRole));
-      }, 250)
-  }, [user, currentUserRole, dispatch])
+    debounce.current = setTimeout(() => {
+      dispatch(fetchFilteredUsers(user, currentUserRole));
+    }, 250);
+  }, [user, currentUserRole, dispatch]);
 
   useEffect(() => {
     if (user.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [user, handleQuery, dispatch]);
 
@@ -71,7 +72,7 @@ const PurchaserAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="purchaser-auto-complete"
         open={open}
@@ -88,6 +89,7 @@ const PurchaserAutoComplete = ({
         options={options}
         loading={loading}
         value={currentUsers}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

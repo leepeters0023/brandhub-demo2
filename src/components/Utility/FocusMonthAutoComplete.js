@@ -33,6 +33,7 @@ const FocusMonthAutoComplete = ({
   const [currentMonths, setCurrentMonths] = useState([]);
 
   const currentFiltersMonth = useSelector((state) => state.filters.month);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleMonths = (value) => {
     setCurrentMonths(value);
@@ -77,6 +78,7 @@ const FocusMonthAutoComplete = ({
         getOptionLabel={(month) => month}
         options={focusMonths}
         value={currentMonths}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

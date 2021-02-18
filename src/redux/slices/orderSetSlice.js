@@ -18,6 +18,7 @@ import { addPreOrderItems, resetPreOrderItems } from "./programsSlice";
 import { getCouponOrderSet } from "../../api/couponApi";
 import { mapOrderItems, mapOrderHistoryOrders } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { navigate } from "@reach/router";
 
 let initialState = {
@@ -377,6 +378,7 @@ export default orderSetSlice.reducer;
 export const fetchOrderSet = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const currentOrders = await fetchOrderSetById(id);
     if (currentOrders.error) {
       throw currentOrders.error;
@@ -438,9 +440,11 @@ export const fetchOrderSet = (id) => async (dispatch) => {
         totalEstTax: totalEstTax,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -449,6 +453,7 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
 ) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     dispatch(resetPreOrderItems());
     const currentOrders = await fetchOrdersByProgram(program, userId, terrId);
     if (currentOrders.error) {
@@ -527,15 +532,18 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
     if (currentItems.length > 0) {
       dispatch(addPreOrderItems({ ids: currentItems.map((i) => i.itemId) }));
     }
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchCouponOrderSet = (code) => async (dispatch) => {
   try {
     dispatch(setCouponLoading());
+    dispatch(startGlobalLoad());
     const currentOrders = await getCouponOrderSet(code);
     if (currentOrders.error) {
       throw currentOrders.error;
@@ -594,10 +602,12 @@ export const fetchCouponOrderSet = (code) => async (dispatch) => {
         territoryId: territoryId,
       })
     );
+    dispatch(stopGlobalLoad());
     navigate(`/orders/open/${orderId}`);
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

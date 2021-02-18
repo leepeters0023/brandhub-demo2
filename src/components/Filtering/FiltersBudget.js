@@ -26,6 +26,7 @@ const FiltersBudget = ({
   const dispatch = useDispatch();
 
   const currentUserRole = useSelector((state) => state.user.role);
+  const isLoading = useSelector((state) => state.globalLoad.isLoading);
 
   return (
     <>
@@ -86,6 +87,7 @@ const FiltersBudget = ({
             className={classes.largeButton}
             variant="contained"
             color="secondary"
+            disabled={isLoading}
             onClick={() => {
               dispatch(setClear());
             }}

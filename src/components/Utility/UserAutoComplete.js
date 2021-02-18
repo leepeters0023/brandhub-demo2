@@ -22,6 +22,7 @@ const UserAutoComplete = ({
   const fieldUsers = useSelector((state) => state.user.managedUsers);
   const currentUser = useSelector((state) => state.user);
   const currentFiltersUser = useSelector((state) => state.filters.user);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleUsers = (value) => {
     setCurrentUsers(value);
@@ -60,7 +61,7 @@ const UserAutoComplete = ({
         freeSolo
         renderTags={() => null}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         fullWidth
         className={classes.queryField}
@@ -78,6 +79,7 @@ const UserAutoComplete = ({
         getOptionLabel={(user) => user.name}
         options={currentUserList}
         value={currentUsers}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

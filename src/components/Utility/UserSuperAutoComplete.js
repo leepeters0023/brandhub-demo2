@@ -24,6 +24,7 @@ const UserSuperAutoComplete = ({
   const isLoading = useSelector((state) => state.userUpdate.isLoading);
   const options = useSelector((state) => state.userUpdate.userList);
   const currentFiltersUser = useSelector((state) => state.filters.user);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -31,19 +32,19 @@ const UserSuperAutoComplete = ({
 
   const handleUsers = (value) => {
     setCurrentUsers(value);
-  }
+  };
 
   const handleQuery = useCallback(() => {
-      clearTimeout(debounce.current);
+    clearTimeout(debounce.current);
 
-      debounce.current = setTimeout(() => {
-        dispatch(fetchFilteredUsers(user));
-      }, 250)
-  }, [user, dispatch])
+    debounce.current = setTimeout(() => {
+      dispatch(fetchFilteredUsers(user));
+    }, 250);
+  }, [user, dispatch]);
 
   useEffect(() => {
     if (user.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [user, handleQuery, dispatch]);
 
@@ -70,7 +71,7 @@ const UserSuperAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="user-auto-complete"
         open={open}
@@ -87,6 +88,7 @@ const UserSuperAutoComplete = ({
         options={options}
         loading={loading}
         value={currentUsers}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

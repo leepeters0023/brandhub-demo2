@@ -13,6 +13,7 @@ import {
 import { fetchOrderHistoryByItem } from "../../api/orderApi";
 import { mapCompItems, mapOrderHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -143,6 +144,7 @@ export const fetchFilteredTriggeredRules = (filterObject) => async (
 ) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let triggeredRules = await fetchTriggeredRules(filterObject);
     if (triggeredRules.error) {
       throw triggeredRules.error;
@@ -156,15 +158,18 @@ export const fetchFilteredTriggeredRules = (filterObject) => async (
           : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     let triggeredRules = await fetchNextTriggeredRules(url);
     if (triggeredRules.error) {
       throw triggeredRules.error;
@@ -178,15 +183,18 @@ export const fetchNextFilteredTriggeredRules = (url) => async (dispatch) => {
           : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let triggeredRules = await fetchOrderHistoryByItem({
       orderItemIds: orderIds,
     });
@@ -202,9 +210,11 @@ export const fetchTriggeredRulesByOrders = (orderIds) => async (dispatch) => {
           : null,
       })
     );
+    dispatch(stopGlobalLoad())
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

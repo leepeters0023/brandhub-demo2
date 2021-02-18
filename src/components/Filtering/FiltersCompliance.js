@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { setClear } from "../../redux/slices/filterSlice";
 
@@ -31,6 +31,7 @@ const FiltersCompliance = ({
   const dispatch = useDispatch();
   const [status, setStatus] = useCallback(useState("all"));
   const [type, setType] = useCallback(useState("all"));
+  const isLoading = useSelector((state) => state.globalLoad.isLoading);
 
   return (
     <>
@@ -49,6 +50,7 @@ const FiltersCompliance = ({
                 {...bindSequenceNum}
                 variant="outlined"
                 size="small"
+                disabled={isLoading}
               />
             </ListItem>
             <ListItem>
@@ -58,6 +60,7 @@ const FiltersCompliance = ({
                 variant="contained"
                 color="secondary"
                 onClick={handleSearch}
+                disabled={isLoading}
               >
                 SEARCH
               </Button>
@@ -120,6 +123,7 @@ const FiltersCompliance = ({
             className={classes.largeButton}
             variant="contained"
             color="secondary"
+            disabled={isLoading}
             onClick={() => {
               dispatch(setClear());
             }}

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchItems, fetchNextItems } from "../../api/itemApi";
 import { mapItems } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -109,6 +110,7 @@ export default itemSlice.reducer;
 export const fetchFilteredItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchItems(filterObject);
     if (items.error) {
       throw items.error;
@@ -121,9 +123,11 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
         nextLink: items.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({error: err.toString()}));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -131,6 +135,7 @@ export const fetchNextFilteredItems = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
     dispatch(clearNextLink());
+    dispatch(startGlobalLoad());
     const items = await fetchNextItems(url);
     if (items.error) {
       throw items.error;
@@ -142,8 +147,10 @@ export const fetchNextFilteredItems = (url) => async (dispatch) => {
         nextLink: items.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({error: err.toString()}));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 }

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchPOHistory, fetchNextPOHistory } from "../../api/purchasingApi";
 import { mapPOHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -76,6 +77,7 @@ export default purchaseOrderHistorySlice.reducer;
 export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let pos = await fetchPOHistory(filterObject);
     if (pos.error) {
       throw pos.error;
@@ -87,15 +89,18 @@ export const fetchFilteredPOHistory = (filterObject) => async (dispatch) => {
         nextLink: pos.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredPOHistory = (url) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let pos = await fetchNextPOHistory(url);
     if (pos.error) {
       throw pos.error;
@@ -107,8 +112,10 @@ export const fetchNextFilteredPOHistory = (url) => async (dispatch) => {
         nextLink: pos.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };

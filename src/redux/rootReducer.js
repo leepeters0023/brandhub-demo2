@@ -12,6 +12,7 @@ import currentOrderReducer from "./slices/currentOrderSlice";
 import distributorReducer from "./slices/distributorSlice";
 import errorReducer from "./slices/errorSlice";
 import filterReducer from "./slices/filterSlice";
+import globalLoadReducer from "./slices/globalLoadSlice";
 import itemReducer from "./slices/itemSlice";
 import itemTypeReducer from "./slices/itemTypeSlice";
 import newProgramReducer from "./slices/newProgramSlice";
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   distributors: distributorReducer,
   error: errorReducer,
   filters: filterReducer,
+  globalLoad: globalLoadReducer,
   itemApprovedOrDenied: itemApprovedOrDenied, 
   items: itemReducer,
   itemTypes: itemTypeReducer,

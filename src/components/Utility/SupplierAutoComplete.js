@@ -23,6 +23,7 @@ const FocusMonthAutoComplete = ({
   const isLoading = useSelector((state) => state.suppliers.isLoading);
   const options = useSelector((state) => state.suppliers.filteredSupplierList);
   const currentFiltersSupplier = useSelector((state) => state.filters.supplier);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -86,6 +87,7 @@ const FocusMonthAutoComplete = ({
         options={options}
         loading={loading}
         value={currentSuppliers}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

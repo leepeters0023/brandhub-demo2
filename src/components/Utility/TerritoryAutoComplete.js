@@ -28,6 +28,7 @@ const TerritoryAutoComplete = ({
   const currentFiltersTerritory = useSelector(
     (state) => state.filters.territory
   );
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -90,6 +91,7 @@ const TerritoryAutoComplete = ({
         options={options}
         loading={loading}
         value={currentTerritories}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

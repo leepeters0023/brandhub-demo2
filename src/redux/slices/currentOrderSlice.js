@@ -11,6 +11,7 @@ import {
 } from "./orderSetSlice";
 import { fetchPreOrders } from "./preOrderDetailSlice";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { mapOrderSet } from "../apiMaps";
 
 let initialState = {
@@ -316,6 +317,7 @@ export const createNewBulkItemOrder = (
 export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let order = await fetchSingleOrderSetByType(type, userId);
     if (order.error) {
       throw order.error;
@@ -356,9 +358,11 @@ export const fetchCurrentOrderByType = (type, userId) => async (dispatch) => {
         warehouse: currentWarehouse ? currentWarehouse : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

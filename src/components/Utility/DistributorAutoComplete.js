@@ -28,6 +28,7 @@ const DistributorAutoComplete = ({
   const currentFiltersDistributor = useSelector(
     (state) => state.filters.distributor
   );
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -53,7 +54,7 @@ const DistributorAutoComplete = ({
 
   useEffect(() => {
     if (distributor.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [distributor, handleQuery, dispatch]);
 
@@ -99,6 +100,7 @@ const DistributorAutoComplete = ({
         options={options}
         loading={loading}
         value={currentDistributors}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

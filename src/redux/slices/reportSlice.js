@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchOrderItemReport } from "../../api/reportApi";
 import { mapOrderHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -54,14 +55,17 @@ export default reportSlice.reducer;
 export const getOrderItemReport = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchOrderItemReport(filterObject);
     if (items.error) {
       throw items.error;
     }
     let mappedItems = mapOrderHistoryItems(items.data);
     dispatch(getReportsSuccess({ type: "wrap-up", reportData: mappedItems }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };

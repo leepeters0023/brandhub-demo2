@@ -53,6 +53,7 @@ const FiltersHistory = ({
   const currentGrouping = useSelector((state) => state.filters.groupBy);
   const toDate = useSelector((state) => state.filters.toDate);
   const fromDate = useSelector((state) => state.filters.fromDate);
+  const isLoading = useSelector((state) => state.globalLoad.isLoading);
   const [value, setValue] = useCallback(useState("order"));
 
   useEffect(() => {
@@ -95,6 +96,7 @@ const FiltersHistory = ({
                       setValue("order");
                       handleFilters("order", "groupBy", "history");
                     }}
+                    disabled={isLoading}
                   >
                     ORDER
                   </Button>
@@ -109,6 +111,7 @@ const FiltersHistory = ({
                       setValue("item");
                       handleFilters("item", "groupBy", "history");
                     }}
+                    disabled={isLoading}
                   >
                     ITEM
                   </Button>
@@ -132,6 +135,7 @@ const FiltersHistory = ({
             {...bindSequenceNum}
             variant="outlined"
             size="small"
+            disabled={isLoading}
           />
         </ListItem>
         {historyType === "rfq" && (
@@ -147,6 +151,7 @@ const FiltersHistory = ({
               {...bindRfqNum}
               variant="outlined"
               size="small"
+              disabled={isLoading}
             />
           </ListItem>
         )}
@@ -163,6 +168,7 @@ const FiltersHistory = ({
               {...bindPoNum}
               variant="outlined"
               size="small"
+              disabled={isLoading}
             />
           </ListItem>
         )}
@@ -173,6 +179,7 @@ const FiltersHistory = ({
             variant="contained"
             color="secondary"
             onClick={handleSearch}
+            disabled={isLoading}
           >
             SEARCH
           </Button>
@@ -203,6 +210,7 @@ const FiltersHistory = ({
                   PopoverProps={{
                     style: { zIndex: "16000" },
                   }}
+                  disabled={isLoading}
                 />
               </MuiPickersUtilsProvider>
             </ListItem>
@@ -225,6 +233,7 @@ const FiltersHistory = ({
                   PopoverProps={{
                     style: { zIndex: "16000" },
                   }}
+                  disabled={isLoading}
                 />
               </MuiPickersUtilsProvider>
             </ListItem>
@@ -346,6 +355,7 @@ const FiltersHistory = ({
             onClick={() => {
               dispatch(setClear());
             }}
+            disabled={isLoading}
           >
             CLEAR FILTERS
           </Button>

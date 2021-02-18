@@ -33,6 +33,7 @@ import {
 } from "./patchOrderSlice";
 import { updateValues } from "./supplierSlice";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { stringToCents } from "../../utility/utilityFunctions";
 import { mapRollupItems, mapPurchaseOrder, mapPOItems } from "../apiMaps";
 import { navigate } from "@reach/router";
@@ -391,6 +392,7 @@ export default purchaseOrderSlice.reducer;
 export const fetchFilteredPOItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchRollupItems(filterObject, "po");
     if (items.error) {
       throw items.error;
@@ -399,15 +401,18 @@ export const fetchFilteredPOItems = (filterObject) => async (dispatch) => {
     dispatch(
       getPOItemsSuccess({ poItems: mappedItems, nextLink: items.data.nextLink })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredPOItems = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchNextRollupItems(url);
     if (items.error) {
       throw items.error;
@@ -419,24 +424,29 @@ export const fetchNextFilteredPOItems = (url) => async (dispatch) => {
         nextLink: items.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchSinglePO = (id) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const newPO = await fetchPO(id);
     if (newPO.error) {
       throw newPO.error;
     }
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -445,15 +455,18 @@ export const createNewPO = (idArray, orderType, programId) => async (
 ) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const newPO = await createPO(idArray, orderType, programId);
     if (newPO.error) {
       throw newPO.error;
     }
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
@@ -462,15 +475,18 @@ export const createInventoryPO = (itemId, qty, warehouse, programId) => async (
 ) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const newPO = await createInvPO(itemId, qty, warehouse, programId);
     if (newPO.error) {
       throw newPO.error;
     }
     const formattedPO = mapPurchaseOrder(newPO.data);
     dispatch(getSinglePOSuccess({ purchaseOrder: formattedPO }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

@@ -32,6 +32,7 @@ const FiltersItemRollup = ({
   const [value, setValue] = useCallback(useState("on-demand"));
 
   const currentOrderType = useSelector((state) => state.filters.orderType);
+  const isLoading = useSelector((state) => state.globalLoad.isLoading);
 
   useEffect(() => {
     if (value !== currentOrderType) {
@@ -85,6 +86,7 @@ const FiltersItemRollup = ({
                     setValue("on-demand");
                     handleFilters("on-demand", "orderType", "itemRollup");
                   }}
+                  disabled={isLoading}
                 >
                   ON-DEMAND
                 </Button>
@@ -99,6 +101,7 @@ const FiltersItemRollup = ({
                     setValue("pre-order");
                     handleFilters("pre-order", "orderType", "itemRollup");
                   }}
+                  disabled={isLoading}
                 >
                   PRE-ORDER
                 </Button>
@@ -121,6 +124,7 @@ const FiltersItemRollup = ({
             {...bindSequenceNum}
             variant="outlined"
             size="small"
+            disabled={isLoading}
           />
         </ListItem>
         <ListItem>
@@ -130,6 +134,7 @@ const FiltersItemRollup = ({
             variant="contained"
             color="secondary"
             onClick={handleSearch}
+            disabled={isLoading}
           >
             SEARCH
           </Button>
@@ -183,6 +188,7 @@ const FiltersItemRollup = ({
             onClick={() => {
               dispatch(setClear());
             }}
+            disabled={isLoading}
           >
             CLEAR FILTERS
           </Button>

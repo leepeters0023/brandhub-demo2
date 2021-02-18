@@ -76,6 +76,7 @@ const StatusSelector = ({
   };
 
   const currentStatus = useSelector((state) => state.filters.status);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleChangeSelect = (evt) => {
     setStatus(evt.target.value);
@@ -96,6 +97,7 @@ const StatusSelector = ({
         variant="outlined"
         size="small"
         className={classes.queryField}
+        disabled={isGlobalLoading}
       >
         <InputLabel id="status-select">{lableMap[filterType]}</InputLabel>
         <Select

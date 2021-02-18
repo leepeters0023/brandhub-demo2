@@ -24,6 +24,7 @@ const BrandAutoComplete = ({
   const isLoading = useSelector((state) => state.brands.isLoading);
   const options = useSelector((state) => state.brands.brandList);
   const currentFiltersBrand = useSelector((state) => state.filters.brand);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const loading = open && isLoading;
 
@@ -31,19 +32,19 @@ const BrandAutoComplete = ({
 
   const handleBrands = (value) => {
     setCurrentBrands(value);
-  }
+  };
 
   const handleQuery = useCallback(() => {
-      clearTimeout(debounce.current);
+    clearTimeout(debounce.current);
 
-      debounce.current = setTimeout(() => {
-        dispatch(fetchBrands(brand));
-      }, 250)
-  }, [brand, dispatch])
+    debounce.current = setTimeout(() => {
+      dispatch(fetchBrands(brand));
+    }, 250);
+  }, [brand, dispatch]);
 
   useEffect(() => {
     if (brand.length >= 1) {
-      handleQuery()
+      handleQuery();
     }
   }, [brand, handleQuery, dispatch]);
 
@@ -70,7 +71,7 @@ const BrandAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="brand-auto-complete"
         open={open}
@@ -87,6 +88,7 @@ const BrandAutoComplete = ({
         options={options}
         loading={loading}
         value={currentBrands}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

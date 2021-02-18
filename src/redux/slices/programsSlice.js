@@ -10,6 +10,7 @@ import {
   patchSuccess,
   setFailure as patchFailure,
 } from "./patchOrderSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { mapPrograms, mapItems } from "../apiMaps";
 import { setError } from "./errorSlice";
 
@@ -169,6 +170,7 @@ export const fetchInitialPrograms = (id, channelBool) => async (dispatch) => {
 export const fetchPrograms = (id, channelBool) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const programs = await fetchProgramsByTerritory(id, channelBool);
     if (programs.error) {
       throw programs.error;
@@ -178,24 +180,29 @@ export const fetchPrograms = (id, channelBool) => async (dispatch) => {
     }
     const programArray = mapPrograms(programs.data);
     dispatch(getProgramsSuccess({ programs: programArray }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchItems = (id) => async (dispatch) => {
   try {
     dispatch(setItemsIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchProgramItems(id);
     if (items.error) {
       throw items.error;
     }
     let mappedItems = mapItems(items.data);
     dispatch(getProgramItemsSuccess({ program: id, items: mappedItems }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 

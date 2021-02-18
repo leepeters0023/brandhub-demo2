@@ -19,6 +19,7 @@ const ItemTypeAutoComplete = ({
 
   const currentFiltersItemType = useSelector((state) => state.filters.itemType);
   const itemTypeList = useSelector((state) => state.itemTypes.itemTypeList);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleItemTypes = (value) => {
     setCurrentItemTypes(value);
@@ -47,7 +48,7 @@ const ItemTypeAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id="itemType-auto-complete"
         open={open}
@@ -63,6 +64,7 @@ const ItemTypeAutoComplete = ({
         getOptionLabel={(option) => option.name}
         options={itemTypeList}
         value={currentItemTypes}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -72,9 +74,7 @@ const ItemTypeAutoComplete = ({
             InputProps={{
               ...params.InputProps,
               autoComplete: "new-password",
-              endAdornment: <>
-                {params.InputProps.endAdornment}
-              </>,
+              endAdornment: <>{params.InputProps.endAdornment}</>,
             }}
           />
         )}

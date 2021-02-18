@@ -21,6 +21,7 @@ const StateAutoComplete = ({
 
   const states = useSelector((state) => state.territories.stateList);
   const currentFiltersState = useSelector((state) => state.filters.stateIds);
+  const isGlobalLoading = useSelector((state) => state.globalLoad.isLoading);
 
   const handleStates = (value) => {
     setCurrentStateCodes(value);
@@ -55,7 +56,7 @@ const StateAutoComplete = ({
         fullWidth
         className={classes.queryField}
         classes={{
-          popper: classes.liftedPopper
+          popper: classes.liftedPopper,
         }}
         id={id ? id : "state-code-complete"}
         open={open}
@@ -71,6 +72,7 @@ const StateAutoComplete = ({
         getOptionLabel={(user) => user.code}
         options={currentStatCodeList}
         value={currentStateCodes}
+        disabled={isGlobalLoading}
         renderInput={(params) => (
           <TextField
             {...params}

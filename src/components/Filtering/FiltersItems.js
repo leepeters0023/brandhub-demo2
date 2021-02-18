@@ -30,6 +30,7 @@ const FiltersItems = ({
   const dispatch = useDispatch();
 
   const favoriteItems = useSelector((state) => state.user.favoriteItems);
+  const isLoading = useSelector((state) => state.globalLoad.isLoading);
 
   return (
     <>
@@ -45,6 +46,7 @@ const FiltersItems = ({
             size="small"
             value={itemNumber}
             {...bindSequenceNum}
+            disabled={isLoading}
           />
         </ListItem>
         <ListItem>
@@ -58,6 +60,7 @@ const FiltersItems = ({
             size="small"
             value={itemDesc}
             {...bindItemDesc}
+            disabled={isLoading}
           />
         </ListItem>
         <ListItem>
@@ -67,6 +70,7 @@ const FiltersItems = ({
             variant="contained"
             color="secondary"
             onClick={handleSearch}
+            disabled={isLoading}
           >
             SEARCH
           </Button>
@@ -80,7 +84,7 @@ const FiltersItems = ({
             className={classes.largeButton}
             variant="contained"
             color="secondary"
-            disabled={favoriteItems.length === 0}
+            disabled={favoriteItems.length === 0 || isLoading}
             onClick={() =>
               handleFilters([...favoriteItems], "favItems", "item-all")
             }
@@ -135,6 +139,7 @@ const FiltersItems = ({
             onClick={() => {
               dispatch(setClear());
             }}
+            disabled={isLoading}
           >
             CLEAR FILTERS
           </Button>

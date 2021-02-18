@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchSharedItems } from "../../api/itemApi";
 import { mapItems } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -51,14 +52,17 @@ export default sharedItemSlice.reducer;
 export const fetchSharedItemsByIds = (ids) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     const items = await fetchSharedItems(ids);
     if (items.error) {
       throw items.error;
     }
     let mappedItems = mapItems(items.data);
     dispatch(getItemsSuccess({ items: mappedItems }));
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };

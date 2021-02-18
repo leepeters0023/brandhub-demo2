@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchAllRules, fetchNextRules } from "../../api/complianceApi";
 import { mapRules } from "../apiMaps";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 
 let initialState = {
   isLoading: false,
@@ -76,6 +77,7 @@ export default complianceRulesSlice.reducer;
 export const fetchFilteredRules = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let rules = await fetchAllRules(filterObject);
     if (rules.error) {
       throw rules.error;
@@ -87,15 +89,18 @@ export const fetchFilteredRules = (filterObject) => async (dispatch) => {
         nextLink: rules.data.nextLink ? rules.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredRules = (url) => async (dispatch) => {
   try {
     dispatch(setNextIsLoading());
+    dispatch(startGlobalLoad());
     let rules = await fetchNextRules(url);
     if (rules.error) {
       throw rules.error;
@@ -107,8 +112,10 @@ export const fetchNextFilteredRules = (url) => async (dispatch) => {
         nextLink: rules.data.nextLink ? rules.data.nextLink : null,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };

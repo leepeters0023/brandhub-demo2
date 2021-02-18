@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchRFQHistory, fetchNextRFQHistory } from "../../api/purchasingApi";
 import { setError } from "./errorSlice";
+import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
 import { mapRFQHistory } from "../apiMaps";
 
 let initialState = {
@@ -76,6 +77,7 @@ export default rfqHistorySlice.reducer;
 export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let rfqs = await fetchRFQHistory(filterObject);
     if (rfqs.error) {
       throw rfqs.error;
@@ -87,15 +89,18 @@ export const fetchFilteredRFQHistory = (filterObject) => async (dispatch) => {
         nextLink: rfqs.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
 
 export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
     let rfqs = await fetchNextRFQHistory(url);
     if (rfqs.error) {
       throw rfqs.error;
@@ -107,8 +112,10 @@ export const fetchNextFilteredRFQHistory = (url) => async (dispatch) => {
         nextLink: rfqs.data.nextLink,
       })
     );
+    dispatch(stopGlobalLoad());
   } catch (err) {
     dispatch(setFailure({ error: err.toString() }));
     dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
   }
 };
