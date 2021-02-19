@@ -90,14 +90,17 @@ const PendingCompliance = ({ handleFiltersClosed, orderIds }) => {
           distributor: item.distributor,
           totalItems: item.isComplianceCanceled ? "Canceled" : item.totalItems,
           rule:
+            item.triggeredRules &&
             item.triggeredRules.length > 0 &&
+            item.triggeredPriorApprovalRules &&
             item.triggeredPriorApprovalRules.length > 0
               ? item.triggerdRules.join(", ") +
                 ", " +
                 item.triggeredPriorApprovalRules.join(", ")
-              : item.triggeredRules.length > 0
+              : item.triggeredRules && item.triggeredRules.length > 0
               ? item.triggeredRules.join(", ")
-              : item.triggeredPriorApprovalRules.length > 0
+              : item.triggeredPriorApprovalRules &&
+                item.triggeredPriorApprovalRules.length > 0
               ? item.triggeredPriorApprovalRules.join(", ")
               : "---",
         });
