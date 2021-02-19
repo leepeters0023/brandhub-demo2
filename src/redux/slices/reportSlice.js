@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchOrderItemReport } from "../../api/reportApi";
+import { fetchOrderItemReport, fetchReportById } from "../../api/reportApi";
 import { mapOrderHistoryItems } from "../apiMaps";
 import { setError } from "./errorSlice";
 import { startGlobalLoad, stopGlobalLoad } from "./globalLoadSlice";
@@ -69,3 +69,21 @@ export const getOrderItemReport = (filterObject) => async (dispatch) => {
     dispatch(stopGlobalLoad());
   }
 };
+
+export const getReportById = (id, filterObject) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    dispatch(startGlobalLoad());
+    const reportData = await fetchReportById(id, filterObject);
+    if (reportData.error) {
+      throw reportData.error;
+    }
+    console.log(reportData.data);
+    dispatch(getReportsSuccess({ type: id, reportData: reportData.data }));
+    dispatch(stopGlobalLoad());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+    dispatch(stopGlobalLoad());
+  }
+}

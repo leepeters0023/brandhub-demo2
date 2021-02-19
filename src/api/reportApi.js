@@ -14,7 +14,7 @@ export const fetchOrderItemReport = async (filterObject) => {
     "/api/order-items",
     "history-items"
   );
-  queryString += "&filter[qty-not-zero]=true&page[size]=10"
+  queryString += "&filter[qty-not-zero]=true&page[size]=10";
   let next = "start";
   let dataArray = [];
   const response = { status: "", error: null, data: null };
@@ -39,5 +39,23 @@ export const fetchOrderItemReport = async (filterObject) => {
     response.status = "ok";
     response.data = dataArray;
   }
+  return response;
+};
+
+export const fetchReportById = async (id, filterObject) => {
+  const response = { status: "", error: null, data: null };
+  await axios
+    .get(`/api/reports/${id}`)
+    .then((res) => {
+      let data = dataFormatter.deserialize(res.data);
+      response.status = "ok";
+      response.data = data;
+    })
+    .catch((err) => {
+      const error = handleErrors(err);
+      console.log(error);
+      response.status = "error";
+      response.error = error;
+    });
   return response;
 };

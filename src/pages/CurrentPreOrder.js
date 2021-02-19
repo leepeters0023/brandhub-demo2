@@ -231,19 +231,20 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleFileUpload = (data) => {
-    console.log(data);
-    const mappedData = data.map((dataPoint) => {
-      let itemNumbers = Object.keys(dataPoint.data).filter(
-        (key) => key !== "ABN"
-      );
-      let dataObject = {
-        abn: dataPoint.data["ABN"],
-      };
-      itemNumbers.forEach((num) => {
-        dataObject[num] = dataPoint.data[num];
+    const mappedData = data
+      .filter((dataPoint) => dataPoint.errors.length === 0)
+      .map((dataPoint) => {
+        let itemNumbers = Object.keys(dataPoint.data).filter(
+          (key) => key !== "ABN"
+        );
+        let dataObject = {
+          abn: dataPoint.data["ABN"],
+        };
+        itemNumbers.forEach((num) => {
+          dataObject[num] = dataPoint.data[num];
+        });
+        return dataObject;
       });
-      return dataObject;
-    });
     if (mappedData.length > 0) {
       dispatch(
         addPreAllocatedOrder(

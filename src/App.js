@@ -93,6 +93,7 @@ import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
 import PurchaseOrderRollup from "./pages/PurchaseOrderRollup";
+import ReportFocusSummary from "./pages/ReportFocusSummary";
 import ReportOrderHistoryDetail from "./pages/ReportOrderHistoryDetail";
 import ReportWrapUp from "./pages/ReportWrapUp";
 import RFQ from "./pages/RFQ";
@@ -874,6 +875,22 @@ const App = () => {
               [
                 "field1",
                 "field2",
+                "purchaser",
+                "select-purchaser",
+                "super",
+                "read-only",
+                "compliance",
+              ],
+              currentRole,
+              territories
+            )}
+            {handleAuth(
+              <ReportFocusSummary
+                path="/reports/focus-summary"
+                handleFiltersClosed={handleFiltersClosed}
+              />,
+              "/reports/focus-summary",
+              [
                 "purchaser",
                 "select-purchaser",
                 "super",

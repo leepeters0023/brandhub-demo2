@@ -114,16 +114,18 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
   };
 
   const handleFileUpload = (data) => {
-    const mappedData = data.map((dataPoint) => ({
-      id: dataPoint.data["Param Item Id"],
-      carrier: dataPoint.data["Carrier"].toLowerCase(),
-      method: dataPoint.data["Ship Method"],
-      "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
-      "shipped-qty": dataPoint.data["Shipped Quantity"],
-      "package-count": dataPoint.data["Package Count"],
-      "tracking-number": dataPoint.data["Tracking Number"],
-      tax: dataPoint.data["Tax"],
-    }));
+    const mappedData = data
+      .filter((dataPoint) => dataPoint.errors.length === 0)
+      .map((dataPoint) => ({
+        id: dataPoint.data["Param Item Id"],
+        carrier: dataPoint.data.Carrier.toLowerCase(),
+        method: dataPoint.data["Ship Method"],
+        "actual-ship-date": new Date(dataPoint.data["Actual Ship Date"]),
+        "shipped-qty": dataPoint.data["Shipped Quantity"],
+        "package-count": dataPoint.data["Package Count"],
+        "tracking-number": dataPoint.data["Tracking Number"],
+        tax: dataPoint.data["Tax"],
+      }));
     dispatch(updateAllShippingParams(mappedData, currentPO.id));
     setUploadLoading(false);
   };
