@@ -4,6 +4,7 @@ import {
   fetchOrderSetById,
   addSingleOrderToSet,
   addCustomAddressOrderToSet,
+  patchOrderItem,
 } from "../../api/orderApi";
 import { createNewOrderSuccess } from "./currentOrderSlice";
 import { fetchDistributorsByTerritory } from "../../api/distributorApi";
@@ -502,7 +503,9 @@ export const fetchProgramOrders = (program, userId, terrId) => async (
         ? ["National"]
         : currentOrders.data[0]["territory-names"].split(", ")
       : null;
-    let territoryId = currentOrders.data[0] ? currentOrders.data[0].territory.id : null;
+    let territoryId = currentOrders.data[0]
+      ? currentOrders.data[0].territory.id
+      : null;
     let channel = currentOrders.data[0] ? currentOrders.data[0].channel : null;
     let note =
       currentOrders.data[0] && currentOrders.data[0].notes
@@ -734,6 +737,159 @@ export const addCustomAddressOrder = (address, id, type, addId) => async (
     if (err === "has already been taken") {
       dispatch(setError({ error: "Cannot add duplicate addresses" }));
     }
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(patchFailure({ error: err.toString() }));
+  }
+};
+
+export const addPreAllocatedOrder = (
+  allocationData,
+  orderSetId,
+  orderTerritoryId,
+  orderType,
+  warehouse
+) => async (dispatch) => {
+  try {
+    dispatch(setOrderLoading());
+    dispatch(patchLoading());
+    const distributors = await fetchDistributorsByTerritory(orderTerritoryId);
+    if (distributors.error) {
+      throw distributors.error;
+    }
+    let errorArray = [];
+    let orderABNs = allocationData.map((data) => data.abn);
+    let validDistIds = [];
+    let validABNs = [];
+    distributors.data.forEach((dist) => {
+      if (orderABNs.includes(dist["external-source-id"])) {
+        validDistIds.push(dist.id);
+        validABNs.push(dist["external-source-id"]);
+      }
+    });
+    let invalidABNs = orderABNs.filter((abn) => !validABNs.includes(abn));
+    if (invalidABNs.length > 0) {
+      errorArray.push(
+        `The following ABNs do not match any distributors in the current territory: ${invalidABNs.join(
+          ", "
+        )}.`
+      );
+    }
+    for (let i = 0; i < validDistIds.length; i++) {
+      const order = await addSingleOrderToSet(
+        orderSetId,
+        validDistIds[i],
+        orderType,
+        warehouse
+      );
+      if (order.error) {
+        errorArray.push(order.error);
+      }
+      const formattedOrder = mapOrderHistoryOrders([order.data])[0];
+      console.log(formattedOrder);
+      let currentABN = formattedOrder.distributorId;
+      let currentOrderAllocation = allocationData.find(
+        (data) => data.abn === currentABN
+      );
+      for (let oi = 0; oi < formattedOrder.items.length; oi++) {
+        let qty = currentOrderAllocation[formattedOrder.items[oi].itemNumber];
+        if (qty && qty.length > 0) {
+          const patchStatus = await patchOrderItem(
+            formattedOrder.items[oi].id,
+            qty
+          );
+          if (patchStatus.error) {
+            errorArray.push(patchStatus.error);
+          }
+        }
+      }
+    }
+
+    const currentOrders = await fetchOrderSetById(orderSetId);
+    if (currentOrders.error) {
+      errorArray.push(currentOrders.error);
+    }
+    let currentItems = currentOrders.data["order-set-items"]
+      ? mapOrderItems(currentOrders.data["order-set-items"], "order-set-item")
+      : [];
+    let orders = currentOrders.data.orders
+      ? mapOrderHistoryOrders(currentOrders.data.orders)
+      : [];
+    if (orders.length > 0) {
+      orders.sort((a, b) => {
+        let aName = a.distributorName ? a.distributorName : a.customAddressName;
+        let bName = b.distributorName ? b.distributorName : b.customAddressName;
+        return aName < bName ? -1 : aName > bName ? 1 : 0;
+      });
+    }
+
+    let totalFreight = 0;
+    let totalTax = 0;
+    if (orders.length > 0) {
+      orders.forEach((ord) => {
+        totalFreight += ord.totalEstFreight;
+        totalTax += ord.totalEstTax;
+      });
+    }
+
+    let type = currentOrders.data.type;
+    let orderId = currentOrders.data.id;
+    let orderStatus = currentOrders.data.status;
+    let complete = currentOrders.data["is-work-complete"];
+    let totalEstFreight = totalFreight;
+    let totalEstTax = totalTax;
+    let territories =
+      currentOrders.data["territory-names"].length === 0
+        ? ["National"]
+        : currentOrders.data["territory-names"].split(", ");
+    let territoryId = currentOrders.data.territory.id;
+    let channel = currentOrders.data.channel;
+    let note = currentOrders.data.notes ? currentOrders.data.notes : "";
+    dispatch(
+      setPreOrderDetails({
+        territories: territories,
+        programId: null,
+      })
+    );
+    dispatch(
+      buildTableFromOrders({
+        orderId: orderId,
+        territoryId: territoryId,
+        channel: channel,
+        type: type,
+        orders: orders,
+        items: currentItems,
+        status: orderStatus,
+        isComplete: complete,
+        note: note,
+        totalEstFreight: totalEstFreight,
+        totalEstTax: totalEstTax,
+      })
+    );
+    dispatch(completeAddingOrders());
+    dispatch(setRebuildRef());
+    dispatch(patchSuccess());
+    let validItemNumbers = currentItems.map((item) => item.itemNumber);
+    let invalidItemNumbers = [];
+    let allocationItemNumbers = Object.keys(allocationData[0]).filter(
+      (key) => key !== "abn"
+    );
+    allocationItemNumbers.forEach((num) => {
+      if (!validItemNumbers.includes(num)) {
+        invalidItemNumbers.push(num);
+      }
+    });
+    if (invalidItemNumbers.length > 0) {
+      errorArray.push(
+        `The following item numbers did not exist on this order set: ${invalidItemNumbers.join(
+          ", "
+        )}`
+      );
+    }
+    if (errorArray.length > 0) {
+      dispatch(setError({ error: errorArray.join(",  ") }));
+    }
+  } catch (err) {
+    dispatch(setError({ error: err.toString() }));
     dispatch(setFailure({ error: err.toString() }));
     dispatch(patchFailure({ error: err.toString() }));
   }

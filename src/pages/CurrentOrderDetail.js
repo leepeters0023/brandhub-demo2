@@ -1,13 +1,19 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import isBefore from "date-fns/isBefore";
 import Helmet from "react-helmet";
+import { CSVLink } from "react-csv";
+import { CSVReader } from "react-papaparse";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 
-import { fetchOrderSet, setIsOrdering } from "../redux/slices/orderSetSlice";
+import {
+  fetchOrderSet,
+  setIsOrdering,
+  addPreAllocatedOrder,
+} from "../redux/slices/orderSetSlice";
 import {
   updateCurrentTerritory,
   updateCurrentChannel,
@@ -16,11 +22,12 @@ import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 import {
   deleteSetItem,
   deleteSetOrder,
+  deleteAllSetOrders,
   submitOrdSet,
   approveOrdSet,
   deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
-
+import { setError } from "../redux/slices/errorSlice";
 import { setRetain } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -34,6 +41,7 @@ import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import NeedRushItemModal from "../components/Utility/NeedRushItemModal";
 import Loading from "../components/Utility/Loading";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -43,6 +51,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import PublishIcon from "@material-ui/icons/Publish";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const determineOrigin = () => {
   let origin;
@@ -78,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
 const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const csvRef = useRef(null);
 
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
@@ -91,6 +102,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
   const [isRushUpdateOpen, setRushUpdateOpen] = useCallback(useState(false));
   const [needRushItems, setNeedRushItems] = useCallback(useState([]));
+  const [currentCSV, setCurrentCSV] = useState({
+    data: [],
+    headers: [],
+  });
+  const [isUploadLoading, setUploadLoading] = useState(false);
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const currentOrderType = useSelector((state) => state.orderSet.type);
@@ -115,6 +131,9 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
   const currentFilters = useSelector((state) => state.filters);
+  const currentWarehouse = useSelector(
+    (state) => state.currentOrder.currentWarehouse
+  );
 
   const handleModalOpen = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -165,6 +184,11 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     setConfirmDeleteOpen(false);
   };
 
+  const handleRemoveAllOrders = () => {
+    let ids = orders.map((ord) => ord.id);
+    dispatch(deleteAllSetOrders(ids))
+  }
+
   const handleSubmit = () => {
     let role = currentUserRole;
     if (
@@ -210,6 +234,45 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   };
 
   useRetainFiltersOnPopstate(determineOrigin(), dispatch);
+
+  const handleOpenDialog = (evt) => {
+    if (csvRef.current) {
+      csvRef.current.open(evt);
+    }
+  };
+
+  const handleFileUpload = (data) => {
+    console.log(data);
+    const mappedData = data.map((dataPoint) => {
+      let itemNumbers = Object.keys(dataPoint.data).filter(
+        (key) => key !== "ABN"
+      );
+      let dataObject = {
+        abn: dataPoint.data["ABN"],
+      };
+      itemNumbers.forEach((num) => {
+        dataObject[num] = dataPoint.data[num];
+      });
+      return dataObject;
+    });
+    if (mappedData.length > 0) {
+      dispatch(
+        addPreAllocatedOrder(
+          mappedData,
+          currentOrderId,
+          currentUserTerritory,
+          currentOrderType,
+          currentOrderType === "in-stock" ? currentWarehouse : null
+        )
+      );
+    }
+    setUploadLoading(false);
+  };
+
+  const handleFileUploadError = (err, file, inputElem, reason) => {
+    dispatch(setError({ error: err.toString() }));
+    console.log(err, file, inputElem, reason);
+  };
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
@@ -257,6 +320,36 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
       dispatch(updateCurrentChannel({ channel: "Retail" }));
     }
   });
+
+  useEffect(() => {
+    if (
+      currentItems.length > 0 &&
+      currentCSV.headers.length === 0 &&
+      !isLoading
+    ) {
+      let itemHeaders = currentItems.map((item) => ({
+        label: item.itemNumber,
+        key: item.itemNumber,
+      }));
+      let csvHeaders = [{ label: "ABN", key: "abn" }].concat(itemHeaders);
+      let csvData = [];
+      if (orders.length > 0) {
+        orders.forEach((ord) => {
+          let dataObject = {
+            abn: ord.distributorId,
+          };
+          ord.items.forEach((i) => {
+            dataObject[i.itemNumber] = i.totalItems;
+          });
+          csvData.push(dataObject);
+        });
+      }
+      setCurrentCSV({
+        data: csvData,
+        headers: csvHeaders,
+      });
+    }
+  }, [currentItems, currentCSV, isLoading, orders]);
 
   useEffect(() => {
     dispatch(setIsOrdering({ status: true }));
@@ -543,22 +636,95 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         <div className={classes.orderControl}>
           {(orderStatus === "in-progress" || orderStatus === "inactive") &&
             currentOrderType !== "pre-order" && (
-              <Button
-                className={classes.largeButton}
-                style={{ marginRight: "10px" }}
-                color="secondary"
-                variant="contained"
-                onClick={() => {
-                  if (currentOrderType === "in-stock") {
-                    navigate("/orders/items/inventory");
-                  } else if (currentOrderType === "on-demand") {
-                    navigate("/orders/items/onDemand");
-                  }
-                  handleDeleteOrderSet();
-                }}
-              >
-                DELETE ORDER
-              </Button>
+              <>
+                {currentItems.length > 0 &&
+                  orders.length === 0 &&
+                  currentUserRole === "super" && (
+                    <>
+                      <CSVLink
+                        data={currentCSV.data}
+                        headers={currentCSV.headers}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className={classes.largeButton}
+                          style={{ marginRight: "10px" }}
+                          startIcon={<GetAppIcon />}
+                        >
+                          TEMPLATE
+                        </Button>
+                      </CSVLink>
+                      <CSVReader
+                        ref={csvRef}
+                        onFileLoad={handleFileUpload}
+                        onError={handleFileUploadError}
+                        noClick
+                        noDrag
+                        config={{
+                          header: true,
+                          beforeFirstChunk: (_chunk) => {
+                            setUploadLoading(true);
+                          },
+                        }}
+                        noProgressBar
+                      >
+                        {() => (
+                          <Button
+                            className={classes.largeButton}
+                            style={{
+                              marginRight: "20px",
+                              width: isUploadLoading ? "132.93px" : "auto",
+                            }}
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<PublishIcon />}
+                            onClick={(evt) => {
+                              handleOpenDialog(evt);
+                            }}
+                            onFocus={(evt) => evt.stopPropagation()}
+                          >
+                            {isUploadLoading ? (
+                              <CircularProgress size={27.78} />
+                            ) : (
+                              "ORDER"
+                            )}
+                          </Button>
+                        )}
+                      </CSVReader>
+                    </>
+                  )}
+                {orders.length > 0 && !overviewVisible && (
+                  <Button
+                    className={classes.largeButton}
+                    style={{ marginRight: "10px" }}
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                      handleRemoveAllOrders();
+                    }}
+                  >
+                    DELETE ORDERS
+                  </Button>
+                )}
+                <Button
+                  className={classes.largeButton}
+                  style={{ marginRight: "10px" }}
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => {
+                    if (currentOrderType === "in-stock") {
+                      navigate("/orders/items/inventory");
+                    } else if (currentOrderType === "on-demand") {
+                      navigate("/orders/items/onDemand");
+                    }
+                    handleDeleteOrderSet();
+                  }}
+                >
+                  DELETE ORDER SET
+                </Button>
+              </>
             )}
           {orderStatus === "in-progress" && overviewVisible && (
             <Button

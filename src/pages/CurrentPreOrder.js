@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
+import { CSVLink } from "react-csv";
+import { CSVReader } from "react-papaparse";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,7 +10,10 @@ import {
   fetchPreOrders,
 } from "../redux/slices/preOrderDetailSlice";
 import { createNewBulkItemOrder } from "../redux/slices/currentOrderSlice";
-import { fetchProgramOrders } from "../redux/slices/orderSetSlice";
+import {
+  fetchProgramOrders,
+  addPreAllocatedOrder,
+} from "../redux/slices/orderSetSlice";
 import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 
 import {
@@ -17,6 +22,7 @@ import {
   completeOrderSet,
 } from "../redux/slices/patchOrderSlice";
 import { deletePreOrderItems } from "../redux/slices/programsSlice";
+import { setError } from "../redux/slices/errorSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -42,6 +48,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import PublishIcon from "@material-ui/icons/Publish";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -117,6 +125,7 @@ const TotalsDiv = React.memo(() => {
 const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const csvRef = useRef(null);
 
   const [program, setProgram] = useState(undefined);
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
@@ -130,6 +139,13 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const [currentItem, setCurrentItem] = useState({});
   const [overviewVisible, setOverviewVisible] = useCallback(useState(false));
   const [switched, setSwitched] = useCallback(useState(false));
+  const [currentCSV, setCurrentCSV] = useState({
+    data: [],
+    headers: [],
+    program: null,
+    territory: null,
+  });
+  const [isUploadLoading, setUploadLoading] = useState(false);
 
   const currentUserId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
@@ -208,6 +224,45 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     [setSwitched]
   );
 
+  const handleOpenDialog = (evt) => {
+    if (csvRef.current) {
+      csvRef.current.open(evt);
+    }
+  };
+
+  const handleFileUpload = (data) => {
+    console.log(data);
+    const mappedData = data.map((dataPoint) => {
+      let itemNumbers = Object.keys(dataPoint.data).filter(
+        (key) => key !== "ABN"
+      );
+      let dataObject = {
+        abn: dataPoint.data["ABN"],
+      };
+      itemNumbers.forEach((num) => {
+        dataObject[num] = dataPoint.data[num];
+      });
+      return dataObject;
+    });
+    if (mappedData.length > 0) {
+      dispatch(
+        addPreAllocatedOrder(
+          mappedData,
+          preOrderId,
+          currentTerritory,
+          "pre-order",
+          null
+        )
+      );
+    }
+    setUploadLoading(false);
+  };
+
+  const handleFileUploadError = (err, file, inputElem, reason) => {
+    dispatch(setError({ error: err.toString() }));
+    console.log(err, file, inputElem, reason);
+  };
+
   const generatePreOrder = () => {
     let currentProgram = userPrograms.find((prog) => prog.id === program);
     let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
@@ -262,6 +317,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
         fetchPreOrders(currentUserId, "summary", program, currentTerritory)
       );
       dispatch(fetchProgramOrders(program, currentUserId, currentTerritory));
+      //setCurrentCSV({ data: [], headers: [] });
       let currentProg = userPrograms.find((prog) => prog.id === program);
       if (currentProg) {
         dispatch(
@@ -278,6 +334,41 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     window.addEventListener("popstate", handleProgramIdHash);
     return () => window.removeEventListener("popstate", handleProgramIdHash);
   }, [handleProgramIdHash]);
+
+  useEffect(() => {
+    if (
+      (program &&
+        currentItems.length > 0 &&
+        currentCSV.headers.length === 0 &&
+        !isLoading) ||
+      (program && program !== currentCSV.program) ||
+      (currentTerritory && currentTerritory !== currentCSV.territory)
+    ) {
+      let itemHeaders = currentItems.map((item) => ({
+        label: item.itemNumber,
+        key: item.itemNumber,
+      }));
+      let csvHeaders = [{ label: "ABN", key: "abn" }].concat(itemHeaders);
+      let csvData = [];
+      if (orders.length > 0) {
+        orders.forEach((ord) => {
+          let dataObject = {
+            abn: ord.distributorId,
+          };
+          ord.items.forEach((i) => {
+            dataObject[i.itemNumber] = i.totalItems;
+          });
+          csvData.push(dataObject);
+        });
+      }
+      setCurrentCSV({
+        data: csvData,
+        headers: csvHeaders,
+        program: program,
+        territory: currentTerritory,
+      });
+    }
+  }, [program, currentItems, currentCSV, isLoading, orders, currentTerritory]);
 
   useEffect(() => {
     if (
@@ -482,29 +573,90 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
           <>
             <div className={classes.orderControl}>
               {!overviewVisible && (
-                <Button
-                  className={classes.largeButton}
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => {
-                    setSwitched(false);
-                    setOverviewVisible(true);
-                    dispatch(
-                      fetchProgramOrders(
-                        program,
-                        currentUserId,
-                        currentTerritory
-                      )
-                    );
-                  }}
-                  disabled={
-                    currentItems.length === 0 ||
-                    setTotal === 0 ||
-                    preOrderStatus === "inactive"
-                  }
-                >
-                  ORDER OVERVIEW
-                </Button>
+                <>
+                  {program &&
+                    currentItems.length > 0 &&
+                    orders.length === 0 &&
+                    currentUserRole === "super" && (
+                      <>
+                        <CSVLink
+                          data={currentCSV.data}
+                          headers={currentCSV.headers}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.largeButton}
+                            style={{ marginRight: "10px" }}
+                            startIcon={<GetAppIcon />}
+                          >
+                            TEMPLATE
+                          </Button>
+                        </CSVLink>
+                        <CSVReader
+                          ref={csvRef}
+                          onFileLoad={handleFileUpload}
+                          onError={handleFileUploadError}
+                          noClick
+                          noDrag
+                          config={{
+                            header: true,
+                            beforeFirstChunk: (_chunk) => {
+                              setUploadLoading(true);
+                            },
+                          }}
+                          noProgressBar
+                        >
+                          {() => (
+                            <Button
+                              className={classes.largeButton}
+                              style={{
+                                marginRight: "20px",
+                                width: isUploadLoading ? "132.93px" : "auto",
+                              }}
+                              variant="contained"
+                              color="secondary"
+                              startIcon={<PublishIcon />}
+                              onClick={(evt) => {
+                                handleOpenDialog(evt);
+                              }}
+                              onFocus={(evt) => evt.stopPropagation()}
+                            >
+                              {isUploadLoading ? (
+                                <CircularProgress size={27.78} />
+                              ) : (
+                                "ORDER"
+                              )}
+                            </Button>
+                          )}
+                        </CSVReader>
+                      </>
+                    )}
+                  <Button
+                    className={classes.largeButton}
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => {
+                      setSwitched(false);
+                      setOverviewVisible(true);
+                      dispatch(
+                        fetchProgramOrders(
+                          program,
+                          currentUserId,
+                          currentTerritory
+                        )
+                      );
+                    }}
+                    disabled={
+                      currentItems.length === 0 ||
+                      setTotal === 0 ||
+                      preOrderStatus === "inactive"
+                    }
+                  >
+                    ORDER OVERVIEW
+                  </Button>
+                </>
               )}
               {overviewVisible && (
                 <Button

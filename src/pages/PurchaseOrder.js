@@ -402,7 +402,7 @@ const PurchaseOrder = ({ handleFiltersClosed }) => {
                           <Button
                             className={classes.largeButton}
                             style={{
-                              width: isUploadLoading ? "132.93px" : "auto",
+                              width: isUploadLoading ? "77.156px" : "auto",
                             }}
                             variant="contained"
                             color="secondary"

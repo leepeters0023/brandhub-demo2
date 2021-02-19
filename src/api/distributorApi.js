@@ -13,10 +13,16 @@ const writeHeaders = {
 
 export const fetchDistributorsByTerritory = async (id, stateIds) => {
   const response = { status: "", error: null, data: null };
+  const queryString =
+    id && stateIds
+      ? `/api/distributors?filter[territory-id]=${id}&filter[state-ids]=${stateIds}`
+      : id
+      ? `/api/distributors?filter[territory-id]=${id}`
+      : stateIds
+      ? `/api/distributors?filter[state-ids]=${stateIds}`
+      : `/api/distributors`;
   await axios
-    .get(
-      `/api/distributors?filter[territory-id]=${id}&filter[state-ids]=${stateIds}`
-    )
+    .get(queryString)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
       response.status = "ok";
@@ -34,11 +40,12 @@ export const fetchDistributorsByTerritory = async (id, stateIds) => {
 //Returns a filtered array of distributors based on partial matches to their name
 export const fetchDistributors = async (name, territoryId, stateIds) => {
   const response = { status: "", error: null, data: null };
-  const queryString = territoryId && stateIds
-    ? `/api/distributors?filter[name]=${name}&filter[territory-id]=${territoryId}&filter[state-ids]=${stateIds}`
-    : !territoryId && stateIds
-    ? `/api/distributors?filter[name]=${name}&filter[state-ids]=${stateIds}`
-    : `/api/distributors?filter[name]=${name}`;
+  const queryString =
+    territoryId && stateIds
+      ? `/api/distributors?filter[name]=${name}&filter[territory-id]=${territoryId}&filter[state-ids]=${stateIds}`
+      : !territoryId && stateIds
+      ? `/api/distributors?filter[name]=${name}&filter[state-ids]=${stateIds}`
+      : `/api/distributors?filter[name]=${name}`;
   await axios
     .get(queryString)
     .then((res) => {

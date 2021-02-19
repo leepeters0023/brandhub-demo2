@@ -189,6 +189,30 @@ export const deleteSetOrder = (id) => async (dispatch) => {
   }
 };
 
+//Deletes all orders in an order set
+export const deleteAllSetOrders = (orderIds) => async (dispatch) => {
+  try {
+    dispatch(setIsLoading());
+    let errorArray = [];
+    for (let i = 0; i < orderIds.length; i++) {
+      let id = orderIds[i]
+      const deleteStatus = await deleteOrder(id);
+      if (deleteStatus.error) {
+        errorArray.push(deleteStatus.error);
+      } else {
+        dispatch(removeGridOrder({ orderId: id }));
+      }
+    }
+    if (errorArray.length > 0) {
+      throw new Error(errorArray.join(", "))
+    }
+    dispatch(patchSuccess());
+  } catch (err) {
+    dispatch(setFailure({ error: err.toString() }));
+    dispatch(setError({ error: err.toString() }));
+  }
+};
+
 //Deletes all order items in provided array
 export const deleteMultipleOrderItems = (
   orderItemArray,
