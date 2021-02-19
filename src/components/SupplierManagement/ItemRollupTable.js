@@ -33,6 +33,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 
 const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
+  { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   { id: "territory", disablePadding: false, label: "Territory", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
@@ -361,6 +362,7 @@ const ItemRollupTable = ({
                         row.itemNumber
                       )}
                     </TableCell>
+                    <TableCell align="left">{row.user}</TableCell>
                     {row.territory.length > 1 ? (
                       <Tooltip
                         placement="left"
@@ -378,7 +380,6 @@ const ItemRollupTable = ({
                     ) : (
                       <TableCell align="left">{row.territory[0]}</TableCell>
                     )}
-
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.projectNum}</TableCell>

@@ -21,7 +21,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
-  { id: "user", disablePadding: false, label: "Person", sort: false },
+  { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: true },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },

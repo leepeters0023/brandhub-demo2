@@ -167,12 +167,17 @@ const ComplianceItemsTable = ({ items, itemsLoading, tableRef }) => {
                       {!row.isComplianceCanceled ? row.totalItems : "Canceled"}
                     </TableCell>
                     <TableCell align="left">
-                      {row.triggeredRules.length > 0 && row.triggeredPriorApprovalRules.length > 0
-                        ? row.triggerdRules.join(", ") + ", " +
+                      {row.triggeredRules &&
+                      row.triggeredRules.length > 0 &&
+                      row.triggeredPriorApprovalRules &&
+                      row.triggeredPriorApprovalRules.length > 0
+                        ? row.triggerdRules.join(", ") +
+                          ", " +
                           row.triggeredPriorApprovalRules.join(", ")
-                        : row.triggeredRules.length > 0
+                        : row.triggeredRules && row.triggeredRules.length > 0
                         ? row.triggeredRules.join(", ")
-                        : row.triggeredPriorApprovalRules.length > 0
+                        : row.triggeredPriorApprovalRules &&
+                          row.triggeredPriorApprovalRules.length > 0
                         ? row.triggeredPriorApprovalRules.join(", ")
                         : "---"}
                     </TableCell>

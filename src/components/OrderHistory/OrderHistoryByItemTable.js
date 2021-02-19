@@ -26,6 +26,7 @@ const headCells = [
   { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
+  { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
@@ -271,6 +272,14 @@ const OrderHistoryByItemTable = ({
                     }
                   >
                     {row.orderId}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    className={
+                      row.isComplianceCanceled ? classes.cancelCell : null
+                    }
+                  >
+                    {row.user}
                   </TableCell>
                   {row.brand.length > 1 ? (
                     <TableCell

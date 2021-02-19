@@ -200,6 +200,10 @@ const SingleOrder = ({ handleFiltersClosed, orderId }) => {
             <Divider />
             <br />
             <Typography className={classes.headerText}>
+              {`Ordered By: ${currentOrder.user}`}
+            </Typography>
+            <br />
+            <Typography className={classes.headerText}>
               {`Status: ${
                 currentOrder.status[0].toUpperCase() +
                 currentOrder.status.slice(1)

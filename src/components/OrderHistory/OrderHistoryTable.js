@@ -24,6 +24,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 const headCells = [
   { id: "id", disablePadding: false, label: "Order #", sort: true },
   { id: "type", disablePadding: false, label: "Type", sort: false },
+  { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   {
     id: "distributor",
     disablePadding: false,
@@ -202,6 +203,7 @@ const OrderHistoryTable = ({
                 >
                   <TableCell align="left">{row.id}</TableCell>
                   <TableCell align="left">{row.type}</TableCell>
+                  <TableCell align="left">{row.user}</TableCell>
                   <TableCell align="left">
                     {row.distributorName ? row.distributorName : "---"}
                   </TableCell>

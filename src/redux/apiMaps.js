@@ -837,6 +837,7 @@ export const mapOrderSetHistory = (orders) => {
 };
 
 export const mapRollupItems = (items) => {
+  console.log(items);
   let mappedItems = items.map((item) => ({
     id: item.id,
     itemId: item.item.id,
@@ -852,6 +853,7 @@ export const mapRollupItems = (items) => {
     orderItemIds: item["order-item-ids"],
     totalNotCompliant: item["qty-pending-compliance"],
     supplier: item["supplier-name"] ? item["supplier-name"] : null,
+    user: item["user-name"] ? item["user-name"] : "---",
     estCost: stringToCents(item["estimated-cost"]),
     totalEstCost: stringToCents(item["estimated-total"]),
     isRush: item["is-rush"] ? true : false,
