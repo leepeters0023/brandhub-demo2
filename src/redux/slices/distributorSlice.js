@@ -177,8 +177,6 @@ export const fetchUserDistributors = (
     } else {
       dispatch(setIsLoading());
     }
-    console.log(territoryId)
-    console.log(stateIds)
     let distributors = await fetchDistributors(name, territoryId, stateIds);
     if (distributors.error) {
       throw distributors.error;

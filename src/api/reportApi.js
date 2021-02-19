@@ -48,6 +48,7 @@ export const fetchReportById = async (id, filterObject) => {
     .get(`/api/reports/${id}`)
     .then((res) => {
       let data = dataFormatter.deserialize(res.data);
+      console.log(res);
       response.status = "ok";
       response.data = data;
     })
