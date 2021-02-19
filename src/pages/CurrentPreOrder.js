@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect/*, useRef*/ } from "react";
 import PropTypes from "prop-types";
 import Helmet from "react-helmet";
-import { CSVLink } from "react-csv";
-import { CSVReader } from "react-papaparse";
+// import { CSVLink } from "react-csv";
+// import { CSVReader } from "react-papaparse";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,7 +12,7 @@ import {
 import { createNewBulkItemOrder } from "../redux/slices/currentOrderSlice";
 import {
   fetchProgramOrders,
-  addPreAllocatedOrder,
+  //addPreAllocatedOrder,
 } from "../redux/slices/orderSetSlice";
 import { fetchFavDistributors } from "../redux/slices/distributorSlice";
 
@@ -22,7 +22,7 @@ import {
   completeOrderSet,
 } from "../redux/slices/patchOrderSlice";
 import { deletePreOrderItems } from "../redux/slices/programsSlice";
-import { setError } from "../redux/slices/errorSlice";
+//import { setError } from "../redux/slices/errorSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
 
@@ -48,8 +48,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Container from "@material-ui/core/Container";
 
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import PublishIcon from "@material-ui/icons/Publish";
-import GetAppIcon from "@material-ui/icons/GetApp";
+// import PublishIcon from "@material-ui/icons/Publish";
+// import GetAppIcon from "@material-ui/icons/GetApp";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -125,7 +125,7 @@ const TotalsDiv = React.memo(() => {
 const CurrentPreOrder = ({ handleFiltersClosed }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const csvRef = useRef(null);
+  //const csvRef = useRef(null);
 
   const [program, setProgram] = useState(undefined);
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
@@ -145,7 +145,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     program: null,
     territory: null,
   });
-  const [isUploadLoading, setUploadLoading] = useState(false);
+  //const [isUploadLoading, setUploadLoading] = useState(false);
 
   const currentUserId = useSelector((state) => state.user.id);
   const currentUserRole = useSelector((state) => state.user.role);
@@ -224,45 +224,45 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
     [setSwitched]
   );
 
-  const handleOpenDialog = (evt) => {
-    if (csvRef.current) {
-      csvRef.current.open(evt);
-    }
-  };
+  // const handleOpenDialog = (evt) => {
+  //   if (csvRef.current) {
+  //     csvRef.current.open(evt);
+  //   }
+  // };
 
-  const handleFileUpload = (data) => {
-    const mappedData = data
-      .filter((dataPoint) => dataPoint.errors.length === 0)
-      .map((dataPoint) => {
-        let itemNumbers = Object.keys(dataPoint.data).filter(
-          (key) => key !== "ABN"
-        );
-        let dataObject = {
-          abn: dataPoint.data["ABN"],
-        };
-        itemNumbers.forEach((num) => {
-          dataObject[num] = dataPoint.data[num];
-        });
-        return dataObject;
-      });
-    if (mappedData.length > 0) {
-      dispatch(
-        addPreAllocatedOrder(
-          mappedData,
-          preOrderId,
-          currentTerritory,
-          "pre-order",
-          null
-        )
-      );
-    }
-    setUploadLoading(false);
-  };
+  // const handleFileUpload = (data) => {
+  //   const mappedData = data
+  //     .filter((dataPoint) => dataPoint.errors.length === 0)
+  //     .map((dataPoint) => {
+  //       let itemNumbers = Object.keys(dataPoint.data).filter(
+  //         (key) => key !== "ABN"
+  //       );
+  //       let dataObject = {
+  //         abn: dataPoint.data["ABN"],
+  //       };
+  //       itemNumbers.forEach((num) => {
+  //         dataObject[num] = dataPoint.data[num];
+  //       });
+  //       return dataObject;
+  //     });
+  //   if (mappedData.length > 0) {
+  //     dispatch(
+  //       addPreAllocatedOrder(
+  //         mappedData,
+  //         preOrderId,
+  //         currentTerritory,
+  //         "pre-order",
+  //         null
+  //       )
+  //     );
+  //   }
+  //   setUploadLoading(false);
+  // };
 
-  const handleFileUploadError = (err, file, inputElem, reason) => {
-    dispatch(setError({ error: err.toString() }));
-    console.log(err, file, inputElem, reason);
-  };
+  // const handleFileUploadError = (err, file, inputElem, reason) => {
+  //   dispatch(setError({ error: err.toString() }));
+  //   console.log(err, file, inputElem, reason);
+  // };
 
   const generatePreOrder = () => {
     let currentProgram = userPrograms.find((prog) => prog.id === program);
@@ -575,7 +575,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
             <div className={classes.orderControl}>
               {!overviewVisible && (
                 <>
-                  {program &&
+                  {/* {program &&
                     currentItems.length > 0 &&
                     orders.length === 0 &&
                     currentUserRole === "super" && (
@@ -633,7 +633,7 @@ const CurrentPreOrder = ({ handleFiltersClosed }) => {
                           )}
                         </CSVReader>
                       </>
-                    )}
+                    )} */}
                   <Button
                     className={classes.largeButton}
                     color="secondary"

@@ -91,11 +91,11 @@ const DrawerReportsNav = ({ classes, role }) => {
                   link: "/reports/order-history-detail",
                   primary: "Order History Detail",
                 },
-                {
-                  link: "/reports/focus-summary",
-                  primary: "Focus Summary",
-                  disabled: role === "field1" || role === "field2"
-                }
+                // {
+                //   link: "/reports/focus-summary",
+                //   primary: "Focus Summary",
+                //   disabled: role === "field1" || role === "field2"
+                // }
               ]}
             />
           </div>

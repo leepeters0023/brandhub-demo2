@@ -1,10 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect /*, useRef*/ } from "react";
 import PropTypes from "prop-types";
 import { Link, navigate } from "@reach/router";
 import isBefore from "date-fns/isBefore";
 import Helmet from "react-helmet";
-import { CSVLink } from "react-csv";
-import { CSVReader } from "react-papaparse";
+// import { CSVLink } from "react-csv";
+// import { CSVReader } from "react-papaparse";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
@@ -12,7 +12,7 @@ import { useRetainFiltersOnPopstate } from "../hooks/UtilityHooks";
 import {
   fetchOrderSet,
   setIsOrdering,
-  addPreAllocatedOrder,
+  //addPreAllocatedOrder,
 } from "../redux/slices/orderSetSlice";
 import {
   updateCurrentTerritory,
@@ -27,7 +27,7 @@ import {
   approveOrdSet,
   deleteOrdSet,
 } from "../redux/slices/patchOrderSlice";
-import { setError } from "../redux/slices/errorSlice";
+// import { setError } from "../redux/slices/errorSlice";
 import { setRetain } from "../redux/slices/filterSlice";
 
 import { formatMoney } from "../utility/utilityFunctions";
@@ -41,7 +41,7 @@ import OrderPatchLoading from "../components/Utility/OrderPatchLoading";
 import NeedRushItemModal from "../components/Utility/NeedRushItemModal";
 import Loading from "../components/Utility/Loading";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -51,8 +51,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import PublishIcon from "@material-ui/icons/Publish";
-import GetAppIcon from "@material-ui/icons/GetApp";
+// import PublishIcon from "@material-ui/icons/Publish";
+// import GetAppIcon from "@material-ui/icons/GetApp";
 
 const determineOrigin = () => {
   let origin;
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const csvRef = useRef(null);
+  // const csvRef = useRef(null);
 
   const [confirmModal, handleConfirmModal] = useCallback(useState(false));
   const [currentItemNum, setCurrentItemNum] = useCallback(useState(null));
@@ -106,7 +106,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     data: [],
     headers: [],
   });
-  const [isUploadLoading, setUploadLoading] = useState(false);
+  // const [isUploadLoading, setUploadLoading] = useState(false);
 
   const isLoading = useSelector((state) => state.orderSet.isLoading);
   const currentOrderType = useSelector((state) => state.orderSet.type);
@@ -131,9 +131,9 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     (state) => state.currentOrder.onDemandOrderItems
   );
   const currentFilters = useSelector((state) => state.filters);
-  const currentWarehouse = useSelector(
-    (state) => state.currentOrder.currentWarehouse
-  );
+  // const currentWarehouse = useSelector(
+  //   (state) => state.currentOrder.currentWarehouse
+  // );
 
   const handleModalOpen = (itemNumber) => {
     let item = currentItems.find((item) => item.itemNumber === itemNumber);
@@ -235,45 +235,45 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
 
   useRetainFiltersOnPopstate(determineOrigin(), dispatch);
 
-  const handleOpenDialog = (evt) => {
-    if (csvRef.current) {
-      csvRef.current.open(evt);
-    }
-  };
+  // const handleOpenDialog = (evt) => {
+  //   if (csvRef.current) {
+  //     csvRef.current.open(evt);
+  //   }
+  // };
 
-  const handleFileUpload = (data) => {
-    const mappedData = data
-      .filter((dataPoint) => dataPoint.errors.length === 0)
-      .map((dataPoint) => {
-        let itemNumbers = Object.keys(dataPoint.data).filter(
-          (key) => key !== "ABN"
-        );
-        let dataObject = {
-          abn: dataPoint.data["ABN"],
-        };
-        itemNumbers.forEach((num) => {
-          dataObject[num] = dataPoint.data[num];
-        });
-        return dataObject;
-      });
-    if (mappedData.length > 0) {
-      dispatch(
-        addPreAllocatedOrder(
-          mappedData,
-          currentOrderId,
-          currentUserTerritory,
-          currentOrderType,
-          currentOrderType === "in-stock" ? currentWarehouse : null
-        )
-      );
-    }
-    setUploadLoading(false);
-  };
+  // const handleFileUpload = (data) => {
+  //   const mappedData = data
+  //     .filter((dataPoint) => dataPoint.errors.length === 0)
+  //     .map((dataPoint) => {
+  //       let itemNumbers = Object.keys(dataPoint.data).filter(
+  //         (key) => key !== "ABN"
+  //       );
+  //       let dataObject = {
+  //         abn: dataPoint.data["ABN"],
+  //       };
+  //       itemNumbers.forEach((num) => {
+  //         dataObject[num] = dataPoint.data[num];
+  //       });
+  //       return dataObject;
+  //     });
+  //   if (mappedData.length > 0) {
+  //     dispatch(
+  //       addPreAllocatedOrder(
+  //         mappedData,
+  //         currentOrderId,
+  //         currentUserTerritory,
+  //         currentOrderType,
+  //         currentOrderType === "in-stock" ? currentWarehouse : null
+  //       )
+  //     );
+  //   }
+  //   setUploadLoading(false);
+  // };
 
-  const handleFileUploadError = (err, file, inputElem, reason) => {
-    dispatch(setError({ error: err.toString() }));
-    console.log(err, file, inputElem, reason);
-  };
+  // const handleFileUploadError = (err, file, inputElem, reason) => {
+  //   dispatch(setError({ error: err.toString() }));
+  //   console.log(err, file, inputElem, reason);
+  // };
 
   useEffect(() => {
     if (orderId !== "inStock" && orderId !== "onDemand") {
@@ -638,7 +638,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
           {(orderStatus === "in-progress" || orderStatus === "inactive") &&
             currentOrderType !== "pre-order" && (
               <>
-                {currentItems.length > 0 &&
+                {/* {currentItems.length > 0 &&
                   orders.length === 0 &&
                   currentUserRole === "super" && (
                     <>
@@ -695,7 +695,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                         )}
                       </CSVReader>
                     </>
-                  )}
+                  )} */}
                 {orders.length > 0 && !overviewVisible && (
                   <Button
                     className={classes.largeButton}
