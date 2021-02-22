@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../../assets/RTA_Logo_Stacked_White.png";
+import Logo from "../../assets/brandhub.svg";
 import PropTypes from "prop-types";
 import { Link } from "@reach/router";
 
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logoLink: {
-    filter: "brightness(100%)",
+    filter:  "invert(100%) contrast(200%)",
     height: "58px",
     width: "auto",
     marginLeft: "25px",
