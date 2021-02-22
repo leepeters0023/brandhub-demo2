@@ -82,7 +82,7 @@ const NewUser = ({ handleFiltersClosed, handleLogout }) => {
             <Grid item sm={2} xs={1} />
             <Grid item sm={8} xs={10} style={{ textAlign: "center" }}>
               <Typography className={classes.titleText} variant="h5">
-                {`Welcome to Ready to Activate ${firstName} ${lastName}`}
+                {`Welcome to Brandhub ${firstName} ${lastName}`}
               </Typography>
               <br />
               <Typography className={classes.headerText}>
