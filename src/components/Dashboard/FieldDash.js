@@ -146,7 +146,7 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
     <Grid container spacing={6} justify="center" style={{ width: "80%" }}>
       <div style={{ paddingLeft: "24px", width: "100%", textAlign: "left" }}>
         <Typography className={classes.titleText}>
-          {`Welcome back ${name}!`}
+          Welcome back, Michelle!
         </Typography>
       </div>
       {cardData.map((data, index) => (

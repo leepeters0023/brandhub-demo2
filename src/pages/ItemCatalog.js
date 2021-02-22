@@ -94,7 +94,19 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   };
 
   const scrollRef = useBottomScrollListener(handleBottomScroll, 300);
-  const currentItems = useSelector((state) => state.items.items);
+  const currentItems = [
+    {
+      id: 1,
+      itemNumber: "123456",
+      itemType: "an item type",
+      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg",
+      program: ["a program"],
+      estCost: 500,
+      brand: ["brand"],
+      itemDescription: "a description of the item",
+      packSize: "10"
+    },
+  ]//useSelector((state) => state.items.items);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
   const currentTerritory = useSelector((state) => state.user.currentTerritory);

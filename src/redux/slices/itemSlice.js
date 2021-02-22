@@ -111,11 +111,11 @@ export const fetchFilteredItems = (filterObject) => async (dispatch) => {
   try {
     dispatch(setIsLoading());
     dispatch(startGlobalLoad());
-    const items = await fetchItems(filterObject);
+   const items = await fetchItems(filterObject);
     if (items.error) {
       throw items.error;
     }
-    let newItems = mapItems(items.data.items)
+    let newItems = mapItems(items)
     dispatch(
       getItemsSuccess({
         orderType: typeMap[filterObject.orderType],

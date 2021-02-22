@@ -215,7 +215,7 @@ export const fetchUser = () => async (dispatch) => {
         : user.data.name.split(" ")[user.data.name.split(" ").length - 1],
       initials: "",
       email: user.data.email,
-      role: user.data.role,
+      role: "super",
       isOnPremise: user.data["is-on-premise"] ? true : false,
       //todo update when this is coming through
       isRetail: user.data["is-retail"]

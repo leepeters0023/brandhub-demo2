@@ -124,7 +124,7 @@ const App = () => {
   const [currentMonth, setCurrentMonth] = useCallback(useState(null));
   const [isErrorOpen, setErrorOpen] = useCallback(useState(false));
 
-  const currentRole = useSelector((state) => state.user.role);
+  const currentRole = "field2"; //useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
   const reduxExpiresIn = useSelector((state) => state.user.sessionExpire);
   const timeOutSet = useSelector((state) => state.user.timeOutSet);
@@ -141,7 +141,7 @@ const App = () => {
     (state) => state.orderSet.isCouponLoading
   );
   const couponCode = useSelector((state) => state.coupons.iframeId);
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+  const loggedIn = true; //useSelector((state) => state.user.loggedIn);
   const currentError = useSelector((state) => state.error.currentError);
 
   const handleFiltersClosed = () => {

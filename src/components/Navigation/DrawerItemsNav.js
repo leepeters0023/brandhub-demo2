@@ -101,7 +101,7 @@ const DrawerItemsNav = ({ role, classes }) => {
             },
           ]}
         />
-        <Divider className={classes.divider} key="divider1" />
+        {/* <Divider className={classes.divider} key="divider1" />
         <NestedMenuItem
           anchorEl={anchorEl}
           handleClose={handleClose}
@@ -125,7 +125,7 @@ const DrawerItemsNav = ({ role, classes }) => {
             //     role === "compliance" || role === "super" ? "Contacts" : null,
             // },
           ]}
-        />
+        /> */}
       </Menu>
     </>
   );

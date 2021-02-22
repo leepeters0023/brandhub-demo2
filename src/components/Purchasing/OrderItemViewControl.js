@@ -30,7 +30,7 @@ const OrderItemViewControl = (props) => {
   const dispatch = useDispatch();
 
   const [currentItemAdded, setCurrentItemAdded] = useCallback(useState(null));
-
+  console.log(items)
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
   const territoryId = useSelector((state) => state.user.currentTerritory);
   const currentChannel = useSelector((state) => state.user.currentChannel);
