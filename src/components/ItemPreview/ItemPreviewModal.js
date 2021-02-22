@@ -14,9 +14,9 @@ import { formatMoney } from "../../utility/utilityFunctions";
 import AddItemConfirmation from "../Utility/AddItemConfirmation";
 import ImageWrapper from "../Utility/ImageWrapper";
 
-// import ItemOneSheet from "./ItemOneSheet";
-// import ItemFeedback from "./ItemFeedback";
-// import ItemAssembly from "./ItemAssembly";
+import ItemOneSheet from "./ItemOneSheet";
+import ItemFeedback from "./ItemFeedback";
+import ItemAssembly from "./ItemAssembly";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -27,8 +27,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Tooltip from "@material-ui/core/Tooltip";
-// import Tabs from "@material-ui/core/Tabs";
-// import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Carousel from "react-material-ui-carousel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -118,7 +118,7 @@ const ItemPreviewModal = (props) => {
       itemDescription,
       warehouse,
       estCost,
-      imgUrlLg,
+      carouselImgs,
       packSize,
       stock,
       isCoupon,
@@ -130,7 +130,7 @@ const ItemPreviewModal = (props) => {
     handleClose,
     previewModal,
   } = props;
-  // const [value, setValue] = useState(1);
+  const [value, setValue] = useState(1);
   const [currentItem, setCurrentItem] = useState(null);
   const currentOrderId = useSelector((state) => state.currentOrder.orderId);
   const currentOrderItems = useSelector(
@@ -146,9 +146,9 @@ const ItemPreviewModal = (props) => {
   const currentUserRole = useSelector((state) => state.user.role);
   const currentChannel = useSelector((state) => state.user.currentChannel);
 
-  // const handleChangeTab = (_evt, newValue) => {
-  //   setValue(newValue);
-  // };
+  const handleChangeTab = (_evt, newValue) => {
+    setValue(newValue);
+  };
 
   const currentBrands =
     typeof brand === "string" ? brand.split(", ") : [...brand];
@@ -220,11 +220,11 @@ const ItemPreviewModal = (props) => {
                 classes={{ root: classes.carouselRoot }}
                 autoPlay=""
                 navButtonsAlwaysInvisible={
-                  imgUrlLg && imgUrlLg.length === 1 ? true : false
+                  carouselImgs && carouselImgs.length === 1 ? true : false
                 }
               >
-                {imgUrlLg &&
-                  imgUrlLg.map((url, index) => (
+                {carouselImgs &&
+                  carouselImgs.map((url, index) => (
                     <div className={classes.largeImageWrapper} key={index}>
                       <ImageWrapper
                         imgUrl={url}
@@ -430,27 +430,27 @@ const ItemPreviewModal = (props) => {
             </Grid>
           </Grid>
           <br />
-          {/* <Tabs
+          <Tabs
             variant="fullWidth"
             value={value}
             onChange={handleChangeTab}
             indicatorColor="primary"
             centered
           >
-            <Tab className={classes.headerText} label="One Sheet" value={1} />
+            <Tab className={classes.headerText} label="Item Feedback" value={1} />
             <Tab
               className={classes.headerText}
-              label="Item Feedback"
+              label="Item One Sheet"
               value={2}
             />
             <Tab className={classes.headerText} label="Assembly" value={3} />
           </Tabs>
           <hr />
           <br />
-          {value === 1 && <ItemOneSheet />}
-          {value === 2 && <ItemFeedback />}
+          {value === 1 && <ItemFeedback />}
+          {value === 2 && <ItemOneSheet />}
           {value === 3 && <ItemAssembly />}
-          <br /> */}
+          <br />
           {type !== "program" && type !== "catalog" && (
             <AddItemConfirmation type={type} item={currentItem} />
           )}

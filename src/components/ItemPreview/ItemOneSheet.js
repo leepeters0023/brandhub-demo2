@@ -14,7 +14,7 @@ const ItemOneSheet = () => {
       <Container className={classes.modalTabContainer}>
         <img
           src="https://res.cloudinary.com/joshdowns-dev/image/upload/v1596482051/Select/sample_one_sheet.png"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "auto", maxHeight: "600px" }}
           alt="One Sheet"
         />
       </Container>
