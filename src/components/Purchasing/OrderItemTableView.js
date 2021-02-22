@@ -113,7 +113,6 @@ const OrderItemTableView = ({
   const classes = useStyles();
   const dispatch = useDispatch();
   const formattedType = `selected${type[0].toUpperCase() + type.slice(1)}Items`;
-  console.log(currentItems)
   const selectedItems = useSelector(
     (state) => state.currentOrder[formattedType]
   );

@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     filter: "sepia(50%)",
     transition: "all .25s ease",
     "&:hover": {
-      cursor: "pointer",
       filter: "sepia(0%)",
     },
   },
@@ -91,14 +90,14 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
               key={prog.id}
             >
               <Paper className={classes.singleItem}>
-                <Link to={`/program/${prog.id}#details`}>
+                
                   <ImageWrapper
                     id={prog.id}
                     imgClass={classes.programImg}
                     alt={prog.name}
                     imgUrl={prog.imgUrl}
                   />
-                </Link>
+               
                 <Typography className={classes.headerText}>
                   {`${prog.name}`}
                 </Typography>
@@ -153,6 +152,7 @@ const CurrentPrograms = ({ currentPrograms, filtersOpen }) => {
                             color="secondary"
                             style={{ marginBottom: "10px" }}
                             startIcon={<ExitToAppIcon />}
+                            disabled
                           >
                             ORDER
                           </Button>

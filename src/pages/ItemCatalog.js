@@ -344,7 +344,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
                 style={{ marginRight: "20px" }}
                 variant="contained"
                 color="secondary"
-                disabled={selectedItems.length === 0}
+                disabled
                 onClick={handleFavoriteItems}
               >
                 ADD TO FAVORITES
@@ -355,7 +355,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
               style={{ marginRight: "20px" }}
               variant="contained"
               color="secondary"
-              disabled={selectedItems.length === 0}
+              disabled
               onClick={handleShareLink}
             >
               CREATE PDF
