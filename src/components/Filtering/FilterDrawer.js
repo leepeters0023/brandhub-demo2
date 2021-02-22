@@ -187,7 +187,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filter !== "itemNumber" &&
         filter !== "itemDesc"
       ) {
-        dispatch(fetchFilteredItems(currentFilters));
+        //dispatch(fetchFilteredItems(currentFilters));
         dispatch(clearItemSelection());
       }
       if (filterType === "compliance-rules") {
@@ -253,7 +253,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-all" ||
         filterType === "item-archive"
       ) {
-        dispatch(fetchFilteredItems(defaultFilters));
+        //dispatch(fetchFilteredItems(defaultFilters));
         dispatch(clearItemSelection());
       }
       if (filterType === "itemRollup-rfq") {
@@ -313,7 +313,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
 
   const handleFilteredItemFetch = () => {
     dispatch(setChips({ filterType: "item-all" }));
-    dispatch(fetchFilteredItems(allFilters));
+    //dispatch(fetchFilteredItems(allFilters));
     dispatch(clearItemSelection());
   };
 
@@ -395,7 +395,7 @@ const FilterDrawer = ({ open, handleDrawerClose }) => {
         filterType === "item-all" ||
         filterType === "item-archive"
       ) {
-        dispatch(fetchFilteredItems(allFilters));
+        //dispatch(fetchFilteredItems(allFilters));
         dispatch(clearItemSelection());
       }
       if (filterType === "history-rfq") {
