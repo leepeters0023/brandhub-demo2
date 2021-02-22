@@ -74,7 +74,7 @@ const DrawerReportsNav = ({ classes, role }) => {
             ]}
           />
         )}
-        {role !== "read-only" && (
+        {/* {role !== "read-only" && (
           <div>
             <Divider className={classes.divider} key="divider1" />
             <NestedMenuItem
@@ -99,7 +99,7 @@ const DrawerReportsNav = ({ classes, role }) => {
               ]}
             />
           </div>
-        )}
+        )} */}
         {role !== "compliance" && (
           <div>
             <Divider className={classes.divider} key="divider2" />

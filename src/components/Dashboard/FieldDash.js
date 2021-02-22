@@ -56,7 +56,7 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
 
   const cardData = [
     {
-      titleText: `Q${monthMap[currentMonth]} Ordering`,
+      titleText: `Q2 Ordering`,
       ariaOwnsState: preOrderOpen,
       ariaOwnsText: "pre-order",
       id: "pre-order-parent",

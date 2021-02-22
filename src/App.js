@@ -124,7 +124,7 @@ const App = () => {
   const [currentMonth, setCurrentMonth] = useCallback(useState(null));
   const [isErrorOpen, setErrorOpen] = useCallback(useState(false));
 
-  const currentRole = "field2"; //useSelector((state) => state.user.role);
+  const currentRole = "super"; //useSelector((state) => state.user.role);
   const currentUserId = useSelector((state) => state.user.id);
   const reduxExpiresIn = useSelector((state) => state.user.sessionExpire);
   const timeOutSet = useSelector((state) => state.user.timeOutSet);

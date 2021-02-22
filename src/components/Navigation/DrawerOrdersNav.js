@@ -17,7 +17,6 @@ import NestedMenuItem from "./NestedMenuItem.js";
 const DrawerOrdersNav = ({
   inStockOrderId,
   onDemandOrderId,
-  role,
   handleCouponModal,
   classes,
   currentMonth,
@@ -38,7 +37,7 @@ const DrawerOrdersNav = ({
     10: "1",
     11: "2",
   };
-
+  const role = "super"
   const hasInStockOrder = useSelector(
     (state) => state.currentOrder.inStockOrderNumber
   );
@@ -102,7 +101,7 @@ const DrawerOrdersNav = ({
               primaryTypographyProps={{
                 className: classes.headerListItemNew,
               }}
-              primary={`+ Q${monthMap[currentMonth]} Pre-Order`}
+              primary={`+ Q2 Pre-Order`}
             />
           </MenuItem>
         )}
@@ -166,7 +165,7 @@ const DrawerOrdersNav = ({
             )}
           </div>
         )}
-        {role !== "field1" && role !== "read-only" && (
+        {/* {role !== "field1" && role !== "read-only" && (
           <MenuItem
             button
             disabled={Boolean(hasOnDemandOrder)}
@@ -183,7 +182,7 @@ const DrawerOrdersNav = ({
               primary="+ New Coupon"
             />
           </MenuItem>
-        )}
+        )} */}
         <Divider className={classes.divider} />
         {role !== "read-only" && role !== "compliance" && (
           <NestedMenuItem
