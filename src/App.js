@@ -64,6 +64,7 @@ import { clearReports } from "./redux/slices/reportSlice";
 import AuthOLanding from "./pages/AuthOLanding";
 import ApproveOrDenyItem from "./pages/ApproveOrDenyItem";
 import BudgetVsSpend from "./pages/BudgetVsSpend";
+import Calendar from "./pages/Calendar";
 import ComplianceContacts from "./pages/ComplianceContacts";
 import ComplianceItems from "./pages/ComplianceItems";
 import ComplianceRules from "./pages/ComplianceRules";
@@ -419,8 +420,8 @@ const App = () => {
           )}
           {(window.location.pathname === "/" ||
             window.location.pathname.includes("/login")) && (
-            <Redirect noThrow to="/dashboard" />
-          )}
+              <Redirect noThrow to="/dashboard" />
+            )}
 
           <Router primary={false} style={{ backgroundColor: "#ffffff" }}>
             <Landing path="/" />
@@ -474,6 +475,11 @@ const App = () => {
               currentRole,
               territories
             )}
+              <Calendar
+                path="/calendar"
+                handleFilterDrawer={setFiltersOpen}
+                filtersOpen={filtersOpen}
+              />
             {handleAuth(
               <ProgramNew
                 path="/programs/new"

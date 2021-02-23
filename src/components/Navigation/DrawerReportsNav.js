@@ -118,6 +118,21 @@ const DrawerReportsNav = ({ classes, role }) => {
             />
           </div>
         )}
+         <div>
+            <Divider className={classes.divider} key="divider3" />
+            <NestedMenuItem
+              anchorEl={anchorEl}
+              handleClose={handleClose}
+              label="Calendars"
+              classes={classes}
+              childItems={[
+                {
+                  link: "/calendar",
+                  primary: "2021 Calendar",
+                },
+              ]}
+            />
+          </div>
       </Menu>
     </>
   );
