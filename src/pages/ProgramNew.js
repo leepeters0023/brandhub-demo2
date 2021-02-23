@@ -136,7 +136,7 @@ const ProgramNew = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | New Program</title>
+        <title> New Program</title>
       </Helmet>
       <ItemPreviewModal
         type="program"
@@ -225,16 +225,16 @@ const ProgramNew = ({ handleFilterDrawer, filtersOpen }) => {
               SUBMIT PROGRAM
             </Button>
           ) : (
-            <Button
-              className={classes.largeButton}
-              color="secondary"
-              variant="contained"
-              onClick={handleReset}
-              style={{ marginRight: "24px" }}
-            >
-              NEW PROGRAM
-            </Button>
-          )}
+                <Button
+                  className={classes.largeButton}
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleReset}
+                  style={{ marginRight: "24px" }}
+                >
+                  NEW PROGRAM
+                </Button>
+              )}
         </div>
       </Container>
       <br />

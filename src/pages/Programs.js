@@ -230,7 +230,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Programs</title>
+        <title> Programs</title>
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
@@ -246,7 +246,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
                   startIcon={<ExitToAppIcon />}
                   component={Link}
                   to="/orders/open/preorder"
-                  disabled={activePrograms.length === 0}
+                  disabled
                 >
                   PLACE ORDERS
                 </Button>

@@ -76,7 +76,7 @@ const Help = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Help</title>
+        <title> Help</title>
       </Helmet>
       <Container
         className={classes.mainWrapper}

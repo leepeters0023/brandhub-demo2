@@ -162,16 +162,16 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
           user: item.user,
           complianceStatus:
             !item.triggeredRules &&
-            !item.triggeredPriorApprovalRules &&
-            !item.isComplianceCanceled
+              !item.triggeredPriorApprovalRules &&
+              !item.isComplianceCanceled
               ? "Ok"
               : item.isComplianceCanceled
-              ? "Compliance Canceled"
-              : (item.triggeredRules && item.triggeredRules.length > 0) ||
-                (item.triggeredPriorApprovalRules &&
-                  item.triggeredPriorApprovalRules.length > 0)
-              ? "On Hold"
-              : "Ok",
+                ? "Compliance Canceled"
+                : (item.triggeredRules && item.triggeredRules.length > 0) ||
+                  (item.triggeredPriorApprovalRules &&
+                    item.triggeredPriorApprovalRules.length > 0)
+                  ? "On Hold"
+                  : "Ok",
           inMarketDate: item.inMarketDate,
           orderDate: item.orderDate,
           orderNumber: item.orderNumber,
@@ -205,7 +205,7 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Order History Detail</title>
+        <title> Order History Detail</title>
         {currentUserRole === "super" && (
           <script type="text/javascript">{` Beacon('suggest', ['600ed398cfe30d219ccdb224'])`}</script>
         )}
@@ -287,15 +287,15 @@ const ReportOrderHistoryDetail = ({ handleFiltersClosed }) => {
                 id="report-user-complete"
               />
             ) : (
-              <UserAutoComplete
-                classes={classes}
-                handleChange={handleUser}
-                reset={reset}
-                setReset={setReset}
-                filterType="report"
-                id="report-user-complete"
-              />
-            )
+                <UserAutoComplete
+                  classes={classes}
+                  handleChange={handleUser}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType="report"
+                  id="report-user-complete"
+                />
+              )
           ) : null}
         </div>
         <br />

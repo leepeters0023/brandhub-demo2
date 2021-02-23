@@ -152,7 +152,7 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Compliance Items</title>
+        <title> Compliance Items</title>
         {currentUserRole === "purchaser" && !filtersOpen && (
           <script type="text/javascript">{`Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}
@@ -171,47 +171,47 @@ const ComplianceItems = ({ handleFilterDrawer, filtersOpen }) => {
           >
             {(currentUserRole === "compliance" ||
               currentUserRole === "super") && (
-              <>
-                <Tooltip
-                  title="Approves a Prior Approval Rule"
-                  PopperProps={{ style: { marginRight: "20px" } }}
-                >
-                  <span>
-                    <Button
-                      className={classes.largeButton}
-                      variant="contained"
-                      color="secondary"
-                      disabled={selectedCompItems.length === 0}
-                      style={{ marginRight: "20px" }}
-                      onClick={() => {
-                        handleApprove();
-                      }}
-                    >
-                      APPROVE RULE
+                <>
+                  <Tooltip
+                    title="Approves a Prior Approval Rule"
+                    PopperProps={{ style: { marginRight: "20px" } }}
+                  >
+                    <span>
+                      <Button
+                        className={classes.largeButton}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedCompItems.length === 0}
+                        style={{ marginRight: "20px" }}
+                        onClick={() => {
+                          handleApprove();
+                        }}
+                      >
+                        APPROVE RULE
                     </Button>
-                  </span>
-                </Tooltip>
-                <Tooltip
-                  title="Denies a Prior Approval Rule"
-                  PopperProps={{ style: { marginRight: "20px" } }}
-                >
-                  <span>
-                    <Button
-                      className={classes.largeButton}
-                      variant="contained"
-                      color="secondary"
-                      disabled={selectedCompItems.length === 0}
-                      style={{ marginRight: "20px" }}
-                      onClick={() => {
-                        handleDeny();
-                      }}
-                    >
-                      DENY RULE
+                    </span>
+                  </Tooltip>
+                  <Tooltip
+                    title="Denies a Prior Approval Rule"
+                    PopperProps={{ style: { marginRight: "20px" } }}
+                  >
+                    <span>
+                      <Button
+                        className={classes.largeButton}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedCompItems.length === 0}
+                        style={{ marginRight: "20px" }}
+                        onClick={() => {
+                          handleDeny();
+                        }}
+                      >
+                        DENY RULE
                     </Button>
-                  </span>
-                </Tooltip>
-              </>
-            )}
+                    </span>
+                  </Tooltip>
+                </>
+              )}
             <Tooltip title="Print Item Rules">
               <IconButton onClick={handlePrint}>
                 <PrintIcon color="secondary" />

@@ -84,18 +84,6 @@ const NewUser = ({ handleFiltersClosed, handleLogout }) => {
               <Typography className={classes.titleText} variant="h5">
                 {`Welcome to Brandhub ${firstName} ${lastName}`}
               </Typography>
-              <br />
-              <Typography className={classes.headerText}>
-                It looks like your account hasn't been set up yet.
-              </Typography>
-              <br />
-              <Typography className={classes.headerText}>
-                Please Email Samara Cowler to have your permissions and regions
-                configured.
-              </Typography>
-              <Typography className={classes.headerText}>
-                samara.cowler@ejgallo.com
-              </Typography>
             </Grid>
             <Grid item sm={2} xs={1} />
           </Grid>

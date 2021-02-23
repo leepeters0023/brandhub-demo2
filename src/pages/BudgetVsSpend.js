@@ -73,7 +73,7 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Budget vs Spend</title>
+        <title> Budget vs Spend</title>
       </Helmet>
       <Container className={classes.mainWrapper}>
         <div className={classes.titleBar}>
@@ -131,7 +131,7 @@ const BudgetVsSpend = ({ handleFilterDrawer, filtersOpen }) => {
           budgets={yearToDateBudgets}
           budgetsLoading={false}
           handleSort={handleSort}
-          // scrollRef={scrollRef}
+        // scrollRef={scrollRef}
         />
         {/* {isNextLoading && (
           <div style={{ width: "100%" }}>

@@ -94,7 +94,7 @@ const RFQ = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | RFQ</title>
+        <title> RFQ</title>
       </Helmet>
       <Container role={role} className={classes.mainWrapper}>
         <div className={classes.titleBar}>

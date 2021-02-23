@@ -142,13 +142,13 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
 
   useEffect(() => {
     dispatch(clearReports())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <>
       <Helmet>
-        <title>RTA | Report Wrap-Up</title>
+        <title> Report Wrap-Up</title>
         {currentUserRole === "super" && (
           <script type="text/javascript">{` Beacon('suggest', ['600ed398cfe30d219ccdb224'])`}</script>
         )}
@@ -228,15 +228,15 @@ const ReportWrapUp = ({ handleFiltersClosed }) => {
                 id="report-user-complete"
               />
             ) : (
-              <UserAutoComplete
-                classes={classes}
-                handleChange={handleUser}
-                reset={reset}
-                setReset={setReset}
-                filterType="report"
-                id="report-user-complete"
-              />
-            )
+                <UserAutoComplete
+                  classes={classes}
+                  handleChange={handleUser}
+                  reset={reset}
+                  setReset={setReset}
+                  filterType="report"
+                  id="report-user-complete"
+                />
+              )
           ) : null}
         </div>
         <br />

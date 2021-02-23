@@ -41,7 +41,7 @@ const Settings = ({ userType, handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Settings</title>
+        <title> Settings</title>
       </Helmet>
       <Container className={classes.mainWrapper}>
         <Grid container spacing={2} alignItems="stretch" wrap="nowrap">

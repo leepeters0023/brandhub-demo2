@@ -112,7 +112,7 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Order Approval</title>
+        <title> Order Approval</title>
         {currentUserRole === "field2" && !filtersOpen && (
           <script type="text/javascript">{` Beacon('suggest', ['600af2ff1c64ad47e4b7201d'])`}</script>
         )}
@@ -140,8 +140,8 @@ const OrderApprovals = ({ handleFilterDrawer, filtersOpen }) => {
               </Button>
             </div>
           ) : (
-            <div></div>
-          )}
+              <div></div>
+            )}
         </div>
         <div
           style={{

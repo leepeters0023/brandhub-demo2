@@ -136,7 +136,7 @@ const Program = ({ handleFiltersClosed, programId }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Program</title>
+        <title> Program</title>
       </Helmet>
       {isLinkModalOpen && (
         <ItemShareModal
@@ -258,15 +258,15 @@ const Program = ({ handleFiltersClosed, programId }) => {
             {itemsLoading ? (
               <CircularProgress />
             ) : (
-              <OrderItemViewControl
-                type={"catalog"}
-                currentView={currentView}
-                handlePreview={handlePreview}
-                items={currentProgram.items}
-                isItemsLoading={itemsLoading}
-                addPreOrderItem={handleAddItem}
-              />
-            )}
+                <OrderItemViewControl
+                  type={"catalog"}
+                  currentView={currentView}
+                  handlePreview={handlePreview}
+                  items={currentProgram.items}
+                  isItemsLoading={itemsLoading}
+                  addPreOrderItem={handleAddItem}
+                />
+              )}
           </>
         )}
       </Container>

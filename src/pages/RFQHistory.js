@@ -243,9 +243,9 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
             bidValue: rfq.bids.find((bid) => bid.supplierId === supplierId)
               .price
               ? formatMoney(
-                  rfq.bids.find((bid) => bid.supplierId === supplierId).price,
-                  true
-                )
+                rfq.bids.find((bid) => bid.supplierId === supplierId).price,
+                true
+              )
               : "---",
           });
         }
@@ -280,7 +280,7 @@ const RFQHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | RFQ History</title>
+        <title> RFQ History</title>
         {currentUserRole === "supplier" && !filtersOpen && (
           <script type="text/javascript">{` Beacon('suggest', ['601438c22042ff6d1b2a8abb'])`}</script>
         )}

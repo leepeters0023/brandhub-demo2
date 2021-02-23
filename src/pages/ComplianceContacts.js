@@ -46,7 +46,7 @@ const ComplianceContacts = ({ handleFiltersClosed }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Compliance Contacts</title>
+        <title> Compliance Contacts</title>
       </Helmet>
       <Container className={classes.mainWrapper}>
         {open && (

@@ -308,7 +308,7 @@ const ItemCatalog = ({ catalogType, handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Item Catalog</title>
+        <title> Item Catalog</title>
         {currentUserRole === "purchaser" && !filtersOpen && (
           <script type="text/javascript">{` Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}

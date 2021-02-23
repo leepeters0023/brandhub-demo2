@@ -376,7 +376,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
     return (
       <>
         <Helmet>
-          <title>RTA | Current Order</title>
+          <title> Current Order</title>
         </Helmet>
         <Container style={{ textAlign: "center" }}>
           <br />
@@ -579,16 +579,16 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                 {decodeURIComponent(window.location.hash.slice(1)).includes(
                   "approval"
                 ) && (
-                  <Tooltip title="Back to Approvals" placement="bottom-start">
-                    <IconButton
-                      component={Link}
-                      to="/orders/approvals"
-                      onClick={() => dispatch(setRetain({ value: true }))}
-                    >
-                      <ArrowBackIcon fontSize="large" color="secondary" />
-                    </IconButton>
-                  </Tooltip>
-                )}
+                    <Tooltip title="Back to Approvals" placement="bottom-start">
+                      <IconButton
+                        component={Link}
+                        to="/orders/approvals"
+                        onClick={() => dispatch(setRetain({ value: true }))}
+                      >
+                        <ArrowBackIcon fontSize="large" color="secondary" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 <Typography
                   className={classes.titleText}
                   style={{ marginTop: "5px" }}
@@ -613,25 +613,25 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
         </div>
         <br />
         {overviewVisible ||
-        ((orderStatus === "approved" || orderStatus === "submitted") &&
-          (currentUserRole === "field1" ||
-            (!window.location.hash.includes("approval") &&
-              !window.location.href.includes("rollup")))) ? (
-          <OrderSetOverview setOverviewVisible={setOverviewVisible} />
-        ) : (
-          <OrderSetTable
-            currentProgram={undefined}
-            handleModalOpen={handleModalOpen}
-            handleOpenConfirm={handleOpenConfirm}
-            handleRemoveOrder={handleDeleteOrderModal}
-            isLoading={isLoading}
-            orderId={currentOrderId}
-            orderStatus={orderStatus}
-            currentItems={currentItems}
-            orders={orders}
-            orderType={currentOrderType}
-          />
-        )}
+          ((orderStatus === "approved" || orderStatus === "submitted") &&
+            (currentUserRole === "field1" ||
+              (!window.location.hash.includes("approval") &&
+                !window.location.href.includes("rollup")))) ? (
+            <OrderSetOverview setOverviewVisible={setOverviewVisible} />
+          ) : (
+            <OrderSetTable
+              currentProgram={undefined}
+              handleModalOpen={handleModalOpen}
+              handleOpenConfirm={handleOpenConfirm}
+              handleRemoveOrder={handleDeleteOrderModal}
+              isLoading={isLoading}
+              orderId={currentOrderId}
+              orderStatus={orderStatus}
+              currentItems={currentItems}
+              orders={orders}
+              orderType={currentOrderType}
+            />
+          )}
         <br />
         <br />
         <div className={classes.orderControl}>
@@ -689,8 +689,8 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
                             {isUploadLoading ? (
                               <CircularProgress size={27.78} />
                             ) : (
-                              "ORDER"
-                            )}
+                                "ORDER"
+                              )}
                           </Button>
                         )}
                       </CSVReader>

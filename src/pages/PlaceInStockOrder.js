@@ -168,7 +168,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Place Inventory Order</title>
+        <title> Place Inventory Order</title>
       </Helmet>
       {previewModal && (
         <ItemPreviewModal

@@ -61,7 +61,7 @@ const ApproveOrDenyItem = () => {
   };
 
   const handleNotes = (e) => {
-      setNotes(e.target.value);
+    setNotes(e.target.value);
   };
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const ApproveOrDenyItem = () => {
   return (
     <>
       <Helmet>
-        <title>RTA | Approve or Deny</title>
+        <title> Approve or Deny</title>
       </Helmet>
       <Container className={classes.mainWrapper}>
         <ImageWrapper
@@ -224,7 +224,7 @@ const ApproveOrDenyItem = () => {
                     </span>
                   </Tooltip>
                 </>
-                )}
+              )}
             </>
           )}
         </div>

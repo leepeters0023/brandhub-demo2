@@ -129,7 +129,7 @@ const ComplianceRules = ({ handleFilterDrawer, filtersOpen }) => {
   return (
     <>
       <Helmet>
-        <title>RTA | Compliance Rules</title>
+        <title> Compliance Rules</title>
         {currentUserRole === "purchaser" && !filtersOpen && (
           <script type="text/javascript">{`Beacon('suggest', ['601438192042ff6d1b2a8ab3'])`}</script>
         )}
