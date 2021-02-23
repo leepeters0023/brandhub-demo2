@@ -34,6 +34,8 @@ import { makeStyles } from "@material-ui/core/styles";
 // import PrintIcon from "@material-ui/icons/Print";
 // import GetAppIcon from "@material-ui/icons/GetApp";
 
+import fakeData from "../fakeData";
+
 const defaultFilters = {
   orderType: "on-demand",
   brand: [],
@@ -77,7 +79,7 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const isPOItemsLoading = useSelector(
     (state) => state.purchaseOrder.isLoading
   );
-  const currentPOItems = useSelector((state) => state.purchaseOrder.poItems);
+  const currentPOItems = fakeData; //useSelector((state) => state.purchaseOrder.poItems);
   const selectedPOItems = useSelector(
     (state) => state.purchaseOrder.selectedPOItems
   );

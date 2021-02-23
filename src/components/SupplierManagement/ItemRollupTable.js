@@ -46,12 +46,6 @@ const headCells = [
     label: "Total Ordered",
     sort: false,
   },
-  {
-    id: "totalNotCompliant",
-    disablePadding: false,
-    label: "Pending Compliance",
-    sort: false,
-  },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
   {
     id: "totalEstCost",
@@ -87,8 +81,8 @@ const EnhancedTableHead = (props) => {
     type === "po"
       ? headCells
       : headCells
-          .filter((cell) => cell.id !== "supplier")
-          .filter((cell) => cell.id !== "totalNotCompliant");
+        .filter((cell) => cell.id !== "supplier")
+        .filter((cell) => cell.id !== "totalNotCompliant");
 
   return (
     <TableHead>
@@ -269,10 +263,6 @@ const ItemRollupTable = ({
 
   const isSelected = (id, itemId) => selected.indexOf(`${id}-${itemId}`) !== -1;
 
-  const handleComplianceClick = (itemNumber, orderIds) => {
-    navigate(`/compliance/pending/${orderIds.join(",")}#${itemNumber}`);
-  };
-
   useEffect(() => {
     if (selected.length > 0 && !itemSelected) {
       setItemSelected(true);
@@ -359,8 +349,8 @@ const ItemRollupTable = ({
                           {row.itemNumber}
                         </div>
                       ) : (
-                        row.itemNumber
-                      )}
+                          row.itemNumber
+                        )}
                     </TableCell>
                     <TableCell align="left">{row.user}</TableCell>
                     {row.territory.length > 1 ? (
@@ -378,34 +368,14 @@ const ItemRollupTable = ({
                         </TableCell>
                       </Tooltip>
                     ) : (
-                      <TableCell align="left">{row.territory[0]}</TableCell>
-                    )}
+                        <TableCell align="left">{row.territory[0]}</TableCell>
+                      )}
                     <TableCell align="left">{row.program}</TableCell>
                     <TableCell align="left">{row.brand}</TableCell>
                     <TableCell align="left">{row.projectNum}</TableCell>
                     <TableCell align="left">{row.itemType}</TableCell>
                     <TableCell align="left">{row.itemDescription}</TableCell>
                     <TableCell align="left">{row.totalItems}</TableCell>
-                    {type === "po" && (
-                      <TableCell
-                        align="left"
-                        className={
-                          row.totalNotCompliant > 0
-                            ? classes.clickableCell
-                            : null
-                        }
-                        onClick={() => {
-                          if (row.totalNotCompliant > 0) {
-                            handleComplianceClick(
-                              row.itemNumber,
-                              row.orderItemIds
-                            );
-                          }
-                        }}
-                      >
-                        {row.totalNotCompliant}
-                      </TableCell>
-                    )}
                     <TableCell align="left">
                       {formatMoney(row.estCost, true)}
                     </TableCell>
@@ -418,9 +388,8 @@ const ItemRollupTable = ({
                     )}
                     <TableCell align="right" padding="checkbox">
                       <Tooltip
-                        title={`Delete ${
-                          type === "po" ? "Purchase Order Item" : "RFQ Item"
-                        }`}
+                        title={`Delete ${type === "po" ? "Purchase Order Item" : "RFQ Item"
+                          }`}
                       >
                         <IconButton
                           onClick={() => handleOpenConfirm(row.orderItemIds)}

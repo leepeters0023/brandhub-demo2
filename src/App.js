@@ -320,9 +320,9 @@ const App = () => {
         {!window.location.pathname.includes("/login") && (
           <Redirect noThrow to="/" />
         )}
-        {isErrorOpen && (
+        {/* {isErrorOpen && (
           <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
-        )}
+        )} */}
         <Router>
           <Landing path="/" />
           <AuthOLanding path="/login" />
@@ -334,9 +334,9 @@ const App = () => {
   } else if (currentUser && (isLoading || isPreOrdersLoading)) {
     return (
       <MuiThemeProvider theme={theme}>
-        {isErrorOpen && (
+        {/* {isErrorOpen && (
           <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
-        )}
+        )} */}
         <Loading partial={false} />;
       </MuiThemeProvider>
     );
@@ -346,9 +346,9 @@ const App = () => {
   ) {
     return (
       <MuiThemeProvider theme={theme}>
-        {isErrorOpen && (
+        {/* {isErrorOpen && (
           <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
-        )}
+        )} */}
         <TopDrawerNav
           userType={currentRole}
           handleLogout={handleLogout}
@@ -397,9 +397,9 @@ const App = () => {
             </Helmet>
           </>
         )}
-        {isErrorOpen && (
+        {/* {isErrorOpen && (
           <ErrorModal open={isErrorOpen} handleClose={handleErrorClose} />
-        )}
+        )} */}
         <FilterDrawer
           open={filtersOpen}
           handleDrawerClose={handleFiltersClosed}
