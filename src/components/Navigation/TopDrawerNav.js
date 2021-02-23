@@ -109,7 +109,7 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal, currentMonth }) => {
 
   const initials = useSelector((state) => state.user.initials);
   const role = useSelector((state) => state.user.role);
-  const territories = useSelector((state) => state.user.territories);
+  const territories = [1, 2]//useSelector((state) => state.user.territories);
 
   const inStockOrderId = useSelector(
     (state) => state.currentOrder.inStockOrderNumber
@@ -151,9 +151,9 @@ const TopDrawerNav = ({ handleLogout, handleCouponModal, currentMonth }) => {
                   <DrawerReportsNav role={role} classes={classes} />
                 </>
               )}
-              {role !== "supplier" && (
+              {/* {role !== "supplier" && (
                 <OnPremiseRetailSelector classes={classes} />
-              )}
+              )} */}
               {territories && territories.length > 0 && (
                 <RegionSelector classes={classes} />
               )}

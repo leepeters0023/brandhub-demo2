@@ -53,7 +53,7 @@ const RegionSelector = ({ classes }) => {
     }
   }, [regions, currentRegion]);
 
-  if (regions.length === 1) {
+  // if (regions.length === 1) { }
     return (
       <div
         style={{
@@ -68,42 +68,42 @@ const RegionSelector = ({ classes }) => {
         }}
       >
         <Typography className={classes.regionText} variant="body2">
-          {regions[0].name}
+          Western
         </Typography>
       </div>
     );
-  } else
-    return (
-      <>
-        <FormControl
-          variant="outlined"
-          size="small"
-          style={{
-            margin: "0 5px",
-            borderRadius: "5px",
-            backgroundColor: "white",
-          }}
-        >
-          <Select
-            name="regions"
-            labelId="region-select"
-            id="regions"
-            value={region}
-            onChange={handleChangeSelect}
-            MenuProps={{
-              style: { zIndex: "10001" },
-            }}
-            disabled={isOrdering}
-          >
-            {regions.map((region, index) => (
-              <MenuItem value={region.name} key={index}>
-                <Typography variant="body2">{region.name}</Typography>
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </>
-    );
+  //  else
+  //   return (
+  //     <>
+  //       <FormControl
+  //         variant="outlined"
+  //         size="small"
+  //         style={{
+  //           margin: "0 5px",
+  //           borderRadius: "5px",
+  //           backgroundColor: "white",
+  //         }}
+  //       >
+  //         <Select
+  //           name="regions"
+  //           labelId="region-select"
+  //           id="regions"
+  //           value={region}
+  //           onChange={handleChangeSelect}
+  //           MenuProps={{
+  //             style: { zIndex: "10001" },
+  //           }}
+  //           disabled={isOrdering}
+  //         >
+  //           {regions.map((region, index) => (
+  //             <MenuItem value={region.name} key={index}>
+  //               <Typography variant="body2">{region.name}</Typography>
+  //             </MenuItem>
+  //           ))}
+  //         </Select>
+  //       </FormControl>
+  //     </>
+  //   );
 };
 
 RegionSelector.propTypes = {

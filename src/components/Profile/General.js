@@ -17,7 +17,10 @@ const useStyles = makeStyles((theme) => ({
 const General = () => {
   const classes = useStyles();
 
-  const currentUser = useSelector((state) => state.user);
+  const currentUser = {
+    name: "Michelle", email: "michelle@selectdesign.com", role: "super user", territories: ["Western"], isRetail: true, isOnPremise: true, territories: [{name: "Western"}], states: [{code: "California"}]
+  }
+  //useSelector((state) => state.user);
   // const [info, setInfo] = useState({
   //   first: currentUser.firstName,
   //   last: currentUser.lastName,
