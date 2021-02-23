@@ -10,7 +10,7 @@ import CurrentPrograms from "../components/Purchasing/CurrentPrograms";
 
 import FilterChipList from "../components/Filtering/FilterChipList";
 
-import { useProgramSort } from "../hooks/UtilityHooks";
+//import { useProgramSort } from "../hooks/UtilityHooks";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -20,6 +20,8 @@ import TuneIcon from "@material-ui/icons/Tune";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
+import fakeData from "../fakeData";
 
 const defaultFilters = {
   bu: [],
@@ -45,154 +47,7 @@ const Programs = ({ handleFilterDrawer, filtersOpen }) => {
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const currentUserRole = useSelector((state) => state.user.role);
-
-  const currentPrograms = [
-    {
-      id: 1,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716034/Select/Traeger_LargeGrillFence_2_v0orgr.jpg"],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624035/Select/20_lusezy.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 2,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631970/Select/115778_Tee_mugany.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631970/Select/115778_Tee_mugany.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631970/Select/115778_Tee_mugany.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631970/Select/115778_Tee_mugany.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631970/Select/115778_Tee_mugany.png",],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 3,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/114222_Traeger_Circle_Tee_skiuie.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/114222_Traeger_Circle_Tee_skiuie.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/114222_Traeger_Circle_Tee_skiuie.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/114222_Traeger_Circle_Tee_skiuie.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/114222_Traeger_Circle_Tee_skiuie.png",],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 4,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/113860_Tent_mtek5j.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/113860_Tent_mtek5j.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/113860_Tent_mtek5j.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/113860_Tent_mtek5j.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631969/Select/113860_Tent_mtek5j.png",],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 5,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",],
-      program: "Home Depot",
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 6,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114222_Pint_elmnyq.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114222_Pint_elmnyq.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114222_Pint_elmnyq.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114222_Pint_elmnyq.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114222_Pint_elmnyq.png",],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 7,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/118092_Metal_Sign_jchxze.png",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/118092_Metal_Sign_jchxze.png",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/118092_Metal_Sign_jchxze.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/118092_Metal_Sign_jchxze.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/118092_Metal_Sign_jchxze.png",],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624033/Select/4_x6r6uj.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-    {
-      id: 8,
-      itemNumber: "123456",
-      itemType: "an item type",
-      imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg",
-      imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg",
-      carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1603716035/Select/Traeger_CleaningProductsDisplay_eoglpu.jpg"],
-      program: ["a program"],
-      estCost: 500,
-      brand: ["brand"],
-      itemDescription: "a description of the item",
-      packSize: "10",
-      oneSheetImg: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605624034/Select/7_tllfj2.jpg",
-      focusMonth: "June",
-      orderWindowOpen: "06/01/2021",
-      orderWindowClose: "07/01/20201",
-      name: "The program name",
-    },
-  ]
+  const currentPrograms = fakeData; 
 
   // useProgramSort(
   //   activePrograms,
