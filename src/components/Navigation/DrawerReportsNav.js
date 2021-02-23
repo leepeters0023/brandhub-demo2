@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "@reach/router";
 import PropTypes from "prop-types";
 
 import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
+import ListItemText from "@material-ui/core/ListItemText";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
@@ -56,6 +59,20 @@ const DrawerReportsNav = ({ classes, role }) => {
         onClose={handleClose}
       >
         <div />
+        <MenuItem
+          button
+          onClick={handleClose}
+          component={Link}
+          to="field-intelligence"
+        >
+          <ListItemText
+            primaryTypographyProps={{
+              className: classes.headerListItemNew,
+            }}
+            primary="Field Intelligence"
+          />
+        </MenuItem>
+        <Divider className={classes.divider} />
         {(role !== "finance" || role !== "compliance") && (
           <NestedMenuItem
             anchorEl={anchorEl}

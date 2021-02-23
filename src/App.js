@@ -73,6 +73,7 @@ import CurrentOrderDetail from "./pages/CurrentOrderDetail";
 import CurrentPreOrder from "./pages/CurrentPreOrder";
 import Dashboard from "./pages/Dashboard";
 import ErrorModal from "./components/Utility/ErrorModal";
+import FieldIntelligence from "./pages/FieldIntelligence";
 import FilterDrawer from "./components/Filtering/FilterDrawer";
 import FourOhFour from "./pages/FourOhFour";
 import Help from "./pages/Help";
@@ -480,6 +481,11 @@ const App = () => {
                 handleFilterDrawer={setFiltersOpen}
                 filtersOpen={filtersOpen}
               />
+              <FieldIntelligence
+              path="/field-intelligence"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />
             {handleAuth(
               <ProgramNew
                 path="/programs/new"
