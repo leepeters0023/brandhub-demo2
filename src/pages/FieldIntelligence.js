@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Link } from "@reach/router";
+// import { Link } from "@reach/router";
 
+import Helmet from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
-import { useInitialFilters } from "../hooks/UtilityHooks";
-
-import { fetchInitialPrograms } from "../redux/slices/programsSlice";
-
+// import { useInitialFilters } from "../hooks/UtilityHooks";
+// import { fetchInitialPrograms } from "../redux/slices/programsSlice";
 //import { useProgramSort } from "../hooks/UtilityHooks";
 
 import Container from "@material-ui/core/Container";
@@ -17,17 +16,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import FieldIntelDetailModal from "./FieldIntelDetailModal";
-
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+// import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import fakeData from "../fakeData";
 
-const defaultFilters = {
-  bu: [],
-  month: [],
-  brand: [],
-  sortProgramsBy: "brand",
-};
+// const defaultFilters = {
+//   bu: [],
+//   month: [],
+//   brand: [],
+//   sortProgramsBy: "brand",
+// };
 
 const useStyles = makeStyles((theme) => ({
     ...theme.global,
@@ -80,6 +78,9 @@ const MarketIntel = ({ userType, currentPrograms, filtersOpen }) => {
       };
     return (
       <>
+      <Helmet>
+        <title> Field Intelligence</title>
+      </Helmet>
       {previewModal && (
           <FieldIntelDetailModal
           handleClose={handleModalClose}
