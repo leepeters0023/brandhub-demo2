@@ -208,10 +208,10 @@ const DrawerOrdersNav = ({
             ]}
           />
         )}
-        {role !== "field1" && role !== "read-only" && (
+        {/*{role !== "field1" && role !== "read-only" && (
           <Divider className={classes.divider} key="divider1" />
         )}
-        {(role === "field2" || role === "super" || role === "read-only") && (
+         {(role === "field2" || role === "super" || role === "read-only") && (
           <NestedMenuItem
             anchorEl={anchorEl}
             handleClose={handleClose}
@@ -228,7 +228,7 @@ const DrawerOrdersNav = ({
               },
             ]}
           />
-        )}
+        )} */}
         {(role === "purchaser" ||
           role === "select-purchaser" ||
           role === "super") && (

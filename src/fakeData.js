@@ -110,7 +110,6 @@ export const fakeData = [
     imgUrlThumb: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",
     imgUrl: "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",
     carouselImgs: ["https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png", "https://res.cloudinary.com/joshdowns-dev/image/upload/v1605631968/Select/114933_Cap_qzpr0d.png",],
-    program: "Home Depot",
     program: ["a program"],
     estCost: 500,
     totalEstCost: 1000,

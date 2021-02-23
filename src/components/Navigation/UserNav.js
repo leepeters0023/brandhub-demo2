@@ -17,6 +17,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import HelpIcon from "@material-ui/icons/Help";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
+import businesswoman from "../../assets/businesswoman.png"
+
 const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -37,7 +39,7 @@ const UserNavMenu = ({ initials, handleLogout, classes, role }) => {
             handleOpen(evt);
           }}
         >
-          <Avatar className={classes.avatar}>{initials}</Avatar>
+          <Avatar className={classes.avatar} src={businesswoman}/>
         </IconButton>
       </Tooltip>
       <Menu

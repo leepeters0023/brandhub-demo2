@@ -249,7 +249,8 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
               className={classes.largeButton}
               variant="contained"
               color="secondary"
-              disabled={!itemSelected}
+              disabled
+              // disabled={!itemSelected}
               style={{ marginRight: "20px" }}
               onClick={() => {
                 handleNewPO();

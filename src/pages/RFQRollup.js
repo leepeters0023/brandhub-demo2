@@ -24,6 +24,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
+import fakeData from "../fakeData";
+
 // import PrintIcon from "@material-ui/icons/Print";
 // import GetAppIcon from "@material-ui/icons/GetApp";
 
@@ -62,7 +64,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
   const [itemSelected, setItemSelected] = useCallback(useState(false));
 
   const isRFQItemsLoading = useSelector((state) => state.rfq.isLoading);
-  const currentRFQItems = useSelector((state) => state.rfq.rfqItems);
+  const currentRFQItems = fakeData; //useSelector((state) => state.rfq.rfqItems);
   const selectedRFQItem = useSelector((state) => state.rfq.selectedRFQItem);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
@@ -115,7 +117,7 @@ const RFQRollup = ({ handleFilterDrawer, filtersOpen }) => {
               className={classes.largeButton}
               variant="contained"
               color="secondary"
-              disabled={!itemSelected}
+              disabled
               style={{ marginRight: "20px" }}
               onClick={() => {
                 handleNewRFQ();
