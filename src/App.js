@@ -91,6 +91,7 @@ import Profile from "./pages/Profile";
 import Program from "./pages/Program";
 import Programs from "./pages/Programs";
 import ProgramNew from "./pages/ProgramNew";
+import Project from "./pages/Project";
 import SharedItems from "./pages/SharedItems";
 import PurchaseOrder from "./pages/PurchaseOrder";
 import PurchaseOrderHistory from "./pages/PurchaseOrderHistory";
@@ -483,6 +484,11 @@ const App = () => {
               />
               <FieldIntelligence
               path="/field-intelligence"
+              handleFilterDrawer={setFiltersOpen}
+              filtersOpen={filtersOpen}
+            />
+            <Project
+              path="/project-status"
               handleFilterDrawer={setFiltersOpen}
               filtersOpen={filtersOpen}
             />
