@@ -479,8 +479,9 @@ const App = () => {
             )}
               <Calendar
                 path="/calendar"
-                handleFilterDrawer={setFiltersOpen}
+                setFiltersOpen={setFiltersOpen}
                 filtersOpen={filtersOpen}
+                //fix filters staying open
               />
               <FieldIntelligence
               path="/field-intelligence"

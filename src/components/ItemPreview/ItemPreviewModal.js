@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   dialogGrid: {
     display: "flex",
     alignItems: "center",
+    marginTop: "110px",
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
     },
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   scrollDiv: {
     margin: "5% 0",
     width: "100%",
-    maxHeight: "90%",
+    maxHeight: "95%",
     overflowY: "scroll",
     paddingRight: "20px",
     [theme.breakpoints.down("sm")]: {
@@ -86,10 +87,11 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogPaper: {
     minHeight: "80vh",
-    maxHeight: "80vh",
+    maxHeight: "90vh",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    overflowY: "scroll",
   },
   specTableCellRoot: {
     padding: "5px 0px",
