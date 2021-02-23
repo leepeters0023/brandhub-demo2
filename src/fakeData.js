@@ -16,6 +16,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 2,
@@ -34,6 +35,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 3,
@@ -52,6 +54,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 4,
@@ -70,6 +73,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 5,
@@ -89,6 +93,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 6,
@@ -107,6 +112,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 7,
@@ -125,6 +131,7 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
     {
       id: 8,
@@ -143,7 +150,8 @@ export const fakeData = [
       orderWindowOpen: "06/01/2021",
       orderWindowClose: "07/01/20201",
       name: "The program name",
+      stock: 10,
     },
   ]
 
-  export default fakeData
+  export default fakeData; 

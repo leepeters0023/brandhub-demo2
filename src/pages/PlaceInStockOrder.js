@@ -34,6 +34,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 
+import fakeData from "../fakeData";
+
 const defaultFilters = {
   brand: [],
   itemType: [],
@@ -71,7 +73,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
   const [invItemId, setInvItemId] = useCallback(useState(null));
   const [isAddInvModalOpen, setAddInvModalOpen] = useCallback(useState(false));
-  const currentItems = useSelector((state) => state.items.items);
+  const currentItems = fakeData; //useSelector((state) => state.items.items);
   const currentChannel = useSelector((state) => state.user.currentChannel);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const orderLoading = useSelector((state) => state.currentOrder.isLoading);

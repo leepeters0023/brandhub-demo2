@@ -33,6 +33,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import ViewStreamIcon from "@material-ui/icons/ViewStream";
 import ViewModuleIcon from "@material-ui/icons/ViewModule";
 
+import fakeData from "../fakeData";
+
 const defaultFilters = {
   brand: [],
   itemType: [],
@@ -68,7 +70,7 @@ const PlaceOnDemandOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const [currentView, setView] = useCallback(useState("list"));
   const [previewModal, handlePreviewModal] = useCallback(useState(false));
   const [currentItem, handleCurrentItem] = useCallback(useState({}));
-  const currentItems = useSelector((state) => state.items.items);
+  const currentItems = fakeData; //useSelector((state) => state.items.items);
   const currentChannel = useSelector((state) => state.user.currentChannel);
   const itemsLoading = useSelector((state) => state.items.isLoading);
   const currentUserRole = useSelector((state) => state.user.role);
