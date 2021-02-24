@@ -479,18 +479,17 @@ const App = () => {
             )}
               <Calendar
                 path="/calendar"
-                setFiltersOpen={setFiltersOpen}
-                filtersOpen={filtersOpen}
-                //fix filters staying open
+                handleFiltersClosed={handleFiltersClosed}
+                filtersOpen={!filtersOpen}
               />
               <FieldIntelligence
               path="/field-intelligence"
-              handleFilterDrawer={setFiltersOpen}
+              handleFiltersClosed={handleFiltersClosed}
               filtersOpen={filtersOpen}
             />
             <Project
               path="/project-status"
-              handleFilterDrawer={setFiltersOpen}
+              handleFiltersClosed={handleFiltersClosed}
               filtersOpen={filtersOpen}
             />
             {handleAuth(

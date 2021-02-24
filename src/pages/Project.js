@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,8 +21,14 @@ const useStyles = makeStyles((theme) => ({
       },
 }));
 
-const Project = () => {
+const Project = ({ handleFiltersClosed, filtersOpen }) => {
     const classes = useStyles();
+
+    useEffect(() => {
+        handleFiltersClosed();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
+
     return (
         <>
         <Helmet>
@@ -36,12 +42,13 @@ const Project = () => {
             </div>
         </Container>
         </>
-
     );
 };
 
 Project.propTypes = {
+    handleFiltersClosed: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
+    filtersOpen: PropTypes.bool.isRequired,
 };
 
 export default Project;

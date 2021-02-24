@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 // import { Link } from "@reach/router";
+import PropTypes from "prop-types";
 
 import Helmet from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,119 +29,121 @@ import fakeData from "../fakeData";
 // };
 
 const useStyles = makeStyles((theme) => ({
-    ...theme.global,
-    itemGridContainer: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      paddingBottom: "20px",
-      width: "100%",
+  ...theme.global,
+  itemGridContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: "20px",
+    width: "100%",
+  },
+  programImg: {
+    width: "85px",
+    height: "85px",
+    marginTop: "15px",
+    borderRadius: "20%",
+    objectFit: "cover",
+    transition: "all .5s ease",
+    "&:hover": {
+      cursor: "pointer",
     },
-    programImg: {
-      width: "85px",
-      height: "85px",
-      marginTop: "15px",
-      borderRadius: "20%",
-      objectFit: "cover",
-      transition: "all .5s ease",
-      "&:hover": {
-        cursor: "pointer",
-      },
-    },
-    singleItem: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "space-between",
-      textAlign: "center",
-      height: "275px",
-      marginBottom: "40px",
-      padding: "10px",
-      backgroundColor: "whitesmoke",
-    },
-    itemControl: {
-      width: "100%",
-      display: "flex",
-      justifyContent: "space-around",
-      alignItems: "center",
-    },
-  }));
+  },
+  singleItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    textAlign: "center",
+    height: "275px",
+    marginBottom: "40px",
+    padding: "10px",
+    backgroundColor: "whitesmoke",
+  },
+  itemControl: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+}));
 
-const MarketIntel = ({ userType, currentPrograms, filtersOpen }) => {
-    const classes = useStyles();
-    const [previewModal, handlePreviewModal] = useState(false);
+const MarketIntel = ({ handleFiltersClosed, currentPrograms, filtersOpen }) => {
+  const classes = useStyles();
+  const [previewModal, handlePreviewModal] = useState(false);
 
-    const handleModalClose = () => {
-        handlePreviewModal(false);
-      };
-      const handleModalOpen = () => {
-        handlePreviewModal(true);
-      };
-    return (
-      <>
+  const handleModalClose = () => {
+    handlePreviewModal(false);
+  };
+
+  const handleModalOpen = () => {
+    handlePreviewModal(true);
+  };
+
+  return (
+    <>
       <Helmet>
         <title> Field Intelligence</title>
       </Helmet>
       {previewModal && (
-          <FieldIntelDetailModal
+        <FieldIntelDetailModal
           handleClose={handleModalClose}
           previewModal={previewModal}
-          />
+        />
       )}
-        <Container style={{ textAlign: "center", maxWidth: "2000px" }}>
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography className={classes.titleText}>
-              Current Programs
+      <Container style={{ textAlign: "center", maxWidth: "2000px" }}>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography className={classes.titleText}>
+            Current Programs
             </Typography>
-          </div>
-          <br />
-          <br />
-          <Grid container spacing={2} justify="center" alignItems="stretch">
-            {currentPrograms.map((prog) => (
-              <Grid
-                item
-                lg={filtersOpen ? 3 : 2}
-                md={filtersOpen ? 4 : 3}
-                sm={filtersOpen ? 6 : 4}
-                xs={filtersOpen ? 12 : 6}
-                key={prog.id}
-              >
-                <Paper className={classes.singleItem}>
-                    <Tooltip title="Details" placement="top">
-                      <img
-                        id={prog.id}
-                        className={classes.programImg}
-                        src={prog.imgUrlThumb}
-                        alt={prog.name}
-                        onClick={() => handleModalOpen()}
-                      />
-                    </Tooltip>
-                  <Typography className={classes.headerText}>
-                    {`${prog.name} - ${prog.focusMonth}`}
+        </div>
+        <br />
+        <br />
+        <Grid container spacing={2} justify="center" alignItems="stretch">
+          {currentPrograms.map((prog) => (
+            <Grid
+              item
+              lg={filtersOpen ? 3 : 2}
+              md={filtersOpen ? 4 : 3}
+              sm={filtersOpen ? 6 : 4}
+              xs={filtersOpen ? 12 : 6}
+              key={prog.id}
+            >
+              <Paper className={classes.singleItem}>
+                <Tooltip title="Details" placement="top">
+                  <img
+                    id={prog.id}
+                    className={classes.programImg}
+                    src={prog.imgUrlThumb}
+                    alt={prog.name}
+                    onClick={() => handleModalOpen()}
+                  />
+                </Tooltip>
+                <Typography className={classes.headerText}>
+                  {`${prog.name} - ${prog.focusMonth}`}
+                </Typography>
+                <div>
+                  <Typography variant="body2" color="textSecondary">
+                    {``}
                   </Typography>
-                  <div>
-                    <Typography variant="body2" color="textSecondary">
-                      {``}
-                    </Typography>
-                  </div>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </>
-    );
-  };
+                </div>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </>
+  );
+};
 
 
-const FieldIntelligence = ({ userType, handleFilterDrawer, filtersOpen }) => {
+const FieldIntelligence = ({ userType, handleFiltersClosed, filtersOpen }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [programFilters, setProgramFilters] = useCallback(useState([]));
@@ -153,28 +156,33 @@ const FieldIntelligence = ({ userType, handleFilterDrawer, filtersOpen }) => {
   const monthFilters = useSelector((state) => state.filters.month);
   const brandFilter = useSelector((state) => state.filters.brand);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
+  
+  const currentPrograms = fakeData;
 
-  const currentPrograms = fakeData; 
-//   useProgramSort(
-//     activePrograms,
-//     sortOption,
-//     programFilters
-//   );
+  //   useProgramSort(
+  //     activePrograms,
+  //     sortOption,
+  //     programFilters
+  //   );
 
-//   useEffect(() => {
-//     if (activePrograms.length === 0 && userType && currentTerritory) {
-//       dispatch(fetchInitialPrograms(currentTerritory));
-//     }
-//   }, [userType, dispatch, activePrograms, currentTerritory]);
+  //   useEffect(() => {
+  //     if (activePrograms.length === 0 && userType && currentTerritory) {
+  //       dispatch(fetchInitialPrograms(currentTerritory));
+  //     }
+  //   }, [userType, dispatch, activePrograms, currentTerritory]);
 
-//   useInitialFilters(
-//     "program",
-//     defaultFilters,
-//     retainFilters,
-//     dispatch,
-//     handleFilterDrawer,
-//     userType
-//   );
+  //   useInitialFilters(
+  //     "program",
+  //     defaultFilters,
+  //     retainFilters,
+  //     dispatch,
+  //     handleFilterDrawer,
+  //     userType
+  //   );
+  useEffect(() => {
+    handleFiltersClosed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (
@@ -204,15 +212,21 @@ const FieldIntelligence = ({ userType, handleFilterDrawer, filtersOpen }) => {
         {isLoading ? (
           <CircularProgress color="inherit" />
         ) : (
-          <MarketIntel
-            userType={userType}
-            currentPrograms={currentPrograms}
-            filtersOpen={false}
-          />
-        )}
+            <MarketIntel
+              userType={userType}
+              currentPrograms={currentPrograms}
+              filtersOpen={false}
+            />
+          )}
       </Container>
     </>
   );
+};
+
+FieldIntelligence.propTypes = {
+  handleFiltersClosed: PropTypes.func.isRequired,
+  filtersOpen: PropTypes.bool.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default FieldIntelligence;
