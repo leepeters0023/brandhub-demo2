@@ -73,14 +73,14 @@ const DistributorSelection = () => {
   const debounce = useRef(null);
 
   const handleDistributors = (value) => {
-    setCurrentDistributors(value);
-    if (orderType === "in-stock") {
-      dispatch(
-        createSingleOrder(orderSetId, value[0].id, orderType, currentWarehouse)
-      );
-    } else {
-      dispatch(createSingleOrder(orderSetId, value[0].id, orderType));
-    }
+    setCurrentDistributors(["Distributor A", "Distributor B"]);
+    // if (orderType === "in-stock") {
+    //   dispatch(
+    //     createSingleOrder(orderSetId, value[0].id, orderType, currentWarehouse)
+    //   );
+    // } else {
+    //   dispatch(createSingleOrder(orderSetId, value[0].id, orderType));
+    // }
   };
 
   const handleClick = (event) => {

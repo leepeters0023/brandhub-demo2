@@ -54,6 +54,8 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import PublishIcon from "@material-ui/icons/Publish";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
+import fakeData from "../fakeData";
+
 const determineOrigin = () => {
   let origin;
   if (window.location.href.includes("rollup")) {
@@ -112,7 +114,7 @@ const CurrentOrderDetail = ({ handleFiltersClosed, orderId }) => {
   const currentOrderType = useSelector((state) => state.orderSet.type);
   const currentOrderId = useSelector((state) => state.orderSet.orderId);
   const orderStatus = useSelector((state) => state.orderSet.status);
-  const currentItems = useSelector((state) => state.orderSet.items);
+  const currentItems = fakeData; //useSelector((state) => state.orderSet.items);
   const orders = useSelector((state) => state.orderSet.orders);
   const currentTotal = useSelector((state) => state.orderSet.totalEstItemCost);
   const currentUserRole = useSelector((state) => state.user.role);

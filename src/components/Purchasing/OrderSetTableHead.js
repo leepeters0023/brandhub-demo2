@@ -31,6 +31,8 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import WarningIcon from "@material-ui/icons/Warning";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 
+import fakeData from "../../fakeData";
+
 const TotalItemCell = React.memo(({ itemNumber, classes }) => {
   const value = useSelector((state) =>
     state.orderSet.items.find((item) => item.itemNumber === itemNumber)
@@ -89,7 +91,7 @@ const OrderSetTableHead = ({
     dispatch(setRebuildRef());
   };
 
-  const currentItems = useSelector((state) => state.orderSet.items);
+  const currentItems = fakeData; //useSelector((state) => state.orderSet.items);
 
   return (
     <TableHead>
@@ -152,17 +154,9 @@ const OrderSetTableHead = ({
                   handleModalOpen(item.itemNumber);
                 }}
               />
-              {item.brand.split(", ").length > 1 ? (
-                <Tooltip title={item.brand}>
-                  <Typography className={classes.headerText} variant="h5">
-                    {`${item.brand.split(", ")[0]} ...`}
-                  </Typography>
-                </Tooltip>
-              ) : (
                 <Typography className={classes.headerText} variant="h5">
                   {item.brand}
                 </Typography>
-              )}
             </div>
           </TableCell>
         ))}

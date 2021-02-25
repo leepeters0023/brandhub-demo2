@@ -95,6 +95,7 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   const isUpdateLoading = useSelector(
     (state) => state.currentOrder.orderUpdateLoading
   );
+  const [isClicked, setIsClicked] = useState(false);
 
   defaultFilters.isOnPremise = currentChannel === "On Premise" ? true : false;
   defaultFilters.currentTerritoryId = territoryId;
@@ -121,16 +122,17 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleAddToOrder = () => {
-    let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
-    if (currentOrder.inStockOrderItems.length === 0) {
-      dispatch(
-        createNewBulkItemOrder("inStock", selectedItems, territoryId, channel)
-      );
-    } else
-      dispatch(
-        addBulkOrderItems(currentOrder.orderId, selectedItems, "inStock")
-      );
-    dispatch(clearItemSelections());
+    setIsClicked(true)
+    // let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
+    // if (currentOrder.inStockOrderItems.length === 0) {
+    //   dispatch(
+    //     createNewBulkItemOrder("inStock", selectedItems, territoryId, channel)
+    //   );
+    // } else
+    //   dispatch(
+    //     addBulkOrderItems(currentOrder.orderId, selectedItems, "inStock")
+    //   );
+    // dispatch(clearItemSelections());
   };
 
   useEffect(() => {
@@ -208,15 +210,14 @@ const PlaceInStockOrder = ({ handleFilterDrawer, filtersOpen }) => {
                 </Button>
                 <Button
                   component={Link}
-                  disabled={
-                    isUpdateLoading ||
-                    currentOrder.inStockOrderItems.length === 0
+                  disabled={!isClicked
+                    // isUpdateLoading ||
+                    // currentOrder.inStockOrderItems.length === 0
                   }
-                  to={
-                    currentOrder.inStockOrderItems.length > 0
-                      ? `/orders/open/${currentOrder.inStockOrderNumber}`
-                      : "/orders/open/inventory"
-                  }
+                  to={"/orders/open/inventory"}
+                  // currentOrder.inStockOrderItems.length > 0
+                  //     ? `/orders/open/${currentOrder.inStockOrderNumber}`
+                  //     : "/orders/open/inventory"
                   className={classes.largeButton}
                   variant="contained"
                   color="secondary"

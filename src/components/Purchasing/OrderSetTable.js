@@ -210,9 +210,9 @@ const OrderSetTable = (props) => {
     }
   }, [itemLength, currentItems, currentItems.length]);
 
-  if (isLoading || (!refTable && orders.length > 0)) {
-    return <CircularProgress color="inherit" />;
-  }
+  // if (isLoading || (!refTable && orders.length > 0)) {
+  //   return <CircularProgress color="inherit" />;
+  // }
 
   return (
     <>
