@@ -93,6 +93,7 @@ const PlaceOnDemandOrder = ({ handleFilterDrawer, filtersOpen }) => {
     (state) => state.currentOrder.orderUpdateLoading
   );
 
+  const [isClicked, setIsClicked] = useState(false)
   defaultFilters.isOnPremise = currentChannel === "On Premise" ? true : false;
   defaultFilters.currentTerritoryId = territoryId;
 
@@ -108,16 +109,17 @@ const PlaceOnDemandOrder = ({ handleFilterDrawer, filtersOpen }) => {
   };
 
   const handleAddToOrder = () => {
-    let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
-    if (currentOrder.onDemandOrderItems.length === 0) {
-      dispatch(
-        createNewBulkItemOrder("onDemand", selectedItems, territoryId, channel)
-      );
-    } else
-      dispatch(
-        addBulkOrderItems(currentOrder.orderId, selectedItems, "onDemand")
-      );
-    dispatch(clearItemSelections());
+    setIsClicked(true);
+    // let channel = currentChannel === "On Premise" ? "on_premise" : "retail";
+    // if (currentOrder.onDemandOrderItems.length === 0) {
+    //   dispatch(
+    //     createNewBulkItemOrder("onDemand", selectedItems, territoryId, channel)
+    //   );
+    // } else
+    //   dispatch(
+    //     addBulkOrderItems(currentOrder.orderId, selectedItems, "onDemand")
+    //   );
+    // dispatch(clearItemSelections());
   };
 
   useEffect(() => {
@@ -194,14 +196,14 @@ const PlaceOnDemandOrder = ({ handleFilterDrawer, filtersOpen }) => {
                 </Button>
                 <Button
                   component={Link}
-                  disabled={
-                    isUpdateLoading ||
-                    currentOrder.onDemandOrderItems.length === 0
+                  disabled={!isClicked
+                    // isUpdateLoading ||
+                    // currentOrder.onDemandOrderItems.length === 0
                   }
-                  to={
-                    currentOrder.onDemandOrderItems.length > 0
-                      ? `/orders/open/${currentOrder.onDemandOrderNumber}`
-                      : "/orders/open/onDemand"
+                  to={"/orders/open/inventory"
+                    // currentOrder.onDemandOrderItems.length > 0
+                    //   ? `/orders/open/${currentOrder.onDemandOrderNumber}`
+                    //   : "/orders/open/onDemand"
                   }
                   className={classes.largeButton}
                   variant="contained"
