@@ -162,7 +162,7 @@ const ApproveOrDenyItem = () => {
           {isError && (
             <Typography className={classes.headerText} variant="h5">
               There was an issue with your request, please contact us at:
-              help@readytoactivate.com. Error message: {isError}
+              help@brandhub.com. Error message: {isError}
             </Typography>
           )}
           {(status === "approved" || status === "denied") && (
@@ -233,7 +233,7 @@ const ApproveOrDenyItem = () => {
           style={{ bottom: "0", float: "right" }}
           variant="h5"
         >
-          need help? Email us: help@readytoactivate.com
+          need help? Email us: help@brandhub.com
         </Typography>
       </Container>
     </>

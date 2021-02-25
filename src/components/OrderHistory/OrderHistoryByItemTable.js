@@ -23,13 +23,13 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 const headCells = [
   { id: "preview", disablePadding: false, label: "Preview", sort: false },
-  { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
-  { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
+  // { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
+  // { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
   { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: false },
-  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  // { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
     id: "itemDescription",
     disablePadding: false,
@@ -42,23 +42,23 @@ const headCells = [
     label: "Distributor",
     sort: true,
   },
-  { id: "state", disablePadding: false, label: "State", sort: false },
+  // { id: "state", disablePadding: false, label: "State", sort: false },
   {
     id: "totalItems",
     disablePadding: false,
     label: "Total Qty",
     sort: false,
   },
-  {
-    id: "estCost",
-    disablePadding: false,
-    label: "Est. Cost/Unit",
-    sort: false,
-  },
+  // {
+  //   id: "estCost",
+  //   disablePadding: false,
+  //   label: "Est. Cost/Unit",
+  //   sort: false,
+  // },
   {
     id: "actCost",
     disablePadding: false,
-    label: "Act. Cost/Unit",
+    label: "Cost",
     sort: false,
   },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },

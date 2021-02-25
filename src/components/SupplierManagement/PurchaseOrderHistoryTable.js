@@ -33,7 +33,7 @@ const headCells = [
   },
   { id: "supplier", disablePadding: false, label: "Supplier", sort: true },
   { id: "quantity", disablePadding: false, label: "Quantity", sort: true },
-  { id: "estCost", disablePadding: false, label: "Est. Cost/Unit", sort: true },
+  // { id: "estCost", disablePadding: false, label: "Est. Cost/Unit", sort: true },
   { id: "actCost", disablePadding: false, label: "Act. Cost/Unit", sort: true },
   { id: "status", disablePadding: false, label: "Status", sort: true },
   {
@@ -49,7 +49,7 @@ const headCells = [
     sort: false,
   },
   { id: "poCreator", disablePadding: false, label: "Purchaser", sort: true },
-  { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
+  // { id: "allocated", disablePadding: false, label: "Allocated", sort: true }, //cdc or direct ship
 ];
 
 // Toggle to On Demand or Pre Order – What if we don’t toggle and add a column for this?  Like we do in Order History

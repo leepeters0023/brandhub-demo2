@@ -31,7 +31,7 @@ const headCells = [
     label: "Distributor",
     sort: true,
   },
-  { id: "state", disablePadding: false, label: "State", sort: true },
+  // { id: "state", disablePadding: false, label: "State", sort: true },
   { id: "program", disablePadding: false, label: "Program", sort: false },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "orderDate", disablePadding: false, label: "Order Date", sort: true },
@@ -48,12 +48,12 @@ const headCells = [
     label: "Est. Total",
     sort: false,
   },
-  {
-    id: "totalActCost",
-    disablePadding: false,
-    label: "Act. Total",
-    sort: false,
-  },
+  // {
+  //   id: "totalActCost",
+  //   disablePadding: false,
+  //   label: "Act. Total",
+  //   sort: false,
+  // },
   { id: "status", disablePadding: false, label: "Status", sort: true },
 ];
 

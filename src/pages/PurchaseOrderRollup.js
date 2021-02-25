@@ -228,7 +228,8 @@ const PurchaseOrderRollup = ({ handleFilterDrawer, filtersOpen }) => {
                 className={classes.largeButton}
                 variant="contained"
                 color="secondary"
-                disabled={selectedPOItems.length !== 1}
+                disabled
+                // disabled={selectedPOItems.length !== 1}
                 style={{ marginRight: "20px" }}
                 onClick={() => {
                   handleNewRFQ();

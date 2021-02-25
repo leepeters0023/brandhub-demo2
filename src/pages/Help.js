@@ -146,10 +146,10 @@ const Help = ({ handleFiltersClosed }) => {
               General Contact Information
             </Typography>
             <Typography className={classes.bodyText}>
-              Phone: 802-864-9075
+              Phone: 888-888-8888
             </Typography>
             <Typography className={classes.bodyText}>
-              Email: help@readytoactivate.com
+              Email: help@brandhub.com
             </Typography>
             <Typography className={classes.bodyText}>
               Please allow up to 12 hours to receive a response from us.

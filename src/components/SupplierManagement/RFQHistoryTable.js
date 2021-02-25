@@ -33,18 +33,18 @@ let headCells = [
     sort: false,
   },
   { id: "estCost", disablePadding: false, label: "Est. Cost", sort: false },
-  {
-    id: "totalEstCost",
-    disablePadding: false,
-    label: "Est. Total",
-    sort: false,
-  },
-  {
-    id: "totalActCost",
-    disablePadding: false,
-    label: "Act. Total",
-    sort: false,
-  },
+  // {
+  //   id: "totalEstCost",
+  //   disablePadding: false,
+  //   label: "Est. Total",
+  //   sort: false,
+  // },
+  // {
+  //   id: "totalActCost",
+  //   disablePadding: false,
+  //   label: "Act. Total",
+  //   sort: false,
+  // },
   { id: "dueDate", disablePadding: false, label: "Due Date", sort: true },
   {
     id: "inMarketDate",
