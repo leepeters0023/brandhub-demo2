@@ -9,7 +9,7 @@ import EditOrderDetailModal from "./EditOrderDetailModal";
 import MemoInputCell from "../Utility/MemoInputCell";
 import OrderSetTableHead from "./OrderSetTableHead";
 import UpdateRushStatusModal from "./UpdateRushStatusModal";
-
+import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -124,6 +124,10 @@ const OrderSetTable = (props) => {
     setRushModalOpen(false);
   }
 
+  const handleAddToOrder = () => {
+    alert("Added to order");
+  }
+
   const handleKeyDown = useCallback(
     (ref, key) => {
       let keys = Object.keys(refTable);
@@ -175,7 +179,7 @@ const OrderSetTable = (props) => {
         `${orders[0].id}` !== Object.keys(refTable)[0].split("-")[0]) ||
       (stateFilter &&
         Object.keys(refTable).length !==
-          filteredOrders.length * currentItems.length) ||
+        filteredOrders.length * currentItems.length) ||
       (!stateFilter &&
         Object.keys(refTable).length !== orders.length * currentItems.length) ||
       rebuildRef
@@ -224,12 +228,12 @@ const OrderSetTable = (props) => {
         />
       )}
       {isRushModalOpen && currentItem && (
-      <UpdateRushStatusModal
-        open={isRushModalOpen}
-        item={currentItem}
-        handleClose={handleRushModalClose}
-      />
-    )}
+        <UpdateRushStatusModal
+          open={isRushModalOpen}
+          item={currentItem}
+          handleClose={handleRushModalClose}
+        />
+      )}
       <TableContainer className={classes.cartContainer} ref={tableRef}>
         <Table
           stickyHeader={true}
@@ -265,142 +269,146 @@ const OrderSetTable = (props) => {
               </TableRow>
             </TableHead>
           ) : (
-            <>
-              <OrderSetTableHead
-                classes={classes}
-                orderType={orderType}
-                orderStatus={orderStatus}
-                handleOpenConfirm={handleOpenConfirm}
-                handleModalOpen={handleModalOpen}
-                setRushModalOpen={setRushModalOpen}
-                setCurrentItem={setCurrentItem}
-              />
-              <TableBody style={{ position: "relative" }}>
-                {orders
-                  .filter((order) => {
-                    if (!stateFilter) {
-                      return order;
-                    } else {
-                      let currentState = order.distributorId
-                        ? order.distributorState
-                        : order.customAddressState;
-                      return stateFilter === currentState;
-                    }
-                  })
-                  .map((ord) => (
-                    <TableRow key={ord.id}>
-                      <TableCell
-                        classes={{ root: classes.noPadCell }}
-                        className={classes.borderRight}
-                        style={{
-                          position: "sticky",
-                          left: 0,
-                          backgroundColor: "#cbcbcb",
-                          zIndex: "1",
-                        }}
-                      >
-                        <div
+              <>
+                <OrderSetTableHead
+                  classes={classes}
+                  orderType={orderType}
+                  orderStatus={orderStatus}
+                  handleOpenConfirm={handleOpenConfirm}
+                  handleModalOpen={handleModalOpen}
+                  setRushModalOpen={setRushModalOpen}
+                  setCurrentItem={setCurrentItem}
+                />
+                <TableBody style={{ position: "relative" }}>
+                  {orders
+                    .filter((order) => {
+                      if (!stateFilter) {
+                        return order;
+                      } else {
+                        let currentState = order.distributorId
+                          ? order.distributorState
+                          : order.customAddressState;
+                        return stateFilter === currentState;
+                      }
+                    })
+                    .map((ord) => (
+                      <TableRow key={ord.id}>
+                        <TableCell
+                          classes={{ root: classes.noPadCell }}
+                          className={classes.borderRight}
                           style={{
-                            position: "relative",
-                            width: "100%",
-                            height: "fit-content",
+                            position: "sticky",
+                            left: 0,
+                            backgroundColor: "#cbcbcb",
+                            zIndex: "1",
                           }}
                         >
                           <div
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              width: "Calc(100% - 8px)",
-                              position: "absolute",
-                              top: "0",
-                              left: "0",
-                              height: "100%",
-                              padding: "0px 2px 0px 6px",
+                              position: "relative",
+                              width: "100%",
+                              height: "fit-content",
                             }}
                           >
-                            <Tooltip
-                              placement="right"
-                              title={`${
-                                ord.distributorCity
-                                  ? ord.distributorCity
-                                  : ord.customAddressCity
-                              }, ${
-                                ord.distributorState
-                                  ? ord.distributorState
-                                  : ord.customAddressState
-                              }`}
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                width: "Calc(100% - 8px)",
+                                position: "absolute",
+                                top: "0",
+                                left: "0",
+                                height: "100%",
+                                padding: "0px 2px 0px 6px",
+                              }}
                             >
-                              <Typography className={classes.headerText} noWrap>
-                                {`${
-                                  ord.distributorName
-                                    ? ord.distributorName
-                                    : ord.customAddressName
-                                }: ${
-                                  ord.distributorCity
+                              <Tooltip
+                                placement="right"
+                                title={`${ord.distributorCity
                                     ? ord.distributorCity
                                     : ord.customAddressCity
-                                }, ${
-                                  ord.distributorState
+                                  }, ${ord.distributorState
                                     ? ord.distributorState
                                     : ord.customAddressState
-                                }`}
-                              </Typography>
-                            </Tooltip>
-                            <div style={{ display: "flex" }}>
-                              <Tooltip title="Delete Order">
-                                <span>
-                                  <IconButton
-                                    onClick={() => handleRemoveOrder(ord.id)}
-                                    disabled={patchLoading}
-                                  >
-                                    <CancelIcon
-                                      fontSize="small"
-                                      color="inherit"
-                                    />
-                                  </IconButton>
-                                </span>
+                                  }`}
+                              >
+                                <Typography className={classes.headerText} noWrap>
+                                  {`${ord.distributorName
+                                      ? ord.distributorName
+                                      : ord.customAddressName
+                                    }: ${ord.distributorCity
+                                      ? ord.distributorCity
+                                      : ord.customAddressCity
+                                    }, ${ord.distributorState
+                                      ? ord.distributorState
+                                      : ord.customAddressState
+                                    }`}
+                                </Typography>
                               </Tooltip>
+                              <div style={{ display: "flex" }}>
+                                <Tooltip title="Delete Order">
+                                  <span>
+                                    <IconButton
+                                      onClick={() => handleRemoveOrder(ord.id)}
+                                      disabled={patchLoading}
+                                    >
+                                      <CancelIcon
+                                        fontSize="small"
+                                        color="inherit"
+                                      />
+                                    </IconButton>
+                                  </span>
+                                </Tooltip>
 
-                              <Tooltip title="Edit Details">
-                                <IconButton
-                                  onClick={() => {
-                                    setEditOpen(true);
-                                    setCurrentOrderNumber(ord.id)
-                                  }}
-                                >
-                                  <EditIcon fontSize="small" color="inherit" />
-                                </IconButton>
-                              </Tooltip>
+                                <Tooltip title="Edit Details">
+                                  <IconButton
+                                    onClick={() => {
+                                      setEditOpen(true);
+                                      setCurrentOrderNumber(ord.id)
+                                    }}
+                                  >
+                                    <EditIcon fontSize="small" color="inherit" />
+                                  </IconButton>
+                                </Tooltip>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </TableCell>
-                      {ord.items.map((item, index) => (
-                        <MemoInputCell
-                          key={item.id}
-                          compliance={item.complianceStatus}
-                          priorApprovalDenied={item.priorApprovalDenied}
-                          orderNumber={ord.id}
-                          itemNumber={item.itemNumber}
-                          itemId={item.id}
-                          index={index}
-                          orderStatus={orderStatus}
-                          orderId={orderId}
-                          program={currentProgram}
-                          cellRef={refTable[`${ord.id}-${item.itemNumber}`]}
-                          handleKeyDown={handleKeyDown}
-                          packSize={item.packSize}
-                          ref={tableRef}
-                        />
-                      ))}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </>
-          )}
+                        </TableCell>
+                        {ord.items.map((item, index) => (
+                          <MemoInputCell
+                            key={item.id}
+                            compliance={item.complianceStatus}
+                            priorApprovalDenied={item.priorApprovalDenied}
+                            orderNumber={ord.id}
+                            itemNumber={item.itemNumber}
+                            itemId={item.id}
+                            index={index}
+                            orderStatus={orderStatus}
+                            orderId={orderId}
+                            program={currentProgram}
+                            cellRef={refTable[`${ord.id}-${item.itemNumber}`]}
+                            handleKeyDown={handleKeyDown}
+                            packSize={item.packSize}
+                            ref={tableRef}
+                          />
+                        ))}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </>
+            )}
         </Table>
       </TableContainer>
+      <Button
+        className={classes.largeButton}
+        variant="contained"
+        color="secondary"
+        onClick={handleAddToOrder}
+        style={{ marginRight: "20px", marginTop: "20px", float: "right"}}
+      >
+       SUBMIT ORDER
+      </Button>
     </>
   );
 };
