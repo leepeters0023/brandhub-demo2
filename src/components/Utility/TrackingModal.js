@@ -33,8 +33,23 @@ const TrackingModal = ({ open, handleClose }) => {
   const [isEvents, setEvents] = useState(false);
 
   const isLoading = useSelector((state) => state.tracking.isLoading);
-  const tracking = useSelector((state) => state.tracking.tracking);
-  const error = useSelector((state) => state.tracking.error);
+  const tracking = {
+    "ship_date": "12.12.20",
+    "tracking_number": "1234556789",
+    "carrier_status_description": "shipped",
+    "actual_delivery_date": "2021.01.01",
+    "actual_delivery_date": "2021.01.01",
+    events: [{
+      "occured_at": "12.01.01",
+      "city_locality": "Boston",
+      "state_province": "MA",
+      "postal_code": "12345",
+      "description": "Shipped"
+    }
+  ]
+
+  }//useSelector((state) => state.tracking.tracking);
+  //const error = useSelector((state) => state.tracking.error);
 
   return (
     <div className={classes.relativeContainer}>
@@ -67,7 +82,7 @@ const TrackingModal = ({ open, handleClose }) => {
               <CircularProgress />
             </div>
           )}
-          {!isLoading && error && (
+          {/* {!isLoading && error && (
             <div
               style={{
                 height: "250px",
@@ -81,8 +96,8 @@ const TrackingModal = ({ open, handleClose }) => {
                 Something went wrong ...
               </Typography>
             </div>
-          )}
-          {!isLoading && !error && tracking && (
+          )} */}
+          {tracking && (
             <Grid container spacing={5}>
               <Grid item md={6} sm={6} xs={12}>
                 <div className={classes.trackingModal}>
@@ -183,7 +198,8 @@ const TrackingModal = ({ open, handleClose }) => {
                       {tracking.events && tracking.events.length > 0 ? (
                         <>
                           <Typography className={classes.bodyText}>
-                            {`Date: ${format(
+                            {tracking.events[0]["occurred_at"]}
+                            {/* {`Date: ${format(
                               new Date(tracking.events[0]["occurred_at"]),
                               "MM/dd/yyyy"
                             )}`}
@@ -192,7 +208,7 @@ const TrackingModal = ({ open, handleClose }) => {
                             {`Time: ${format(
                               new Date(tracking.events[0]["occurred_at"]),
                               "MM/dd/yyyy"
-                            )}`}
+                            )}`} */}
                           </Typography>
                           {tracking.events[0]["city_locality"] &&
                             tracking.events[0]["state_province"] && (

@@ -135,11 +135,11 @@ const orderTypeMap = {
 
 const useStyles = makeStyles((theme) => ({
   ...theme.global,
-  orderHistoryRow: {
-    "&&:hover": {
-      cursor: "pointer",
-    },
-  },
+  // orderHistoryRow: {
+  //   "&&:hover": {
+  //     cursor: "pointer",
+  //   },
+  // },
   visuallyHidden: {
     border: 0,
     clip: "rect(0 0 0 0)",
@@ -153,6 +153,7 @@ const useStyles = makeStyles((theme) => ({
   },
   clickableCell: {
     "&:hover": {
+      cursor: "pointer",
       backgroundColor: "#737373",
       color: "white",
     },
@@ -191,7 +192,7 @@ const OrderHistoryByItemTable = ({
   };
 
   const handleRowClick = (orderNum) => {
-    navigate(`/orders/history/${orderNum}`);
+    //navigate(`/orders/history/${orderNum}`);
   };
 
   return (
