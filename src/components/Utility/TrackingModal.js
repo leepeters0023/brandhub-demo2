@@ -44,7 +44,7 @@ const TrackingModal = ({ open, handleClose }) => {
       "city_locality": "Boston",
       "state_province": "MA",
       "postal_code": "12345",
-      "description": "Shipped"
+      "description": "Scanned at Boston distribution warehouse"
     }
   ]
 
