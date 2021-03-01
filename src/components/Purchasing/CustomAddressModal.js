@@ -38,9 +38,9 @@ const CustomAddressModal = ({ orderSetId, orderType, open, handleClose }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const rapidId = useSelector((state) => state.addresses.rapidAddress.id);
-  const championId = useSelector((state) => state.addresses.championAddress.id);
-  const currentUserRole = useSelector((state) => state.user.role);
+  const rapidId = "1234"//useSelector((state) => state.addresses.rapidAddress.id);
+  const championId = "1234"//useSelector((state) => state.addresses.championAddress.id);
+  const currentUserRole = "super" //useSelector((state) => state.user.role);
 
   const {
     value: name,
