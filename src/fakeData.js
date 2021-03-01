@@ -24,6 +24,15 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
+
   },
   {
     id: 2,
@@ -50,6 +59,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 3,
@@ -76,6 +93,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 4,
@@ -102,6 +127,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 5,
@@ -128,6 +161,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 6,
@@ -154,6 +195,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 7,
@@ -180,6 +229,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
   {
     id: 8,
@@ -206,6 +263,14 @@ export const fakeData = [
     supplier: "Supplier A",
     inMarketDate: "2021.06.01",
     user: "user B",
+    distributor: ["Distributor A"],
+    shipDate: "2021.01.01",
+    tracking: "123456",
+    orderDate: "2020.12.31",
+    status: ["shipped"],
+    carrier: "UPS",
+
+
   },
 ]
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "@reach/router";
-import format from "date-fns/format";
+//import format from "date-fns/format";
 
 import { formatMoney } from "../../utility/utilityFunctions";
 
@@ -26,10 +26,10 @@ const headCells = [
   // { id: "itemNumber", disablePadding: false, label: "Sequence #", sort: true },
   // { id: "orderType", disablePadding: false, label: "Order Type", sort: false },
   { id: "orderNum", disablePadding: false, label: "Order #", sort: true },
-  { id: "user", disablePadding: false, label: "Ordered By", sort: false },
+  // { id: "user", disablePadding: false, label: "Ordered By", sort: false },
   { id: "brand", disablePadding: false, label: "Brand", sort: false },
   { id: "program", disablePadding: false, label: "Program", sort: false },
-  // { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
+  { id: "itemType", disablePadding: false, label: "Item Type", sort: true },
   {
     id: "itemDescription",
     disablePadding: false,
@@ -178,6 +178,7 @@ const OrderHistoryByItemTable = ({
   handlePreview,
   handleTrackingClick,
 }) => {
+  console.log(items);
   const classes = useStyles();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("itemType");
@@ -228,11 +229,7 @@ const OrderHistoryByItemTable = ({
                 <TableRow
                   key={index}
                   hover
-                  className={
-                    row.isComplianceCanceled
-                      ? classes.cancelRow
-                      : classes.orderHistoryRow
-                  }
+                  className={classes.orderHistoryRow}
                   onClick={() => {
                     handleRowClick(row.orderId);
                   }}
@@ -251,42 +248,42 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                    // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.itemNumber}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                    // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {orderTypeMap[row.orderType]}
-                  </TableCell>
-                  <TableCell
+                  </TableCell> */}
+                  {/* <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                    // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.orderId}
-                  </TableCell>
-                  <TableCell
+                  </TableCell> */}
+                  {/* <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.user}
-                  </TableCell>
+                  </TableCell> */}
                   {row.brand.length > 1 ? (
                     <TableCell
                       align="left"
-                      className={
-                        row.isComplianceCanceled ? classes.cancelCell : null
-                      }
+                      // className={
+                      //   row.isComplianceCanceled ? classes.cancelCell : null
+                      // }
                     >
                       <Typography variant="body2">{row.brand[0]}</Typography>
                       <Tooltip
@@ -303,105 +300,107 @@ const OrderHistoryByItemTable = ({
                   ) : (
                     <TableCell
                       align="left"
-                      className={
-                        row.isComplianceCanceled ? classes.cancelCell : null
-                      }
+                      // className={
+                      //   row.isComplianceCanceled ? classes.cancelCell : null
+                      // }
                     >
                       {row.brand[0]}
                     </TableCell>
                   )}
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.program}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                     style={{ whiteSpace: "nowrap" }}
                   >
                     {row.itemType}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.itemDescription}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.distributor.length > 0 ? row.distributor : "---"}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.state}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
-                    {row.isComplianceCanceled ? "Canceled" : row.totalItems}
+                    {row.totalItems}
+                    {/* {row.isComplianceCanceled ? "Canceled" : row.totalItems} */}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.estCost !== "---"
                       ? formatMoney(row.estCost, false)
                       : row.estCost}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.actCost !== "---"
                       ? formatMoney(row.actCost, false)
                       : row.actCost}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.orderDate}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
-                    {row.shipDate !== "---"
+                    {row.shipDate}
+                    {/* !== "---"
                       ? format(new Date(row.shipDate), "MM/dd/yyyy")
-                      : row.shipDate}
+                      : row.shipDate */}
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
                     {row.carrier}
                   </TableCell>
@@ -427,13 +426,11 @@ const OrderHistoryByItemTable = ({
                   </TableCell>
                   <TableCell
                     align="left"
-                    className={
-                      row.isComplianceCanceled ? classes.cancelCell : null
-                    }
+                     // className={
+                    //   row.isComplianceCanceled ? classes.cancelCell : null
+                    // }
                   >
-                    {!row.isComplianceCanceled
-                      ? row.status[0].toUpperCase() + row.status.slice(1)
-                      : "Canceled"}
+                    {row.status[0]}
                   </TableCell>
                 </TableRow>
               ))}

@@ -96,7 +96,7 @@ const FiltersHistory = ({
                       setValue("order");
                       handleFilters("order", "groupBy", "history");
                     }}
-                    disabled={isLoading}
+                    disabled //={isLoading}
                   >
                     ORDER
                   </Button>

@@ -38,6 +38,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import PrintIcon from "@material-ui/icons/Print";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
+import fakeData from "../fakeData";
+
 const orderHeaders = [
   { label: "Order Number", key: "orderNum" },
   { label: "Order Type", key: "type" },
@@ -159,7 +161,7 @@ const OrderHistory = ({ handleFilterDrawer, filtersOpen, filterOption }) => {
 
   const isOrdersLoading = useSelector((state) => state.orderHistory.isLoading);
   const currentOrders = useSelector((state) => state.orderHistory.orders);
-  const currentOrderItems = useSelector((state) => state.orderHistory.items);
+  const currentOrderItems = fakeData;//useSelector((state) => state.orderHistory.items);
   const currentUserRole = useSelector((state) => state.user.role);
   const retainFilters = useSelector((state) => state.filters.retainFilters);
   const defaultFilters =

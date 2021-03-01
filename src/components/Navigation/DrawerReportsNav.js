@@ -96,6 +96,7 @@ const DrawerReportsNav = ({ classes, role }) => {
               {
                 link: "/orders/history/group/byOrder",
                 primary: "By Order",
+                disabled: true,
               },
               {
                 link: "/orders/history/group/byItem",
