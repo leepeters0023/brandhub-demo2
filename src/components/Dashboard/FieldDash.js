@@ -50,21 +50,18 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
     ? anchorEl.id === "catalog-archive-parent"
     : false;
   const itemRulesOpen = anchorEl ? anchorEl.id === "item-rules-parent" : false;
-  const wrapReportOpen = anchorEl
-    ? anchorEl.id === "wrap-report-parent"
+  const reportsOpen = anchorEl
+    ? anchorEl.id === "reports-parent"
     : false;
 
   const cardData = [
     {
-      titleText: `Q2 Ordering`,
+      titleText: `Brand Calendar`,
       ariaOwnsState: preOrderOpen,
       ariaOwnsText: "pre-order",
       id: "pre-order-parent",
-      link: "/programs",
-      info:
-        programs.length > 0
-          ? "Place your Quarter One Pre-Order. Orders are placed in groups based on programs and distributors that are availiable within your assigned Regions and Key Accounts"
-          : "There are currently no active pre order programs",
+      link: "/calendar",
+      info: "View current and future brand activation programs",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Q1_Ordering_tg2ryl.png",
     },
@@ -91,51 +88,40 @@ const FieldDash = ({ classes, name, InfoPopover, currentMonth }) => {
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Place_In_Stock_Order_skvxpj.png",
     },
     {
-      titleText: "Order History",
-      ariaOwnsState: historyOpen,
-      ariaOwnsText: "order-history",
-      id: "history-parent",
-      link: "/orders/history/group/byOrder",
-      info:
-        "View order history grouped by item or order & get tracking information",
+      titleText: "Pre-Order",
+      ariaOwnsState: preOrderOpen,
+      ariaOwnsText: "pre-order",
+      id: "pre-order-parent",
+      link: "/programs",
+      info: "View and order from currently available pre-order programs",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Order_History_jvvgmh.png",
     },
     {
-      titleText: "Item Catalog: Current",
-      ariaOwnsState: catalogCurrentOpen,
-      ariaOwnsText: "catalog-current",
-      id: "catalog-current-parent",
-      link: "/items/all",
-      info: "View catalog of and details about currently available items",
+      titleText: "Order History",
+      ariaOwnsState: historyOpen,
+      ariaOwnsText: "order-history",
+      id: "history-parent",
+      link: "/orders/history/group/byItem",
+      info: "View history of orders and tracking information",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Current_ykkrrc.png",
     },
     {
-      titleText: "Item Catalog: Archive",
+      titleText: "Address Book",
       ariaOwnsState: catalogArchiveOpen,
       ariaOwnsText: "catalog-archive",
       id: "catalog-archive-parent",
-      link: "/items/archive",
-      info: "View archive of and details about items no longer available",
+      link: "",
+      info: "View and edit my address book",
       icon:
         "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Catalog_Archive_wgetjy.png",
     },
     {
-      titleText: "Item Rules",
-      ariaOwnsState: itemRulesOpen,
-      ariaOwnsText: "item-rules",
-      id: "item-rules-parent",
-      link: "/compliance/items",
-      info: "View details about regional item compliance",
-      icon:
-        "https://res.cloudinary.com/brandhub/image/upload/v1610483653/prod/Icons/Item_Rules_r2iepr.png",
-    },
-    {
-      titleText: "Wrap Up Report",
-      ariaOwnsState: wrapReportOpen,
-      ariaOwnsText: "wrap-up-report",
-      id: "wrap-report-parent",
+      titleText: "Reports",
+      ariaOwnsState: reportsOpen,
+      ariaOwnsText: "reports",
+      id: "reports-parent",
       link: "/reports/wrap-up",
       info: "View wrap up report",
       icon:
